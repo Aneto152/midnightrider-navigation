@@ -1,0 +1,64 @@
+services:
+
+  # ─────────────────────────────────────────
+  # InfluxDB v2.8
+  # ─────────────────────────────────────────
+  influxdb:
+    image: influxdb:2.8
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+
+  # ─────────────────────────────────────────
+  # Grafana v12.3.1
+  # ─────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:12.3.1
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - grafana-config:/etc/grafana
+    environment:
+      - GF_SERVER_HTTP_PORT=3001
+    depends_on:
+      - influxdb
+
+  # ─────────────────────────────────────────
+  # Signal K
+  # network_mode: host est nécessaire pour :
+  #   - accès à Kflex via TCP localhost:10110
+  #   - accès NMEA2000 via /dev/ttyACM1
+  #   - mDNS / discovery réseau
+  # ─────────────────────────────────────────
+  signalk:
+    image: signalk/signalk-server:latest
+    container_name: signalk
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - signalk-data:/home/node/.signalk
+    # Décommenter quand le YDWG-02 (/dev/ttyACM1) est branché :
+    # devices:
+    #   - /dev/ttyACM1:/dev/ttyACM1
+    depends_on:
+      - influxdb
+
+# Volumes externes — déjà créés et remplis avec les données migrées
+volumes:
+  influxdb-data:
+    external: true
+  influxdb-config:
+    external: true
+  grafana-data:
+    external: true
+  grafana-config:
+    external: true
+  signalk-data:
+    external: true
