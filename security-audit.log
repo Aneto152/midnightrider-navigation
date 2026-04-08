@@ -1,0 +1,18 @@
+=== Audit 2026-04-07 07:58 ===
+Firewall: Status: active
+Ports:
+Docker:
+signalk Up 9 hours
+grafana Up 9 hours
+influxdb Up 9 hours
+Updates disponibles: 247
+===
+
+=== Actions effectuées le 2026-04-07 ===
+- UFW installé et configuré (deny incoming, LAN 192.168.0.0/16 seulement)
+- rpcbind désactivé (port 111 fermé)
+- unattended-upgrades activé
+- X11Forwarding SSH désactivé
+- apt upgrade lancé (250 → en cours)
+- Audit hebdomadaire cron configuré (lundi 8h)
+===
