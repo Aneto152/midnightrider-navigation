@@ -173,11 +173,32 @@
 <div class="toast" id="toast"></div>
 
 <script>
-let timerSeconds = 300;
+let timerSeconds = parseInt(localStorage.getItem('timerSeconds') ?? '300');
+let timerRunning = localStorage.getItem('timerRunning') === 'true';
+let timerStart = parseInt(localStorage.getItem('timerStart') ?? '0');
 let timerInterval = null;
-let timerRunning = false;
 let currentSail = null;
 let currentHelm = null;
+
+// Restaurer le timer si il tournait
+if (timerRunning && timerStart > 0) {
+  const elapsed = Math.floor((Date.now() - timerStart) / 1000);
+  timerSeconds -= elapsed;
+  if (timerSeconds <= -3600) { timerRunning = false; }
+}
+
+// Démarrer auto si le timer tournait
+if (timerRunning) {
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    saveTimer();
+    updateTimerDisplay();
+    if (timerSeconds <= 0 && timerSeconds > -2) {
+      logEvent('gun', 'Coup de canon');
+      showToast('🚦 DÉPART !', 4000);
+    }
+  }, 1000);
+}
 
 function showToast(msg, duration=2000) {
   const t = document.getElementById('toast');
@@ -204,8 +225,12 @@ function resetTimer() { stopTimer(); timerSeconds = 300; updateTimerDisplay(); }
 function startTimer() {
   if (timerRunning) return;
   timerRunning = true;
+  timerStart = Date.now();
+  localStorage.setItem('timerRunning', 'true');
+  localStorage.setItem('timerStart', timerStart);
   timerInterval = setInterval(() => {
     timerSeconds--;
+    saveTimer();
     updateTimerDisplay();
     if (timerSeconds <= 0) {
       stopTimer();
@@ -217,6 +242,9 @@ function startTimer() {
 
 function stopTimer() {
   timerRunning = false;
+  timerStart = 0;
+  localStorage.setItem('timerRunning', 'false');
+  localStorage.setItem('timerStart', '0');
   if (timerInterval) clearInterval(timerInterval);
 }
 
@@ -231,6 +259,10 @@ function syncTimer() {
   if (timerSeconds < 0) timerSeconds = 0;
   updateTimerDisplay();
   showToast('⏱ Sync → ' + Math.floor(timerSeconds/60) + 'min00');
+}
+
+function saveTimer() {
+  localStorage.setItem('timerSeconds', timerSeconds);
 }
 
 function updateTimerDisplay() {
