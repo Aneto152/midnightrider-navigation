@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>MidnightRider — Régate</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, sans-serif;
+    background: #0a1628;
+    color: #fff;
+    min-height: 100vh;
+    padding: 16px;
+  }
+  h1 { text-align: center; font-size: 1.4em; margin-bottom: 16px; color: #4fc3f7; }
+  .section {
+    background: #112240;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    border: 1px solid #1e3a5f;
+  }
+  .section h2 { font-size: 0.9em; color: #4fc3f7; text-transform: uppercase; margin-bottom: 12px; }
+  .btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .btn-grid.three { grid-template-columns: repeat(3, 1fr); }
+  button {
+    padding: 14px 8px;
+    border: 2px solid #1e3a5f;
+    border-radius: 10px;
+    background: #0a1628;
+    color: #fff;
+    font-size: 0.95em;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  button:active { transform: scale(0.96); }
+  button.active { background: #1565c0; border-color: #4fc3f7; }
+  button.success { background: #1b5e20; border-color: #66bb6a; }
+  button.danger { background: #b71c1c; border-color: #ef5350; }
+  button.big {
+    padding: 20px;
+    font-size: 1.1em;
+    font-weight: bold;
+    grid-column: span 2;
+  }
+  .timer-display {
+    text-align: center;
+    font-size: 3.5em;
+    font-weight: bold;
+    font-family: monospace;
+    color: #fff;
+    padding: 16px 0;
+    letter-spacing: 2px;
+  }
+  .timer-display.warning { color: #ffb300; }
+  .timer-display.danger { color: #ef5350; }
+  .timer-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    background: #112240;
+    border-radius: 10px;
+    padding: 10px 16px;
+    margin-bottom: 16px;
+    font-size: 0.85em;
+    color: #90caf9;
+  }
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1565c0;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    display: none;
+    z-index: 999;
+  }
+  .line-status {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 0.8em;
+    color: #90caf9;
+  }
+  .mark { padding: 4px 8px; background: #0a1628; border-radius: 6px; }
+  .mark.set { color: #66bb6a; }
+</style>
+</head>
+<body>
+
+<h1>⛵ MidnightRider</h1>
+
+<div class="status-bar">
+  <span id="pos-display">GPS: —</span>
+  <span id="time-display">—</span>
+</div>
+
+<!-- TIMER -->
+<div class="section">
+  <h2>⏱ Timer Départ</h2>
+  <div class="timer-display" id="timer">05:00</div>
+  <div class="timer-controls">
+    <button onclick="setTimer(5)">5 min</button>
+    <button onclick="setTimer(4)">4 min</button>
+    <button onclick="setTimer(3)">3 min</button>
+    <button onclick="setTimer(1)">1 min</button>
+    <button onclick="startTimer()" class="success">▶ Start</button>
+    <button onclick="syncTimer()">🔄 Sync</button>
+    <button onclick="stopTimer()" class="danger">■ Stop</button>
+    <button onclick="resetTimer()">↺ Reset</button>
+  </div>
+</div>
+
+<!-- LIGNE DE DÉPART -->
+<div class="section">
+  <h2>📍 Ligne de départ</h2>
+  <div class="btn-grid">
+    <button onclick="markLine('pin')" id="btn-pin">📌 Bouée (Pin)</button>
+    <button onclick="markLine('boat')" id="btn-boat">🚢 Bateau comité</button>
+  </div>
+  <div class="line-status">
+    <span class="mark" id="mark-pin">Pin: —</span>
+    <span class="mark" id="mark-boat">Comité: —</span>
+  </div>
+</div>
+
+<!-- BARREUR -->
+<div class="section">
+  <h2>🧑‍✈️ Barreur</h2>
+  <div class="btn-grid three">
+    <button onclick="setHelmsman('Denis')" id="helm-Denis">Denis</button>
+    <button onclick="setHelmsman('Anne-Sophie')" id="helm-Anne-Sophie">Anne-Sophie</button>
+    <button onclick="setHelmsman('Autre')" id="helm-Autre">Autre</button>
+  </div>
+</div>
+
+<!-- VOILES -->
+<div class="section">
+  <h2>⛵ Voile d'avant</h2>
+  <div class="btn-grid">
+    <button onclick="setForesail('J1')" id="fs-J1">J1</button>
+    <button onclick="setForesail('J2')" id="fs-J2">J2</button>
+    <button onclick="setForesail('J3')" id="fs-J3">J3</button>
+    <button onclick="setForesail('Spi')" id="fs-Spi">Spi</button>
+  </div>
+</div>
+<div class="section">
+  <h2>⛵ Grande voile</h2>
+  <div class="btn-grid three">
+    <button onclick="setMainsail('GV pleine')" id="ms-GV pleine">GV pleine</button>
+    <button onclick="setMainsail('1 ris')" id="ms-1 ris">1 ris</button>
+    <button onclick="setMainsail('2 ris')" id="ms-2 ris">2 ris</button>
+  </div>
+</div>
+
+<!-- NOTES -->
+<div class="section">
+  <h2>📝 Événements</h2>
+  <div class="btn-grid">
+    <button onclick="logEvent('tack', 'Virement')">↩ Virement</button>
+    <button onclick="logEvent('gybe', 'Empannage')">↪ Empannage</button>
+    <button onclick="logEvent('start', 'Départ')">🚦 Départ</button>
+    <button onclick="logEvent('mark', 'Marque')">🏁 Marque</button>
+    <button onclick="logEvent('finish', 'Arrivée')" class="big success">🏆 ARRIVÉE</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let timerSeconds = 300;
+let timerInterval = null;
+let timerRunning = false;
+let currentSail = null;
+let currentHelm = null;
+
+function showToast(msg, duration=2000) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', duration);
+}
+
+async function api(path, data) {
+  try {
+    const r = await fetch(path, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(data)
+    });
+    return await r.json();
+  } catch(e) { return {ok: false}; }
+}
+
+// TIMER
+function setTimer(min) { timerSeconds = min * 60; updateTimerDisplay(); }
+function resetTimer() { stopTimer(); timerSeconds = 300; updateTimerDisplay(); }
+
+function startTimer() {
+  if (timerRunning) return;
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    timerSeconds--;
+    updateTimerDisplay();
+    if (timerSeconds <= 0) {
+      stopTimer();
+      logEvent('gun', 'Coup de canon');
+      showToast('🚦 DÉPART !', 4000);
+    }
+  }, 1000);
+}
+
+function stopTimer() {
+  timerRunning = false;
+  if (timerInterval) clearInterval(timerInterval);
+}
+
+function syncTimer() {
+  // Arrondir timerSeconds à la minute entière la plus proche
+  const remainder = timerSeconds % 60;
+  if (remainder <= 30) {
+    timerSeconds -= remainder;       // arrondir vers le bas
+  } else {
+    timerSeconds += (60 - remainder); // arrondir vers le haut
+  }
+  if (timerSeconds < 0) timerSeconds = 0;
+  updateTimerDisplay();
+  showToast('⏱ Sync → ' + Math.floor(timerSeconds/60) + 'min00');
+}
+
+function updateTimerDisplay() {
+  const el = document.getElementById('timer');
+  const m = Math.floor(Math.abs(timerSeconds) / 60);
+  const s = Math.abs(timerSeconds) % 60;
+  const sign = timerSeconds < 0 ? '-' : '';
+  el.textContent = `${sign}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  el.className = 'timer-display';
+  if (timerSeconds <= 60 && timerSeconds > 0) el.className += ' warning';
+  if (timerSeconds <= 0) el.className += ' danger';
+}
+
+// LIGNE
+async function markLine(point) {
+  const res = await api('/api/start_line', {point});
+  const id = `mark-${point}`;
+  const btn = document.getElementById(`btn-${point}`);
+  if (res.ok) {
+    const lat = res.lat ? res.lat.toFixed(5) : '?';
+    const lon = res.lon ? res.lon.toFixed(5) : '?';
+    document.getElementById(id).textContent = `${point === 'pin' ? 'Pin' : 'Comité'}: ${lat}, ${lon}`;
+    document.getElementById(id).className = 'mark set';
+    btn.className = 'success';
+    showToast(`📍 ${point === 'pin' ? 'Bouée' : 'Comité'} marqué(e)`);
+  }
+}
+
+// BARREUR
+async function setHelmsman(name) {
+  document.querySelectorAll('[id^="helm-"]').forEach(b => b.className = '');
+  document.getElementById(`helm-${name}`).className = 'active';
+  currentHelm = name;
+  const res = await api('/api/helmsman', {name});
+  if (res.ok) showToast(`🧑‍✈️ Barreur: ${name}`);
+}
+
+// VOILES
+let currentForesail = null;
+let currentMainsail = null;
+
+async function setForesail(sail) {
+  document.querySelectorAll('[id^="fs-"]').forEach(b => b.className = '');
+  document.getElementById(`fs-${sail}`).className = 'active';
+  currentForesail = sail;
+  const res = await api('/api/sail', {sail, type: 'foresail'});
+  if (res.ok) showToast(`⛵ Avant: ${sail}`);
+}
+
+async function setMainsail(sail) {
+  document.querySelectorAll('[id^="ms-"]').forEach(b => b.className = '');
+  document.getElementById(`ms-${sail}`).className = 'active';
+  currentMainsail = sail;
+  const res = await api('/api/sail', {sail, type: 'mainsail'});
+  if (res.ok) showToast(`⛵ GV: ${sail}`);
+}
+
+// ÉVÉNEMENTS
+async function logEvent(type, label) {
+  const res = await api('/api/event', {type, note: label});
+  if (res.ok) showToast(`✅ ${label} enregistré`);
+}
+
+// Status bar
+async function updateStatus() {
+  const now = new Date();
+  document.getElementById('time-display').textContent =
+    now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  try {
+    const r = await fetch('/api/position');
+    const pos = await r.json();
+    if (pos.latitude) {
+      document.getElementById('pos-display').textContent =
+        `${pos.latitude.toFixed(4)}° ${pos.longitude.toFixed(4)}°`;
+    }
+  } catch(e) {}
+}
+
+setInterval(updateStatus, 1000);
+updateStatus();
+</script>
+</body>
+</html>
