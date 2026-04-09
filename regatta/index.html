@@ -26,6 +26,10 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 .marks { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.8em; }
 .mark { padding: 4px 8px; background: #0a1628; border-radius: 6px; color: #90caf9; }
 .mark.set { color: #66bb6a; }
+.helm-timer { background: #0a1628; border-radius: 8px; padding: 8px; text-align: center; font-size: 0.8em; color: #90caf9; border: 1px solid #1e3a5f; }
+.helm-timer.active { border-color: #4fc3f7; color: #fff; }
+.helm-timer.warn { border-color: #ffb300; color: #ffb300; }
+.ht-time { font-size: 1.3em; font-weight: bold; font-family: monospace; display: block; margin-top: 2px; }
 </style>
 </head>
 <body>
@@ -96,10 +100,18 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 
 <div class="section">
   <h2>🧑‍✈️ Barreur</h2>
-  <div class="grid3">
+  <div class="grid3" style="margin-bottom:8px">
     <button id="helm-Denis" onclick="setHelmsman('Denis')">Denis</button>
     <button id="helm-AnSo" onclick="setHelmsman('Anne-Sophie')">Anne-Sophie</button>
     <button id="helm-Autre" onclick="setHelmsman('Autre')">Autre</button>
+  </div>
+  <div class="grid3" id="helm-timers">
+    <div class="helm-timer" id="ht-Denis">Denis<br><span class="ht-time">0:00</span></div>
+    <div class="helm-timer" id="ht-AnSo">Anne-So.<br><span class="ht-time">0:00</span></div>
+    <div class="helm-timer" id="ht-Autre">Autre<br><span class="ht-time">0:00</span></div>
+  </div>
+  <div style="text-align:right;margin-top:6px">
+    <button style="width:auto;padding:6px 12px;font-size:0.75em" onclick="resetHelmTimers()">↺ Reset chrono</button>
   </div>
 </div>
 
@@ -117,6 +129,70 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 <div class="toast" id="toast"></div>
 
 <script>
+// --- Chrono barreurs ---
+var helmIds = ['Denis', 'AnSo', 'Autre'];
+var helmNames = {'Denis':'Denis', 'AnSo':'Anne-Sophie', 'Autre':'Autre'};
+var helmSecs = {
+  Denis: parseInt(localStorage.getItem('hs-Denis') || '0'),
+  AnSo:  parseInt(localStorage.getItem('hs-AnSo')  || '0'),
+  Autre: parseInt(localStorage.getItem('hs-Autre') || '0')
+};
+var helmActive = localStorage.getItem('ha') || '';
+var helmStart  = parseInt(localStorage.getItem('hst') || '0');
+
+// Recalculer si un barreur était actif
+if (helmActive && helmStart > 0) {
+  var helmElapsed = Math.floor((Date.now() - helmStart) / 1000);
+  helmSecs[helmActive] += helmElapsed;
+  helmStart = Date.now(); // reset le start
+  localStorage.setItem('hst', helmStart);
+  localStorage.setItem('hs-' + helmActive, helmSecs[helmActive]);
+}
+
+function helmFmt(secs) {
+  var h = Math.floor(secs / 3600);
+  var m = Math.floor((secs % 3600) / 60);
+  var s = secs % 60;
+  return (h > 0 ? h + ':' + pad(m) : m) + ':' + pad(s);
+}
+
+function updateHelmTimers() {
+  helmIds.forEach(function(id) {
+    var el = document.getElementById('ht-' + id);
+    if (!el) return;
+    var secs = helmSecs[id] + (helmActive === id && helmStart > 0 ? Math.floor((Date.now() - helmStart) / 1000) : 0);
+    el.querySelector('.ht-time').textContent = helmFmt(secs);
+    el.className = 'helm-timer' + (helmActive === id ? ' active' : '') + (secs >= 7200 ? ' warn' : '');
+  });
+}
+
+function startHelmTimer(id) {
+  // Sauvegarder le temps du barreur précédent
+  if (helmActive && helmActive !== id && helmStart > 0) {
+    helmSecs[helmActive] += Math.floor((Date.now() - helmStart) / 1000);
+    localStorage.setItem('hs-' + helmActive, helmSecs[helmActive]);
+  }
+  helmActive = id;
+  helmStart = Date.now();
+  localStorage.setItem('ha', id);
+  localStorage.setItem('hst', helmStart);
+}
+
+function resetHelmTimers() {
+  helmIds.forEach(function(id) {
+    helmSecs[id] = 0;
+    localStorage.setItem('hs-' + id, '0');
+  });
+  helmActive = '';
+  helmStart = 0;
+  localStorage.setItem('ha', '');
+  localStorage.setItem('hst', '0');
+  updateHelmTimers();
+  toast('↺ Chronos barreurs remis à zéro');
+}
+
+setInterval(updateHelmTimers, 1000);
+
 // --- État persistant ---
 var S = {
   timerSecs: parseInt(localStorage.getItem('ts') || '300'),
@@ -274,9 +350,11 @@ function setHelmsman(name) {
     document.getElementById('helm-' + id).className = '';
   });
   var map = {'Denis': 'Denis', 'Anne-Sophie': 'AnSo', 'Autre': 'Autre'};
-  document.getElementById('helm-' + map[name]).className = 'on';
+  var id = map[name];
+  document.getElementById('helm-' + id).className = 'on';
   S.helmsman = name;
   save('hm', name);
+  startHelmTimer(id);
   post('/api/helmsman', {name: name}, function() { toast('🧑‍✈️ ' + name); });
 }
 
@@ -320,6 +398,7 @@ function restoreState() {
 setInterval(updateStatus, 1000);
 updateStatus();
 restoreState();
+updateHelmTimers();
 </script>
 </body>
 </html>
