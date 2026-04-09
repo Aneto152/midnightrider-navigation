@@ -5,403 +5,317 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>MidnightRider — Régate</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: -apple-system, sans-serif;
-    background: #0a1628;
-    color: #fff;
-    min-height: 100vh;
-    padding: 16px;
-  }
-  h1 { text-align: center; font-size: 1.4em; margin-bottom: 16px; color: #4fc3f7; }
-  .section {
-    background: #112240;
-    border-radius: 12px;
-    padding: 16px;
-    margin-bottom: 16px;
-    border: 1px solid #1e3a5f;
-  }
-  .section h2 { font-size: 0.9em; color: #4fc3f7; text-transform: uppercase; margin-bottom: 12px; }
-  .btn-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .btn-grid.three { grid-template-columns: repeat(3, 1fr); }
-  button {
-    padding: 14px 8px;
-    border: 2px solid #1e3a5f;
-    border-radius: 10px;
-    background: #0a1628;
-    color: #fff;
-    font-size: 0.95em;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-  }
-  button:active { transform: scale(0.96); }
-  button.active { background: #1565c0; border-color: #4fc3f7; }
-  button.success { background: #1b5e20; border-color: #66bb6a; }
-  button.danger { background: #b71c1c; border-color: #ef5350; }
-  button.big {
-    padding: 20px;
-    font-size: 1.1em;
-    font-weight: bold;
-    grid-column: span 2;
-  }
-  .timer-display {
-    text-align: center;
-    font-size: 3.5em;
-    font-weight: bold;
-    font-family: monospace;
-    color: #fff;
-    padding: 16px 0;
-    letter-spacing: 2px;
-  }
-  .timer-display.warning { color: #ffb300; }
-  .timer-display.danger { color: #ef5350; }
-  .timer-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .status-bar {
-    display: flex;
-    justify-content: space-between;
-    background: #112240;
-    border-radius: 10px;
-    padding: 10px 16px;
-    margin-bottom: 16px;
-    font-size: 0.85em;
-    color: #90caf9;
-  }
-  .toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1565c0;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 0.9em;
-    display: none;
-    z-index: 999;
-  }
-  .line-status {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 8px;
-    font-size: 0.8em;
-    color: #90caf9;
-  }
-  .mark { padding: 4px 8px; background: #0a1628; border-radius: 6px; }
-  .mark.set { color: #66bb6a; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #0a1628; color: #fff; min-height: 100vh; padding: 16px; }
+h1 { text-align: center; font-size: 1.4em; margin-bottom: 16px; color: #4fc3f7; }
+.section { background: #112240; border-radius: 12px; padding: 16px; margin-bottom: 16px; border: 1px solid #1e3a5f; }
+.section h2 { font-size: 0.9em; color: #4fc3f7; text-transform: uppercase; margin-bottom: 12px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+button { padding: 14px 8px; border: 2px solid #1e3a5f; border-radius: 10px; background: #0a1628; color: #fff; font-size: 0.9em; cursor: pointer; width: 100%; }
+button.on { background: #1565c0; border-color: #4fc3f7; }
+button.go { background: #1b5e20; border-color: #66bb6a; }
+button.stop { background: #b71c1c; border-color: #ef5350; }
+button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: bold; }
+.timer { text-align: center; font-size: 3.5em; font-weight: bold; font-family: monospace; padding: 16px 0; }
+.timer.warn { color: #ffb300; }
+.timer.over { color: #ef5350; }
+.status { display: flex; justify-content: space-between; background: #112240; border-radius: 10px; padding: 10px 16px; margin-bottom: 16px; font-size: 0.85em; color: #90caf9; }
+.toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1565c0; color: white; padding: 10px 20px; border-radius: 20px; font-size: 0.9em; display: none; z-index: 999; }
+.marks { display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.8em; }
+.mark { padding: 4px 8px; background: #0a1628; border-radius: 6px; color: #90caf9; }
+.mark.set { color: #66bb6a; }
 </style>
 </head>
 <body>
 
 <h1>⛵ MidnightRider</h1>
 
-<div class="status-bar">
-  <span id="pos-display">GPS: —</span>
-  <span id="time-display">—</span>
+<div class="status">
+  <span id="gps">GPS: —</span>
+  <span id="clock">—</span>
 </div>
 
-<!-- TIMER -->
 <div class="section">
   <h2>⏱ Timer Départ</h2>
-  <div class="timer-display" id="timer">05:00</div>
-  <div class="timer-controls">
+  <div class="timer" id="timer">05:00</div>
+  <div class="grid4" style="margin-bottom:8px">
     <button onclick="setTimer(5)">5 min</button>
     <button onclick="setTimer(4)">4 min</button>
     <button onclick="setTimer(3)">3 min</button>
     <button onclick="setTimer(1)">1 min</button>
-    <button onclick="startTimer()" class="success">▶ Start</button>
+  </div>
+  <div class="grid4">
+    <button class="go" onclick="startTimer()">▶ Start</button>
     <button onclick="syncTimer()">🔄 Sync</button>
-    <button onclick="stopTimer()" class="danger">■ Stop</button>
+    <button class="stop" onclick="stopTimer()">■ Stop</button>
     <button onclick="resetTimer()">↺ Reset</button>
   </div>
 </div>
 
-<!-- LIGNE DE DÉPART -->
 <div class="section">
   <h2>📍 Ligne de départ</h2>
-  <div class="btn-grid">
-    <button onclick="markLine('pin')" id="btn-pin">📌 Bouée (Pin)</button>
-    <button onclick="markLine('boat')" id="btn-boat">🚢 Bateau comité</button>
+  <div class="grid2">
+    <button id="btn-pin" onclick="markLine('pin')">📌 Bouée (Pin)</button>
+    <button id="btn-boat" onclick="markLine('boat')">🚢 Comité</button>
   </div>
-  <div class="line-status">
+  <div class="marks">
     <span class="mark" id="mark-pin">Pin: —</span>
     <span class="mark" id="mark-boat">Comité: —</span>
   </div>
 </div>
 
-<!-- BARREUR -->
-<div class="section">
-  <h2>🧑‍✈️ Barreur</h2>
-  <div class="btn-grid three">
-    <button onclick="setHelmsman('Denis')" id="helm-Denis">Denis</button>
-    <button onclick="setHelmsman('Anne-Sophie')" id="helm-Anne-Sophie">Anne-Sophie</button>
-    <button onclick="setHelmsman('Autre')" id="helm-Autre">Autre</button>
-  </div>
-</div>
-
-<!-- MOTEUR / VOILES -->
 <div class="section">
   <h2>🔧 Mode</h2>
-  <div class="btn-grid">
-    <button onclick="setMode('voile')" id="mode-voile">⛵ Voile</button>
-    <button onclick="setMode('moteur')" id="mode-moteur">🛥 Moteur</button>
+  <div class="grid2">
+    <button id="mode-voile" onclick="setMode('voile')">⛵ Voile</button>
+    <button id="mode-moteur" onclick="setMode('moteur')">🛥 Moteur</button>
   </div>
-</div>
-<div id="sails-section">
-<div class="section">
-  <h2>⛵ Voile d'avant</h2>
-  <div class="btn-grid">
-    <button onclick="setForesail('J1')" id="fs-J1">J1</button>
-    <button onclick="setForesail('J2')" id="fs-J2">J2</button>
-    <button onclick="setForesail('J3')" id="fs-J3">J3</button>
-    <button onclick="setForesail('Spi')" id="fs-Spi">Spi</button>
-  </div>
-</div>
-<div class="section">
-  <h2>⛵ Grande voile</h2>
-  <div class="btn-grid three">
-    <button onclick="setMainsail('GV pleine')" id="ms-GV pleine">GV pleine</button>
-    <button onclick="setMainsail('1 ris')" id="ms-1 ris">1 ris</button>
-    <button onclick="setMainsail('2 ris')" id="ms-2 ris">2 ris</button>
-  </div>
-</div>
 </div>
 
-<!-- NOTES -->
+<div id="sails-section">
+  <div class="section">
+    <h2>⛵ Voile d'avant</h2>
+    <div class="grid4">
+      <button id="fs-J1" onclick="setForesail('J1')">J1</button>
+      <button id="fs-J2" onclick="setForesail('J2')">J2</button>
+      <button id="fs-J3" onclick="setForesail('J3')">J3</button>
+      <button id="fs-Spi" onclick="setForesail('Spi')">Spi</button>
+    </div>
+  </div>
+  <div class="section">
+    <h2>⛵ Grande voile</h2>
+    <div class="grid3">
+      <button id="ms-gv" onclick="setMainsail('GV pleine')">GV pleine</button>
+      <button id="ms-r1" onclick="setMainsail('1 ris')">1 ris</button>
+      <button id="ms-r2" onclick="setMainsail('2 ris')">2 ris</button>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🧑‍✈️ Barreur</h2>
+  <div class="grid3">
+    <button id="helm-Denis" onclick="setHelmsman('Denis')">Denis</button>
+    <button id="helm-AnSo" onclick="setHelmsman('Anne-Sophie')">Anne-Sophie</button>
+    <button id="helm-Autre" onclick="setHelmsman('Autre')">Autre</button>
+  </div>
+</div>
+
 <div class="section">
   <h2>📝 Événements</h2>
-  <div class="btn-grid">
-    <button onclick="logEvent('tack', 'Virement')">↩ Virement</button>
-    <button onclick="logEvent('gybe', 'Empannage')">↪ Empannage</button>
-    <button onclick="logEvent('start', 'Départ')">🚦 Départ</button>
-    <button onclick="logEvent('mark', 'Marque')">🏁 Marque</button>
-    <button onclick="logEvent('finish', 'Arrivée')" class="big success">🏆 ARRIVÉE</button>
+  <div class="grid2">
+    <button onclick="logEvent('tack','Virement')">↩ Virement</button>
+    <button onclick="logEvent('gybe','Empannage')">↪ Empannage</button>
+    <button onclick="logEvent('start','Départ')">🚦 Départ</button>
+    <button onclick="logEvent('mark','Marque')">🏁 Marque</button>
+    <button class="go span2" onclick="logEvent('finish','Arrivée')">🏆 ARRIVÉE</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-let timerSeconds = parseInt(localStorage.getItem('timerSeconds') ?? '300');
-let timerRunning = localStorage.getItem('timerRunning') === 'true';
-let timerStart = parseInt(localStorage.getItem('timerStart') ?? '0');
-let timerInterval = null;
-let currentForesail = localStorage.getItem('foresail') || null;
-let currentMainsail = localStorage.getItem('mainsail') || null;
-let currentHelm = localStorage.getItem('helmsman') || null;
-let currentMode = localStorage.getItem('mode') || 'voile';
+// --- État persistant ---
+var S = {
+  timerSecs: parseInt(localStorage.getItem('ts') || '300'),
+  timerRunning: localStorage.getItem('tr') === '1',
+  timerStart: parseInt(localStorage.getItem('tst') || '0'),
+  foresail: localStorage.getItem('fs') || '',
+  mainsail: localStorage.getItem('ms') || '',
+  helmsman: localStorage.getItem('hm') || '',
+  mode: localStorage.getItem('md') || 'voile'
+};
 
-// Restaurer le timer si il tournait
-if (timerRunning && timerStart > 0) {
-  const elapsed = Math.floor((Date.now() - timerStart) / 1000);
-  timerSeconds -= elapsed;
-  if (timerSeconds <= -3600) { timerRunning = false; }
+var timerInterval = null;
+
+// Recalculer si le timer tournait
+if (S.timerRunning && S.timerStart > 0) {
+  var elapsed = Math.floor((Date.now() - S.timerStart) / 1000);
+  S.timerSecs -= elapsed;
 }
 
-// Démarrer auto si le timer tournait
-if (timerRunning) {
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    saveTimer();
-    updateTimerDisplay();
-    if (timerSeconds <= 0 && timerSeconds > -2) {
-      logEvent('gun', 'Coup de canon');
-      showToast('🚦 DÉPART !', 4000);
-    }
-  }, 1000);
-}
+function save(key, val) { localStorage.setItem(key, val); }
 
-function showToast(msg, duration=2000) {
-  const t = document.getElementById('toast');
+function toast(msg, ms) {
+  var t = document.getElementById('toast');
   t.textContent = msg;
   t.style.display = 'block';
-  setTimeout(() => t.style.display = 'none', duration);
+  setTimeout(function() { t.style.display = 'none'; }, ms || 2000);
 }
 
-async function api(path, data) {
-  try {
-    const r = await fetch(path, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify(data)
-    });
-    return await r.json();
-  } catch(e) { return {ok: false}; }
+function post(path, data, cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', path);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.onload = function() { if (cb) cb(JSON.parse(xhr.responseText)); };
+  xhr.send(JSON.stringify(data));
 }
 
-// TIMER
-function setTimer(min) { timerSeconds = min * 60; updateTimerDisplay(); }
-function resetTimer() { stopTimer(); timerSeconds = 300; updateTimerDisplay(); }
+// --- Timer ---
+function timerDisplay() {
+  var s = S.timerSecs;
+  var neg = s < 0;
+  s = Math.abs(s);
+  var m = Math.floor(s / 60), sc = s % 60;
+  var str = (neg ? '-' : '') + pad(m) + ':' + pad(sc);
+  var el = document.getElementById('timer');
+  el.textContent = str;
+  el.className = 'timer' + (S.timerSecs < 0 ? ' over' : S.timerSecs <= 60 ? ' warn' : '');
+}
+
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+
+function setTimer(m) {
+  stopTimer();
+  S.timerSecs = m * 60;
+  save('ts', S.timerSecs);
+  timerDisplay();
+}
+
+function resetTimer() {
+  stopTimer();
+  S.timerSecs = 300;
+  save('ts', 300);
+  timerDisplay();
+}
 
 function startTimer() {
-  if (timerRunning) return;
-  timerRunning = true;
-  timerStart = Date.now();
-  localStorage.setItem('timerRunning', 'true');
-  localStorage.setItem('timerStart', timerStart);
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    saveTimer();
-    updateTimerDisplay();
-    if (timerSeconds <= 0) {
-      stopTimer();
+  if (S.timerRunning) return;
+  S.timerRunning = true;
+  S.timerStart = Date.now();
+  save('tr', '1');
+  save('tst', S.timerStart);
+  timerInterval = setInterval(function() {
+    S.timerSecs--;
+    save('ts', S.timerSecs);
+    timerDisplay();
+    if (S.timerSecs === 0) {
       logEvent('gun', 'Coup de canon');
-      showToast('🚦 DÉPART !', 4000);
+      toast('🚦 DÉPART !', 4000);
     }
   }, 1000);
 }
 
 function stopTimer() {
-  timerRunning = false;
-  timerStart = 0;
-  localStorage.setItem('timerRunning', 'false');
-  localStorage.setItem('timerStart', '0');
-  if (timerInterval) clearInterval(timerInterval);
+  S.timerRunning = false;
+  S.timerStart = 0;
+  save('tr', '0');
+  save('tst', '0');
+  clearInterval(timerInterval);
+  timerInterval = null;
 }
 
 function syncTimer() {
-  // Arrondir timerSeconds à la minute entière la plus proche
-  const remainder = timerSeconds % 60;
-  if (remainder <= 30) {
-    timerSeconds -= remainder;       // arrondir vers le bas
-  } else {
-    timerSeconds += (60 - remainder); // arrondir vers le haut
-  }
-  if (timerSeconds < 0) timerSeconds = 0;
-  updateTimerDisplay();
-  showToast('⏱ Sync → ' + Math.floor(timerSeconds/60) + 'min00');
+  var r = S.timerSecs % 60;
+  if (r <= 30) S.timerSecs -= r;
+  else S.timerSecs += (60 - r);
+  if (S.timerSecs < 0) S.timerSecs = 0;
+  save('ts', S.timerSecs);
+  timerDisplay();
+  toast('⏱ Sync → ' + Math.floor(S.timerSecs / 60) + 'min00');
 }
 
-function saveTimer() {
-  localStorage.setItem('timerSeconds', timerSeconds);
-}
-
-function updateTimerDisplay() {
-  const el = document.getElementById('timer');
-  const m = Math.floor(Math.abs(timerSeconds) / 60);
-  const s = Math.abs(timerSeconds) % 60;
-  const sign = timerSeconds < 0 ? '-' : '';
-  el.textContent = `${sign}${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-  el.className = 'timer-display';
-  if (timerSeconds <= 60 && timerSeconds > 0) el.className += ' warning';
-  if (timerSeconds <= 0) el.className += ' danger';
-}
-
-// LIGNE
-async function markLine(point) {
-  const res = await api('/api/start_line', {point});
-  const id = `mark-${point}`;
-  const btn = document.getElementById(`btn-${point}`);
-  if (res.ok) {
-    const lat = res.lat ? res.lat.toFixed(5) : '?';
-    const lon = res.lon ? res.lon.toFixed(5) : '?';
-    document.getElementById(id).textContent = `${point === 'pin' ? 'Pin' : 'Comité'}: ${lat}, ${lon}`;
-    document.getElementById(id).className = 'mark set';
-    btn.className = 'success';
-    showToast(`📍 ${point === 'pin' ? 'Bouée' : 'Comité'} marqué(e)`);
-  }
-}
-
-// BARREUR
-async function setHelmsman(name) {
-  document.querySelectorAll('[id^="helm-"]').forEach(b => b.className = '');
-  document.getElementById(`helm-${name}`).className = 'active';
-  currentHelm = name;
-  localStorage.setItem('helmsman', name);
-  const res = await api('/api/helmsman', {name});
-  if (res.ok) showToast(`🧑‍✈️ Barreur: ${name}`);
-}
-
-// VOILES
-let currentForesail = null;
-let currentMainsail = null;
-
-async function setForesail(sail) {
-  document.querySelectorAll('[id^="fs-"]').forEach(b => b.className = '');
-  document.getElementById(`fs-${sail}`).className = 'active';
-  currentForesail = sail;
-  localStorage.setItem('foresail', sail);
-  const res = await api('/api/sail', {sail, type: 'foresail'});
-  if (res.ok) showToast(`⛵ Avant: ${sail}`);
-}
-
-async function setMainsail(sail) {
-  document.querySelectorAll('[id^="ms-"]').forEach(b => b.className = '');
-  document.getElementById(`ms-${sail}`).className = 'active';
-  currentMainsail = sail;
-  localStorage.setItem('mainsail', sail);
-  const res = await api('/api/sail', {sail, type: 'mainsail'});
-  if (res.ok) showToast(`⛵ GV: ${sail}`);
-}
-
-// ÉVÉNEMENTS
-async function logEvent(type, label) {
-  const res = await api('/api/event', {type, note: label});
-  if (res.ok) showToast(`✅ ${label} enregistré`);
-}
-
-// Status bar
-async function updateStatus() {
-  const now = new Date();
-  document.getElementById('time-display').textContent =
-    now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
-  try {
-    const r = await fetch('/api/position');
-    const pos = await r.json();
-    if (pos.latitude) {
-      document.getElementById('pos-display').textContent =
-        `${pos.latitude.toFixed(4)}° ${pos.longitude.toFixed(4)}°`;
+// --- Ligne ---
+function markLine(point) {
+  post('/api/start_line', {point: point}, function(res) {
+    var id = 'mark-' + point;
+    var btn = document.getElementById('btn-' + point);
+    if (res.ok) {
+      var lat = res.lat ? res.lat.toFixed(5) : '?';
+      var lon = res.lon ? res.lon.toFixed(5) : '?';
+      var label = point === 'pin' ? 'Pin' : 'Comité';
+      document.getElementById(id).textContent = label + ': ' + lat + ', ' + lon;
+      document.getElementById(id).className = 'mark set';
+      btn.className = 'go';
+      toast('📍 ' + label + ' marqué(e)');
     }
-  } catch(e) {}
+  });
 }
 
-// Mode moteur/voile
-async function setMode(mode) {
-  currentMode = mode;
-  localStorage.setItem('mode', mode);
-  document.getElementById('mode-voile').className = mode === 'voile' ? 'active' : '';
-  document.getElementById('mode-moteur').className = mode === 'moteur' ? 'danger active' : '';
+// --- Mode ---
+function setMode(mode) {
+  S.mode = mode;
+  save('md', mode);
+  document.getElementById('mode-voile').className = mode === 'voile' ? 'on' : '';
+  document.getElementById('mode-moteur').className = mode === 'moteur' ? 'stop on' : '';
   document.getElementById('sails-section').style.display = mode === 'moteur' ? 'none' : 'block';
-  const res = await api('/api/event', {type: 'mode', note: mode});
-  showToast(mode === 'moteur' ? '🛥 Moteur' : '⛵ Voile');
+  post('/api/event', {type: 'mode', note: mode}, null);
+  toast(mode === 'moteur' ? '🛥 Moteur' : '⛵ Voile');
 }
 
-// Restaurer l'état au chargement
+// --- Voiles ---
+function setForesail(sail) {
+  ['J1','J2','J3','Spi'].forEach(function(s) {
+    document.getElementById('fs-' + s).className = '';
+  });
+  document.getElementById('fs-' + sail).className = 'on';
+  S.foresail = sail;
+  save('fs', sail);
+  post('/api/sail', {sail: sail, type: 'foresail'}, function() { toast('⛵ Avant: ' + sail); });
+}
+
+function setMainsail(sail) {
+  ['ms-gv','ms-r1','ms-r2'].forEach(function(id) {
+    document.getElementById(id).className = '';
+  });
+  var map = {'GV pleine': 'ms-gv', '1 ris': 'ms-r1', '2 ris': 'ms-r2'};
+  document.getElementById(map[sail]).className = 'on';
+  S.mainsail = sail;
+  save('ms', sail);
+  post('/api/sail', {sail: sail, type: 'mainsail'}, function() { toast('⛵ GV: ' + sail); });
+}
+
+// --- Barreur ---
+function setHelmsman(name) {
+  ['Denis','AnSo','Autre'].forEach(function(id) {
+    document.getElementById('helm-' + id).className = '';
+  });
+  var map = {'Denis': 'Denis', 'Anne-Sophie': 'AnSo', 'Autre': 'Autre'};
+  document.getElementById('helm-' + map[name]).className = 'on';
+  S.helmsman = name;
+  save('hm', name);
+  post('/api/helmsman', {name: name}, function() { toast('🧑‍✈️ ' + name); });
+}
+
+// --- Événements ---
+function logEvent(type, label) {
+  post('/api/event', {type: type, note: label}, function() { toast('✅ ' + label); });
+}
+
+// --- Status bar ---
+function updateStatus() {
+  var now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/api/position');
+  xhr.onload = function() {
+    try {
+      var pos = JSON.parse(xhr.responseText);
+      if (pos.latitude) {
+        document.getElementById('gps').textContent =
+          pos.latitude.toFixed(4) + '° ' + pos.longitude.toFixed(4) + '°';
+      }
+    } catch(e) {}
+  };
+  xhr.send();
+}
+
+// --- Restaurer l'état ---
 function restoreState() {
-  // Restaurer barreur
-  if (currentHelm) {
-    const b = document.getElementById(`helm-${currentHelm}`);
-    if (b) b.className = 'active';
-  }
-  // Restaurer voile avant
-  if (currentForesail) {
-    const b = document.getElementById(`fs-${currentForesail}`);
-    if (b) b.className = 'active';
-  }
-  // Restaurer GV
-  if (currentMainsail) {
-    const b = document.getElementById(`ms-${currentMainsail}`);
-    if (b) b.className = 'active';
-  }
-  // Restaurer mode moteur/voile (sans écraser les autres boutons)
-  const modeVoile = document.getElementById('mode-voile');
-  const modeMoteur = document.getElementById('mode-moteur');
-  const sailsSection = document.getElementById('sails-section');
-  if (currentMode === 'moteur') {
-    if (modeMoteur) modeMoteur.className = 'danger active';
-    if (modeVoile) modeVoile.className = '';
-    if (sailsSection) sailsSection.style.display = 'none';
-  } else {
-    if (modeVoile) modeVoile.className = 'active';
-    if (modeMoteur) modeMoteur.className = '';
-    if (sailsSection) sailsSection.style.display = 'block';
-  }
-  updateTimerDisplay();
+  timerDisplay();
+  setMode(S.mode);
+  if (S.foresail) setForesail(S.foresail);
+  if (S.mainsail) setMainsail(S.mainsail);
+  if (S.helmsman) setHelmsman(S.helmsman);
+  if (S.timerRunning) startTimer();
 }
 
 setInterval(updateStatus, 1000);
 updateStatus();
-document.addEventListener('DOMContentLoaded', restoreState);
+restoreState();
 </script>
 </body>
 </html>
