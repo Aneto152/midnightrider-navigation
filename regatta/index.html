@@ -139,7 +139,15 @@
   </div>
 </div>
 
-<!-- VOILES -->
+<!-- MOTEUR / VOILES -->
+<div class="section">
+  <h2>🔧 Mode</h2>
+  <div class="btn-grid">
+    <button onclick="setMode('voile')" id="mode-voile">⛵ Voile</button>
+    <button onclick="setMode('moteur')" id="mode-moteur">🛥 Moteur</button>
+  </div>
+</div>
+<div id="sails-section">
 <div class="section">
   <h2>⛵ Voile d'avant</h2>
   <div class="btn-grid">
@@ -156,6 +164,7 @@
     <button onclick="setMainsail('1 ris')" id="ms-1 ris">1 ris</button>
     <button onclick="setMainsail('2 ris')" id="ms-2 ris">2 ris</button>
   </div>
+</div>
 </div>
 
 <!-- NOTES -->
@@ -177,8 +186,10 @@ let timerSeconds = parseInt(localStorage.getItem('timerSeconds') ?? '300');
 let timerRunning = localStorage.getItem('timerRunning') === 'true';
 let timerStart = parseInt(localStorage.getItem('timerStart') ?? '0');
 let timerInterval = null;
-let currentSail = null;
-let currentHelm = null;
+let currentForesail = localStorage.getItem('foresail') || null;
+let currentMainsail = localStorage.getItem('mainsail') || null;
+let currentHelm = localStorage.getItem('helmsman') || null;
+let currentMode = localStorage.getItem('mode') || 'voile';
 
 // Restaurer le timer si il tournait
 if (timerRunning && timerStart > 0) {
@@ -296,6 +307,7 @@ async function setHelmsman(name) {
   document.querySelectorAll('[id^="helm-"]').forEach(b => b.className = '');
   document.getElementById(`helm-${name}`).className = 'active';
   currentHelm = name;
+  localStorage.setItem('helmsman', name);
   const res = await api('/api/helmsman', {name});
   if (res.ok) showToast(`🧑‍✈️ Barreur: ${name}`);
 }
@@ -308,6 +320,7 @@ async function setForesail(sail) {
   document.querySelectorAll('[id^="fs-"]').forEach(b => b.className = '');
   document.getElementById(`fs-${sail}`).className = 'active';
   currentForesail = sail;
+  localStorage.setItem('foresail', sail);
   const res = await api('/api/sail', {sail, type: 'foresail'});
   if (res.ok) showToast(`⛵ Avant: ${sail}`);
 }
@@ -316,6 +329,7 @@ async function setMainsail(sail) {
   document.querySelectorAll('[id^="ms-"]').forEach(b => b.className = '');
   document.getElementById(`ms-${sail}`).className = 'active';
   currentMainsail = sail;
+  localStorage.setItem('mainsail', sail);
   const res = await api('/api/sail', {sail, type: 'mainsail'});
   if (res.ok) showToast(`⛵ GV: ${sail}`);
 }
@@ -341,8 +355,41 @@ async function updateStatus() {
   } catch(e) {}
 }
 
+// Mode moteur/voile
+async function setMode(mode) {
+  currentMode = mode;
+  localStorage.setItem('mode', mode);
+  document.getElementById('mode-voile').className = mode === 'voile' ? 'active' : '';
+  document.getElementById('mode-moteur').className = mode === 'moteur' ? 'danger active' : '';
+  document.getElementById('sails-section').style.display = mode === 'moteur' ? 'none' : 'block';
+  const res = await api('/api/event', {type: 'mode', note: mode});
+  showToast(mode === 'moteur' ? '🛥 Moteur' : '⛵ Voile');
+}
+
+// Restaurer l'état au chargement
+function restoreState() {
+  if (currentHelm) {
+    const b = document.getElementById(`helm-${currentHelm}`);
+    if (b) b.className = 'active';
+  }
+  if (currentForesail) {
+    const b = document.getElementById(`fs-${currentForesail}`);
+    if (b) b.className = 'active';
+  }
+  if (currentMainsail) {
+    const b = document.getElementById(`ms-${currentMainsail}`);
+    if (b) b.className = 'active';
+  }
+  setMode(currentMode);
+  updateTimerDisplay();
+  if (timerRunning) {
+    document.querySelector('button.success').textContent = '⏸ En cours...';
+  }
+}
+
 setInterval(updateStatus, 1000);
 updateStatus();
+restoreState();
 </script>
 </body>
 </html>
