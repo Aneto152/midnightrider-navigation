@@ -182,6 +182,7 @@ function resetTimer() {
 }
 
 function startTimer() {
+  if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
   if (S.timerRunning) return;
   S.timerRunning = true;
   S.timerStart = Date.now();
@@ -310,7 +311,10 @@ function restoreState() {
   if (S.foresail) setForesail(S.foresail);
   if (S.mainsail) setMainsail(S.mainsail);
   if (S.helmsman) setHelmsman(S.helmsman);
-  if (S.timerRunning) startTimer();
+  if (S.timerRunning) {
+    S.timerRunning = false; // reset pour permettre startTimer
+    startTimer();
+  }
 }
 
 setInterval(updateStatus, 1000);
