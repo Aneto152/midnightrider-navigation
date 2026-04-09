@@ -368,28 +368,40 @@ async function setMode(mode) {
 
 // Restaurer l'état au chargement
 function restoreState() {
+  // Restaurer barreur
   if (currentHelm) {
     const b = document.getElementById(`helm-${currentHelm}`);
     if (b) b.className = 'active';
   }
+  // Restaurer voile avant
   if (currentForesail) {
     const b = document.getElementById(`fs-${currentForesail}`);
     if (b) b.className = 'active';
   }
+  // Restaurer GV
   if (currentMainsail) {
     const b = document.getElementById(`ms-${currentMainsail}`);
     if (b) b.className = 'active';
   }
-  setMode(currentMode);
-  updateTimerDisplay();
-  if (timerRunning) {
-    document.querySelector('button.success').textContent = '⏸ En cours...';
+  // Restaurer mode moteur/voile (sans écraser les autres boutons)
+  const modeVoile = document.getElementById('mode-voile');
+  const modeMoteur = document.getElementById('mode-moteur');
+  const sailsSection = document.getElementById('sails-section');
+  if (currentMode === 'moteur') {
+    if (modeMoteur) modeMoteur.className = 'danger active';
+    if (modeVoile) modeVoile.className = '';
+    if (sailsSection) sailsSection.style.display = 'none';
+  } else {
+    if (modeVoile) modeVoile.className = 'active';
+    if (modeMoteur) modeMoteur.className = '';
+    if (sailsSection) sailsSection.style.display = 'block';
   }
+  updateTimerDisplay();
 }
 
 setInterval(updateStatus, 1000);
 updateStatus();
-restoreState();
+document.addEventListener('DOMContentLoaded', restoreState);
 </script>
 </body>
 </html>
