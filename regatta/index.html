@@ -100,14 +100,16 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 
 <div class="section">
   <h2>🧑‍✈️ Barreur</h2>
-  <div class="grid3" style="margin-bottom:8px">
+  <div class="grid4" style="margin-bottom:8px">
     <button id="helm-Denis" onclick="setHelmsman('Denis')">Denis</button>
     <button id="helm-AnSo" onclick="setHelmsman('Anne-Sophie')">Anne-Sophie</button>
+    <button id="helm-Andrea" onclick="setHelmsman('Andrea')">Andrea</button>
     <button id="helm-Autre" onclick="setHelmsman('Autre')">Autre</button>
   </div>
-  <div class="grid3" id="helm-timers">
+  <div class="grid4" id="helm-timers">
     <div class="helm-timer" id="ht-Denis">Denis<br><span class="ht-time">0:00</span></div>
     <div class="helm-timer" id="ht-AnSo">Anne-So.<br><span class="ht-time">0:00</span></div>
+    <div class="helm-timer" id="ht-Andrea">Andrea<br><span class="ht-time">0:00</span></div>
     <div class="helm-timer" id="ht-Autre">Autre<br><span class="ht-time">0:00</span></div>
   </div>
   <div style="text-align:right;margin-top:6px">
@@ -130,12 +132,13 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 
 <script>
 // --- Chrono barreurs ---
-var helmIds = ['Denis', 'AnSo', 'Autre'];
-var helmNames = {'Denis':'Denis', 'AnSo':'Anne-Sophie', 'Autre':'Autre'};
+var helmIds = ['Denis', 'AnSo', 'Andrea', 'Autre'];
+var helmNames = {'Denis':'Denis', 'AnSo':'Anne-Sophie', 'Andrea':'Andrea', 'Autre':'Autre'};
 var helmSecs = {
-  Denis: parseInt(localStorage.getItem('hs-Denis') || '0'),
-  AnSo:  parseInt(localStorage.getItem('hs-AnSo')  || '0'),
-  Autre: parseInt(localStorage.getItem('hs-Autre') || '0')
+  Denis:  parseInt(localStorage.getItem('hs-Denis')   || '0'),
+  AnSo:   parseInt(localStorage.getItem('hs-AnSo')    || '0'),
+  Andrea: parseInt(localStorage.getItem('hs-Andrea')  || '0'),
+  Autre:  parseInt(localStorage.getItem('hs-Autre')   || '0')
 };
 var helmActive = localStorage.getItem('ha') || '';
 var helmStart  = parseInt(localStorage.getItem('hst') || '0');
@@ -346,10 +349,10 @@ function setMainsail(sail) {
 
 // --- Barreur ---
 function setHelmsman(name) {
-  ['Denis','AnSo','Autre'].forEach(function(id) {
+  ['Denis','AnSo','Andrea','Autre'].forEach(function(id) {
     document.getElementById('helm-' + id).className = '';
   });
-  var map = {'Denis': 'Denis', 'Anne-Sophie': 'AnSo', 'Autre': 'Autre'};
+  var map = {'Denis': 'Denis', 'Anne-Sophie': 'AnSo', 'Andrea': 'Andrea', 'Autre': 'Autre'};
   var id = map[name];
   document.getElementById('helm-' + id).className = 'on';
   S.helmsman = name;
