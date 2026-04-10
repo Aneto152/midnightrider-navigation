@@ -68,6 +68,11 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
     <span class="mark" id="mark-pin">Pin: —</span>
     <span class="mark" id="mark-boat">Comité: —</span>
   </div>
+  <div id="line-distance" style="display:none;margin-top:10px;text-align:center">
+    <div style="font-size:0.8em;color:#90caf9;margin-bottom:4px">Distance à la ligne</div>
+    <div id="line-dist-value" style="font-size:2em;font-weight:bold;font-family:monospace">—</div>
+    <div id="line-dist-side" style="font-size:0.85em;margin-top:2px">—</div>
+  </div>
 </div>
 
 <div class="section">
@@ -131,6 +136,78 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 <div class="toast" id="toast"></div>
 
 <script>
+// --- Ligne de départ ---
+var linePin  = JSON.parse(localStorage.getItem('line-pin')  || 'null');
+var lineBoat = JSON.parse(localStorage.getItem('line-boat') || 'null');
+
+function toRad(d) { return d * Math.PI / 180; }
+
+// Distance entre 2 points GPS en mètres (Haversine)
+function distGPS(a, b) {
+  var R = 6371000;
+  var dLat = toRad(b.lat - a.lat);
+  var dLon = toRad(b.lon - a.lon);
+  var x = Math.sin(dLat/2) * Math.sin(dLat/2) +
+          Math.cos(toRad(a.lat)) * Math.cos(toRad(b.lat)) *
+          Math.sin(dLon/2) * Math.sin(dLon/2);
+  return R * 2 * Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
+}
+
+// Distance signée du point P à la droite AB (positif = côté bâbord de la ligne)
+function distToLine(A, B, P) {
+  // Conversion en coordonnées locales (mètres)
+  var latM = 111319.9;
+  var lonM = 111319.9 * Math.cos(toRad((A.lat + B.lat) / 2));
+  var ax = 0, ay = 0;
+  var bx = (B.lon - A.lon) * lonM, by = (B.lat - A.lat) * latM;
+  var px = (P.lon - A.lon) * lonM, py = (P.lat - A.lat) * latM;
+  // Distance signée à la droite AB
+  var len = Math.sqrt(bx*bx + by*by);
+  if (len === 0) return 0;
+  return (bx * (py - ay) - by * (px - ax)) / len;
+}
+
+function formatDist(m) {
+  if (Math.abs(m) >= 1000) return (m/1000).toFixed(2) + ' nm';
+  return Math.round(Math.abs(m)) + ' m';
+}
+
+function updateLineDistance(pos) {
+  if (!linePin || !lineBoat || !pos.latitude) return;
+  var P = {lat: pos.latitude, lon: pos.longitude};
+  var dist = distToLine(linePin, lineBoat, P);
+  var absDist = Math.abs(dist);
+  var el = document.getElementById('line-dist-value');
+  var side = document.getElementById('line-dist-side');
+  var wrap = document.getElementById('line-distance');
+  wrap.style.display = 'block';
+  el.textContent = formatDist(absDist);
+  if (absDist < 50) {
+    el.style.color = '#ef5350'; // rouge - très proche
+    side.textContent = '⚠️ Sur la ligne !';
+  } else if (dist > 0) {
+    el.style.color = '#66bb6a'; // vert - avant la ligne (bon côté)
+    side.textContent = '✅ Avant la ligne';
+  } else {
+    el.style.color = '#ffb300'; // orange - derrière la ligne
+    side.textContent = '⚠️ Derrière la ligne';
+  }
+}
+
+// Restaurer les points de ligne au chargement
+function restoreLineMarks() {
+  if (linePin) {
+    document.getElementById('mark-pin').textContent = 'Pin: ' + linePin.lat.toFixed(5) + ', ' + linePin.lon.toFixed(5);
+    document.getElementById('mark-pin').className = 'mark set';
+    document.getElementById('btn-pin').className = 'go';
+  }
+  if (lineBoat) {
+    document.getElementById('mark-boat').textContent = 'Comité: ' + lineBoat.lat.toFixed(5) + ', ' + lineBoat.lon.toFixed(5);
+    document.getElementById('mark-boat').className = 'mark set';
+    document.getElementById('btn-boat').className = 'go';
+  }
+}
+
 // --- Chrono barreurs ---
 var helmIds = ['Denis', 'AnSo', 'Andrea', 'Autre'];
 var helmNames = {'Denis':'Denis', 'AnSo':'Anne-Sophie', 'Andrea':'Andrea', 'Autre':'Autre'};
@@ -309,6 +386,10 @@ function markLine(point) {
       document.getElementById(id).textContent = label + ': ' + lat + ', ' + lon;
       document.getElementById(id).className = 'mark set';
       btn.className = 'go';
+      // Sauvegarder le point
+      var pt = {lat: res.lat, lon: res.lon};
+      if (point === 'pin') { linePin = pt; localStorage.setItem('line-pin', JSON.stringify(pt)); }
+      else { lineBoat = pt; localStorage.setItem('line-boat', JSON.stringify(pt)); }
       toast('📍 ' + label + ' marqué(e)');
     }
   });
@@ -379,6 +460,7 @@ function updateStatus() {
       if (pos.latitude) {
         document.getElementById('gps').textContent =
           pos.latitude.toFixed(4) + '° ' + pos.longitude.toFixed(4) + '°';
+        updateLineDistance(pos);
       }
     } catch(e) {}
   };
@@ -402,6 +484,7 @@ setInterval(updateStatus, 1000);
 updateStatus();
 restoreState();
 updateHelmTimers();
+restoreLineMarks();
 </script>
 </body>
 </html>
