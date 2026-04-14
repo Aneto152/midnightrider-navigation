@@ -16,3 +16,13 @@ Updates disponibles: 247
 - apt upgrade lancé (250 → en cours)
 - Audit hebdomadaire cron configuré (lundi 8h)
 ===
+=== Audit 2026-04-13 08:00 ===
+sudo: ufw: command not found
+Firewall: 
+Ports:
+Docker:
+signalk Up 4 days
+grafana Up 4 days
+influxdb Up 4 days
+Updates disponibles: 30
+===
