@@ -3,6 +3,7 @@
 
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import json, time, urllib.parse, urllib.request, os
+import weather_collector
 
 INFLUX_URL = "http://localhost:8086"
 INFLUX_TOKEN = "4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA=="
@@ -234,6 +235,8 @@ class Handler(BaseHTTPRequestHandler):
             params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             radius = float(params.get('radius', ['10'])[0])
             self.send_json(get_ais_targets(radius))
+        elif self.path == "/api/weather/status":
+            self.send_json(weather_collector.status())
         elif self.path.startswith("/api/ndbc/"):
             station_id = self.path.split("/")[-1].upper()
             self.send_json(fetch_ndbc(station_id))
@@ -267,6 +270,10 @@ class Handler(BaseHTTPRequestHandler):
                 {"lat": lat, "lon": lon, "point": point},
                 {"mark": point})
             self.send_json({"ok": ok, "lat": lat, "lon": lon})
+        elif self.path == "/api/weather/start":
+            self.send_json(weather_collector.start())
+        elif self.path == "/api/weather/stop":
+            self.send_json(weather_collector.stop())
         elif self.path == "/api/event":
             ok = write_influx("regatta.events",
                 {"note": body.get("note",""), "value": 1},

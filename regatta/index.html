@@ -480,6 +480,42 @@ function restoreState() {
   }
 }
 
+// --- Météo collecteur ---
+function wxStart() {
+  post('/api/weather/start', {}, function(r) {
+    toast(r.ok ? '🌬️ Collecte démarrée' : r.msg);
+    wxStatus();
+  });
+}
+function wxStop() {
+  post('/api/weather/stop', {}, function(r) {
+    toast('■ Collecte arrêtée');
+    wxStatus();
+  });
+}
+function wxStatus() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/api/weather/status');
+  xhr.onload = function() {
+    try {
+      var d = JSON.parse(xhr.responseText);
+      var el = document.getElementById('wx-status');
+      if (d.running) {
+        el.textContent = '● En cours — ' + d.stations + ' stations / ' + (d.interval_s/60) + 'min';
+        el.style.color = '#66bb6a';
+        document.getElementById('btn-wx-start').className = 'on';
+      } else {
+        el.textContent = '○ Arrêté';
+        el.style.color = '#546e7a';
+        document.getElementById('btn-wx-start').className = '';
+      }
+    } catch(e) {}
+  };
+  xhr.send();
+}
+setInterval(wxStatus, 10000);
+wxStatus();
+
 setInterval(updateStatus, 1000);
 updateStatus();
 restoreState();
