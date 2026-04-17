@@ -142,10 +142,25 @@ h1 { text-align: center; font-size: 1.3em; color: #4fc3f7; margin-bottom: 4px; }
 <div class="config-bar">
   <label>Cap marque (°)</label>
   <input type="number" id="mark-bearing" value="0" min="0" max="359">
-  <button onclick="saveConfig()">💾 Save</button>
   <label style="margin-left:8px">Rayon</label>
   <input type="number" id="radius" value="10" min="1" max="20" style="width:50px">
   <label>nm</label>
+  <label style="margin-left:8px">PHRF MR</label>
+  <input type="number" id="phrf-mr" value="156" min="0" max="300" style="width:55px">
+  <button onclick="saveConfig()">💾 Save</button>
+  <button onclick="toggleRatings()" style="background:#0d2a4a">🏆 Ratings</button>
+</div>
+
+<!-- Ratings panel -->
+<div id="ratings-panel" style="display:none;background:#0d1f35;border-radius:10px;padding:12px;margin-bottom:10px;border:1px solid #1e3a5f">
+  <div style="font-size:0.8em;color:#4fc3f7;margin-bottom:6px">🏆 Ratings PHRF flotte</div>
+  <div style="font-size:0.72em;color:#546e7a;margin-bottom:8px">VMG corrigé = VMG × (PHRF_MR ÷ PHRF_concurrent)</div>
+  <div id="ratings-list"></div>
+  <div style="display:flex;gap:6px;margin-top:8px">
+    <input id="new-name" placeholder="Nom bateau" style="flex:1;background:#1e3a5f;border:1px solid #2a5080;border-radius:6px;color:white;padding:5px 8px;font-size:0.8em">
+    <input id="new-phrf" type="number" placeholder="PHRF" style="width:65px;background:#1e3a5f;border:1px solid #2a5080;border-radius:6px;color:white;padding:5px 8px;font-size:0.8em">
+    <button onclick="addRating()" style="background:#1565c0;border:none;border-radius:6px;color:white;padding:5px 10px;font-size:0.8em">+ Add</button>
+  </div>
 </div>
 
 <!-- Toggle view -->
@@ -166,6 +181,68 @@ h1 { text-align: center; font-size: 1.3em; color: #4fc3f7; margin-bottom: 4px; }
 var currentView = 'live';
 var markBearing = parseFloat(localStorage.getItem('mark-bearing') || '0');
 var radius = parseFloat(localStorage.getItem('radius') || '10');
+var phrfMR = parseFloat(localStorage.getItem('phrf-mr') || '156');
+var ratings = JSON.parse(localStorage.getItem('fleet-ratings') || '{}');
+// ratings = { "BOAT NAME": phrf_value }
+
+document.getElementById('mark-bearing').value = markBearing;
+document.getElementById('radius').value = radius;
+document.getElementById('phrf-mr').value = phrfMR;
+
+function toggleRatings() {
+  var p = document.getElementById('ratings-panel');
+  p.style.display = p.style.display === 'none' ? 'block' : 'none';
+  renderRatingsList();
+}
+
+function renderRatingsList() {
+  var html = '';
+  var keys = Object.keys(ratings);
+  if (!keys.length) {
+    html = '<div style="color:#546e7a;font-size:0.8em">Aucun rating saisi</div>';
+  } else {
+    html = '<table style="width:100%;font-size:0.8em;border-collapse:collapse">';
+    keys.forEach(function(name) {
+      html += '<tr><td style="padding:3px 6px">'+name+'</td>' +
+        '<td style="padding:3px 6px;font-family:monospace">PHRF '+ratings[name]+'</td>' +
+        '<td style="padding:3px 6px"><button onclick="removeRating(\''+name+'\')" style="background:#b71c1c;border:none;border-radius:4px;color:white;padding:2px 6px;font-size:0.75em">✕</button></td></tr>';
+    });
+    html += '</table>';
+  }
+  document.getElementById('ratings-list').innerHTML = html;
+}
+
+function addRating() {
+  var name = document.getElementById('new-name').value.trim().toUpperCase();
+  var phrf = parseFloat(document.getElementById('new-phrf').value);
+  if (!name || isNaN(phrf)) return;
+  ratings[name] = phrf;
+  localStorage.setItem('fleet-ratings', JSON.stringify(ratings));
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-phrf').value = '';
+  renderRatingsList();
+}
+
+function removeRating(name) {
+  delete ratings[name];
+  localStorage.setItem('fleet-ratings', JSON.stringify(ratings));
+  renderRatingsList();
+}
+
+function getPHRF(boatName) {
+  // Cherche par correspondance partielle
+  var name = (boatName || '').toUpperCase();
+  for (var k in ratings) {
+    if (name.includes(k) || k.includes(name)) return ratings[k];
+  }
+  return null;
+}
+
+function correctedVMG(vmg, boatName) {
+  var phrf = getPHRF(boatName);
+  if (!phrf) return null;
+  return vmg * (phrfMR / phrf);
+}
 var mrHistory = []; // {time, sog, cog, vmg}
 var fleetHistory = {}; // mmsi -> [{time, sog, cog, lat, lon}]
 
@@ -175,8 +252,10 @@ document.getElementById('radius').value = radius;
 function saveConfig() {
   markBearing = parseFloat(document.getElementById('mark-bearing').value);
   radius = parseFloat(document.getElementById('radius').value);
+  phrfMR = parseFloat(document.getElementById('phrf-mr').value);
   localStorage.setItem('mark-bearing', markBearing);
   localStorage.setItem('radius', radius);
+  localStorage.setItem('phrf-mr', phrfMR);
   loadFleet();
 }
 
@@ -248,30 +327,34 @@ function renderFleet() {
 
   if (currentView === 'live') {
     html = '<table class="fleet-table"><thead><tr>' +
-      '<th>Bateau</th><th>Dist</th><th>SOG</th><th>VMG</th><th>ΔVMG</th><th>Latéral</th>' +
+      '<th>Bateau</th><th>Dist</th><th>VMG</th><th>VMGc*</th><th>ΔVMGc</th><th>Latéral</th>' +
       '</tr></thead><tbody>';
 
     targets.forEach(function(t) {
       var vmg = calcVMG(t.sog, t.cog, markBearing);
+      var vmgC = correctedVMG(vmg, t.name);
       var mrVmg = mr ? calcVMG(mr.sog, mr.cog, markBearing) : null;
-      var delta = (mrVmg != null) ? (vmg - mrVmg) : null;
+      var delta = (mrVmg != null && vmgC != null) ? (vmgC - mrVmg) :
+                  (mrVmg != null) ? (vmg - mrVmg) : null;
       var lat = (mr && t.lat && t.lon) ? lateralOffset(mr.lat, mr.lon, t.lat, t.lon, markBearing) : null;
 
       var dCls = delta == null ? 'neu' : delta > 0.1 ? 'pos' : delta < -0.1 ? 'neg' : 'neu';
       var dSign = delta > 0 ? '+' : '';
       var latIcon = lat == null ? '—' : lat > 0.05 ? '<span class="lat-loss">→ +'+fmt(lat,2)+'nm ⬆️</span>' :
         lat < -0.05 ? '<span class="lat-gain">← '+fmt(lat,2)+'nm ⬇️</span>' : '<span class="lat-neu">≈ 0</span>';
+      var phrfTag = getPHRF(t.name) ? '<span style="font-size:0.7em;color:#80cbc4"> ('+getPHRF(t.name)+')</span>' : '<span style="font-size:0.7em;color:#546e7a"> (?)</span>';
 
       html += '<tr>' +
         '<td><div class="boat-name" title="'+t.name+'">'+t.name+'</div>' +
-        '<div class="dist">'+fmt(t.dist,1)+'nm '+bearingLabel(mr ? bearing(mr.lat,mr.lon,t.lat,t.lon) : 0)+'</div></td>' +
-        '<td class="sog">'+fmt(t.sog,1)+'</td>' +
+        '<div class="dist">'+fmt(t.dist,1)+'nm '+bearingLabel(mr ? bearing(mr.lat,mr.lon,t.lat,t.lon) : 0)+phrfTag+'</div></td>' +
         '<td class="vmg-val">'+fmt(vmg,1)+'</td>' +
+        '<td class="vmg-val" style="color:#80cbc4">'+(vmgC!=null?fmt(vmgC,1):'—')+'</td>' +
         '<td class="delta '+dCls+'">'+(delta!=null ? dSign+fmt(delta,1) : '—')+'</td>' +
         '<td>'+latIcon+'</td>' +
         '</tr>';
     });
     html += '</tbody></table>';
+    html += '<div style="font-size:0.65em;color:#546e7a;margin-top:6px">* VMGc = VMG corrigé PHRF — configurer les ratings ci-dessus</div>';
 
   } else {
     var mins = currentView === '5min' ? 5 : 30;
