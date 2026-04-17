@@ -32,6 +32,61 @@ def write_influx(measurement, fields, tags={}):
         print(f"InfluxDB error: {e}")
         return False
 
+def get_signalk(path):
+    try:
+        url = f"{SIGNALK_URL}/signalk/v1/api/{path}"
+        req = urllib.request.Request(url)
+        res = urllib.request.urlopen(req, timeout=2)
+        return json.loads(res.read())
+    except:
+        return {}
+
+def get_navigation():
+    sog_data = get_signalk("vessels/self/navigation/speedOverGround")
+    cog_data = get_signalk("vessels/self/navigation/courseOverGroundTrue")
+    return {
+        "sog": sog_data.get("value", 0) * 1.94384 if sog_data.get("value") else 0,
+        "cog": round((cog_data.get("value", 0) or 0) * 57.2958, 1)
+    }
+
+def get_ais_targets(radius_nm=10):
+    try:
+        data = get_signalk("vessels")
+        targets = []
+        self_id = None
+        # Trouver l'ID de MidnightRider
+        for k in data.keys():
+            v = data[k]
+            if isinstance(v, dict) and v.get("self"):
+                self_id = k
+                break
+        for mmsi, vessel in data.items():
+            if not isinstance(vessel, dict): continue
+            if mmsi == self_id or mmsi == "self": continue
+            nav = vessel.get("navigation", {})
+            pos = nav.get("position", {}).get("value", {})
+            if not pos or not pos.get("latitude"): continue
+            # Filtrer voiliers uniquement
+            vessel_type = vessel.get("design", {}).get("aisShipType", {}).get("value", {}).get("id", 0)
+            if vessel_type and (vessel_type < 36 or vessel_type > 39) and vessel_type != 0:
+                continue  # pas un voilier
+            name = vessel.get("name", mmsi)
+            if isinstance(name, dict): name = name.get("value", mmsi)
+            sog = nav.get("speedOverGround", {}).get("value", 0) or 0
+            cog = nav.get("courseOverGroundTrue", {}).get("value", 0) or 0
+            targets.append({
+                "mmsi": mmsi,
+                "name": str(name)[:20],
+                "lat": pos["latitude"],
+                "lon": pos["longitude"],
+                "sog": round(sog * 1.94384, 2),
+                "cog": round(cog * 57.2958, 1)
+            })
+        return targets
+    except Exception as e:
+        print(f"AIS error: {e}")
+        return []
+
 def get_gps_position():
     try:
         url = f"{SIGNALK_URL}/signalk/v1/api/vessels/self/navigation/position"
@@ -168,9 +223,17 @@ class Handler(BaseHTTPRequestHandler):
             self.serve_file("index.html")
         elif self.path == "/wind":
             self.serve_file("wind.html")
+        elif self.path == "/fleet":
+            self.serve_file("fleet.html")
         elif self.path == "/api/position":
             pos = get_gps_position()
             self.send_json(pos)
+        elif self.path == "/api/navigation":
+            self.send_json(get_navigation())
+        elif self.path.startswith("/api/ais"):
+            params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
+            radius = float(params.get('radius', ['10'])[0])
+            self.send_json(get_ais_targets(radius))
         elif self.path.startswith("/api/ndbc/"):
             station_id = self.path.split("/")[-1].upper()
             self.send_json(fetch_ndbc(station_id))

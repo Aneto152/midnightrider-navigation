@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>MidnightRider — Flotte</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, sans-serif; background: #0a1628; color: #fff; padding: 12px; }
+h1 { text-align: center; font-size: 1.3em; color: #4fc3f7; margin-bottom: 4px; }
+.updated { text-align: center; font-size: 0.75em; color: #546e7a; margin-bottom: 10px; }
+
+/* MidnightRider card */
+.mr-card {
+  background: #1a3a5c;
+  border: 2px solid #4fc3f7;
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin-bottom: 12px;
+}
+.mr-title { font-size: 0.75em; color: #4fc3f7; text-transform: uppercase; margin-bottom: 8px; }
+.mr-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.mr-stat { text-align: center; }
+.mr-val { font-size: 1.4em; font-weight: bold; font-family: monospace; }
+.mr-lbl { font-size: 0.65em; color: #90caf9; }
+
+/* Config bar */
+.config-bar {
+  background: #0d1f35;
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.config-bar label { font-size: 0.75em; color: #90caf9; }
+.config-bar input {
+  background: #1e3a5f;
+  border: 1px solid #2a5080;
+  border-radius: 6px;
+  color: white;
+  padding: 4px 8px;
+  font-size: 0.85em;
+  width: 70px;
+}
+.config-bar button {
+  background: #1565c0;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  padding: 5px 10px;
+  font-size: 0.8em;
+  cursor: pointer;
+}
+
+/* View toggle */
+.toggle { display: flex; gap: 6px; margin-bottom: 10px; }
+.toggle button { flex: 1; padding: 8px; border: 1px solid #1e3a5f; border-radius: 8px; background: #0a1628; color: #90caf9; font-size: 0.8em; cursor: pointer; }
+.toggle button.on { background: #1565c0; color: white; border-color: #4fc3f7; }
+
+/* Fleet table */
+.fleet-table { width: 100%; border-collapse: collapse; font-size: 0.78em; }
+.fleet-table th { color: #546e7a; text-align: left; padding: 4px 6px; border-bottom: 1px solid #1e3a5f; font-size: 0.85em; }
+.fleet-table td { padding: 6px 6px; border-bottom: 1px solid #0d1f35; vertical-align: middle; }
+.fleet-table tr:hover td { background: #0d1f35; }
+
+.boat-name { font-weight: bold; max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sog { font-family: monospace; }
+.vmg-val { font-family: monospace; font-weight: bold; }
+.delta { font-family: monospace; font-weight: bold; }
+.delta.pos { color: #ef5350; }  /* concurrent devant */
+.delta.neg { color: #66bb6a; }  /* concurrent derrière */
+.delta.neu { color: #90caf9; }
+
+.lat-gain { color: #66bb6a; }  /* on gagne en latéral */
+.lat-loss { color: #ef5350; }  /* on perd en latéral */
+.lat-neu  { color: #90caf9; }
+
+.trend-up   { color: #ef5350; }
+.trend-dn   { color: #66bb6a; }
+.trend-flat { color: #90caf9; }
+
+.dist { color: #90caf9; font-size: 0.9em; }
+.bearing-badge {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  background: #1e3a5f;
+}
+
+/* Avg view */
+.avg-section { margin-top: 6px; }
+.avg-title { font-size: 0.7em; color: #546e7a; margin: 8px 0 4px; text-transform: uppercase; }
+
+/* No data */
+.nodata { text-align: center; padding: 30px; color: #546e7a; }
+.nodata .icon { font-size: 2em; margin-bottom: 8px; }
+
+.refresh-btn { display: block; width: 100%; padding: 12px; margin-top: 12px; background: #1565c0; border: none; border-radius: 10px; color: white; font-size: 0.9em; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<h1>⛵ Benchmark Flotte</h1>
+<div class="updated" id="updated">Chargement...</div>
+
+<!-- MidnightRider -->
+<div class="mr-card">
+  <div class="mr-title">🚩 MidnightRider</div>
+  <div class="mr-grid">
+    <div class="mr-stat">
+      <div class="mr-val" id="mr-sog">—</div>
+      <div class="mr-lbl">SOG kts</div>
+    </div>
+    <div class="mr-stat">
+      <div class="mr-val" id="mr-vmg">—</div>
+      <div class="mr-lbl">VMG kts</div>
+    </div>
+    <div class="mr-stat">
+      <div class="mr-val" id="mr-cog">—</div>
+      <div class="mr-lbl">COG °</div>
+    </div>
+    <div class="mr-stat">
+      <div class="mr-val" id="mr-vmg5">—</div>
+      <div class="mr-lbl">VMG 5min</div>
+    </div>
+    <div class="mr-stat">
+      <div class="mr-val" id="mr-vmg30">—</div>
+      <div class="mr-lbl">VMG 30min</div>
+    </div>
+    <div class="mr-stat">
+      <div class="mr-val" id="mr-count">—</div>
+      <div class="mr-lbl">Bateaux 10nm</div>
+    </div>
+  </div>
+</div>
+
+<!-- Config -->
+<div class="config-bar">
+  <label>Cap marque (°)</label>
+  <input type="number" id="mark-bearing" value="0" min="0" max="359">
+  <button onclick="saveConfig()">💾 Save</button>
+  <label style="margin-left:8px">Rayon</label>
+  <input type="number" id="radius" value="10" min="1" max="20" style="width:50px">
+  <label>nm</label>
+</div>
+
+<!-- Toggle view -->
+<div class="toggle">
+  <button id="btn-live" class="on" onclick="setView('live')">⚡ Live</button>
+  <button id="btn-5min" onclick="setView('5min')">📊 5 min</button>
+  <button id="btn-30min" onclick="setView('30min')">📊 30 min</button>
+</div>
+
+<!-- Fleet table -->
+<div id="fleet-content">
+  <div class="nodata"><div class="icon">📡</div>En attente des données AIS...<br><small>Connecter le YDWG-02 pour activer</small></div>
+</div>
+
+<button class="refresh-btn" onclick="loadFleet()">🔄 Rafraîchir</button>
+
+<script>
+var currentView = 'live';
+var markBearing = parseFloat(localStorage.getItem('mark-bearing') || '0');
+var radius = parseFloat(localStorage.getItem('radius') || '10');
+var mrHistory = []; // {time, sog, cog, vmg}
+var fleetHistory = {}; // mmsi -> [{time, sog, cog, lat, lon}]
+
+document.getElementById('mark-bearing').value = markBearing;
+document.getElementById('radius').value = radius;
+
+function saveConfig() {
+  markBearing = parseFloat(document.getElementById('mark-bearing').value);
+  radius = parseFloat(document.getElementById('radius').value);
+  localStorage.setItem('mark-bearing', markBearing);
+  localStorage.setItem('radius', radius);
+  loadFleet();
+}
+
+function setView(v) {
+  currentView = v;
+  ['live','5min','30min'].forEach(function(x) {
+    document.getElementById('btn-'+x).className = x === v ? 'on' : '';
+  });
+  renderFleet();
+}
+
+// Calcul VMG vers une marque
+function calcVMG(sog, cog, markBrg) {
+  var angle = (cog - markBrg + 360) % 360;
+  if (angle > 180) angle = 360 - angle;
+  return sog * Math.cos(angle * Math.PI / 180);
+}
+
+// Distance entre 2 points GPS (nm)
+function distNm(lat1, lon1, lat2, lon2) {
+  var R = 3440.065; // nm
+  var dLat = (lat2-lat1)*Math.PI/180;
+  var dLon = (lon2-lon1)*Math.PI/180;
+  var a = Math.sin(dLat/2)*Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*
+    Math.sin(dLon/2)*Math.sin(dLon/2);
+  return R * 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+// Relèvement de A vers B
+function bearing(lat1, lon1, lat2, lon2) {
+  var dLon = (lon2-lon1)*Math.PI/180;
+  var y = Math.sin(dLon)*Math.cos(lat2*Math.PI/180);
+  var x = Math.cos(lat1*Math.PI/180)*Math.sin(lat2*Math.PI/180) -
+    Math.sin(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.cos(dLon);
+  return (Math.atan2(y,x)*180/Math.PI+360)%360;
+}
+
+// Position latérale d'un bateau par rapport à MidnightRider
+// Positif = il est du côté favorable (au vent de la marque)
+function lateralOffset(mrLat, mrLon, targetLat, targetLon, markBrg) {
+  var brg = bearing(mrLat, mrLon, targetLat, targetLon);
+  var relBrg = (brg - markBrg + 360) % 360;
+  // Négatif = sous le vent, positif = au vent
+  if (relBrg <= 180) return distNm(mrLat, mrLon, targetLat, targetLon) * Math.sin(relBrg*Math.PI/180);
+  else return -distNm(mrLat, mrLon, targetLat, targetLon) * Math.sin((360-relBrg)*Math.PI/180);
+}
+
+function fmt(v, dec) {
+  if (v == null || isNaN(v)) return '—';
+  return v.toFixed(dec || 1);
+}
+
+function avgVMG(history, minutes) {
+  if (!history || history.length === 0) return null;
+  var cutoff = Date.now() - minutes * 60 * 1000;
+  var recent = history.filter(function(h) { return h.time > cutoff; });
+  if (!recent.length) return null;
+  var sum = recent.reduce(function(s, h) { return s + h.vmg; }, 0);
+  return sum / recent.length;
+}
+
+function renderFleet() {
+  var targets = window._fleetData;
+  if (!targets || !targets.length) return;
+
+  var mr = window._mrData;
+  var html = '';
+
+  if (currentView === 'live') {
+    html = '<table class="fleet-table"><thead><tr>' +
+      '<th>Bateau</th><th>Dist</th><th>SOG</th><th>VMG</th><th>ΔVMG</th><th>Latéral</th>' +
+      '</tr></thead><tbody>';
+
+    targets.forEach(function(t) {
+      var vmg = calcVMG(t.sog, t.cog, markBearing);
+      var mrVmg = mr ? calcVMG(mr.sog, mr.cog, markBearing) : null;
+      var delta = (mrVmg != null) ? (vmg - mrVmg) : null;
+      var lat = (mr && t.lat && t.lon) ? lateralOffset(mr.lat, mr.lon, t.lat, t.lon, markBearing) : null;
+
+      var dCls = delta == null ? 'neu' : delta > 0.1 ? 'pos' : delta < -0.1 ? 'neg' : 'neu';
+      var dSign = delta > 0 ? '+' : '';
+      var latIcon = lat == null ? '—' : lat > 0.05 ? '<span class="lat-loss">→ +'+fmt(lat,2)+'nm ⬆️</span>' :
+        lat < -0.05 ? '<span class="lat-gain">← '+fmt(lat,2)+'nm ⬇️</span>' : '<span class="lat-neu">≈ 0</span>';
+
+      html += '<tr>' +
+        '<td><div class="boat-name" title="'+t.name+'">'+t.name+'</div>' +
+        '<div class="dist">'+fmt(t.dist,1)+'nm '+bearingLabel(mr ? bearing(mr.lat,mr.lon,t.lat,t.lon) : 0)+'</div></td>' +
+        '<td class="sog">'+fmt(t.sog,1)+'</td>' +
+        '<td class="vmg-val">'+fmt(vmg,1)+'</td>' +
+        '<td class="delta '+dCls+'">'+(delta!=null ? dSign+fmt(delta,1) : '—')+'</td>' +
+        '<td>'+latIcon+'</td>' +
+        '</tr>';
+    });
+    html += '</tbody></table>';
+
+  } else {
+    var mins = currentView === '5min' ? 5 : 30;
+    html = '<div class="avg-title">Moyenne sur '+mins+' min</div>';
+    html += '<table class="fleet-table"><thead><tr>' +
+      '<th>Bateau</th><th>VMG moy</th><th>ΔVMG moy</th><th>Tendance</th>' +
+      '</tr></thead><tbody>';
+
+    var mrAvg = avgVMG(mrHistory, mins);
+
+    targets.forEach(function(t) {
+      var hist = fleetHistory[t.mmsi] || [];
+      var avg = avgVMG(hist.map(function(h) {
+        return { time: h.time, vmg: calcVMG(h.sog, h.cog, markBearing) };
+      }), mins);
+      var delta = (mrAvg != null && avg != null) ? (avg - mrAvg) : null;
+      var dCls = delta == null ? 'neu' : delta > 0.1 ? 'pos' : delta < -0.1 ? 'neg' : 'neu';
+      var dSign = delta > 0 ? '+' : '';
+
+      // Tendance: comparer première et dernière moitié
+      var trend = '→';
+      var trendCls = 'trend-flat';
+      if (hist.length >= 4) {
+        var half = Math.floor(hist.length/2);
+        var first = hist.slice(0,half).reduce(function(s,h){return s+calcVMG(h.sog,h.cog,markBearing);},0)/half;
+        var last  = hist.slice(half).reduce(function(s,h){return s+calcVMG(h.sog,h.cog,markBearing);},0)/(hist.length-half);
+        if (last - first > 0.2) { trend = '↑'; trendCls = 'trend-up'; }
+        else if (first - last > 0.2) { trend = '↓'; trendCls = 'trend-dn'; }
+      }
+
+      html += '<tr>' +
+        '<td><div class="boat-name">'+t.name+'</div><div class="dist">'+fmt(t.dist,1)+'nm</div></td>' +
+        '<td class="vmg-val">'+(avg!=null?fmt(avg,1):'—')+'</td>' +
+        '<td class="delta '+dCls+'">'+(delta!=null?dSign+fmt(delta,1):'—')+'</td>' +
+        '<td class="'+trendCls+'">'+trend+'</td>' +
+        '</tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  document.getElementById('fleet-content').innerHTML = html;
+}
+
+function bearingLabel(brg) {
+  var dirs = ['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSO','SO','OSO','O','ONO','NO','NNO'];
+  return dirs[Math.round(brg/22.5)%16];
+}
+
+async function loadFleet() {
+  document.getElementById('updated').textContent = 'Mise à jour...';
+  try {
+    // Récupérer position et données MidnightRider
+    var mrRes = await fetch('/api/position');
+    var mrPos = await mrRes.json();
+    var mrNavRes = await fetch('/api/navigation');
+    var mrNav = await mrNavRes.json().catch(function(){return {};});
+
+    var mr = null;
+    if (mrPos && mrPos.latitude) {
+      var sog = mrNav.sog || 0;
+      var cog = mrNav.cog || 0;
+      mr = {
+        lat: mrPos.latitude,
+        lon: mrPos.longitude,
+        sog: sog,
+        cog: cog
+      };
+      window._mrData = mr;
+
+      // Mettre à jour l'affichage MidnightRider
+      document.getElementById('mr-sog').textContent = sog.toFixed(1);
+      document.getElementById('mr-cog').textContent = Math.round(cog);
+      document.getElementById('mr-vmg').textContent = calcVMG(sog, cog, markBearing).toFixed(1);
+
+      // Historique MidnightRider
+      mrHistory.push({ time: Date.now(), sog: sog, cog: cog, vmg: calcVMG(sog, cog, markBearing) });
+      mrHistory = mrHistory.filter(function(h){ return h.time > Date.now() - 35*60*1000; });
+
+      document.getElementById('mr-vmg5').textContent = fmt(avgVMG(mrHistory, 5), 1);
+      document.getElementById('mr-vmg30').textContent = fmt(avgVMG(mrHistory, 30), 1);
+    }
+
+    // Récupérer les targets AIS
+    var aisRes = await fetch('/api/ais?radius=' + radius);
+    var targets = await aisRes.json();
+
+    if (!targets || !targets.length) {
+      document.getElementById('fleet-content').innerHTML =
+        '<div class="nodata"><div class="icon">📡</div>Aucun voilier AIS dans ' + radius + 'nm<br><small>YDWG-02 connecté ?</small></div>';
+      document.getElementById('mr-count').textContent = '0';
+      document.getElementById('updated').textContent = 'Mis à jour: ' + new Date().toLocaleTimeString('fr-FR');
+      return;
+    }
+
+    // Filtrer et calculer distances
+    targets = targets.filter(function(t) {
+      return mr ? distNm(mr.lat, mr.lon, t.lat, t.lon) <= radius : true;
+    }).map(function(t) {
+      t.dist = mr ? distNm(mr.lat, mr.lon, t.lat, t.lon) : 0;
+      // Historique
+      if (!fleetHistory[t.mmsi]) fleetHistory[t.mmsi] = [];
+      fleetHistory[t.mmsi].push({ time: Date.now(), sog: t.sog, cog: t.cog, lat: t.lat, lon: t.lon });
+      fleetHistory[t.mmsi] = fleetHistory[t.mmsi].filter(function(h){ return h.time > Date.now() - 35*60*1000; });
+      return t;
+    }).sort(function(a,b){ return a.dist - b.dist; });
+
+    document.getElementById('mr-count').textContent = targets.length;
+    window._fleetData = targets;
+    renderFleet();
+    document.getElementById('updated').textContent = 'Mis à jour: ' + new Date().toLocaleTimeString('fr-FR');
+
+  } catch(e) {
+    document.getElementById('updated').textContent = 'Erreur: ' + e.message;
+  }
+}
+
+loadFleet();
+setInterval(loadFleet, 30000); // Refresh toutes les 30s
+</script>
+</body>
+</html>
