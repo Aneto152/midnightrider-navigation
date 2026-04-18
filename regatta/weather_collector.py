@@ -82,6 +82,9 @@ def fetch_ndbc(station_id):
             "wind_dir": val(p[5]),
             "wind_speed": val(p[6]),
             "wind_gust": val(p[7]),
+            "wave_height": val(p[8]),   # WVHT m
+            "wave_period": val(p[9]),   # DPD sec
+            "wave_dir": val(p[11]) if len(p) > 11 else None,  # MWD deg
             "pressure": val(p[12]),
             "air_temp": val(p[13]),
             "water_temp": val(p[14]) if len(p) > 14 else None,
@@ -188,6 +191,12 @@ def collect_once():
             fields["air_temp_c"] = data["air_temp"]
         if data["water_temp"] is not None:
             fields["water_temp_c"] = data["water_temp"]
+        if data.get("wave_height") is not None:
+            fields["wave_height_m"] = data["wave_height"]
+        if data.get("wave_period") is not None:
+            fields["wave_period_s"] = data["wave_period"]
+        if data.get("wave_dir") is not None:
+            fields["wave_dir"] = data["wave_dir"]
         if write_influx("weather.station", tags, fields, ts):
             collected += 1
         time.sleep(0.5)  # éviter de spammer les APIs
