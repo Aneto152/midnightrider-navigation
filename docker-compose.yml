@@ -41,10 +41,13 @@ services:
     container_name: signalk
     restart: unless-stopped
     network_mode: host
+    group_add:
+      - "46"   # plugdev — accès ports série USB
+      - "20"   # dialout
     volumes:
       - signalk-data:/home/node/.signalk
-    # devices:
-    #   - /dev/ttyUSB0:/dev/ttyUSB0
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
     # Décommenter quand le YDWG-02 (/dev/ttyACM1) est branché :
     #   - /dev/ttyACM1:/dev/ttyACM1
     depends_on:
