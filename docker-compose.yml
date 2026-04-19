@@ -48,8 +48,8 @@ services:
       - signalk-data:/home/node/.signalk
     devices:
       - /dev/ttyUSB0:/dev/ttyUSB0
-    # Décommenter quand le YDWG-02 (/dev/ttyACM1) est branché :
-    #   - /dev/ttyACM1:/dev/ttyACM1
+    # YDWG-02 NMEA2000
+      - /dev/ttyACM0:/dev/ttyACM0
     depends_on:
       - influxdb
 
