@@ -1,0 +1,17 @@
+{
+  "name": "@aneto/race-management-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for race management (sails, start timing, distance to line, marks)",
+  "main": "race-server.js",
+  "type": "commonjs",
+  "bin": {
+    "race-management-mcp-server": "./race-server.js"
+  },
+  "scripts": {
+    "start": "node race-server.js"
+  },
+  "keywords": ["mcp", "sailing", "race", "sails", "start", "timing", "marks"],
+  "author": "Aneto (MidnightRider J/30)",
+  "license": "MIT",
+  "engines": { "node": ">=18.0.0" }
+}
