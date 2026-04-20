@@ -1,0 +1,420 @@
+apiVersion: 1
+
+groups:
+  - name: MidnightRider Phase 3 - Advanced Meteorology
+    interval: 30m
+    rules:
+      - uid: meteo_model_divergence
+        title: "📊 METEO_DIVERGENCE"
+        description: "Divergence modèles météo (Open-Meteo)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30m"
+        annotations:
+          description: "Weather model forecasts diverging. Multiple models showing different predictions."
+          summary: "Model forecast divergence"
+        labels:
+          severity: "info"
+          category: "meteo"
+          phase: "3"
+
+      - uid: meteo_fog_risk
+        title: "🌫️ FOG_RISK"
+        description: "Risque brouillard (NWS marine forecast)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1h"
+        annotations:
+          description: "Fog risk detected in forecast. Visibility may be severely reduced."
+          summary: "Fog risk warning"
+        labels:
+          severity: "warning"
+          category: "meteo"
+          phase: "3"
+
+      - uid: meteo_wind_shear
+        title: "💨 WIND_SHEAR"
+        description: "Cisaillement géographique vent (réseau bouées)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "20m"
+        annotations:
+          description: "Wind shear detected across buoy network. Different wind speeds/directions in nearby areas."
+          summary: "Geographic wind shear"
+        labels:
+          severity: "info"
+          category: "meteo"
+          phase: "3"
+
+      - uid: meteo_gust_nowcast
+        title: "⚡ GUST_NOWCAST"
+        description: "Rafale imminente (HRRR < 15min)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Gust warning from HRRR nowcast. Significant wind gust expected within 15 minutes."
+          summary: "Gust imminent (< 15min)"
+        labels:
+          severity: "warning"
+          category: "meteo"
+          phase: "3"
+
+---
+
+  - name: MidnightRider Phase 3 - Advanced Wind Patterns
+    interval: 10s
+    rules:
+      - uid: shift_oscillation_pattern
+        title: "🌊 SHIFT_OSCILLATION"
+        description: "Schéma oscillant (FFT sur TWD 2h)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30m"
+        annotations:
+          description: "Wind direction oscillating in regular pattern (FFT analysis). May indicate thermal or local circulation."
+          summary: "Oscillating wind pattern"
+        labels:
+          severity: "info"
+          category: "shift"
+          phase: "3"
+
+      - uid: shift_forecast_change
+        title: "💨 SHIFT_FORECAST"
+        description: "Bascule prévue (HRRR 30-60min)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10m"
+        annotations:
+          description: "HRRR forecast predicts significant wind shift in 30-60 minutes. Prepare for tactical adjustment."
+          summary: "Shift forecasted (30-60min)"
+        labels:
+          severity: "info"
+          category: "shift"
+          phase: "3"
+
+---
+
+  - name: MidnightRider Phase 3 - Advanced Current Analysis
+    interval: 30m
+    rules:
+      - uid: curr_plum_gut_timing
+        title: "⏱️ PLUM_GUT_TIMING"
+        description: "Timing Plum Gut (étale 60/30/15min)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10m"
+        annotations:
+          description: "Plum Gut slack water timing windows approaching (60/30/15 min). Key tactical opportunity for LIS racers."
+          summary: "Plum Gut slack timing"
+        labels:
+          severity: "info"
+          category: "curr"
+          phase: "3"
+
+      - uid: curr_nyofs_adverse
+        title: "🌊 NYOFS_ADVERSE"
+        description: "Courant NYOFS adverse > 1kt"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "20m"
+        annotations:
+          description: "NYOFS forecast shows adverse current > 1 knot in your area. Navigation may be significantly affected."
+          summary: "Adverse current (NYOFS)"
+        labels:
+          severity: "warning"
+          category: "curr"
+          phase: "3"
+
+---
+
+  - name: MidnightRider Phase 3 - Advanced Environment
+    interval: 10m
+    rules:
+      - uid: env_cloud_passage
+        title: "☁️ CLOUD_PASSAGE"
+        description: "Passage nuageux (perte brise thermique)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10m"
+        annotations:
+          description: "Cloud cover increasing. Thermal wind (sea breeze) will be lost. Expect wind decrease."
+          summary: "Cloud cover / loss of thermal"
+        labels:
+          severity: "info"
+          category: "env"
+          phase: "3"
+
+      - uid: env_clear_sky
+        title: "🌤️ CLEAR_SKY"
+        description: "Ciel dégagé nuit (brise de terre)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30m"
+        annotations:
+          description: "Clear skies tonight. Land breeze likely after sunset. Watch for wind direction change."
+          summary: "Clear sky / land breeze"
+        labels:
+          severity: "info"
+          category: "env"
+          phase: "3"
+
+      - uid: env_twilight_nautical
+        title: "🌅 TWILIGHT_NAUTICAL"
+        description: "Crépuscule nautique (première lumière)"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30m"
+        annotations:
+          description: "Nautical twilight (first light). Navigation lights can be extinguished. Visibility increasing."
+          summary: "Nautical twilight"
+        labels:
+          severity: "info"
+          category: "env"
+          phase: "3"
+
+---
+
+  - name: MidnightRider Phase 3 - Advanced Racing
+    interval: 10s
+    rules:
+      - uid: race_mark_approach_1nm
+        title: "🏁 MARK_APPROACH_1NM"
+        description: "Approche marque 1nm"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10s"
+        annotations:
+          description: "Mark approaching in 1 nautical mile. Prepare for turn. Check layer line and competition."
+          summary: "Mark 1nm away"
+        labels:
+          severity: "info"
+          category: "race"
+          phase: "3"
+
+      - uid: race_mark_approach_500m
+        title: "🏁 MARK_APPROACH_500M"
+        description: "Approche marque 0.5nm"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5s"
+        annotations:
+          description: "Mark very close (500 meters). Final approach. Watch for other boats and wind shifts."
+          summary: "Mark 500m away"
+        labels:
+          severity: "warning"
+          category: "race"
+          phase: "3"
+
+      - uid: race_mark_approach_200m
+        title: "🏁 MARK_APPROACH_200M"
+        description: "Approche marque 0.2nm"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "3s"
+        annotations:
+          description: "Mark 200 meters away! Prepare for turn NOW. Tight competition zone."
+          summary: "MARK 200m!"
+        labels:
+          severity: "critical"
+          category: "race"
+          phase: "3"
+
+      - uid: race_leaderboard_gain
+        title: "📊 LEADERBOARD_GAIN"
+        description: "Gain place classement corrigé"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30s"
+        annotations:
+          description: "Excellent! Gained one or more positions on corrected leaderboard. Great tactical move!"
+          summary: "Position gain!"
+        labels:
+          severity: "info"
+          category: "race"
+          phase: "3"
+
+      - uid: race_leaderboard_loss
+        title: "📊 LEADERBOARD_LOSS"
+        description: "Perte place classement corrigé"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30s"
+        annotations:
+          description: "Lost one or more positions on corrected leaderboard. Adjust tactics to regain."
+          summary: "Position loss"
+        labels:
+          severity: "warning"
+          category: "race"
+          phase: "3"
+
+      - uid: race_overtaken_competitor
+        title: "⛵ OVERTAKEN"
+        description: "Dépassement physique par concurrent"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5s"
+        annotations:
+          description: "Another boat has physically overtaken you. Consider immediate tactical response."
+          summary: "Competitor overtook us"
+        labels:
+          severity: "warning"
+          category: "race"
+          phase: "3"
+
+---
+
+  - name: MidnightRider Phase 3 - Fleet Tracking (AIS)
+    interval: 10s
+    rules:
+      - uid: ais_competitor_orca_passes
+        title: "⛵ COMPETITOR_PASSES"
+        description: "Concurrent corrigé ORC nous dépasse"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10s"
+        annotations:
+          description: "AIS: Competitor (ORC corrected) overtaking us. Monitor their speed and course."
+          summary: "AIS: Competitor passing"
+        labels:
+          severity: "warning"
+          category: "ais"
+          phase: "3"
+
+      - uid: ais_competitor_divergence
+        title: "⛵ COMPETITOR_DIVERGENCE"
+        description: "Divergence tactique concurrent proche"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "20s"
+        annotations:
+          description: "AIS: Nearby competitor diverging tactically. Watch their moves carefully."
+          summary: "Competitor diverging"
+        labels:
+          severity: "info"
+          category: "ais"
+          phase: "3"
+
+      - uid: ais_fleet_ranking
+        title: "📊 FLEET_RANKING"
+        description: "Classement corrigé toute flotte"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "AIS + ORC rating: Current corrected leaderboard position in fleet."
+          summary: "Current fleet position"
+        labels:
+          severity: "info"
+          category: "ais"
+          phase: "3"
+
+      - uid: ais_competitor_mark
+        title: "🏁 COMPETITOR_MARK"
+        description: "Concurrent franchit waypoint clé"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10s"
+        annotations:
+          description: "AIS: Competitor has rounded/passed a key waypoint. Race status update."
+          summary: "Competitor passed waypoint"
+        labels:
+          severity: "info"
+          category: "ais"
+          phase: "3"
+
+      - uid: ais_fleet_grouping
+        title: "👥 FLEET_GROUPING"
+        description: "Groupement flotte sur un bord"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30s"
+        annotations:
+          description: "AIS: Fleet clustering on one side (starboard/port). Potential wind advantage there."
+          summary: "Fleet grouping detected"
+        labels:
+          severity: "info"
+          category: "ais"
+          phase: "3"
+
+      - uid: ais_competitor_tack
+        title: "⛵ COMPETITOR_TACK"
+        description: "Changement d'armure concurrent"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "3m"
+        annotations:
+          description: "AIS: Competitor changed course significantly (tack). Watch their wind pattern."
+          summary: "Competitor tacked"
+        labels:
+          severity: "info"
+          category: "ais"
+          phase: "3"
+
+      - uid: ais_competitor_acceleration
+        title: "⛵ COMPETITOR_ACCELERATION"
+        description: "Accélération soudaine concurrent"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "AIS: Competitor accelerated significantly (gained 0.8+ kt). Found better wind or faster course."
+          summary: "Competitor accelerating"
+        labels:
+          severity: "warning"
+          category: "ais"
+          phase: "3"
+
+      - uid: ais_competitor_deceleration
+        title: "⛵ COMPETITOR_DECELERATION"
+        description: "Décélération soudaine concurrent"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "AIS: Competitor decelerated significantly (lost 0.8+ kt). Possible equipment issue or wind hole."
+          summary: "Competitor slowing"
+        labels:
+          severity: "info"
+          category: "ais"
+          phase: "3"
+
+      - uid: ais_competitor_tack_decision
+        title: "⛵ COMPETITOR_TACK_DECISION"
+        description: "Concurrent change de bord"
+        condition: "A"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "3m"
+        annotations:
+          description: "AIS: Competitor changed tack (CT/LI crossing). Consider your own tack strategy."
+          summary: "Competitor changed tack"
+        labels:
+          severity: "info"
+          category: "ais"
+          phase: "3"
