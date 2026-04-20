@@ -76,7 +76,7 @@ module.exports = function(app) {
     // Also check on startup
     checkAndUpdateAstronomical();
 
-    function checkAndUpdateAstronomical() {
+    async function checkAndUpdateAstronomical() {
       try {
         const today = new Date().toLocaleDateString();
         
@@ -125,14 +125,16 @@ module.exports = function(app) {
 
         // Fetch tides from NOAA and send combined data
         if (axios) {
-          fetchTidesAndSend(astroData);
+          await fetchTidesAndSend(astroData);
         } else {
           // Send astro data only if axios not available
           sendToSignalK(astroData);
         }
 
         lastUpdateDate = today;
-        app.debug(`[Astro] Updated data for ${today}`);
+        if (debug) {
+          app.debug(`[Astro] Updated data for ${today}`);
+        }
 
       } catch (err) {
         app.error(`[Astro] Error in checkAndUpdateAstronomical: ${err.message}`);
