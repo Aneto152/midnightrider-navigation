@@ -31,3 +31,11 @@ Everything up-to-date
 [main 821a8bf] Auto-backup 2026-04-19 02:00
  1 file changed, 9 insertions(+)
 fatal: unable to access 'https://github.com/Aneto152/midnightrider-navigation.git/': Could not resolve host: github.com
+[main 92f9d38] Auto-backup 2026-04-20 02:00
+ 5 files changed, 468 insertions(+), 346 deletions(-)
+ delete mode 100644 INFLUXDB-LOCAL.md
+ create mode 100644 plugins/signalk-astronomical-direct-package.json
+ create mode 100644 plugins/signalk-astronomical-direct.js
+ create mode 100644 plugins/signalk-astronomical-simple.js
+To https://github.com/Aneto152/midnightrider-navigation.git
+   0a66119..92f9d38  main -> main

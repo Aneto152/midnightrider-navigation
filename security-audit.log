@@ -26,3 +26,13 @@ grafana Up 4 days
 influxdb Up 4 days
 Updates disponibles: 30
 ===
+=== Audit 2026-04-20 08:00 ===
+sudo: ufw: command not found
+Firewall: 
+Ports:
+Docker:
+signalk Up 10 hours
+grafana Up 20 hours
+influxdb Up 20 hours
+Updates disponibles: 25
+===
