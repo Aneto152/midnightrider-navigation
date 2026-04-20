@@ -1,0 +1,76 @@
+# Astronomical Data Services
+# 
+# Option 1: astronomical-init (OneShot)
+#   - Runs once at startup
+#   - Checks if data exists in InfluxDB
+#   - Populates if missing
+#   - Exits
+# 
+# Option 2: astronomical-cron (Long-running)
+#   - Runs cron daemon
+#   - Updates daily at midnight
+#   - Keeps running
+#
+# Use one or both depending on your needs
+
+services:
+
+  # One-shot initialization (runs at startup, populates if needed, exits)
+  astronomical-init:
+    build:
+      context: ..
+      dockerfile: astronomical/Dockerfile
+    container_name: astronomical-init
+    restart: "no"
+    network_mode: host
+    environment:
+      - LAT=41.0534
+      - LON=-73.5387
+      - NOAA_STATION=8467150
+      - INFLUX_URL=http://localhost:8086
+      - INFLUX_TOKEN=4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+      - INFLUX_ORG=MidnightRider
+      - INFLUX_BUCKET=signalk
+    depends_on:
+      - influxdb
+
+  # Long-running cron daemon (daily updates at midnight)
+  astronomical-cron:
+    build:
+      context: ..
+      dockerfile: astronomical/Dockerfile.cron
+    container_name: astronomical-cron
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - LAT=41.0534
+      - LON=-73.5387
+      - NOAA_STATION=8467150
+      - INFLUX_URL=http://localhost:8086
+      - INFLUX_TOKEN=4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+      - INFLUX_ORG=MidnightRider
+      - INFLUX_BUCKET=signalk
+    depends_on:
+      - influxdb
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "crond"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Dependencies (from main docker-compose)
+  influxdb:
+    image: influxdb:2.8
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+
+volumes:
+  influxdb-data:
+    external: true
+  influxdb-config:
+    external: true

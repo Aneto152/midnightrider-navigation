@@ -30,6 +30,27 @@ services:
       - influxdb
 
   # ─────────────────────────────────────────
+  # Astronomical Data (sun/moon/tides)
+  # ─────────────────────────────────────────
+  astronomical:
+    build:
+      context: .
+      dockerfile: astronomical/Dockerfile
+    container_name: astronomical
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - LAT=41.0534
+      - LON=-73.5387
+      - NOAA_STATION=8467150
+      - INFLUX_URL=http://localhost:8086
+      - INFLUX_TOKEN=4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+      - INFLUX_ORG=MidnightRider
+      - INFLUX_BUCKET=signalk
+    depends_on:
+      - influxdb
+
+  # ─────────────────────────────────────────
   # Signal K
   # network_mode: host est nécessaire pour :
   #   - accès à Kflex via TCP localhost:10110
@@ -52,6 +73,7 @@ services:
       - /dev/ttyACM0:/dev/ttyACM0
     depends_on:
       - influxdb
+      - astronomical
 
 # Volumes externes — déjà créés et remplis avec les données migrées
 volumes:

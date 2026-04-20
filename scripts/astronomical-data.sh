@@ -26,9 +26,12 @@ NOAA_API="https://api.tidesandcurrents.noaa.gov/api/prod/datagetter"
 
 echo "[$(date)] Starting astronomical data update..."
 
+# Ensure we're in the script directory for node_modules
+cd "$(dirname "$0")"
+
 # Create node script inline
 ASTRO_SCRIPT=$(cat << 'NEOF'
-const SunCalc = require('suncalc');
+const SunCalc = require('./node_modules/suncalc');
 
 const lat = parseFloat(process.env.LAT || 41.0534);
 const lon = parseFloat(process.env.LON || -73.5387);
@@ -81,7 +84,8 @@ echo "[$(date)] Astro data: $ASTRO"
 # Fetch tides
 echo "[$(date)] Fetching tides from NOAA..."
 BEGIN_DATE=$(date +%Y%m%d)
-END_DATE=$(date -d "+1 day" +%Y%m%d)
+# Use compatible date syntax (works on both GNU and BusyBox)
+END_DATE=$(date -v+1d +%Y%m%d 2>/dev/null || date -d "+1 day" +%Y%m%d 2>/dev/null || date +%Y%m%d)
 
 TIDES_JSON=$(curl -s "${NOAA_API}?station=${NOAA_STATION}&begin_date=${BEGIN_DATE}&end_date=${END_DATE}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=metric&format=json")
 
