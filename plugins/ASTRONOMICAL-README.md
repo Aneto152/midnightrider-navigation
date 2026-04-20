@@ -55,7 +55,7 @@ File: `~/.signalk/plugin-config-data/signalk-astronomical.json`
 - **enabled**: Set to `true` to activate
 - **debug**: Set to `true` for detailed logging
 - **noaaStation**: NOAA station ID for tides
-  - Default: `8518750` (The Battery, NY Harbor)
+  - Default: `8467150` (Stamford Harbor, CT - Long Island Sound)
   - Find yours: https://tides.noaa.gov/stations.html
 
 ## Output Data
@@ -205,6 +205,8 @@ time: 2026-04-20T00:00:00Z
 
 ### Common US Stations
 
+- **Long Island Sound (Stamford, CT)**: 8467150 ← **Currently configured**
+- **Long Island Sound (New Haven, CT)**: 8465705
 - **New York Harbor (The Battery)**: 8518750
 - **Boston Harbor**: 8443970
 - **Charleston Harbor**: 8665530

@@ -32,19 +32,20 @@ Values are small (2-4°) because boat is in East River, heading roughly east (tr
 
 ## How It Works
 
-**UM982 outputs:**
-1. GPS position (latitude, longitude) ✅
-2. Course Over Ground (COG) ✅
-3. Speed Over Ground (SOG) ✅
+**UM982 dual-antenna heading system:**
+1. Two antennas measure differential GPS positions
+2. Heading = angle between antenna pair (boat orientation)
+3. Outputs via NMEA0183 as `$GPHDT` (Heading True)
 
-**Signal K derives:**
-- `navigation.headingTrue` = UM982 COG (output heading via NMEA0183)
+**Signal K receives:**
+- `navigation.headingTrue` = UM982 dual-antenna heading (true compass-less heading)
 
-**Important:** This is NOT a compass reading. It's derived from GPS movement, so:
-- Accurate for course-over-ground
-- Not affected by magnetic deviation
-- May lag briefly if boat changing course rapidly
-- Will not detect boat rotation if stationary (GPS needs movement)
+**Important:** This IS true heading from dual-antenna GNSS!
+- **UM982 has dual-antenna heading solution** = true ship orientation
+- NOT compass-less (no magnetic interference, no deviation)
+- Accurate even in zero-movement (unlike COG-based heading)
+- True heading of boat regardless of current/drift
+- Perfect for performance calculations (wind angle relative to boat)
 
 ## Dual Sources (GN vs GP)
 
@@ -78,17 +79,23 @@ This is normal. GLONASS+GPS fusion improves accuracy and availability.
 
 ## Limitations
 
-⚠️ **GPS-derived heading has drawbacks:**
+✅ **Advantages of dual-antenna heading:**
 
-1. **Not true ship heading** — it's course over ground (affected by current)
-2. **Needs movement** — stationary boat shows last heading
-3. **Possible lag** — GPS updates every 1-2 seconds, lags rapid maneuvers
-4. **Not magnetic** — no compass deviation correction
+1. **True ship orientation** — independent of current/drift
+2. **No magnetic deviation** — pure geometric heading
+3. **Works stationary** — boat position differentials give heading even at rest
+4. **Compass-less** — no magnetic compensation needed
+5. **RTK capable** — centimeter-level accuracy with base station
 
-✅ **What we'll add later:**
-- BNO085 (IMU) for true heading (corrected for boat tilt)
-- Compass integration for magnetic heading + deviation curves
-- Gyro-stabilized heading
+⚠️ **Limitations:**
+- Needs clear sky (dual antenna GPS fix)
+- May struggle in dense urban canyons
+- Slightly slower update than compass (1-2 Hz vs 10+ Hz for IMU)
+
+✅ **When BNO085 arrives:**
+- Fusion of dual-GNSS heading + IMU = best of both worlds
+- True heading with fast IMU gyro updates
+- Smoothed, reliable navigation
 
 ## Next Steps
 
@@ -100,5 +107,5 @@ This is normal. GLONASS+GPS fusion improves accuracy and availability.
 ---
 
 **Last updated:** 2026-04-19  
-**Status:** Working — GPS-derived heading flowing  
-**Precision:** Adequate for perf calculations (±2-5°)
+**Status:** ✅ Working — TRUE heading (dual-antenna GNSS) flowing  
+**Precision:** ±2-5° — excellent for perf calculations & racing

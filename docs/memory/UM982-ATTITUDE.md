@@ -6,11 +6,19 @@
 
 ## Discovery
 
-**Direct observation from GPS serial port:**
+**Direct observation from GPS serial port (`/dev/ttyUSB0` @ 115200 baud):**
+
+Date: 2026-04-19, 16:51 EDT (Sunday afternoon, boat at rest)
+
 ```
 #HEADINGA,COM1,13495,95.0,FINE,2415,73711.000,17020772,13,18;SOL_COMPUTED,L1_FLOAT,12.2446,260.1887,-35.0258,0.0000,292.7253,155.0128,"999",29,7,7,0,3,00,0,51*12fb1b6a
 
 #UNIHEADINGA,95,GPS,FINE,2415,73711000,0,0,18,13;SOL_COMPUTED,L1_FLOAT,12.2446,260.1887,-35.0258,0.0000,292.7253,155.0128,"999",29,7,7,0,3,00,0,51*8c4c3dfb
+```
+
+Also observed (insufficient observations state):
+```
+#HEADINGA,COM1,13495,95.0,FINE,2415,73708.000,17017771,12,18;INSUFFICIENT_OBS,NONE,0.0000,0.0000,0.0000,0.0000,0.0000,0.0000,"",0,0,0,0,0,00,0,0*247fffb7
 ```
 
 ## Field Mapping (Hypothesis)
