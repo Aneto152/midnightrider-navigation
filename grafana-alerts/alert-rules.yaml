@@ -1,0 +1,273 @@
+apiVersion: 1
+
+groups:
+  - name: MidnightRider Safety Alerts
+    interval: 1m
+    rules:
+      - uid: sunset_approaching
+        title: "🌅 Sunset Approaching (2h)"
+        description: "Alert when sunset is less than 2 hours away"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+            model:
+              conditions:
+                - evaluator:
+                    params: [120]
+                    type: "lt"
+                  operator:
+                    type: "and"
+                  query:
+                    params: ["A"]
+                  reducer:
+                    params: []
+                    type: "lastNotNull"
+                  type: "query"
+              datasourceUid: "prometheus_uid"
+              expression: ""
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Sunset is approaching in less than 2 hours. Prepare for return before dark."
+          runbook_url: "https://docs.midnightrider.local/sunset"
+          summary: "Sunset in < 2 hours"
+        labels:
+          severity: "warning"
+          category: "safety"
+
+      - uid: night_approach_critical
+        title: "🌃 CRITICAL: Night in 30 Minutes"
+        description: "CRITICAL alert when sunset is less than 30 minutes away"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+            model:
+              conditions:
+                - evaluator:
+                    params: [30]
+                    type: "lt"
+                  operator:
+                    type: "and"
+                  query:
+                    params: ["A"]
+                  reducer:
+                    params: []
+                    type: "lastNotNull"
+                  type: "query"
+              datasourceUid: "prometheus_uid"
+              expression: ""
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "CRITICAL: Night is approaching in less than 30 minutes. Return to harbor/anchorage immediately."
+          runbook_url: "https://docs.midnightrider.local/night"
+          summary: "CRITICAL: Night in < 30 min"
+        labels:
+          severity: "critical"
+          category: "safety"
+
+      - uid: distance_to_start_line
+        title: "🏁 Distance to Start Line"
+        description: "Alert when approaching start line (< 300m = 5 min)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+            model:
+              conditions:
+                - evaluator:
+                    params: [300]
+                    type: "lt"
+                  operator:
+                    type: "and"
+                  query:
+                    params: ["A"]
+                  reducer:
+                    params: []
+                    type: "lastNotNull"
+                  type: "query"
+              datasourceUid: "influxdb_uid"
+              expression: ""
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "10s"
+        annotations:
+          description: "Approaching start line. Less than 5 minutes until race start. Prepare for start sequence."
+          runbook_url: "https://docs.midnightrider.local/race-start"
+          summary: "Start line approach (< 300m)"
+        labels:
+          severity: "warning"
+          category: "racing"
+
+      - uid: pressure_drop_warning
+        title: "📉 Pressure Drop (> 3 hPa/3h)"
+        description: "Alert on rapid pressure drop (indicator of approaching weather)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+            model:
+              conditions:
+                - evaluator:
+                    params: [3]
+                    type: "gt"
+                  operator:
+                    type: "and"
+                  query:
+                    params: ["A"]
+                  reducer:
+                    params: []
+                    type: "lastNotNull"
+                  type: "query"
+              datasourceUid: "influxdb_uid"
+              expression: ""
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Barometric pressure is dropping rapidly (> 3 hPa in 3 hours). Weather deterioration likely. Prepare for stronger winds."
+          runbook_url: "https://docs.midnightrider.local/pressure"
+          summary: "Rapid pressure drop detected"
+        labels:
+          severity: "warning"
+          category: "weather"
+
+---
+
+apiVersion: 1
+
+groups:
+  - name: MidnightRider Performance Alerts
+    interval: 10s
+    rules:
+      - uid: high_rate_of_turn
+        title: "🔄 High Rate of Turn (> 20°/min)"
+        description: "Track sharp turns (tacking frequency indicator)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+            model:
+              conditions:
+                - evaluator:
+                    params: [20]
+                    type: "gt"
+                  operator:
+                    type: "and"
+                  query:
+                    params: ["A"]
+                  reducer:
+                    params: []
+                    type: "lastNotNull"
+                  type: "query"
+              datasourceUid: "influxdb_uid"
+              expression: ""
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5s"
+        annotations:
+          description: "Boat is turning sharply (tacking in progress). Monitor helmsman performance."
+          runbook_url: "https://docs.midnightrider.local/tacking"
+          summary: "Sharp turn detected"
+        labels:
+          severity: "info"
+          category: "navigation"
+
+      - uid: excessive_speed
+        title: "⚡ Excessive Speed (> 12kt)"
+        description: "Alert when SOG exceeds safe coastal speed"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+            model:
+              conditions:
+                - evaluator:
+                    params: [12]
+                    type: "gt"
+                  operator:
+                    type: "and"
+                  query:
+                    params: ["A"]
+                  reducer:
+                    params: []
+                    type: "lastNotNull"
+                  type: "query"
+              datasourceUid: "influxdb_uid"
+              expression: ""
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30s"
+        annotations:
+          description: "Speed over ground exceeds 12 knots. Check course safety and current."
+          runbook_url: "https://docs.midnightrider.local/speed"
+          summary: "High speed (> 12kt)"
+        labels:
+          severity: "info"
+          category: "navigation"
+
+---
+
+apiVersion: 1
+
+groups:
+  - name: MidnightRider Astronomical Alerts
+    interval: 1h
+    rules:
+      - uid: poor_moon_illumination
+        title: "🌙 Low Moon Illumination (< 20%)"
+        description: "Alert on low moon phase (very dark nights)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+            model:
+              conditions:
+                - evaluator:
+                    params: [20]
+                    type: "lt"
+                  operator:
+                    type: "and"
+                  query:
+                    params: ["A"]
+                  reducer:
+                    params: []
+                    type: "lastNotNull"
+                  type: "query"
+              datasourceUid: "influxdb_uid"
+              expression: ""
+              hide: false
+              intervalMs: 1000
+              maxDataPoints: 43200
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "30m"
+        annotations:
+          description: "Moon illumination is very low (< 20%). Night will be very dark. Use navigation lights and extra caution."
+          runbook_url: "https://docs.midnightrider.local/moon"
+          summary: "Very dark night (low moon)"
+        labels:
+          severity: "info"
+          category: "safety"
