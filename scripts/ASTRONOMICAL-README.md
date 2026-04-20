@@ -31,13 +31,32 @@ cd /home/aneto/docker/signalk/scripts
 npm install suncalc
 ```
 
-### 2. Make Script Executable
+### 2. Make Scripts Executable
 
 ```bash
-chmod +x astronomical-data.sh
+chmod +x astronomical-data.sh init-astronomical-data.sh
 ```
 
-### 3. Set Up Cron Job
+### 3. Option A: Systemd Service (Recommended)
+
+Install service (runs at boot, then daily at midnight):
+
+```bash
+sudo cp /home/aneto/docker/signalk/scripts/astronomical-data.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable astronomical-data.service
+sudo systemctl start astronomical-data.service
+```
+
+Verify:
+```bash
+sudo systemctl status astronomical-data.service
+journalctl -u astronomical-data.service -n 50
+```
+
+### Option B: Cron Job Only
+
+For daily updates (data must be manually initialized first):
 
 ```bash
 crontab -e
@@ -48,8 +67,14 @@ Add:
 0 0 * * * /home/aneto/docker/signalk/scripts/astronomical-data.sh >> /tmp/astronomical-data.log 2>&1
 ```
 
-### 4. Test
+### 4. Manual Test
 
+Initialize data (checks if it exists, creates if missing):
+```bash
+/home/aneto/docker/signalk/scripts/init-astronomical-data.sh
+```
+
+Or directly:
 ```bash
 /home/aneto/docker/signalk/scripts/astronomical-data.sh
 ```
@@ -182,6 +207,38 @@ astronomical-data.sh
 - **Low overhead** — 1 call/day per location
 - **Offline capable** — suncalc works without internet
 - **Extensible** — easy to add more NOAA data (currents, wind, etc.)
+
+## How It Works
+
+### First Time (init-astronomical-data.sh)
+
+1. Waits for InfluxDB to be ready (max 30 sec)
+2. Checks if astronomical data exists in InfluxDB
+3. If **NO data**: Executes `astronomical-data.sh` immediately
+4. If **data exists**: Waits for daily cron job
+
+### Daily (cron or systemd)
+
+Every day at midnight (`0 0 * * *`):
+- Updates sun/moon/tide data
+- Overwrites previous day's values
+- Logs to `/tmp/astronomical-data.log`
+
+### Systemd Service Flow
+
+```
+Boot
+  ↓
+init-astronomical-data.sh (OneShot)
+  ├─ Wait for InfluxDB
+  ├─ Check if data exists
+  └─ Populate if missing
+  ↓
+Cron job (daily 00:00)
+  ├─ Update sun/moon
+  ├─ Update tides
+  └─ Send to InfluxDB
+```
 
 ## Author
 
