@@ -176,27 +176,27 @@ module.exports = function(app) {
             timestamp: astroData.timestamp,
             values: [
               {
-                path: 'navigation.sun.sunriseTime',
+                path: 'environment.sun.sunriseTime',
                 value: astroData.sun.sunriseTime
               },
               {
-                path: 'navigation.sun.sunsetTime',
+                path: 'environment.sun.sunsetTime',
                 value: astroData.sun.sunsetTime
               },
               {
-                path: 'navigation.moon.moonriseTime',
+                path: 'environment.moon.moonriseTime',
                 value: astroData.moon.moonriseTime
               },
               {
-                path: 'navigation.moon.moonsetTime',
+                path: 'environment.moon.moonsetTime',
                 value: astroData.moon.moonsetTime
               },
               {
-                path: 'navigation.moon.illumination',
+                path: 'environment.moon.illumination',
                 value: astroData.moon.illumination
               },
               {
-                path: 'navigation.moon.phase',
+                path: 'environment.moon.phase',
                 value: astroData.moon.phase
               }
             ]

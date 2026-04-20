@@ -58,16 +58,16 @@ Plugin updates Signal K paths once per day:
 
 ### Sun Times
 ```
-navigation.sun.sunriseTime     (ISO8601 timestamp)
-navigation.sun.sunsetTime      (ISO8601 timestamp)
+environment.sun.sunriseTime     (ISO8601 timestamp)
+environment.sun.sunsetTime      (ISO8601 timestamp)
 ```
 
 ### Moon Times & Illumination
 ```
-navigation.moon.moonriseTime   (ISO8601 timestamp)
-navigation.moon.moonsetTime    (ISO8601 timestamp)
-navigation.moon.illumination   (0.0 to 1.0, where 0=new, 0.5=half, 1.0=full)
-navigation.moon.phase          (string: "new_moon", "waxing_crescent", "first_quarter", "waxing_gibbous", "full_moon", "waning_gibbous", "last_quarter", "waning_crescent")
+environment.moon.moonriseTime   (ISO8601 timestamp)
+environment.moon.moonsetTime    (ISO8601 timestamp)
+environment.moon.illumination   (0.0 to 1.0, where 0=new, 0.5=half, 1.0=full)
+environment.moon.phase          (string: "new_moon", "waxing_crescent", "first_quarter", "waxing_gibbous", "full_moon", "waning_gibbous", "last_quarter", "waning_crescent")
 ```
 
 ## How It Works
@@ -83,14 +83,14 @@ navigation.moon.phase          (string: "new_moon", "waxing_crescent", "first_qu
 
 ### Display Times
 ```
-SELECT value FROM "navigation.sun.sunriseTime" WHERE time > now() - 24h
+SELECT value FROM "environment.sun.sunriseTime" WHERE time > now() - 24h
 ```
 
 Returns last sunrise time (ISO8601 string)
 
 ### Display Illumination
 ```
-SELECT value FROM "navigation.moon.illumination" WHERE time > now() - 30d
+SELECT value FROM "environment.moon.illumination" WHERE time > now() - 30d
 ```
 
 Convert to percentage: `value * 100`
@@ -108,19 +108,19 @@ Convert to percentage: `value * 100`
 After first update, InfluxDB will contain:
 
 ```
-measurement: navigation.sun.sunriseTime
+measurement: environment.sun.sunriseTime
 value: "2026-04-20T05:34:00Z"
 time: 2026-04-20T00:00:00Z
 
-measurement: navigation.sun.sunsetTime
+measurement: environment.sun.sunsetTime
 value: "2026-04-20T19:28:00Z"
 time: 2026-04-20T00:00:00Z
 
-measurement: navigation.moon.illumination
+measurement: environment.moon.illumination
 value: 0.65
 time: 2026-04-20T00:00:00Z
 
-measurement: navigation.moon.phase
+measurement: environment.moon.phase
 value: "waxing_gibbous"
 time: 2026-04-20T00:00:00Z
 ```
