@@ -48,8 +48,13 @@ module.exports = function(app) {
     let lastUpdateDate = null;
 
     // NOAA API configuration
-    const NOAA_STATION = options.noaaStation || '8518750';
+    const NOAA_STATION = options.noaaStation || '8467150';
     const NOAA_API = 'https://api.tidesandcurrents.noaa.gov/api/prod/datagetter';
+    
+    // Default GPS coordinates (Stamford Harbor, Long Island Sound)
+    // Used if no GPS position available yet
+    const DEFAULT_LAT = options.defaultLat || 41.0534;
+    const DEFAULT_LON = options.defaultLon || -73.5387;
 
     // Try to require axios, warn if not available
     let axios;
@@ -96,19 +101,23 @@ module.exports = function(app) {
           }
         }
 
-        // Get boat position from Signal K
+        // Get boat position from Signal K (or use default)
+        let lat, lon;
         const position = app.signalk.self.navigation && app.signalk.self.navigation.position;
 
-        if (!position || !position.value || !position.value.latitude || !position.value.longitude) {
-          app.error('[Astro] No GPS position available yet');
-          return;
-        }
-
-        const lat = position.value.latitude;
-        const lon = position.value.longitude;
-
-        if (debug) {
-          app.debug(`[Astro] Using position: lat=${lat}, lon=${lon}`);
+        if (position && position.value && position.value.latitude && position.value.longitude) {
+          lat = position.value.latitude;
+          lon = position.value.longitude;
+          if (debug) {
+            app.debug(`[Astro] Using GPS position: lat=${lat}, lon=${lon}`);
+          }
+        } else {
+          // Use default coordinates (Stamford Harbor, CT)
+          lat = DEFAULT_LAT;
+          lon = DEFAULT_LON;
+          if (debug) {
+            app.debug(`[Astro] No GPS yet, using default: lat=${lat}, lon=${lon}`);
+          }
         }
 
         // Calculate astronomical data
