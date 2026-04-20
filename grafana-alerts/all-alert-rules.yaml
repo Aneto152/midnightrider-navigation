@@ -1,0 +1,755 @@
+apiVersion: 1
+
+groups:
+  - name: MidnightRider Phase 1 - Safety & Astronomy
+    interval: 1h
+    rules:
+      - uid: sunset_approaching
+        title: "🌅 SUNSET_APPROACHING"
+        description: "Coucher soleil < 120 minutes"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Sunset approaching in less than 2 hours. Prepare return before dark."
+          summary: "Sunset < 2h"
+        labels:
+          severity: "warning"
+          category: "env"
+          phase: "1"
+
+      - uid: night_approach_critical
+        title: "🌃 NIGHT_APPROACH_CRITICAL"
+        description: "Coucher soleil < 30 minutes"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "CRITICAL: Night approaching in less than 30 minutes. Return to anchorage immediately."
+          summary: "CRITICAL: Night < 30min"
+        labels:
+          severity: "critical"
+          category: "env"
+          phase: "1"
+
+      - uid: poor_visibility
+        title: "🌙 POOR_VISIBILITY"
+        description: "Illumination lune < 20%"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "30m"
+        annotations:
+          description: "Moon illumination very low (< 20%). Night will be very dark. Extra caution required."
+          summary: "Very dark night"
+        labels:
+          severity: "info"
+          category: "env"
+          phase: "1"
+
+      - uid: sunrise_approaching
+        title: "🌅 SUNRISE_TIME"
+        description: "Lever soleil - informationnel"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "1h"
+        annotations:
+          description: "Sunrise approaching. First light in less than 30 minutes."
+          summary: "Sunrise imminent"
+        labels:
+          severity: "info"
+          category: "env"
+          phase: "1"
+
+      - uid: moonrise_event
+        title: "🌙 MOONRISE"
+        description: "Lever lune"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "1h"
+        annotations:
+          description: "Moon rising. Check moon phase for visibility."
+          summary: "Moon rising"
+        labels:
+          severity: "info"
+          category: "env"
+          phase: "1"
+
+      - uid: slack_water_approaching
+        title: "⏱️ SLACK_WATER"
+        description: "Étale (courant nul)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Slack water approaching. Current will change direction soon."
+          summary: "Slack water near"
+        labels:
+          severity: "info"
+          category: "curr"
+          phase: "1"
+
+      - uid: slack_water_30min_warning
+        title: "⏱️ SLACK_WATER_30MIN"
+        description: "Étale dans 30 min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Slack water in 30 minutes. Plan maneuvers accordingly."
+          summary: "Slack water in 30min"
+        labels:
+          severity: "info"
+          category: "curr"
+          phase: "1"
+
+---
+
+  - name: MidnightRider Phase 1 - Racing
+    interval: 10s
+    rules:
+      - uid: distance_to_start_line
+        title: "🏁 DISTANCE_TO_START_LINE"
+        description: "Distance < 300m (≈5min)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "10s"
+        annotations:
+          description: "Approaching start line. Less than 5 minutes to start. Prepare for start sequence."
+          summary: "Start line < 300m"
+        labels:
+          severity: "warning"
+          category: "race"
+          phase: "1"
+
+      - uid: start_line_countdown
+        title: "🏁 START_COUNTDOWN"
+        description: "Timer départ (5/3/1/30/10 sec)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "5s"
+        annotations:
+          description: "Race start countdown. Follow the sequence: 5min, 3min, 1min, 30sec, 10sec, START!"
+          summary: "Race starting"
+        labels:
+          severity: "critical"
+          category: "race"
+          phase: "1"
+
+      - uid: ocs_early_start
+        title: "🏁 OCS_EARLY_START"
+        description: "Franchissement ligne avant la canon"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "5s"
+        annotations:
+          description: "CRITICAL: You have crossed the start line before the gun! Pull back immediately to avoid OCS penalty."
+          summary: "CRITICAL: Over Early!"
+        labels:
+          severity: "critical"
+          category: "race"
+          phase: "1"
+
+---
+
+  - name: MidnightRider Phase 1 - Weather & Depth
+    interval: 30m
+    rules:
+      - uid: nws_gale_warning
+        title: "⚠️ NWS_GALE_WARNING"
+        description: "Alerte NWS (SCA ou Gale)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "NWS Gale Warning or Small Craft Advisory issued. Severe conditions expected."
+          summary: "Gale Warning Active"
+        labels:
+          severity: "critical"
+          category: "meteo"
+          phase: "1"
+
+      - uid: pressure_drop_warning
+        title: "📉 PRESSURE_DROP"
+        description: "Chute pression > 3 hPa/3h"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Barometric pressure dropping rapidly (> 3 hPa in 3 hours). Weather deterioration likely."
+          summary: "Rapid pressure drop"
+        labels:
+          severity: "warning"
+          category: "meteo"
+          phase: "1"
+
+      - uid: depth_critical
+        title: "🌊 DEPTH_CRITICAL"
+        description: "Profondeur < 4m (critique)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "OK"
+        execErrState: "Alerting"
+        for: "10s"
+        annotations:
+          description: "CRITICAL: Water depth less than 4 meters. Risk of grounding. Alter course immediately."
+          summary: "CRITICAL: Shallow water!"
+        labels:
+          severity: "critical"
+          category: "curr"
+          phase: "1"
+
+---
+
+  - name: MidnightRider Phase 2 - Performance Monitoring
+    interval: 10s
+    rules:
+      - uid: vmg_below_target
+        title: "📊 VMG_BELOW_TARGET"
+        description: "VMG < 85% polaire"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30s"
+        annotations:
+          description: "Current VMG is below 85% of target. Check sail trim, heel angle, or course angle."
+          summary: "Low VMG performance"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: vmg_exceeding_target
+        title: "📊 VMG_EXCEEDING_TARGET"
+        description: "VMG > 105% polaire"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30s"
+        annotations:
+          description: "Excellent performance! VMG exceeding 105% of target. Conditions favoring."
+          summary: "Excellent VMG!"
+        labels:
+          severity: "info"
+          category: "perf"
+          phase: "2"
+
+      - uid: wind_angle_suboptimal
+        title: "🧭 WIND_ANGLE_SUBOPTIMAL"
+        description: "Angle au vent ±5° du optimal"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Current sailing angle is suboptimal (±5° from optimal). Adjust heading for better VMG."
+          summary: "Suboptimal wind angle"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: excessive_heel
+        title: "⛵ EXCESSIVE_HEEL"
+        description: "Gîte > 25° pendant 2min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "2m"
+        annotations:
+          description: "Boat heeling excessively (> 25°). Risk of reduced performance. Consider easing sails or adjusting course."
+          summary: "Excessive heel angle"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: insufficient_heel_upwind
+        title: "⛵ INSUFFICIENT_HEEL"
+        description: "Gîte < 8° au près > 12kt"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Upwind heel angle too small (< 8° with TWS > 12kt). Add sail or adjust trim."
+          summary: "Insufficient heel"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: heel_instability
+        title: "⛵ HEEL_INSTABILITY"
+        description: "Gîte oscillante (std > 5°/2min)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "2m"
+        annotations:
+          description: "Heel angle oscillating too much (std > 5°/2min). Helmsman steering inconsistently or sail trim unstable."
+          summary: "Heel oscillation"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: current_variation_force
+        title: "🌊 CURRENT_CHANGE_FORCE"
+        description: "Variation courant force > 0.5kt/5min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Current magnitude changing rapidly (> 0.5kt/5min). May be entering different current band."
+          summary: "Current strength changing"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: current_variation_direction
+        title: "🌊 CURRENT_CHANGE_DIRECTION"
+        description: "Variation courant direction > 20°/5min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Current direction changing rapidly (> 20°/5min). Possible eddy or tidal shift. Adjust course."
+          summary: "Current direction shifting"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: helmsman_instability
+        title: "👤 HELMSMAN_INSTABILITY"
+        description: "Instabilité barreur (TWA std > 5°/10min)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10m"
+        annotations:
+          description: "Helmsman steering inconsistently (TWA std > 5°/10min). Recommend crew rotation or helmsman break."
+          summary: "Helmsman instability detected"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: heading_drift
+        title: "🧭 HEADING_DRIFT"
+        description: "Dérive cap moyen > 5°/20min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "20m"
+        annotations:
+          description: "Average heading drifting > 5° over 20 min. Check course objective and adjust."
+          summary: "Heading drift detected"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: helmsman_degradation
+        title: "👤 HELMSMAN_DEGRADATION"
+        description: "Dégradation progressive stabilité barreur"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Helmsman stability degrading over time. Consider crew rotation soon."
+          summary: "Helmsman fatigue warning"
+        labels:
+          severity: "warning"
+          category: "perf"
+          phase: "2"
+
+      - uid: helmsman_rotation_recommended
+        title: "👤 ROTATION_RECOMMENDED"
+        description: "Changement barreur recommandé"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Performance degradation detected. Fresh helmsman recommended now."
+          summary: "Crew rotation due"
+        labels:
+          severity: "info"
+          category: "perf"
+          phase: "2"
+
+---
+
+  - name: MidnightRider Phase 2 - Wind Shifts
+    interval: 10s
+    rules:
+      - uid: lift_favorable_shift
+        title: "💨 LIFT_FAVORABLE"
+        description: "Bascule favorable > 8°/3min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "3m"
+        annotations:
+          description: "Favorable wind shift (lift) detected! Adjust course or tack if beneficial."
+          summary: "Wind lift!"
+        labels:
+          severity: "info"
+          category: "shift"
+          phase: "2"
+
+      - uid: header_unfavorable_shift
+        title: "💨 HEADER_UNFAVORABLE"
+        description: "Bascule défavorable > 8°/3min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "3m"
+        annotations:
+          description: "Unfavorable wind shift (header) detected. Consider tacking to other side."
+          summary: "Wind header!"
+        labels:
+          severity: "warning"
+          category: "shift"
+          phase: "2"
+
+      - uid: persistent_wind_shift
+        title: "💨 PERSISTENT_SHIFT"
+        description: "Bascule persistante > 20°/30min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "30m"
+        annotations:
+          description: "Persistent wind direction change (> 20° over 30 min). Pattern shift or frontal passage possible."
+          summary: "Persistent wind shift"
+        labels:
+          severity: "info"
+          category: "shift"
+          phase: "2"
+
+      - uid: geographic_wind_difference
+        title: "💨 GEOGRAPHIC_DIFFERENCE"
+        description: "Bascule géographique bouée vs bateau"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10m"
+        annotations:
+          description: "Wind direction at buoy differs significantly from your position. Localized wind pattern detected."
+          summary: "Geographic wind difference"
+        labels:
+          severity: "info"
+          category: "shift"
+          phase: "2"
+
+---
+
+  - name: MidnightRider Phase 2 - Sail Configuration
+    interval: 10s
+    rules:
+      - uid: sail_config_change_recommended
+        title: "⛵ SAIL_CONFIG_CHANGE"
+        description: "Changement config voiles recommandé"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Sail configuration changed recommended based on current wind and heel conditions."
+          summary: "Sail change recommended"
+        labels:
+          severity: "info"
+          category: "sail"
+          phase: "2"
+
+      - uid: sail_reduction_preventive
+        title: "⛵ SAIL_REDUCTION"
+        description: "Réduction préventive (vent monte)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Wind increasing. Recommend preventive sail reduction to avoid overpowering."
+          summary: "Reduce sail (wind rising)"
+        labels:
+          severity: "warning"
+          category: "sail"
+          phase: "2"
+
+      - uid: sail_increase_opportunity
+        title: "⛵ SAIL_INCREASE"
+        description: "Opportunité augmenter toile"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Wind conditions favorable to add sail. Current setup is underpowered."
+          summary: "Add sail (opportunity)"
+        labels:
+          severity: "info"
+          category: "sail"
+          phase: "2"
+
+      - uid: spinnaker_possible
+        title: "⛵ SPINNAKER_POSSIBLE"
+        description: "Spi possible (TWA > 120°, TWS < 18kt)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Conditions suitable for spinnaker deployment (downwind, moderate wind, stable heel)."
+          summary: "Spi window!"
+        labels:
+          severity: "info"
+          category: "sail"
+          phase: "2"
+
+      - uid: spinnaker_douse_preventive
+        title: "⛵ SPINNAKER_DOUSE"
+        description: "Affaler spi préventif (rafale imminente)"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Gust warning forecast. Recommend preventive spinnaker douse to avoid broaching."
+          summary: "Douse spi (gust warning)"
+        labels:
+          severity: "warning"
+          category: "sail"
+          phase: "2"
+
+      - uid: seas_correction_needed
+        title: "⛵ SEAS_CORRECTION"
+        description: "Correction mer agitée — réduire"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "1m"
+        annotations:
+          description: "Pitch/roll excessive due to rough seas. Recommend sail reduction or course adjustment."
+          summary: "Rough seas - adjust sail"
+        labels:
+          severity: "warning"
+          category: "sail"
+          phase: "2"
+
+      - uid: sail_config_optimal
+        title: "⛵ OPTIMAL_CONFIG"
+        description: "Config optimale confirmée > 95% polaire"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Excellent! Current sail configuration is optimal (> 95% of polar performance)."
+          summary: "Optimal sail config!"
+        labels:
+          severity: "info"
+          category: "sail"
+          phase: "2"
+
+---
+
+  - name: MidnightRider Phase 2 - Racing Navigation
+    interval: 10s
+    rules:
+      - uid: layline_starboard
+        title: "🏁 LAYLINE_STARBOARD"
+        description: "Layline tribord atteinte"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10s"
+        annotations:
+          description: "Starboard layline to mark achieved! Check other competitors' positions."
+          summary: "On starboard layline"
+        labels:
+          severity: "info"
+          category: "race"
+          phase: "2"
+
+      - uid: layline_port
+        title: "🏁 LAYLINE_PORT"
+        description: "Layline bâbord atteinte"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10s"
+        annotations:
+          description: "Port layline to mark achieved! Check competitor positions."
+          summary: "On port layline"
+        labels:
+          severity: "info"
+          category: "race"
+          phase: "2"
+
+      - uid: depth_change_significant
+        title: "🌊 DEPTH_CHANGE"
+        description: "Changement profondeur > 3m/5min"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "5m"
+        annotations:
+          description: "Water depth changing significantly. May indicate current flow or bottom topology change."
+          summary: "Depth change detected"
+        labels:
+          severity: "info"
+          category: "curr"
+          phase: "2"
+
+      - uid: wind_mismatch
+        title: "💨 WIND_MISMATCH"
+        description: "Vent mesuré ≠ prévu"
+        condition: "A"
+        data:
+          - refId: A
+            queryType: "classic_conditions"
+        noDataState: "NoData"
+        execErrState: "Alerting"
+        for: "10m"
+        annotations:
+          description: "Measured wind differs significantly from forecast. Local conditions or forecast error."
+          summary: "Wind mismatch"
+        labels:
+          severity: "info"
+          category: "meteo"
+          phase: "2"
