@@ -1,15 +1,17 @@
-# Signal K Astronomical Data Plugin
+# Signal K Astronomical Data + Tides Plugin
 
-**Provides:** Sunrise/Sunset, Moonrise/Moonset, Moon Illumination & Phase
+**Provides:** Sunrise/Sunset, Moonrise/Moonset, Moon Illumination & Phase, Tide Predictions (NOAA)
 
 ## Installation
 
-### 1. Install Dependency
+### 1. Install Dependencies
 
 ```bash
 cd /home/node/signalk
-npm install suncalc
+npm install suncalc axios
 ```
+
+(Both required: `suncalc` for astronomical calculations, `axios` for NOAA API calls)
 
 ### 2. Copy Plugin Files
 
@@ -45,16 +47,20 @@ File: `~/.signalk/plugin-config-data/signalk-astronomical.json`
 ```json
 {
   "enabled": true,
-  "debug": false
+  "debug": false,
+  "noaaStation": "8518750"
 }
 ```
 
 - **enabled**: Set to `true` to activate
 - **debug**: Set to `true` for detailed logging
+- **noaaStation**: NOAA station ID for tides
+  - Default: `8518750` (The Battery, NY Harbor)
+  - Find yours: https://tides.noaa.gov/stations.html
 
 ## Output Data
 
-Plugin updates Signal K paths once per day:
+Plugin updates Signal K paths once per day (checks every hour):
 
 ### Sun Times
 ```
@@ -68,6 +74,14 @@ environment.moon.moonriseTime   (ISO8601 timestamp)
 environment.moon.moonsetTime    (ISO8601 timestamp)
 environment.moon.illumination   (0.0 to 1.0, where 0=new, 0.5=half, 1.0=full)
 environment.moon.phase          (string: "new_moon", "waxing_crescent", "first_quarter", "waxing_gibbous", "full_moon", "waning_gibbous", "last_quarter", "waning_crescent")
+```
+
+### Tide Times & Levels (NOAA)
+```
+environment.tide.tideHighTime   (ISO8601 timestamp)
+environment.tide.tideHighLevel  (meters)
+environment.tide.tideLowTime    (ISO8601 timestamp)
+environment.tide.tideLowLevel   (meters)
 ```
 
 ## How It Works
@@ -95,6 +109,16 @@ SELECT value FROM "environment.moon.illumination" WHERE time > now() - 30d
 
 Convert to percentage: `value * 100`
 
+### Display Tides
+```
+SELECT value FROM "environment.tide.tideHighLevel" WHERE time > now() - 30d
+```
+
+Or with times:
+```
+SELECT value FROM "environment.tide.tideHighTime" WHERE time > now() - 7d
+```
+
 ### Create Alert: Sunset Approaching
 - Condition: `sunsetTime < now + 2 hours`
 - Action: Send notification
@@ -102,6 +126,14 @@ Convert to percentage: `value * 100`
 ### Create Alert: Full Moon
 - Condition: `illumination > 0.90`
 - Action: Send notification
+
+### Create Alert: Low Tide Warning
+- Condition: `tideHighLevel < 0.5`
+- Action: Send notification (shallow water)
+
+### Create Alert: High Tide Window
+- Condition: `tideHighLevel > 2.0`
+- Action: Send notification (good time for shallow navigation)
 
 ## Example Data Points
 
@@ -123,13 +155,26 @@ time: 2026-04-20T00:00:00Z
 measurement: environment.moon.phase
 value: "waxing_gibbous"
 time: 2026-04-20T00:00:00Z
+
+measurement: environment.tide.tideHighTime
+value: "2026-04-20T14:30:00-04:00"
+time: 2026-04-20T00:00:00Z
+
+measurement: environment.tide.tideHighLevel
+value: 2.15
+time: 2026-04-20T00:00:00Z
+
+measurement: environment.tide.tideLowLevel
+value: 0.45
+time: 2026-04-20T00:00:00Z
 ```
 
 ## Dependencies
 
 - **suncalc** (npm): Astronomical calculations
+- **axios** (npm): HTTP client for NOAA API
 - **GPS position**: From Signal K (uses boat's latitude/longitude)
-- **No external API** required
+- **NOAA API**: For tide predictions (requires internet)
 
 ## Troubleshooting
 
@@ -148,18 +193,60 @@ time: 2026-04-20T00:00:00Z
 - Plugin uses UTC (ISO8601 standard)
 - Convert to local in Grafana as needed
 
+## NOAA Tides Configuration
+
+### Finding Your Station
+
+1. Go to: https://tides.noaa.gov/stations.html
+2. Search for your port (e.g., "New York Harbor")
+3. Find the station with data you want
+4. Copy the station ID (e.g., 8518750 for The Battery, NY)
+5. Update `noaaStation` in plugin config
+
+### Common US Stations
+
+- **New York Harbor (The Battery)**: 8518750
+- **Boston Harbor**: 8443970
+- **Charleston Harbor**: 8665530
+- **San Francisco Bay**: 9414290
+- **Puget Sound (Seattle)**: 9447130
+
 ## Next Steps
 
-### Phase 1B: Add Tides
-When ready, can add tide predictions (high/low times and levels)
-
 ### Phase 2: Add Temperature
-Can add air temperature from NOAA or local sensor
+When ready, can add air temperature from NOAA or local sensor
+
+## Troubleshooting
+
+### No tide data appearing
+
+1. Check internet connection: Plugin needs access to NOAA API
+2. Enable debug mode: `"debug": true` in config
+3. Check logs for `[Astro] Fetching NOAA tides...` message
+4. Verify station ID exists: https://tides.noaa.gov/stations.html
+5. Plugin will still send astro data even if tides fail
+
+### Wrong station data
+
+- Update `noaaStation` in config with correct ID
+- Restart Signal K
+- Data refreshes next day
 
 ## Author
 
 Aneto (MidnightRider J/30)
 2026-04-19
+
+## Version History
+
+**v1.1.0** (2026-04-19)
+- Added NOAA API integration for tide predictions
+- Configurable station ID
+- Graceful fallback if API unavailable
+- Environment namespace for all paths
+
+**v1.0.0** (2026-04-19)
+- Initial release: Sun/Moon times and phases
 
 ## License
 
