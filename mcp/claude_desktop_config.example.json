@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "astronomical": {
+      "command": "/home/aneto/docker/signalk/mcp/astronomical-server.js",
+      "args": [],
+      "env": {
+        "INFLUX_URL": "http://localhost:8086",
+        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_ORG": "MidnightRider",
+        "INFLUX_BUCKET": "signalk"
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["@modelcontextprotocol/server-filesystem", "/home/aneto"],
+      "disabled": false
+    }
+  }
+}
