@@ -74,8 +74,14 @@ module.exports = function(app) {
     function checkAndUpdateAstronomical() {
       try {
         const today = new Date().toLocaleDateString();
-
-        if (lastUpdateDate === today) {
+        
+        // Check if environment data already exists
+        const hasEnvironmentData = app.signalk.self.environment && 
+                                   app.signalk.self.environment.sun &&
+                                   app.signalk.self.environment.sun.sunriseTime;
+        
+        // Send if: date changed OR no environment data yet
+        if (lastUpdateDate === today && hasEnvironmentData) {
           if (debug) {
             app.debug('[Astro] Already updated today, skipping');
           }
@@ -83,7 +89,11 @@ module.exports = function(app) {
         }
 
         if (debug) {
-          app.debug('[Astro] Date changed, calculating new values');
+          if (lastUpdateDate !== today) {
+            app.debug('[Astro] Date changed, calculating new values');
+          } else {
+            app.debug('[Astro] No environment data yet, sending first values');
+          }
         }
 
         // Get boat position from Signal K
