@@ -1,0 +1,13 @@
+CORRECTION: UM982 Heading
+
+Le UM982 est un Dual GNSS avec DUAL-ANTENNA HEADING SOLUTION.
+Donc le heading que nous reçons est:
+- **TRUE HEADING** (orientation réelle du bateau)
+- PAS Course Over Ground (COG)
+- C'est du compass-less heading par positions GPS différentielles
+
+Cela signifie:
+- Nous avons le vrai cap du bateau 
+- Pas besoin du BNO085 pour avoir le heading (bonus quand on l'aura)
+- Les 2-4° observés = orientation réelle du bateau
+- Utile pour tous les calculs perf (angle au vent, etc.)
