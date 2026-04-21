@@ -39,3 +39,18 @@ fatal: unable to access 'https://github.com/Aneto152/midnightrider-navigation.gi
  create mode 100644 plugins/signalk-astronomical-simple.js
 To https://github.com/Aneto152/midnightrider-navigation.git
    0a66119..92f9d38  main -> main
+[main b75f85b] Auto-backup 2026-04-21 02:00
+ 12 files changed, 5498 insertions(+)
+ create mode 100644 PLUGIN-POLARS-INSTALLATION.md
+ create mode 100644 docs/J30-SAILS-SPECIFICS.md
+ create mode 100644 docs/LAYLINES-INTEGRATION.md
+ create mode 100644 docs/POLAR-PERFORMANCE-INTEGRATION.md
+ create mode 100644 docs/SAILS-DECISION-MATRIX-DETAILED.md
+ create mode 100644 docs/SAILS-MANAGEMENT-SYSTEM.md
+ create mode 100644 docs/VICTRON-ORION-12-18-CONFIG.md
+ create mode 100644 docs/VICTRON-ORION-BLUETOOTH.md
+ create mode 100644 docs/VICTRON-ORION-INTEGRATION.md
+ create mode 100644 grafana-alerts/FILTERED-ALERTS-SETUP.md
+ create mode 100644 grafana-dashboards/04-alerts-filtered.json
+To https://github.com/Aneto152/midnightrider-navigation.git
+   7888298..b75f85b  main -> main
