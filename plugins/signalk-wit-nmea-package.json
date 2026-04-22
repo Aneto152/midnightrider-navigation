@@ -1,0 +1,10 @@
+{
+  "name": "signalk-wit-nmea",
+  "version": "1.0.0",
+  "main": "signalk-wit-nmea.js",
+  "description": "WIT WT901BLECL IMU NMEA0183 Parser",
+  "keywords": ["wit", "imu", "nmea"],
+  "signalk": {
+    "plugin": true
+  }
+}

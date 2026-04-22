@@ -1,0 +1,23 @@
+FROM node:18-alpine
+
+# Install signalk-server
+RUN npm install -g signalk-server
+
+# Create signalk directory
+RUN mkdir -p /home/node/.signalk/plugins
+
+# Copy WIT NMEA plugin
+COPY plugins/signalk-wit-nmea.js /home/node/.signalk/plugins/signalk-wit-nmea/index.js
+COPY plugins/signalk-wit-nmea-package.json /home/node/.signalk/plugins/signalk-wit-nmea/package.json
+
+# Install plugin dependencies (if any)
+RUN cd /home/node/.signalk/plugins/signalk-wit-nmea && npm install
+
+# Copy settings.json with plugin configured
+COPY config/signalk-settings-wit.json /home/node/.signalk/settings.json
+
+# Expose ports
+EXPOSE 3000 3443
+
+# Start Signal K
+CMD ["signalk-server"]

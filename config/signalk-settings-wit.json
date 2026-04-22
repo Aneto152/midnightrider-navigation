@@ -1,0 +1,73 @@
+{
+  "pipedProviders": [
+    {
+      "pipeElements": [
+        {
+          "type": "providers/simple",
+          "options": {
+            "logging": false,
+            "type": "NMEA0183",
+            "subOptions": {
+              "validateChecksum": true,
+              "type": "tcp",
+              "host": "localhost",
+              "port": "10111"
+            }
+          }
+        }
+      ],
+      "id": "kflex",
+      "enabled": true
+    }
+  ],
+  "interfaces": {
+    "applicationData": true,
+    "appstore": true,
+    "logfiles": true,
+    "mfd_webapp": true,
+    "nmea-tcp": false,
+    "playground": true,
+    "plugins": true,
+    "providers": true,
+    "rest": true,
+    "tcp": true,
+    "wasm": true,
+    "webapps": true,
+    "ws": true
+  },
+  "plugins": {
+    "signalk-wit-nmea": {
+      "enabled": true,
+      "host": "localhost",
+      "port": 10111,
+      "debug": true
+    },
+    "signalk-to-influxdb2": {
+      "enabled": true,
+      "influxes": [
+        {
+          "url": "http://influxdb:8086",
+          "token": "4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+          "org": "MidnightRider",
+          "bucket": "signalk",
+          "outputDailyLog": true,
+          "resampleIntervalMs": 1000
+        }
+      ]
+    }
+  },
+  "courseApi": {
+    "apiOnly": false
+  },
+  "mdns": false,
+  "ssl": false,
+  "wsCompression": false,
+  "accessLogging": true,
+  "enablePluginLogging": true,
+  "trustProxy": false,
+  "port": 3000,
+  "sslport": 3443,
+  "pruneContextsMinutes": 60,
+  "keepMostRecentLogsOnly": true,
+  "logCountToKeep": 24
+}
