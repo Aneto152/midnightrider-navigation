@@ -1,6 +1,68 @@
 
 ---
 
+## 🎯 CRITICAL LESSON: Signal K v2.25 Plugin Discovery (2026-04-22)
+
+### THE PROBLEM
+**Signal K v2.25 IGNORES symlinks created by `npm link`!**
+
+- ❌ `npm link` creates symlinks in `~/.signalk/node_modules/`
+- ❌ Signal K v2.25 does NOT follow symlinks automatically
+- ❌ Plugin never discovered, never loaded, never runs
+
+### THE SOLUTION
+**Copy the plugin directly instead of linking it:**
+
+```bash
+# WRONG (doesn't work with Signal K v2.25):
+npm link
+cd ~/.signalk && npm link my-plugin
+
+# CORRECT (works every time):
+cp -r ~/my-plugin ~/.signalk/node_modules/
+```
+
+### ALSO REQUIRED
+Plugin `package.json` MUST have:
+```json
+{
+  "name": "signalk-my-plugin",
+  "keywords": [
+    "signalk-node-server-plugin",
+    "signalk-plugin"
+  ]
+}
+```
+
+Without `"signalk-node-server-plugin"` keyword, Signal K won't discover it.
+
+### ALSO REQUIRED
+Enable plugin in `~/.signalk/settings.json`:
+```json
+{
+  "plugins": {
+    "signalk-my-plugin": {
+      "enabled": true,
+      "... options ...": "..."
+    }
+  }
+}
+```
+
+### Full Checklist
+- [ ] Create plugin code with correct structure (use `plugin.id = ...`, not `const plugin = {id: ...}`)
+- [ ] Create `package.json` with `"signalk-node-server-plugin"` keyword
+- [ ] **Copy directly:** `cp -r ~/my-plugin ~/.signalk/node_modules/`
+- [ ] Add config to `~/.signalk/settings.json`
+- [ ] Restart Signal K: `sudo systemctl restart signalk`
+- [ ] Verify: Check `/skServer/plugins` API
+- [ ] Check data flows: Test API endpoints
+
+### Why This Matters
+This is a **gotcha with Signal K v2.25**. Many developers waste hours trying npm link before discovering it simply doesn't work. Document this immediately.
+
+---
+
 ## PGN 130824 — B&G Performance Data (2026-04-19)
 
 ### Vue d'ensemble
