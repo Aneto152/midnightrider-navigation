@@ -1,0 +1,85 @@
+{
+  "plugins": {
+    "signalk-wit-imu-usb": {
+      "enabled": true,
+      "usbPort": "/dev/ttyUSB0",
+      "baudRate": 115200,
+      "filterAlpha": 0.05,
+      "updateRate": 1,
+      "calibrationX": 0.0111,
+      "calibrationY": -0.0389,
+      "calibrationZ": 0.0327,
+      "gyroOffsetX": 0,
+      "gyroOffsetY": 0,
+      "gyroOffsetZ": 0,
+      "angleOffsetRoll": -2.1553,
+      "angleOffsetPitch": -0.6157,
+      "angleOffsetYaw": 69.9939
+    },
+    "signalk-wave-height-simple": {
+      "enabled": true,
+      "windowSize": 60,
+      "filterAlpha": 0.1
+    },
+    "signalk-wit-imu-reader": {
+      "enabled": true,
+      "usbPort": "/dev/ttyUSB0",
+      "baudRate": 115200,
+      "filterAlpha": 0.05,
+      "updateRate": 1,
+      "calibrationX": 0.0111,
+      "calibrationY": -0.0389,
+      "calibrationZ": 0.0327,
+      "gyroOffsetX": 0,
+      "gyroOffsetY": 0,
+      "gyroOffsetZ": 0,
+      "angleOffsetRoll": -2.1553,
+      "angleOffsetPitch": -0.6157,
+      "angleOffsetYaw": 69.9939
+    },
+    "signalk-to-influxdb2": {
+      "enabled": true
+    },
+    "signalk-sails-management-v2": {
+      "enabled": true
+    },
+    "signalk-performance-polars": {
+      "enabled": true
+    },
+    "signalk-loch-calibration": {
+      "enabled": true
+    },
+    "signalk-current-calculator": {
+      "enabled": true
+    },
+    "signalk-wave-height": {
+      "enabled": true
+    },
+    "signalk-wit-imu": {
+      "enabled": false
+    },
+    "signalk-wit-imu-usb": {
+      "enabled": false
+    },
+    "signalk-astronomical": {
+      "enabled": false
+    }
+  },
+  "pipedProviders": [],
+  "interfaces": {},
+  "resourcesApi": {
+    "defaultProviders": {
+      "routes": "resources-provider",
+      "waypoints": "resources-provider",
+      "notes": "resources-provider",
+      "regions": "resources-provider",
+      "charts": "resources-provider",
+      "tracks": "resources-provider",
+      "infolayers": "resources-provider",
+      "groups": "resources-provider"
+    }
+  },
+  "courseApi": {
+    "apiOnly": false
+  }
+}
