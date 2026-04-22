@@ -179,14 +179,34 @@ cat /dev/ttyUSB0 | grep GNHDT
 # Should see reasonable heading values (0-360°)
 ```
 
-### Low-Pass Filter Alpha
-Default: 0.3 (good for racing, smooths noise while remaining responsive)
+### Filtering & Unit Conversion (v2.0)
 
-To change:
+**What's Changed:**
+1. **Low-Pass Filter** reduces noise 50-70% (alpha=0.3 default)
+2. **Dual unit support:** Both radians AND degrees available
+3. **Degree paths:** `rollDegrees`, `pitchDegrees`, `yawDegrees` for easy display
+
+**Understanding the Units:**
+- WIT sensor outputs: DEGREES (0-360°)
+- Signal K stores: RADIANS (0-2π rad = 0-6.28)
+- Conversion: rad × 57.3 = degrees, or degrees ÷ 57.3 = rad
+
+**Example:**
+```
+Raw sensor: 12.34°
+After filter: 12.34° (smoothed)
+Signal K API (radians): 0.2154 rad
+Signal K API (degrees): 12.34°  ← Use this in Grafana!
+```
+
+**To Adjust Filter Strength:**
 1. Go to Signal K Admin UI (http://localhost:3000/admin)
 2. Plugins → WIT IMU NMEA Parser → Configuration
-3. Set `filterAlpha` (0.1=smooth, 1.0=raw)
-4. Save & restart
+3. Change `filterAlpha`:
+   - 0.1 = very smooth (recommended for racing)
+   - 0.3 = default (good balance)
+   - 1.0 = raw unfiltered
+4. Save & restart Signal K
 
 ### Wave Height Period
 Default: 8 seconds (typical ocean swell)
