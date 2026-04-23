@@ -1,0 +1,19 @@
+{
+  "name": "signalk-wave-height-imu",
+  "version": "2.0.0",
+  "main": "index.js",
+  "description": "Calculate wave height from vertical acceleration of 9-axis IMU sensor",
+  "keywords": [
+    "signalk-node-server-plugin",
+    "signalk-plugin",
+    "wave",
+    "height",
+    "imu",
+    "acceleration",
+    "maritime",
+    "ocean",
+    "spectral"
+  ],
+  "author": "Denis Lafarge",
+  "license": "MIT"
+}

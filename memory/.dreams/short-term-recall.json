@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-20T23:02:46.022Z",
+  "updatedAt": "2026-04-23T21:52:32.510Z",
   "entries": {
     "memory:memory/2026-04-09.md:57:73": {
       "key": "memory:memory/2026-04-09.md:57:73",
@@ -9,18 +9,22 @@
       "endLine": 73,
       "source": "memory",
       "snippet": "- Comparaison VMG avec concurrents via AIS - Alertes vocales via enceinte Bluetooth (timer, vent, VMG) - Grafana Cloud sync pour analyse post-régate ## OpenClaw - Mis à jour vers version 2026.4.9 - WhatsApp NON configuré — uniquement Telegram - Rate limit Telegram: problème récurrent quand messages trop rapprochés → garder messages courts et groupés ## Tokens / Credentials (à ne pas perdre) - InfluxDB local token: 4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA== - InfluxDB Cloud URL: https://us-east-1-1.aws.cloud2.influxdata.com - InfluxDB Cloud org ID: 48a34d6463cef7c9 - InfluxDB Cloud token: _kEQ4jECoIVng-8UF1ZmpWJvvMVSGPt0x0vzgWGHJbQLyoq2Og3BOzukX",
-      "recallCount": 1,
+      "recallCount": 4,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 0.7804522013672835,
-      "maxScore": 0.7804522013672835,
+      "totalScore": 3.256524946057658,
+      "maxScore": 0.9175851983663867,
       "firstRecalledAt": "2026-04-19T19:51:40.125Z",
-      "lastRecalledAt": "2026-04-19T19:51:40.125Z",
+      "lastRecalledAt": "2026-04-23T21:52:32.510Z",
       "queryHashes": [
-        "9f099d4a525f"
+        "9f099d4a525f",
+        "64e6de1fede5",
+        "5de9673eca98",
+        "77d9f6e8b8c4"
       ],
       "recallDays": [
-        "2026-04-19"
+        "2026-04-19",
+        "2026-04-23"
       ],
       "conceptTags": [
         "gpt",
@@ -73,20 +77,22 @@
       "endLine": 92,
       "source": "memory",
       "snippet": "- Ligne de départ : 2 points GPS (pin + bateau comité) - Timer départ avec sync à la minute - Événements : virement, empannage, marque, arrivée - Service systemd `regatta` actif **TODO ligne de départ (quand instruments connectés) :** - Longueur de la ligne (distance GPS entre les 2 points) - Angle ligne vs vent réel (TWD depuis SignalK) - Affichage biais : côté avantageux (bâbord ou tribord) ## TODO demain - Interface web de régate (iPad-friendly) : - Sélection voiles + horodatage - Barreur (Denis, Anne-Sophie, autre) - Marquage ligne de départ (2 points GPS) - Timer départ régate (5min/4min/1min) - Tout logué dans InfluxDB + visible dans Grafana",
-      "recallCount": 2,
+      "recallCount": 3,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 1.2021286339384916,
-      "maxScore": 0.646539093318428,
+      "totalScore": 1.921604490593718,
+      "maxScore": 0.7194758566552263,
       "firstRecalledAt": "2026-04-19T19:51:40.131Z",
-      "lastRecalledAt": "2026-04-20T23:02:46.022Z",
+      "lastRecalledAt": "2026-04-23T21:50:57.045Z",
       "queryHashes": [
         "7118cdc335b4",
-        "0cfcda5f88cb"
+        "0cfcda5f88cb",
+        "6dc2b268a7da"
       ],
       "recallDays": [
         "2026-04-19",
-        "2026-04-20"
+        "2026-04-20",
+        "2026-04-23"
       ],
       "conceptTags": [
         "ipad-friendly",
@@ -106,20 +112,22 @@
       "endLine": 82,
       "source": "memory",
       "snippet": "- Login : admin / MidnightRider - Datasource InfluxDB uid : efifgp8jvgj5sf ## Kflex - Probablement = kplex (NMEA multiplexer) - Pas installé actuellement - Rôle : alimenter qtVLM via TCP 10110 - À configurer quand instruments bord branchés ## Instruments à bord - Loch / sondeur - Girouette anémomètre - GPS heading dual GNSS (UM982) - Baromètre - AIS - Connexion via NMEA2000 (YDWG-02) + NMEA0183 (kplex/Kflex) ## Grafana Cloud - Denis a un compte existant - Objectif : même dashboards onboard et cloud - Datasource : InfluxDB Cloud déjà en place - À configurer demain ## Vue courants LIS (Long Island Sound) - Courants très forts dans le LIS - Calcul vecteur courant : SOG/COG (GPS) - STW/HDG (",
-      "recallCount": 2,
+      "recallCount": 3,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 0.9976345875636186,
-      "maxScore": 0.5178073380188364,
+      "totalScore": 1.7253145824855955,
+      "maxScore": 0.727679994921977,
       "firstRecalledAt": "2026-04-19T19:51:40.131Z",
-      "lastRecalledAt": "2026-04-20T23:02:46.022Z",
+      "lastRecalledAt": "2026-04-23T21:50:57.045Z",
       "queryHashes": [
         "7118cdc335b4",
-        "0cfcda5f88cb"
+        "0cfcda5f88cb",
+        "6dc2b268a7da"
       ],
       "recallDays": [
         "2026-04-19",
-        "2026-04-20"
+        "2026-04-20",
+        "2026-04-23"
       ],
       "conceptTags": [
         "ydwg-02",
@@ -139,20 +147,23 @@
       "endLine": 35,
       "source": "memory",
       "snippet": "# 2026-04-09 — Mémoire de compaction (suite session 2026-04-08) ## WiFi AP MidnightRider - AP configuré via NetworkManager (hostapd conflict résolu) - SSID: MidnightRider / Mot de passe: Aneto152 - IP du RPi sur l'AP: 192.168.4.1 - Partage internet via Ethernet → NAT permanent (iptables-persistent) - SSID Verizon_C9PX3L supprimé (causait des conflits) - UFW mis à jour pour autoriser 192.168.4.0/24 ## Grafana - Dashboard public (sans login): http://192.168.4.1:3001/public-dashboards/d397139a405c4f4eb9f1fdc52f306029 - Login admin: admin / MidnightRider - Dashboard \"MidnightRider Navigation\" avec carte Geomap, SOG, COG ## Grafana Cloud - Denis a un compte existant - TODO: configurer datasour",
-      "recallCount": 2,
+      "recallCount": 4,
       "dailyCount": 0,
       "groundedCount": 0,
-      "totalScore": 0.9680492909822449,
-      "maxScore": 0.5163069817849792,
+      "totalScore": 2.4348402478717315,
+      "maxScore": 0.7399497414451811,
       "firstRecalledAt": "2026-04-19T19:51:40.131Z",
-      "lastRecalledAt": "2026-04-20T23:02:46.022Z",
+      "lastRecalledAt": "2026-04-23T21:52:30.685Z",
       "queryHashes": [
         "7118cdc335b4",
-        "0cfcda5f88cb"
+        "0cfcda5f88cb",
+        "6dc2b268a7da",
+        "5de9673eca98"
       ],
       "recallDays": [
         "2026-04-19",
-        "2026-04-20"
+        "2026-04-20",
+        "2026-04-23"
       ],
       "conceptTags": [
         "network",

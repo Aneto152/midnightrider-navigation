@@ -1,0 +1,58 @@
+MidnightRider J/30 Workspace
+=============================
+
+ROOT (Essential Files Only)
+├── INDEX.md               ← Start here!
+├── AGENTS.md             ← Agent instructions
+├── USER.md               ← Your profile (Denis)
+├── SOUL.md               ← Agent personality
+├── IDENTITY.md           ← Agent identity
+├── MEMORY.md             ← Long-term learning
+├── HEARTBEAT.md          ← Periodic tasks
+├── TODO.md               ← Action items
+├── TOOLS.md              ← Tool reference
+│
+├── docs/
+│   ├── README.md
+│   ├── system/           ← Signal K, InfluxDB, Grafana
+│   │   └── README.md
+│   ├── plugins/          ← All 9 plugins documented
+│   │   └── README.md
+│   └── archive/          ← Historical documentation
+│       └── README.md
+│
+├── plugins-stable-v0/    ← Production backup (v0)
+│   ├── MANIFEST.md
+│   ├── signalk-wit-imu-usb/
+│   ├── signalk-wit-imu-ble/
+│   ├── signalk-wave-height-imu/
+│   ├── signalk-performance-polars/
+│   ├── signalk-sails-management-v2/
+│   ├── signalk-astronomical/
+│   ├── signalk-loch-calibration/
+│   ├── signalk-current-calculator/
+│   ├── signalk-rpi-cpu-temp/
+│   └── j30-polars-data.json
+│
+├── memory/               ← Daily logs & notes
+│   ├── 2026-04-20-*.md
+│   ├── 2026-04-21-*.md
+│   └── ...
+│
+├── scripts/              ← Helper scripts
+│   ├── boot-midnightrider.sh
+│   └── get-docker.sh
+│
+├── dashboards/           ← Web UI
+│   ├── signalk-dashboard-v4-ipad.html
+│   ├── signalk-dashboard-v5-bigdebug.html
+│   └── ...
+│
+├── backups/              ← Archive storage
+│   ├── old-docs/        ← Historical docs
+│   ├── midnightrider-2026-04-22.tar.gz
+│   └── ...
+│
+└── [Git tracked]
+    .git/
+    .gitignore

@@ -1,0 +1,29 @@
+{
+  "name": "signalk-wit-imu-usb",
+  "version": "2.1.0",
+  "main": "index.js",
+  "description": "WIT WT901BLECL 9-axis IMU USB Reader for Signal K - With Calibration Offsets",
+  "keywords": [
+    "signalk-node-server-plugin",
+    "signalk-plugin",
+    "imu",
+    "wit",
+    "attitude",
+    "roll",
+    "pitch",
+    "yaw",
+    "acceleration",
+    "rate-of-turn",
+    "calibration",
+    "9-axis"
+  ],
+  "author": "Denis Lafarge",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dennislafarge/signalk-wit-imu-usb"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
