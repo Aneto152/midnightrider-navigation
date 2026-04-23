@@ -54,3 +54,11 @@ To https://github.com/Aneto152/midnightrider-navigation.git
  create mode 100644 grafana-dashboards/04-alerts-filtered.json
 To https://github.com/Aneto152/midnightrider-navigation.git
    7888298..b75f85b  main -> main
+[main f4b8ed8] Auto-backup 2026-04-22 02:00
+ 5 files changed, 240 insertions(+)
+ create mode 100644 Dockerfile.wit
+ create mode 100644 config/signalk-settings-wit.json
+ create mode 100644 plugins/signalk-wit-nmea-package.json
+ create mode 100644 plugins/signalk-wit-nmea.js
+To https://github.com/Aneto152/midnightrider-navigation.git
+   748fd39..f4b8ed8  main -> main

@@ -51,11 +51,11 @@ services:
       - influxdb
 
   # ─────────────────────────────────────────
-  # Signal K
+  # Signal K (2026-04-22: via Kplex, not direct USB)
   # network_mode: host est nécessaire pour :
-  #   - accès à Kflex via TCP localhost:10110
-  #   - accès NMEA2000 via /dev/ttyACM1
+  #   - accès à Kplex via TCP localhost:10110 ✅
   #   - mDNS / discovery réseau
+  #   - Pas d'accès direct USB (Kplex gère)
   # ─────────────────────────────────────────
   signalk:
     image: signalk/signalk-server:latest
@@ -65,12 +65,15 @@ services:
     group_add:
       - "46"   # plugdev — accès ports série USB
       - "20"   # dialout
+    environment:
+      - ALLOW_READONLY=true
     volumes:
       - signalk-data:/home/node/.signalk
-    devices:
-      - /dev/ttyUSB0:/dev/ttyUSB0
-    # YDWG-02 NMEA2000
-      - /dev/ttyACM0:/dev/ttyACM0
+    # USB removed: Kplex handles /dev/ttyUSB0 (WIT)
+    # Signal K connects to Kplex TCP:10110
+    # YDWG-02 NMEA2000 (if needed, uncomment)
+    # devices:
+    #   - /dev/ttyACM0:/dev/ttyACM0
     depends_on:
       - influxdb
       - astronomical
