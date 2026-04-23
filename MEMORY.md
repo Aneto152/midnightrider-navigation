@@ -1,7 +1,7 @@
 
 ---
 
-## 🎯 CRITICAL LESSON: Signal K v2.25 Plugin Discovery (2026-04-22)
+## 🔴 CRITICAL LESSON #1: Signal K v2.25 Plugin Discovery (2026-04-22)
 
 ### THE PROBLEM
 **Signal K v2.25 IGNORES symlinks created by `npm link`!**
@@ -24,7 +24,7 @@ cp -r ~/my-plugin ~/.signalk/node_modules/
 
 ### ALSO REQUIRED
 Plugin `package.json` MUST have:
-```json
+```
 {
   "name": "signalk-my-plugin",
   "keywords": [
@@ -34,32 +34,57 @@ Plugin `package.json` MUST have:
 }
 ```
 
-Without `"signalk-node-server-plugin"` keyword, Signal K won't discover it.
+Without "signalk-node-server-plugin" keyword, Signal K won't discover it.
 
 ### ALSO REQUIRED
 Enable plugin in `~/.signalk/settings.json`:
-```json
+```
 {
   "plugins": {
     "signalk-my-plugin": {
-      "enabled": true,
-      "... options ...": "..."
+      "enabled": true
     }
   }
 }
 ```
 
-### Full Checklist
-- [ ] Create plugin code with correct structure (use `plugin.id = ...`, not `const plugin = {id: ...}`)
-- [ ] Create `package.json` with `"signalk-node-server-plugin"` keyword
-- [ ] **Copy directly:** `cp -r ~/my-plugin ~/.signalk/node_modules/`
-- [ ] Add config to `~/.signalk/settings.json`
-- [ ] Restart Signal K: `sudo systemctl restart signalk`
-- [ ] Verify: Check `/skServer/plugins` API
-- [ ] Check data flows: Test API endpoints
+---
 
-### Why This Matters
-This is a **gotcha with Signal K v2.25**. Many developers waste hours trying npm link before discovering it simply doesn't work. Document this immediately.
+## 🔴 CRITICAL LESSON #2: Signal K Plugins MUST Be Manually Activated (2026-04-22)
+
+### THE PROBLEM
+**Even if a plugin is installed, configured, and discoverable, it will NOT run until you activate it manually!**
+
+- ✅ Plugin appears in `/skServer/plugins` endpoint
+- ✅ Plugin is installed in `~/.signalk/node_modules/`
+- ✅ Plugin is in settings.json with `enabled: true`
+- ❌ **BUT:** Plugin doesn't actually RUN until manually activated via UI
+
+### THE SOLUTION
+**Use Signal K Admin Web UI:**
+
+1. Open browser: `http://localhost:3000`
+2. Go to Admin panel
+3. Find Installed Plugins section
+4. Locate your plugin in the list
+5. Click **Enable** or toggle **ON**
+6. Plugin now runs
+
+### WHY THIS HAPPENS
+- Signal K separates "discovered" from "running"
+- Configuration file (`settings.json`) doesn't auto-activate
+- Manual activation is required for user safety
+
+### ALWAYS REMEMBER
+**Plugin installed ≠ Plugin running**
+
+You MUST manually enable it via the Admin UI after installation/configuration.
+
+---
+
+## 🎯 CRITICAL LESSON: Signal K v2.25 Plugin Discovery (2026-04-22)
+
+
 
 ---
 
