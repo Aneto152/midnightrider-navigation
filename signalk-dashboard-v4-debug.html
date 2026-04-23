@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MidnightRider - Dashboard v4 Debug</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a15 0%, #0f1428 100%);
+            color: #00ff88;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 15px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: rgba(0, 255, 136, 0.08);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+            letter-spacing: 2px;
+            flex: 0 0 auto;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .status-label {
+            font-size: 16px;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+            font-family: 'Courier New', monospace;
+        }
+
+        .status-dot {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #ff4444;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
+        }
+
+        .status-dot.connected {
+            background: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+        }
+
+        /* Debug panel */
+        .debug-panel {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            max-height: 120px;
+            overflow-y: auto;
+            color: #ffff00;
+        }
+
+        .debug-line {
+            line-height: 1.4;
+        }
+
+        .debug-line.error {
+            color: #ff4444;
+        }
+
+        .debug-line.success {
+            color: #00ff88;
+        }
+
+        /* ===== DASHBOARD GRID ===== */
+        .dashboard {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        /* ===== CARD STYLES ===== */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 200px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 255, 136, 0.5);
+            box-shadow: 0 8px 25px rgba(0, 255, 136, 0.1);
+            transform: translateY(-4px);
+        }
+
+        .card-label {
+            font-size: 18px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card-value {
+            font-size: 64px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            font-variant-numeric: tabular-nums;
+            font-family: 'Courier New', monospace;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+
+        .card-unit {
+            font-size: 20px;
+            opacity: 0.6;
+            font-weight: 500;
+        }
+
+        .card.updating .card-value {
+            animation: update-flash 0.2s ease;
+        }
+
+        @keyframes update-flash {
+            0% {
+                color: #ffff00;
+                text-shadow: 0 0 30px rgba(255, 255, 0, 0.8);
+            }
+            100% {
+                color: #00ff88;
+                text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            }
+        }
+
+        .card.attitude { border-color: rgba(100, 200, 255, 0.3); }
+        .card.attitude:hover { border-color: rgba(100, 200, 255, 0.6); background: rgba(100, 200, 255, 0.05); }
+        .card.wind { border-color: rgba(255, 200, 100, 0.3); }
+        .card.wind:hover { border-color: rgba(255, 200, 100, 0.6); background: rgba(255, 200, 100, 0.05); }
+        .card.position { border-color: rgba(100, 255, 100, 0.3); }
+        .card.position:hover { border-color: rgba(100, 255, 100, 0.6); background: rgba(100, 255, 100, 0.05); }
+        .card.performance { border-color: rgba(255, 100, 255, 0.3); }
+        .card.performance:hover { border-color: rgba(255, 100, 255, 0.6); background: rgba(255, 100, 255, 0.05); }
+        .card.wave { border-color: rgba(100, 255, 255, 0.3); }
+        .card.wave:hover { border-color: rgba(100, 255, 255, 0.6); background: rgba(100, 255, 255, 0.05); }
+
+        .dashboard::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .dashboard::-webkit-scrollbar-track {
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .dashboard::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.3);
+            border-radius: 6px;
+        }
+
+        .dashboard::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 255, 136, 0.5);
+        }
+
+        @media (orientation: portrait) {
+            .header { flex-direction: column; }
+            .dashboard { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+            .card { min-height: 160px; padding: 16px; }
+            .card-value { font-size: 44px; }
+            .card-label { font-size: 13px; }
+            .card-unit { font-size: 15px; }
+            .status-bar { width: 100%; justify-content: space-around; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">⛵ MidnightRider</div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-label">Connection</div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span id="statusText" style="font-size: 24px;">...</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Fréquence</div>
+                    <div class="status-value" id="frequency">0.0 Hz</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Buffer</div>
+                    <div class="status-value" id="bufferSize">0/100</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Polls/sec</div>
+                    <div class="status-value" id="pollsPerSec">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="debug-panel" id="debugPanel"></div>
+
+        <div class="dashboard" id="dashboard"></div>
+    </div>
+
+    <script>
+        const API_URL = `http://${window.location.hostname}:8376`;
+        
+        const SENSORS = {
+            'navigation.attitude.roll': { label: 'Roll', unit: '°', category: 'attitude', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'navigation.attitude.pitch': { label: 'Pitch', unit: '°', category: 'attitude', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'navigation.attitude.yaw': { label: 'Heading', unit: '°', category: 'attitude', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'navigation.acceleration.x': { label: 'Accel X', unit: 'm/s²', category: 'attitude', format: v => v.toFixed(2) },
+            'navigation.acceleration.y': { label: 'Accel Y', unit: 'm/s²', category: 'attitude', format: v => v.toFixed(2) },
+            'navigation.acceleration.z': { label: 'Accel Z', unit: 'm/s²', category: 'wave', format: v => v.toFixed(2) },
+            'environment.wind.angleApparent': { label: 'Wind Angle', unit: '°', category: 'wind', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'environment.wind.speedApparent': { label: 'Wind Speed', unit: 'kt', category: 'wind', format: v => v.toFixed(1) },
+            'navigation.speedOverGround': { label: 'SOG', unit: 'kt', category: 'position', format: v => v.toFixed(2) },
+            'navigation.speedThroughWater': { label: 'STW', unit: 'kt', category: 'position', format: v => v.toFixed(2) },
+            'navigation.courseOverGround': { label: 'COG', unit: '°', category: 'position', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'environment.water.waveHeight': { label: 'Wave Height', unit: 'm', category: 'wave', format: v => v.toFixed(1) }
+        };
+
+        // DEBUG STATS
+        let updateCounter = 0;
+        let lastTime = Date.now();
+        let pollCounter = 0;
+        let lastPollTime = Date.now();
+        let pollInterval = null;
+        let debugLines = [];
+
+        function addDebug(msg, type = 'normal') {
+            const time = new Date().toLocaleTimeString();
+            debugLines.unshift(`[${time}] ${msg}`);
+            if (debugLines.length > 15) debugLines.pop();
+            
+            const panel = document.getElementById('debugPanel');
+            panel.innerHTML = debugLines.map((line, i) => {
+                let cls = '';
+                if (line.includes('✅')) cls = 'success';
+                if (line.includes('❌')) cls = 'error';
+                return `<div class="debug-line ${cls}">${line}</div>`;
+            }).join('');
+            
+            panel.scrollTop = 0;
+        }
+
+        function createCards() {
+            const dashboard = document.getElementById('dashboard');
+            dashboard.innerHTML = '';
+            Object.entries(SENSORS).forEach(([path, config]) => {
+                const card = document.createElement('div');
+                card.className = `card ${config.category}`;
+                card.id = `card-${path}`;
+                card.innerHTML = `
+                    <div class="card-label">${config.label}</div>
+                    <div class="card-value" id="value-${path}">--</div>
+                    <div class="card-unit">${config.unit}</div>
+                `;
+                dashboard.appendChild(card);
+            });
+        }
+
+        function updateValue(path, value) {
+            if (value === null || value === undefined) return;
+
+            const config = SENSORS[path];
+            const element = document.getElementById(`value-${path}`);
+            const card = document.getElementById(`card-${path}`);
+
+            if (!element) return;
+
+            const formatted = config.format(value);
+            if (element.textContent !== formatted) {
+                element.textContent = formatted;
+                card.classList.remove('updating');
+                void card.offsetWidth;
+                card.classList.add('updating');
+                updateCounter++;
+            }
+        }
+
+        async function pollDeltas() {
+            pollCounter++;
+            const pollStart = Date.now();
+
+            try {
+                const response = await fetch(`${API_URL}/deltas`);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+
+                const data = await response.json();
+                const pollTime = Date.now() - pollStart;
+                
+                document.getElementById('bufferSize').textContent = `${data.count}/100`;
+
+                let valueCount = 0;
+                data.deltas.forEach(item => {
+                    const delta = item.data;
+                    if (delta.updates) {
+                        delta.updates.forEach(update => {
+                            if (update.values) {
+                                update.values.forEach(v => {
+                                    if (SENSORS[v.path]) {
+                                        updateValue(v.path, v.value);
+                                        valueCount++;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+                // Frequency calculation
+                const now = Date.now();
+                if (now - lastTime >= 1000) {
+                    const hz = (updateCounter * 1000 / (now - lastTime)).toFixed(1);
+                    document.getElementById('frequency').textContent = `${hz} Hz`;
+                    updateCounter = 0;
+                    lastTime = now;
+                }
+
+                // Polls per second
+                if (now - lastPollTime >= 1000) {
+                    document.getElementById('pollsPerSec').textContent = `${pollCounter}`;
+                    pollCounter = 0;
+                    lastPollTime = now;
+                }
+
+                document.getElementById('statusDot').classList.add('connected');
+                document.getElementById('statusText').textContent = '✅ TCP';
+
+                if (pollCounter % 5 === 0) {
+                    addDebug(`✅ Poll: ${valueCount} values, ${pollTime}ms, buffer=${data.count}`);
+                }
+
+            } catch (error) {
+                document.getElementById('statusDot').classList.remove('connected');
+                document.getElementById('statusText').textContent = '❌ Error';
+                addDebug(`❌ Poll failed: ${error.message}`);
+            }
+        }
+
+        window.addEventListener('load', () => {
+            addDebug(`📱 Dashboard v4 Debug started`);
+            addDebug(`🌐 API: ${API_URL}`);
+            addDebug(`⏰ Poll interval: 100ms = 10 Hz`);
+            
+            createCards();
+            
+            // First poll immediately
+            pollDeltas().then(() => {
+                addDebug(`✅ First poll successful`);
+            }).catch(e => {
+                addDebug(`❌ First poll failed: ${e.message}`);
+            });
+            
+            // Then poll every 100ms
+            pollInterval = setInterval(pollDeltas, 100);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (pollInterval) clearInterval(pollInterval);
+        });
+
+        // Detect connection issues
+        window.addEventListener('offline', () => {
+            addDebug(`❌ Network offline`);
+        });
+
+        window.addEventListener('online', () => {
+            addDebug(`✅ Network online`);
+        });
+    </script>
+</body>
+</html>
