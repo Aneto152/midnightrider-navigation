@@ -1,195 +1,390 @@
-# WIT IMU Calibration Guide
+# WIT IMU Calibration Guide - Plugin v2.1
 
-## Vue d'ensemble
+**Date:** 2026-04-23  
+**Plugin:** signalk-wit-imu-usb v2.1  
+**Status:** ✅ **CALIBRATION READY**
 
-L'IMU WIT WT901BLECL doit être **calibré une seule fois** pour corriger les offsets matériels. Cette calibration est effectuée au démarrage et sauvegardée dans un fichier.
+---
 
-## Étapes de Calibration
+## 📐 Calibration Parameters Overview
 
-### 1. **Préparer l'IMU**
+The WIT IMU plugin now includes **7 calibration offset parameters** for precision tuning:
 
+### Configuration Interface
+
+**Location:** http://localhost:3000 → Admin → Plugins → WIT IMU USB Reader → ⚙️ Configuration
+
+---
+
+## 🎯 Calibration Parameters
+
+### 1. **Roll Offset** (Angles Section)
+
+**What it does:** Corrects systematic roll angle error
+
+```
+Format: Degrees (-180° to +180°)
+Default: 0
+Unit: Degrees
+Applied as: roll_corrected = roll_raw - rollOffset
+```
+
+**When to use:**
+- Bateau not level at rest → roll reads 5° when flat
+- Apply `rollOffset = 5` to zero it
+
+**Measurement:**
+1. Place bateau on perfectly level surface
+2. Note the roll reading
+3. Apply that value as negative offset
+
+---
+
+### 2. **Pitch Offset** (Angles Section)
+
+**What it does:** Corrects systematic pitch angle error
+
+```
+Format: Degrees (-180° to +180°)
+Default: 0
+Unit: Degrees
+Applied as: pitch_corrected = pitch_raw - pitchOffset
+```
+
+**When to use:**
+- Bateau has list or trim → pitch reads 3° when level
+- Apply `pitchOffset = 3` to correct
+
+**Measurement:**
+1. Trim bateau level (no heel, no pitch)
+2. Note the pitch reading
+3. Apply that value as negative offset
+
+---
+
+### 3. **Yaw/Heading Offset** (Angles Section)
+
+**What it does:** Corrects compass heading to true north
+
+```
+Format: Degrees (-180° to +180°)
+Default: 0
+Unit: Degrees
+Applied as: yaw_corrected = yaw_raw - yawOffset
+```
+
+**When to use:**
+- Compass deviation due to:
+  - Ferrous materials near IMU
+  - Electrical equipment interference
+  - Antenna misalignment
+
+**Measurement - Method 1 (GPS):**
+1. Sail in straight line (note GPS track)
+2. Compare IMU heading to GPS track
+3. Difference = heading error
+4. Example: GPS track 045°, IMU reads 050° → `yawOffset = 5`
+
+**Measurement - Method 2 (Known Bearing):**
+1. Align bateau nose with known bearing (star, landmark, compass rose)
+2. Note what IMU reads
+3. Apply correction: `yawOffset = (IMU_reading - known_bearing)`
+
+---
+
+### 4. **Accel X Offset** (Acceleration Section)
+
+**What it does:** Removes zero-point error in X-axis acceleration
+
+```
+Format: m/s² (-20 to +20)
+Default: 0
+Unit: Meters per second squared
+Applied as: accelX_corrected = accelX_raw - accelXOffset
+```
+
+**When to use:**
+- X acceleration reads non-zero when bateau motionless
+- Example: reads +0.5 m/s² at rest → `accelXOffset = 0.5`
+
+**Measurement:**
+1. Bateau perfectly still (no motion, wind, waves)
+2. Note X acceleration reading
+3. Apply that value as offset
+
+---
+
+### 5. **Accel Y Offset** (Acceleration Section)
+
+**What it does:** Removes zero-point error in Y-axis acceleration
+
+```
+Format: m/s² (-20 to +20)
+Default: 0
+Unit: Meters per second squared
+Applied as: accelY_corrected = accelY_raw - accelYOffset
+```
+
+**When to use:**
+- Same as X offset, but for Y axis
+- Typically used for heeling motion compensation
+
+**Measurement:**
+1. Bateau level and still
+2. Note Y acceleration reading
+3. Apply that value as offset
+
+---
+
+### 6. **Accel Z Offset** (Acceleration Section)
+
+**What it does:** Removes gravity from vertical acceleration
+
+```
+Format: m/s² (-20 to +20)
+Default: 0
+Unit: Meters per second squared
+Applied as: accelZ_corrected = accelZ_raw - accelZOffset
+```
+
+**⚠️ IMPORTANT:** This is the MOST CRITICAL offset!
+
+**Why:** In a static IMU, Z-axis always reads Earth's gravity (≈9.81 m/s²) downward.
+
+**Correct values:**
+- IMU oriented vertically (nose up): `accelZOffset = +9.81` (removes gravity)
+- IMU oriented at angle: `accelZOffset = 9.81 * cos(angle)`
+
+**Measurement:**
+1. Bateau still and level
+2. Read Z acceleration (usually ~9.81 m/s²)
+3. Set `accelZOffset = 9.81` to remove gravity effect
+4. Or measure actual value and use that
+
+**Example scenarios:**
+```
+Level bateau, IMU horizontal:
+  Z reads: +9.81 m/s²
+  Offset: +9.81
+  Result: 0 m/s² (gravity removed)
+
+Bateau heeled 30°, IMU angle-mounted:
+  Z reads: 9.81 * cos(30°) = 8.5 m/s²
+  Offset: 8.5
+  Result: 0 m/s² (gravity removed)
+```
+
+---
+
+### 7. **Gyro Z Offset** (Gyroscope Section)
+
+**What it does:** Removes gyroscope bias/drift at rest
+
+```
+Format: rad/s (-0.5 to +0.5)
+Default: 0
+Unit: Radians per second
+Applied as: gyroZ_corrected = gyroZ_raw - gyroZOffset
+```
+
+**When to use:**
+- Rate of turn reads non-zero when bateau not rotating
+- Gyroscopes can "drift" over time
+- More important at warm temperatures
+
+**Measurement:**
+1. Bateau completely still (anchored, docked, calm day)
+2. Average gyro Z reading over 10-30 seconds
+3. Apply that value as offset
+4. Example: reads 0.02 rad/s at rest → `gyroZOffset = 0.02`
+
+---
+
+## 🔧 Calibration Workflow
+
+### Step 1: Prepare the IMU
+
+```
+1. Mount IMU in final position on bateau
+2. Ensure secure, level mounting (if possible)
+3. Wait 30 seconds for temperature stabilization
+```
+
+### Step 2: Measure Raw Values
+
+**Access Signal K data:**
+- http://localhost:3000 → API → vessels/self/navigation
+
+**Or via Grafana:**
+- Dashboard with all IMU outputs visible
+
+**Log the values:**
+```
+Roll (raw):        +2.5°  → Set rollOffset = 2.5
+Pitch (raw):       -1.3°  → Set pitchOffset = -1.3
+Yaw (raw):         048°   → Compare GPS and adjust
+Accel X (raw):     +0.3 m/s²  → Set accelXOffset = 0.3
+Accel Y (raw):     -0.2 m/s²  → Set accelYOffset = -0.2
+Accel Z (raw):     +9.81 m/s² → Set accelZOffset = 9.81
+Gyro Z (raw):      +0.015 rad/s → Set gyroZOffset = 0.015
+```
+
+### Step 3: Apply Calibration
+
+1. Open Signal K Admin UI: http://localhost:3000
+2. Go to: Admin → Plugins → "WIT IMU USB Reader"
+3. Click the ⚙️ **Configuration** icon
+4. Scroll to "Calibration Offsets" section
+5. Enter each offset value
+6. Click **SUBMIT** or **SAVE**
+
+### Step 4: Verify Calibration
+
+Wait 10-30 seconds for plugin to apply new values
+
+**Check:**
+- All values should now read ~0 when bateau at rest
+- Roll/Pitch/Yaw should match visual position
+- Acceleration should be near 0 (except gravity)
+
+### Step 5: Field Test
+
+Go sailing and verify:
+- ✅ Roll matches heel position
+- ✅ Pitch matches trim
+- ✅ Heading matches GPS track
+- ✅ Acceleration responds to motion
+- ✅ Rate of turn matches steering
+
+---
+
+## 📊 Calibration Example
+
+**Scenario:** J/30 with WIT IMU mounted on cabin roof, tilted 5° toward bow
+
+### Raw Measurements:
+```
+Bateau level at dock:
+  Roll:           5.2°  (boat heel error)
+  Pitch:          -2.1° (list toward stern)
+  Yaw:            123°  (GPS shows 120° true)
+  Accel X:        +0.4 m/s²
+  Accel Y:        -0.3 m/s²
+  Accel Z:        +9.81 m/s² (gravity)
+  Gyro Z:         +0.018 rad/s (drift)
+```
+
+### Applied Offsets:
+```
+rollOffset:       5.2°
+pitchOffset:      2.1°
+yawOffset:        3°
+accelXOffset:     0.4
+accelYOffset:     0.3
+accelZOffset:     9.81
+gyroZOffset:      0.018
+```
+
+### Result:
+```
+After calibration at rest:
+  Roll:           0.0°  ✅
+  Pitch:          0.0°  ✅
+  Yaw:            120°  ✅ (matches GPS)
+  Accel X:        0 m/s² ✅
+  Accel Y:        0 m/s² ✅
+  Accel Z:        0 m/s² ✅ (gravity removed)
+  Gyro Z:         0 rad/s ✅
+```
+
+---
+
+## ⚠️ Troubleshooting
+
+### Problem: Calibration Not Taking Effect
+
+**Check:**
+1. Did you click **SUBMIT/SAVE** in the config form?
+2. Wait 10 seconds for values to apply
+3. Check if plugin is still "enabled" in Admin → Plugins
+
+**Fix:**
 ```bash
-# Arrête le lecteur USB courant
-sudo systemctl stop wit-usb-reader
-
-# Attends 5 sec
-sleep 5
+sudo systemctl restart signalk
+# Or restart just the plugin from Admin UI
 ```
 
-### 2. **Lancer la Calibration**
+### Problem: Values Still Drifting After Calibration
 
-```bash
-python3 /home/aneto/wit-imu-calibration.py
-```
+**Possible causes:**
+- Temperature change (gyros are temp-sensitive)
+- Bateau moving (waves, wind)
+- Calibration values need refinement
 
-**IMPORTANT:** L'IMU doit être **IMMOBILE ET HORIZONTAL** durant tout le calibrage!
+**Solution:**
+- Recalibrate in final sailing conditions
+- Use heavier filter alpha (0.1-0.2) if noise is issue
 
-Exemple de sortie:
+### Problem: Accel Offsets Seem Wrong
 
-```
-╔════════════════════════════════════════════════════════════╗
-║  WIT IMU Calibration - One-Time Static Calibration        ║
-╚════════════════════════════════════════════════════════════╝
+**Remember:**
+- Accel Z almost always needs `+9.81` (gravity removal)
+- If mounting angle is tilted, account for it
+- Measure multiple times and average
 
-⚠️  KEEP IMU COMPLETELY STILL!
+---
 
-Collecting 300 samples (10.0s)...
+## 🎓 Advanced: Temperature Compensation
 
-  [ 50/300] samples collected...
-  [100/300] samples collected...
-  [150/300] samples collected...
-  [200/300] samples collected...
-  [250/300] samples collected...
-  [300/300] samples collected...
+Gyroscope bias changes with temperature.
 
-Calculating offsets...
+**Option 1: Seasonal Recalibration**
+- Calibrate in spring, fall, winter separately
+- Store different offset values
 
-Axis X:
-  Accel: avg=0.0234g → offset=0.0234g
-  Gyro:  avg=2.15°/s → offset=2.15°/s
+**Option 2: Continuous Monitoring**
+- Monitor gyro values over time
+- Adjust offset if drift detected
 
-Axis Y:
-  Accel: avg=-0.0156g → offset=-0.0156g
-  Gyro:  avg=-1.87°/s → offset=-1.87°/s
+---
 
-Axis Z:
-  Accel: avg=10.1204g → offset=0.3104g
-  Gyro:  avg=0.45°/s → offset=0.45°/s
+## 📝 Calibration Record
 
-✅ Calibration saved to /home/aneto/.signalk/wit-calibration.json
-```
-
-### 3. **Fichier de Calibration**
-
-Le fichier `/home/aneto/.signalk/wit-calibration.json` contient:
-
-```json
-{
-  "accel_offset": [0.0234, -0.0156, 0.3104],
-  "gyro_offset": [2.15, -1.87, 0.45],
-  "timestamp": "2026-04-22T13:57:00Z",
-  "samples": 300
-}
-```
-
-### 4. **Activer le Lecteur Calibré**
-
-```bash
-# Met à jour le service systemd
-sudo systemctl edit wit-usb-reader
-```
-
-Change `ExecStart` en:
+Keep a log of your calibration values:
 
 ```
-ExecStart=/usr/bin/python3 /home/aneto/wit-usb-calibrated.py
+Date: 2026-04-23
+Bateau: J/30 MidnightRider
+Conditions: 65°F, calm, at dock
+
+rollOffset:       5.2°
+pitchOffset:      2.1°
+yawOffset:        3°
+accelXOffset:     0.4 m/s²
+accelYOffset:     0.3 m/s²
+accelZOffset:     9.81 m/s²
+gyroZOffset:      0.018 rad/s
+
+Notes: Mounted on cabin roof, tilted 5° toward bow
 ```
 
-Puis redémarre:
+---
 
-```bash
-sudo systemctl restart wit-usb-reader
-```
+## 🎯 Summary
 
-### 5. **Vérifier la Calibration**
+| Parameter | Range | Default | Typical Value | Unit |
+|-----------|-------|---------|---|---|
+| Roll Offset | -180 to +180 | 0 | ±5 | degrees |
+| Pitch Offset | -180 to +180 | 0 | ±3 | degrees |
+| Yaw Offset | -180 to +180 | 0 | ±5 | degrees |
+| Accel X Offset | -20 to +20 | 0 | ±1 | m/s² |
+| Accel Y Offset | -20 to +20 | 0 | ±1 | m/s² |
+| Accel Z Offset | -20 to +20 | 0 | 9.81 | m/s² |
+| Gyro Z Offset | -0.5 to +0.5 | 0 | 0.01-0.05 | rad/s |
 
-```bash
-# Check logs
-sudo journalctl -u wit-usb-reader -n 5 --no-pager
+---
 
-# Devrait afficher:
-# ✅ Calibration loaded (offsets applied)
-# ✅ USB port opened
-# ✅ WebSocket connected
-```
+**Status:** ✅ **READY FOR CALIBRATION**
 
-## Architecture
+Use this guide to achieve precision tuning of your WIT IMU on MidnightRider! ⛵
 
-```
-WIT IMU (100Hz brut)
-    ↓
-wit-usb-calibrated.py
-    ├─ Lit packets binaires
-    ├─ Applique offsets de calibration
-    ├─ Filtre low-pass (α=0.05)
-    └─ Envoie via WebSocket Signal K
-        ↓
-    Signal K API
-        ↓
-    Grafana
-```
-
-## Calibration vs Filtrage
-
-| Étape | Quand | Quoi | Fichier |
-|-------|-------|------|---------|
-| **Calibration** | 1× au démarrage | Soustrait offsets matériels | `wit-calibration.json` |
-| **Filtrage** | Chaque update | Lisse le bruit (low-pass α) | `WIT_FILTER_ALPHA` env var |
-
-**Exemple:**
-```
-Valeur brute:  10.234 g
-- Offset:       0.310 g
-= Calibré:      9.924 g
-→ Filtre α=0.05 → 9.920 g
-→ Signal K
-```
-
-## Cas de Recalibration
-
-Recalibrer **uniquement si:**
-- ❌ L'IMU a reçu un choc/chute
-- ❌ Les offsets dérivent (après 6+ mois)
-- ❌ Les datas semblent "biaisées"
-
-**Ne pas recalibrer** pour:
-- ✅ Changements de température (filtrage gère)
-- ✅ Variations mineures (< 0.5%)
-- ✅ Bruits de vibration (filtrage gère)
-
-## Paramètres à Ajuster
-
-### Filter Alpha (WIT_FILTER_ALPHA)
-
-```bash
-# Plus lissé (moins réactif):
-export WIT_FILTER_ALPHA=0.01
-sudo systemctl restart wit-usb-reader
-
-# Normal (défaut):
-export WIT_FILTER_ALPHA=0.05
-
-# Moins lissé (plus réactif):
-export WIT_FILTER_ALPHA=0.1
-```
-
-### Calibration File
-
-```bash
-# Utiliser fichier custom:
-export WIT_CALIBRATION=/path/to/custom-calib.json
-sudo systemctl restart wit-usb-reader
-```
-
-## Monitoring
-
-Vérifie que la calibration est appliquée:
-
-```bash
-curl http://localhost:3000/signalk/v1/api/vessels/self/navigation/attitude | python3 -m json.tool
-
-# Avec calibration, les values doivent être:
-# - roll/pitch ~0° quand horizontal
-# - yaw = heading actuel
-# - accel.z ~9.81 m/s² (gravité)
-```
-
-## Résumé
-
-1. **Immobilise l'IMU horizontalement**
-2. **Lance `python3 /home/aneto/wit-imu-calibration.py`**
-3. **Mets à jour le service systemd**
-4. **Redémarre**
-5. **Vérifiez via API Signal K**
-
-**C'est fait!** La calibration est sauvegardée et appliquée automatiquement à chaque démarrage.
