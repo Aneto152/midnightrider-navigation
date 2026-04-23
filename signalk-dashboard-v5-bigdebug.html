@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>MidnightRider - Dashboard v5 Big Debug</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a15 0%, #0f1428 100%);
+            color: #00ff88;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 15px;
+            gap: 10px;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: rgba(0, 255, 136, 0.08);
+            border: 2px solid rgba(0, 255, 136, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .header-title {
+            font-size: 40px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+            letter-spacing: 2px;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .status-label {
+            font-size: 14px;
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-value {
+            font-size: 44px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+            font-family: 'Courier New', monospace;
+            line-height: 1;
+        }
+
+        .status-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ff4444;
+            box-shadow: 0 0 15px rgba(255, 68, 68, 0.6);
+        }
+
+        .status-dot.connected {
+            background: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+        }
+
+        /* ===== DEBUG PANEL - ÉNORME ===== */
+        .debug-panel {
+            background: rgba(0, 0, 0, 0.4);
+            border: 3px solid rgba(0, 255, 136, 0.4);
+            border-radius: 10px;
+            padding: 20px;
+            font-size: 32px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            min-height: 200px;
+            max-height: 40%;
+            overflow-y: auto;
+            color: #ffff00;
+            line-height: 1.6;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .debug-line {
+            line-height: 1.6;
+            margin-bottom: 8px;
+            padding: 6px;
+            border-radius: 4px;
+        }
+
+        .debug-line.error {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+
+        .debug-line.success {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .debug-line.info {
+            color: #ffff00;
+            background: rgba(255, 255, 0, 0.05);
+        }
+
+        /* ===== DASHBOARD GRID ===== */
+        .dashboard {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            overflow-y: auto;
+            padding-right: 8px;
+        }
+
+        /* ===== CARD STYLES ===== */
+        .card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 2px solid rgba(0, 255, 136, 0.2);
+            border-radius: 10px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            min-height: 160px;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 255, 136, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .card-label {
+            font-size: 16px;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .card-value {
+            font-size: 56px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
+            font-variant-numeric: tabular-nums;
+            font-family: 'Courier New', monospace;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .card-unit {
+            font-size: 16px;
+            opacity: 0.6;
+        }
+
+        .card.updating .card-value {
+            animation: update-flash 0.2s ease;
+        }
+
+        @keyframes update-flash {
+            0% { color: #ffff00; text-shadow: 0 0 25px rgba(255, 255, 0, 0.8); }
+            100% { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.5); }
+        }
+
+        .card.attitude { border-color: rgba(100, 200, 255, 0.3); }
+        .card.attitude:hover { border-color: rgba(100, 200, 255, 0.6); background: rgba(100, 200, 255, 0.04); }
+        .card.wind { border-color: rgba(255, 200, 100, 0.3); }
+        .card.wind:hover { border-color: rgba(255, 200, 100, 0.6); background: rgba(255, 200, 100, 0.04); }
+        .card.position { border-color: rgba(100, 255, 100, 0.3); }
+        .card.position:hover { border-color: rgba(100, 255, 100, 0.6); background: rgba(100, 255, 100, 0.04); }
+        .card.wave { border-color: rgba(100, 255, 255, 0.3); }
+        .card.wave:hover { border-color: rgba(100, 255, 255, 0.6); background: rgba(100, 255, 255, 0.04); }
+
+        .dashboard::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .dashboard::-webkit-scrollbar-thumb {
+            background: rgba(0, 255, 136, 0.3);
+            border-radius: 5px;
+        }
+
+        .debug-panel::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        .debug-panel::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 0, 0.3);
+            border-radius: 6px;
+        }
+
+        @media (orientation: portrait) {
+            .header { flex-direction: column; text-align: center; }
+            .header-title { font-size: 32px; }
+            .status-bar { justify-content: center; width: 100%; }
+            .dashboard { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+            .card { min-height: 140px; padding: 14px; }
+            .card-value { font-size: 48px; }
+            .card-label { font-size: 12px; }
+            .card-unit { font-size: 13px; }
+            .debug-panel { font-size: 28px; min-height: 220px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-title">⛵ MidnightRider</div>
+            <div class="status-bar">
+                <div class="status-item">
+                    <div class="status-label">Connection</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span id="statusText" style="font-size: 20px;">...</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Fréquence</div>
+                    <div class="status-value" id="frequency">0.0 Hz</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Buffer</div>
+                    <div class="status-value" id="bufferSize">0/100</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Polls/sec</div>
+                    <div class="status-value" id="pollsPerSec">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="debug-panel" id="debugPanel"></div>
+
+        <div class="dashboard" id="dashboard"></div>
+    </div>
+
+    <script>
+        const API_URL = `http://${window.location.hostname}:8376`;
+        
+        const SENSORS = {
+            'navigation.attitude.roll': { label: 'Roll', unit: '°', category: 'attitude', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'navigation.attitude.pitch': { label: 'Pitch', unit: '°', category: 'attitude', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'navigation.attitude.yaw': { label: 'Heading', unit: '°', category: 'attitude', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'navigation.acceleration.x': { label: 'Accel X', unit: 'm/s²', category: 'attitude', format: v => v.toFixed(2) },
+            'navigation.acceleration.y': { label: 'Accel Y', unit: 'm/s²', category: 'attitude', format: v => v.toFixed(2) },
+            'navigation.acceleration.z': { label: 'Accel Z', unit: 'm/s²', category: 'wave', format: v => v.toFixed(2) },
+            'environment.wind.angleApparent': { label: 'Wind Angle', unit: '°', category: 'wind', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'environment.wind.speedApparent': { label: 'Wind Speed', unit: 'kt', category: 'wind', format: v => v.toFixed(1) },
+            'navigation.speedOverGround': { label: 'SOG', unit: 'kt', category: 'position', format: v => v.toFixed(2) },
+            'navigation.speedThroughWater': { label: 'STW', unit: 'kt', category: 'position', format: v => v.toFixed(2) },
+            'navigation.courseOverGround': { label: 'COG', unit: '°', category: 'position', format: v => (v * 180 / Math.PI).toFixed(1) },
+            'environment.water.waveHeight': { label: 'Wave Height', unit: 'm', category: 'wave', format: v => v.toFixed(1) }
+        };
+
+        let updateCounter = 0;
+        let lastTime = Date.now();
+        let pollCounter = 0;
+        let lastPollTime = Date.now();
+        let pollInterval = null;
+        let debugLines = [];
+
+        function addDebug(msg, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            debugLines.unshift(`[${time}] ${msg}`);
+            if (debugLines.length > 20) debugLines.pop();
+            
+            const panel = document.getElementById('debugPanel');
+            panel.innerHTML = debugLines.map((line, i) => {
+                let cls = 'info';
+                if (line.includes('✅')) cls = 'success';
+                if (line.includes('❌')) cls = 'error';
+                return `<div class="debug-line ${cls}">${line}</div>`;
+            }).join('');
+            
+            panel.scrollTop = 0;
+        }
+
+        function createCards() {
+            const dashboard = document.getElementById('dashboard');
+            dashboard.innerHTML = '';
+            Object.entries(SENSORS).forEach(([path, config]) => {
+                const card = document.createElement('div');
+                card.className = `card ${config.category}`;
+                card.id = `card-${path}`;
+                card.innerHTML = `
+                    <div class="card-label">${config.label}</div>
+                    <div class="card-value" id="value-${path}">--</div>
+                    <div class="card-unit">${config.unit}</div>
+                `;
+                dashboard.appendChild(card);
+            });
+        }
+
+        function updateValue(path, value) {
+            if (value === null || value === undefined) return;
+
+            const config = SENSORS[path];
+            const element = document.getElementById(`value-${path}`);
+            const card = document.getElementById(`card-${path}`);
+
+            if (!element) return;
+
+            const formatted = config.format(value);
+            if (element.textContent !== formatted) {
+                element.textContent = formatted;
+                card.classList.remove('updating');
+                void card.offsetWidth;
+                card.classList.add('updating');
+                updateCounter++;
+            }
+        }
+
+        async function pollDeltas() {
+            pollCounter++;
+            const pollStart = Date.now();
+
+            try {
+                const response = await fetch(`${API_URL}/deltas`);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+
+                const data = await response.json();
+                const pollTime = Date.now() - pollStart;
+                
+                document.getElementById('bufferSize').textContent = `${data.count}/100`;
+
+                let valueCount = 0;
+                data.deltas.forEach(item => {
+                    const delta = item.data;
+                    if (delta.updates) {
+                        delta.updates.forEach(update => {
+                            if (update.values) {
+                                update.values.forEach(v => {
+                                    if (SENSORS[v.path]) {
+                                        updateValue(v.path, v.value);
+                                        valueCount++;
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+
+                // Frequency calculation
+                const now = Date.now();
+                if (now - lastTime >= 1000) {
+                    const hz = (updateCounter * 1000 / (now - lastTime)).toFixed(1);
+                    document.getElementById('frequency').textContent = `${hz} Hz`;
+                    updateCounter = 0;
+                    lastTime = now;
+                }
+
+                // Polls per second
+                if (now - lastPollTime >= 1000) {
+                    document.getElementById('pollsPerSec').textContent = `${pollCounter}`;
+                    pollCounter = 0;
+                    lastPollTime = now;
+                }
+
+                document.getElementById('statusDot').classList.add('connected');
+                document.getElementById('statusText').textContent = '✅ TCP Bridge';
+
+                if (pollCounter % 3 === 0) {
+                    addDebug(`✅ Poll OK: ${valueCount} vals | ${pollTime}ms | buf=${data.count}`, 'success');
+                }
+
+            } catch (error) {
+                document.getElementById('statusDot').classList.remove('connected');
+                document.getElementById('statusText').textContent = '❌ Error';
+                addDebug(`❌ Poll FAILED: ${error.message}`, 'error');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            addDebug(`📱 Dashboard v5 BIG DEBUG started`, 'info');
+            addDebug(`🌐 API: ${API_URL}`, 'info');
+            addDebug(`⏰ Poll interval: 100ms (10 Hz)`, 'info');
+            addDebug(`🔄 Initial connection...`, 'info');
+            
+            createCards();
+            
+            // First poll
+            pollDeltas().then(() => {
+                addDebug(`✅ First poll successful`, 'success');
+            }).catch(e => {
+                addDebug(`❌ First poll failed: ${e.message}`, 'error');
+            });
+            
+            // Then poll every 100ms
+            setTimeout(() => {
+                pollInterval = setInterval(pollDeltas, 100);
+                addDebug(`✅ Polling started`, 'success');
+            }, 100);
+        });
+
+        window.addEventListener('beforeunload', () => {
+            if (pollInterval) clearInterval(pollInterval);
+        });
+    </script>
+</body>
+</html>
