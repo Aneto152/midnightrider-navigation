@@ -1,0 +1,35 @@
+{
+  "configuration": {
+    "usbPort": "/dev/ttyWIT",
+    "baudRate": 115200,
+    "batchInterval": 100,
+    "attitudeCal": {
+      "rollOffset": 0,
+      "pitchOffset": 0,
+      "yawOffset": 0,
+      "rollGain": 1,
+      "pitchGain": 1,
+      "yawGain": 1
+    },
+    "accelCal": {
+      "xOffset": 0,
+      "yOffset": 0,
+      "zOffset": 0,
+      "xGain": 1,
+      "yGain": 1,
+      "zGain": 1
+    },
+    "gyroCal": {
+      "wxOffset": 0,
+      "wyOffset": 0,
+      "wzOffset": 0,
+      "wxGain": 1,
+      "wyGain": 1,
+      "wzGain": 1
+    },
+    "debug": false,
+    "updateRate": 10,
+    "filterAlpha": 0.05
+  },
+  "enabled": true
+}
