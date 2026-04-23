@@ -1,8 +1,11 @@
 /**
- * Signal K Plugin - Wave Height Calculator v2.0
+ * Signal K Plugin - Wave Height Calculator v2.1 (3-Axis)
  * 
- * Reads vertical acceleration (Z-axis) from WIT IMU
- * Calculates significant wave height and spectral parameters
+ * Reads 3-axis acceleration (X, Y, Z) from WIT IMU
+ * Calculates wave height using acceleration magnitude (not just Z-axis)
+ * This accounts for boat heel - uses |a| = sqrt(ax² + ay² + az²)
+ * 
+ * Corrects for boat orientation (heel/pitch changes which axis carries gravity)
  * Based on maritime engineering formulas (DNV-GL, ISO 12649)
  */
 
@@ -10,9 +13,9 @@ module.exports = function(app) {
   const plugin = {};
   
   plugin.id = 'signalk-wave-height-imu';
-  plugin.name = 'Wave Height Calculator (IMU)';
-  plugin.description = 'Calculate wave height from vertical acceleration (Z-axis) of 9-axis IMU';
-  plugin.version = '2.0.0';
+  plugin.name = 'Wave Height Calculator (3-Axis IMU)';
+  plugin.description = 'Calculate wave height from 3-axis acceleration magnitude (corrects for boat heel)';
+  plugin.version = '2.1.0';
 
   plugin.schema = {
     type: 'object',
@@ -21,10 +24,10 @@ module.exports = function(app) {
       windowSize: {
         type: 'number',
         title: 'Analysis Window Size (seconds)',
-        default: 10,
+        default: 12,
         minimum: 5,
         maximum: 60,
-        description: 'Time window for wave analysis (10-20s typical)'
+        description: 'Time window for wave analysis (12s = 120 samples @ 10Hz)'
       },
       minFrequency: {
         type: 'number',
@@ -48,20 +51,20 @@ module.exports = function(app) {
         default: 9.81,
         minimum: 9.5,
         maximum: 10.0,
-        description: 'Subtract gravity from Z-axis for wave motion only'
+        description: 'Gravitational acceleration (for wave formula)'
       },
       methodType: {
         type: 'string',
         title: 'Calculation Method',
         enum: ['rms', 'peakToPeak', 'spectral', 'combined'],
         default: 'combined',
-        description: 'rms=RMS acceleration, peakToPeak=Peak-to-peak, spectral=FFT-based, combined=average of methods'
+        description: 'Wave height calculation method (combined = average of all 3)'
       },
       debug: {
         type: 'boolean',
-        title: 'Debug Logging',
+        title: 'Enable Debug Logging',
         default: false,
-        description: 'Enable detailed debug output'
+        description: 'Log detailed calculations'
       }
     }
   };
@@ -69,51 +72,81 @@ module.exports = function(app) {
   plugin.start = function(options) {
     options = options || {};
     
-    const windowSize = options.windowSize || 10;  // seconds
-    const minFreq = options.minFrequency || 0.04;
-    const maxFreq = options.maxFrequency || 0.3;
-    const gravityOffset = options.gravityOffset || 9.81;
+    const windowSize = options.windowSize || 12;        // seconds
+    const minFreq = options.minFrequency || 0.04;       // Hz
+    const maxFreq = options.maxFrequency || 0.3;        // Hz
+    const gravity = options.gravityOffset || 9.81;      // m/s²
     const methodType = options.methodType || 'combined';
-    const debug = options.debug || false;
+    const debugMode = options.debug || false;
 
-    // Frequency of IMU updates (10 Hz default)
-    const imuFrequency = 10;
-    const bufferSize = windowSize * imuFrequency;  // e.g., 100 samples for 10s window @ 10Hz
-
-    let accelZBuffer = [];
+    const bufferSize = windowSize * 10;  // 10 Hz sampling rate
+    let accelMagnitudeBuffer = [];       // Rolling buffer of |a| = sqrt(ax² + ay² + az²)
     let sampleCount = 0;
     let lastAnalysis = Date.now();
 
-    app.debug(`[Wave Height] Started with window=${windowSize}s, method=${methodType}`);
-    app.setPluginStatus(`Monitoring acceleration for wave height`);
+    app.debug('[Wave Height] Starting - 3-Axis Magnitude Mode');
+    app.debug(`[Wave Height] Window: ${windowSize}s, Method: ${methodType}`);
+    app.setPluginStatus(`Initializing (waiting for acceleration data)...`);
 
-    /**
-     * Subscribe to acceleration.z from WIT IMU
-     */
-    app.streambundle.getSelfStream('navigation.acceleration.z').onValue(accelZ => {
-      if (accelZ === null || accelZ === undefined) {
-        return;
-      }
+    // Subscribe to all 3 acceleration axes
+    app.streambundle.getSelfStream('navigation.acceleration.x').onValue(function(accelX) {
+      // Also need Y and Z, but we'll capture them in next subscription
+    });
 
-      // Remove gravity component (Z-axis typically includes ~9.81 m/s² downward)
-      const waveAccel = accelZ - gravityOffset;
+    app.streambundle.getSelfStream('navigation.acceleration.y').onValue(function(accelY) {
+      // Also need X and Z
+    });
 
-      accelZBuffer.push(waveAccel);
-      sampleCount++;
+    // Main subscription - trigger on Z axis updates, read all 3 axes
+    app.streambundle.getSelfStream('navigation.acceleration.z').onValue(function(accelZ) {
+      try {
+        // Get current values of all 3 axes
+        const selfData = app.getSelfData();
+        const accelData = selfData?.navigation?.acceleration;
+        
+        if (!accelData) return;
 
-      // Keep only last N samples (rolling window)
-      if (accelZBuffer.length > bufferSize) {
-        accelZBuffer.shift();
-      }
+        const ax = accelData.x?.value || 0;
+        const ay = accelData.y?.value || 0;
+        const az = accelData.z?.value || 0;
 
-      // Analyze every second
-      const now = Date.now();
-      if (now - lastAnalysis >= 1000 && accelZBuffer.length >= bufferSize * 0.5) {
-        const waveData = calculateWaveHeight();
-        if (waveData) {
-          injectWaveData(waveData);
+        // Calculate acceleration magnitude (3-axis)
+        // This corrects for boat heel/pitch - the total acceleration stays consistent
+        // even as the boat tilts
+        const magnitude = Math.sqrt(ax * ax + ay * ay + az * az);
+
+        // Remove gravity offset (when boat is level, |a| ≈ 9.81 m/s²)
+        // Wave motion adds oscillation on top of gravity
+        const waveAccel = magnitude - gravity;
+
+        if (debugMode) {
+          app.debug(`[Wave] ax=${ax.toFixed(2)} ay=${ay.toFixed(2)} az=${az.toFixed(2)} |a|=${magnitude.toFixed(2)} wave=${waveAccel.toFixed(3)}`);
         }
-        lastAnalysis = now;
+
+        accelMagnitudeBuffer.push(waveAccel);
+        sampleCount++;
+
+        // Keep only last N samples (rolling window)
+        if (accelMagnitudeBuffer.length > bufferSize) {
+          accelMagnitudeBuffer.shift();
+        }
+
+        // Update status
+        if (sampleCount % 50 === 0) {
+          app.setPluginStatus(`Analyzing (${accelMagnitudeBuffer.length}/${bufferSize} samples)`);
+        }
+
+        // Analyze every second
+        const now = Date.now();
+        if (now - lastAnalysis >= 1000 && accelMagnitudeBuffer.length >= bufferSize * 0.5) {
+          const waveData = calculateWaveHeight();
+          if (waveData) {
+            injectWaveData(waveData);
+          }
+          lastAnalysis = now;
+        }
+      } catch (e) {
+        app.debug(`[Wave Height] Error: ${e.message}`);
       }
     });
 
@@ -121,7 +154,7 @@ module.exports = function(app) {
      * Calculate wave height using selected method
      */
     function calculateWaveHeight() {
-      if (accelZBuffer.length < bufferSize * 0.5) {
+      if (accelMagnitudeBuffer.length < bufferSize * 0.5) {
         return null;
       }
 
@@ -153,20 +186,20 @@ module.exports = function(app) {
      * Based on Rayleigh distribution of wave heights
      */
     function calculateRmsWaveHeight() {
-      if (accelZBuffer.length === 0) return null;
+      if (accelMagnitudeBuffer.length === 0) return null;
 
-      const mean = accelZBuffer.reduce((a, b) => a + b, 0) / accelZBuffer.length;
-      const variance = accelZBuffer.reduce((sum, x) => sum + (x - mean) ** 2, 0) / accelZBuffer.length;
+      const mean = accelMagnitudeBuffer.reduce((a, b) => a + b, 0) / accelMagnitudeBuffer.length;
+      const variance = accelMagnitudeBuffer.reduce((sum, x) => sum + (x - mean) ** 2, 0) / accelMagnitudeBuffer.length;
       const rmsAccel = Math.sqrt(variance);
 
       // Significant wave height (1/3 of largest waves)
-      const significantHeight = (4 * rmsAccel) / 9.81;
+      const significantHeight = (4 * rmsAccel) / gravity;
       
       // Mean wave height
       const meanHeight = significantHeight / 1.6;
 
       // Wave period (characteristic from RMS acceleration and gravity)
-      const period = Math.sqrt((rmsAccel / 9.81) * 50);  // Approximation
+      const period = Math.sqrt((rmsAccel / gravity) * 50);
 
       return {
         method: 'rms',
@@ -178,146 +211,146 @@ module.exports = function(app) {
     }
 
     /**
-     * Peak-to-Peak based calculation
-     * Simple but less accurate method
+     * Peak-to-Peak wave height estimation
+     * Simpler but less accurate than RMS
      */
     function calculatePeakToPeakWaveHeight() {
-      if (accelZBuffer.length === 0) return null;
+      if (accelMagnitudeBuffer.length === 0) return null;
 
-      const maxAccel = Math.max(...accelZBuffer);
-      const minAccel = Math.min(...accelZBuffer);
-      const peakToPeak = maxAccel - minAccel;
+      const max = Math.max(...accelMagnitudeBuffer);
+      const min = Math.min(...accelMagnitudeBuffer);
+      const peakToPeak = max - min;
 
-      // Typical factor for vertical acceleration to wave height
-      const waveHeight = peakToPeak * 0.25;  // ~0.25m per 1m/s² acceleration
+      // Approximate significant height from peak-to-peak
+      const significantHeight = peakToPeak * 0.25;
+      const meanHeight = significantHeight / 1.6;
+      const period = Math.sqrt((peakToPeak / gravity) * 50);
 
       return {
         method: 'peakToPeak',
-        waveHeight: waveHeight,
-        peakToPeak: peakToPeak
+        waveHeight: significantHeight,
+        meanWaveHeight: meanHeight,
+        period: period,
+        rmsAccel: peakToPeak / 4
       };
     }
 
     /**
-     * Spectral analysis (simplified - no FFT)
-     * Estimates dominant frequency from zero-crossing rate
+     * Spectral analysis (simplified zero-crossing method)
      */
     function calculateSpectralWaveHeight() {
-      if (accelZBuffer.length < 10) return null;
+      if (accelMagnitudeBuffer.length < 10) return null;
 
       // Count zero crossings
       let zeroCrossings = 0;
-      for (let i = 1; i < accelZBuffer.length; i++) {
-        if ((accelZBuffer[i - 1] >= 0 && accelZBuffer[i] < 0) ||
-            (accelZBuffer[i - 1] < 0 && accelZBuffer[i] >= 0)) {
+      for (let i = 1; i < accelMagnitudeBuffer.length; i++) {
+        if (accelMagnitudeBuffer[i-1] < 0 && accelMagnitudeBuffer[i] >= 0) {
           zeroCrossings++;
         }
       }
 
-      // Dominant frequency from zero-crossing rate
-      const timeSpan = accelZBuffer.length / imuFrequency;
-      const dominantFreq = zeroCrossings / (2 * timeSpan);
+      // Estimate dominant frequency from zero-crossing rate
+      const dt = 0.1;  // 10 Hz = 0.1s per sample
+      const zeroCrossingFreq = (zeroCrossings / accelMagnitudeBuffer.length) * (1 / dt);
+      const dominantFreq = Math.max(minFreq, Math.min(maxFreq, zeroCrossingFreq));
 
-      // Clamp to expected wave frequency range
-      const freq = Math.max(minFreq, Math.min(maxFreq, dominantFreq));
+      // Wave period from frequency
+      const period = 1 / dominantFreq;
 
-      // Period from frequency
-      const period = 1 / freq;
+      // RMS for this method
+      const mean = accelMagnitudeBuffer.reduce((a, b) => a + b, 0) / accelMagnitudeBuffer.length;
+      const variance = accelMagnitudeBuffer.reduce((sum, x) => sum + (x - mean) ** 2, 0) / accelMagnitudeBuffer.length;
+      const rmsAccel = Math.sqrt(variance);
 
-      // Wave height from RMS and period (Jonswap spectrum approximation)
-      const rmsAccel = Math.sqrt(
-        accelZBuffer.reduce((sum, x) => sum + x * x, 0) / accelZBuffer.length
-      );
-      const waveHeight = (rmsAccel / 9.81) * period * period * 2.5;
+      const significantHeight = (4 * rmsAccel) / gravity;
+      const meanHeight = significantHeight / 1.6;
 
       return {
         method: 'spectral',
-        waveHeight: waveHeight,
-        dominantFreq: freq,
+        waveHeight: significantHeight,
+        meanWaveHeight: meanHeight,
         period: period,
-        zeroCrossings: zeroCrossings
+        dominantFrequency: dominantFreq,
+        rmsAccel: rmsAccel
       };
     }
 
     /**
-     * Combine multiple methods
+     * Combine multiple methods into single result
      */
     function combineResults(results, method) {
-      if (method === 'combined' && Object.keys(results).length > 1) {
-        const heights = Object.values(results).map(r => r.waveHeight || 0);
+      if (method === 'combined') {
+        const heights = Object.values(results)
+          .map(r => r.waveHeight)
+          .filter(h => h !== null && !isNaN(h) && h >= 0);
+
+        if (heights.length === 0) return null;
+
         const avgHeight = heights.reduce((a, b) => a + b, 0) / heights.length;
-        
+
+        // Use RMS method's period and frequency if available
+        const rmsData = results.rms || results.peakToPeak || results.spectral;
+
         return {
-          method: 'combined',
-          waveHeight: avgHeight,
-          methods: results,
-          sampleCount: accelZBuffer.length
+          method: 'combined (avg of RMS, P2P, spectral)',
+          waveHeight: Math.max(0, avgHeight),
+          meanWaveHeight: Math.max(0, avgHeight / 1.6),
+          period: rmsData?.period || 0,
+          dominantFrequency: results.spectral?.dominantFrequency || 0,
+          rmsAccel: rmsData?.rmsAccel || 0
         };
       } else {
-        return {
-          ...results[Object.keys(results)[0]],
-          sampleCount: accelZBuffer.length
-        };
+        return results[method] || null;
       }
     }
 
     /**
-     * Inject wave data into Signal K
+     * Inject wave height data into Signal K
      */
     function injectWaveData(waveData) {
-      const now = new Date().toISOString();
+      if (!waveData) return;
 
       const values = [
-        { path: 'environment.wave.height', value: Math.max(0, waveData.waveHeight) }
+        {
+          path: 'environment.wave.height',
+          value: Math.max(0, waveData.waveHeight)
+        },
+        {
+          path: 'environment.wave.meanWaveHeight',
+          value: Math.max(0, waveData.meanWaveHeight)
+        },
+        {
+          path: 'environment.wave.timeBetweenCrests',
+          value: Math.max(0, waveData.period)
+        },
+        {
+          path: 'environment.wave.dominantFrequency',
+          value: Math.max(0, waveData.dominantFrequency)
+        },
+        {
+          path: 'environment.wave.rmsAcceleration',
+          value: Math.max(0, waveData.rmsAccel)
+        }
       ];
 
-      // Add optional fields if available
-      if (waveData.meanWaveHeight !== undefined) {
-        values.push({ path: 'environment.wave.meanWaveHeight', value: Math.max(0, waveData.meanWaveHeight) });
-      }
-      if (waveData.period !== undefined) {
-        values.push({ path: 'environment.wave.timeBetweenCrests', value: Math.max(0, waveData.period) });
-      }
-      if (waveData.dominantFreq !== undefined) {
-        values.push({ path: 'environment.wave.dominantFrequency', value: waveData.dominantFreq });
-      }
-      if (waveData.rmsAccel !== undefined) {
-        values.push({ path: 'environment.wave.rmsAcceleration', value: waveData.rmsAccel });
-      }
-
-      const delta = {
+      app.handleMessage(plugin.id, {
         context: 'vessels.' + app.selfId,
         updates: [{
-          source: { label: 'signalk-wave-height-imu' },
-          timestamp: now,
+          source: { label: plugin.id },
+          timestamp: new Date().toISOString(),
           values: values
         }]
-      };
+      });
 
-      try {
-        app.handleMessage(plugin.id, delta);
-
-        if (debug && sampleCount % 100 === 0) {
-          app.debug(
-            `[Wave Height] H=${waveData.waveHeight.toFixed(2)}m | ` +
-            (waveData.period ? `T=${waveData.period.toFixed(1)}s | ` : '') +
-            `samples=${accelZBuffer.length}`
-          );
-        }
-      } catch (e) {
-        app.debug(`[Wave Height] Injection error: ${e.message}`);
+      if (debugMode) {
+        app.debug(`[Wave Height] Hs=${waveData.waveHeight.toFixed(2)}m Period=${waveData.period.toFixed(1)}s Freq=${waveData.dominantFrequency.toFixed(3)}Hz`);
       }
     }
+  };
 
-    /**
-     * Stop plugin
-     */
-    plugin.stop = function() {
-      app.debug('[Wave Height] Stopped');
-      app.setPluginStatus('Stopped');
-    };
-
-    return plugin;
+  plugin.stop = function() {
+    app.debug('[Wave Height] Stopped');
+    app.setPluginStatus('Stopped');
   };
 
   return plugin;
