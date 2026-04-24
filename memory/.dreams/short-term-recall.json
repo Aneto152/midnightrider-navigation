@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-04-23T21:52:32.510Z",
+  "updatedAt": "2026-04-24T04:08:31.125Z",
   "entries": {
     "memory:memory/2026-04-09.md:57:73": {
       "key": "memory:memory/2026-04-09.md:57:73",
@@ -205,6 +205,37 @@
         "grosse",
         "journée",
         "config"
+      ]
+    },
+    "memory:memory/2026-04-23.md:52:90": {
+      "key": "memory:memory/2026-04-23.md:52:90",
+      "path": "memory/2026-04-23.md",
+      "startLine": 52,
+      "endLine": 90,
+      "source": "memory",
+      "snippet": "2. MAC address correct ✅ 3. Connect timeout reached ❌ (HANG indefinite) 4. Same behavior as earlier attempts - **Conclusion**: **This is NOT a plugin code issue. Linux Bluetooth stack incompatibility with WIT's BLE protocol.** ## Key Discoveries ### 1. WIT WT901BLECL Uses Proprietary BLE Protocol - Not standard GATT services - Manual specifies \"BLE 5.0 Adapter\" (USB dongle with CP2102) - Direct Linux native BLE connection issues suggest device uses vendor-specific handshake ### 2. BlueZ Architecture Limitation - `bluetoothd` daemon controls all BLE on Linux - `gatttool` conflicts with bluetoothd control - `BleakClient` from Bleak library also goes through bluetoothd - All approaches",
+      "recallCount": 1,
+      "dailyCount": 0,
+      "groundedCount": 0,
+      "totalScore": 0.7575886820993877,
+      "maxScore": 0.7575886820993877,
+      "firstRecalledAt": "2026-04-24T04:08:31.125Z",
+      "lastRecalledAt": "2026-04-24T04:08:31.125Z",
+      "queryHashes": [
+        "fad7d1fdeec8"
+      ],
+      "recallDays": [
+        "2026-04-24"
+      ],
+      "conceptTags": [
+        "5.0",
+        "vendor-specific",
+        "mac",
+        "address",
+        "correct",
+        "connect",
+        "timeout",
+        "reached"
       ]
     }
   }
