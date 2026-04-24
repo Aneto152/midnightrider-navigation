@@ -22,7 +22,7 @@
 - **Problem:** Serial port enum was empty when no ports detected
 - **Fix:** Added fallback: `enum: serialConnectionEnum.length > 0 ? serialConnectionEnum : ["waiting-for-port"]`
 
-## 📱 Configuration via Admin UI
+## 📱 Configuration via Admin UI (SUPER SIMPLE!)
 
 ### Step 1: Open Signal K Admin
 ```
@@ -34,20 +34,22 @@ http://localhost:3000
 
 ### Step 2: Click on Plugin to Configure
 
+✨ **THE SERIAL PORT IS ALREADY PRE-FILLED!**
+
 You should see:
-- **Serial Connection:** Dropdown to select `/dev/ttyUM982`
-- **NTRIP Enabled:** Toggle for RTK corrections (optional)
-- **NTRIP Options:** Server details, username, password, etc. (if NTRIP enabled)
+- **Serial Connection:** `/dev/ttyUM982` ← **ALREADY SELECTED** ✅
+- **NTRIP Enabled:** Toggle for RTK corrections (optional, leave default)
+- **NTRIP Options:** Server details (optional, only if using NTRIP)
 
-### Step 3: Select Serial Port
+### Step 3: Just Save!
 
-The dropdown should show:
-- `/dev/ttyUM982` (if GPS is connected)
-- Or: `waiting-for-port` (if no ports detected yet)
+**That's it!** Just click **SAVE** button.
 
-### Step 4: Configure UM982 Output
+No need to change anything - `/dev/ttyUM982` is already configured.
 
-Once the plugin is running, it sends these commands to the GPS:
+### Step 4: Wait for Data
+
+Once saved, the plugin automatically sends these commands to the GPS:
 ```
 MODE ROVER UAV         # Set rover mode
 GPGSVH 1              # SV (satellite) output
@@ -55,6 +57,8 @@ BESTSATA 1            # Best solution output
 GPHPR 1               # Heading/pitch/roll output
 CONFIG                # Show configuration
 ```
+
+Data starts flowing to Signal K immediately! 🎉
 
 ## 🎯 What This Plugin Does
 
