@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Regatta interface server — MidnightRider"""
 
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json, time, urllib.parse, urllib.request, os
 import weather_collector
 
@@ -297,6 +297,6 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
 
 if __name__ == "__main__":
-    server = HTTPServer(("0.0.0.0", 5000), Handler)
+    server = ThreadingHTTPServer(("0.0.0.0", 5000), Handler)
     print("Regatta server on :5000")
     server.serve_forever()
