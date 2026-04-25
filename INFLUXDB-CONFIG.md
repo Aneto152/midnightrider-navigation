@@ -41,7 +41,7 @@ influxdb:
     - INFLUX_BUCKET=signalk
     - INFLUX_ADMIN_USER=admin
     - INFLUX_ADMIN_PASSWORD=password
-    - INFLUX_ADMIN_TOKEN=4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+    - INFLUX_ADMIN_TOKEN=[MASKED_INFLUX_TOKEN]
   volumes:
     - influxdb-data:/var/lib/influxdb2
 ```
@@ -65,7 +65,7 @@ astronomical:
   environment:
     # Local (always)
     - INFLUX_URL=http://localhost:8086
-    - INFLUX_TOKEN=4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+    - INFLUX_TOKEN=[MASKED_INFLUX_TOKEN]
     - INFLUX_ORG=MidnightRider
     - INFLUX_BUCKET=signalk
     
@@ -112,7 +112,7 @@ Add to crontab:
 
 ```
 INFLUX_URL=http://localhost:8086
-INFLUX_TOKEN=4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+INFLUX_TOKEN=[MASKED_INFLUX_TOKEN]
 INFLUX_ORG=MidnightRider
 INFLUX_BUCKET=signalk
 ```

@@ -35,7 +35,7 @@
   - Priority: HIGH (enables AI coaching)
 
 - [ ] **Valider InfluxDB data source dans Grafana**
-  - Token InfluxDB: `4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==`
+  - Token InfluxDB: `[MASKED_INFLUX_TOKEN]`
   - URL: `http://localhost:8086`
   - Org: `MidnightRider`
   - Bucket: `signalk`

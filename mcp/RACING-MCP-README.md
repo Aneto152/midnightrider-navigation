@@ -36,7 +36,7 @@ chmod +x racing-server.js
       "command": "/home/aneto/docker/signalk/mcp/racing-server.js",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_TOKEN": "[MASKED_INFLUX_TOKEN]",
         "INFLUX_ORG": "MidnightRider",
         "INFLUX_BUCKET": "signalk"
       }

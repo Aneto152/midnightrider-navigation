@@ -144,7 +144,7 @@ crontab -l | { cat; echo "0 2 * * * /home/aneto/docker/signalk/git-backup.sh >> 
 
 | Service | Détail |
 |---------|--------|
-| InfluxDB local token | `4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==` |
+| InfluxDB local token | `[MASKED_INFLUX_TOKEN]` |
 | InfluxDB Cloud URL | `https://us-east-1-1.aws.cloud2.influxdata.com` |
 | InfluxDB Cloud Org ID | `48a34d6463cef7c9` |
 | InfluxDB Cloud token | `_kEQ4jECoIVng-8UF1ZmpWJvvMVSGPt0x0vzgWGHJbQLyoq2Og3BOzukXvddkjG4VFW0AIpryx5CBEJGXO9KpQ==` |

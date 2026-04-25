@@ -4,7 +4,7 @@
     "influxes": [
       {
         "url": "http://localhost:8086",
-        "token": "4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "token": "${INFLUX_TOKEN}",
         "org": "MidnightRider",
         "bucket": "signalk",
         "onlySelf": false,

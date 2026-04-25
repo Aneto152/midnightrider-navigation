@@ -14,7 +14,7 @@ import os
 import sys
 
 INFLUX_URL = "http://localhost:8086"
-INFLUX_TOKEN = "4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA=="
+INFLUX_TOKEN = os.getenv('INFLUX_TOKEN', '')
 INFLUX_ORG = "MidnightRider"
 BUCKET = "weather_lis"
 INTERVAL = 300  # 5 minutes
