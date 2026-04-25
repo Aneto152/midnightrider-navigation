@@ -5,6 +5,24 @@
 
 ---
 
+## 🔧 CORRECTIONS RÉCENTES (2026-04-25)
+
+### [CORRIGÉ LE 25/04/2026 11:15] MCP Racing Server — Unit Conversion Bug
+**File:** `mcp/racing-server.js`  
+**Issue:** Speed values from Signal K (m/s) returned as "knots" without conversion  
+**Impact:** All speed-based calculations (VMG, polar lookups, crew coaching) using 50% wrong values  
+**Fix:** Added ÷ 0.51444 conversion for get_sog, get_stw, get_vmg, get_wind_apparent, get_wind_true  
+**Commit:** `66067b6`
+
+### [CORRIGÉ LE 25/04/2026 11:15] Regatta Server — Single-Threaded Blocking
+**File:** `regatta/server.py`  
+**Issue:** HTTPServer blocked on long I/O (NOAA buoy/weather timeouts = 10+ sec freeze)  
+**Impact:** UI unresponsive during weather API calls, crew queries queue indefinitely  
+**Fix:** HTTPServer → ThreadingHTTPServer (each request in separate thread)  
+**Commit:** `eab1f8e`
+
+---
+
 # ⚠️ DOCUMENT VIVANT — RÈGLE ABSOLUE
 
 ## CE DOCUMENT EST LA SINGLE SOURCE OF TRUTH
