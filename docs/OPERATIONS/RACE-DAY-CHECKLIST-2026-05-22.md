@@ -16,6 +16,32 @@
 - [ ] SSH access working: `ssh pi@rpi4.local`
 - [ ] Disk space check: `df -h` (should be >10GB free)
 
+### Docker Containers (InfluxDB & Grafana)
+
+**CRITICAL:** InfluxDB and Grafana run in Docker, NOT systemd!
+
+```bash
+# Ensure native InfluxDB is stopped (it should be masked)
+sudo systemctl status influxdb  # Should show "masked"
+
+# Start the containers
+cd /home/aneto/.openclaw/workspace
+docker compose up -d influxdb grafana
+
+# Wait for startup (~10-15 sec)
+sleep 15
+
+# Verify both are running
+docker compose ps
+```
+
+- [ ] InfluxDB responding: `curl http://localhost:8086/health` (expect HTTP 200)
+- [ ] Grafana responding: `curl http://localhost:3001/api/health` (expect HTTP 200)
+
+**If either fails:**
+- Check: `docker compose logs influxdb` or `docker compose logs grafana`
+- See `TROUBLESHOOTING.md` Section 6-7
+
 ### Signal K Boot
 
 - [ ] Service starts automatically: `systemctl status signalk`
@@ -193,7 +219,7 @@ sudo shutdown -h now
 | iPad blank Grafana | Reload browser: Cmd+R (Mac) or F5 (Windows) |
 | WIT data stops | SSH: `systemctl status signalk` — if red, `systemctl restart signalk` |
 | NMEA 2000 bus quiet | Check YDNU-02 USB connection, restart both devices |
-| InfluxDB using too much RAM | `systemctl restart influxdb` (brief interruption, ~10 sec) |
+| InfluxDB using too much RAM | `docker compose restart influxdb` (brief interruption, ~10 sec) |
 | Touchscreen unresponsive | Hard power-off Vulcan, wait 5 sec, power back on |
 
 **For any crash:** Re-read `TROUBLESHOOTING.md` or phone Denis

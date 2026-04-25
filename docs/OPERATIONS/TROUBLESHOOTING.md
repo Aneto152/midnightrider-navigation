@@ -216,18 +216,23 @@ curl -I http://localhost:3000/signalk/v1/api/
 
 **Diagnosis:**
 ```bash
-# Check service
-systemctl status influxdb
+# Check Docker container
+docker compose ps | grep influxdb
 
 # Check memory usage
 free -h
 
 # Check database size
-du -sh /var/lib/influxdb
+docker exec influxdb du -sh /var/lib/influxdb2
+
+# Check logs
+docker compose logs influxdb --tail=20
 ```
 
 **Fixes:**
-- Restart: `sudo systemctl restart influxdb` (brief 10-15 sec interruption)
+- Restart: `docker compose restart influxdb` (brief 10-15 sec interruption)
+- Or full restart: `docker compose down && docker compose up -d influxdb`
+- **IMPORTANT:** Never use `systemctl restart influxdb` — service is masked (disabled)
 - Clear old data (if needed): use InfluxDB CLI (advanced)
 - Check disk space: `df -h` (need >20GB free)
 
@@ -239,13 +244,16 @@ du -sh /var/lib/influxdb
 
 **Diagnosis:**
 ```bash
-# Check Grafana service
-systemctl status grafana-server
+# Check Docker container
+docker compose ps | grep grafana
 
 # Test connection
 curl http://localhost:3001/api/health
 
-# Test InfluxDB data source
+# Check logs
+docker compose logs grafana --tail=20
+
+# Test InfluxDB data source from Grafana
 curl -X GET "http://localhost:3001/api/datasources"
 ```
 
