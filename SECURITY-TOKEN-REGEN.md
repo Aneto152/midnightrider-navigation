@@ -9,7 +9,7 @@
 ⚠️ **CRITIQUE:** L'ancien token a été exposé publiquement sur GitHub.
 
 ```
-Ancien token: 4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+Ancien token: [REDACTED-INFLUX-TOKEN]
 ```
 
 Vous DEVEZ révoquer ce token immédiatement dans InfluxDB.

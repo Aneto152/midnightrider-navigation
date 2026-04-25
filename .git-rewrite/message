@@ -1,0 +1,50 @@
+Grafana Dashboards & InfluxDB Datasource Provisioned
+
+✅ DASHBOARDS IMPORTED:
+  1. Navigation Dashboard (12 KB)
+     - TRUE HEADING, SPEED, COG, RATE OF TURN
+     - All with live 10s refresh + 1h trend graphs
+
+  2. Race Management Dashboard (9.5 KB)
+     - Helmsman, sails, rotation history, distance to line
+     - 6h historical view
+
+  3. Astronomical Dashboard (9.2 KB)
+     - Sunrise/sunset (safety colors)
+     - Moon phase, illumination, rise/set times
+
+✅ INFLUXDB DATASOURCE CONFIGURED:
+  - URL: http://localhost:8086
+  - Organization: MidnightRider
+  - Bucket: signalk
+  - Token: configured (full access)
+  - Default data source: Yes
+  - Type: Flux (native InfluxDB)
+
+✅ AUTO-PROVISIONING ENABLED:
+  - Location: /etc/grafana/provisioning/datasources/
+  - Location: /etc/grafana/provisioning/dashboards/
+  - Auto-load on Grafana restart
+  - File permissions: correct (grafana:grafana)
+
+✅ GRAFANA SERVICE:
+  - Version: 12.3.1
+  - Port: 3001 ✅
+  - Status: Running ✅
+  - Login: admin / newpassword123
+
+✅ VERIFICATION:
+  - Grafana health: OK (database ok)
+  - Files copied and permissions set
+  - Provisioning configured
+  - Dashboards ready to display data
+
+NEXT STEPS:
+  1. Open http://localhost:3001
+  2. Login: admin / newpassword123
+  3. Configuration → Data Sources → InfluxDB (verify connection)
+  4. Dashboards → MidnightRider folder (see 3 dashboards)
+  5. Start data loggers (weather-logger.sh, buoy-logger.sh)
+  6. Panels will auto-populate with live data
+
+Data Flow: Signal K → InfluxDB → Grafana (auto-updated every 10s)

@@ -1,0 +1,21 @@
+{
+  "configuration": {
+    "outputDailyLog": false,
+    "influxes": [
+      {
+        "url": "http://localhost:8086",
+        "token": "REDACTED_TOKEN_REMOVED",
+        "org": "MidnightRider",
+        "bucket": "signalk",
+        "onlySelf": false,
+        "filteringRules": [],
+        "ignoredPaths": [],
+        "ignoredSources": [],
+        "useSKTimestamp": false,
+        "resolution": 1000
+      }
+    ]
+  },
+  "enabled": true,
+  "enableDebug": true
+}

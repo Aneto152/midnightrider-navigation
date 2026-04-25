@@ -1,0 +1,98 @@
+{
+  "pipedProviders": [
+    {
+      "pipeElements": [
+        {
+          "type": "providers/simple",
+          "options": {
+            "logging": false,
+            "type": "NMEA0183",
+            "subOptions": {
+              "validateChecksum": true,
+              "type": "serial",
+              "device": "/dev/ttyUSB0",
+              "baudrate": 115200
+            }
+          }
+        }
+      ],
+      "id": "um982-gps",
+      "enabled": true
+    },
+    {
+      "pipeElements": [
+        {
+          "type": "providers/simple",
+          "options": {
+            "logging": false,
+            "type": "NMEA0183",
+            "subOptions": {
+              "validateChecksum": true,
+              "type": "tcp",
+              "host": "localhost",
+              "port": "10110"
+            }
+          }
+        }
+      ],
+      "id": "kflex",
+      "enabled": true
+    },
+    {
+      "pipeElements": [
+        {
+          "type": "providers/simple",
+          "options": {
+            "logging": false,
+            "type": "NMEA2000",
+            "subOptions": {
+              "type": "ydwg02-usb-canboatjs",
+              "baudrate": 115200,
+              "device": "/dev/ttyACM1"
+            }
+          }
+        }
+      ],
+      "id": "NMEA2000",
+      "enabled": true
+    }
+  ],
+  "interfaces": {
+    "applicationData": true,
+    "appstore": true,
+    "logfiles": true,
+    "mfd_webapp": true,
+    "nmea-tcp": false,
+    "playground": true,
+    "plugins": true,
+    "providers": true,
+    "rest": true,
+    "tcp": true,
+    "wasm": true,
+    "webapps": true,
+    "ws": true
+  },
+  "resourcesApi": {
+    "defaultProviders": {
+      "routes": "resources-provider",
+      "waypoints": "resources-provider",
+      "regions": "resources-provider",
+      "notes": "resources-provider",
+      "charts": "resources-provider"
+    }
+  },
+  "courseApi": {
+    "apiOnly": false
+  },
+  "mdns": false,
+  "ssl": false,
+  "wsCompression": false,
+  "accessLogging": true,
+  "enablePluginLogging": true,
+  "trustProxy": false,
+  "port": 3000,
+  "sslport": 3443,
+  "pruneContextsMinutes": 60,
+  "keepMostRecentLogsOnly": true,
+  "logCountToKeep": 24
+}

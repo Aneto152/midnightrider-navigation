@@ -1,0 +1,230 @@
+{
+  "id": 6,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"wind_speed_kts\")\n  |> group(columns: [\"station_name\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Force du vent par station (kts)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 2,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"wind_dir\")\n  |> group(columns: [\"station_name\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Direction du vent par station (\u00b0)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 3,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"wind_gust_kts\")\n  |> group(columns: [\"station_name\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Rafales par station (kts)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 15
+      },
+      "id": 4,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"wind_speed_kts\" and r[\"zone\"] == \"CT\")\n  |> mean()\n  |> group()",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"wind_speed_kts\" and r[\"zone\"] == \"LI\")\n  |> mean()\n  |> group()",
+          "refId": "B"
+        }
+      ],
+      "title": "CT vs LI \u2014 Diff\u00e9rentiel de vent (kts)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 15
+      },
+      "id": 5,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"pressure_hpa\")\n  |> group(columns: [\"station_name\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Pression atmosph\u00e9rique (hPa)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 6,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: -30m)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and (r._field == \"wind_speed_kts\" or r._field == \"wind_dir\" or r._field == \"wind_gust_kts\"))\n  |> last()\n  |> pivot(rowKey:[\"station_name\"], columnKey:[\"_field\"], valueColumn:\"_value\")\n  |> keep(columns:[\"station_name\",\"zone\",\"wind_dir\",\"wind_speed_kts\",\"wind_gust_kts\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Derni\u00e8res valeurs \u2014 toutes stations",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 30
+      },
+      "id": 7,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"wave_height_m\")\n  |> group(columns: [\"station_name\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Hauteur des vagues \u2014 Hs (m)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 30
+      },
+      "id": 8,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"wave_period_s\")\n  |> group(columns: [\"station_name\"])",
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"weather_lis\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"weather.station\" and r._field == \"wave_dir\")\n  |> group(columns: [\"station_name\"])",
+          "refId": "B"
+        }
+      ],
+      "title": "P\u00e9riode et direction des vagues",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "5m",
+  "schemaVersion": 38,
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "title": "MidnightRider M\u00e9t\u00e9o LIS",
+  "uid": "midnightrider-meteo",
+  "version": 2
+}

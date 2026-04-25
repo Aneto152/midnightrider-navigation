@@ -1,0 +1,33 @@
+{
+  "name": "@aneto/astronomical-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for accessing astronomical data (sun/moon/tides) from InfluxDB",
+  "main": "astronomical-server.js",
+  "type": "commonjs",
+  "bin": {
+    "astronomical-mcp-server": "./astronomical-server.js"
+  },
+  "scripts": {
+    "start": "node astronomical-server.js",
+    "test": "echo 'MCP server - no tests yet'"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "astronomical",
+    "sun",
+    "moon",
+    "tides",
+    "influxdb",
+    "signalk"
+  ],
+  "author": "Aneto",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Aneto152/midnightrider-navigation"
+  }
+}

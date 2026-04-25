@@ -1,0 +1,12 @@
+6933991c892a2a8be5eb90ed38c1b586b6a21380 commit	refs/heads/archive/obsolete-files
+cf8fd67b3fd123f93f0bfa4db5939bd14302536a commit	refs/heads/dev
+00d9037786b286b8b0608a16aaddcf29720ecdb4 commit	refs/heads/main
+67b1c38977704eed5a8189541e570c47e99c8dea commit	refs/heads/master
+d2b5567aa53c31fc989c2f55be89cdb634959f42 commit	refs/heads/stable
+6933991c892a2a8be5eb90ed38c1b586b6a21380 commit	refs/remotes/origin/archive/obsolete-files
+0498c332c55eb7eed891168c316a81252e58b9e0 commit	refs/remotes/origin/dev
+00d9037786b286b8b0608a16aaddcf29720ecdb4 commit	refs/remotes/origin/main
+67b1c38977704eed5a8189541e570c47e99c8dea commit	refs/remotes/origin/master
+d2b5567aa53c31fc989c2f55be89cdb634959f42 commit	refs/remotes/origin/stable
+3ee4e36456918804e277c56621810572fcfac671 commit	refs/stash
+dcc0e2f7f3c0e9f645c0a81a0803dbf79b63c195 tag	refs/tags/v0.1

@@ -1,0 +1,17 @@
+{
+  "name": "@aneto/buoy-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for NOAA buoy wind data in Long Island Sound (real observations, not forecast)",
+  "main": "buoy-server.js",
+  "type": "commonjs",
+  "bin": {
+    "buoy-mcp-server": "./buoy-server.js"
+  },
+  "scripts": {
+    "start": "node buoy-server.js"
+  },
+  "keywords": ["mcp", "sailing", "buoy", "noaa", "wind", "lis", "long-island-sound"],
+  "author": "Aneto (MidnightRider J/30)",
+  "license": "MIT",
+  "engines": { "node": ">=18.0.0" }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "@aneto/weather-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for weather data (logged from Open-Meteo via weather-logger.sh)",
+  "main": "weather-server.js",
+  "type": "commonjs",
+  "bin": {
+    "weather-mcp-server": "./weather-server.js"
+  },
+  "scripts": {
+    "start": "node weather-server.js"
+  },
+  "keywords": ["mcp", "sailing", "weather", "forecast", "wind", "temperature"],
+  "author": "Aneto (MidnightRider J/30)",
+  "license": "MIT",
+  "engines": { "node": ">=18.0.0" }
+}

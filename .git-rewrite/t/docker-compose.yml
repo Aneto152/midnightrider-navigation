@@ -1,0 +1,89 @@
+services:
+
+  # ─────────────────────────────────────────
+  # InfluxDB v2.8
+  # ─────────────────────────────────────────
+  influxdb:
+    image: influxdb:2.8
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+
+  # ─────────────────────────────────────────
+  # Grafana v12.3.1
+  # ─────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:12.3.1
+    container_name: grafana
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - grafana-config:/etc/grafana
+    environment:
+      - GF_SERVER_HTTP_PORT=3001
+    depends_on:
+      - influxdb
+
+  # ─────────────────────────────────────────
+  # Astronomical Data (sun/moon/tides)
+  # ─────────────────────────────────────────
+  astronomical:
+    build:
+      context: .
+      dockerfile: astronomical/Dockerfile
+    container_name: astronomical
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - LAT=41.0534
+      - LON=-73.5387
+      - NOAA_STATION=8467150
+      - INFLUX_URL=http://localhost:8086
+      - INFLUX_TOKEN=REDACTED_TOKEN_REMOVED
+      - INFLUX_ORG=MidnightRider
+      - INFLUX_BUCKET=signalk
+    depends_on:
+      - influxdb
+
+  # ─────────────────────────────────────────
+  # Signal K
+  # network_mode: host est nécessaire pour :
+  #   - accès à Kflex via TCP localhost:10110
+  #   - accès NMEA2000 via /dev/ttyACM1
+  #   - mDNS / discovery réseau
+  # ─────────────────────────────────────────
+  signalk:
+    image: signalk/signalk-server:latest
+    container_name: signalk
+    restart: unless-stopped
+    network_mode: host
+    group_add:
+      - "46"   # plugdev — accès ports série USB
+      - "20"   # dialout
+    volumes:
+      - signalk-data:/home/node/.signalk
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+    # YDWG-02 NMEA2000
+      - /dev/ttyACM0:/dev/ttyACM0
+    depends_on:
+      - influxdb
+      - astronomical
+
+# Volumes externes — déjà créés et remplis avec les données migrées
+volumes:
+  influxdb-data:
+    external: true
+  influxdb-config:
+    external: true
+  grafana-data:
+    external: true
+  grafana-config:
+    external: true
+  signalk-data:
+    external: true

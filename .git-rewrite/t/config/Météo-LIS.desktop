@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Météo LIS
+Comment=Relevés météo Long Island Sound
+Exec=xdg-open http://localhost:5000/wind
+Icon=weather-clear-wind
+Terminal=false
+Type=Application
+Categories=Navigation;

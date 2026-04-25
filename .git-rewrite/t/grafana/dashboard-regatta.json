@@ -1,0 +1,139 @@
+{
+  "id": 5,
+  "panels": [
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 1,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"signalk\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regatta.helmsman\" and r._field == \"name\")\n  |> group(columns: [\"_value\"])\n  |> count()",
+          "refId": "A"
+        }
+      ],
+      "title": "Barreurs \u2014 Temps \u00e0 la barre",
+      "type": "barchart"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 2,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"signalk\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regatta.events\")\n  |> filter(fn: (r) => r._field == \"note\")\n  |> keep(columns: [\"_time\", \"_value\", \"type\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "\u00c9v\u00e9nements chronologiques",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 8
+      },
+      "id": 3,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"signalk\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regatta.sails\" and r._field == \"sail\")\n  |> keep(columns: [\"_time\", \"_value\", \"type\"])",
+          "refId": "A"
+        }
+      ],
+      "title": "Voiles utilis\u00e9es",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 8
+      },
+      "id": 4,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"signalk\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n  |> filter(fn: (r) => r._field == \"lat\" or r._field == \"lon\")\n  |> pivot(rowKey:[\"_time\"], columnKey:[\"_field\"], valueColumn:\"_value\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Ligne de d\u00e9part",
+      "type": "geomap"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 5,
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"signalk\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"regatta.events\")\n  |> filter(fn: (r) => r._field == \"value\")\n  |> filter(fn: (r) => r.type == \"tack\" or r.type == \"gybe\")",
+          "refId": "A"
+        }
+      ],
+      "title": "Virements & Empannages",
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "10s",
+  "schemaVersion": 38,
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "title": "MidnightRider R\u00e9gate",
+  "uid": "midnightrider-regatta",
+  "version": 1
+}
