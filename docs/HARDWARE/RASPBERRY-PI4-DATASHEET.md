@@ -46,7 +46,6 @@
 | Grafana | Dashboards | 3001 | ✅ Active |
 | qtVLM | Weather routing | NMEA 0183 TCP | ✅ Active |
 | Bleak (Python) | WIT IMU driver | (subprocess) | ✅ Active |
-| Kplex | NMEA 0183 multiplexer | — | ⏳ Optional |
 
 ---
 
