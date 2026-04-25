@@ -164,8 +164,8 @@ async function handleTool(name, args) {
       case 'get_sog':
         const sog = await getLatestValue('navigation.speedOverGround');
         return {
-          speed_over_ground_knots: sog,
-          speed_over_ground_ms: sog ? sog * 0.51444 : null,
+          speed_over_ground_knots: sog ? sog / 0.51444 : null,
+          speed_over_ground_ms: sog,
           unit: 'knots'
         };
 
@@ -181,15 +181,15 @@ async function handleTool(name, args) {
       case 'get_stw':
         const stw = await getLatestValue('navigation.speedThroughWater');
         return {
-          speed_through_water_knots: stw,
-          speed_through_water_ms: stw ? stw * 0.51444 : null,
+          speed_through_water_knots: stw ? stw / 0.51444 : null,
+          speed_through_water_ms: stw,
           unit: 'knots'
         };
 
       case 'get_vmg':
         const vmg = await getLatestValue('performance.velocityMadeGood');
         return {
-          vmg_knots: vmg,
+          vmg_knots: vmg ? vmg / 0.51444 : null,
           vmg_percent: vmg ? (vmg / (await getLatestValue('performance.targetVMG') || 1)) * 100 : null,
           unit: 'knots'
         };
@@ -209,7 +209,7 @@ async function handleTool(name, args) {
         const appSpeed = await getLatestValue('environment.wind.speedApparent');
         const appAngle = await getLatestValue('environment.wind.angleApparent');
         return {
-          speed_knots: appSpeed,
+          speed_knots: appSpeed ? appSpeed / 0.51444 : null,
           angle_degrees: appAngle ? radToDeg(appAngle) : null,
           angle_radians: appAngle,
           direction: appAngle ? (appAngle < Math.PI ? 'starboard' : 'port') : null
@@ -219,7 +219,7 @@ async function handleTool(name, args) {
         const trueSpeed = await getLatestValue('environment.wind.speedTrue');
         const trueAngle = await getLatestValue('environment.wind.angleTrue');
         return {
-          speed_knots: trueSpeed,
+          speed_knots: trueSpeed ? trueSpeed / 0.51444 : null,
           angle_degrees: trueAngle ? radToDeg(trueAngle) : null,
           angle_radians: trueAngle,
           direction: trueAngle ? (trueAngle < Math.PI ? 'starboard' : 'port') : null
