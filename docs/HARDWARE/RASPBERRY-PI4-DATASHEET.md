@@ -151,7 +151,7 @@
 | Issue | Fix |
 |-------|-----|
 | Overheating | Add heatsinks or improve airflow |
-| InfluxDB consuming RAM | Restart: `systemctl restart influxdb` |
+| InfluxDB consuming RAM | Restart: `docker compose restart influxdb` |
 | Signal K slow | Check disk space + memory (`free -h`) |
 | WiFi dropping | Use Ethernet if available (backup) |
 | USB device not seen | Restart: `sudo systemctl restart signalk` |

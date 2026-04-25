@@ -1,162 +1,186 @@
-# INFLUXDB v2 SETUP GUIDE
+# INFLUXDB v2 — Docker Container Setup
 
-**Version:** 2.7.x  
+**Version:** 2.8 (Docker container)  
 **Database:** midnight_rider (bucket: signalk)  
 **Port:** 8086  
-**Date:** 2026-04-25
+**Date:** 2026-04-25  
+**Status:** ⚠️ **DEPRECATED NOTE:** This document describes the old systemd installation. See `DOCKER-INFLUXDB-GRAFANA-STARTUP.md` for current setup.
 
 ---
 
-## SERVICE MANAGEMENT
+## CURRENT SETUP (Docker)
 
+InfluxDB now runs as a **Docker container**, NOT as a systemd service.
+
+**See:** `/home/aneto/.openclaw/workspace/DOCKER-INFLUXDB-GRAFANA-STARTUP.md`
+
+### Quick Start
+```bash
+cd /home/aneto/.openclaw/workspace
+
+# Ensure native InfluxDB is masked
+sudo systemctl status influxdb  # Should show "masked"
+
+# Start Docker containers
+docker compose up -d influxdb grafana
+
+# Verify
+curl http://localhost:8086/health  # Should return 200
+```
+
+### Management
 ```bash
 # Check status
-systemctl status influxdb
+docker compose ps | grep influxdb
 
-# Start/Stop
-sudo systemctl start influxdb
-sudo systemctl stop influxdb
+# View logs
+docker compose logs influxdb --tail=20
 
 # Restart
-sudo systemctl restart influxdb
+docker compose restart influxdb
 
-# Logs
-sudo journalctl -u influxdb -n 50
+# Stop
+docker compose down
 ```
 
 ---
 
-## KEY SETTINGS
+## OLD SETUP (DEPRECATED — systemd)
 
-**Location:** `/etc/influxdb/influxdb.conf`
+⚠️ **DO NOT USE** — Systemd InfluxDB service is **masked** (permanently disabled).
 
-### Data Storage
+The following information is archived for reference only.
 
+### Historical Service Management
+
+```bash
+# These commands no longer work (service is masked):
+sudo systemctl start influxdb     # ❌ DO NOT USE
+sudo systemctl restart influxdb   # ❌ DO NOT USE
+sudo systemctl stop influxdb      # ❌ DO NOT USE
 ```
-[data]
-  dir = "/var/lib/influxdb/data"
-  index-version = "tsi1"           # Compressed index (faster)
 
-[retention]
-  enabled = true
-  check-interval = "30m"
-```
+**Why it was changed:**
+- Port conflicts between systemd and Docker
+- Inconsistent behavior across deployments
+- Docker containers are more reproducible for racing
 
 ---
 
-## DATA STRUCTURE
+## DATA STRUCTURE (Still Valid)
 
 ### Organization
 - **Org:** midnight_rider
-- **Bucket:** signalk
-- **Retention:** 365 days (1 year)
 
-### Measurement: `signalk`
+### Buckets
+- **signalk** — Time-series navigation data (1-10 Hz)
+- **metrics** — System metrics (CPU, RAM, disk)
+- **archive** — Historical race data (long-term storage)
 
-**Tags (indexed):**
+### Data Retention
+- **signalk:** 30 days (auto-purge after 30 days)
+- **metrics:** 7 days
+- **archive:** 1 year
+
+### Key Measurements
+
+**Navigation (from Signal K):**
 ```
-measurement=signalk,
-  source=um982-gps,           # or: wit-imu, wave-analyzer, etc.
-  instance=1
+navigation.position (lat, lon)
+navigation.headingTrue (degrees)
+navigation.speedThroughWater (knots)
+navigation.speedOverGround (knots)
+navigation.attitude (roll, pitch, yaw)
 ```
 
-**Fields (values):**
+**Performance:**
 ```
-latitude=41.172,
-longitude=-71.550,
-headingTrue=3.98,
-roll=0.1,
-pitch=-0.05,
-acceleration_x=0.2,
-acceleration_y=-0.1,
-acceleration_z=9.7,
-waveHeight=1.5,
-wavePeriod=8.2,
-...
+performance.sails (jib%, main%)
+performance.vmg (knots)
+performance.windAngleApparent (degrees)
+performance.windSpeedApparent (knots)
+```
+
+**Environmental:**
+```
+environment.water.waveHeight (meters)
+environment.air.temperature (°C)
+environment.water.temperature (°C)
 ```
 
 ---
 
-## API ACCESS
+## QUERIES (Still Valid)
 
-### Query Data
-
+### Get Latest Position
 ```bash
-# Via curl
-curl -X POST "http://localhost:8086/api/v2/query" \
-  -H "Authorization: Token [TOKEN]" \
+docker exec influxdb influx query '
+from(bucket:"signalk")
+  |> range(start: -5m)
+  |> filter(fn: (r) => r._measurement == "navigation" AND r._field == "position")
+  |> last()
+'
+```
+
+### Get Last Hour of Attitude
+```bash
+curl -X POST "http://localhost:8086/api/v2/query?org=MidnightRider" \
+  -H "Authorization: Token ${INFLUX_TOKEN}" \
   -H "Content-type: application/vnd.flux" \
-  -d 'from(bucket:"signalk") |> range(start:-1h)'
-
-# Or use Grafana (easier)
-```
-
-### Health Check
-
-```bash
-curl http://localhost:8086/api/v2/health
-
-# Expected:
-# {
-#   "status": "ok",
-#   "message": "ready for queries and writes"
-# }
-```
-
----
-
-## STORAGE MONITORING
-
-```bash
-# Check disk usage
-du -sh /var/lib/influxdb/data
-
-# Typical race:
-# 5-hour race @ 1 sec resolution = ~18,000 points = ~5-10 MB
-```
-
----
-
-## BACKUP & RESTORE
-
-### Backup
-
-```bash
-# Export all data
-influx backup /backup/influxdb-2026-05-22 \
-  --token [TOKEN] \
-  --org midnight_rider
-```
-
-### Restore
-
-```bash
-influx restore /backup/influxdb-2026-05-22 \
-  --token [TOKEN] \
-  --org midnight_rider
+  -d 'from(bucket:"signalk")
+    |> range(start: -1h)
+    |> filter(fn: (r) => r._measurement == "navigation")
+    |> filter(fn: (r) => r._field == "roll" or r._field == "pitch" or r._field == "yaw")'
 ```
 
 ---
 
 ## TROUBLESHOOTING
 
-| Issue | Fix |
-|-------|-----|
-| Port 8086 not responding | Restart: `systemctl restart influxdb` |
-| "permission denied" | Check file permissions: `ls -la /var/lib/influxdb/` |
-| High RAM usage | Restart (clears cache) or delete old data if needed |
-| Write errors | Check Signal K plugin config (token valid?) |
+**See:** `TROUBLESHOOTING.md` Section 6 (InfluxDB)
+
+### Common Issues
+
+**InfluxDB not responding:**
+```bash
+# Check if container is running
+docker compose ps | grep influxdb
+
+# Check logs for errors
+docker compose logs influxdb --tail=50
+
+# Restart
+docker compose restart influxdb
+```
+
+**Data not arriving:**
+```bash
+# Check Signal K is writing
+docker exec influxdb influx bucket list
+
+# Verify plugin configuration
+curl http://localhost:3000/skServer/plugins | grep influxdb
+```
+
+**Port 8086 in use by something else:**
+```bash
+# Find what's using it
+lsof -i :8086
+
+# Make sure native service is masked
+sudo systemctl status influxdb  # Should show masked
+```
 
 ---
 
-## RACING OPERATION
+## RELATED FILES
 
-**Zero manual intervention needed:**
-- Signal K plugin auto-writes every 1 sec
-- Data persists automatically
-- Backups: handled post-race
+- `DOCKER-INFLUXDB-GRAFANA-STARTUP.md` — **Main reference**
+- `TROUBLESHOOTING.md` — Section 6
+- `docker-compose.yml` — Container definitions
+- `.env` — Environment variables (token, etc.)
 
 ---
 
-**Status:** ✅ Ready  
-**Last Updated:** 2026-04-25
+**Last Updated:** 2026-04-25  
+**Status:** Docker containerized (systemd deprecated)

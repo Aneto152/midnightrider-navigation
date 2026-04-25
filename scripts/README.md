@@ -148,7 +148,7 @@ journalctl -u signalk --since "5 min ago" | grep -i influx
 
 **All system services:**
 ```bash
-systemctl status signalk influxdb grafana
+systemctl status signalk
 docker compose ps
 ```
 
@@ -162,6 +162,7 @@ docker compose ps
 | GPS (⚠️) | Wait 30+ sec for cold start |
 | WIT BLE (❌) | `systemctl restart signalk` or check power |
 | YDNU-02 (⚠️) | Unplug USB 5 sec, replug |
+| Containers won't start | `sudo systemctl stop influxdb && docker compose up -d` |
 
 ### Version
 
