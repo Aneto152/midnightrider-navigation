@@ -58,7 +58,7 @@ cd ~/.signalk && npm list --depth=0 2>/dev/null | grep signalk
 systemctl list-units --state=active | grep -E "signalk|influx|grafana|qtvlm"
 
 # Scripts Python actifs
-ls -la /home/pi/*.py /home/pi/*.sh /home/aneto/*.py /home/aneto/*.sh 2>/dev/null
+ls -la /home/aneto/*.py /home/aneto/*.sh /home/aneto/*.py /home/aneto/*.sh 2>/dev/null
 
 # Ports série (GPS exact device name)
 ls -la /dev/ttyUSB* /dev/ttyACM* /dev/gnss* 2>/dev/null
