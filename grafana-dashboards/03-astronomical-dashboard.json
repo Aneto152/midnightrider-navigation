@@ -79,7 +79,7 @@
           "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunriseTime\") |> last()"
         }
       ],
-      "title": "🌅 SUNRISE",
+      "title": "\ud83c\udf05 SUNRISE",
       "type": "stat"
     },
     {
@@ -139,7 +139,7 @@
           "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunsetTime\") |> last()"
         }
       ],
-      "title": "🌅 SUNSET",
+      "title": "\ud83c\udf05 SUNSET",
       "type": "stat"
     },
     {
@@ -208,7 +208,7 @@
           "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.illumination\") |> last()"
         }
       ],
-      "title": "🌙 MOON ILLUMINATION",
+      "title": "\ud83c\udf19 MOON ILLUMINATION",
       "type": "gauge"
     },
     {
@@ -268,7 +268,7 @@
           "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.phase\") |> last()"
         }
       ],
-      "title": "🌙 MOON PHASE",
+      "title": "\ud83c\udf19 MOON PHASE",
       "type": "stat"
     },
     {
@@ -328,7 +328,7 @@
           "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonriseTime\") |> last()"
         }
       ],
-      "title": "🌙 MOON RISE",
+      "title": "\ud83c\udf19 MOON RISE",
       "type": "stat"
     },
     {
@@ -388,7 +388,7 @@
           "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonsetTime\") |> last()"
         }
       ],
-      "title": "🌙 MOON SET",
+      "title": "\ud83c\udf19 MOON SET",
       "type": "stat"
     }
   ],

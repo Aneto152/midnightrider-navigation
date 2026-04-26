@@ -373,7 +373,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisLabel": "Rate of Turn (°/min)",
+            "axisLabel": "Rate of Turn (\u00b0/min)",
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",

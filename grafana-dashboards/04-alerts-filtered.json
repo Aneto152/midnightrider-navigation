@@ -65,7 +65,7 @@
           "refId": "A"
         }
       ],
-      "title": "⚠️ ACTIVE ALERTS — Yellow/Orange/Red Only",
+      "title": "\u26a0\ufe0f ACTIVE ALERTS \u2014 Yellow/Orange/Red Only",
       "type": "stat"
     },
     {
@@ -135,7 +135,7 @@
           "refId": "A"
         }
       ],
-      "title": "Alert Rules — Filtered View (Yellow/Orange/Red)",
+      "title": "Alert Rules \u2014 Filtered View (Yellow/Orange/Red)",
       "transformations": [
         {
           "id": "organize",
