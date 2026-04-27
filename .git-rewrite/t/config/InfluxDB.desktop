@@ -1,8 +1,0 @@
-[Desktop Entry]
-Name=InfluxDB
-Comment=Base de données
-Exec=xdg-open http://localhost:8086
-Icon=server-database
-Terminal=false
-Type=Application
-Categories=Navigation;

@@ -306,3 +306,52 @@ Located: `/docs/MEMORY/`
 
 *Last updated: 2026-04-25 10:05 EDT*  
 *Next review: Post-restructuring completion*
+
+## GRAFANA DASHBOARDS SUITE (2026-04-25 21:15 EDT)
+
+### Complete Dashboard Suite — 8 Dashboards, Ready to Import
+
+**Status:** ✅ Production-ready JSON files  
+**Location:** `/home/aneto/.openclaw/workspace/grafana-dashboards/`
+
+| Dashboard | Purpose | Refresh | Status |
+|-----------|---------|---------|--------|
+| 01 COCKPIT | Main navigation | 5s | ✅ Ready |
+| 02 ENVIRONMENT | Sea & weather | 30s | ✅ Ready |
+| 03 PERFORMANCE | Speed analysis | 5s | ✅ Ready |
+| 04 WIND & CURRENT | Tactical | 10s | ✅ Ready |
+| 05 COMPETITIVE | Fleet tracking | 30s | ✅ Ready |
+| 06 ELECTRICAL | Power mgmt | 30s | ✅ Ready |
+| 07 RACE | Block Island | 5s | ✅ Ready |
+| 08 ALERTS | 60 rules | 10s | ✅ Ready |
+
+### Import Procedure
+
+1. Configure InfluxDB token in Grafana (Admin → Data Sources)
+2. Upload each JSON file via Grafana import UI
+3. Test on iPad via WiFi AP
+
+### Alert Rules (60 Total)
+
+Categories:
+- Safety (10): Heel, pitch, temp, battery, system failures
+- Performance (15): VMG, polars, trim, waves, current
+- Weather (15): Wind shifts, pressure, swell, humidity
+- Systems (10): Battery, charger, comms, GPS, storage
+- Racing (10): Marks, start line, finish, fleet
+
+See Dashboard 8 (ALERTS) for complete structure.
+
+### Files
+
+- `01-cockpit.json` → 13 KB
+- `02-environment.json` → 5.5 KB
+- `03-performance.json` → 5.5 KB
+- `04-wind-current.json` → 5.4 KB
+- `05-competitive.json` → 5.4 KB
+- `06-electrical.json` → 5.5 KB
+- `07-race.json` → 5.4 KB
+- `08-alerts.json` → 6.2 KB
+- Total: 48 KB
+
+**Next:** Import and test on iPad before field test (May 19).

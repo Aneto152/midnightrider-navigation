@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  influxdb:
+    environment:
+      - INFLUX_DB_INIT=true
+      - INFLUX_DB_INIT_MODE=setup
+      - INFLUX_DB_INIT_USERNAME=admin
+      - INFLUX_DB_INIT_PASSWORD=adminpass
+      - INFLUX_DB_INIT_ORG=MidnightRider
+      - INFLUX_DB_INIT_BUCKET=signalk
+      - INFLUX_DB_INIT_RETENTION=720h
+      - INFLUX_DB_INIT_ADMIN_TOKEN=MidnightRider-Token-2026-04-25

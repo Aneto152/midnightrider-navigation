@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=qtVLM
-Comment=Navigation et routage
-Exec=/home/aneto/Downloads/qtVlm/QtVlm.sh
-Icon=/home/aneto/Downloads/qtVlm/icon/qtVlm_48x48.png
-Path=/home/aneto/Downloads/qtVlm
-Terminal=false
-Type=Application
-Categories=Navigation;
