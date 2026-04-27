@@ -279,6 +279,20 @@ class Handler(BaseHTTPRequestHandler):
                 {"note": body.get("note",""), "value": 1},
                 {"type": body.get("type","note")})
             self.send_json({"ok": ok})
+        elif self.path == "/api/timer":
+            seconds = body.get("seconds_to_start", 0)
+            label = body.get("label", "")  # "J-5min", "J-3min", etc
+            active = body.get("active", True)
+            ok = write_influx(
+                "regatta.timer",
+                {
+                    "seconds_to_start": int(seconds),
+                    "active": 1 if active else 0,
+                    "label": label
+                },
+                {"type": "start_timer"}
+            )
+            self.send_json({"ok": ok})
         else:
             self.send_response(404)
             self.end_headers()
