@@ -15,7 +15,7 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 4,
+  "id": 14,
   "links": [],
   "panels": [
     {
@@ -145,12 +145,12 @@
             },
             "indexByName": {},
             "renameByName": {
-              "title": "Alert Name",
-              "severity": "Severity",
               "category": "Category",
-              "phase": "Phase",
+              "condition": "Condition",
               "for": "Duration",
-              "condition": "Condition"
+              "phase": "Phase",
+              "severity": "Severity",
+              "title": "Alert Name"
             }
           }
         }

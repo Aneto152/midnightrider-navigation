@@ -5,7 +5,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 13,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -51,11 +51,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -63,11 +63,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Speed Through Water (STW)",
@@ -115,11 +115,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -127,11 +127,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "VMG (Velocity Made Good)",
@@ -179,11 +179,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -191,11 +191,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Performance Efficiency",
@@ -243,11 +243,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -255,11 +255,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Distance to Next Mark",
@@ -273,13 +273,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -323,11 +323,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Speed vs Polars (5 min)",
@@ -341,13 +341,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -391,11 +391,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "VMG History (30 min)",
@@ -410,9 +410,9 @@
         "defaults": {
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             }
           }
         },
@@ -450,6 +450,6 @@
   "timezone": "America/New_York",
   "title": "03 \u2014 PERFORMANCE (Speed & Efficiency)",
   "uid": "performance-analysis",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }

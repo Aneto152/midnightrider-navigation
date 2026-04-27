@@ -5,7 +5,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 19,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -17,8 +17,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "fixed",
-            "fixedColor": "red"
+            "fixedColor": "red",
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
@@ -47,11 +47,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "text": {},
         "textMode": "value_and_name"
@@ -59,11 +59,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "\ud83d\udd14 ALERTING",
@@ -77,8 +77,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "fixed",
-            "fixedColor": "green"
+            "fixedColor": "green",
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
@@ -107,11 +107,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "text": {},
         "textMode": "value_and_name"
@@ -119,11 +119,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "\u2705 OK",
@@ -137,8 +137,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "fixed",
-            "fixedColor": "orange"
+            "fixedColor": "orange",
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
@@ -167,11 +167,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "text": {},
         "textMode": "value_and_name"
@@ -179,11 +179,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "\u23f3 PENDING",
@@ -197,8 +197,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "fixed",
-            "fixedColor": "gray"
+            "fixedColor": "gray",
+            "mode": "fixed"
           },
           "mappings": [],
           "thresholds": {
@@ -227,11 +227,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "text": {},
         "textMode": "value_and_name"
@@ -239,11 +239,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "\ud83d\udd07 SILENCED",
@@ -257,13 +257,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "thresholds"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "stepBefore",
             "lineWidth": 1,
@@ -314,11 +314,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Alert Status Timeline (24h) \u2014 Categories: Safety | Performance | Weather/Sea | Systems | Racing",
@@ -333,9 +333,9 @@
         "defaults": {
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             }
           }
         },
@@ -373,6 +373,6 @@
   "timezone": "America/New_York",
   "title": "08 \u2014 ALERTS & MONITORING (60 Alert Rules)",
   "uid": "alerts-monitoring",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }

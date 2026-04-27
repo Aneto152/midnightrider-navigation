@@ -5,7 +5,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 10,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -51,11 +51,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -63,11 +63,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Water Temperature",
@@ -115,11 +115,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -127,11 +127,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Wave Height",
@@ -179,11 +179,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -191,11 +191,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Atmospheric Pressure",
@@ -243,11 +243,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -255,11 +255,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Current Speed",
@@ -273,13 +273,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -323,11 +323,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Wave Height History (1h)",
@@ -341,13 +341,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -392,11 +392,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Temperature Trends (12h)",
@@ -411,9 +411,9 @@
         "defaults": {
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             }
           }
         },
@@ -451,6 +451,6 @@
   "timezone": "America/New_York",
   "title": "02 \u2014 ENVIRONMENT (Sea & Weather)",
   "uid": "environment-conditions",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }

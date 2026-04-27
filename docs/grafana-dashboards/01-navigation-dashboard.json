@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 9,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -72,8 +72,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> last()"
+          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> last()",
+          "refId": "A"
         }
       ],
       "title": "TRUE HEADING",
@@ -97,9 +97,9 @@
             "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -156,8 +156,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> aggregateWindow(every: 10s, fn: mean)"
+          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> aggregateWindow(every: 10s, fn: mean)",
+          "refId": "A"
         }
       ],
       "title": "HEADING TREND (last 1h)",
@@ -214,8 +214,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 1.94384}))"
+          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 1.94384}))",
+          "refId": "A"
         }
       ],
       "title": "SPEED OVER GROUND (knots)",
@@ -239,9 +239,9 @@
             "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -298,8 +298,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> map(fn: (r) => ({r with _value: r._value * 1.94384})) |> aggregateWindow(every: 10s, fn: mean)"
+          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> map(fn: (r) => ({r with _value: r._value * 1.94384})) |> aggregateWindow(every: 10s, fn: mean)",
+          "refId": "A"
         }
       ],
       "title": "SPEED TREND (last 1h, knots)",
@@ -355,8 +355,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.courseOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159}))"
+          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.courseOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159}))",
+          "refId": "A"
         }
       ],
       "title": "COURSE OVER GROUND (degrees)",
@@ -380,9 +380,9 @@
             "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 1,
@@ -439,8 +439,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.rateOfTurn\") |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159 * 60})) |> aggregateWindow(every: 10s, fn: mean)"
+          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.rateOfTurn\") |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159 * 60})) |> aggregateWindow(every: 10s, fn: mean)",
+          "refId": "A"
         }
       ],
       "title": "RATE OF TURN TREND",
@@ -466,6 +466,6 @@
   "timezone": "America/New_York",
   "title": "MidnightRider - Navigation",
   "uid": "midnight-navigation",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

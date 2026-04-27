@@ -5,7 +5,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 18,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -55,11 +55,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -67,11 +67,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "\ud83c\udfc1 Countdown to Start",
@@ -111,11 +111,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -123,11 +123,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Current Mark",
@@ -175,11 +175,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -187,11 +187,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Distance to Finish",
@@ -239,11 +239,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -251,11 +251,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Fleet Position",
@@ -269,13 +269,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -319,11 +319,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Cumulative Distance Sailed",
@@ -337,13 +337,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -387,11 +387,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Speed During Race",
@@ -406,9 +406,9 @@
         "defaults": {
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             }
           }
         },
@@ -446,6 +446,6 @@
   "timezone": "America/New_York",
   "title": "07 \u2014 RACE (Block Island Race \u2014 May 22, 2026)",
   "uid": "race-block-island",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }

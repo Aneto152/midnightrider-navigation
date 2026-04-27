@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 12,
   "links": [],
   "liveNow": false,
   "panels": [
@@ -75,8 +75,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunriseTime\") |> last()"
+          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunriseTime\") |> last()",
+          "refId": "A"
         }
       ],
       "title": "\ud83c\udf05 SUNRISE",
@@ -135,8 +135,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunsetTime\") |> last()"
+          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunsetTime\") |> last()",
+          "refId": "A"
         }
       ],
       "title": "\ud83c\udf05 SUNSET",
@@ -204,8 +204,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.illumination\") |> last()"
+          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.illumination\") |> last()",
+          "refId": "A"
         }
       ],
       "title": "\ud83c\udf19 MOON ILLUMINATION",
@@ -264,8 +264,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.phase\") |> last()"
+          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.phase\") |> last()",
+          "refId": "A"
         }
       ],
       "title": "\ud83c\udf19 MOON PHASE",
@@ -324,8 +324,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonriseTime\") |> last()"
+          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonriseTime\") |> last()",
+          "refId": "A"
         }
       ],
       "title": "\ud83c\udf19 MOON RISE",
@@ -384,8 +384,8 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonsetTime\") |> last()"
+          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonsetTime\") |> last()",
+          "refId": "A"
         }
       ],
       "title": "\ud83c\udf19 MOON SET",
@@ -412,6 +412,6 @@
   "timezone": "America/New_York",
   "title": "MidnightRider - Astronomical Data",
   "uid": "midnight-astronomical",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

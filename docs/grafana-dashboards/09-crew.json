@@ -5,7 +5,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
+  "id": 20,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -17,19 +17,19 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "fixed",
-            "fixedColor": "green"
+            "fixedColor": "green",
+            "mode": "fixed"
           },
           "mappings": [
             {
               "options": {
-                "1": {
-                  "color": "green",
-                  "text": "\u2693 AT HELM"
-                },
                 "0": {
                   "color": "gray",
                   "text": "\ud83d\udca4 RESTING"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "\u2693 AT HELM"
                 }
               },
               "type": "value"
@@ -61,11 +61,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "text": {},
         "textMode": "value_and_name"
@@ -73,11 +73,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "DENIS LAFARGE",
@@ -91,19 +91,19 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "fixed",
-            "fixedColor": "blue"
+            "fixedColor": "blue",
+            "mode": "fixed"
           },
           "mappings": [
             {
               "options": {
-                "1": {
-                  "color": "green",
-                  "text": "\u2693 AT HELM"
-                },
                 "0": {
                   "color": "gray",
                   "text": "\ud83d\udca4 RESTING"
+                },
+                "1": {
+                  "color": "green",
+                  "text": "\u2693 AT HELM"
                 }
               },
               "type": "value"
@@ -135,11 +135,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "text": {},
         "textMode": "value_and_name"
@@ -147,11 +147,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "ANNE-SOPHIE",
@@ -203,11 +203,11 @@
       "options": {
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true
@@ -215,11 +215,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "\u23f1\ufe0f NEXT WATCH CHANGE COUNTDOWN (Target: 2h per watch)",
@@ -233,13 +233,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -283,11 +283,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "DENIS Performance (Speed @ Helm) \u2014 2h window",
@@ -301,13 +301,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -351,11 +351,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "ANNE-SOPHIE Performance (Speed @ Helm) \u2014 2h window",
@@ -369,13 +369,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "thresholds"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "stepBefore",
             "lineWidth": 2,
@@ -426,11 +426,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Watch Schedule (12h history) \u2014 Green: Helm | Blue: Rest | Yellow: Transition",
@@ -481,11 +481,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "text": {},
         "textMode": "value_and_name"
@@ -493,11 +493,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "DENIS \u2014 Total watch time (race duration)",
@@ -548,11 +548,11 @@
         "justifyMode": "center",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
         "text": {},
         "textMode": "value_and_name"
@@ -560,11 +560,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "ANNE-SOPHIE \u2014 Total watch time (race duration)",
@@ -578,13 +578,13 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "palette-classic"
           },
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -628,11 +628,11 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "refId": "A"
         }
       ],
       "title": "Fatigue Index (6h rolling) \u2014 Based on boat performance degradation at helm",
@@ -647,9 +647,9 @@
         "defaults": {
           "custom": {
             "hideFrom": {
+              "legend": false,
               "tooltip": false,
-              "viz": false,
-              "legend": false
+              "viz": false
             }
           }
         },
@@ -688,6 +688,6 @@
   "timezone": "America/New_York",
   "title": "09 \u2014 CREW (Watch Management & Fatigue)",
   "uid": "crew-management",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }
