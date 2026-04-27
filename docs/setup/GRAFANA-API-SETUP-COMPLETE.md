@@ -171,7 +171,7 @@ INFLUX_ORG="MidnightRider"
 INFLUX_BUCKET="midnight_rider"
 
 GRAFANA_URL="http://localhost:3001"
-GRAFANA_ADMIN_PASSWORD="MotDePasse2026"
+GRAFANA_ADMIN_PASSWORD="${GRAFANA_ADMIN_PASSWORD}"
 
 GRAFANA_TOKEN="[unused — using Basic Auth instead]"
 ```
