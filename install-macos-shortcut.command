@@ -15,7 +15,10 @@ mkdir -p "$APP_DIR/Resources"
 # Create macOS launcher script
 cat > "$APP_DIR/MacOS/launcher" << 'EOF'
 #!/bin/bash
-open "http://localhost:3001/dashboard-portal.html"
+cd /home/aneto/.openclaw/workspace
+python3 -m http.server 8000 > /dev/null 2>&1 &
+sleep 1
+open "http://localhost:8000/dashboard-proxy.html"
 EOF
 chmod +x "$APP_DIR/MacOS/launcher"
 
