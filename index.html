@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midnight Rider — Dashboard Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #fff;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #a0aec0;
+        }
+
+        .dashboards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 255, 0.1));
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 12px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: inherit;
+        }
+
+        .dashboard-card:hover {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 255, 0.2));
+            border-color: rgba(0, 212, 255, 0.6);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+        }
+
+        .dashboard-icon {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-name {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #00d4ff;
+        }
+
+        .dashboard-desc {
+            font-size: 0.85em;
+            color: #a0aec0;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .dashboards-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⛵ MIDNIGHT RIDER</h1>
+            <p class="subtitle">Navigation System — Block Island Race 2026</p>
+        </header>
+
+        <div class="dashboards-grid">
+            <a href="viewer.html?dashboard=cockpit-main&name=COCKPIT" class="dashboard-card">
+                <div class="dashboard-icon">🏠</div>
+                <div class="dashboard-name">COCKPIT</div>
+                <div class="dashboard-desc">Main Navigation</div>
+            </a>
+
+            <a href="viewer.html?dashboard=environment-conditions&name=ENVIRONMENT" class="dashboard-card">
+                <div class="dashboard-icon">🌊</div>
+                <div class="dashboard-name">ENVIRONMENT</div>
+                <div class="dashboard-desc">Sea & Weather</div>
+            </a>
+
+            <a href="viewer.html?dashboard=performance-analysis&name=PERFORMANCE" class="dashboard-card">
+                <div class="dashboard-icon">⚡</div>
+                <div class="dashboard-name">PERFORMANCE</div>
+                <div class="dashboard-desc">Speed Analysis</div>
+            </a>
+
+            <a href="viewer.html?dashboard=wind-current-tactical&name=WIND" class="dashboard-card">
+                <div class="dashboard-icon">🌪️</div>
+                <div class="dashboard-name">WIND & CURRENT</div>
+                <div class="dashboard-desc">Tactical View</div>
+            </a>
+
+            <a href="viewer.html?dashboard=competitive-fleet&name=COMPETITIVE" class="dashboard-card">
+                <div class="dashboard-icon">🏆</div>
+                <div class="dashboard-name">COMPETITIVE</div>
+                <div class="dashboard-desc">Fleet Tracking</div>
+            </a>
+
+            <a href="viewer.html?dashboard=electrical-power&name=ELECTRICAL" class="dashboard-card">
+                <div class="dashboard-icon">🔋</div>
+                <div class="dashboard-name">ELECTRICAL</div>
+                <div class="dashboard-desc">Power Management</div>
+            </a>
+
+            <a href="viewer.html?dashboard=race-block-island&name=RACE" class="dashboard-card">
+                <div class="dashboard-icon">🏁</div>
+                <div class="dashboard-name">RACE</div>
+                <div class="dashboard-desc">Race Metrics</div>
+            </a>
+
+            <a href="viewer.html?dashboard=alerts-monitoring&name=ALERTS" class="dashboard-card">
+                <div class="dashboard-icon">🔔</div>
+                <div class="dashboard-name">ALERTS</div>
+                <div class="dashboard-desc">System Monitoring</div>
+            </a>
+
+            <a href="viewer.html?dashboard=crew-management&name=CREW" class="dashboard-card">
+                <div class="dashboard-icon">⚓</div>
+                <div class="dashboard-name">CREW</div>
+                <div class="dashboard-desc">Watch Management</div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
