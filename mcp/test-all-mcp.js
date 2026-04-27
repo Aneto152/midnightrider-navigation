@@ -9,7 +9,7 @@ const { spawn } = require('child_process');
 const path = require('path');
 
 // Configuration
-const INFLUX_TOKEN = process.env.INFLUX_TOKEN || '4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==';
+const INFLUX_TOKEN = process.env.INFLUX_TOKEN || '${INFLUX_TOKEN}';
 const INFLUX_ORG = 'MidnightRider';
 const INFLUX_BUCKET = 'signalk';
 

@@ -76,7 +76,7 @@ Cloud: Optional (token renewal when needed)
 
 Org: MidnightRider
 Bucket: signalk
-Token: 4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+Token: ${INFLUX_TOKEN}
 
 Data Retention:
   ├─ Local: 7-14 days (rotating)
@@ -93,7 +93,7 @@ Measurement Prefixes:
 
 ### 4. INTELLIGENCE LAYER (7 MCP Servers)
 
-**Location:** `/home/aneto/docker/signalk/mcp/`
+**Location:** `${PROJECT_ROOT}/docker/signalk/mcp/`
 
 Each server is a Node.js file that:
 1. Reads from InfluxDB
@@ -117,13 +117,13 @@ Each server is a Node.js file that:
 ### 5. DATA LOGGERS (Cron Jobs)
 
 ```
-*/5 * * * * /home/aneto/docker/signalk/scripts/weather-logger.sh
+*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/weather-logger.sh
   └─ Fetches Open-Meteo, logs to InfluxDB every 5 minutes
 
-*/5 * * * * /home/aneto/docker/signalk/scripts/buoy-logger.sh
+*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/buoy-logger.sh
   └─ Fetches NOAA buoy data, logs to InfluxDB every 5 minutes
 
-0 0 * * * /home/aneto/docker/signalk/scripts/init-astronomical-data.sh
+0 0 * * * ${PROJECT_ROOT}/docker/signalk/scripts/init-astronomical-data.sh
   └─ Calculates sun/moon/tides, logs to InfluxDB daily at midnight
 ```
 
@@ -163,7 +163,7 @@ docker ps | grep -E "influxdb|signalk|grafana"
 # grafana:3001 (Visualization, optional)
 
 # If missing, run docker-compose:
-cd /home/aneto/docker/signalk
+cd ${PROJECT_ROOT}/docker/signalk
 docker-compose up -d
 ```
 
@@ -182,14 +182,14 @@ influx query 'from(bucket:"signalk")
   |> filter(fn: (r) => r._measurement == "navigation")
   |> last()' \
   --org MidnightRider \
-  --token 4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+  --token ${INFLUX_TOKEN}
 ```
 
 ### STEP 3: Restore All MCP Servers
 
 ```bash
 # Clone or pull from GitHub
-cd /home/aneto/docker/signalk
+cd ${PROJECT_ROOT}/docker/signalk
 git pull origin main
 
 # Verify all server files exist
@@ -217,9 +217,9 @@ crontab -l
 # If missing, reinstall:
 crontab -e
 # Add these lines:
-*/5 * * * * /home/aneto/docker/signalk/scripts/weather-logger.sh >> /tmp/weather-logger.log 2>&1
-*/5 * * * * /home/aneto/docker/signalk/scripts/buoy-logger.sh >> /tmp/buoy-logger.log 2>&1
-0 0 * * * /home/aneto/docker/signalk/scripts/init-astronomical-data.sh >> /tmp/astronomical.log 2>&1
+*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/weather-logger.sh >> /tmp/weather-logger.log 2>&1
+*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/buoy-logger.sh >> /tmp/buoy-logger.log 2>&1
+0 0 * * * ${PROJECT_ROOT}/docker/signalk/scripts/init-astronomical-data.sh >> /tmp/astronomical.log 2>&1
 
 # Save and exit
 ```
@@ -228,12 +228,12 @@ crontab -e
 
 ```bash
 # Run test suite
-bash /home/aneto/docker/signalk/mcp/test-servers.sh
+bash ${PROJECT_ROOT}/docker/signalk/mcp/test-servers.sh
 
 # Expected: ✅ All 7 servers responsive
 
 # Run comprehensive test
-node /home/aneto/docker/signalk/mcp/test-all-mcp.js
+node ${PROJECT_ROOT}/docker/signalk/mcp/test-all-mcp.js
 ```
 
 ### STEP 6: Restore Claude Integration
@@ -259,64 +259,64 @@ nano ~/.config/Claude/claude_desktop_config.json
 {
   "mcpServers": {
     "astronomical": {
-      "command": "/home/aneto/docker/signalk/mcp/astronomical-server.js",
+      "command": "${PROJECT_ROOT}/docker/signalk/mcp/astronomical-server.js",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
         "INFLUX_ORG": "MidnightRider",
         "INFLUX_BUCKET": "signalk"
       }
     },
     "racing": {
-      "command": "/home/aneto/docker/signalk/mcp/racing-server.js",
+      "command": "${PROJECT_ROOT}/docker/signalk/mcp/racing-server.js",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
         "INFLUX_ORG": "MidnightRider",
         "INFLUX_BUCKET": "signalk"
       }
     },
     "polar": {
-      "command": "/home/aneto/docker/signalk/mcp/polar-server.js",
+      "command": "${PROJECT_ROOT}/docker/signalk/mcp/polar-server.js",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
         "INFLUX_ORG": "MidnightRider",
         "INFLUX_BUCKET": "signalk"
       }
     },
     "crew": {
-      "command": "/home/aneto/docker/signalk/mcp/crew-server.js",
+      "command": "${PROJECT_ROOT}/docker/signalk/mcp/crew-server.js",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
         "INFLUX_ORG": "MidnightRider",
         "INFLUX_BUCKET": "signalk"
       }
     },
     "race": {
-      "command": "/home/aneto/docker/signalk/mcp/race-server.js",
+      "command": "${PROJECT_ROOT}/docker/signalk/mcp/race-server.js",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
         "INFLUX_ORG": "MidnightRider",
         "INFLUX_BUCKET": "signalk"
       }
     },
     "weather": {
-      "command": "/home/aneto/docker/signalk/mcp/weather-server.js",
+      "command": "${PROJECT_ROOT}/docker/signalk/mcp/weather-server.js",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
         "INFLUX_ORG": "MidnightRider",
         "INFLUX_BUCKET": "signalk"
       }
     },
     "buoy": {
-      "command": "/home/aneto/docker/signalk/mcp/buoy-server.js",
+      "command": "${PROJECT_ROOT}/docker/signalk/mcp/buoy-server.js",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
         "INFLUX_ORG": "MidnightRider",
         "INFLUX_BUCKET": "signalk"
       }
@@ -358,7 +358,7 @@ git log --oneline | head -20  # See all commits
 ## FILE STRUCTURE (Complete Map)
 
 ```
-/home/aneto/docker/signalk/
+${PROJECT_ROOT}/docker/signalk/
 ├── docker-compose.yml              ← Start all containers
 ├── mcp/                            ← 7 MCP Servers + tests
 │   ├── astronomical-server.js      (4 tools)
@@ -403,8 +403,8 @@ git log --oneline | head -20  # See all commits
 ## MEMORY BACKUPS (In OpenClaw Workspace)
 
 **Primary Memory:**
-- `/home/aneto/.openclaw/workspace/MEMORY.md`
-- `/home/aneto/.openclaw/workspace/memory/2026-04-19-mcp-complete.md`
+- `${PROJECT_ROOT}/.openclaw/workspace/MEMORY.md`
+- `${PROJECT_ROOT}/.openclaw/workspace/memory/2026-04-19-mcp-complete.md`
 
 **Contains:**
 - Complete summary of what was built
@@ -421,7 +421,7 @@ git log --oneline | head -20  # See all commits
 
 ```bash
 # Recovery time: < 5 minutes
-cd /home/aneto/docker/signalk
+cd ${PROJECT_ROOT}/docker/signalk
 git pull origin main
 # All servers restored
 bash mcp/test-servers.sh  # Verify
@@ -496,12 +496,12 @@ https://github.com/Aneto152/midnightrider-navigation
 
 **InfluxDB Token (Local):**
 ```
-4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+${INFLUX_TOKEN}
 ```
 
 **Key Paths:**
-- Code: `/home/aneto/docker/signalk/`
-- Memory: `/home/aneto/.openclaw/workspace/`
+- Code: `${PROJECT_ROOT}/docker/signalk/`
+- Memory: `${PROJECT_ROOT}/.openclaw/workspace/`
 - Config: `~/.config/Claude/claude_desktop_config.json`
 
 **Cron Jobs (3):**

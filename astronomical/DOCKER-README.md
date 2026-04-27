@@ -115,7 +115,7 @@ astronomical:
     - LON=-73.5387
     - NOAA_STATION=8467150
     - INFLUX_URL=http://localhost:8086
-    - INFLUX_TOKEN=4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==
+    - INFLUX_TOKEN=${INFLUX_TOKEN}
     - INFLUX_ORG=MidnightRider
     - INFLUX_BUCKET=signalk
   depends_on:
@@ -196,7 +196,7 @@ docker run --rm --network host astronomical-cron /app/astronomical-data.sh
 After container runs, verify data in InfluxDB:
 
 ```bash
-export INFLUX_TOKEN="4g-_q9TA8SLTPsaZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA=="
+export INFLUX_TOKEN="${INFLUX_TOKEN}"
 export INFLUX_ORG="MidnightRider"
 
 influx query 'from(bucket:"signalk") 
