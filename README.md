@@ -1,5 +1,9 @@
 # Midnight Rider 🌊
 
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Made for J/30](https://img.shields.io/badge/Boat-J%2F30%20%23511-blue)
+![Block Island Race 2026](https://img.shields.io/badge/Race-Block%20Island%202026-red)
+
 > Open-source marine performance instrumentation system for sailing races.  
 > Built for a J/30 competing in the Block Island Race 2026.
 
