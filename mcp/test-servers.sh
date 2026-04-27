@@ -7,7 +7,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INFLUX_TOKEN=${INFLUX_TOKEN:-4g-_q9TA8SLTPsaAZZeG_yJvk05O6vUXygzcU9TAJot5YDJ1OdHxvzZGH1TzIxnhUaz9rXI7Tis7mTK7X2OrDDA==}
+INFLUX_TOKEN=${INFLUX_TOKEN:-your_influxdb_token_here}
 INFLUX_ORG=${INFLUX_ORG:-MidnightRider}
 INFLUX_BUCKET=${INFLUX_BUCKET:-signalk}
 
