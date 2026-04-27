@@ -1,0 +1,481 @@
+---
+# Midnight Rider — Alert Rules Phase 1
+# 18 alerts deployable now (SYSTEM, PERFORMANCE, WEATHER, RACING, CREW)
+# Generated: 2026-04-27 19:55 EDT
+# Target: Grafana Alerting v9+
+
+groups:
+  - name: "Midnight Rider — Phase 1 Alerts"
+    interval: 1m
+    rules:
+      
+      # ════════════════════════════════════════════════════════════
+      # SYSTEM HEALTH (9 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: sy_a1_signalk_down
+        title: Signal K Down
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.signalk_up == "0")
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 30s
+        annotations:
+          description: "Signal K API is not responding. Check systemctl status signalk"
+          runbook_url: "https://docs.openclaw.ai/signalk-troubleshooting"
+        labels:
+          severity: critical
+          category: SYSTEM
+          
+      - uid: sy_a2_influxdb_down
+        title: InfluxDB Down
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.influxdb_up == "0")
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 30s
+        annotations:
+          description: "InfluxDB is not responding. Data logging is blocked."
+          runbook_url: "https://docs.openclaw.ai/influxdb-troubleshooting"
+        labels:
+          severity: critical
+          category: SYSTEM
+          
+      - uid: sy_a3_grafana_down
+        title: Grafana Down
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.grafana_up == "0")
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 30s
+        annotations:
+          description: "Grafana is not responding. Dashboards are inaccessible."
+          runbook_url: "https://docs.openclaw.ai/grafana-troubleshooting"
+        labels:
+          severity: warning
+          category: SYSTEM
+          
+      - uid: sy_a4_internet_lost
+        title: Internet Lost
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.internet_up == "0")
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 120s
+        annotations:
+          description: "Internet connectivity lost. Check WiFi AP or cellular modem."
+          runbook_url: "https://docs.openclaw.ai/connectivity-troubleshooting"
+        labels:
+          severity: critical
+          category: SYSTEM
+          
+      - uid: sy_b1_cpu_temp_high
+        title: CPU Temperature Critical
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "environment.system.cpuTemperature" and r._value > 85)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 120s
+        annotations:
+          description: "RPi CPU temperature exceeded 85°C. Throttling may occur."
+          runbook_url: "https://docs.openclaw.ai/rpi-cooling"
+        labels:
+          severity: critical
+          category: SYSTEM
+          
+      - uid: sy_b2_cpu_load_high
+        title: High CPU Load
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.rpi_cpu_load > 90)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 300s
+        annotations:
+          description: "CPU load > 90%. Services may be slow or unresponsive."
+          runbook_url: "https://docs.openclaw.ai/rpi-performance"
+        labels:
+          severity: warning
+          category: SYSTEM
+          
+      - uid: sy_b3_memory_saturated
+        title: Memory Saturated
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.rpi_memory_used_pct > 95)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 300s
+        annotations:
+          description: "RAM usage > 95%. Consider restarting services or RPi."
+          runbook_url: "https://docs.openclaw.ai/rpi-memory"
+        labels:
+          severity: warning
+          category: SYSTEM
+          
+      - uid: sy_c01_gps_low_sats
+        title: GPS Low Satellite Count
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "navigation.gnss.satellites" and r._value < 4)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 60s
+        annotations:
+          description: "GPS satellite count < 4. Position accuracy degraded. Check antenna."
+          runbook_url: "https://docs.openclaw.ai/gps-troubleshooting"
+        labels:
+          severity: warning
+          category: SYSTEM
+          
+      - uid: sy_c03_imu_roll_missing
+        title: IMU Roll Data Missing
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "navigation.attitude.roll")
+              |> count()
+              |> map(fn:(r) => ({r with value: if r._value == 0 then 1 else 0}))
+        noDataState: Alerting
+        execErrState: Alerting
+        for: 10s
+        annotations:
+          description: "No roll data from WIT IMU in last 10s. Check BLE connection."
+          runbook_url: "https://docs.openclaw.ai/wit-ble-troubleshooting"
+        labels:
+          severity: critical
+          category: SYSTEM
+
+      # ════════════════════════════════════════════════════════════
+      # PERFORMANCE (2 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: pe_b1_critical_heel
+        title: Critical Heel Angle
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "navigation.attitude.roll" and r._value > 0.436)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 120s
+        annotations:
+          description: "Heel angle > 25° (0.436 rad). Risk of knockdown or rail immersion."
+          runbook_url: "https://docs.openclaw.ai/sail-trim"
+        labels:
+          severity: critical
+          category: PERFORMANCE
+
+      - uid: pe_b4_excessive_pitch
+        title: Excessive Pitch
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "navigation.attitude.pitch" and r._value > 0.262)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 60s
+        annotations:
+          description: "Pitch angle > 15° (0.262 rad). Adjust fore-aft trim or reduce sail."
+          runbook_url: "https://docs.openclaw.ai/trim-management"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      # ════════════════════════════════════════════════════════════
+      # WEATHER/SEA (1 alert)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: w_d1_shallow_water
+        title: Shallow Water Alert
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "environment.depth.belowKeel" and r._value < 4)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 10s
+        annotations:
+          description: "Water depth < 4 meters. Risk of grounding. Avoid shallow areas."
+          runbook_url: "https://docs.openclaw.ai/navigation-safety"
+        labels:
+          severity: critical
+          category: WEATHER
+
+      # ════════════════════════════════════════════════════════════
+      # RACING (4 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: r_a2_start_timer_5min
+        title: "Start Timer — 5 Minutes"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "regatta.timer" and r.seconds_to_start <= 300)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1s
+        annotations:
+          description: "⏰ 5 minutes to start. Begin pre-start maneuver."
+          runbook_url: ""
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_a2_start_timer_1min
+        title: "Start Timer — 1 Minute"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "regatta.timer" and r.seconds_to_start <= 60)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1s
+        annotations:
+          description: "⏰ 1 minute to start. Finalize crew positions."
+          runbook_url: ""
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_a2_start_timer_30s
+        title: "Start Timer — 30 Seconds"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "regatta.timer" and r.seconds_to_start <= 30)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1s
+        annotations:
+          description: "⏰ 30 seconds to start. All hands to stations."
+          runbook_url: ""
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_a2_start_timer_10s
+        title: "Start Timer — 10 Seconds"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "regatta.timer" and r.seconds_to_start <= 10)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1s
+        annotations:
+          description: "⏰ 10 seconds to start. Stand by for gun."
+          runbook_url: ""
+        labels:
+          severity: info
+          category: RACING
+
+      # ════════════════════════════════════════════════════════════
+      # CREW (2 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: cr_1_watch_elapsed
+        title: Watch Time Elapsed
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "regatta.helmsman" and r._value > 3600)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 300s
+        annotations:
+          description: "Helmsman watch duration > 1 hour. Consider changing watch."
+          runbook_url: ""
+        labels:
+          severity: warning
+          category: CREW
+
+      - uid: cr_2_watch_excessive
+        title: "Watch Excessive (>3h)"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "regatta.helmsman" and r._value > 10800)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 10800s
+        annotations:
+          description: "⚠️ Helmsman watch > 3 hours. Crew fatigue risk. CHANGE WATCH NOW."
+          runbook_url: ""
+        labels:
+          severity: critical
+          category: CREW
