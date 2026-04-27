@@ -12,7 +12,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -70,7 +70,7 @@
           "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           }
         }
       ],
@@ -80,7 +80,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -126,7 +126,7 @@
           "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           }
         }
       ],
@@ -136,7 +136,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -190,7 +190,7 @@
           "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           }
         }
       ],
@@ -200,7 +200,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -254,7 +254,7 @@
           "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           }
         }
       ],
@@ -264,7 +264,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -322,7 +322,7 @@
           "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           }
         }
       ],
@@ -332,7 +332,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -390,7 +390,7 @@
           "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           }
         }
       ],
@@ -400,7 +400,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {

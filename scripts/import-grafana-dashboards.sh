@@ -6,7 +6,7 @@
 
 source .env.local 2>/dev/null || true
 
-GRAFANA_PASS=${GRAFANA_PASSWORD:-admin}
+GRAFANA_PASS=${GRAFANA_PASSWORD:-}  # Vide si pas configuré
 GRAFANA_URL="http://localhost:3001"
 DASHBOARD_DIR="docs/grafana-dashboards"
 
@@ -79,13 +79,22 @@ except Exception as e:
     continue
   fi
 
-  # POST to Grafana API
-  response=$(curl -s -w "\n%{http_code}" \
-    -X POST \
-    -H "Content-Type: application/json" \
-    -u "admin:${GRAFANA_PASS}" \
-    -d "$payload" \
-    "${GRAFANA_URL}/api/dashboards/db")
+  # POST to Grafana API (use Bearer token if available)
+  if [ -n "${GRAFANA_TOKEN}" ]; then
+    response=$(curl -s -w "\n%{http_code}" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer ${GRAFANA_TOKEN}" \
+      -d "$payload" \
+      "${GRAFANA_URL}/api/dashboards/db")
+  else
+    response=$(curl -s -w "\n%{http_code}" \
+      -X POST \
+      -H "Content-Type: application/json" \
+      -u "admin:${GRAFANA_PASS}" \
+      -d "$payload" \
+      "${GRAFANA_URL}/api/dashboards/db")
+  fi
 
   http_code=$(echo "$response" | tail -1)
   
