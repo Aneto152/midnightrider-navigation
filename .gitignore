@@ -74,3 +74,4 @@ influxdb-backup-*
 docs/memory/CREDENTIALS.md
 docs/memory/SECRETS.json
 docs/memory/PRIVATE/
+.env.new
