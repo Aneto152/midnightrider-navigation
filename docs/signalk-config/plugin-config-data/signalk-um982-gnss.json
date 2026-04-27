@@ -1,0 +1,15 @@
+{
+  "configuration": {
+    "port": "/dev/ttyUSB0",
+    "baudRate": 115200,
+    "freqAttitude": 5,
+    "freqPosition": 1,
+    "antennaAxis": "port-starboard",
+    "reverseHeading": false,
+    "rollOffset": 0,
+    "pitchOffset": 0,
+    "reverseRoll": true,
+    "reversePitch": false
+  },
+  "enabled": true
+}

@@ -1,0 +1,21 @@
+{
+  "configuration": {
+    "bleAddress": "E9:10:DB:8B:CE:C7",
+    "bleName": "WT901BLE68",
+    "characteristicHandle": "0x0030",
+    "autoReconnect": true,
+    "updateRate": 100,
+    "filterAlpha": 0.05,
+    "enableAcceleration": true,
+    "enableRateOfTurn": true,
+    "rollOffset": 0,
+    "pitchOffset": 0,
+    "yawOffset": 0,
+    "accelXOffset": 0,
+    "accelYOffset": 0,
+    "accelZOffset": 0,
+    "gyroZOffset": 0,
+    "rateOfTurnZOffset": 0
+  },
+  "enabled": true
+}

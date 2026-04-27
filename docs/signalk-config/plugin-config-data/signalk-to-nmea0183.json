@@ -1,0 +1,63 @@
+{
+  "enabled": true,
+  "servers": {
+    "tcp": {
+      "enabled": true,
+      "port": 10110,
+      "address": "0.0.0.0"
+    },
+    "udp": {
+      "enabled": false
+    }
+  },
+  "convertToNMEA": [
+    "navigation.position",
+    "navigation.courseOverGround",
+    "navigation.speedOverGround",
+    "navigation.headingTrue",
+    "navigation.headingMagnetic",
+    "environment.wind.speedApparent",
+    "environment.wind.angleApparent",
+    "environment.depth.belowTransducer"
+  ],
+  "sentences": {
+    "RMC": {
+      "enabled": true,
+      "senderId": "GP",
+      "throttle": 1000
+    },
+    "GGA": {
+      "enabled": true,
+      "senderId": "GN",
+      "throttle": 1000
+    },
+    "GLL": {
+      "enabled": true,
+      "senderId": "GN",
+      "throttle": 1000
+    },
+    "VTG": {
+      "enabled": true,
+      "senderId": "GP",
+      "throttle": 1000
+    },
+    "HDT": {
+      "enabled": true,
+      "senderId": "GN",
+      "throttle": 1000
+    },
+    "MWV": {
+      "enabled": true,
+      "senderId": "WI",
+      "throttle": 1000
+    },
+    "VHW": {
+      "enabled": true,
+      "senderId": "GN",
+      "throttle": 1000
+    }
+  },
+  "excludeSources": [
+    "signalk-to-nmea0183"
+  ]
+}

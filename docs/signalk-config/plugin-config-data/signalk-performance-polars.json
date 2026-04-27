@@ -1,0 +1,8 @@
+{
+  "configuration": {
+    "enabled": true,
+    "debug": false,
+    "updateInterval": 1000
+  },
+  "enabled": true
+}

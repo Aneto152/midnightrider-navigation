@@ -1,0 +1,7 @@
+{
+  "configuration": {
+    "enabled": true,
+    "updateInterval": 10
+  },
+  "enabled": true
+}

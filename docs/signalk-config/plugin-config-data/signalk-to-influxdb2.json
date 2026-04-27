@@ -1,0 +1,16 @@
+{
+  "configuration": {
+    "outputDailyLog": false,
+    "influxes": [
+      {
+        "name": "MidnightRider",
+        "url": "http://localhost:8086",
+        "org": "MidnightRider",
+        "bucket": "midnight_rider",
+        "token": "${INFLUX_TOKEN}",
+        "writeInterval": 1
+      }
+    ]
+  },
+  "enabled": true
+}
