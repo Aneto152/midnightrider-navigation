@@ -1,224 +1,280 @@
-# Midnight Rider Navigation System — J/30
+# Midnight Rider 🌊
 
-**Status:** ✅ Production-ready for Block Island Race (May 22, 2026)
+> Open-source marine performance instrumentation system for sailing races.  
+> Built for a J/30 competing in the Block Island Race 2026.
+
+## What It Does
+
+**Midnight Rider** is a complete, self-contained navigation and race analytics system for sailboats:
+
+- **Real-time data collection** via Signal K (GNSS, IMU, instruments)
+- **Time-series storage** in InfluxDB
+- **Live dashboards** in Grafana (9 custom dashboards)
+- **AI race coaching** via Claude integration (MCP tools)
+- **WhatsApp race reporting** ("Media Man" agent for family & friends)
+- **Battery monitoring** for LiFePO4 via Bluetooth BLE
+- **Offline queue** with automatic reconnect
+
+Perfect for racing, cruising, or research.
 
 ---
 
 ## Quick Start
 
+### Prerequisites
+
+- Raspberry Pi 4 (or similar Linux host)
+- Docker & Docker Compose
+- Python 3.9+
+- Internet connection (for initial setup)
+
+### Installation
+
 ```bash
-cd /home/aneto/.openclaw/workspace
+# 1. Clone the repository
+git clone https://github.com/denislafarge/midnight-rider.git
+cd midnight-rider
 
-# 1. Ensure native InfluxDB is masked
-sudo systemctl status influxdb  # Should show "masked"
+# 2. Copy config template
+cp .env.example .env.local
+# Edit .env.local with your credentials
 
-# 2. Start Docker containers (InfluxDB + Grafana)
+# 3. Start services
 docker compose up -d influxdb grafana
 
-# 3. Verify
-docker compose ps
-curl http://localhost:8086/health      # Should return 200
-curl http://localhost:3001/api/health  # Should return 200
+# 4. Start Signal K (if native install)
+systemctl start signalk
 
-# 4. Check Signal K
-systemctl status signalk
-curl http://localhost:3000/signalk/v1/api
-
-# 5. Run diagnostic
-./check-system.sh --full
+# 5. Verify
+curl http://localhost:3001/api/health  # Grafana
+curl http://localhost:8086/health      # InfluxDB
+curl http://localhost:3000/signalk/v1/api  # Signal K
 ```
 
----
+### Access Dashboards
 
-## Architecture
-
-| Component | Type | Port | Status |
-|-----------|------|------|--------|
-| **Signal K v2.25** | systemd service | 3000 | ✅ Native |
-| **InfluxDB v2.8** | Docker container | 8086 | ✅ Containerized |
-| **Grafana v12.3.1** | Docker container | 3001 | ✅ Containerized |
-
-**Note:** Signal K runs as systemd. InfluxDB and Grafana run as Docker containers (NOT systemd).
+- **Grafana:** http://localhost:3001
+- **Signal K:** http://localhost:3000
+- **iPad:** http://<your-hostname>.local:8888 (via portal)
 
 ---
 
 ## Hardware
 
-- **Platform:** Raspberry Pi 4 (8GB RAM)
-- **GPS:** Unicore UM982 GNSS
-- **IMU:** WIT WT901BLECL (BLE)
-- **Anemometer:** Calypso UP10 (optional)
-- **NMEA 2000 Gateway:** YDNU-02
-- **MFD:** Vulcan 7 FS
+### Core System
 
-See: `docs/HARDWARE/` for datasheets
+| Component | Purpose | Notes |
+|-----------|---------|-------|
+| **Raspberry Pi 4** | Main computer | 8GB RAM recommended |
+| **Unicore UM982** | GNSS receiver | Dual-antenna, heading capable |
+| **WIT WT901BLECL** | Inertial measurement | Roll, pitch, yaw via BLE |
+| **SOK 12V 100Ah** | Battery | LiFePO4, BMS with BLE |
+
+### Optional Instruments
+
+- **Calypso UP10:** Wind (anemometer + vane)
+- **Loch:** Speed through water
+- **Barometer:** Pressure trends
+- **Sounder:** Water depth
 
 ---
 
 ## Software Stack
 
-### Plugins (Signal K)
-- `signalk-um982-gnss` — GPS heading + position
-- `signalk-wit-imu-ble` — Attitude (roll/pitch/yaw)
-- `signalk-wave-analyzer-v1.1` — Wave height from IMU
-- `signalk-sails-management-v2` — Jib/main recommendations
-- `signalk-performance-polars` — J/30 polars + VMG
+### Services
 
-### Data Storage
-- **InfluxDB** — Time-series database (Docker container)
-- **Grafana** — Visualization dashboards (Docker container)
+```
+Signal K (port 3000)
+    ↓
+InfluxDB (port 8086)
+    ↓
+Grafana (port 3001)
+    ↓
+9 Dashboards
+```
 
-### AI Coaching (MCP Servers)
-- Racing optimizer
-- Crew communication
-- Weather analysis
-- Buoy data
+### Architecture
 
-See: `docs/SOFTWARE/` for guides
+| Component | Type | Language | Role |
+|-----------|------|----------|------|
+| **Signal K** | Native systemd | Node.js | Data hub |
+| **InfluxDB** | Docker | Go | Time-series DB |
+| **Grafana** | Docker | Go | Visualization |
+| **Dashboard Portal** | HTML/JS | JavaScript | iPad UI |
+| **Media Man** | Python | Python 3 | WhatsApp reporter |
+| **MCP Tools** | Node.js | JavaScript | AI integration |
 
 ---
 
-## Startup Procedure
+## Dashboards (9 Total)
 
-### Before Leaving Dock (T-60 min)
+| # | Name | Refresh | Purpose |
+|----|------|---------|---------|
+| 1 | 🏠 COCKPIT | 5s | Main navigation |
+| 2 | 🌊 ENVIRONMENT | 30s | Sea & weather |
+| 3 | ⚡ PERFORMANCE | 5s | Speed & efficiency |
+| 4 | 🌪️ WIND & CURRENT | 10s | Tactical analysis |
+| 5 | 🏆 COMPETITIVE | 30s | Fleet tracking |
+| 6 | 🔋 ELECTRICAL | 30s | Power management |
+| 7 | 🏁 RACE | 5s | Race-specific metrics |
+| 8 | 🔔 ALERTS | 10s | System monitoring (65 alerts) |
+| 9 | ⚓ CREW | 30s | Watch management |
 
-```bash
-# 1. Stop native InfluxDB (should already be masked)
-sudo systemctl stop influxdb 2>/dev/null
+---
 
-# 2. Start Docker containers
-cd /home/aneto/.openclaw/workspace
-docker compose up -d influxdb grafana
+## Features
 
-# 3. Start Signal K (usually auto-starts)
-sudo systemctl start signalk
+### Live Navigation
 
-# 4. Wait for initialization (~30 sec)
-sleep 30
+- True heading (GNSS-based)
+- Speed over ground & through water
+- Course over ground
+- Roll, pitch, yaw attitude
+- Rate of turn
 
-# 5. Run diagnostics
-./check-system.sh --full
+### Race Analytics
 
-# Expected: GO FOR DEPLOYMENT (exit code 0 or 1)
-# If exit code 2, see TROUBLESHOOTING.md
-```
+- Velocity made good (VMG)
+- Performance vs. polar diagrams
+- Wind shifts and lulls
+- Crew watch rotation
+- Mark approach warnings
+- Start line analysis
 
-### Troubleshooting
+### Race Reporting
 
-See: `docs/OPERATIONS/TROUBLESHOOTING.md`
+**Media Man** — WhatsApp bot that sends live updates to a group:
 
-**If containers won't start:**
-```bash
-docker compose logs influxdb | tail -20
-docker compose logs grafana | tail -20
+- Position updates every 30 minutes
+- Wind alerts (gusts > threshold)
+- Speed records
+- Mark roundings
+- Finish notifications
 
-# Common issue: Native InfluxDB still running
-lsof -i :8086
-sudo systemctl stop influxdb
-sudo systemctl mask influxdb
-docker compose up -d influxdb
-```
+### Battery Monitoring (SOK BMS)
+
+- State of charge (SOC)
+- Cell voltages (imbalance detection)
+- Temperature
+- Current (charge/discharge)
+- Cycle count
+
+### Offline Mode
+
+- Message queue for WhatsApp updates
+- Auto-reconnect and drain
+- Persistent state (max 20 messages)
 
 ---
 
 ## Documentation
 
-- **`docs/ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md`** — Complete system architecture
-- **`docs/OPERATIONS/`** — Field test, race day, troubleshooting checklists
-- **`docs/HARDWARE/`** — Sensor datasheets and specs
-- **`docs/INTEGRATION/`** — Hardware-software integration guides
-- **`docs/SOFTWARE/`** — Signal K plugins, InfluxDB, Grafana setup
-- **`DOCKER-INFLUXDB-GRAFANA-STARTUP.md`** — Docker container management
-- **`MEMORY.md`** — Recent lessons and fixes
+Complete documentation in `/docs`:
+
+- **HARDWARE/** — Device datasheets and integration guides
+- **SOFTWARE/** — Signal K config, Grafana setup, plugin catalog
+- **OPERATIONS/** — Pre-race checklists, troubleshooting
+- **INTEGRATION/** — Hardware-specific integration procedures
+
+Start with: [`docs/INDEX.md`](docs/INDEX.md)
 
 ---
 
-## Key Files
+## Configuration
 
+### .env.local
+
+Copy `.env.example` to `.env.local` and fill in your values:
+
+```bash
+cp .env.example .env.local
+nano .env.local
 ```
-/home/aneto/.openclaw/workspace/
-├── docker-compose.yml          # InfluxDB + Grafana definition
-├── .env                         # Environment variables (token, etc.)
-├── check-system.sh              # Pre-race diagnostic script
-├── scripts/                     # Operational scripts
-├── docs/                        # Professional documentation
-├── mcp/                         # AI coaching servers
-└── regatta/                     # Race management tools
-```
+
+**Never commit `.env.local` to Git.** It's in `.gitignore` for security.
+
+Key variables:
+- **Grafana:** Admin user, password, token
+- **InfluxDB:** URL, org, bucket, token
+- **WhatsApp:** Twilio credentials, group IDs
+- **Race:** Boat name, skipper, race config
+
+See `.env.example` for full list.
 
 ---
 
-## Environment Variables
+## Development
 
-Create `.env` file (git-ignored):
+### Clone & Setup
 
 ```bash
-INFLUX_TOKEN=your_secure_token_here
-INFLUX_ORG=MidnightRider
-INFLUX_BUCKET=signalk
+git clone https://github.com/denislafarge/midnight-rider.git
+cd midnight-rider
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
-See: `SECURITY-TOKEN-DONE.md` for token management
+### Run Tests
+
+```bash
+pytest tests/
+```
+
+### Contributing
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines.
+
+**Security reminder:** Never commit credentials. Use `.env.local` (gitignored).
 
 ---
 
-## Testing
+## License
 
-**Before field test (May 19):**
-```bash
-./check-system.sh --full
-```
+[MIT License](LICENSE) — Denis LAFARGE, 2026
 
-**On race day (May 22):**
-```bash
-# T-60 min
-./check-system.sh --full
-
-# T-15 min
-./check-system.sh --quick
-```
-
----
-
-## Race Day Commands
-
-```bash
-# Start system (T-60)
-sudo systemctl stop influxdb
-docker compose up -d influxdb grafana
-
-# Enable race mode
-./race-mode.sh
-
-# Monitor during race
-./check-system.sh --watch
-
-# Export data after race
-./race-debrief.sh
-```
+Free to use, modify, and distribute.
 
 ---
 
 ## Support
 
-- **Troubleshooting:** See `docs/OPERATIONS/TROUBLESHOOTING.md`
-- **Field test:** See `docs/OPERATIONS/FIELD-TEST-CHECKLIST-2026-05-19.md`
-- **Race day:** See `docs/OPERATIONS/RACE-DAY-CHECKLIST-2026-05-22.md`
-- **Architecture:** See `docs/ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md`
+### Documentation
+
+- Full docs: `/docs`
+- Hardware setup: `/docs/HARDWARE`
+- Troubleshooting: `/docs/OPERATIONS/TROUBLESHOOTING.md`
+
+### Issues & Contributions
+
+- Found a bug? [Open an issue](https://github.com/denislafarge/midnight-rider/issues)
+- Have an idea? [Create a discussion](https://github.com/denislafarge/midnight-rider/discussions)
+- Want to contribute? See [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ---
 
-## Version
+## Acknowledgments
 
-- **v1.0** — 2026-04-25 — Production-ready for May 22 Block Island Race
-  - Docker containerized deployment
-  - 5 Signal K plugins
-  - 7 MCP AI servers
-  - Professional documentation suite
-  - Full diagnostics and troubleshooting guides
+- **OpenClaw** — AI agent framework (main session agent "OC")
+- **Signal K** — Open marine data standard
+- **Grafana & InfluxDB** — Open-source observability stack
+- **Twilio** — WhatsApp Business API
 
 ---
 
-**Status:** ✅ Ready for deployment  
-**Last Updated:** 2026-04-25 12:02 EDT  
-**For:** Denis Lafarge, J/30 Midnight Rider crew
+## Status
+
+| Component | Status | Notes |
+|-----------|--------|-------|
+| Core system | ✅ Production | Ready for racing |
+| Dashboards | ✅ Complete | 9 dashboards + 65 alerts |
+| iPad portal | ✅ Ready | Offline mode + auto-reconnect |
+| Battery monitor | ✅ Ready | SOK BMS via BLE |
+| Media Man | ✅ Ready | WhatsApp reporting |
+| Documentation | ✅ Complete | Full integration guides |
+
+**Next race:** Block Island Race 2026 (May 22)
+
+---
+
+**Built with ⛵ for sailors who care about data.**
