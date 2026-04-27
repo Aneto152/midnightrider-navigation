@@ -8,7 +8,7 @@ import weather_collector
 INFLUX_URL = "http://localhost:8086"
 INFLUX_TOKEN = os.getenv('INFLUX_TOKEN', '')
 INFLUX_ORG = "MidnightRider"
-INFLUX_BUCKET = "signalk"
+INFLUX_BUCKET = "midnight_rider"
 SIGNALK_URL = "http://localhost:3000"
 
 # Cache vent (TTL 5 min)
