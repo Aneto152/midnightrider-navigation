@@ -1,38 +1,76 @@
-# 🔒 Credentials & Secrets
-docs/memory/CREDENTIALS.md
-docs/memory/SECRETS.json
+# 🔒 Credentials & Config Locaux
 .env
 .env.local
-*.key
-*.pem
+.env.*.local
+.env.new
+*.secret
+secrets/
+config/local/
 
-# Logs
-*.log
+# 🚢 Données de Navigation (Privées)
+data/raw/
+data/logs/
 logs/
+*.log
 *.log.*
+offline_queue.json
+queue.json
+/var/lib/midnight-reporter/
 
-# Backups
-backup/
-*.backup
-*.bak
-influxdb-backup-*
+# 🐍 Python
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.coverage
 
-# Temporary files
-.DS_Store
-.tmp
-*.swp
-*~
+# 📦 Node.js
 node_modules/
+npm-debug.log
+yarn-error.log
 
-# Docker volumes (large, not needed in git)
-data/
-volumes/
+# 🐳 Docker Volumes (Locaux, trop gros)
+docker/volumes/
+influxdb-data/
+influxdb-config/
+grafana-data/
+grafana-config/
+signalk-data/
 
-# IDE
+# 🔧 IDE & Éditeurs
 .vscode/
 .idea/
 *.iml
-
-# OS
+*.swp
+*.swo
+*~
+.DS_Store
 Thumbs.db
+
+# 🗂️ Backups & Temporaires
+backup/
+*.backup
+*.bak
+.tmp/
+.cache/
+influxdb-backup-*
+
+# 🔗 System
 .openclaw/
+.git-rewrite/
+.git-filter/
+
+# 🎯 IDE PyCharm
+.pytest_cache/
+.mypy_cache/
+
+# 📝 Documentation Personnelle (optionnel)
+docs/memory/CREDENTIALS.md
+docs/memory/SECRETS.json
+docs/memory/PRIVATE/
