@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Midnight Rider Dashboard
+Comment=Navigation System Dashboard - Block Island Race 2026
+Exec=xdg-open http://localhost:3001/dashboard-portal.html
+Icon=/home/aneto/.openclaw/workspace/midnight-rider-icon.svg
+Terminal=false
+Categories=Utility;
+StartupNotify=true
+MimeType=text/html;application/xhtml+xml;
+Keywords=sailing;navigation;dashboard;grafana;
+X-GNOME-FullName=Midnight Rider Navigation Dashboard

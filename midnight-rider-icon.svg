@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <!-- Background circle -->
+  <circle cx="128" cy="128" r="125" fill="#1a1a2e" stroke="#00d4ff" stroke-width="3"/>
+  
+  <!-- Water waves -->
+  <path d="M 30 180 Q 50 170, 70 180 T 110 180 T 150 180 T 190 180 T 230 180" 
+        fill="none" stroke="#0099ff" stroke-width="2" opacity="0.6"/>
+  <path d="M 20 195 Q 40 185, 60 195 T 100 195 T 140 195 T 180 195 T 220 195" 
+        fill="none" stroke="#0099ff" stroke-width="2" opacity="0.4"/>
+  
+  <!-- Boat hull -->
+  <path d="M 80 160 L 176 160 L 190 200 L 66 200 Z" fill="#00d4ff" stroke="#00ffff" stroke-width="2"/>
+  
+  <!-- Mast -->
+  <line x1="128" y1="160" x2="128" y2="40" stroke="#00ffff" stroke-width="3"/>
+  
+  <!-- Main sail -->
+  <path d="M 128 50 L 128 150 L 175 140 Z" fill="rgba(0, 212, 255, 0.3)" stroke="#00d4ff" stroke-width="2"/>
+  
+  <!-- Jib sail -->
+  <path d="M 128 60 L 128 140 L 85 130 Z" fill="rgba(0, 153, 255, 0.4)" stroke="#0099ff" stroke-width="2"/>
+  
+  <!-- Star compass rose (top) -->
+  <circle cx="128" cy="20" r="8" fill="#00ffff"/>
+  <line x1="128" y1="12" x2="128" y2="4" stroke="#00ffff" stroke-width="1.5"/>
+  <line x1="128" y1="28" x2="128" y2="36" stroke="#00ffff" stroke-width="1.5"/>
+  <line x1="120" y1="20" x2="112" y2="20" stroke="#00ffff" stroke-width="1.5"/>
+  <line x1="136" y1="20" x2="144" y2="20" stroke="#00ffff" stroke-width="1.5"/>
+  
+  <!-- Racing flag -->
+  <rect x="135" y="35" width="25" height="15" fill="#ff6b6b" stroke="#ff0000" stroke-width="1"/>
+  <text x="147" y="46" font-size="10" font-weight="bold" fill="#fff" text-anchor="middle">MR</text>
+</svg>
