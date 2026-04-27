@@ -1,3 +1,6 @@
+⚠️ **SECURITY NOTE:** This guide uses placeholders (${INFLUX_TOKEN}, ${PROJECT_ROOT}).
+Fill in your actual values before executing commands.
+
 # 🔄 RECOVERY GUIDE — Complete Reconstruction Instructions
 
 **Purpose:** If the system crashes or needs to be rebuilt, this guide allows complete recovery of all MCP systems and logic.
