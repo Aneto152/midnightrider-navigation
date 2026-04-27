@@ -3,72 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Viewer</title>
+    <title>Dashboard</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #1a1a2e; overflow: hidden; }
+        
+        #loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: #1a1a2e;
-            overflow: hidden;
-        }
-
-        .top-bar {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 15px 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid rgba(0, 212, 255, 0.3);
-            height: 60px;
-            z-index: 100;
-        }
-
-        .dashboard-title {
-            color: #00d4ff;
-            font-size: 1.3em;
-            font-weight: 600;
-        }
-
-        .nav-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        button {
-            background: rgba(0, 212, 255, 0.2);
-            border: 1px solid rgba(0, 212, 255, 0.4);
-            color: #00d4ff;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background: rgba(0, 212, 255, 0.3);
-            border-color: rgba(0, 212, 255, 0.6);
-        }
-
-        iframe {
-            width: 100%;
-            height: calc(100vh - 60px);
-            border: none;
-            background: #1a1a2e;
-        }
-
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            justify-content: center;
+            flex-direction: column;
+            z-index: 1000;
             color: #a0aec0;
-            text-align: center;
         }
 
         .spinner {
@@ -78,7 +27,7 @@
             border-top: 4px solid #00d4ff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin-bottom: 20px;
         }
 
         @keyframes spin {
@@ -88,53 +37,24 @@
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <div class="dashboard-title" id="title">Loading...</div>
-        <div class="nav-buttons">
-            <button id="fullscreenBtn">⛶ Fullscreen</button>
-            <button id="homeBtn">⬅ Menu</button>
-        </div>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Loading dashboard...</p>
     </div>
 
-    <iframe id="dashboardFrame"></iframe>
-
     <script>
+        // Parse URL parameters
         const params = new URLSearchParams(window.location.search);
         const dashboard = params.get('dashboard') || 'cockpit-main';
         const name = params.get('name') || 'Dashboard';
 
-        // Update title
-        document.getElementById('title').textContent = `⛵ ${name}`;
-
-        // Build Grafana kiosk URL (no login needed in kiosk mode)
+        // Build direct Grafana URL (kiosk mode, no iframe needed)
         const grafanaUrl = `http://localhost:3001/d/${dashboard}?kiosk&refresh=5s`;
         
-        // Load dashboard
-        const frame = document.getElementById('dashboardFrame');
-        frame.src = grafanaUrl;
+        console.log('Redirecting to:', grafanaUrl);
 
-        // Home button
-        document.getElementById('homeBtn').addEventListener('click', () => {
-            window.location.href = 'index.html';
-        });
-
-        // Fullscreen toggle
-        document.getElementById('fullscreenBtn').addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => console.log(err.message));
-            } else {
-                document.exitFullscreen();
-            }
-        });
-
-        // F key for fullscreen
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'f' || e.key === 'F') {
-                document.getElementById('fullscreenBtn').click();
-            }
-        });
-
-        console.log('Dashboard loaded:', dashboard);
+        // Redirect directly to Grafana (no iframe)
+        window.location.href = grafanaUrl;
     </script>
 </body>
 </html>
