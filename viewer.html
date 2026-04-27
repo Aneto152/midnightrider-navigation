@@ -48,8 +48,11 @@
         const dashboard = params.get('dashboard') || 'cockpit-main';
         const name = params.get('name') || 'Dashboard';
 
+        // Get host from parameter (default to localhost)
+        const host = params.get('host') || 'localhost';
+        
         // Build direct Grafana URL (kiosk mode, no iframe needed)
-        const grafanaUrl = `http://localhost:3001/d/${dashboard}?kiosk&refresh=5s`;
+        const grafanaUrl = `http://${host}:3001/d/${dashboard}?kiosk&refresh=5s`;
         
         console.log('Redirecting to:', grafanaUrl);
 
