@@ -77,7 +77,9 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> last()",
+          "rawQuery": true
         }
       ],
       "title": "Speed Over Ground (SOG)",
@@ -147,7 +149,9 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.courseOverGroundTrue\") |> last()",
+          "rawQuery": true
         }
       ],
       "title": "Heading True",
@@ -212,7 +216,9 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.attitude.roll\") |> last()",
+          "rawQuery": true
         }
       ],
       "title": "Roll (Heel)",
@@ -277,7 +283,9 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.attitude.pitch\") |> last()",
+          "rawQuery": true
         }
       ],
       "title": "Pitch",
@@ -291,7 +299,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "fixed",
+            "fixedColor": "green"
           },
           "custom": {
             "axisCenteredZero": false,
@@ -366,7 +375,9 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> window(every:30s) |> mean()",
+          "rawQuery": true
         }
       ],
       "title": "Speed History (5 min)",
@@ -380,7 +391,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "fixed",
+            "fixedColor": "green"
           },
           "custom": {
             "axisCenteredZero": false,
@@ -454,7 +466,9 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement =~ /navigation.attitude/) |> window(every:30s) |> mean()",
+          "rawQuery": true
         }
       ],
       "title": "Attitude History (Roll/Pitch)",
@@ -468,7 +482,8 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "fixed",
+            "fixedColor": "green"
           },
           "custom": {
             "hideFrom": {
@@ -532,7 +547,9 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"environment.system.cpuTemperature\") |> last()",
+          "rawQuery": true
         }
       ],
       "title": "System Status \u2014 Sensors OK",
