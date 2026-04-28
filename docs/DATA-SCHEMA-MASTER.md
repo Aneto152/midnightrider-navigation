@@ -213,6 +213,11 @@ Basé sur audit direct du 28 avril 2026.
 | navigation.headingTrue | UM982 + WIT | radians | 1.741 | 1 Hz | ❓ À confirmer |
 | navigation.position.latitude | UM982 | degrés décimaux | 41.5425 | 1 Hz | ✅ |
 | navigation.position.longitude | UM982 | degrés décimaux | -71.4132 | 1 Hz | ✅ |
+
+> ⚠️ **Note InfluxDB :** `navigation.position` est stocké comme measurement unique
+> avec les fields `lat` et `lon` (voir Section 4). Les paths Signal K `.latitude` et
+> `.longitude` sont la vue applicative ; dans InfluxDB ils apparaissent comme fields
+> d'un même measurement.
 > ⚠️ **Note InfluxDB :** `navigation.position` est stocké comme measurement unique
 > avec les fields `lat` et `lon` (voir Section 4). Les paths Signal K `.latitude` et
 > `.longitude` sont la vue applicative ; dans InfluxDB ils apparaissent comme fields
@@ -439,6 +444,10 @@ Signal K :3000
 |---|---|---|---|---|---|
 | **SOK BMS LiFePO4** | ~5 mai 2026 | electrical.batteries.house.* | electrical.batteries.* | Hardware attendu + plugin Signal K | 🔴 Critique |
 | **Calypso ULTRASONIC** | TBD | environment.wind.*, navigation.attitude.*, environment.outside.temperature | Complément + backup B&G WS320. Fournit aussi pitch/roll/heading (masthead, 1Hz, moins précis que WIT). Seul capteur de température de l'air. | 🟡 Haute |
+
+> **Note Calypso :** Si connecté, `environment.outside.temperature` devient disponible
+> localement (masthead) — n'est plus dépendant de NOAA pour la température de l'air.
+> Attitude depuis le Calypso = complément du WIT (source "masthead" vs "hull").
 | **AIS Transponder** | TBD (regatta) | vessels.* | vessels.* | Maritime AIS | 🟡 Haute |
 | **Victron MPPT** | TBD | electrical.solar.* | electrical.solar.* | Solar panel monitoring | 🟢 Moyenne |
 
