@@ -78,10 +78,10 @@ Basé sur audit direct du 28 avril 2026.
 | navigation.acceleration.x | WIT | m/s² | -0.15 | 30 Hz | ✅ |
 | navigation.acceleration.y | WIT | m/s² | 0.22 | 30 Hz | ✅ |
 | navigation.acceleration.z | WIT | m/s² | 9.81 | 30 Hz | ✅ |
-| environment.wind.speedTrue | B&G WS320 | m/s | N/A (non connecté) | N/A | ⏳ Non connecté (B&G WS320) |
-| environment.wind.directionTrue | B&G WS320 | radians | N/A (non connecté) | N/A | ⏳ Non connecté (B&G WS320) |
-| environment.wind.speedApparent | B&G WS320 | m/s | N/A (non connecté) | N/A | ⏳ Non connecté (B&G WS320) |
-| environment.wind.angleApparent | B&G WS320 | radians | N/A (non connecté) | N/A | ⏳ Non connecté (B&G WS320) |
+| environment.wind.speedTrue | B&G WS320 | m/s | N/A | N/A | ⏳ Non connecté (B&G WS320) |
+| environment.wind.directionTrue | B&G WS320 | radians | N/A | N/A | ⏳ Non connecté (B&G WS320) |
+| environment.wind.speedApparent | B&G WS320 | m/s | N/A | N/A | ⏳ Non connecté (B&G WS320) |
+| environment.wind.angleApparent | B&G WS320 | radians | N/A | N/A | ⏳ Non connecté (B&G WS320) |
 | environment.system.cpuTemperature | RPi sysfs | Kelvin | 323.15 (50°C) | 5 s | ✅ |
 | environment.outside.temperature | NOAA API | Kelvin | N/A | 30 min | 🔨 À construire (NOAA API) |
 | environment.water.temperature | NOAA API | Kelvin | N/A | 30 min | 🔨 À construire (NOAA API) |
@@ -168,7 +168,7 @@ from(bucket: "midnight_rider")
 |---|---|---|---|---|---|---|---|
 | **Roll (gîte)** | ° | ±2° | ±15° | ±25° | ±30° | ±40° | J/30: max théorique ±90°; excès =risk |
 | **Pitch (assiette)** | ° | ±1° | ±5° | ±10° | ±15° | ±20° | Trim optimal: 0-2° |
-| **SOG** | kt | 0 | 3-6 | 5-8 | <0.5 kt pendant >30s | N/A | Dépend allure/vent; panne OK brève |
+| **SOG** | kt | 0 | 3-6 | 5-8 | <0.5 pendant >30s | N/A | Vitesse nulle brève acceptable en manœuvre |
 | **TWS (vent réel)** | kt | — | 8-20 | 10-25 | >30 | >40 | Limite J/30 ~35-40 kt |
 | **AWS (vent apparent)** | kt | — | 10-25 | 12-30 | >35 | >45 | |
 | **TWD (direction)** | ° | — | variable | variable | shift >20° en 5min | N/A | Mark approach sensible |
@@ -296,6 +296,7 @@ influx query 'from(bucket:"midnight_rider")
 | Date | Auteur | Changement | Sections affectées |
 |---|---|---|---|
 | 2026-04-28 | OC + Denis | Document initial | Toutes |
+| 2026-04-28 | OC + Denis | Clarification statuts, NOAA → À construire, corrections audit | 2, 3, 6, 9, 9b |
 | 2026-04-28 v2 | OC | Clarifier statuts (⏳/🔨/❓/❌), ajouter NOAA API section | 1-9 |
 | TBD (mai 2026) | OC | Ajout SOK BMS data | 2, 3, 4, 6 |
 | TBD (mai 2026) | OC | Affinage seuils post-field-test | Section 6 |
