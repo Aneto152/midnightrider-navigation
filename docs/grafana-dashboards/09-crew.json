@@ -258,7 +258,19 @@
           },
           "unit": "knots"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -326,7 +338,19 @@
           },
           "unit": "knots"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -603,7 +627,19 @@
           },
           "unit": "%"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,

@@ -48,7 +48,31 @@
           },
           "unit": "kn"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "navigation.speedOverGround"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -114,7 +138,31 @@
           },
           "unit": "degree"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "navigation.courseOverGroundTrue"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -187,7 +235,31 @@
           },
           "unit": "degree"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "navigation.attitude.roll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -254,7 +326,31 @@
           },
           "unit": "degree"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "navigation.attitude.pitch"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -344,7 +440,31 @@
           },
           "unit": "kn"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "navigation.speedOverGround"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -436,7 +556,19 @@
           },
           "unit": "degree"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,

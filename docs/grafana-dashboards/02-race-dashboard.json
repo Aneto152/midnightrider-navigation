@@ -50,7 +50,19 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -120,7 +132,19 @@
             ]
           }
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,

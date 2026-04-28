@@ -43,7 +43,19 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -129,7 +141,19 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -185,7 +209,19 @@
           },
           "unit": "knot"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -271,7 +307,19 @@
           },
           "unit": "knot"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,
@@ -326,7 +374,19 @@
           },
           "unit": "short"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 8,

@@ -43,7 +43,19 @@
           },
           "unit": "kn"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -99,7 +111,19 @@
           },
           "unit": "\u00b0"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -167,7 +191,19 @@
           },
           "unit": "kn"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -223,7 +259,19 @@
           },
           "unit": "\u00b0"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 4,
@@ -290,7 +338,19 @@
           },
           "unit": "\u00b0"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,
@@ -357,7 +417,19 @@
           },
           "unit": "kn"
         },
-        "overrides": []
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byAll"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              }
+            ]
+          }
+        ]
       },
       "gridPos": {
         "h": 6,
