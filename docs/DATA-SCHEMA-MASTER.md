@@ -49,7 +49,7 @@
 | 2 | WIT WT901BLECL IMU | Accéléromètre/gyro | BLE JSON | 30 Hz | Roll, pitch, yaw, accél, temp | ✅ Actif |
 | 3 | B&G WS320 | Anémomètre mécanique | NMEA 2000 | 1 Hz | TWS, TWD, AWA, AWS | ⏳ Non connecté |
 | 4 | Système RPi 4 | CPU, mémoire, temp | Signal K internal | 5 s | CPU temp, load, storage | ✅ Actif |
-| 5 | NOAA Buoys & NDBC | Météo côtière | HTTP API | 30 min | Vent réel, pression, temp eau | 🔨 À construire |
+| 5 | NOAA NDBC | Météo côtière (buoys LIS) | HTTP API | 30 min | Vent, pression, temp eau | 🔨 À construire |
 | 6 | Open-Meteo | Prévisions météo | HTTP API | 6h (scheduler) | Vent prévu, pression, gust | ✅ Actif |
 | 7 | Regatta Server | Timer, équipage | HTTP local :5000 | Event-driven | Timer départ, watch crew, scoring | ✅ Actif |
 | 8 | SOK BMS LiFePO4 | Batterie maison | BLE (BMS protocol) | 1 Hz | Voltage, current, SOC, temp cell | ⏳ Non connecté (~5 mai) |
@@ -64,7 +64,7 @@ Basé sur audit direct du 28 avril 2026.
 |---|---|---|---|---|---|
 | navigation.speedOverGround | UM982 | m/s | 3.2 | 1 Hz | ✅ |
 | navigation.courseOverGroundTrue | UM982 | radians | 2.2096 | 1 Hz | ✅ |
-| navigation.headingTrue | UM982 + WIT hybrid | radians | 1.741 | 1 Hz | ❓ À confirmer |
+| navigation.headingTrue | UM982 + WIT | radians | 1.741 | 1 Hz | ❓ À confirmer |
 | navigation.position.latitude | UM982 | degrés décimaux | 41.5425 | 1 Hz | ✅ |
 | navigation.position.longitude | UM982 | degrés décimaux | -71.4132 | 1 Hz | ✅ |
 | navigation.attitude.roll | WIT WT901BLECL | radians | -0.00518 | 30 Hz | ✅ |
@@ -72,17 +72,20 @@ Basé sur audit direct du 28 avril 2026.
 | navigation.attitude.yaw | WIT WT901BLECL | radians | -0.03445 | 30 Hz | ✅ |
 | navigation.speedThroughWater | N/A | m/s | N/A | N/A | ❌ Absent |
 | navigation.rateOfTurn | WIT calc | rad/s | ~0.01 | 30 Hz | ✅ |
+| navigation.gnss.satellites | UM982 | count | 12 | 1 Hz | ✅ |
+| navigation.gnss.type | UM982 | string | "RTK Float" | 1 Hz | ✅ |
+
 | navigation.acceleration.x | WIT | m/s² | -0.15 | 30 Hz | ✅ |
 | navigation.acceleration.y | WIT | m/s² | 0.22 | 30 Hz | ✅ |
 | navigation.acceleration.z | WIT | m/s² | 9.81 | 30 Hz | ✅ |
-| environment.wind.speedTrue | B&G WS320 | m/s | N/A (non connecté) | N/A | ⏳ Non connecté |
-| environment.wind.directionTrue | B&G WS320 | radians | N/A (non connecté) | N/A | ⏳ Non connecté |
-| environment.wind.speedApparent | B&G WS320 | m/s | N/A (non connecté) | N/A | ⏳ Non connecté |
-| environment.wind.angleApparent | B&G WS320 | radians | N/A (non connecté) | N/A | ⏳ Non connecté |
+| environment.wind.speedTrue | B&G WS320 | m/s | N/A (non connecté) | N/A | ⏳ Non connecté (B&G WS320) |
+| environment.wind.directionTrue | B&G WS320 | radians | N/A (non connecté) | N/A | ⏳ Non connecté (B&G WS320) |
+| environment.wind.speedApparent | B&G WS320 | m/s | N/A (non connecté) | N/A | ⏳ Non connecté (B&G WS320) |
+| environment.wind.angleApparent | B&G WS320 | radians | N/A (non connecté) | N/A | ⏳ Non connecté (B&G WS320) |
 | environment.system.cpuTemperature | RPi sysfs | Kelvin | 323.15 (50°C) | 5 s | ✅ |
-| environment.outside.temperature | NOAA API (future) | Kelvin | N/A | 30 min | 🔨 À construire |
-| environment.water.temperature | NOAA API (future) | Kelvin | N/A | 30 min | 🔨 À construire |
-| environment.outside.pressure | NOAA API (future) | Pa | N/A | 30 min | 🔨 À construire |
+| environment.outside.temperature | NOAA API | Kelvin | N/A | 30 min | 🔨 À construire (NOAA API) |
+| environment.water.temperature | NOAA API | Kelvin | N/A | 30 min | 🔨 À construire (NOAA API) |
+| environment.outside.pressure | NOAA API | Pa | N/A | 30 min | 🔨 À construire (NOAA API) |
 | electrical.batteries.house.voltage | SOK BMS (future) | V | N/A | 1 Hz | ⏳ Non connecté |
 | electrical.batteries.house.current | SOK BMS (future) | A | N/A | 1 Hz | ⏳ Non connecté |
 | electrical.batteries.house.stateOfCharge | SOK BMS (future) | ratio 0-1 | N/A | 1 Hz | ⏳ Non connecté |
@@ -165,7 +168,7 @@ from(bucket: "midnight_rider")
 |---|---|---|---|---|---|---|---|
 | **Roll (gîte)** | ° | ±2° | ±15° | ±25° | ±30° | ±40° | J/30: max théorique ±90°; excès =risk |
 | **Pitch (assiette)** | ° | ±1° | ±5° | ±10° | ±15° | ±20° | Trim optimal: 0-2° |
-| **SOG** | kt | 0 | 3-6 | 5-8 | <1 (panne ?) | N/A | Dépend allure/vent/courant |
+| **SOG** | kt | 0 | 3-6 | 5-8 | <0.5 kt pendant >30s | N/A | Dépend allure/vent; panne OK brève |
 | **TWS (vent réel)** | kt | — | 8-20 | 10-25 | >30 | >40 | Limite J/30 ~35-40 kt |
 | **AWS (vent apparent)** | kt | — | 10-25 | 12-30 | >35 | >45 | |
 | **TWD (direction)** | ° | — | variable | variable | shift >20° en 5min | N/A | Mark approach sensible |
@@ -238,7 +241,6 @@ from(bucket: "midnight_rider")
 | **Calypso ULTRASONIC** | TBD | environment.wind.* | environment.wind.* | Replaces B&G WS320 | 🟡 Haute |
 | **AIS Transponder** | TBD (regatta) | vessels.* | vessels.* | Maritime AIS | 🟡 Haute |
 | **Victron MPPT** | TBD | electrical.solar.* | electrical.solar.* | Solar panel monitoring | 🟢 Moyenne |
-| **FLIR Thermal** | Post-race | environment.thermal.* | environment.thermal.* | Deck camera | 🟢 Basse |
 
 ---
 
