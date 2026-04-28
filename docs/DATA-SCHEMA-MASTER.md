@@ -31,9 +31,8 @@
 │ SIGNAL K :3000                                              │
 │ + UM982 (USB) · WIT BLE · Calypso BLE · RPi sys            │
 │ + Regatta Server :5000 · qtVLM TCP :10111                  │
-│                                                             │
-│ Calibration → réinjection NMEA 2000 (heading, vent, STW)   │
-│ Fusion multi-sources (priorité + tags source InfluxDB)     │
+│ Calibration → réinjection NMEA 2000                         │
+│ Fusion multi-sources (tags source InfluxDB)                 │
 └────────┬─────────────────┬──────────────┬───────────────────┘
          │                 │              │
          ▼                 ▼              ▼
@@ -41,14 +40,13 @@
     midnight_rider     NMEA 0183 TCP données calibrées
          │
          ▼
-    Grafana :3001
-    9 dashboards · 65 alertes
+    Grafana :3001 — 9 dashboards · 65 alertes
          │
          ▼
     MCP (7 serveurs · 37 outils)
          │
          ▼
-OC / Claude → WhatsApp → Denis & Anne-Sophie
+    OC / Claude → WhatsApp → Denis & Anne-Sophie
 ```
 
 ---
