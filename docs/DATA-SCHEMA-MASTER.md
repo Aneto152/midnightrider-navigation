@@ -21,33 +21,31 @@
 ## 1. Architecture globale du flux de données
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│ RÉSEAU NMEA 2000 (bus CAN)                              │
-│ B&G WS320 · Vulcan GPS · Loch · Baromètre · AIS        │
-└──────────────────────┬──────────────────────────────────┘
-                       │ YDNU-02 (bidirectionnel)
+┌─────────────────────────────────────────────────────────────┐
+│ RÉSEAU NMEA 2000 (bus CAN)                                  │
+│ B&G WS320 · B&G Vulcan GPS · Loch · Baro · AIS             │
+└──────────────────────┬──────────────────────────────────────┘
+                       │ YDNU-02 (bidirectionnel NMEA 2000 ↔ USB)
                        ▼
-┌──────────────────────────────────────────────────────────┐
-│ SIGNAL K :3000                                           │
-│ + UM982 (USB) · WIT (BLE) · RPi sys · Regatta :5000     │
-│                                                          │
-│ Calibration → données recalibrées réinjectées NMEA 2000│
-│ Fusion multi-sources (priorité + tags source)           │
-└────────┬──────────────┬──────────────────┬─────────────┘
-         │              │                  │
-         ▼              ▼                  ▼
-    InfluxDB :8086   qtVLM :10110    NMEA 2000 (retour)
-    bucket:          (NMEA 0183 TCP)  (données calibrées)
-    midnight_rider   ◄─────────────
-                     qtVLM :10111
-                     (NMEA 0183 TCP)
+┌─────────────────────────────────────────────────────────────┐
+│ SIGNAL K :3000                                              │
+│ + UM982 (USB) · WIT BLE · Calypso BLE · RPi sys            │
+│ + Regatta Server :5000 · qtVLM TCP :10111                  │
+│                                                             │
+│ Calibration → réinjection NMEA 2000 (heading, vent, STW)   │
+│ Fusion multi-sources (priorité + tags source InfluxDB)     │
+└────────┬─────────────────┬──────────────┬───────────────────┘
+         │                 │              │
+         ▼                 ▼              ▼
+    InfluxDB :8086     qtVLM :10110  NMEA 2000 (retour)
+    midnight_rider     NMEA 0183 TCP données calibrées
          │
          ▼
     Grafana :3001
-    9 dashboards
+    9 dashboards · 65 alertes
          │
          ▼
-    MCP (7 serveurs)
+    MCP (7 serveurs · 37 outils)
          │
          ▼
 OC / Claude → WhatsApp → Denis & Anne-Sophie
@@ -335,15 +333,15 @@ from(bucket: "midnight_rider")
 
 | Dashboard | Measurements consommés | Refresh | Panels | Status |
 |---|---|---|---|---|
-| 🏠 **COCKPIT** (ID: 8) | navigation.speed*, heading*, attitude.*, course* | 5s | 28 | ✅ Actif |
-| 🌊 **ENVIRONMENT** (ID: 10) | environment.wind.*, outside.*, water.*, system.cpu* | 30s | 20 | ⏳ Non connecté (B&G WS320) |
-| ⚡ **PERFORMANCE** (ID: 13) | navigation.speed*, polar, VMG | 5s | 20 | ⏳ À vérifier |
-| 🌪️ **WIND & CURRENT** (ID: 15) | environment.wind.*, navigation.current* | 10s | 20 | ⏳ À vérifier |
-| 🏆 **COMPETITIVE** (ID: 16) | AIS, fleet, distance, performance | 30s | 20 | ⏳ À vérifier |
-| 🔋 **ELECTRICAL** (ID: 17) | electrical.batteries.*, solar.* | 30s | 20 | ⏳ Non connecté (SOK BMS) |
-| 🏁 **RACE** (ID: 18) | navigation.*, regatta.timer, current* | 5s | 20 | ⏳ À vérifier |
-| 🔔 **ALERTS** (ID: 19) | tous (event-based) | 10s | 17 | ⏳ À vérifier |
-| ⚓ **CREW** (ID: 20) | regatta.crew, navigation.speed*, timer | 30s | 31 | ⏳ À vérifier |
+| 🏠 **COCKPIT** (ID: 8) | navigation.speed*, heading*, attitude.*, course* | 5s | 8 | ✅ Actif |
+| 🌊 **ENVIRONMENT** (ID: 10) | environment.wind.*, outside.*, water.*, system.cpu* | 30s | 7 | ⏳ Non connecté (B&G WS320) |
+| ⚡ **PERFORMANCE** (ID: 13) | navigation.speed*, polar, VMG | 5s | 7 | ⏳ À vérifier |
+| 🌪️ **WIND & CURRENT** (ID: 15) | environment.wind.*, navigation.current* | 10s | 7 | ⏳ À vérifier |
+| 🏆 **COMPETITIVE** (ID: 16) | AIS, fleet, distance, performance | 30s | 7 | ⏳ À vérifier |
+| 🔋 **ELECTRICAL** (ID: 17) | electrical.batteries.*, solar.* | 30s | 7 | ⏳ Non connecté (SOK BMS) |
+| 🏁 **RACE** (ID: 18) | navigation.*, regatta.timer, current* | 5s | 7 | ⏳ À vérifier |
+| 🔔 **ALERTS** (ID: 19) | tous (event-based) | 10s | 2 | ⏳ À vérifier |
+| ⚓ **CREW** (ID: 20) | regatta.crew, navigation.speed*, timer | 30s | 10 | ⏳ À vérifier |
 
 ---
 
@@ -503,6 +501,7 @@ influx query 'from(bucket:"midnight_rider")
 | 2026-04-28 | OC + Denis | Document initial | Toutes |
 | 2026-04-28 | OC + Denis | Clarification statuts, NOAA → À construire, corrections audit | 2, 3, 6, 9, 9b |
 | 2026-04-28 v2 | OC | Clarifier statuts (⏳/🔨/❓/❌), ajouter NOAA API section | 1-9 |
+| 2026-04-28 v3 | OC + Denis | Architecture NMEA 2000, YDNU-02 interface, multi-sources, Vulcan, qtVLM, calibration | 1, 2, 2b, 2c, 2d, 8b, 9b |
 | TBD (mai 2026) | OC | Ajout SOK BMS data | 2, 3, 4, 6 |
 | TBD (mai 2026) | OC | Affinage seuils post-field-test | Section 6 |
 | TBD (juin 2026) | Denis | Post-mortem course | Toutes |
