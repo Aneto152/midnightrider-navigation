@@ -71,6 +71,25 @@
                 "value": "knots"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
           }
         ]
       },
@@ -101,7 +120,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> last()",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
           "rawQuery": true,
           "refId": "A"
         }
@@ -161,6 +180,25 @@
                 "value": "degree"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
           }
         ]
       },
@@ -197,7 +235,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.courseOverGroundTrue\") |> last()",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.courseOverGroundTrue\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
           "rawQuery": true,
           "refId": "A"
         }
@@ -258,6 +296,25 @@
                 "value": "degree"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
           }
         ]
       },
@@ -288,7 +345,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.attitude.roll\") |> last()",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.attitude.roll\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
           "rawQuery": true,
           "refId": "A"
         }
@@ -349,6 +406,25 @@
                 "value": "degree"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "degree"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
           }
         ]
       },
@@ -379,7 +455,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.attitude.pitch\") |> last()",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.attitude.pitch\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
           "rawQuery": true,
           "refId": "A"
         }
@@ -463,6 +539,25 @@
                 "value": "knots"
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "knots"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
+              }
+            ]
           }
         ]
       },
@@ -495,7 +590,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> window(every:30s) |> mean()",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> window(every:30s) |> mean()\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
           "rawQuery": true,
           "refId": "A"
         }
@@ -598,7 +693,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement =~ /navigation.attitude/) |> window(every:30s) |> mean()",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement =~ /navigation.attitude/) |> window(every:30s) |> mean()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958}))",
           "rawQuery": true,
           "refId": "A"
         }
