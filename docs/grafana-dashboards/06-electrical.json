@@ -171,19 +171,7 @@
           },
           "unit": "A"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byAll"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "knots"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 4,
@@ -247,19 +235,7 @@
           },
           "unit": "\u00b0C"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byAll"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "celsius"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 4,

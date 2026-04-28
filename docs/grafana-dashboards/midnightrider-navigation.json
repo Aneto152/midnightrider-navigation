@@ -60,7 +60,8 @@
         "defaults": {
           "decimals": 1,
           "unit": "knot"
-        }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,
@@ -101,7 +102,8 @@
         "defaults": {
           "decimals": 0,
           "unit": "degree"
-        }
+        },
+        "overrides": []
       },
       "gridPos": {
         "h": 3,

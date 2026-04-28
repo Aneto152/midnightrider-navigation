@@ -82,17 +82,6 @@
           },
           {
             "matcher": {
-              "id": "byAll"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "knots"
-              }
-            ]
-          },
-          {
-            "matcher": {
               "id": "byName"
             },
             "properties": [
@@ -208,17 +197,6 @@
             "matcher": {
               "id": "byName",
               "options": "navigation.courseOverGroundTrue"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "degree"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byAll"
             },
             "properties": [
               {
@@ -363,17 +341,6 @@
           },
           {
             "matcher": {
-              "id": "byAll"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "degree"
-              }
-            ]
-          },
-          {
-            "matcher": {
               "id": "byName"
             },
             "properties": [
@@ -497,17 +464,6 @@
             "matcher": {
               "id": "byName",
               "options": "navigation.attitude.pitch"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "degree"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byAll"
             },
             "properties": [
               {
@@ -656,17 +612,6 @@
           },
           {
             "matcher": {
-              "id": "byAll"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "knots"
-              }
-            ]
-          },
-          {
-            "matcher": {
               "id": "byName"
             },
             "properties": [
@@ -779,19 +724,7 @@
           "unit": "degrees",
           "decimals": 1
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byAll"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "degree"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 6,

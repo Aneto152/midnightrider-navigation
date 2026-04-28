@@ -46,12 +46,20 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byAll"
+              "id": "byName"
             },
             "properties": [
               {
                 "id": "unit",
                 "value": "degree"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
               }
             ]
           }
@@ -84,7 +92,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> last()",
+          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
           "refId": "A"
         }
       ],
@@ -144,12 +152,20 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byAll"
+              "id": "byName"
             },
             "properties": [
               {
                 "id": "unit",
                 "value": "degree"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
               }
             ]
           }
@@ -180,7 +196,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> aggregateWindow(every: 10s, fn: mean)",
+          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> aggregateWindow(every: 10s, fn: mean)\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
           "refId": "A"
         }
       ],
@@ -212,12 +228,20 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byAll"
+              "id": "byName"
             },
             "properties": [
               {
                 "id": "unit",
                 "value": "knots"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
               }
             ]
           }
@@ -250,7 +274,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 1.94384}))",
+          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
           "refId": "A"
         }
       ],
@@ -310,12 +334,20 @@
         "overrides": [
           {
             "matcher": {
-              "id": "byAll"
+              "id": "byName"
             },
             "properties": [
               {
                 "id": "unit",
                 "value": "knots"
+              },
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": false,
+                  "tooltip": false,
+                  "viz": false
+                }
               }
             ]
           }
@@ -346,7 +378,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> map(fn: (r) => ({r with _value: r._value * 1.94384})) |> aggregateWindow(every: 10s, fn: mean)",
+          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> map(fn: (r) => ({r with _value: r._value * 1.94384})) |> aggregateWindow(every: 10s, fn: mean)\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
           "refId": "A"
         }
       ],
@@ -374,19 +406,7 @@
           },
           "unit": "short"
         },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byAll"
-            },
-            "properties": [
-              {
-                "id": "unit",
-                "value": "degree"
-              }
-            ]
-          }
-        ]
+        "overrides": []
       },
       "gridPos": {
         "h": 8,
