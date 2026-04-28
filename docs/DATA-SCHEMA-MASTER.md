@@ -21,27 +21,70 @@
 ## 1. Architecture globale du flux de données
 
 ```
-[Instruments physiques]
-│ NMEA 2000 / BLE / USB
-▼
-[Signal K] :3000 ──── normalisation, routing, unités SI
-│ signalk-to-influxdb2 plugin (1s interval)
-▼
-[InfluxDB] :8086 ──── time-series, bucket: midnight_rider
-│ Flux queries + conversions
-▼
-[Grafana] :3001 ──── dashboards (9), alertes (69)
-│ MCP tools (7 serveurs, 37 outils)
-▼
-[OC / Claude] ──── intelligence, analyse, coaching
-│ Twilio WhatsApp / Telegram
-▼
-[Denis & Anne-Sophie] ──── Helmsman & Navigator
+┌─────────────────────────────────────────────────────────┐
+│ RÉSEAU NMEA 2000 (bus CAN)                              │
+│ B&G WS320 · Vulcan GPS · Loch · Baromètre · AIS        │
+└──────────────────────┬──────────────────────────────────┘
+                       │ YDNU-02 (bidirectionnel)
+                       ▼
+┌──────────────────────────────────────────────────────────┐
+│ SIGNAL K :3000                                           │
+│ + UM982 (USB) · WIT (BLE) · RPi sys · Regatta :5000     │
+│                                                          │
+│ Calibration → données recalibrées réinjectées NMEA 2000│
+│ Fusion multi-sources (priorité + tags source)           │
+└────────┬──────────────┬──────────────────┬─────────────┘
+         │              │                  │
+         ▼              ▼                  ▼
+    InfluxDB :8086   qtVLM :10110    NMEA 2000 (retour)
+    bucket:          (NMEA 0183 TCP)  (données calibrées)
+    midnight_rider   ◄─────────────
+                     qtVLM :10111
+                     (NMEA 0183 TCP)
+         │
+         ▼
+    Grafana :3001
+    9 dashboards
+         │
+         ▼
+    MCP (7 serveurs)
+         │
+         ▼
+OC / Claude → WhatsApp → Denis & Anne-Sophie
 ```
 
 ---
 
 ## 2. Catalogue des sources de données
+
+### Architecture des connexions capteurs
+
+**Réseau NMEA 2000 (via Yacht Devices YDNU-02)**
+Le YDNU-02 est un gateway bidirectionnel NMEA 2000 ↔ USB.
+Tous les instruments ci-dessous transitent par ce bus :
+
+| Instrument | Mesures | PGN NMEA 2000 | Statut |
+|---|---|---|---|
+| B&G WS320 (anémomètre) | TWS, TWD, AWA, AWS | PGN 130306 | ⏳ Appairage requis |
+| Loch (à installer) | STW, distance | PGN 128259 | ⏳ Capteur non installé |
+| Baromètre (à définir) | Pression atmosphérique | PGN 130314 | ⏳ Capteur non installé |
+| AIS Transponder Class B | Vessels, position, MMSI | PGN 129038/129039 | ⏳ Non installé (obligatoire ORC) |
+| B&G Vulcan (écrans) | Position GPS interne, SOG, COG | PGN 129025/129026 | ✅ Actif (source secondaire GPS) |
+
+**Connexions directes Signal K (hors NMEA 2000)**
+
+| Instrument | Protocole | Plugin Signal K | Statut |
+|---|---|---|---|
+| UM982 NANO-HED10L | NMEA 0183 / USB | signalk-parser-nmea0183 | ✅ Actif |
+| WIT WT901BLECL IMU | BLE JSON | bleak_wit.py | ✅ Actif |
+| Calypso ULTRASONIC | BLE | signalk-calypso (prévu) | ⏳ Non connecté |
+| Système RPi 4 | sysfs / proc | signalk-system-stats | ✅ Actif |
+| Regatta Server | HTTP REST :5000 | plugin custom | ✅ Actif |
+| qtVLM | NMEA 0183 TCP :10111 | signalk-tcp-server | ✅ Actif (bidirectionnel) |
+
+### Tableau des instruments
+
+
 
 | # | Instrument | Type | Protocole | Fréquence | Mesures principales | Statut |
 |---|---|---|---|---|---|---|
@@ -53,8 +96,111 @@
 | 6 | Open-Meteo | Prévisions météo | HTTP API | 6h (scheduler) | Vent prévu, pression, gust | ✅ Actif |
 | 7 | Regatta Server | Timer, équipage | HTTP local :5000 | Event-driven | Timer départ, watch crew, scoring | ✅ Actif |
 | 8 | SOK BMS LiFePO4 | Batterie maison | BLE (BMS protocol) | 1 Hz | Voltage, current, SOC, temp cell | ⏳ Non connecté (~5 mai) |
+| 9 | Yacht Devices YDNU-02 | Gateway NMEA 2000 ↔ USB | NMEA 2000 bidirectionnel | passthrough | Bridge instruments NMEA 2000 → Signal K (et retour) | ✅ Actif |
+| 10 | B&G Vulcan (écrans) | Chartplotter avec GPS interne | NMEA 2000 | 1 Hz | Position GPS, SOG, COG (source secondaire) | ✅ Actif |
+| 11 | Loch (à installer) | Capteur vitesse dans l'eau | NMEA 2000 (via YDNU-02) | 1 Hz | STW, distance parcourue | ⏳ Non installé |
+| 12 | Baromètre (à définir) | Capteur pression | NMEA 2000 (via YDNU-02) | 1/min | Pression atmosphérique | ⏳ Non installé |
+| 13 | AIS Transponder Class B | Transpondeur AIS | NMEA 2000 (via YDNU-02) | event | Vessels, position, MMSI | ⏳ Non installé (obligatoire ORC) |
 
 ---
+
+---
+
+## 2b. Stratégie multi-sources — Capteurs redondants
+
+Plusieurs capteurs mesurent les mêmes grandeurs physiques (vent, attitude, position GPS).
+Principe : chaque source est loggée indépendamment dans InfluxDB avec un tag source.
+Aucune donnée n'est perdue. La fusion ou la priorité est appliquée à la couche affichage
+(Grafana) ou analyse (OC), pas au niveau du stockage.
+
+### Sources redondantes et stratégie
+
+| Grandeur | Sources | Signal K path | Tag source InfluxDB | Priorité affichage |
+|---|---|---|---|---|
+| Vent (TWS/TWD) | B&G WS320 (NMEA 2000), Calypso (BLE) | environment.wind.* | nmea2000_ws320, calypso_ble | WS320 prioritaire (mât, plus précis en vitesse) |
+| Attitude (roll/pitch/yaw) | WIT WT901BLECL (BLE, hull), Calypso (BLE, masthead) | navigation.attitude.* | wit_hull, calypso_masthead | WIT prioritaire (30 Hz vs 1 Hz Calypso) |
+| Heading | UM982 (GNSS dual-ant), Calypso (masthead) | navigation.headingTrue | um982_gnss, calypso_masthead | UM982 prioritaire (RTK Float, précis) |
+| Position GPS | UM982 (principal), B&G Vulcan (secondaire) | navigation.position | um982_primary, vulcan_internal | UM982 prioritaire (dual-antenna, RTK) |
+| SOG / COG | UM982 (principal), B&G Vulcan (secondaire) | navigation.speedOverGround, navigation.courseOverGroundTrue | um982_primary, vulcan_internal | UM982 prioritaire |
+| Température de l'air | Calypso (masthead), NOAA API (externe) | environment.outside.temperature | calypso_masthead, noaa_api | Calypso si connecté, NOAA sinon |
+
+### Configuration Signal K requise
+
+Dans Signal K, activer le logging multi-sources dans le plugin signalk-to-influxdb2 :
+```json
+{
+  "logAllSources": true,
+  "tagWithSource": true
+}
+```
+
+Cela garantit que chaque valeur est stockée avec son tag source dans InfluxDB,
+permettant des queries filtrées par source ou comparatives.
+
+### Query Flux exemple — comparer deux sources de vent
+```flux
+from(bucket: "midnight_rider")
+  |> range(start: -10m)
+  |> filter(fn: (r) => r._measurement == "environment.wind.speedTrue")
+  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))
+  |> group(columns: ["source"])
+  |> aggregateWindow(every: 5s, fn: mean, createEmpty: false)
+```
+
+---
+
+## 2c. Calibration Signal K et réinjection NMEA 2000
+
+Signal K peut appliquer des corrections sur les données entrantes et les réinjecter
+sur le bus NMEA 2000 via le YDNU-02 (bidirectionnel).
+Cela permet à tous les instruments du bord (Vulcan, etc.) d'afficher des données calibrées.
+
+| Mesure | Correction appliquée dans Signal K | Réinjectée NMEA 2000 ? | PGN cible | Statut |
+|---|---|---|---|---|
+| **Heading (cap compas)** | Déclinaison magnétique (auto via position GPS) | ✅ Prévu | PGN 127250 | ⏳ À configurer |
+| **Variation magnétique** | Calculée par Signal K (plugin variation) | ✅ Prévu | PGN 127258 | ⏳ À configurer |
+| **Depth (profondeur)** | Offset quille (à définir selon tirant d'eau J/30) | ✅ Prévu | PGN 128267 | ⏳ Loch non installé |
+| **STW calibrée** | Coefficient de calibration loch | ✅ Prévu | PGN 128259 | ⏳ Loch non installé |
+| **Vent calibré (offset direction)** | Correction d'installation WS320 (upwash) | ✅ Prévu | PGN 130306 | ⏳ WS320 non connecté |
+
+**Note :** La réinjection nécessite que le YDNU-02 soit configuré en mode bidirectionnel
+(paramètre "PGN forwarding" activé dans la config YDNU-02).
+
+---
+
+## 2d. Interface YDNU-02 — Filtrage des données NMEA 2000 ↔ Signal K
+
+Le YDNU-02 est configuré pour contrôler quelles PGNs passent dans chaque direction.
+Toutes les PGNs ne doivent pas nécessairement être transmises — certaines sont ignorées
+pour éviter les conflits ou la surcharge.
+
+### NMEA 2000 → Signal K (lecture)
+
+| PGN | Données | Source | Transmis ? | Notes |
+|---|---|---|---|---|
+| 129025 | Position GPS | Vulcan | ✅ Oui | Source secondaire (priorité basse) |
+| 129026 | SOG / COG | Vulcan | ✅ Oui | Source secondaire |
+| 130306 | Vent (vitesse + direction) | B&G WS320 | ✅ Oui (dès connexion) | |
+| 128259 | STW / distance | Loch | ✅ Oui (dès installation) | |
+| 130314 | Pression atmosphérique | Baromètre | ✅ Oui (dès installation) | |
+| 129038/129039 | AIS vessels | AIS transponder | ✅ Oui (dès installation) | |
+| 127250 | Cap compas | Vulcan / compas | ✅ Oui | |
+| 127257 | Attitude (roll/pitch) | Vulcan | ⚠️ Optionnel | Redondant avec WIT (priorité WIT) |
+
+### Signal K → NMEA 2000 (réinjection)
+
+| PGN | Données | Condition | Transmis ? | Notes |
+|---|---|---|---|---|
+| 127250 | Cap vrai calibré | Signal K calcule heading + déclinaison | ✅ Prévu | Affichage Vulcan |
+| 127258 | Variation magnétique | Signal K plugin variation | ✅ Prévu | |
+| 130306 | Vent calibré (offset corrigé) | WS320 connecté + calibration configurée | ✅ Prévu | |
+| 128259 | STW calibrée | Loch installé + coefficient configuré | ✅ Prévu | |
+| 128267 | Profondeur calibrée | Loch installé + offset quille | ✅ Prévu | |
+| 129025 | Position UM982 (haute précision) | UM982 actif (RTK Float) | ✅ Prévu | Override GPS Vulcan |
+
+⚠️ **Point d'attention :** Éviter de réinjecter une PGN déjà émise par un instrument sur
+le bus (risque de conflit). Par exemple, ne pas réinjecter PGN 130306 (vent) si le WS320
+émet déjà cette PGN sur le bus.
 
 ## 3. Signal K paths actifs (réalité du terrain)
 
@@ -67,6 +213,11 @@ Basé sur audit direct du 28 avril 2026.
 | navigation.headingTrue | UM982 + WIT | radians | 1.741 | 1 Hz | ❓ À confirmer |
 | navigation.position.latitude | UM982 | degrés décimaux | 41.5425 | 1 Hz | ✅ |
 | navigation.position.longitude | UM982 | degrés décimaux | -71.4132 | 1 Hz | ✅ |
+> ⚠️ **Note InfluxDB :** `navigation.position` est stocké comme measurement unique
+> avec les fields `lat` et `lon` (voir Section 4). Les paths Signal K `.latitude` et
+> `.longitude` sont la vue applicative ; dans InfluxDB ils apparaissent comme fields
+> d'un même measurement.
+
 | navigation.attitude.roll | WIT WT901BLECL | radians | -0.00518 | 30 Hz | ✅ |
 | navigation.attitude.pitch | WIT WT901BLECL | radians | -0.02291 | 30 Hz | ✅ |
 | navigation.attitude.yaw | WIT WT901BLECL | radians | -0.03445 | 30 Hz | ✅ |
@@ -93,7 +244,7 @@ Basé sur audit direct du 28 avril 2026.
 | regatta.crew.watch | Regatta Server | string | "crew-A" | event | ✅ |
 
 **Status récapitulatif:**
-- ✅ **Confirmé dans InfluxDB**: 12 measurements
+- ✅ **Confirmé dans InfluxDB**: 16 measurements
 - ❓ **À confirmer**: 1 measurement (heading)
 - 🔨 **À construire (software)**: 4 measurements (NOAA)
 - ⏳ **Non connecté (hardware)**: 5 measurements (B&G WS320 + SOK BMS)
@@ -183,15 +334,15 @@ from(bucket: "midnight_rider")
 
 | Dashboard | Measurements consommés | Refresh | Panels | Status |
 |---|---|---|---|---|
-| 🏠 **COCKPIT** (ID: 8) | navigation.speed*, heading*, attitude.*, course* | 5s | 6 | ✅ Actif |
-| 🌊 **ENVIRONMENT** (ID: 10) | environment.wind.*, outside.*, water.*, system.cpu* | 30s | ⏳ | ⏳ Non connecté (B&G WS320) |
-| ⚡ **PERFORMANCE** (ID: 13) | navigation.speed*, polar, VMG | 5s | ⏳ | ⏳ À vérifier |
-| 🌪️ **WIND & CURRENT** (ID: 15) | environment.wind.*, navigation.current* | 10s | ⏳ | ⏳ À vérifier |
-| 🏆 **COMPETITIVE** (ID: 16) | AIS, fleet, distance, performance | 30s | ⏳ | ⏳ À vérifier |
-| 🔋 **ELECTRICAL** (ID: 17) | electrical.batteries.*, solar.* | 30s | ⏳ | ⏳ Non connecté (SOK BMS) |
-| 🏁 **RACE** (ID: 18) | navigation.*, regatta.timer, current* | 5s | ⏳ | ⏳ À vérifier |
-| 🔔 **ALERTS** (ID: 19) | tous (event-based) | 10s | ⏳ | ⏳ À vérifier |
-| ⚓ **CREW** (ID: 20) | regatta.crew, navigation.speed*, timer | 30s | ⏳ | ⏳ À vérifier |
+| 🏠 **COCKPIT** (ID: 8) | navigation.speed*, heading*, attitude.*, course* | 5s | 28 | ✅ Actif |
+| 🌊 **ENVIRONMENT** (ID: 10) | environment.wind.*, outside.*, water.*, system.cpu* | 30s | 20 | ⏳ Non connecté (B&G WS320) |
+| ⚡ **PERFORMANCE** (ID: 13) | navigation.speed*, polar, VMG | 5s | 20 | ⏳ À vérifier |
+| 🌪️ **WIND & CURRENT** (ID: 15) | environment.wind.*, navigation.current* | 10s | 20 | ⏳ À vérifier |
+| 🏆 **COMPETITIVE** (ID: 16) | AIS, fleet, distance, performance | 30s | 20 | ⏳ À vérifier |
+| 🔋 **ELECTRICAL** (ID: 17) | electrical.batteries.*, solar.* | 30s | 20 | ⏳ Non connecté (SOK BMS) |
+| 🏁 **RACE** (ID: 18) | navigation.*, regatta.timer, current* | 5s | 20 | ⏳ À vérifier |
+| 🔔 **ALERTS** (ID: 19) | tous (event-based) | 10s | 17 | ⏳ À vérifier |
+| ⚓ **CREW** (ID: 20) | regatta.crew, navigation.speed*, timer | 30s | 31 | ⏳ À vérifier |
 
 ---
 
@@ -205,9 +356,58 @@ from(bucket: "midnight_rider")
 | **Crew** | mcp/crew | regatta.crew, navigation.* | watch_rotation, helmsman_status, performance_brief | ⏳ À intégrer |
 | **Race Management** | mcp/race_management | regatta.timer, navigation.* | start_timer, mark_distance, layline_calc | ⏳ À intégrer |
 | **Weather** | mcp/weather | Open-Meteo HTTP API | forecast_summary, wind_trend, gust_warning | ✅ Actif |
-| **Buoy** | mcp/buoy | NOAA HTTP API | real_observations, wind_comparison, pressure_trend | ✅ Actif |
+| **Buoy** | mcp/buoy | NOAA HTTP API | real_observations, wind_comparison, pressure_trend | ⚠️ Partiel — serveur MCP actif, données NOAA non encore collectées (cf. Section 9) |
 
 ---
+
+---
+
+## 8b. Interface qtVLM — Navigation et routing
+
+qtVLM est le logiciel de routage et navigation utilisé à bord.
+Il communique avec Signal K via NMEA 0183 sur TCP, bidirectionnel.
+
+### Architecture de la connexion
+
+```
+Signal K :3000
+│ NMEA 0183 TCP server
+├──► qtVLM port :10110 (Signal K → qtVLM)
+│    Données envoyées : position, SOG, COG, heading, vent
+│
+└◄── qtVLM port :10111 (qtVLM → Signal K)
+     Données reçues : waypoints actifs, routing data, AIS décodé
+```
+
+### Données Signal K → qtVLM (port 10110, NMEA 0183 TCP)
+
+| Sentence NMEA 0183 | Données | Source Signal K | Fréquence |
+|---|---|---|---|
+| $GPGGA / $GPRMC | Position, SOG, COG | UM982 (primary) | 1 Hz |
+| $HEHDT | Heading true | UM982 | 1 Hz |
+| $WIMWV | Vent apparent (AWA, AWS) | B&G WS320 | 1 Hz (dès connexion) |
+| $WIMWD | Vent vrai (TWD, TWS) | B&G WS320 | 1 Hz (dès connexion) |
+| $VDVHW | STW, cap magnétique | Loch | 1 Hz (dès installation) |
+
+### Données qtVLM → Signal K (port 10111, NMEA 0183 TCP)
+
+| Sentence NMEA 0183 | Données | Utilisation dans Signal K | Status |
+|---|---|---|---|
+| $GPWPL / $GPBWC | Waypoint actif, bearing, distance | Affichage dans dashboards Grafana | ✅ Actif |
+| $VDRMB | Route active, XTE | Alertes déviation de route (OC) | ✅ Actif |
+| $AIVDM | AIS vessels (si qtVLM a un décodeur AIS) | Source AIS complémentaire | ⏳ À vérifier |
+
+### Signal K paths alimentés par qtVLM
+
+| Signal K path | Source | Données | Statut |
+|---|---|---|---|
+| `navigation.courseRhumbline.nextPoint` | qtVLM | Waypoint actif | ✅ Actif |
+| `navigation.courseRhumbline.crossTrackError` | qtVLM | XTE | ✅ Actif |
+| `navigation.racing.distanceLayline` | qtVLM (calc) | Distance au layline | ⏳ À configurer |
+
+**Note :** Les données qtVLM reçues par Signal K sont également loggées dans InfluxDB
+(bucket: midnight_rider) et peuvent alimenter des panels Grafana ou des alertes OC
+(ex: alerte XTE > 0.5nm).
 
 ## 9. Intégrations API à construire (software uniquement)
 
@@ -238,7 +438,7 @@ from(bucket: "midnight_rider")
 | Intégration | ETA | Signal K path | InfluxDB measurement | Dépendance | Priorité |
 |---|---|---|---|---|---|
 | **SOK BMS LiFePO4** | ~5 mai 2026 | electrical.batteries.house.* | electrical.batteries.* | Hardware attendu + plugin Signal K | 🔴 Critique |
-| **Calypso ULTRASONIC** | TBD | environment.wind.* | environment.wind.* | Replaces B&G WS320 | 🟡 Haute |
+| **Calypso ULTRASONIC** | TBD | environment.wind.*, navigation.attitude.*, environment.outside.temperature | Complément + backup B&G WS320. Fournit aussi pitch/roll/heading (masthead, 1Hz, moins précis que WIT). Seul capteur de température de l'air. | 🟡 Haute |
 | **AIS Transponder** | TBD (regatta) | vessels.* | vessels.* | Maritime AIS | 🟡 Haute |
 | **Victron MPPT** | TBD | electrical.solar.* | electrical.solar.* | Solar panel monitoring | 🟢 Moyenne |
 
