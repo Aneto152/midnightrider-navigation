@@ -159,6 +159,9 @@ Cela permet à tous les instruments du bord (Vulcan, etc.) d'afficher des donné
 | **STW calibrée** | Coefficient de calibration loch | ✅ Prévu | PGN 128259 | ⏳ Loch non installé |
 | **Vent calibré (offset direction)** | Correction d'installation WS320 (upwash) | ✅ Prévu | PGN 130306 | ⏳ WS320 non connecté |
 
+> ⚠️ **Règle anti-conflit :** Ne jamais réinjecter une PGN déjà émise par un instrument actif
+> (ex: ne pas réinjecter PGN 130306 si le WS320 émet déjà cette PGN sur le bus).
+
 **Note :** La réinjection nécessite que le YDNU-02 soit configuré en mode bidirectionnel
 (paramètre "PGN forwarding" activé dans la config YDNU-02).
 
@@ -197,6 +200,8 @@ pour éviter les conflits ou la surcharge.
 ⚠️ **Point d'attention :** Éviter de réinjecter une PGN déjà émise par un instrument sur
 le bus (risque de conflit). Par exemple, ne pas réinjecter PGN 130306 (vent) si le WS320
 émet déjà cette PGN sur le bus.
+
+Cette règle est répétée ici par souci de clarté (voir aussi Section 2c).
 
 ## 3. Signal K paths actifs (réalité du terrain)
 
