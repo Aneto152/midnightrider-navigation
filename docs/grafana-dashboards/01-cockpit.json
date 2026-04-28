@@ -139,13 +139,7 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "efifgp8jvgj5sf"
-          },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: -10m, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
-          "rawQuery": true,
-          "refId": "A"
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"speedOverGround\")\n |> map(fn: (r) => ({r with _value: r._value * 1.94384}))"
         }
       ],
       "title": "Speed Over Ground (SOG) \u2014 Last 10 min",
@@ -265,13 +259,7 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "efifgp8jvgj5sf"
-          },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: -10m, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.courseOverGroundTrue\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
-          "rawQuery": true,
-          "refId": "A"
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"headingTrue\")\n |> map(fn: (r) => ({r with _value: r._value * 57.2958}))"
         }
       ],
       "title": "Heading True \u2014 Last 10 min",
@@ -398,13 +386,7 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "efifgp8jvgj5sf"
-          },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: -10m, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.attitude.roll\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
-          "rawQuery": true,
-          "refId": "A"
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"attitude.roll\")\n |> map(fn: (r) => ({r with _value: r._value * 57.2958}))"
         }
       ],
       "title": "Roll (Heel) \u2014 Last 10 min",
@@ -531,13 +513,7 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "efifgp8jvgj5sf"
-          },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: -10m, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.attitude.pitch\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
-          "rawQuery": true,
-          "refId": "A"
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"attitude.pitch\")\n |> map(fn: (r) => ({r with _value: r._value * 57.2958}))"
         }
       ],
       "title": "Pitch (Assiette) \u2014 Last 10 min",
@@ -658,13 +634,7 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "efifgp8jvgj5sf"
-          },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: -1h, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> window(every:30s) |> mean()\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
-          "rawQuery": true,
-          "refId": "A"
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"speedOverGround\")\n |> aggregateWindow(every: 5m, fn: mean, createEmpty: false)\n |> map(fn: (r) => ({r with _value: r._value * 1.94384}))"
         }
       ],
       "title": "Speed Over Ground (5 min avg) \u2014 Last 1 hour",
@@ -753,13 +723,10 @@
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "influxdb",
-            "uid": "efifgp8jvgj5sf"
-          },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: -1h, stop: now()) |> filter(fn:(r) => r._measurement =~ /navigation.attitude/) |> window(every:30s) |> mean()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958}))",
-          "rawQuery": true,
-          "refId": "A"
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"attitude.roll\")\n |> aggregateWindow(every: 30s, fn: mean, createEmpty: false)\n |> map(fn: (r) => ({r with _value: r._value * 57.2958}))"
+        },
+        {
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"attitude.pitch\")\n |> aggregateWindow(every: 30s, fn: mean, createEmpty: false)\n |> map(fn: (r) => ({r with _value: r._value * 57.2958}))"
         }
       ],
       "title": "Attitude History (Roll & Pitch) \u2014 Last 1 hour",
