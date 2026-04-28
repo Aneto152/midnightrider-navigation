@@ -1,0 +1,1013 @@
+---
+# Midnight Rider — Complete Alert Rules
+# 69 alerts across 6 categories
+# Phase 1 (18) + Phase 2 (51) combined
+# Generated: 2026-04-27 20:20 EDT
+# Target: Grafana Alerting v9+
+
+groups:
+  - name: "Midnight Rider — All Alerts (69 total)"
+    interval: 1m
+    rules:
+      
+      # ════════════════════════════════════════════════════════════
+      # SYSTEM HEALTH (9 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: sy_a1_signalk_down
+        title: Signal K Down
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.signalk_up == "0")
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 30s
+        annotations:
+          description: "Signal K API is not responding. Check systemctl status signalk"
+          runbook_url: "https://docs.openclaw.ai/signalk-troubleshooting"
+        labels:
+          severity: critical
+          category: SYSTEM
+          
+      - uid: sy_a2_influxdb_down
+        title: InfluxDB Down
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.influxdb_up == "0")
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 30s
+        annotations:
+          description: "InfluxDB is not responding. Data logging is blocked."
+          runbook_url: "https://docs.openclaw.ai/influxdb-troubleshooting"
+        labels:
+          severity: critical
+          category: SYSTEM
+          
+      - uid: sy_a3_grafana_down
+        title: Grafana Down
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.grafana_up == "0")
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 30s
+        annotations:
+          description: "Grafana is not responding. Dashboards are inaccessible."
+          runbook_url: "https://docs.openclaw.ai/grafana-troubleshooting"
+        labels:
+          severity: warning
+          category: SYSTEM
+          
+      - uid: sy_a4_internet_lost
+        title: Internet Lost
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.internet_up == "0")
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 120s
+        annotations:
+          description: "Internet connectivity lost. Check WiFi AP or cellular modem."
+          runbook_url: "https://docs.openclaw.ai/connectivity-troubleshooting"
+        labels:
+          severity: critical
+          category: SYSTEM
+          
+      - uid: sy_b1_cpu_temp_high
+        title: CPU Temperature Critical
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "environment.system.cpuTemperature" and r._value > 85)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 120s
+        annotations:
+          description: "RPi CPU temperature exceeded 85°C. Throttling may occur."
+          runbook_url: "https://docs.openclaw.ai/rpi-cooling"
+        labels:
+          severity: critical
+          category: SYSTEM
+          
+      - uid: sy_b2_cpu_load_high
+        title: High CPU Load
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.rpi_cpu_load > 90)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 300s
+        annotations:
+          description: "CPU load > 90%. Services may be slow or unresponsive."
+          runbook_url: "https://docs.openclaw.ai/rpi-performance"
+        labels:
+          severity: warning
+          category: SYSTEM
+          
+      - uid: sy_b3_memory_saturated
+        title: Memory Saturated
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "system_health" and r.rpi_memory_used_pct > 95)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 300s
+        annotations:
+          description: "RAM usage > 95%. Consider restarting services or RPi."
+          runbook_url: "https://docs.openclaw.ai/rpi-memory"
+        labels:
+          severity: warning
+          category: SYSTEM
+          
+      - uid: sy_c01_gps_low_sats
+        title: GPS Low Satellite Count
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "navigation.gnss.satellites" and r._value < 4)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 60s
+        annotations:
+          description: "GPS satellite count < 4. Position accuracy degraded. Check antenna."
+          runbook_url: "https://docs.openclaw.ai/gps-troubleshooting"
+        labels:
+          severity: warning
+          category: SYSTEM
+          
+      - uid: sy_c03_imu_roll_missing
+        title: IMU Roll Data Missing
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "navigation.attitude.roll")
+              |> count()
+              |> map(fn:(r) => ({r with value: if r._value == 0 then 1 else 0}))
+        noDataState: Alerting
+        execErrState: Alerting
+        for: 10s
+        annotations:
+          description: "No roll data from WIT IMU in last 10s. Check BLE connection."
+          runbook_url: "https://docs.openclaw.ai/wit-ble-troubleshooting"
+        labels:
+          severity: critical
+          category: SYSTEM
+
+      # ════════════════════════════════════════════════════════════
+      # PERFORMANCE (2 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: pe_b1_critical_heel
+        title: Critical Heel Angle
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "navigation.attitude.roll" and r._value > 0.436)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 120s
+        annotations:
+          description: "Heel angle > 25° (0.436 rad). Risk of knockdown or rail immersion."
+          runbook_url: "https://docs.openclaw.ai/sail-trim"
+        labels:
+          severity: critical
+          category: PERFORMANCE
+
+      - uid: pe_b4_excessive_pitch
+        title: Excessive Pitch
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "navigation.attitude.pitch" and r._value > 0.262)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 60s
+        annotations:
+          description: "Pitch angle > 15° (0.262 rad). Adjust fore-aft trim or reduce sail."
+          runbook_url: "https://docs.openclaw.ai/trim-management"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      # ════════════════════════════════════════════════════════════
+      # WEATHER/SEA (1 alert)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: w_d1_shallow_water
+        title: Shallow Water Alert
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "environment.depth.belowKeel" and r._value < 4)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 10s
+        annotations:
+          description: "Water depth < 4 meters. Risk of grounding. Avoid shallow areas."
+          runbook_url: "https://docs.openclaw.ai/navigation-safety"
+        labels:
+          severity: critical
+          category: WEATHER
+
+      # ════════════════════════════════════════════════════════════
+      # RACING (4 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: r_a2_start_timer_5min
+        title: "Start Timer — 5 Minutes"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "regatta.timer" and r.seconds_to_start <= 300)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1s
+        annotations:
+          description: "⏰ 5 minutes to start. Begin pre-start maneuver."
+          runbook_url: ""
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_a2_start_timer_1min
+        title: "Start Timer — 1 Minute"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "regatta.timer" and r.seconds_to_start <= 60)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1s
+        annotations:
+          description: "⏰ 1 minute to start. Finalize crew positions."
+          runbook_url: ""
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_a2_start_timer_30s
+        title: "Start Timer — 30 Seconds"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "regatta.timer" and r.seconds_to_start <= 30)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1s
+        annotations:
+          description: "⏰ 30 seconds to start. All hands to stations."
+          runbook_url: ""
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_a2_start_timer_10s
+        title: "Start Timer — 10 Seconds"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-1m)
+              |> filter(fn:(r) => r._measurement == "regatta.timer" and r.seconds_to_start <= 10)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 1s
+        annotations:
+          description: "⏰ 10 seconds to start. Stand by for gun."
+          runbook_url: ""
+        labels:
+          severity: info
+          category: RACING
+
+      # ════════════════════════════════════════════════════════════
+      # CREW (2 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: cr_1_watch_elapsed
+        title: Watch Time Elapsed
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "regatta.helmsman" and r._value > 3600)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 300s
+        annotations:
+          description: "Helmsman watch duration > 1 hour. Consider changing watch."
+          runbook_url: ""
+        labels:
+          severity: warning
+          category: CREW
+
+      - uid: cr_2_watch_excessive
+        title: "Watch Excessive (>3h)"
+        condition: A
+        data:
+          - refId: A
+            queryType: ""
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: efifgp8jvgj5sf
+            expression: |-
+              from(bucket:"midnight_rider")
+              |> range(start:-5m)
+              |> filter(fn:(r) => r._measurement == "regatta.helmsman" and r._value > 10800)
+              |> last()
+        noDataState: NoData
+        execErrState: Alerting
+        for: 10800s
+        annotations:
+          description: "⚠️ Helmsman watch > 3 hours. Crew fatigue risk. CHANGE WATCH NOW."
+          runbook_url: ""
+        labels:
+          severity: critical
+          category: CREW
+
+      
+      # ════════════════════════════════════════════════════════════
+      # SYSTEM (11 additional alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: sy_c02_gps_heading_missing
+        title: GPS Heading Missing
+        condition: A
+        for: 30s
+        annotations:
+          description: "No heading data from UM982 for 30s"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c04_anemometer_silent
+        title: Anemometer Silent
+        condition: A
+        for: 30s
+        annotations:
+          description: "No wind data from B&G WS320 for 30s"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c05_loch_no_data
+        title: Loch No Data
+        condition: A
+        for: 30s
+        annotations:
+          description: "No STW data from Loch for 30s"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c06_ais_no_targets
+        title: AIS No Targets
+        condition: A
+        for: 60s
+        annotations:
+          description: "No AIS vessels detected (>60s silence)"
+        labels:
+          severity: info
+          category: SYSTEM
+
+      - uid: sy_c07_barometer_no_data
+        title: Barometer No Data
+        condition: A
+        for: 60s
+        annotations:
+          description: "No pressure data (NMEA2000 barometer)"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c08_thermometer_no_data
+        title: Thermometer No Data
+        condition: A
+        for: 60s
+        annotations:
+          description: "No water temperature data (NMEA2000)"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c09_battery_soc_no_data
+        title: Battery SOC No Data
+        condition: A
+        for: 60s
+        annotations:
+          description: "No house battery data from SOK BMS (BLE)"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c10_starter_battery_no_data
+        title: Starter Battery No Data
+        condition: A
+        for: 60s
+        annotations:
+          description: "No starter battery voltage data (Victron)"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c11_vulcan_nmea_silent
+        title: Vulcan NMEA2000 Silent
+        condition: A
+        for: 30s
+        annotations:
+          description: "No data from Vulcan MFD (NMEA2000)"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c12_wave_analyzer_no_data
+        title: Wave Analyzer No Data
+        condition: A
+        for: 60s
+        annotations:
+          description: "No significant wave height data (Wave Analyzer v1.1)"
+        labels:
+          severity: warning
+          category: SYSTEM
+
+      - uid: sy_c13_current_calc_no_data
+        title: Current Calc No Data
+        condition: A
+        for: 60s
+        annotations:
+          description: "No current speed/direction calculated (SOG-STW)"
+        labels:
+          severity: info
+          category: SYSTEM
+
+      # ════════════════════════════════════════════════════════════
+      # PERFORMANCE (15 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: pe_a1_vmg_suboptimal
+        title: VMG Suboptimal
+        condition: A
+        for: 180s
+        annotations:
+          description: "VMG < 85% of polar target (3 min average)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_a2_vmg_overestimated
+        title: VMG Overestimated
+        condition: A
+        for: 120s
+        annotations:
+          description: "VMG > 105% of polar (potential instrument error)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_a3_boat_slow
+        title: Boat Slow (Polars)
+        condition: A
+        for: 300s
+        annotations:
+          description: "Boat speed deficit > 20% vs polars (5 min)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_b2_insufficient_heel
+        title: Insufficient Heel
+        condition: A
+        for: 180s
+        annotations:
+          description: "Heel < 5° @ close-hauled with TWS > 12kt (trim)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_b3_heel_unstable
+        title: Heel Unstable
+        condition: A
+        for: 120s
+        annotations:
+          description: "Heel variation > 5°/2min (unstable trim)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_c1_heading_drift
+        title: Heading Drift
+        condition: A
+        for: 1200s
+        annotations:
+          description: "Heading change > 5° over 20 min (course drift)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_c2_helm_oscillation
+        title: Helm Oscillation
+        condition: A
+        for: 600s
+        annotations:
+          description: "True wind angle std dev > 5° (helmsman issue)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_c3_high_leeway
+        title: High Leeway
+        condition: A
+        for: 300s
+        annotations:
+          description: "Leeway > 8° @ close-hauled (drift/leeway)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_d1_adverse_current
+        title: Adverse Current
+        condition: A
+        for: 300s
+        annotations:
+          description: "Current > 0.5kt against boat (5 min)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_d2_current_shift
+        title: Current Shift
+        condition: A
+        for: 300s
+        annotations:
+          description: "Current speed change > 0.5kt in 5 min"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_d3_port_layline
+        title: Port Layline Open
+        condition: A
+        for: 1s
+        annotations:
+          description: "Port layline angle <= 0° (opportunity)"
+        labels:
+          severity: info
+          category: PERFORMANCE
+
+      - uid: pe_d4_starboard_layline
+        title: Starboard Layline Open
+        condition: A
+        for: 1s
+        annotations:
+          description: "Starboard layline angle <= 0° (opportunity)"
+        labels:
+          severity: info
+          category: PERFORMANCE
+
+      - uid: pe_e1_favorable_lift
+        title: Favorable Lift
+        condition: A
+        for: 180s
+        annotations:
+          description: "Wind shift > 8° favorable in 3 min"
+        labels:
+          severity: info
+          category: PERFORMANCE
+
+      - uid: pe_e2_unfavorable_header
+        title: Unfavorable Header
+        condition: A
+        for: 180s
+        annotations:
+          description: "Wind shift > 8° adverse in 3 min"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      - uid: pe_e3_sails_not_optimal
+        title: Sails Not Optimal
+        condition: A
+        for: 300s
+        annotations:
+          description: "Current sail config != polar recommendation (5 min)"
+        labels:
+          severity: warning
+          category: PERFORMANCE
+
+      # ════════════════════════════════════════════════════════════
+      # WEATHER/SEA (14 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: w_a1_wind_shift
+        title: Wind Shift
+        condition: A
+        for: 180s
+        annotations:
+          description: "Wind direction change > 15° in 3 min"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_a2_gust_imminente
+        title: Gust Imminente
+        condition: A
+        for: 300s
+        annotations:
+          description: "Wind speed increase > 8kt in 5 min"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_a3_squall
+        title: Squall
+        condition: A
+        for: 600s
+        annotations:
+          description: "Wind speed increase > 15kt in 10 min"
+        labels:
+          severity: critical
+          category: WEATHER
+
+      - uid: w_b1_buoy_wind_direction
+        title: NDBC Wind Direction Change
+        condition: A
+        for: 1800s
+        annotations:
+          description: "NDBC buoy wind direction shift > 20° (30 min)"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_b2_buoy_wind_speed
+        title: NDBC Wind Speed Change
+        condition: A
+        for: 1800s
+        annotations:
+          description: "NDBC buoy wind speed change > 6kt (30 min)"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_c1_pressure_drop
+        title: Pressure Drop
+        condition: A
+        for: 10800s
+        annotations:
+          description: "Barometer pressure drop > 3hPa (3 hours)"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_c2_nws_alert
+        title: NWS Alert Active
+        condition: A
+        for: 1s
+        annotations:
+          description: "NWS Small Craft / Gale / Storm alert active"
+        labels:
+          severity: critical
+          category: WEATHER
+
+      - uid: w_d2_short_wave_period
+        title: Short Wave Period
+        condition: A
+        for: 300s
+        annotations:
+          description: "Wave period < 6 seconds (choppy seas)"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_d3_adverse_swell
+        title: Adverse Swell
+        condition: A
+        for: 600s
+        annotations:
+          description: "Swell direction > 90° from COG (headwind waves)"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_d4_slack_water
+        title: Slack Water Approaching
+        condition: A
+        for: 1s
+        annotations:
+          description: "Tidal slack water < 30 min away (opportunity)"
+        labels:
+          severity: info
+          category: WEATHER
+
+      - uid: w_d5_sunset
+        title: Sunset (Lights On)
+        condition: A
+        for: 1s
+        annotations:
+          description: "Sunset < 30 min (turn on deck lights)"
+        labels:
+          severity: info
+          category: WEATHER
+
+      - uid: w_e1_current_shift
+        title: Current Direction Shift
+        condition: A
+        for: 300s
+        annotations:
+          description: "Current direction change > 20° in 5 min"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_f1_water_temp_anomaly
+        title: Water Temp Anomaly
+        condition: A
+        for: 1800s
+        annotations:
+          description: "Water temperature change > 2°C in 30 min"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      - uid: w_f2_cold_water
+        title: Cold Water
+        condition: A
+        for: 600s
+        annotations:
+          description: "Water temperature < 10°C (safety: hypothermia risk)"
+        labels:
+          severity: warning
+          category: WEATHER
+
+      # ════════════════════════════════════════════════════════════
+      # RACING (10 alerts)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: r_a1_start_line_approaching
+        title: Start Line Approaching
+        condition: A
+        for: 1s
+        annotations:
+          description: "Distance to start line < 0.5 nm (1 min away)"
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_a3_ocs_risk
+        title: "OCS Risk (Off Course Start)"
+        condition: A
+        for: 1s
+        annotations:
+          description: "Boat crossing start line BEFORE gun (OCS penalty!)"
+        labels:
+          severity: critical
+          category: RACING
+
+      - uid: r_a4_line_bias
+        title: Start Line Bias
+        condition: A
+        for: 120s
+        annotations:
+          description: "Start line bias > 5° (port/starboard favored)"
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_b1_mark_approaching
+        title: Mark Approaching
+        condition: A
+        for: 1s
+        annotations:
+          description: "Distance to next mark < 1nm (rounding approaching)"
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_b2_wrong_mark
+        title: Wrong Mark Franchised
+        condition: A
+        for: 1s
+        annotations:
+          description: "Boat rounded wrong waypoint (course error!)"
+        labels:
+          severity: critical
+          category: RACING
+
+      - uid: r_b3_course_boundary
+        title: Course Boundary Violation
+        condition: A
+        for: 30s
+        annotations:
+          description: "Boat outside course limits > 0.1nm (penalty)"
+        labels:
+          severity: critical
+          category: RACING
+
+      - uid: r_b4_finish_approaching
+        title: Finish Approaching
+        condition: A
+        for: 1s
+        annotations:
+          description: "Distance to finish line < 0.2nm"
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_c1_competitor_passing
+        title: "Competitor Passing (ORC corrected)"
+        condition: A
+        for: 300s
+        annotations:
+          description: "Fleet position change detected (ORC TCF corrected)"
+        labels:
+          severity: info
+          category: RACING
+
+      - uid: r_c2_competitor_close
+        title: Competitor Very Close
+        condition: A
+        for: 1s
+        annotations:
+          description: "Competitor < 0.2nm behind (tactical pressure)"
+        labels:
+          severity: warning
+          category: RACING
+
+      - uid: r_d1_time_limit
+        title: Time Limit Approaching
+        condition: A
+        for: 1s
+        annotations:
+          description: "Race finish time < 2 hours away (final push)"
+        labels:
+          severity: info
+          category: RACING
+
+      # ════════════════════════════════════════════════════════════
+      # CREW (1 additional alert)
+      # ════════════════════════════════════════════════════════════
+      
+      - uid: cr_3_crew_wake_call
+        title: Crew Wake-Up Call
+        condition: A
+        for: 1s
+        annotations:
+          description: "T-10min before scheduled crew wake-up (rest period end)"
+        labels:
+          severity: info
+          category: CREW
