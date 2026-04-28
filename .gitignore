@@ -77,3 +77,12 @@ docs/memory/PRIVATE/
 .env.new
 oc/
 __pycache__/
+
+# OpenClaw internal files (not for public distribution)
+AGENTS.md
+SOUL.md
+IDENTITY.md
+HEARTBEAT.md
+TOOLS.md
+USER.md
+MEMORY.md
