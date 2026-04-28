@@ -6,6 +6,18 @@
 
 ---
 
+## Légende des statuts
+
+| Statut | Signification | Exemple |
+|---|---|---|
+| ✅ Actif | Opérationnel et confirmé dans InfluxDB | UM982 GNSS, WIT IMU |
+| ⏳ Non connecté | Instrument physique non encore branché au réseau | B&G WS320, SOK BMS |
+| 🔨 À construire | Intégration software/API non encore développée | NOAA Buoys, NDBC API |
+| ❓ À confirmer | Présence dans InfluxDB non encore vérifiée | navigation.headingTrue |
+| ❌ Absent | Capteur non disponible à bord | STW (Speed Through Water) |
+
+---
+
 ## 1. Architecture globale du flux de données
 
 ```
@@ -35,12 +47,12 @@
 |---|---|---|---|---|---|---|
 | 1 | UM982 NANO-HED10L | GNSS dual-antenna | NMEA / USB | 1 Hz | Position, SOG, COG, Heading | ✅ Actif |
 | 2 | WIT WT901BLECL IMU | Accéléromètre/gyro | BLE JSON | 30 Hz | Roll, pitch, yaw, accél, temp | ✅ Actif |
-| 3 | B&G WS320 | Anémomètre mécanique | NMEA 2000 | 1 Hz | TWS, TWD, AWA, AWS | ✅ Actif |
+| 3 | B&G WS320 | Anémomètre mécanique | NMEA 2000 | 1 Hz | TWS, TWD, AWA, AWS | ⏳ Non connecté |
 | 4 | Système RPi 4 | CPU, mémoire, temp | Signal K internal | 5 s | CPU temp, load, storage | ✅ Actif |
-| 5 | NOAA Buoys | Météo externe | HTTP API | 5 min (cron) | Vent réel, pression, temp eau | ✅ Actif |
+| 5 | NOAA Buoys & NDBC | Météo côtière | HTTP API | 30 min | Vent réel, pression, temp eau | 🔨 À construire |
 | 6 | Open-Meteo | Prévisions météo | HTTP API | 6h (scheduler) | Vent prévu, pression, gust | ✅ Actif |
 | 7 | Regatta Server | Timer, équipage | HTTP local :5000 | Event-driven | Timer départ, watch crew, scoring | ✅ Actif |
-| 8 | SOK BMS LiFePO4 | Batterie maison | BLE (BMS protocol) | 1 Hz | Voltage, current, SOC, temp cell | ⏳ ~5 mai 2026 |
+| 8 | SOK BMS LiFePO4 | Batterie maison | BLE (BMS protocol) | 1 Hz | Voltage, current, SOC, temp cell | ⏳ Non connecté (~5 mai) |
 
 ---
 
@@ -48,40 +60,41 @@
 
 Basé sur audit direct du 28 avril 2026.
 
-| Path Signal K | Instrument source | Unité SI | Valeur sample (28 avr) | Fréquence | Dans InfluxDB ? |
+| Path Signal K | Instrument source | Unité SI | Valeur sample (28 avr) | Fréquence | Status |
 |---|---|---|---|---|---|
 | navigation.speedOverGround | UM982 | m/s | 3.2 | 1 Hz | ✅ |
 | navigation.courseOverGroundTrue | UM982 | radians | 2.2096 | 1 Hz | ✅ |
-| navigation.headingTrue | UM982 + WIT hybrid | radians | 1.741 | 1 Hz | ⏳ (présumé) |
+| navigation.headingTrue | UM982 + WIT hybrid | radians | 1.741 | 1 Hz | ❓ À confirmer |
 | navigation.position.latitude | UM982 | degrés décimaux | 41.5425 | 1 Hz | ✅ |
 | navigation.position.longitude | UM982 | degrés décimaux | -71.4132 | 1 Hz | ✅ |
 | navigation.attitude.roll | WIT WT901BLECL | radians | -0.00518 | 30 Hz | ✅ |
 | navigation.attitude.pitch | WIT WT901BLECL | radians | -0.02291 | 30 Hz | ✅ |
 | navigation.attitude.yaw | WIT WT901BLECL | radians | -0.03445 | 30 Hz | ✅ |
-| navigation.speedThroughWater | N/A | m/s | N/A | N/A | ❌ (capteur manquant) |
+| navigation.speedThroughWater | N/A | m/s | N/A | N/A | ❌ Absent |
 | navigation.rateOfTurn | WIT calc | rad/s | ~0.01 | 30 Hz | ✅ |
 | navigation.acceleration.x | WIT | m/s² | -0.15 | 30 Hz | ✅ |
 | navigation.acceleration.y | WIT | m/s² | 0.22 | 30 Hz | ✅ |
 | navigation.acceleration.z | WIT | m/s² | 9.81 | 30 Hz | ✅ |
-| environment.wind.speedTrue | B&G WS320 | m/s | 5.2 | 1 Hz | ⏳ (à vérifier) |
-| environment.wind.directionTrue | B&G WS320 | radians | 1.047 | 1 Hz | ⏳ (à vérifier) |
-| environment.wind.speedApparent | B&G WS320 | m/s | 6.1 | 1 Hz | ⏳ (à vérifier) |
-| environment.wind.angleApparent | B&G WS320 | radians | 0.628 | 1 Hz | ⏳ (à vérifier) |
+| environment.wind.speedTrue | B&G WS320 | m/s | N/A (non connecté) | N/A | ⏳ Non connecté |
+| environment.wind.directionTrue | B&G WS320 | radians | N/A (non connecté) | N/A | ⏳ Non connecté |
+| environment.wind.speedApparent | B&G WS320 | m/s | N/A (non connecté) | N/A | ⏳ Non connecté |
+| environment.wind.angleApparent | B&G WS320 | radians | N/A (non connecté) | N/A | ⏳ Non connecté |
 | environment.system.cpuTemperature | RPi sysfs | Kelvin | 323.15 (50°C) | 5 s | ✅ |
-| environment.outside.temperature | NOAA API | Kelvin | 288.15 (15°C) | 5 min | ⏳ (à vérifier) |
-| environment.water.temperature | NOAA API | Kelvin | 283.15 (10°C) | 5 min | ⏳ (à vérifier) |
-| environment.outside.pressure | NOAA API | Pa | 101325 | 5 min | ⏳ (à vérifier) |
-| electrical.batteries.house.voltage | SOK BMS (future) | V | N/A | 1 Hz | ⏳ ~5 mai |
-| electrical.batteries.house.current | SOK BMS (future) | A | N/A | 1 Hz | ⏳ ~5 mai |
-| electrical.batteries.house.stateOfCharge | SOK BMS (future) | ratio 0-1 | N/A | 1 Hz | ⏳ ~5 mai |
-| regatta.timer.startTime | Regatta Server | ISO 8601 | 2026-05-22T14:00:00Z | event | ⏳ |
-| regatta.crew.watch | Regatta Server | string | "crew-A" | event | ⏳ |
+| environment.outside.temperature | NOAA API (future) | Kelvin | N/A | 30 min | 🔨 À construire |
+| environment.water.temperature | NOAA API (future) | Kelvin | N/A | 30 min | 🔨 À construire |
+| environment.outside.pressure | NOAA API (future) | Pa | N/A | 30 min | 🔨 À construire |
+| electrical.batteries.house.voltage | SOK BMS (future) | V | N/A | 1 Hz | ⏳ Non connecté |
+| electrical.batteries.house.current | SOK BMS (future) | A | N/A | 1 Hz | ⏳ Non connecté |
+| electrical.batteries.house.stateOfCharge | SOK BMS (future) | ratio 0-1 | N/A | 1 Hz | ⏳ Non connecté |
+| regatta.timer.startTime | Regatta Server | ISO 8601 | 2026-05-22T14:00:00Z | event | ✅ |
+| regatta.crew.watch | Regatta Server | string | "crew-A" | event | ✅ |
 
 **Status récapitulatif:**
 - ✅ **Confirmé dans InfluxDB**: 12 measurements
-- ⏳ **À vérifier**: 8 measurements
+- ❓ **À confirmer**: 1 measurement (heading)
+- 🔨 **À construire (software)**: 4 measurements (NOAA)
+- ⏳ **Non connecté (hardware)**: 5 measurements (B&G WS320 + SOK BMS)
 - ❌ **Absent**: 1 (STW — capteur manquant)
-- ⏳ **Future (mai 2026)**: 3 measurements (SOK BMS)
 
 ---
 
@@ -95,7 +108,7 @@ Basé sur audit direct du 28 avril 2026.
   - Archive (24h mean): 7 ans
 
 **Fréquence globale d'écriture:**
-  - **Estimated:** ~3,000 points/min (1,200 à 1,800 de WIT à 30 Hz + navigation/wind à 1 Hz)
+  - **Estimated:** ~3,000 points/min (1,800 de WIT à 30 Hz + 1,200 navigation/wind à 1 Hz)
   - **Vérification requise:** Phase 1.3
 
 | Measurement (nom exact InfluxDB) | Field | Unité brute | Valeur sample (28 avr) | Points/min | Conversion requise |
@@ -113,10 +126,10 @@ Basé sur audit direct du 28 avril 2026.
 | navigation.gnss.satellites | _value | count | 12 | ~60 | N/A (count) |
 | navigation.gnss.type | _value | string | "RTK Float" | ~60 | N/A (string) |
 | environment.system.cpuTemperature | _value | Kelvin | 323.15 | ~12/min (5s) | - 273.15 → °C |
-| environment.wind.speedTrue | _value | m/s | ⏳ | ~60 | × 1.94384 → knots |
-| environment.wind.directionTrue | _value | radians | ⏳ | ~60 | × 57.2958 → ° |
-| environment.wind.speedApparent | _value | m/s | ⏳ | ~60 | × 1.94384 → knots |
-| environment.wind.angleApparent | _value | radians | ⏳ | ~60 | × 57.2958 → ° |
+| environment.wind.speedTrue | _value | m/s | N/A | N/A | × 1.94384 → knots |
+| environment.wind.directionTrue | _value | radians | N/A | N/A | × 57.2958 → ° |
+| environment.wind.speedApparent | _value | m/s | N/A | N/A | × 1.94384 → knots |
+| environment.wind.angleApparent | _value | radians | N/A | N/A | × 57.2958 → ° |
 
 ---
 
@@ -168,11 +181,11 @@ from(bucket: "midnight_rider")
 | Dashboard | Measurements consommés | Refresh | Panels | Status |
 |---|---|---|---|---|
 | 🏠 **COCKPIT** (ID: 8) | navigation.speed*, heading*, attitude.*, course* | 5s | 6 | ✅ Actif |
-| 🌊 **ENVIRONMENT** (ID: 10) | environment.wind.*, outside.*, water.*, system.cpu* | 30s | ⏳ | ⏳ À vérifier |
+| 🌊 **ENVIRONMENT** (ID: 10) | environment.wind.*, outside.*, water.*, system.cpu* | 30s | ⏳ | ⏳ Non connecté (B&G WS320) |
 | ⚡ **PERFORMANCE** (ID: 13) | navigation.speed*, polar, VMG | 5s | ⏳ | ⏳ À vérifier |
 | 🌪️ **WIND & CURRENT** (ID: 15) | environment.wind.*, navigation.current* | 10s | ⏳ | ⏳ À vérifier |
 | 🏆 **COMPETITIVE** (ID: 16) | AIS, fleet, distance, performance | 30s | ⏳ | ⏳ À vérifier |
-| 🔋 **ELECTRICAL** (ID: 17) | electrical.batteries.*, solar.* | 30s | ⏳ | ⏳ À vérifier |
+| 🔋 **ELECTRICAL** (ID: 17) | electrical.batteries.*, solar.* | 30s | ⏳ | ⏳ Non connecté (SOK BMS) |
 | 🏁 **RACE** (ID: 18) | navigation.*, regatta.timer, current* | 5s | ⏳ | ⏳ À vérifier |
 | 🔔 **ALERTS** (ID: 19) | tous (event-based) | 10s | ⏳ | ⏳ À vérifier |
 | ⚓ **CREW** (ID: 20) | regatta.crew, navigation.speed*, timer | 30s | ⏳ | ⏳ À vérifier |
@@ -193,11 +206,35 @@ from(bucket: "midnight_rider")
 
 ---
 
-## 9. Intégrations futures (pipeline 2026)
+## 9. Intégrations API à construire (software uniquement)
+
+**Ces intégrations ne nécessitent pas de hardware — elles sont à coder.**
+
+| Source | Données | Fréquence | Signal K path cible | Priorité | Status |
+|---|---|---|---|---|---|
+| **NOAA NDBC** | Vent réel, temp eau, pression, houle (buoys LIS) | 30 min | environment.outside.*, environment.water.temperature | 🔴 Avant race | 🔨 À construire |
+| **NDBC Station 44017** | Montauk: vent, pression, houle | 30 min | environment.outside.wind.*, outside.pressure | 🔴 Avant race | 🔨 À construire |
+| **NDBC Station 44025** | LIS Central: température eau | 30 min | environment.water.temperature | 🔴 Avant race | 🔨 À construire |
+| **NDBC Station BLTM3** | Block Island: météo locale (pendant race) | 10 min | environment.outside.wind.*, pressure | 🔴 Pendant race | 🔨 À construire |
+
+**Architecture NOAA à construire:**
+```
+[NOAA NDBC API]
+  ↓ HTTP GET https://www.ndbc.noaa.gov/data/realtime2/{STATION_ID}.txt
+  ↓ Parser Python (regatta/weather_collector.py ou nouveau script)
+  ↓ Write InfluxDB directement (bucket: midnight_rider)
+  ↓ Measurements: environment.outside.*, environment.water.*
+  ↓ Fréquence: cron toutes les 30 min (données buoy ~30 min delay)
+  ↓ Signal K: push via REST API ou direct InfluxDB write
+```
+
+---
+
+## 9b. Intégrations futures — Matériel (pipeline 2026)
 
 | Intégration | ETA | Signal K path | InfluxDB measurement | Dépendance | Priorité |
 |---|---|---|---|---|---|
-| **SOK BMS LiFePO4** | ~5 mai 2026 | electrical.batteries.house.* | electrical.batteries.* | Hardware + driver BLE | 🔴 Critique |
+| **SOK BMS LiFePO4** | ~5 mai 2026 | electrical.batteries.house.* | electrical.batteries.* | Hardware attendu + plugin Signal K | 🔴 Critique |
 | **Calypso ULTRASONIC** | TBD | environment.wind.* | environment.wind.* | Replaces B&G WS320 | 🟡 Haute |
 | **AIS Transponder** | TBD (regatta) | vessels.* | vessels.* | Maritime AIS | 🟡 Haute |
 | **Victron MPPT** | TBD | electrical.solar.* | electrical.solar.* | Solar panel monitoring | 🟢 Moyenne |
@@ -257,6 +294,7 @@ influx query 'from(bucket:"midnight_rider")
 | Date | Auteur | Changement | Sections affectées |
 |---|---|---|---|
 | 2026-04-28 | OC + Denis | Document initial | Toutes |
+| 2026-04-28 v2 | OC | Clarifier statuts (⏳/🔨/❓/❌), ajouter NOAA API section | 1-9 |
 | TBD (mai 2026) | OC | Ajout SOK BMS data | 2, 3, 4, 6 |
 | TBD (mai 2026) | OC | Affinage seuils post-field-test | Section 6 |
 | TBD (juin 2026) | Denis | Post-mortem course | Toutes |
