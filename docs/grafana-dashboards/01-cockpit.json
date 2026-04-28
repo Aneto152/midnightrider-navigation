@@ -46,7 +46,26 @@
               }
             ]
           },
-          "unit": "kn"
+          "unit": "knots",
+          "decimals": 1,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "pointSize": 5,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "min": 0,
+          "max": 15
         },
         "overrides": [
           {
@@ -111,7 +130,22 @@
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true,
-        "text": {}
+        "text": {},
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
       "pluginVersion": "9.0.0",
       "targets": [
@@ -120,13 +154,13 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: -10m, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Speed Over Ground (SOG)",
-      "type": "gauge"
+      "title": "Speed Over Ground (SOG) \u2014 Last 10 min",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -140,9 +174,18 @@
           },
           "custom": {
             "hideFrom": {
-              "legend": false,
               "tooltip": false,
-              "viz": false
+              "viz": false,
+              "legend": false
+            },
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "pointSize": 5,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
             }
           },
           "mappings": [],
@@ -155,7 +198,10 @@
               }
             ]
           },
-          "unit": "degree"
+          "unit": "degrees",
+          "decimals": 0,
+          "min": 0,
+          "max": 360
         },
         "overrides": [
           {
@@ -214,9 +260,15 @@
           "value"
         ],
         "legend": {
-          "displayMode": "list",
+          "calcs": [
+            "mean",
+            "max",
+            "min",
+            "last"
+          ],
+          "displayMode": "table",
           "placement": "bottom",
-          "values": []
+          "showLegend": true
         },
         "pieType": "donut",
         "reduceOptions": {
@@ -226,7 +278,11 @@
           "fields": "",
           "values": false
         },
-        "text": {}
+        "text": {},
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
       "pluginVersion": "9.0.0",
       "targets": [
@@ -235,13 +291,13 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.courseOverGroundTrue\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: -10m, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.courseOverGroundTrue\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Heading True",
-      "type": "stat"
+      "title": "Heading True \u2014 Last 10 min",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -271,7 +327,26 @@
               }
             ]
           },
-          "unit": "degree"
+          "unit": "degrees",
+          "decimals": 1,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "pointSize": 5,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "min": -45,
+          "max": 45
         },
         "overrides": [
           {
@@ -336,7 +411,22 @@
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true,
-        "text": {}
+        "text": {},
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
       "pluginVersion": "9.0.0",
       "targets": [
@@ -345,13 +435,13 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.attitude.roll\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: -10m, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.attitude.roll\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Roll (Heel)",
-      "type": "gauge"
+      "title": "Roll (Heel) \u2014 Last 10 min",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -381,7 +471,26 @@
               }
             ]
           },
-          "unit": "degree"
+          "unit": "degrees",
+          "decimals": 1,
+          "custom": {
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "tooltip": false,
+              "viz": false,
+              "legend": false
+            },
+            "pointSize": 5,
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            }
+          },
+          "min": -30,
+          "max": 30
         },
         "overrides": [
           {
@@ -446,7 +555,22 @@
         },
         "showThresholdLabels": false,
         "showThresholdMarkers": true,
-        "text": {}
+        "text": {},
+        "legend": {
+          "calcs": [
+            "mean",
+            "max",
+            "min",
+            "last"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
       "pluginVersion": "9.0.0",
       "targets": [
@@ -455,13 +579,13 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.attitude.pitch\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: -10m, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.attitude.pitch\") |> last()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958})",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Pitch",
-      "type": "gauge"
+      "title": "Pitch (Assiette) \u2014 Last 10 min",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -481,21 +605,21 @@
             "axisPlacement": "auto",
             "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
+            "fillOpacity": 10,
             "gradientMode": "none",
             "hideFrom": {
-              "legend": false,
               "tooltip": false,
-              "viz": false
+              "viz": false,
+              "legend": false
             },
             "lineInterpolation": "linear",
-            "lineWidth": 1,
+            "lineWidth": 2,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
             },
             "showPoints": "auto",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -514,7 +638,8 @@
               }
             ]
           },
-          "unit": "kn"
+          "unit": "knots",
+          "decimals": 1
         },
         "overrides": [
           {
@@ -571,15 +696,17 @@
       "options": {
         "legend": {
           "calcs": [
-            "last",
-            "max"
+            "mean",
+            "max",
+            "min",
+            "last"
           ],
           "displayMode": "table",
           "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -590,12 +717,12 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> window(every:30s) |> mean()\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: -1h, stop: now()) |> filter(fn:(r) => r._measurement == \"navigation.speedOverGround\") |> window(every:30s) |> mean()\n|> map(fn: (r) => ({r with _value: r._value * 1.94384})",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Speed History (5 min)",
+      "title": "Speed Over Ground (5 min avg) \u2014 Last 1 hour",
       "type": "timeseries"
     },
     {
@@ -617,11 +744,11 @@
             "barAlignment": 0,
             "drawStyle": "line",
             "fillOpacity": 10,
-            "gradientMode": "opacity",
+            "gradientMode": "none",
             "hideFrom": {
-              "legend": false,
               "tooltip": false,
-              "viz": false
+              "viz": false,
+              "legend": false
             },
             "lineInterpolation": "linear",
             "lineWidth": 2,
@@ -630,7 +757,7 @@
               "type": "linear"
             },
             "showPoints": "never",
-            "spanNulls": false,
+            "spanNulls": true,
             "stacking": {
               "group": "A",
               "mode": "none"
@@ -649,7 +776,8 @@
               }
             ]
           },
-          "unit": "degree"
+          "unit": "degrees",
+          "decimals": 1
         },
         "overrides": [
           {
@@ -675,6 +803,9 @@
       "options": {
         "legend": {
           "calcs": [
+            "mean",
+            "max",
+            "min",
             "last"
           ],
           "displayMode": "table",
@@ -682,7 +813,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -693,12 +824,12 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\") |> range(start: v.timeRangeStart, stop: v.timeRangeStop) |> filter(fn:(r) => r._measurement =~ /navigation.attitude/) |> window(every:30s) |> mean()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958}))",
+          "query": "from(bucket:\"midnight_rider\") |> range(start: -1h, stop: now()) |> filter(fn:(r) => r._measurement =~ /navigation.attitude/) |> window(every:30s) |> mean()\n|> map(fn: (r) => ({r with _value: r._value * 57.2958}))",
           "rawQuery": true,
           "refId": "A"
         }
       ],
-      "title": "Attitude History (Roll/Pitch)",
+      "title": "Attitude History (Roll & Pitch) \u2014 Last 1 hour",
       "type": "timeseries"
     },
     {
