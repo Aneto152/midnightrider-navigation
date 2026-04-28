@@ -218,10 +218,6 @@ Basé sur audit direct du 28 avril 2026.
 > avec les fields `lat` et `lon` (voir Section 4). Les paths Signal K `.latitude` et
 > `.longitude` sont la vue applicative ; dans InfluxDB ils apparaissent comme fields
 > d'un même measurement.
-> ⚠️ **Note InfluxDB :** `navigation.position` est stocké comme measurement unique
-> avec les fields `lat` et `lon` (voir Section 4). Les paths Signal K `.latitude` et
-> `.longitude` sont la vue applicative ; dans InfluxDB ils apparaissent comme fields
-> d'un même measurement.
 
 | navigation.attitude.roll | WIT WT901BLECL | radians | -0.00518 | 30 Hz | ✅ |
 | navigation.attitude.pitch | WIT WT901BLECL | radians | -0.02291 | 30 Hz | ✅ |
