@@ -75,3 +75,5 @@ docs/memory/CREDENTIALS.md
 docs/memory/SECRETS.json
 docs/memory/PRIVATE/
 .env.new
+oc/
+__pycache__/
