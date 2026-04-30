@@ -72,23 +72,91 @@ GRAFANA_CLOUD_API_KEY=your_key_here
 curl https://rclone.org/install.sh | sudo bash
 ```
 
-### Add Google Drive remote
+### Add Google Drive remote (headless RPi via SSH)
+
+> ⚠️ **The RPi has no screen.** OAuth flow must be done from your Mac/iPhone.
+
+**On the RPi (SSH terminal):**
 
 ```bash
 rclone config
-
-# Follow prompts:
-# - Name: gdrive
-# - Storage: Google Drive (option 13 or search "drive")
-# - Client ID: Leave blank (use built-in)
-# - Use advanced config? No
-# - Use browser for auth? Yes → Opens browser → Approve → Paste token
-# - Confirm config: Yes
 ```
 
-Test:
+Follow these steps exactly:
+
+```
+No remotes found, make a new one?
+n              # Type: n (new remote)
+
+name
+gdrive         # Remote name: gdrive
+
+Type of storage
+drive          # Type: search "drive" → Google Drive
+
+Google Application Client Id
+               # Leave blank (Enter)
+
+Google Application Client Secret
+               # Leave blank (Enter)
+
+Scope that rclone should use
+1              # Scope: 1 (full access to all files)
+
+root_folder_id
+               # Leave blank (Enter)
+
+service_account_file
+               # Leave blank (Enter)
+
+Edit advanced config?
+n              # Advanced config: n
+
+Use auto config?
+n              # IMPORTANT: type n for headless SSH ← KEY DIFFERENCE
+```
+
+rclone will display:
+```
+Please go to the following link: https://accounts.google.com/o/oauth2/auth?...
+Log in and authorize rclone for access
+Enter verification code>
+```
+
+**On your Mac or iPhone (browser):**
+
+1. **Copy the full URL** from the terminal
+2. **Open it in a browser**
+3. **Sign in with your Google account**
+4. **Click "Allow"** to authorize rclone
+5. **Google displays a verification code** (ex: `4/0AX4XfWh...`)
+6. **Copy the code**
+
+**Back on RPi (terminal):**
+
+7. **Paste the code** after `Enter verification code>` → Press Enter
+8. When asked:
+   ```
+   Configure this as a Shared Drive (Team Drive)?
+   n              # No
+   
+   Keep this "gdrive" remote?
+   y              # Yes
+   
+   e/n/d/r/c/s/u/o/q>
+   q              # Quit config
+   ```
+
+**Verify immediately:**
+
 ```bash
-rclone ls gdrive:
+rclone listremotes
+# Expected output: gdrive:
+
+rclone lsd gdrive:
+# Should display your Google Drive contents
+
+echo "✅ Google Drive configured!"
 ```
 
 ## Step 3: Configure InfluxDB Cloud Replication (Optional)
