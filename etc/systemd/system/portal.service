@@ -1,0 +1,17 @@
+[Unit]
+Description=Midnight Rider Portal :8888
+Documentation=https://github.com/Aneto152/midnightrider-navigation
+After=network.target
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto/.openclaw/workspace/portal
+ExecStart=/usr/bin/python3 -m http.server 8888
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
