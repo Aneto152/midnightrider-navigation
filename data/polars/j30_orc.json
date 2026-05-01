@@ -1,0 +1,38 @@
+{
+  "_meta": {
+    "boat": "J/30",
+    "source": "ORC/IMS interpolated",
+    "units": {
+      "tws": "knots",
+      "twa": "degrees",
+      "bsp": "knots"
+    },
+    "twa_modes": {
+      "upwind": "TWA absolu < 60°",
+      "reach": "60° ≤ TWA absolu ≤ 150°",
+      "downwind": "TWA absolu > 150°"
+    },
+    "convention": {
+      "twa_sign": "Signal K : positif tribord, négatif bâbord — utiliser valeur absolue",
+      "twa_source": "environment.wind.angleTrueWater (référencé à l'eau, pas au fond)",
+      "tws_source": "environment.wind.speedTrue (m/s → convertir en kts ×1.944)",
+      "output_unit": "kts — à convertir en m/s ÷1.944 pour Signal K"
+    },
+    "last_updated": "2026-05-01",
+    "version": "1.0"
+  },
+  "polars": [
+    {"tws": 5, "upwind": 3.2, "reach": 4.1, "downwind": 4.8, "upwind_angle": 32, "downwind_angle": 155},
+    {"tws": 6, "upwind": 3.9, "reach": 5.0, "downwind": 5.9, "upwind_angle": 31, "downwind_angle": 155},
+    {"tws": 7, "upwind": 4.6, "reach": 5.9, "downwind": 6.9, "upwind_angle": 31, "downwind_angle": 155},
+    {"tws": 8, "upwind": 5.2, "reach": 6.7, "downwind": 7.8, "upwind_angle": 31, "downwind_angle": 155},
+    {"tws": 9, "upwind": 5.8, "reach": 7.5, "downwind": 8.7, "upwind_angle": 30, "downwind_angle": 155},
+    {"tws": 10, "upwind": 6.4, "reach": 8.2, "downwind": 9.5, "upwind_angle": 30, "downwind_angle": 155},
+    {"tws": 12, "upwind": 7.5, "reach": 9.6, "downwind": 11.0, "upwind_angle": 30, "downwind_angle": 155},
+    {"tws": 14, "upwind": 8.5, "reach": 10.9, "downwind": 12.4, "upwind_angle": 29, "downwind_angle": 155},
+    {"tws": 16, "upwind": 9.4, "reach": 12.0, "downwind": 13.7, "upwind_angle": 29, "downwind_angle": 155},
+    {"tws": 18, "upwind": 10.2, "reach": 13.0, "downwind": 14.8, "upwind_angle": 28, "downwind_angle": 155},
+    {"tws": 20, "upwind": 10.9, "reach": 13.9, "downwind": 15.8, "upwind_angle": 28, "downwind_angle": 155},
+    {"tws": 25, "upwind": 12.0, "reach": 15.2, "downwind": 17.2, "upwind_angle": 27, "downwind_angle": 155}
+  ]
+}

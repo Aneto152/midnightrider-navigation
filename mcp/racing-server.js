@@ -170,7 +170,7 @@ async function handleTool(name, args) {
         };
 
       case 'get_cog':
-        const cog = await getLatestValue('navigation.courseOverGround');
+        const cog = await getLatestValue('navigation.courseOverGroundTrue');
         return {
           course_over_ground_degrees: cog ? radToDeg(cog) : null,
           course_over_ground_radians: cog,
@@ -190,14 +190,14 @@ async function handleTool(name, args) {
         const vmg = await getLatestValue('performance.velocityMadeGood');
         return {
           vmg_knots: vmg ? vmg / 0.51444 : null,
-          vmg_percent: vmg ? (vmg / (await getLatestValue('performance.targetVMG') || 1)) * 100 : null,
+          vmg_percent: vmg ? (vmg / (await getLatestValue('performance.targetSpeed') || 1)) * 100 : null,
           unit: 'knots'
         };
 
       case 'get_performance':
         return {
           vmg: await getLatestValue('performance.velocityMadeGood'),
-          target_vmg: await getLatestValue('performance.targetVMG'),
+          target_vmg: await getLatestValue('performance.targetSpeed'),
           target_speed: await getLatestValue('performance.targetSpeed'),
           vmg_ratio: await getLatestValue('performance.velocityMadeGoodRatio'),
           beat_angle: await getLatestValue('performance.beatAngle'),
@@ -217,7 +217,7 @@ async function handleTool(name, args) {
 
       case 'get_wind_true':
         const trueSpeed = await getLatestValue('environment.wind.speedTrue');
-        const trueAngle = await getLatestValue('environment.wind.angleTrue');
+        const trueAngle = await getLatestValue('environment.wind.angleTrueWater');
         return {
           speed_knots: trueSpeed ? trueSpeed / 0.51444 : null,
           angle_degrees: trueAngle ? radToDeg(trueAngle) : null,
@@ -251,8 +251,8 @@ async function handleTool(name, args) {
         };
 
       case 'get_current':
-        const currentSpeed = await getLatestValue('environment.current.speedOverGround');
-        const currentDir = await getLatestValue('environment.current.directionTrue');
+        const currentSpeed = await getLatestValue('environment.current.drift');
+        const currentDir = await getLatestValue('environment.current.setTrue');
         return {
           speed_knots: currentSpeed,
           direction_degrees: currentDir ? radToDeg(currentDir) : null,
@@ -311,7 +311,7 @@ async function handleTool(name, args) {
           },
           performance: {
             vmg: await getLatestValue('performance.velocityMadeGood'),
-            target_vmg: await getLatestValue('performance.targetVMG')
+            target_vmg: await getLatestValue('performance.targetSpeed')
           }
         };
 
