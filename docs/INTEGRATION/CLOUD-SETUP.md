@@ -1,5 +1,7 @@
 # Cloud Integration Guide — Midnight Rider Navigation
 
+**⚠️ NOTE:** This guide focuses on **InfluxDB Cloud + Grafana Cloud only** (no Google Drive). For Google Drive backup, see separate documentation.
+
 ## Overview
 
 **Architecture:** RPi (at sea) → Local InfluxDB → [Back at dock, WiFi] → InfluxDB Cloud → Grafana Cloud
@@ -11,9 +13,22 @@ This guide explains how to sync race data to the cloud and access it from anywhe
 You will need:
 1. **InfluxDB Cloud account** (Free tier = 30 days retention, sufficient for post-race analysis)
 2. **Grafana Cloud account** (Free tier = 1 free stack)
-3. **Google Drive** (for backup)
-4. **rclone** (for Google Drive sync)
-5. **WiFi connection at dock** (to upload data)
+3. **WiFi connection at dock** (to upload data)
+
+### Prerequisites Check (run before race day)
+
+```bash
+# Check InfluxDB local is accessible
+curl http://localhost:8086/health
+
+# Check Grafana local is accessible
+curl http://localhost:3001/api/health
+
+# Verify .env contains cloud tokens
+grep "INFLUX_CLOUD_TOKEN\|GRAFANA_CLOUD_API_KEY" .env
+```
+
+---
 
 ## Step 1: Create Cloud Accounts
 
@@ -31,9 +46,13 @@ You will need:
    - Select **All Buckets** with **Read/Write**
    - Copy the token (looks like: `ABCD1234-1234...`)
 
+**⚠️ Important:** Copy your exact InfluxDB Cloud URL from: **Account** → **Settings** → **Cloud URL**
+
 **Save these values to .env:**
 ```bash
-INFLUX_CLOUD_URL=https://us-east-1-1.aws.cloud2.influxdata.com
+# Use the EXACT URL from your InfluxDB Cloud account
+# Do NOT hardcode — it varies by region and account
+INFLUX_CLOUD_URL=https://your-unique-url.aws.cloud2.influxdata.com
 INFLUX_CLOUD_TOKEN=your_token_here
 INFLUX_CLOUD_ORG=your-org-id-here
 INFLUX_CLOUD_BUCKET=midnight_rider
@@ -46,132 +65,40 @@ INFLUX_CLOUD_BUCKET=midnight_rider
 3. Create a stack (choose a name, e.g., "midnight-rider")
 4. Wait for stack creation (2 min)
 5. Note your stack URL: `https://yourname.grafana.net`
-6. **Generate API key:**
-   - Go to **Configuration** → **API Keys**
-   - Click **New API key**
-   - Scope: **Admin**
-   - Copy the key
+6. **Generate Service Account Token (NOT API Key):**
+   - Go to **Administration** → **Service Accounts**
+   - Click **Add service account**
+   - Display name: `midnight-rider-sync`
+   - Role: **Admin**
+   - Click **Create**
+   - Click **Add service account token**
+   - Display name: `rpi-sync`
+   - Click **Generate token**
+   - ⚠️ **Copy the token IMMEDIATELY** (displayed only once!)
 
 **Save to .env:**
 ```bash
 GRAFANA_CLOUD_URL=https://yourname.grafana.net
-GRAFANA_CLOUD_API_KEY=your_key_here
+GRAFANA_CLOUD_API_KEY=your_service_account_token_here
 ```
 
-### Google Drive (for rclone)
+---
 
-1. Already have? Continue to Step 2
-2. Don't have? Just use your existing Google account
-3. rclone will handle OAuth authentication
-
-## Step 2: Configure rclone
-
-### Install rclone
-
-```bash
-curl https://rclone.org/install.sh | sudo bash
-```
-
-### Add Google Drive remote (headless RPi via SSH)
-
-> ⚠️ **The RPi has no screen.** OAuth flow must be done from your Mac/iPhone.
-
-**On the RPi (SSH terminal):**
-
-```bash
-rclone config
-```
-
-Follow these steps exactly:
-
-```
-No remotes found, make a new one?
-n              # Type: n (new remote)
-
-name
-gdrive         # Remote name: gdrive
-
-Type of storage
-drive          # Type: search "drive" → Google Drive
-
-Google Application Client Id
-               # Leave blank (Enter)
-
-Google Application Client Secret
-               # Leave blank (Enter)
-
-Scope that rclone should use
-1              # Scope: 1 (full access to all files)
-
-root_folder_id
-               # Leave blank (Enter)
-
-service_account_file
-               # Leave blank (Enter)
-
-Edit advanced config?
-n              # Advanced config: n
-
-Use auto config?
-n              # IMPORTANT: type n for headless SSH ← KEY DIFFERENCE
-```
-
-rclone will display:
-```
-Please go to the following link: https://accounts.google.com/o/oauth2/auth?...
-Log in and authorize rclone for access
-Enter verification code>
-```
-
-**On your Mac or iPhone (browser):**
-
-1. **Copy the full URL** from the terminal
-2. **Open it in a browser**
-3. **Sign in with your Google account**
-4. **Click "Allow"** to authorize rclone
-5. **Google displays a verification code** (ex: `4/0AX4XfWh...`)
-6. **Copy the code**
-
-**Back on RPi (terminal):**
-
-7. **Paste the code** after `Enter verification code>` → Press Enter
-8. When asked:
-   ```
-   Configure this as a Shared Drive (Team Drive)?
-   n              # No
-   
-   Keep this "gdrive" remote?
-   y              # Yes
-   
-   e/n/d/r/c/s/u/o/q>
-   q              # Quit config
-   ```
-
-**Verify immediately:**
-
-```bash
-rclone listremotes
-# Expected output: gdrive:
-
-rclone lsd gdrive:
-# Should display your Google Drive contents
-
-echo "✅ Google Drive configured!"
-```
-
-## Step 3: Configure InfluxDB Cloud Replication (Optional)
+## Step 2: Configure InfluxDB Cloud Replication (Optional)
 
 This step automatically syncs data from local InfluxDB to the cloud.
 
 ### Create InfluxDB Cloud Remote
 
+**⚠️ CRITICAL:** Each `influx` command MUST include `--host "http://localhost:8086"` to target the local InfluxDB.
+
 ```bash
 # First, get your InfluxDB Cloud org ID
-# Go to https://cloud2.influxdata.com → Account → Org ID
+# Go to https://cloud2.influxdata.com → Account → Organization ID
 
 influx remote create \
   --name "influxdb-cloud" \
-  --remote-url "https://us-east-1-1.aws.cloud2.influxdata.com" \
+  --remote-url "${INFLUX_CLOUD_URL}" \
   --remote-api-token "${INFLUX_CLOUD_TOKEN}" \
   --remote-org-id "your-cloud-org-id" \
   --org "${INFLUX_ORG}" \
@@ -183,8 +110,17 @@ influx remote create \
 
 ```bash
 # Get IDs
-REMOTE_ID=$(influx remote list --org "${INFLUX_ORG}" --token "${INFLUX_TOKEN}" --json | jq -r '.[0].id')
-BUCKET_ID=$(influx bucket list --org "${INFLUX_ORG}" --token "${INFLUX_TOKEN}" --json | jq -r '.[] | select(.name=="midnight_rider") | .id')
+REMOTE_ID=$(influx remote list \
+  --org "${INFLUX_ORG}" \
+  --token "${INFLUX_TOKEN}" \
+  --host "http://localhost:8086" \
+  --json | jq -r '.[0].id')
+
+BUCKET_ID=$(influx bucket list \
+  --org "${INFLUX_ORG}" \
+  --token "${INFLUX_TOKEN}" \
+  --host "http://localhost:8086" \
+  --json | jq -r '.[] | select(.name=="midnight_rider") | .id')
 
 # Create replication
 influx replication create \
@@ -193,15 +129,27 @@ influx replication create \
   --local-bucket-id "${BUCKET_ID}" \
   --remote-bucket "midnight_rider" \
   --org "${INFLUX_ORG}" \
-  --token "${INFLUX_TOKEN}"
+  --token "${INFLUX_TOKEN}" \
+  --host "http://localhost:8086"
 
 # Verify
-influx replication list --org "${INFLUX_ORG}" --token "${INFLUX_TOKEN}"
+influx replication list \
+  --org "${INFLUX_ORG}" \
+  --token "${INFLUX_TOKEN}" \
+  --host "http://localhost:8086"
 ```
 
-## Step 4: Post-Race Workflow
+---
 
-After the race, when back at dock with WiFi:
+## Step 3: Post-Race Workflow
+
+### ⚠️ **DEADLINE CRITICAL**
+
+**InfluxDB Cloud Free Tier = 30-day retention only.**
+
+Block Island Race = **May 22, 2026** → **Data deleted after June 21, 2026**
+
+**You MUST export/archive race data within 48 hours of returning to dock.**
 
 ### Run the sync script
 
@@ -210,8 +158,8 @@ bash scripts/post-race-cloud-sync.sh
 ```
 
 This will:
-1. ✅ Backup last 30 hours to Google Drive
-2. ✅ Flush InfluxDB replication queue
+1. ✅ Backup last 30 hours to local archive
+2. ✅ Flush InfluxDB replication queue to cloud
 3. ✅ Export Grafana dashboards
 
 ### Import Dashboards to Grafana Cloud
@@ -219,12 +167,19 @@ This will:
 1. Go to your Grafana Cloud: `https://yourname.grafana.net`
 2. **+ Create** → **Import dashboard**
 3. Upload the dashboard JSON files from `/tmp/grafana-cloud-export-*/`
-4. For datasource: **Create new** → **InfluxDB**
-   - URL: `https://us-east-1-1.aws.cloud2.influxdata.com`
-   - Organization: (your InfluxDB Cloud org)
-   - Token: `${INFLUX_CLOUD_TOKEN}`
-   - Bucket: `midnight_rider`
-5. Save
+4. For each dashboard, create/assign a datasource:
+   - Click **Create new datasource** → **InfluxDB**
+   - **URL:** `${INFLUX_CLOUD_URL}` (use exact URL from Step 1)
+   - **Organization:** (your InfluxDB Cloud org name)
+   - **Token:** `${INFLUX_CLOUD_TOKEN}`
+   - **Bucket:** `midnight_rider`
+   - **Query Language:** ⚠️ **SELECT "Flux" (NOT InfluxQL)**
+     - Midnight Rider dashboards use Flux language only
+     - InfluxQL is not compatible
+   - Click **Save & Test**
+5. Complete the import and save dashboard
+
+---
 
 ## Accessing Data
 
@@ -232,47 +187,55 @@ After sync complete:
 
 ### InfluxDB Cloud
 - https://cloud2.influxdata.com
-- Query race data directly in Explore
+- Query race data directly in **Explore**
+- Use Flux query language
 
 ### Grafana Cloud
 - https://yourname.grafana.net
 - View dashboards with live data
+- All 9 dashboards accessible
 
-### Google Drive
-- https://drive.google.com
-- Folder: **MidnightRider/InfluxDB-backups/**
-- Contains tar.gz archives of race data
+---
 
 ## Troubleshooting
 
 ### "Replication failed"
 - Check internet connection
-- Verify cloud token is valid
-- Check InfluxDB Cloud bucket exists
+- Verify `INFLUX_CLOUD_TOKEN` is valid (expires after 30 days)
+- Verify `INFLUX_CLOUD_BUCKET` exists in cloud
 
-### "rclone: gdrive remote not found"
-- Run `rclone config` and create remote named `gdrive`
+### "Dashboard won't load"
+- Verify datasource is set to **Flux** (not InfluxQL)
+- Check `INFLUX_CLOUD_TOKEN` has Read access to `midnight_rider` bucket
+- Verify bucket name is exactly `midnight_rider`
 
-### "Grafana auth failed"
-- Verify GRAFANA_PASSWORD in .env
-- Check admin user still exists
+### "Import fails with JSON error"
+- Use `python3 scripts/json_utils.py validate <file>` to check dashboard JSON
+- Never use `sed`/`awk` on JSON files — use json_utils.py only
+
+---
 
 ## FAQ
 
-**Q: Do I need to sync to cloud?**  
-A: No, it's optional. Local backups to Google Drive are sufficient for post-race analysis.
+**Q: Do I need InfluxDB Cloud?**  
+A: No, it's optional. Local backups are sufficient for post-race analysis.
 
-**Q: What's the retention policy?**  
-A: InfluxDB Cloud Free = 30 days. After that, data is deleted unless you upgrade.
+**Q: What if I exceed 30 days?**  
+A: Free tier data is deleted automatically. Upgrade to paid tier to extend retention.
 
 **Q: Can I access live data during the race?**  
 A: No, replication only works when connected to WiFi. During the race, only local monitoring works.
 
 **Q: Do I need Grafana Cloud if I have local Grafana?**  
-A: No, but cloud Grafana is accessible from any device after the race.
+A: No, but cloud Grafana is accessible from any device (phone, tablet) after the race.
+
+**Q: Which Grafana region should I choose?**  
+A: US region is default. Choose based on your location for lower latency.
+
+---
 
 ## More Info
 
 - InfluxDB Cloud docs: https://docs.influxdata.com/influxdb/cloud/
 - Grafana Cloud docs: https://grafana.com/docs/grafana-cloud/
-- rclone Google Drive: https://rclone.org/drive/
+- Flux query language: https://docs.influxdata.com/influxdb/cloud/query-data/get-started/
