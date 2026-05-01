@@ -350,17 +350,27 @@ from(bucket: "midnight_rider")
 
 ## 8. Vue par serveur MCP
 
-| Serveur MCP | Config | Measurements InfluxDB utilisés | Outils exposés | Status |
+**Audit 2026-05-01:** 7 serveurs implémentés. 🔧 **ISSUE:** Tous utilisent bucket 'signalk', doivent utiliser 'midnight_rider'. Voir `docs/MCP-INTEGRATION-STATUS.md`.
+
+| Serveur MCP | Fichier | Bucket | Statut | Notes |
 |---|---|---|---|---|
-| **Astronomical** | mcp/astronomical | N/A (calculs locaux) | sun_position, moon_phase, tides, twilight_times | ✅ Actif |
-| **Racing** | mcp/racing | navigation.*, environment.wind.* | heading_accuracy, sog_analysis, vmg, wind_optimization | ✅ Actif |
-| **Polar** | mcp/polar | navigation.speed*, wind.* | polar_efficiency, target_speed, performance_delta | ✅ Actif |
-| **Crew** | mcp/crew | regatta.crew, navigation.* | watch_rotation, helmsman_status, performance_brief | ⏳ À intégrer |
-| **Race Management** | mcp/race_management | regatta.timer, navigation.* | start_timer, mark_distance, layline_calc | ⏳ À intégrer |
-| **Weather** | mcp/weather | Open-Meteo HTTP API | forecast_summary, wind_trend, gust_warning | ✅ Actif |
-| **Buoy** | mcp/buoy | NOAA HTTP API | real_observations, wind_comparison, pressure_trend | ⚠️ Partiel — serveur MCP actif, données NOAA non encore collectées (cf. Section 9) |
+| **Astronomical** | astronomical-server.js | midnight_rider | ✅ Actif | Calculs locaux |
+| **Weather** | weather-server.js | midnight_rider | ✅ Actif | Open-Meteo API |
+| **Racing** | racing-server.js | midnight_rider | ✅ Actif | Performance de course |
+| **Polar** | polar-server.js | midnight_rider | ✅ Actif | Polars J/30 |
+| **Race** | race-server.js | midnight_rider | ✅ Actif | Race management |
+| **Buoy** | buoy-server.js | midnight_rider | ⚠️ Partiel | MCP ✅, NOAA data TBD |
+| **Crew** | crew-server.js | midnight_rider | ⏳ En attente | Regatta.crew requis |
 
 ---
+
+---
+
+## 8.2 Alignement avec DATA-SCHEMA-MASTER
+
+**Bucket InfluxDB utilisé:** `midnight_rider` (27 measurements actifs)  
+**Outils MCP exposés:** 37 outils (5 serveurs + 2 partiels)  
+**Statut global:** 5/7 serveurs fully operational
 
 ---
 

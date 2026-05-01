@@ -1,13 +1,81 @@
 {
   "mcpServers": {
     "astronomical": {
-      "command": "/home/aneto/docker/signalk/mcp/astronomical-server.js",
-      "args": [],
+      "command": "node",
+      "args": ["/home/aneto/.openclaw/workspace/mcp/astronomical-server.js"],
+      "description": "Sun/moon position, tides, twilight calculations (local)",
       "env": {
         "INFLUX_URL": "http://localhost:8086",
         "INFLUX_TOKEN": "${INFLUX_TOKEN}",
         "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
+        "INFLUX_BUCKET": "midnight_rider"
+      }
+    },
+    "weather": {
+      "command": "node",
+      "args": ["/home/aneto/.openclaw/workspace/mcp/weather-server.js"],
+      "description": "Weather forecasts, wind trends, gust warnings (Open-Meteo API)",
+      "env": {
+        "INFLUX_URL": "http://localhost:8086",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
+        "INFLUX_ORG": "MidnightRider",
+        "INFLUX_BUCKET": "midnight_rider"
+      }
+    },
+    "racing": {
+      "command": "node",
+      "args": ["/home/aneto/.openclaw/workspace/mcp/racing-server.js"],
+      "description": "Racing performance: heading accuracy, SOG, VMG, wind optimization",
+      "env": {
+        "INFLUX_URL": "http://localhost:8086",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
+        "INFLUX_ORG": "MidnightRider",
+        "INFLUX_BUCKET": "midnight_rider"
+      }
+    },
+    "polar": {
+      "command": "node",
+      "args": ["/home/aneto/.openclaw/workspace/mcp/polar-server.js"],
+      "description": "Polar performance analysis: efficiency, target speed, delta",
+      "env": {
+        "INFLUX_URL": "http://localhost:8086",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
+        "INFLUX_ORG": "MidnightRider",
+        "INFLUX_BUCKET": "midnight_rider"
+      }
+    },
+    "race": {
+      "command": "node",
+      "args": ["/home/aneto/.openclaw/workspace/mcp/race-server.js"],
+      "description": "Race management: start timer, mark distance, layline calculations",
+      "env": {
+        "INFLUX_URL": "http://localhost:8086",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
+        "INFLUX_ORG": "MidnightRider",
+        "INFLUX_BUCKET": "midnight_rider"
+      }
+    },
+    "buoy": {
+      "command": "node",
+      "args": ["/home/aneto/.openclaw/workspace/mcp/buoy-server.js"],
+      "description": "NOAA buoy observations: wind comparison, pressure trends (requires noaa_collector.py running)",
+      "env": {
+        "INFLUX_URL": "http://localhost:8086",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
+        "INFLUX_ORG": "MidnightRider",
+        "INFLUX_BUCKET": "midnight_rider"
+      }
+    },
+    "crew": {
+      "command": "node",
+      "args": ["/home/aneto/.openclaw/workspace/mcp/crew-server.js"],
+      "description": "Crew management: watch rotation, helmsman status, performance brief (requires regatta.crew data)",
+      "disabled": true,
+      "env": {
+        "INFLUX_URL": "http://localhost:8086",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
+        "INFLUX_ORG": "MidnightRider",
+        "INFLUX_BUCKET": "midnight_rider"
       }
     },
     "filesystem": {
