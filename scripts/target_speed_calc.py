@@ -1,322 +1,348 @@
 #!/usr/bin/env python3
 """
-target_speed_calc.py — Target Speed Calculation from Polars
+target_speed_calc.py — Target Speed from J/30 Polars
 
-Midnight Rider Navigation — J/30 Polar Performance
+Midnight Rider Navigation — Load external polars from data/polars/j30_orc.json
 
-Formula:
-  Target Speed = Polar(TWS, TWA)
-  
-  Where:
-    TWS = True Wind Speed (m/s) from environment.wind.speedTrue
-    TWA = True Wind Angle (rad) from environment.wind.angleTrueWater
-    
-  Polars are J/30-specific boat coefficients.
+╔════════════════════════════════════════════════════════════════╗
+║ SOURCE POLAIRES: data/polars/j30_orc.json (NO HARDCODING!)    ║
+║                                                                ║
+║ target_speed = interpolate(POLAR, TWS_kts, mode(|TWA|))      ║
+║                                                                ║
+║ Modes from |TWA| absolute (KEY: use abs() for symmetry):     ║
+║  |TWA| < 60° → upwind (beating, close-hauled)                ║
+║  60° ≤ |TWA| ≤ 150° → reach (beam, broad)                    ║
+║  |TWA| > 150° → downwind (running)                           ║
+╚════════════════════════════════════════════════════════════════╝
 
-Inputs from Signal K:
-  - environment.wind.speedTrue (m/s)
-  - environment.wind.angleTrueWater (rad)
+INPUTS from Signal K (REST HTTP, every 10s):
+  environment.wind.speedTrue [m/s] — TWS
+  environment.wind.angleTrueWater [rad] — TWA (SIGNED: + starboard, - port)
+  navigation.speedThroughWater [m/s] — STW (for efficiency calculation)
 
-Outputs to Signal K:
-  - performance.targetSpeed (m/s)
+OUTPUTS to Signal K (WebSocket PERSISTENT connection):
+  performance.targetSpeed [m/s] — polar target speed
+  performance.polarEfficiency [0-1] — STW / targetSpeed
 
-Also writes to InfluxDB bucket 'midnight_rider'.
+OUTPUTS to InfluxDB (bucket: midnight_rider):
+  measurement: performance.target
+  fields: target_kts, efficiency_pct, mode, tws_kts, twa_deg
 
-J/30 Polars (knots, interpolated):
-  TWS=4kts:   0°:2.0  30°:4.5  60°:5.5  90°:5.8  120°:5.2  150°:3.5  180°:0
-  TWS=6kts:   0°:3.0  30°:6.5  60°:8.0  90°:8.5  120°:7.5  150°:5.0  180°:0
-  TWS=8kts:   0°:4.0  30°:8.5  60°:10.5 90°:11.0 120°:10.0 150°:6.5  180°:0
-  TWS=10kts:  0°:5.0  30°:10.0 60°:12.5 90°:13.0 120°:12.0 150°:8.0  180°:0
-  TWS=12kts:  0°:5.8  30°:11.5 60°:14.0 90°:14.5 120°:13.5 150°:9.0  180°:0
-  TWS=15kts:  0°:6.5  30°:13.0 60°:15.5 90°:16.0 120°:15.0 150°:10.0 180°:0
-  TWS=20kts:  0°:7.5  30°:15.0 60°:17.0 90°:17.5 120°:16.5 150°:11.5 180°:0
+BUG FIXES in this version:
+  ✅ FIX 1: Load polars from data/polars/j30_orc.json (no hardcoding)
+  ✅ FIX 2: Use correct J/30 values (not 2× too high)
+  ✅ FIX 3: Use abs() on TWA → starboard/port symmetry
+  ✅ BONUS: WebSocket persistent (no reconnect per cycle)
 
-Author: OC (Open Claw) — Midnight Rider Navigation
-License: MIT
+Compliance: DATA-SCHEMA-MASTER.md § Polars & Performance
 """
 
 import asyncio
 import json
 import math
-import time
 import os
 import sys
-from datetime import datetime
-from typing import Optional, List, Tuple
-
+import time
 import urllib.request
 import urllib.error
+from datetime import datetime
+from pathlib import Path
+from typing import Optional, List, Tuple
 
+# ─── Configuration ─────────────────────────────────────────────────────
 
-# Configuration
 SIGNALK_HTTP = os.getenv("SIGNALK_HTTP", "http://localhost:3000")
 SIGNALK_WS = os.getenv("SIGNALK_WS", "ws://localhost:3000/signalk/v1/stream")
-
 INFLUX_URL = os.getenv("INFLUX_URL", "http://localhost:8086")
 INFLUX_TOKEN = os.getenv("INFLUX_TOKEN", "")
 INFLUX_ORG = os.getenv("INFLUX_ORG", "MidnightRider")
 INFLUX_BUCKET = os.getenv("INFLUX_BUCKET", "midnight_rider")
+CALC_INTERVAL = 10.0  # seconds between calculations
 
-# Calculation frequency: every 10 seconds
-CALC_INTERVAL = 10.0
+SOURCE_LABEL = "midnight-rider-polar-calc"
 
-# J/30 Polars (knots): {tws: [(angle_deg, speed_kts), ...]}
-J30_POLARS = {
-    4: [(0, 2.0), (30, 4.5), (60, 5.5), (90, 5.8), (120, 5.2), (150, 3.5), (180, 0)],
-    6: [(0, 3.0), (30, 6.5), (60, 8.0), (90, 8.5), (120, 7.5), (150, 5.0), (180, 0)],
-    8: [(0, 4.0), (30, 8.5), (60, 10.5), (90, 11.0), (120, 10.0), (150, 6.5), (180, 0)],
-    10: [(0, 5.0), (30, 10.0), (60, 12.5), (90, 13.0), (120, 12.0), (150, 8.0), (180, 0)],
-    12: [(0, 5.8), (30, 11.5), (60, 14.0), (90, 14.5), (120, 13.5), (150, 9.0), (180, 0)],
-    15: [(0, 6.5), (30, 13.0), (60, 15.5), (90, 16.0), (120, 15.0), (150, 10.0), (180, 0)],
-    20: [(0, 7.5), (30, 15.0), (60, 17.0), (90, 17.5), (120, 16.5), (150, 11.5), (180, 0)],
-}
+# FIX 1: Load polars from external file (not hardcoded)
+POLAR_FILE = Path(__file__).parent.parent / "data" / "polars" / "j30_orc.json"
+
+# Signal K paths
+SK_TWS = "environment/wind/speedTrue"
+SK_TWA = "environment/wind/angleTrueWater"
+SK_STW = "navigation/speedThroughWater"
+SK_TARGET = "performance.targetSpeed"
+SK_EFFICIENCY = "performance.polarEfficiency"
 
 
-# ─── Signal K API calls ───────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════
+# POLARS LOADING
+# ════════════════════════════════════════════════════════════════════
 
-def get_signalk_value(path: str) -> Optional[float]:
-    """Fetch a single value from Signal K REST API."""
+def load_polars(path: Path) -> List[dict]:
+    """
+    Load and validate J/30 polars from external JSON file.
+    Source of truth: data/polars/j30_orc.json
+    Format: see data/polars/README.md
+    """
+    if not path.exists():
+        raise FileNotFoundError(f"Polar file not found: {path}")
+
+    with open(path) as f:
+        data = json.load(f)
+
+    polars = sorted(data["polars"], key=lambda p: p["tws"])
+
+    # Validate structure
+    required = {"tws", "upwind", "reach", "downwind"}
+    for p in polars:
+        missing = required - set(p.keys())
+        if missing:
+            raise ValueError(f"Point TWS={p['tws']} missing: {missing}")
+
+    print(f"✅ Polars loaded: {path.name}")
+    print(f"   Boat: {data['_meta']['boat']}")
+    print(f"   Source: {data['_meta']['source']}")
+    print(f"   Points: {len(polars)} ({polars[0]['tws']}-{polars[-1]['tws']} knots)")
+
+    return polars
+
+
+def interpolate_polar(polars: List[dict], tws_kts: float) -> dict:
+    """
+    Linear interpolation between TWS points.
+    Returns {upwind, reach, downwind, ...} for given TWS.
+    """
+    if tws_kts <= polars[0]["tws"]:
+        return polars[0]
+    if tws_kts >= polars[-1]["tws"]:
+        return polars[-1]
+
+    for i in range(len(polars) - 1):
+        lo, hi = polars[i], polars[i + 1]
+        if lo["tws"] <= tws_kts <= hi["tws"]:
+            ratio = (tws_kts - lo["tws"]) / (hi["tws"] - lo["tws"])
+            return {
+                k: lo[k] + (hi[k] - lo[k]) * ratio
+                for k in lo if isinstance(lo[k], (int, float))
+            }
+
+    return polars[-1]
+
+
+def get_sailing_mode(twa_deg_abs: float) -> str:
+    """
+    FIX 3: Get sailing mode from |TWA| absolute.
+
+    CRITICAL: twa_deg_abs MUST be abs(TWA_signed).
+    Signal K returns TWA signed: + starboard, - port.
+    Mode is SYMMETRIC: same target speed either side.
+
+    J/30 thresholds:
+      < 60° → upwind (close-hauled)
+      60-150°→ reach (travers, broad)
+      > 150° → downwind (running)
+    """
+    if twa_deg_abs < 60:
+        return "upwind"
+    if twa_deg_abs <= 150:
+        return "reach"
+    return "downwind"
+
+
+def get_target_speed(
+    polars: List[dict], tws_ms: float, twa_rad: float
+) -> Tuple[float, str, float, float]:
+    """
+    Calculate target speed from polars.
+
+    FIX 1: Use polars loaded from external file
+    FIX 3: Use abs(twa_rad) for mode calculation
+
+    Returns: (target_ms, mode, twa_deg_abs, tws_kts)
+    """
+    tws_kts = tws_ms * 1.944
+
+    # FIX 3: Use abs() on TWA for symmetry (starboard = port)
+    twa_deg = math.degrees(abs(twa_rad))
+
+    mode = get_sailing_mode(twa_deg)
+    polar = interpolate_polar(polars, tws_kts)
+
+    # FIX 2: Use correct values from j30_orc.json (verified above)
+    target_kts = polar[mode]
+    target_ms = target_kts / 1.944
+
+    return target_ms, mode, twa_deg, tws_kts
+
+
+# ════════════════════════════════════════════════════════════════════
+# SIGNAL K
+# ════════════════════════════════════════════════════════════════════
+
+def get_signalk(path: str) -> Optional[float]:
+    """Fetch value from Signal K REST API."""
     try:
         url = f"{SIGNALK_HTTP}/signalk/v1/api/vessels/self/{path}"
-        with urllib.request.urlopen(url, timeout=2) as response:
-            data = json.loads(response.read().decode('utf-8'))
-            return data.get('value')
-    except (urllib.error.URLError, json.JSONDecodeError, OSError):
+        resp = urllib.request.urlopen(
+            urllib.request.Request(url), timeout=2
+        )
+        return json.loads(resp.read()).get("value")
+    except Exception:
         return None
 
 
-def get_wind_inputs() -> Tuple[Optional[float], Optional[float]]:
-    """Fetch wind inputs from Signal K."""
-    tws = get_signalk_value("environment/wind/speedTrue")
-    twa = get_signalk_value("environment/wind/angleTrueWater")
-    return tws, twa
+def build_delta(target_ms: float, efficiency_ratio: float) -> str:
+    """Build Signal K delta message."""
+    return json.dumps({
+        "context": "vessels.self",
+        "updates": [{
+            "source": {
+                "label": SOURCE_LABEL,
+                "type": "software"
+            },
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "values": [
+                {"path": SK_TARGET, "value": round(target_ms, 4)},
+                {"path": SK_EFFICIENCY, "value": round(efficiency_ratio, 4)}
+            ]
+        }]
+    })
 
 
-# ─── Polar interpolation ──────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════
+# INFLUXDB
+# ════════════════════════════════════════════════════════════════════
 
-def interpolate_polar(tws_kts: float, twa_deg: float) -> Optional[float]:
-    """
-    Interpolate target speed from J/30 polars.
-    
-    Args:
-        tws_kts: True Wind Speed (knots)
-        twa_deg: True Wind Angle (degrees, 0-180)
-    
-    Returns:
-        Target speed (knots), or None if out of range
-    """
-    # Find surrounding TWS values in polars
-    tws_values = sorted(J30_POLARS.keys())
-    
-    if tws_kts < tws_values[0]:
-        # Below minimum TWS
-        tws_low = tws_low_idx = None
-        tws_high = tws_values[0]
-        tws_high_idx = 0
-        alpha = 0.0
-    elif tws_kts > tws_values[-1]:
-        # Above maximum TWS
-        tws_low = tws_values[-1]
-        tws_low_idx = len(tws_values) - 1
-        tws_high = tws_high_idx = None
-        alpha = 1.0
-    else:
-        # Within range: find bracketing values
-        for i in range(len(tws_values) - 1):
-            if tws_values[i] <= tws_kts <= tws_values[i+1]:
-                tws_low = tws_values[i]
-                tws_low_idx = i
-                tws_high = tws_values[i+1]
-                tws_high_idx = i + 1
-                alpha = (tws_kts - tws_low) / (tws_high - tws_low) if tws_high > tws_low else 0
-                break
-    
-    # Clamp TWA to 0-180
-    twa_norm = min(180, max(0, twa_deg))
-    
-    # Get speeds from low and high TWS rows
-    speed_low = None
-    speed_high = None
-    
-    if tws_low_idx is not None:
-        polar_row = J30_POLARS[tws_low]
-        # Interpolate within this row
-        for i in range(len(polar_row) - 1):
-            angle_low, speed_low_lo = polar_row[i]
-            angle_high, speed_low_hi = polar_row[i+1]
-            if angle_low <= twa_norm <= angle_high:
-                beta = (twa_norm - angle_low) / (angle_high - angle_low) if angle_high > angle_low else 0
-                speed_low = speed_low_lo + beta * (speed_low_hi - speed_low_lo)
-                break
-        else:
-            # Use last value if beyond range
-            speed_low = polar_row[-1][1]
-    
-    if tws_high_idx is not None:
-        polar_row = J30_POLARS[tws_high]
-        for i in range(len(polar_row) - 1):
-            angle_low, speed_high_lo = polar_row[i]
-            angle_high, speed_high_hi = polar_row[i+1]
-            if angle_low <= twa_norm <= angle_high:
-                beta = (twa_norm - angle_low) / (angle_high - angle_low) if angle_high > angle_low else 0
-                speed_high = speed_high_lo + beta * (speed_high_hi - speed_high_lo)
-                break
-        else:
-            speed_high = polar_row[-1][1]
-    
-    # Interpolate between TWS rows
-    if speed_low is not None and speed_high is not None:
-        return speed_low + alpha * (speed_high - speed_low)
-    elif speed_low is not None:
-        return speed_low
-    elif speed_high is not None:
-        return speed_high
-    else:
-        return None
-
-
-# ─── InfluxDB ─────────────────────────────────────────────────────────────────
-
-def write_to_influxdb(measurement: str, fields: dict, tags: dict = None) -> bool:
-    """Write measurement to InfluxDB using line protocol."""
+def write_influx(
+    target_ms: float, efficiency_pct: float,
+    mode: str, tws_kts: float, twa_deg: float
+) -> None:
+    """Write to InfluxDB."""
     if not INFLUX_TOKEN:
-        print("⚠️  INFLUX_TOKEN not set, skipping InfluxDB write")
-        return False
-    
-    if tags is None:
-        tags = {}
-    
-    # Build line protocol
-    line = measurement
-    
-    if tags:
-        tag_str = ",".join(f"{k}={v}" for k, v in tags.items())
-        line += f",{tag_str}"
-    
-    field_parts = []
-    for k, v in fields.items():
-        if isinstance(v, str):
-            field_parts.append(f'{k}="{v}"')
-        elif isinstance(v, bool):
-            field_parts.append(f"{k}={str(v).lower()}")
-        else:
-            field_parts.append(f"{k}={v}")
-    
-    line += " " + ",".join(field_parts)
-    
-    url = f"{INFLUX_URL}/api/v2/write?org={INFLUX_ORG}&bucket={INFLUX_BUCKET}&precision=s"
-    data = line.encode('utf-8')
-    
-    req = urllib.request.Request(url, data=data, method="POST")
+        return
+
+    line = (
+        f'performance.target '
+        f'target_kts={round(target_ms * 1.944, 3)},'
+        f'efficiency_pct={round(efficiency_pct, 1)},'
+        f'mode="{mode}",'
+        f'tws_kts={round(tws_kts, 1)},'
+        f'twa_deg={round(twa_deg, 1)}'
+    )
+
+    url = (
+        f"{INFLUX_URL}/api/v2/write"
+        f"?org={INFLUX_ORG}&bucket={INFLUX_BUCKET}&precision=s"
+    )
+
+    req = urllib.request.Request(
+        url, data=line.encode(), method="POST"
+    )
     req.add_header("Authorization", f"Token {INFLUX_TOKEN}")
     req.add_header("Content-Type", "text/plain")
-    
+
     try:
-        with urllib.request.urlopen(req, timeout=3) as response:
-            return response.status == 204
-    except urllib.error.URLError as e:
-        print(f"⚠️  InfluxDB error: {e}")
-        return False
+        urllib.request.urlopen(req, timeout=3)
+    except Exception as e:
+        print(f"⚠️  InfluxDB: {e}")
 
 
-# ─── Signal K Delta ───────────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════
+# MAIN LOOP — WebSocket PERSISTENT
+# ════════════════════════════════════════════════════════════════════
 
-async def send_signalk_delta(target_speed_kts: float) -> bool:
-    """Inject target speed into Signal K via delta."""
+async def main_loop():
+    """
+    BONUS FIX: WebSocket PERSISTENT connection.
+    Open once at startup, keep alive for entire runtime.
+    Reconnect on disconnection (after 5s delay).
+    """
     try:
         import websockets
     except ImportError:
-        return False
-    
+        print("⚠️  websockets module not installed")
+        print("   pip3 install websockets")
+        return
+
+    # Load polars once at startup (FIX 1)
     try:
-        timestamp = datetime.utcnow().isoformat() + "Z"
-        target_speed_ms = target_speed_kts / 1.944  # Convert knots to m/s
-        
-        delta = {
-            "context": "vessels.self",
-            "updates": [{
-                "source": {
-                    "label": "midnight-rider-polars",
-                    "type": "software"
-                },
-                "timestamp": timestamp,
-                "values": [
-                    {"path": "performance.targetSpeed", "value": target_speed_ms}
-                ]
-            }]
-        }
-        
-        uri = f"{SIGNALK_WS}?subscribe=none"
-        async with websockets.connect(uri, timeout=5) as websocket:
-            await websocket.send(json.dumps(delta))
-            print(f"  ↔️  Signal K: targetSpeed={target_speed_kts:.1f}kts ({target_speed_ms:.2f}m/s)")
-            return True
+        polars = load_polars(POLAR_FILE)
     except Exception as e:
-        print(f"⚠️  Signal K delta failed: {e}")
-        return False
+        print(f"❌ Failed to load polars: {e}")
+        sys.exit(1)
 
+    print(f"\n🎯 Target Speed Calculator — J/30 Polars")
+    print(f"   Polars: {POLAR_FILE.name}")
+    print(f"   Bucket: {INFLUX_BUCKET}")
+    print(f"   Interval: {CALC_INTERVAL}s")
+    print(f"   WebSocket: PERSISTENT\n")
 
-# ─── Main loop ────────────────────────────────────────────────────────────────
-
-async def main():
-    """Main calculation loop."""
-    print("🎯 Target Speed Calculator — J/30 Polars")
-    print(f"   Signal K: {SIGNALK_HTTP}")
-    print(f"   InfluxDB: {INFLUX_URL} (bucket: {INFLUX_BUCKET})")
-    print()
-    
     iteration = 0
-    
+    reconnect_delay = 5
+
     while True:
-        iteration += 1
-        
-        # Fetch wind inputs
-        tws, twa_rad = get_wind_inputs()
-        
-        if tws is None or twa_rad is None:
-            print(f"[{iteration}] ⚠️  Missing wind data: TWS={tws}, TWA={twa_rad}")
-            await asyncio.sleep(CALC_INTERVAL)
-            continue
-        
-        # Convert to knots and degrees
-        tws_kts = tws * 1.944
-        twa_deg = math.degrees(twa_rad)
-        
-        # Lookup target speed from polars
-        target_speed_kts = interpolate_polar(tws_kts, twa_deg)
-        
-        if target_speed_kts is None:
-            print(f"[{iteration}] ⚠️  Polar lookup failed: TWS={tws_kts:.1f}kts, TWA={twa_deg:.1f}°")
-            await asyncio.sleep(CALC_INTERVAL)
-            continue
-        
-        target_speed_ms = target_speed_kts / 1.944
-        
-        # Log
-        print(f"[{iteration}] TWS={tws_kts:.1f}kts TWA={twa_deg:.1f}° → TargetSpeed={target_speed_kts:.1f}kts ({target_speed_ms:.2f}m/s)")
-        
-        # Write to InfluxDB
-        write_to_influxdb(
-            "performance.targetSpeed",
-            {
-                "value": target_speed_ms,
-                "kts": target_speed_kts
-            },
-            {"source": "midnight-rider-polars", "boat": "J30"}
-        )
-        
-        # Send to Signal K
-        await send_signalk_delta(target_speed_kts)
-        
-        # Wait before next iteration
-        await asyncio.sleep(CALC_INTERVAL)
+        try:
+            uri = f"{SIGNALK_WS}?subscribe=none"
+            async with websockets.connect(uri, ping_interval=30) as ws:
+                # Signal K hello
+                hello = json.loads(await ws.recv())
+                print(f"✅ Signal K: {hello.get('name', '?')} "
+                      f"v{hello.get('version', '?')}\n")
+
+                # Calculation loop (WebSocket stays open)
+                while True:
+                    iteration += 1
+
+                    tws_ms = get_signalk(SK_TWS)
+                    twa_rad = get_signalk(SK_TWA)
+                    stw_ms = get_signalk(SK_STW)
+
+                    if tws_ms is not None and twa_rad is not None:
+                        target_ms, mode, twa_deg, tws_kts = get_target_speed(
+                            polars, tws_ms, twa_rad
+                        )
+
+                        efficiency_ratio = 0.0
+                        efficiency_pct = 0.0
+                        if stw_ms and target_ms > 0:
+                            efficiency_ratio = stw_ms / target_ms
+                            efficiency_pct = efficiency_ratio * 100.0
+
+                        print(
+                            f"[{iteration:4d}] "
+                            f"TWS={tws_kts:5.1f}kt "
+                            f"TWA={twa_deg:5.0f}° "
+                            f"Mode={mode:8s} "
+                            f"Target={target_ms*1.944:5.2f}kt "
+                            f"Eff={efficiency_pct:5.1f}%"
+                        )
+
+                        # Send to Signal K (same WebSocket)
+                        await ws.send(build_delta(target_ms, efficiency_ratio))
+
+                        # Write to InfluxDB
+                        write_influx(
+                            target_ms, efficiency_pct,
+                            mode, tws_kts, twa_deg
+                        )
+                    else:
+                        print(
+                            f"[{iteration:4d}] ⚠️  Missing: "
+                            f"TWS={tws_ms}, TWA={twa_rad}"
+                        )
+
+                    # Wait before next calculation
+                    await asyncio.sleep(CALC_INTERVAL)
+
+        except Exception as e:
+            print(f"❌ Connection error: {e}")
+            print(f"   Reconnecting in {reconnect_delay}s...\n")
+            await asyncio.sleep(reconnect_delay)
 
 
-# ─── Entry point ──────────────────────────────────────────────────────────────
+# ════════════════════════════════════════════════════════════════════
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        asyncio.run(main_loop())
     except KeyboardInterrupt:
         print("\n⏹️  Stopped")
         sys.exit(0)
