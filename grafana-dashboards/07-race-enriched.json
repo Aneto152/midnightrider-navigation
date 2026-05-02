@@ -640,7 +640,7 @@
       },
       "id": 110,
       "options": {
-        "content": "### Interface r\u00e9gate\n\n[\ud83c\udfc1 Ouvrir](http://midnightrider.local:8888/regatta/)\n\nChrono \u00b7 Ligne \u00b7 Bou\u00e9es",
+        "content": "### Interface r\u00e9gate\n\n[\ud83c\udfc1 Ouvrir](http://localhost:8888/regatta/)\n\nChrono \u00b7 Ligne \u00b7 Bou\u00e9es",
         "mode": "markdown"
       },
       "pluginVersion": "9.0.0",

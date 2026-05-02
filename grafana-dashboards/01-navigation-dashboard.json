@@ -25,7 +25,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -70,7 +70,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> last()"
@@ -82,7 +82,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -154,7 +154,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> aggregateWindow(every: 10s, fn: mean)"
@@ -166,7 +166,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -212,7 +212,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 1.94384}))"
@@ -224,7 +224,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -296,7 +296,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> map(fn: (r) => ({r with _value: r._value * 1.94384})) |> aggregateWindow(every: 10s, fn: mean)"
@@ -308,7 +308,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -353,7 +353,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.courseOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159}))"
@@ -365,7 +365,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -437,7 +437,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.rateOfTurn\") |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159 * 60})) |> aggregateWindow(every: 10s, fn: mean)"

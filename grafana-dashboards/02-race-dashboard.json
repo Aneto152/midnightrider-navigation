@@ -25,7 +25,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -83,7 +83,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.helmsman\") |> last()"
@@ -95,7 +95,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -153,7 +153,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.sails\") |> last()"
@@ -165,7 +165,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -237,7 +237,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"regatta.helmsman\") |> aggregateWindow(every: 30m, fn: count)"
@@ -249,7 +249,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -321,7 +321,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"regatta.sails\") |> aggregateWindow(every: 30m, fn: count)"
@@ -333,7 +333,7 @@
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -387,7 +387,7 @@
         {
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
+            "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
           "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.start_line\") |> last()"
