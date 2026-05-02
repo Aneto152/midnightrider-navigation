@@ -372,7 +372,7 @@
   "timepicker": {},
   "timezone": "America/New_York",
   "title": "08 \u2014 ALERTS & MONITORING (60 Alert Rules)",
-  "uid": "alerts-monitoring",
+  "uid": "08-alerts",
   "version": 2,
   "weekStart": "monday"
 }
