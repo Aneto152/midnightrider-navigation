@@ -1,0 +1,1966 @@
+{
+  "uid": "data-model-status",
+  "title": "DATA MODEL STATUS",
+  "tags": [
+    "midnight-rider",
+    "status",
+    "monitoring"
+  ],
+  "timezone": "browser",
+  "refresh": "10s",
+  "version": 1,
+  "schemaVersion": 39,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "text",
+      "title": "",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 2
+      },
+      "options": {
+        "mode": "markdown",
+        "content": "# \u2693 Midnight Rider \u2014 Data Model Status\n_Real-time operational status of all measurements and sensors. **Green** = active data in last 30s. **Orange** = stale (30s-5min). **Red** = no data._"
+      }
+    },
+    {
+      "id": 2,
+      "type": "row",
+      "title": "\ud83d\udd0c SENSORS \u2014 Hardware Status",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 2,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Signal K",
+      "description": "Signal K server \u2192 NMEA 2000",
+      "gridPos": {
+        "x": 0,
+        "y": 3,
+        "w": 6,
+        "h": 4
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.1
+              },
+              {
+                "color": "green",
+                "value": 1.0
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "NO DATA",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ACTIVE",
+                  "color": "green"
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -30s)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"sog_kts\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "GPS/GNSS",
+      "description": "NANO-HED10L dual antenna",
+      "gridPos": {
+        "x": 6,
+        "y": 3,
+        "w": 6,
+        "h": 4
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.1
+              },
+              {
+                "color": "green",
+                "value": 1.0
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "NO DATA",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ACTIVE",
+                  "color": "green"
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -30s)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"latitude\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "stat",
+      "title": "Wind B&G",
+      "description": "WS320 mechanical sensor",
+      "gridPos": {
+        "x": 12,
+        "y": 3,
+        "w": 6,
+        "h": 4
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.1
+              },
+              {
+                "color": "green",
+                "value": 1.0
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "NO DATA",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ACTIVE",
+                  "color": "green"
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -30s)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"tws_kts\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "IMU (Roll)",
+      "description": "BNO085 IMU attitude",
+      "gridPos": {
+        "x": 18,
+        "y": 3,
+        "w": 6,
+        "h": 4
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.1
+              },
+              {
+                "color": "green",
+                "value": 1.0
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "NO DATA",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ACTIVE",
+                  "color": "green"
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -30s)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"heel_deg\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "type": "stat",
+      "title": "Depth",
+      "description": "NMEA 2000 sounder",
+      "gridPos": {
+        "x": 0,
+        "y": 7,
+        "w": 6,
+        "h": 4
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.1
+              },
+              {
+                "color": "green",
+                "value": 1.0
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "NO DATA",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ACTIVE",
+                  "color": "green"
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -60s)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"depth_m\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "type": "stat",
+      "title": "NOAA Buoy",
+      "description": "NDBC nearest station",
+      "gridPos": {
+        "x": 6,
+        "y": 7,
+        "w": 6,
+        "h": 4
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "orientation": "auto",
+        "textMode": "value_and_name",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.1
+              },
+              {
+                "color": "green",
+                "value": 1.0
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0": {
+                  "text": "NO DATA",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ACTIVE",
+                  "color": "green"
+                }
+              }
+            }
+          ],
+          "color": {
+            "mode": "thresholds"
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -300s)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"buoy_wvht\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "type": "row",
+      "title": "\ud83e\udded NAVIGATION",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 11,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 10,
+      "type": "stat",
+      "title": "Latitude",
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "decimals": 6,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"latitude\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "stat",
+      "title": "Longitude",
+      "gridPos": {
+        "x": 4,
+        "y": 12,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "decimals": 6,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"longitude\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "type": "stat",
+      "title": "SOG",
+      "gridPos": {
+        "x": 8,
+        "y": 12,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocityKn",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"sog_kts\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "stat",
+      "title": "COG",
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"cog_deg\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "type": "stat",
+      "title": "Heading",
+      "gridPos": {
+        "x": 16,
+        "y": 12,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"heading_mag_deg\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "stat",
+      "title": "STW",
+      "gridPos": {
+        "x": 20,
+        "y": 12,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocityKn",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"stw_kts\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "type": "stat",
+      "title": "Heel",
+      "gridPos": {
+        "x": 0,
+        "y": 15,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"heel_deg\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "type": "stat",
+      "title": "Pitch",
+      "gridPos": {
+        "x": 4,
+        "y": 15,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"pitch_deg\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "type": "stat",
+      "title": "Depth",
+      "gridPos": {
+        "x": 8,
+        "y": 15,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "lengthm",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"depth_m\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "type": "stat",
+      "title": "Satellites",
+      "gridPos": {
+        "x": 12,
+        "y": 15,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"satellites\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "type": "row",
+      "title": "\ud83d\udca8 WIND & ENVIRONMENT",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 21,
+      "type": "stat",
+      "title": "TWS",
+      "gridPos": {
+        "x": 0,
+        "y": 19,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocityKn",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"tws_kts\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "type": "stat",
+      "title": "TWA",
+      "gridPos": {
+        "x": 4,
+        "y": 19,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"twa_deg\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "type": "stat",
+      "title": "AWA",
+      "gridPos": {
+        "x": 8,
+        "y": 19,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"awa_deg\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "type": "stat",
+      "title": "AWS",
+      "gridPos": {
+        "x": 12,
+        "y": 19,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocityKn",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"aws_kts\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "type": "stat",
+      "title": "TWD",
+      "gridPos": {
+        "x": 16,
+        "y": 19,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"twd_deg\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "type": "stat",
+      "title": "Air Temp",
+      "gridPos": {
+        "x": 20,
+        "y": 19,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"air_temp_c\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "type": "stat",
+      "title": "Water Temp",
+      "gridPos": {
+        "x": 0,
+        "y": 22,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"water_temp_c\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "type": "stat",
+      "title": "Pressure",
+      "gridPos": {
+        "x": 4,
+        "y": 22,
+        "w": 4,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "pressurehpa",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"pressure_hpa\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "type": "row",
+      "title": "\u26a1 PERFORMANCE",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 25,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 30,
+      "type": "stat",
+      "title": "VMG",
+      "gridPos": {
+        "x": 0,
+        "y": 26,
+        "w": 6,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocityKn",
+          "decimals": 2,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance\" and r._field == \"vmg_kts\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "type": "stat",
+      "title": "Target Speed",
+      "gridPos": {
+        "x": 6,
+        "y": 26,
+        "w": 6,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "velocityKn",
+          "decimals": 2,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance\" and r._field == \"target_speed_kts\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "type": "stat",
+      "title": "Polar Ratio",
+      "gridPos": {
+        "x": 12,
+        "y": 26,
+        "w": 6,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance\" and r._field == \"polar_ratio\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "type": "stat",
+      "title": "Leeway",
+      "gridPos": {
+        "x": 18,
+        "y": 26,
+        "w": 6,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance\" and r._field == \"leeway_deg\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "type": "row",
+      "title": "\ud83d\udda5\ufe0f SYSTEM \u2014 Raspberry Pi",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 29,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 35,
+      "type": "stat",
+      "title": "CPU Temp",
+      "gridPos": {
+        "x": 0,
+        "y": 30,
+        "w": 6,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"system\" and r._field == \"cpu_temp_celsius\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "type": "stat",
+      "title": "CPU Load",
+      "gridPos": {
+        "x": 6,
+        "y": 30,
+        "w": 6,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"system\" and r._field == \"cpu_percent\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "type": "stat",
+      "title": "RAM Usage",
+      "gridPos": {
+        "x": 12,
+        "y": 30,
+        "w": 6,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"system\" and r._field == \"memory_percent\")\n |> last()"
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "type": "stat",
+      "title": "Disk Usage",
+      "gridPos": {
+        "x": 18,
+        "y": 30,
+        "w": 6,
+        "h": 3
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "value",
+        "graphMode": "area",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 0,
+          "noValue": "\u2014",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"system\" and r._field == \"disk_percent\")\n |> last()"
+        }
+      ]
+    }
+  ]
+}

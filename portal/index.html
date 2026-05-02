@@ -1,25 +1,20 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Midnight Rider — Dashboard Portal</title>
+    <title>Midnight Rider Navigation</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            color: #fff;
         }
 
         .container {
@@ -29,136 +24,166 @@
 
         header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
         }
 
         h1 {
             font-size: 3em;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, #00d4ff, #0099ff);
+            background: linear-gradient(45deg, #00d4ff, #7c3aed);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
 
         .subtitle {
-            font-size: 1.2em;
+            font-size: 1.1em;
             color: #a0aec0;
+            margin-bottom: 30px;
         }
 
-        .dashboards-grid {
+        .dashboard-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
             margin-bottom: 40px;
         }
 
         .dashboard-card {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 153, 255, 0.1));
-            border: 2px solid rgba(0, 212, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
             border-radius: 12px;
-            padding: 30px;
+            padding: 24px;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
+            color: inherit;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            text-align: center;
-            color: inherit;
+            gap: 12px;
         }
 
         .dashboard-card:hover {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 153, 255, 0.2));
-            border-color: rgba(0, 212, 255, 0.6);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
+            background: rgba(0, 212, 255, 0.1);
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
         }
 
-        .dashboard-icon {
-            font-size: 2.5em;
-            margin-bottom: 15px;
+        .dashboard-card h2 {
+            font-size: 1.4em;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        .dashboard-name {
-            font-size: 1.3em;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #00d4ff;
+        .dashboard-card .emoji {
+            font-size: 1.8em;
         }
 
-        .dashboard-desc {
-            font-size: 0.85em;
+        .dashboard-card p {
             color: #a0aec0;
+            margin: 0;
+            font-size: 0.95em;
+            flex-grow: 1;
+        }
+
+        .dashboard-card .badge {
+            display: inline-block;
+            background: rgba(124, 58, 237, 0.3);
+            color: #a78bfa;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            width: fit-content;
+        }
+
+        .footer {
+            text-align: center;
+            color: #64748b;
+            font-size: 0.9em;
+            border-top: 1px solid rgba(0, 212, 255, 0.1);
+            padding-top: 40px;
+            margin-top: 40px;
         }
 
         @media (max-width: 768px) {
             h1 { font-size: 2em; }
-            .dashboards-grid { grid-template-columns: 1fr; }
+            .dashboard-grid { gap: 16px; }
+            .dashboard-card { padding: 16px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>⛵ MIDNIGHT RIDER</h1>
-            <p class="subtitle">Navigation System — Block Island Race 2026</p>
+            <h1>⚓ Midnight Rider Navigation</h1>
+            <p class="subtitle">J/30 Race Telemetry & Monitoring System</p>
+            <p class="subtitle">Real-time dashboards via Grafana</p>
         </header>
 
-        <div class="dashboards-grid">
-            <a href="viewer.html?dashboard=cockpit-main&name=COCKPIT&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">🏠</div>
-                <div class="dashboard-name">COCKPIT</div>
-                <div class="dashboard-desc">Main Navigation</div>
+        <div class="dashboard-grid">
+            <!-- Navigation Dashboard -->
+            <a href="viewer.html?dashboard=01-navigation-dashboard&host=midnightrider.local" class="dashboard-card">
+                <h2><span class="emoji">🧭</span> Navigation</h2>
+                <p>Live position, course, speed, heading, and navigation data</p>
+                <span class="badge">Primary</span>
             </a>
 
-            <a href="viewer.html?dashboard=environment-conditions&name=ENVIRONMENT&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">🌊</div>
-                <div class="dashboard-name">ENVIRONMENT</div>
-                <div class="dashboard-desc">Sea & Weather</div>
+            <!-- Cockpit Dashboard -->
+            <a href="viewer.html?dashboard=cockpit-main&host=midnightrider.local" class="dashboard-card">
+                <h2><span class="emoji">🎰</span> Cockpit</h2>
+                <p>Master dashboard with key instruments and alerts</p>
+                <span class="badge">Primary</span>
             </a>
 
-            <a href="viewer.html?dashboard=performance-analysis&name=PERFORMANCE&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">⚡</div>
-                <div class="dashboard-name">PERFORMANCE</div>
-                <div class="dashboard-desc">Speed Analysis</div>
+            <!-- Performance Dashboard -->
+            <a href="viewer.html?dashboard=03-performance&host=midnightrider.local" class="dashboard-card">
+                <h2><span class="emoji">⚡</span> Performance</h2>
+                <p>Boat speed, VMG, heel angle, and efficiency metrics</p>
+                <span class="badge">Racing</span>
             </a>
 
-            <a href="viewer.html?dashboard=wind-current-tactical&name=WIND&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">🌪️</div>
-                <div class="dashboard-name">WIND & CURRENT</div>
-                <div class="dashboard-desc">Tactical View</div>
+            <!-- Weather Dashboard -->
+            <a href="viewer.html?dashboard=04-wind-current&host=midnightrider.local" class="dashboard-card">
+                <h2><span class="emoji">💨</span> Weather</h2>
+                <p>Wind, pressure, temperature, and current data</p>
+                <span class="badge">Racing</span>
             </a>
 
-            <a href="viewer.html?dashboard=competitive-fleet&name=COMPETITIVE&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">🏆</div>
-                <div class="dashboard-name">COMPETITIVE</div>
-                <div class="dashboard-desc">Fleet Tracking</div>
+            <!-- Racing Dashboard -->
+            <a href="viewer.html?dashboard=07-race&host=midnightrider.local" class="dashboard-card">
+                <h2><span class="emoji">🏁</span> Racing</h2>
+                <p>Race timer, marks, start sequence, and tactics</p>
+                <span class="badge">Racing</span>
             </a>
 
-            <a href="viewer.html?dashboard=electrical-power&name=ELECTRICAL&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">🔋</div>
-                <div class="dashboard-name">ELECTRICAL</div>
-                <div class="dashboard-desc">Power Management</div>
+            <!-- Alerts Dashboard -->
+            <a href="viewer.html?dashboard=08-alerts&host=midnightrider.local" class="dashboard-card">
+                <h2><span class="emoji">🔔</span> Alerts</h2>
+                <p>Real-time alert monitoring and operational status</p>
+                <span class="badge">Safety</span>
             </a>
 
-            <a href="viewer.html?dashboard=race-block-island&name=RACE&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">🏁</div>
-                <div class="dashboard-name">RACE</div>
-                <div class="dashboard-desc">Race Metrics</div>
+            <!-- Data Model Status Dashboard -->
+            <a href="viewer.html?dashboard=data-model-status&host=midnightrider.local" class="dashboard-card">
+                <h2><span class="emoji">📊</span> Data Status</h2>
+                <p>Sensor health and measurement operational status</p>
+                <span class="badge">Monitoring</span>
             </a>
 
-            <a href="viewer.html?dashboard=alerts-monitoring&name=ALERTS&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">🔔</div>
-                <div class="dashboard-name">ALERTS</div>
-                <div class="dashboard-desc">System Monitoring</div>
+            <!-- Crew Dashboard -->
+            <a href="viewer.html?dashboard=09-crew&host=midnightrider.local" class="dashboard-card">
+                <h2><span class="emoji">👥</span> Crew</h2>
+                <p>Crew management and watch timer data</p>
+                <span class="badge">Team</span>
             </a>
+        </div>
 
-            <a href="viewer.html?dashboard=crew-management&name=CREW&host=MidnightRider.local" class="dashboard-card">
-                <div class="dashboard-icon">⚓</div>
-                <div class="dashboard-name">CREW</div>
-                <div class="dashboard-desc">Watch Management</div>
-            </a>
+        <div class="footer">
+            <p>Midnight Rider — Block Island Race 2026</p>
+            <p>Grafana (:3001) | Signal K (:3000) | InfluxDB (:8086)</p>
         </div>
     </div>
 </body>
