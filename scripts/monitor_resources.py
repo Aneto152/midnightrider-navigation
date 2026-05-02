@@ -2,18 +2,15 @@
 """
 RPi Resource Monitor — Midnight Rider Navigation
 
-Monitor CPU, memory, disk, temperature, and process usage.
-Logs to /tmp/rpi_resources.log and alerts if thresholds exceeded.
+Collect CPU, memory, disk, temperature and write to InfluxDB.
 
 Usage:
-  python3 scripts/monitor_resources.py # run once
-  python3 scripts/monitor_resources.py --daemon # run forever (every 60s)
-  python3 scripts/monitor_resources.py --debug # verbose output
+  python3 scripts/monitor_resources.py          # run once
+  python3 scripts/monitor_resources.py --daemon # loop every 30s
 """
 
 import psutil
 import os
-import subprocess
 import json
 import logging
 import time
@@ -21,19 +18,21 @@ import argparse
 import sys
 from datetime import datetime
 
-# ─── Configuration ────────────────────────────────────────────────────────────
+try:
+    from influxdb_client import InfluxDBClient, Point
+    from influxdb_client.client.write_api import SYNCHRONOUS
+    INFLUX_AVAILABLE = True
+except ImportError:
+    INFLUX_AVAILABLE = False
 
-THRESHOLDS = {
-    "cpu_percent": 80,        # Alert if CPU > 80%
-    "memory_percent": 85,     # Alert if RAM > 85%
-    "disk_percent": 90,       # Alert if disk > 90%
-    "temp_celsius": 75,       # Alert if temp > 75°C
-}
+INFLUX_URL = os.environ.get("INFLUXDB_URL", "http://localhost:8086")
+INFLUX_TOKEN = os.environ.get("INFLUX_TOKEN", "")
+INFLUX_ORG = os.environ.get("INFLUX_ORG", "MidnightRider")
+INFLUX_BUCKET = "midnight_rider"
+INTERVAL_SEC = 30
 
-LOG_FILE = "/tmp/rpi_resources.log"
+LOG_FILE = "/tmp/monitor_resources.log"
 REPORT_FILE = "/tmp/rpi_resources.json"
-
-# ─── Logging ──────────────────────────────────────────────────────────────────
 
 logging.basicConfig(
     level=logging.INFO,
@@ -45,162 +44,114 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-
-# ─── Collectors ───────────────────────────────────────────────────────────────
-
-def get_cpu_info():
-    """Return CPU usage %."""
-    return psutil.cpu_percent(interval=1)
-
-
-def get_memory_info():
-    """Return memory usage %."""
-    mem = psutil.virtual_memory()
-    return {
-        "percent": mem.percent,
-        "used_mb": mem.used // (1024 * 1024),
-        "total_mb": mem.total // (1024 * 1024),
-    }
-
-
-def get_disk_info():
-    """Return disk usage %."""
-    disk = psutil.disk_usage("/")
-    return {
-        "percent": disk.percent,
-        "used_gb": disk.used // (1024 * 1024 * 1024),
-        "total_gb": disk.total // (1024 * 1024 * 1024),
-    }
-
-
 def get_temperature():
     """Return CPU temperature in Celsius (RPi only)."""
     try:
-        # RPi temperature: /sys/class/thermal/thermal_zone0/temp (millidegrees)
         with open("/sys/class/thermal/thermal_zone0/temp", "r") as f:
             temp_millideg = int(f.read().strip())
             return temp_millideg / 1000.0
-    except (FileNotFoundError, ValueError):
+    except Exception:
         return None
-
-
-def get_process_info(process_names=None):
-    """Return top processes by CPU + memory."""
-    if process_names is None:
-        process_names = ["signalk", "grafana", "influxd", "python3", "node", "chromium"]
-    
-    processes = {}
-    for proc in psutil.process_iter(["pid", "name", "cpu_percent", "memory_percent"]):
-        try:
-            for pname in process_names:
-                if pname.lower() in proc.info["name"].lower():
-                    key = f"{proc.info['name']}_{proc.info['pid']}"
-                    processes[key] = {
-                        "pid": proc.info["pid"],
-                        "name": proc.info["name"],
-                        "cpu_percent": proc.info["cpu_percent"],
-                        "memory_percent": proc.info["memory_percent"],
-                    }
-        except (psutil.NoSuchProcess, psutil.AccessDenied):
-            pass
-    
-    # Return top 5 by memory
-    return dict(sorted(processes.items(), key=lambda x: x[1]["memory_percent"], reverse=True)[:5])
-
-
-def get_uptime():
-    """Return system uptime in days."""
-    try:
-        with open("/proc/uptime", "r") as f:
-            uptime_seconds = float(f.read().split()[0])
-            return uptime_seconds / (24 * 3600)  # days
-    except:
-        return None
-
-
-# ─── Alerting ─────────────────────────────────────────────────────────────────
-
-def check_thresholds(metrics):
-    """Check if any metrics exceed thresholds and log alerts."""
-    alerts = []
-    
-    if metrics["cpu"] > THRESHOLDS["cpu_percent"]:
-        msg = f"⚠️ HIGH CPU: {metrics['cpu']:.1f}% (threshold: {THRESHOLDS['cpu_percent']}%)"
-        alerts.append(msg)
-        log.warning(msg)
-    
-    if metrics["memory"]["percent"] > THRESHOLDS["memory_percent"]:
-        msg = f"⚠️ HIGH MEMORY: {metrics['memory']['percent']:.1f}% ({metrics['memory']['used_mb']}MB/{metrics['memory']['total_mb']}MB)"
-        alerts.append(msg)
-        log.warning(msg)
-    
-    if metrics["disk"]["percent"] > THRESHOLDS["disk_percent"]:
-        msg = f"⚠️ LOW DISK SPACE: {metrics['disk']['percent']:.1f}% used ({metrics['disk']['used_gb']}GB/{metrics['disk']['total_gb']}GB)"
-        alerts.append(msg)
-        log.warning(msg)
-    
-    if metrics["temperature"] and metrics["temperature"] > THRESHOLDS["temp_celsius"]:
-        msg = f"⚠️ HIGH TEMPERATURE: {metrics['temperature']:.1f}°C (threshold: {THRESHOLDS['temp_celsius']}°C)"
-        alerts.append(msg)
-        log.warning(msg)
-    
-    return alerts
-
-
-# ─── Main ─────────────────────────────────────────────────────────────────────
 
 def collect_metrics():
-    """Collect all metrics and return as dict."""
+    """Collect all system metrics."""
+    mem = psutil.virtual_memory()
+    disk = psutil.disk_usage("/")
+    
     return {
-        "timestamp": datetime.now().isoformat(),
-        "cpu": get_cpu_info(),
-        "memory": get_memory_info(),
-        "disk": get_disk_info(),
-        "temperature": get_temperature(),
-        "uptime_days": get_uptime(),
-        "top_processes": get_process_info(),
+        "cpu_percent": psutil.cpu_percent(interval=1),
+        "cpu_temp_celsius": get_temperature(),
+        "memory_percent": mem.percent,
+        "memory_used_mb": mem.used // (1024 * 1024),
+        "memory_total_mb": mem.total // (1024 * 1024),
+        "disk_percent": disk.percent,
+        "disk_used_gb": disk.used // (1024 ** 3),
+        "disk_total_gb": disk.total // (1024 ** 3),
     }
 
-
-def report_metrics(metrics):
-    """Log metrics and save to JSON."""
-    log.info(f"CPU: {metrics['cpu']:.1f}% | "
-             f"Memory: {metrics['memory']['percent']:.1f}% ({metrics['memory']['used_mb']}MB) | "
-             f"Disk: {metrics['disk']['percent']:.1f}% ({metrics['disk']['used_gb']}GB) | "
-             f"Temp: {metrics['temperature']:.1f}°C | "
-             f"Uptime: {metrics['uptime_days']:.1f}d")
+def write_to_influxdb(metrics):
+    """Write system metrics to InfluxDB."""
+    if not INFLUX_AVAILABLE:
+        log.warning("influxdb-client not installed")
+        return False
     
-    # Save JSON report
-    with open(REPORT_FILE, "w") as f:
-        json.dump(metrics, f, indent=2, default=str)
+    if not INFLUX_TOKEN:
+        log.warning("INFLUX_TOKEN not set in .env")
+        return False
     
-    # Check thresholds
-    check_thresholds(metrics)
+    try:
+        with InfluxDBClient(url=INFLUX_URL, token=INFLUX_TOKEN, org=INFLUX_ORG) as client:
+            write_api = client.write_api(write_options=SYNCHRONOUS)
+            
+            point = (Point("system")
+                .field("cpu_percent", float(metrics["cpu_percent"]))
+                .field("memory_percent", float(metrics["memory_percent"]))
+                .field("disk_percent", float(metrics["disk_percent"]))
+                .field("memory_used_mb", float(metrics["memory_used_mb"]))
+                .field("disk_used_gb", float(metrics["disk_used_gb"])))
+            
+            if metrics["cpu_temp_celsius"] is not None:
+                point = point.field("cpu_temp_celsius", float(metrics["cpu_temp_celsius"]))
+            
+            write_api.write(bucket=INFLUX_BUCKET, record=point)
+            return True
+    
+    except Exception as e:
+        log.error(f"InfluxDB write error: {e}")
+        return False
 
+def save_json_report(metrics):
+    """Save metrics to JSON file."""
+    try:
+        with open(REPORT_FILE, "w") as f:
+            json.dump(metrics, f, indent=2, default=str)
+    except Exception as e:
+        log.error(f"JSON save error: {e}")
+
+def run_once(verbose=False):
+    """Collect metrics and write to InfluxDB + JSON."""
+    metrics = collect_metrics()
+    influx_ok = write_to_influxdb(metrics)
+    save_json_report(metrics)
+    
+    if verbose or not influx_ok:
+        temp_str = f"{metrics['cpu_temp_celsius']:.1f}°C" if metrics['cpu_temp_celsius'] else "N/A"
+        log.info(
+            f"CPU: {metrics['cpu_percent']:.1f}% | "
+            f"Temp: {temp_str} | "
+            f"RAM: {metrics['memory_percent']:.1f}% | "
+            f"Disk: {metrics['disk_percent']:.1f}% | "
+            f"InfluxDB: {'✅' if influx_ok else '❌'}"
+        )
+    
+    return metrics, influx_ok
 
 def main():
     parser = argparse.ArgumentParser(description="RPi Resource Monitor")
-    parser.add_argument("--daemon", action="store_true", help="Run forever (every 60s)")
-    parser.add_argument("--debug", action="store_true", help="Enable debug logging")
+    parser.add_argument("--daemon", action="store_true", 
+                       help=f"Loop every {INTERVAL_SEC}s")
+    parser.add_argument("--debug", action="store_true")
     args = parser.parse_args()
     
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
     
+    if not INFLUX_AVAILABLE:
+        log.error("influxdb-client missing. Run: pip3 install influxdb-client")
+        sys.exit(1)
+    
     if args.daemon:
-        log.info("Starting daemon mode (60s intervals)")
+        log.info(f"Daemon mode — writing to InfluxDB every {INTERVAL_SEC}s")
         while True:
             try:
-                metrics = collect_metrics()
-                report_metrics(metrics)
+                run_once()
             except Exception as e:
-                log.error(f"Error collecting metrics: {e}")
-            time.sleep(60)
+                log.error(f"Loop error: {e}")
+            time.sleep(INTERVAL_SEC)
     else:
-        metrics = collect_metrics()
-        report_metrics(metrics)
+        metrics, ok = run_once(verbose=True)
         print(json.dumps(metrics, indent=2, default=str))
-
+        sys.exit(0 if ok else 1)
 
 if __name__ == "__main__":
     main()
