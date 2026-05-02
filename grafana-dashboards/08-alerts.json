@@ -35,7 +35,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 10,
         "w": 6,
         "x": 0,
         "y": 0
@@ -95,7 +95,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 10,
         "w": 6,
         "x": 6,
         "y": 0
@@ -155,7 +155,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 10,
         "w": 6,
         "x": 12,
         "y": 0
@@ -215,7 +215,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 10,
         "w": 6,
         "x": 18,
         "y": 0
@@ -292,7 +292,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 12,
         "w": 24,
         "x": 0,
         "y": 4
@@ -342,7 +342,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 2,
+        "h": 3,
         "w": 24,
         "x": 0,
         "y": 12
@@ -373,6 +373,6 @@
   "timezone": "America/New_York",
   "title": "08 \u2014 ALERTS & MONITORING (60 Alert Rules)",
   "uid": "alerts-monitoring",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }
