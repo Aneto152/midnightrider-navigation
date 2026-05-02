@@ -86,7 +86,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.helmsman\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.helmsman\") |> last()"
         }
       ],
       "title": "CURRENT HELMSMAN",
@@ -156,7 +156,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.sails\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.sails\") |> last()"
         }
       ],
       "title": "CURRENT SAILS",
@@ -240,7 +240,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"regatta.helmsman\") |> aggregateWindow(every: 30m, fn: count)"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"regatta.helmsman\") |> aggregateWindow(every: 30m, fn: count)"
         }
       ],
       "title": "HELMSMAN ROTATION HISTORY",
@@ -324,7 +324,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"regatta.sails\") |> aggregateWindow(every: 30m, fn: count)"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -6h) |> filter(fn: (r) => r._measurement == \"regatta.sails\") |> aggregateWindow(every: 30m, fn: count)"
         }
       ],
       "title": "SAIL CHANGES HISTORY",
@@ -390,7 +390,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.start_line\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"regatta.start_line\") |> last()"
         }
       ],
       "title": "DISTANCE TO START LINE",

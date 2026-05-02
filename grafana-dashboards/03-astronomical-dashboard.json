@@ -76,7 +76,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunriseTime\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunriseTime\") |> last()"
         }
       ],
       "title": "\ud83c\udf05 SUNRISE",
@@ -136,7 +136,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunsetTime\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.sun.sunsetTime\") |> last()"
         }
       ],
       "title": "\ud83c\udf05 SUNSET",
@@ -205,7 +205,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.illumination\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.illumination\") |> last()"
         }
       ],
       "title": "\ud83c\udf19 MOON ILLUMINATION",
@@ -265,7 +265,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.phase\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.phase\") |> last()"
         }
       ],
       "title": "\ud83c\udf19 MOON PHASE",
@@ -325,7 +325,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonriseTime\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonriseTime\") |> last()"
         }
       ],
       "title": "\ud83c\udf19 MOON RISE",
@@ -385,7 +385,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonsetTime\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1d) |> filter(fn: (r) => r._measurement == \"environment.moon.moonsetTime\") |> last()"
         }
       ],
       "title": "\ud83c\udf19 MOON SET",

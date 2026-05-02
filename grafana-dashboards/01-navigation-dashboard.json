@@ -73,7 +73,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> last()"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> last()"
         }
       ],
       "title": "TRUE HEADING",
@@ -157,7 +157,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> aggregateWindow(every: 10s, fn: mean)"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\") |> aggregateWindow(every: 10s, fn: mean)"
         }
       ],
       "title": "HEADING TREND (last 1h)",
@@ -215,7 +215,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 1.94384}))"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 1.94384}))"
         }
       ],
       "title": "SPEED OVER GROUND (knots)",
@@ -299,7 +299,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> map(fn: (r) => ({r with _value: r._value * 1.94384})) |> aggregateWindow(every: 10s, fn: mean)"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\") |> map(fn: (r) => ({r with _value: r._value * 1.94384})) |> aggregateWindow(every: 10s, fn: mean)"
         }
       ],
       "title": "SPEED TREND (last 1h, knots)",
@@ -356,7 +356,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.courseOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159}))"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -10m) |> filter(fn: (r) => r._measurement == \"navigation.courseOverGround\") |> last() |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159}))"
         }
       ],
       "title": "COURSE OVER GROUND (degrees)",
@@ -440,7 +440,7 @@
             "uid": "efifgp8jvgj5sf"
           },
           "refId": "A",
-          "query": "from(bucket: \"signalk\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.rateOfTurn\") |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159 * 60})) |> aggregateWindow(every: 10s, fn: mean)"
+          "query": "from(bucket: \"midnight_rider\") |> range(start: -1h) |> filter(fn: (r) => r._measurement == \"navigation.rateOfTurn\") |> map(fn: (r) => ({r with _value: r._value * 180 / 3.14159 * 60})) |> aggregateWindow(every: 10s, fn: mean)"
         }
       ],
       "title": "RATE OF TURN TREND",
