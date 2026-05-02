@@ -1,0 +1,17 @@
+[Unit]
+Description=Midnight Rider — RPi Resource Monitor → InfluxDB
+After=network.target
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto/.openclaw/workspace
+EnvironmentFile=/home/aneto/.openclaw/workspace/.env
+ExecStart=/usr/bin/python3 scripts/monitor_resources.py --daemon
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
