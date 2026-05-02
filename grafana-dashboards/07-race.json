@@ -10,10 +10,36 @@
   "liveNow": true,
   "panels": [
     {
+      "collapsed": false,
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 100,
+      "options": {
+        "folderId": null
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [],
+      "title": "🏁 LIGNE DE DÉPART",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
+      "description": "Secondes avant le départ",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -29,15 +55,15 @@
               },
               {
                 "color": "orange",
-                "value": 3600
+                "value": 120
               },
               {
                 "color": "yellow",
-                "value": 1800
+                "value": 60
               },
               {
                 "color": "green",
-                "value": 600
+                "value": 10
               }
             ]
           },
@@ -46,41 +72,45 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 4,
+        "h": 8,
         "w": 6,
         "x": 0,
-        "y": 0
+        "y": 1
       },
-      "id": 1,
+      "id": 101,
       "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
-          }
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.timer\")\n |> filter(fn: (r) => r._field == \"start_timer_seconds\")\n |> last()",
+          "refId": "A"
         }
       ],
-      "title": "\ud83c\udfc1 Countdown to Start",
-      "type": "gauge"
+      "title": "⏱️ Chrono Départ",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -92,12 +122,20 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "white",
+                "color": "red",
                 "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 50
+              },
+              {
+                "color": "green",
+                "value": 100
               }
             ]
           },
-          "unit": "short"
+          "unit": "lengthm"
         },
         "overrides": []
       },
@@ -105,38 +143,120 @@
         "h": 4,
         "w": 6,
         "x": 6,
-        "y": 0
+        "y": 1
       },
-      "id": 2,
+      "id": 102,
       "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
-          }
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n |> filter(fn: (r) => r._field == \"distance_to_line_m\")\n |> last()",
+          "refId": "A"
         }
       ],
-      "title": "Current Mark",
-      "type": "gauge"
+      "title": "📏 Distance à la ligne",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
+      },
+      "description": "OCS = au-dessus de la ligne",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "CLEAR": {
+                  "color": "green",
+                  "text": "✅ CLEAR"
+                },
+                "CLOSE": {
+                  "color": "yellow",
+                  "text": "⚠️ CLOSE"
+                },
+                "OCS": {
+                  "color": "red",
+                  "text": "🔴 OCS"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 5
+      },
+      "id": 103,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n |> filter(fn: (r) => r._field == \"line_side\")\n |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "🚦 Position / Ligne",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -148,20 +268,12 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "orange",
-                "value": null
-              },
-              {
                 "color": "yellow",
-                "value": 5
-              },
-              {
-                "color": "green",
-                "value": 1
+                "value": null
               }
             ]
           },
-          "unit": "nm"
+          "unit": "degree"
         },
         "overrides": []
       },
@@ -169,38 +281,42 @@
         "h": 4,
         "w": 6,
         "x": 12,
-        "y": 0
+        "y": 1
       },
-      "id": 3,
+      "id": 104,
       "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
-          }
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n |> filter(fn: (r) => r._field == \"pin_buoy_bearing_deg\")\n |> last()",
+          "refId": "A"
         }
       ],
-      "title": "Distance to Finish",
-      "type": "gauge"
+      "title": "🟡 Pin Bouée — Bearing",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
@@ -212,20 +328,72 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
-                "value": null
-              },
-              {
                 "color": "yellow",
-                "value": 5
-              },
-              {
-                "color": "green",
-                "value": 1
+                "value": null
               }
             ]
           },
-          "unit": "short"
+          "unit": "lengthm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 5
+      },
+      "id": 105,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n |> filter(fn: (r) => r._field == \"pin_buoy_dist_m\")\n |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "🟡 Pin Bouée — Distance",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          },
+          "unit": "degree"
         },
         "overrides": []
       },
@@ -233,196 +401,246 @@
         "h": 4,
         "w": 6,
         "x": 18,
-        "y": 0
+        "y": 1
       },
-      "id": 4,
+      "id": 106,
       "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
         "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
-          }
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n |> filter(fn: (r) => r._field == \"pin_rc_bearing_deg\")\n |> last()",
+          "refId": "A"
         }
       ],
-      "title": "Fleet Position",
-      "type": "gauge"
+      "title": "🚤 Comité — Bearing",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
-          },
-          "custom": {
-            "hideFrom": {
-              "tooltip": false,
-              "viz": false,
-              "legend": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "showPoints": "never",
-            "spanNulls": false
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "white",
+                "color": "blue",
                 "value": null
               }
             ]
           },
-          "unit": "nm"
+          "unit": "lengthm"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 4
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 5
       },
-      "id": 5,
+      "id": 107,
       "options": {
-        "legend": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
           "calcs": [
-            "last",
-            "max"
+            "lastNotNull"
           ],
-          "displayMode": "table",
-          "placement": "bottom"
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single"
-        }
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
-          }
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n |> filter(fn: (r) => r._field == \"pin_rc_dist_m\")\n |> last()",
+          "refId": "A"
         }
       ],
-      "title": "Cumulative Distance Sailed",
-      "type": "timeseries"
+      "title": "🚤 Comité — Distance",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
+      "description": "Pin bouée → Bateau comité",
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
-          },
-          "custom": {
-            "hideFrom": {
-              "tooltip": false,
-              "viz": false,
-              "legend": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
-            "showPoints": "never",
-            "spanNulls": false
+            "mode": "thresholds"
           },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "red",
+                "color": "green",
                 "value": null
               }
             ]
           },
-          "unit": "kn"
+          "unit": "lengthm"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 4
+        "h": 4,
+        "w": 8,
+        "x": 0,
+        "y": 9
       },
-      "id": 6,
+      "id": 108,
       "options": {
-        "legend": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
           "calcs": [
-            "last",
-            "max"
+            "lastNotNull"
           ],
-          "displayMode": "table",
-          "placement": "bottom"
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "mode": "single"
-        }
+        "text": {},
+        "textMode": "auto"
       },
       "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
           "datasource": {
             "type": "influxdb",
-            "uid": "influxdb"
-          }
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n |> filter(fn: (r) => r._field == \"start_line_length_m\")\n |> last()",
+          "refId": "A"
         }
       ],
-      "title": "Speed During Race",
-      "type": "timeseries"
+      "title": "📐 Longueur ligne",
+      "type": "stat"
     },
     {
       "datasource": {
         "type": "influxdb",
-        "uid": "influxdb"
+        "uid": "efifgp8jvgj5sf"
       },
+      "description": "Négatif = bouée favorite, Positif = comité",
       "fieldConfig": {
         "defaults": {
-          "custom": {
-            "hideFrom": {
-              "tooltip": false,
-              "viz": false,
-              "legend": false
-            }
-          }
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": -2
+              },
+              {
+                "color": "orange",
+                "value": 2
+              }
+            ]
+          },
+          "unit": "degree"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 2,
-        "w": 24,
-        "x": 0,
-        "y": 10
+        "h": 4,
+        "w": 8,
+        "x": 8,
+        "y": 9
       },
-      "id": 7,
+      "id": 109,
       "options": {
-        "content": "\n\n**NAVIGATION LINKS:**  [\ud83c\udfe0 Cockpit](d/cockpit-main) | [\ud83c\udf0a Environment](d/environment-conditions) | [\u2693 Crew](d/crew-management) | [\u26a1 Performance](d/performance-analysis) | [\ud83c\udf2a\ufe0f Wind](d/wind-current-tactical) | [\ud83c\udfc6 Competitive](d/competitive-fleet) | [\ud83d\udd0b Electrical](d/electrical-power) | [\ud83c\udfc1 Race](d/race-block-island) | [\ud83d\udd14 Alerts](d/alerts-monitoring)",
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.start_line\")\n |> filter(fn: (r) => r._field == \"line_bias_deg\")\n |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "⚖️ Biais ligne",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Mixed --"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 8,
+        "x": 16,
+        "y": 9
+      },
+      "id": 110,
+      "options": {
+        "content": "### Interface régate\n\n[🏁 Ouvrir](http://localhost:8888/regatta/)\n\nChrono · Ligne · Bouées",
         "mode": "markdown"
       },
       "pluginVersion": "9.0.0",
@@ -444,8 +662,8 @@
   },
   "timepicker": {},
   "timezone": "America/New_York",
-  "title": "07 \u2014 RACE (Block Island Race \u2014 May 22, 2026)",
+  "title": "07 — RACE (Block Island Race — May 22, 2026)",
   "uid": "07-race",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }
