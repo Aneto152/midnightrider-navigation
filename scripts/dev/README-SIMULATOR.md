@@ -39,8 +39,9 @@ SIMULATOR_ENABLED=true python3 scripts/dev/simulator.py --verify-fields
 
 This:
 1. Injects "calibrate" scenario (known exact values)
-2. Shows which fields were written
-3. Lets you verify field names match your dashboard
+2. Writes to `midnight_rider_sim` bucket
+3. Shows which fields were written
+4. Lets you verify field names match your dashboard
 
 ### Single injection to safe bucket
 
@@ -88,6 +89,8 @@ SIMULATOR_ENABLED=true python3 scripts/dev/simulator.py --scenario storm-alert -
 | `calibrate` | Known exact values | Verify field names are correct |
 | `upwind` | TWS 12kt, TWA 45°, heel 18° | Test navigation/wind display |
 | `downwind` | TWS 15kt, spinnaker | Test performance in strong wind |
+| `the-race` | SOG 2kt, STW 6kt, courant 4.5kt E | Simuler le passage de The Race |
+| `race-start` | Timer 4m30, layline, boat speed max | Tester alertes départ |
 | `storm-alert` | Heel 28°, TWS 28kt, pressure 998hPa | Test alert rules firing |
 | `anchor` | All values zero | Test zero-state display |
 

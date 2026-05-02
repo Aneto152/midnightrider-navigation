@@ -43,13 +43,90 @@ import urllib.error
 
 INFLUX_URL = os.environ.get("INFLUXDB_URL", "http://localhost:8086")
 INFLUX_TOKEN = os.environ.get("INFLUX_TOKEN", "")
-INFLUX_ORG = os.environ.get("INFLUX_ORG", "MidnightRider")
+INFLUX_ORG = os.environ.get("INFLUX_ORG", "midnight_rider")
 SIGNALK_URL = os.environ.get("SIGNALK_URL", "http://localhost:3000")
 
 SIM_BUCKET = "midnight_rider_sim"
 LIVE_BUCKET = "midnight_rider"
 INTERVAL_SEC = 5
 MAX_RUNTIME = 7200
+
+# ─── Signal K path map ────────────────────────────────────────────────────────
+# Maps InfluxDB field names → Signal K paths + SI unit converters
+
+SK_PATH_MAP = {
+    "sog_kts": ("navigation.speedOverGround", lambda v: v * 0.514444),
+    "stw_kts": ("navigation.speedThroughWater", lambda v: v * 0.514444),
+    "cog_deg": ("navigation.courseOverGroundTrue", lambda v: math.radians(v)),
+    "heading_mag_deg": ("navigation.headingMagnetic", lambda v: math.radians(v)),
+    "heel_deg": ("navigation.attitude.roll", lambda v: math.radians(v)),
+    "pitch_deg": ("navigation.attitude.pitch", lambda v: math.radians(v)),
+    "depth_m": ("environment.depth.belowKeel", lambda v: v),
+    "tws_kts": ("environment.wind.speedTrue", lambda v: v * 0.514444),
+    "aws_kts": ("environment.wind.speedApparent", lambda v: v * 0.514444),
+    "twa_deg": ("environment.wind.angleTrueWater", lambda v: math.radians(v)),
+    "awa_deg": ("environment.wind.angleApparent", lambda v: math.radians(v)),
+    "twd_deg": ("environment.wind.directionTrue", lambda v: math.radians(v)),
+    "pressure_hpa": ("environment.outside.pressure", lambda v: v * 100.0),
+    "air_temp_c": ("environment.outside.temperature", lambda v: v + 273.15),
+    "water_temp_c": ("environment.water.temperature", lambda v: v + 273.15),
+    "vmg_kts": ("performance.velocityMadeGood", lambda v: v * 0.514444),
+    "target_speed_kts": ("performance.targetSpeed", lambda v: v * 0.514444),
+    "current_drift_kts": ("environment.current.drift", lambda v: v * 0.514444),
+    "current_set_deg": ("environment.current.setTrue", lambda v: math.radians(v)),
+}
+
+def inject_signalk(scenario_data, verbose=False):
+    """Inject values into Signal K via HTTP PUT.
+    Only injects fields present in SK_PATH_MAP.
+    HTTP 405 = path read-only in SK → silently skipped.
+    """
+    headers = {"Content-Type": "application/json"}
+    injected = 0
+    skipped = 0
+    failed = 0
+
+    for measurement, fields in scenario_data.items():
+        for field, value in fields.items():
+            if field not in SK_PATH_MAP:
+                skipped += 1
+                continue
+            sk_path, converter = SK_PATH_MAP[field]
+            try:
+                sk_value = converter(float(value))
+            except Exception:
+                skipped += 1
+                continue
+
+            path_url = sk_path.replace(".", "/")
+            url = f"{SIGNALK_URL}/signalk/v1/api/vessels/self/{path_url}"
+            payload = json.dumps({"value": sk_value}).encode()
+
+            try:
+                req = urllib.request.Request(
+                    url, data=payload, headers=headers, method="PUT")
+                with urllib.request.urlopen(req, timeout=3):
+                    injected += 1
+            except urllib.error.HTTPError as e:
+                if e.code == 405:
+                    skipped += 1  # read-only path, normal
+                else:
+                    failed += 1
+                    if verbose:
+                        print(f" ⚠️ SK PUT {sk_path} → HTTP {e.code}")
+            except Exception as e:
+                failed += 1
+                if verbose:
+                    print(f" ⚠️ SK {sk_path} → {type(e).__name__}")
+
+    if verbose or injected > 0:
+        status = f"✅ Signal K : {injected} injected"
+        if skipped:
+            status += f", {skipped} skipped"
+        if failed:
+            status += f", {failed} failed"
+        print(f" {status}")
+    return injected
 
 # ─── Scenarios ────────────────────────────────────────────────────────────────
 
@@ -125,6 +202,50 @@ SCENARIOS = {
             },
             "performance": {
                 "vmg_kts": 5.1, "target_speed_kts": 7.2, "polar_ratio": 0.71
+            }
+        }
+    },
+
+    "the-race": {
+        "description": "Passage de The Race — courant 4.5kt E, J/30 lutte contre le courant",
+        "variance": 0.08,
+        "data": {
+            "navigation": {
+                "sog_kts": 2.1, "stw_kts": 6.3, "cog_deg": 185.0,
+                "heading_mag_deg": 180.0, "heel_deg": 22.0, "pitch_deg": 4.0,
+                "depth_m": 45.0
+            },
+            "environment": {
+                "tws_kts": 14.0, "twa_deg": 40.0, "aws_kts": 18.5,
+                "pressure_hpa": 1011.0, "air_temp_c": 13.0, "water_temp_c": 11.0
+            },
+            "performance": {
+                "vmg_kts": 1.8, "target_speed_kts": 6.1, "polar_ratio": 0.88
+            },
+            "environment_current": {
+                "current_drift_kts": 4.5, "current_set_deg": 90.0
+            }
+        }
+    },
+
+    "race-start": {
+        "description": "Ligne de départ Stamford — timer 4m30, layline, boat speed max",
+        "variance": 0.04,
+        "data": {
+            "navigation": {
+                "sog_kts": 5.8, "stw_kts": 5.7, "cog_deg": 295.0,
+                "heading_mag_deg": 292.0, "heel_deg": 16.0, "pitch_deg": 2.5,
+                "depth_m": 18.0
+            },
+            "environment": {
+                "tws_kts": 10.0, "twa_deg": 48.0, "aws_kts": 13.5,
+                "pressure_hpa": 1017.0, "air_temp_c": 18.0, "water_temp_c": 13.0
+            },
+            "performance": {
+                "vmg_kts": 4.2, "target_speed_kts": 5.9, "polar_ratio": 0.95
+            },
+            "racing": {
+                "start_timer_min": 4.5
             }
         }
     },
@@ -235,6 +356,8 @@ def main():
     parser.add_argument("--live", action="store_true",
                        help=f"⚠️ Write to REAL bucket '{LIVE_BUCKET}'")
     parser.add_argument("--verify-fields", action="store_true", help="Inject calibrate + show fields")
+    parser.add_argument("--no-signalk", action="store_true",
+                       help="Skip Signal K injection (InfluxDB only)")
     parser.add_argument("--interval", type=int, default=INTERVAL_SEC)
     args = parser.parse_args()
 
@@ -292,6 +415,8 @@ def main():
         data = apply_variance(scenario["data"], variance)
         print(f"[{datetime.now().strftime('%H:%M:%S')}] Cycle {cycle}", end=" ")
         write_influxdb(data, bucket, verbose=(cycle == 1))
+        if not args.no_signalk:
+            inject_signalk(data, verbose=(cycle == 1))
 
         if cycle == 1 and not args.continuous:
             print(f"\n✅ Single shot done — bucket: {bucket}")
