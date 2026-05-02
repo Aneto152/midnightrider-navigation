@@ -51,7 +51,7 @@ class ShutdownHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
     def log_message(self, format, *args):
-        if "/api/" in args[0]:
+        if args and "/api/" in args[0]:
             print(f"[Portal API] {format % args}")
 
 if __name__ == "__main__":

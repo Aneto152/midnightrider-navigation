@@ -208,7 +208,7 @@
     align-items: center;
     gap: 8px;
     box-shadow: 0 0 12px rgba(255,68,68,0.3);">
-    ⏻ Shutdown RPi
+    ⏻ Éteindre le RPi
     </button>
     </div>
 
@@ -231,10 +231,10 @@
     box-shadow: 0 0 40px rgba(255,68,68,0.4);">
     <div style="font-size: 48px; margin-bottom: 12px;">⏻</div>
     <h2 style="color: #ff4444; margin: 0 0 12px; font-size: 20px;">
-    Shutdown Raspberry Pi?
+    Éteindre le Raspberry Pi ?
     </h2>
     <p style="color: #aaa; margin: 0 0 28px; font-size: 14px; line-height: 1.5;">
-    System will shut down cleanly.
+    Le système va s'arrêter proprement.
     </p>
     <div style="display: flex; gap: 12px; justify-content: center;">
     <button onclick="cancelShutdown()" style="
@@ -246,7 +246,7 @@
     font-size: 15px;
     font-family: monospace;
     cursor: pointer;">
-    Cancel
+    Annuler
     </button>
     <button id="confirm-btn" onclick="executeShutdown()" style="
     background: #ff4444;
@@ -258,7 +258,7 @@
     font-family: monospace;
     cursor: pointer;
     font-weight: bold;">
-    ⏻ Shutdown
+    ⏻ Éteindre
     </button>
     </div>
     </div>
@@ -288,7 +288,7 @@
 
     function executeShutdown() {
     confirmBtn.disabled = true;
-    confirmBtn.textContent = '⏳ Shutting down...';
+    confirmBtn.textContent = '⏳ Arrêt en cours...';
     confirmBtn.style.background = '#888';
 
     fetch('/api/shutdown', {method: 'POST',
@@ -296,9 +296,9 @@
     body: JSON.stringify({source: 'portal'})})
     .then(function(r) { return r.json(); })
     .then(function() {
-    confirmBtn.textContent = '✅ Shutdown initiated';
+    confirmBtn.textContent = '✅ Arrêt initié';
     setTimeout(function() {
-    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#0a0a1a;color:#ff4444;font-family:monospace;gap:24px;"><div style="font-size:80px;">⏻</div><h1 style="margin:0;font-size:28px;">System shutting down...</h1><p style="color:#aaa;font-size:16px;">You can power off in 10 seconds.</p></div>';
+    document.body.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;background:#0a0a1a;color:#ff4444;font-family:monospace;gap:24px;"><div style="font-size:80px;">⏻</div><h1 style="margin:0;font-size:28px;">Arrêt en cours...</h1><p style="color:#aaa;font-size:16px;">Tu peux couper le courant dans 10 secondes.</p></div>';
     }, 800);
     })
     .catch(function(e) {
