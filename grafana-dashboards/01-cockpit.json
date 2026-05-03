@@ -77,7 +77,8 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-2m)|>filter(fn:(r)=>r._measurement==\"navigation.speedOverGround\")|>last()|>map(fn:(r)=>({r with _value:r._value * 1.94384}))"
         }
       ],
       "title": "Speed Over Ground (SOG)",
@@ -147,7 +148,8 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-2m)|>filter(fn:(r)=>r._measurement==\"navigation.headingTrue\")|>last()|>map(fn:(r)=>({r with _value:r._value * 180.0 / 3.14159265}))"
         }
       ],
       "title": "Heading True",
@@ -212,7 +214,8 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-2m)|>filter(fn:(r)=>r._measurement==\"navigation.attitude.roll\")|>last()|>map(fn:(r)=>({r with _value:r._value * 180.0 / 3.14159265}))"
         }
       ],
       "title": "Roll (Heel)",
