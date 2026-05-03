@@ -1,38 +1,40 @@
 {
-  "annotations": {
-    "list": [
-      {
-        "builtIn": 1,
-        "datasource": {
-          "type": "grafana",
-          "uid": "-- Grafana --"
-        },
-        "enable": true,
-        "hide": true,
-        "iconColor": "rgba(0, 211, 255, 1)",
-        "name": "Annotations & Alerts",
-        "type": "dashboard"
-      }
-    ]
-  },
-  "editable": true,
-  "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
-  "id": null,
-  "links": [],
+  "uid": "cockpit-main",
+  "title": "01 \u2014 COCKPIT (Main Navigation)",
+  "tags": [
+    "midnight-rider",
+    "navigation",
+    "cockpit"
+  ],
+  "timezone": "America/New_York",
+  "schemaVersion": 38,
+  "version": 4,
+  "refresh": "5s",
   "liveNow": true,
+  "time": {
+    "from": "now-5m",
+    "to": "now"
+  },
   "panels": [
     {
+      "id": 1,
+      "type": "gauge",
+      "title": "Speed Over Ground (SOG)",
       "datasource": {
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
       },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 0
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
+          "unit": "kn",
+          "min": 0,
+          "max": 12,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -41,36 +43,30 @@
                 "value": null
               },
               {
+                "color": "yellow",
+                "value": 6
+              },
+              {
                 "color": "red",
-                "value": 80
+                "value": 10
               }
             ]
-          },
-          "unit": "kn"
+          }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 0,
-        "y": 0
-      },
-      "id": 2,
       "options": {
-        "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
+        "orientation": "auto",
         "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "text": {}
+        "showThresholdMarkers": true
       },
-      "pluginVersion": "9.0.0",
       "targets": [
         {
           "refId": "A",
@@ -81,39 +77,15 @@
           "query": "from(bucket:\"midnight_rider\")|>range(start:-2m)|>filter(fn:(r)=>r._measurement==\"navigation.speedOverGround\")|>last()|>map(fn:(r)=>({r with _value:r._value * 1.94384}))"
         }
       ],
-      "title": "Speed Over Ground (SOG)",
-      "type": "gauge"
+      "pluginVersion": "10.0.0"
     },
     {
+      "id": 2,
+      "type": "stat",
+      "title": "Heading True",
       "datasource": {
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          },
-          "unit": "degree"
-        },
-        "overrides": []
       },
       "gridPos": {
         "h": 4,
@@ -121,27 +93,34 @@
         "x": 6,
         "y": 0
       },
-      "id": 3,
-      "options": {
-        "displayLabels": [
-          "value"
-        ],
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "values": []
+      "fieldConfig": {
+        "defaults": {
+          "unit": "degree",
+          "min": 0,
+          "max": 360,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              }
+            ]
+          }
         },
-        "pieType": "donut",
+        "overrides": []
+      },
+      "options": {
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
-        "text": {}
+        "colorMode": "value",
+        "graphMode": "none"
       },
-      "pluginVersion": "9.0.0",
       "targets": [
         {
           "refId": "A",
@@ -152,20 +131,27 @@
           "query": "from(bucket:\"midnight_rider\")|>range(start:-2m)|>filter(fn:(r)=>r._measurement==\"navigation.headingTrue\")|>last()|>map(fn:(r)=>({r with _value:r._value * 180.0 / 3.14159265}))"
         }
       ],
-      "title": "Heading True",
-      "type": "stat"
+      "pluginVersion": "10.0.0"
     },
     {
+      "id": 3,
+      "type": "gauge",
+      "title": "Roll (Heel)",
       "datasource": {
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
       },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 0
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
+          "unit": "degree",
+          "min": -45,
+          "max": 45,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -182,32 +168,22 @@
                 "value": 35
               }
             ]
-          },
-          "unit": "degree"
+          }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 12,
-        "y": 0
-      },
-      "id": 4,
       "options": {
-        "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
+        "orientation": "auto",
         "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "text": {}
+        "showThresholdMarkers": true
       },
-      "pluginVersion": "9.0.0",
       "targets": [
         {
           "refId": "A",
@@ -218,20 +194,27 @@
           "query": "from(bucket:\"midnight_rider\")|>range(start:-2m)|>filter(fn:(r)=>r._measurement==\"navigation.attitude.roll\")|>last()|>map(fn:(r)=>({r with _value:r._value * 180.0 / 3.14159265}))"
         }
       ],
-      "title": "Roll (Heel)",
-      "type": "gauge"
+      "pluginVersion": "10.0.0"
     },
     {
+      "id": 4,
+      "type": "gauge",
+      "title": "Pitch",
       "datasource": {
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
       },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
+          "unit": "degree",
+          "min": -20,
+          "max": 20,
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -241,92 +224,64 @@
               },
               {
                 "color": "yellow",
-                "value": 15
+                "value": 12
               },
               {
                 "color": "red",
-                "value": 25
+                "value": 20
               }
             ]
-          },
-          "unit": "degree"
+          }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 4,
-        "w": 6,
-        "x": 18,
-        "y": 0
-      },
-      "id": 5,
       "options": {
-        "orientation": "auto",
         "reduceOptions": {
-          "values": false,
-          "fields": "",
           "calcs": [
             "lastNotNull"
-          ]
+          ],
+          "fields": "",
+          "values": false
         },
+        "orientation": "auto",
         "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "text": {}
+        "showThresholdMarkers": true
       },
-      "pluginVersion": "9.0.0",
       "targets": [
         {
           "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-2m)|>filter(fn:(r)=>r._measurement==\"navigation.attitude.pitch\")|>last()|>map(fn:(r)=>({r with _value:r._value * 180.0 / 3.14159265}))"
         }
       ],
-      "title": "Pitch",
-      "type": "gauge"
+      "pluginVersion": "10.0.0"
     },
     {
+      "id": 5,
+      "type": "timeseries",
+      "title": "Speed History (5 min)",
       "datasource": {
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 4
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "value"
-          },
+          "unit": "kn",
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "tooltip": false,
-              "viz": false,
-              "legend": false
-            },
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "spanNulls": true
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -335,18 +290,10 @@
                 "value": null
               }
             ]
-          },
-          "unit": "kn"
+          }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 0,
-        "y": 4
-      },
-      "id": 6,
       "options": {
         "legend": {
           "calcs": [
@@ -362,60 +309,41 @@
           "sort": "none"
         }
       },
-      "pluginVersion": "9.0.0",
       "targets": [
         {
           "refId": "A",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.speedOverGround\")|>map(fn:(r)=>({r with _value:r._value * 1.94384}))|>aggregateWindow(every:5s,fn:mean,createEmpty:false)"
         }
       ],
-      "title": "Speed History (5 min)",
-      "type": "timeseries"
+      "pluginVersion": "10.0.0"
     },
     {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Attitude History (Roll & Pitch)",
       "datasource": {
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
       },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 4
+      },
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "value"
-          },
+          "unit": "degree",
           "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
             "drawStyle": "line",
-            "fillOpacity": 10,
-            "gradientMode": "opacity",
-            "hideFrom": {
-              "tooltip": false,
-              "viz": false,
-              "legend": false
-            },
-            "lineInterpolation": "linear",
             "lineWidth": 2,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "never",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
+            "fillOpacity": 5,
+            "spanNulls": true
           },
-          "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
@@ -424,18 +352,10 @@
                 "value": null
               }
             ]
-          },
-          "unit": "degree"
+          }
         },
         "overrides": []
       },
-      "gridPos": {
-        "h": 6,
-        "w": 12,
-        "x": 12,
-        "y": 4
-      },
-      "id": 7,
       "options": {
         "legend": {
           "calcs": [
@@ -446,161 +366,41 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
-      "pluginVersion": "9.0.0",
       "targets": [
         {
-          "refId": "A",
+          "refId": "Roll",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
-        }
-      ],
-      "title": "Attitude History (Roll/Pitch)",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "efifgp8jvgj5sf"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "value"
           },
-          "custom": {
-            "hideFrom": {
-              "tooltip": false,
-              "viz": false,
-              "legend": false
-            }
-          },
-          "mappings": [
-            {
-              "options": {
-                "1": {
-                  "color": "green",
-                  "index": 1,
-                  "text": "OK"
-                },
-                "0": {
-                  "color": "red",
-                  "index": 0,
-                  "text": "ERROR"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.attitude.roll\")|>map(fn:(r)=>({r with _value:r._value * 180.0 / 3.14159265}))|>aggregateWindow(every:5s,fn:mean,createEmpty:false)"
         },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 24,
-        "x": 0,
-        "y": 10
-      },
-      "id": 8,
-      "options": {
-        "displayMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "values": false,
-          "fields": "",
-          "calcs": [
-            "lastNotNull"
-          ]
-        },
-        "text": {}
-      },
-      "pluginVersion": "9.0.0",
-      "targets": [
         {
-          "refId": "A",
+          "refId": "Pitch",
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.attitude.pitch\")|>map(fn:(r)=>({r with _value:r._value * 180.0 / 3.14159265}))|>aggregateWindow(every:5s,fn:mean,createEmpty:false)"
         }
       ],
-      "title": "System Status \u2014 Sensors OK",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "influxdb",
-        "uid": "efifgp8jvgj5sf"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "custom": {
-            "hideFrom": {
-              "tooltip": false,
-              "viz": false,
-              "legend": false
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 2,
-        "w": 24,
-        "x": 0,
-        "y": 13
-      },
-      "id": 9,
-      "options": {
-        "content": "\n\n**NAVIGATION LINKS:**  [\ud83c\udfe0 Cockpit](d/cockpit-main) | [\ud83c\udf0a Environment](d/environment-conditions) | [\u2693 Crew](d/crew-management) | [\u26a1 Performance](d/performance-analysis) | [\ud83c\udf2a\ufe0f Wind](d/wind-current-tactical) | [\ud83c\udfc6 Competitive](d/competitive-fleet) | [\ud83d\udd0b Electrical](d/electrical-power) | [\ud83c\udfc1 Race](d/race-block-island) | [\ud83d\udd14 Alerts](d/alerts-monitoring)",
-        "mode": "markdown"
-      },
-      "pluginVersion": "9.0.0",
-      "type": "text"
+      "pluginVersion": "10.0.0"
     }
   ],
-  "schemaVersion": 38,
-  "style": "dark",
-  "tags": [
-    "midnight-rider",
-    "navigation",
-    "cockpit"
-  ],
+  "annotations": {
+    "list": []
+  },
   "templating": {
     "list": []
   },
-  "time": {
-    "from": "now-5m",
-    "to": "now"
-  },
-  "timepicker": {},
-  "timezone": "America/New_York",
-  "title": "01 \u2014 COCKPIT (Main Navigation)",
-  "uid": "cockpit-main",
-  "version": 1,
-  "weekStart": "monday"
+  "links": [],
+  "style": "dark",
+  "graphTooltip": 0,
+  "fiscalYearStartMonth": 0,
+  "weekStart": "monday",
+  "id": null
 }
