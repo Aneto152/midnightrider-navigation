@@ -85,6 +85,26 @@ services:
       - influxdb
       - astronomical
 
+  # ─────────────────────────────────────────
+  # Regatta Server (race planning & weather)
+  # ─────────────────────────────────────────
+  regatta:
+    image: python:3.11-slim
+    container_name: regatta
+    restart: unless-stopped
+    network_mode: host
+    working_dir: /app
+    volumes:
+      - ./regatta:/app
+      - ./:/repo
+    command: python server.py
+    environment:
+      - INFLUX_TOKEN=${INFLUXDB_TOKEN}
+    env_file:
+      - .env
+    depends_on:
+      - influxdb
+
 # Volumes externes — déjà créés et remplis avec les données migrées
 volumes:
   influxdb-data:
