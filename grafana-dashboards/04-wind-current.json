@@ -265,7 +265,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "thresholds"
           },
           "custom": {
             "hideFrom": {
@@ -332,7 +332,7 @@
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "value"
+            "mode": "thresholds"
           },
           "custom": {
             "hideFrom": {
