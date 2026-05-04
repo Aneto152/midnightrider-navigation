@@ -1,51 +1,37 @@
 {
-  "task": "fix regatta — nouveau token InfluxDB dans .env",
-  "started": "2026-05-04T00:12:10.554322+00:00",
-  "updated": "2026-05-03T20:12:40Z",
+  "task": "fix SignalK→InfluxDB token + dashboard status queries",
+  "started": "2026-05-04T00:23:10.915340+00:00",
+  "updated": "2026-05-03T20:23:40Z",
   "status": "success",
-  "sha": "933ba913",
+  "sha": "9effc48",
   "steps": [
     {
-      "step": "get real token from InfluxDB",
-      "cmd": "influx auth list --json",
-      "output": "XxIolCzqcN...fAw==",
+      "step": "find SignalK config",
+      "cmd": "find + grep influxdb",
+      "output": "/home/aneto/.signalk/plugin-config-data/signalk-to-influxdb2.json",
       "ok": true,
-      "ts": "2026-05-03T20:11:00Z"
+      "ts": "2026-05-03T20:22:00Z"
     },
     {
-      "step": "test write with new token",
-      "cmd": "curl POST /api/v2/write",
-      "output": "HTTP 204",
+      "step": "update SignalK token",
+      "cmd": "Python: update token in config",
+      "output": "Old: daEPq... → New: XxIol...",
       "ok": true,
-      "ts": "2026-05-03T20:11:15Z"
+      "ts": "2026-05-03T20:22:15Z"
     },
     {
-      "step": "update .env with new token",
-      "cmd": "Python: Path.write_text",
-      "output": "INFLUX_TOKEN updated",
+      "step": "create status dashboard",
+      "cmd": "Generate 00-system-status.json",
+      "output": "8 sensors with Flux queries",
       "ok": true,
-      "ts": "2026-05-03T20:11:30Z"
+      "ts": "2026-05-03T20:23:00Z"
     },
     {
-      "step": "restart regatta",
-      "cmd": "docker compose up -d --force-recreate regatta",
-      "output": "Container started with new token",
+      "step": "commit & push",
+      "cmd": "git commit + git push",
+      "output": "SHA 9effc48",
       "ok": true,
-      "ts": "2026-05-03T20:12:00Z"
-    },
-    {
-      "step": "bouton pin",
-      "cmd": "POST /api/start_line pin",
-      "output": "ok=True lat=40.7625 lon=-73.988",
-      "ok": true,
-      "ts": "2026-05-03T20:12:30Z"
-    },
-    {
-      "step": "bouton comite",
-      "cmd": "POST /api/start_line committee",
-      "output": "ok=True lat=40.7625 lon=-73.988",
-      "ok": true,
-      "ts": "2026-05-03T20:12:35Z"
+      "ts": "2026-05-03T20:23:30Z"
     }
   ]
 }
