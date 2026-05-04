@@ -136,3 +136,41 @@ python3 logs/write_log.py --finalize --ok # ou sans --ok si échec
 
 **Règle absolue**: `--finalize` est la seule commande qui commite et pushe.
 Ne jamais git push sans passer par `--finalize`.
+
+
+---
+
+## RÈGLE ABSOLUE — ÉDITION DES FICHIERS JSON
+
+**Toujours utiliser Python pour lire et écrire les fichiers JSON. Jamais sed, jamais echo, jamais heredoc.**
+
+### Template obligatoire pour modifier un JSON :
+
+```python
+import json
+from pathlib import Path
+
+f = Path("chemin/vers/fichier.json")
+data = json.loads(f.read_text())
+
+# Modifier ici
+data["clé"] = "valeur"
+
+# Toujours vérifier avant d'écrire
+json.dumps(data)  # lève une exception si invalide
+f.write_text(json.dumps(data, indent=2, ensure_ascii=False))
+print("✅ JSON valide écrit")
+```
+
+### Vérification obligatoire après chaque écriture JSON :
+```bash
+python3 -c "import json; json.load(open('fichier.json'))" && echo "✅ JSON valide" || echo "❌ JSON invalide"
+```
+
+### Ce qui est INTERDIT sur les fichiers JSON :
+- `sed -i 's/.../.../g' fichier.json`
+- `echo '...' > fichier.json`
+- `cat > fichier.json << EOF ... EOF`
+- Toute édition texte directe sans parsing JSON
+
+**La raison** : sed et heredoc ne comprennent pas la structure JSON — ils créent des virgules manquantes, des guillemets non fermés, des accolades orphelines.
