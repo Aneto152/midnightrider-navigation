@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-05-03T20:49:00Z",
+  "status": "✅ OPERATIONAL",
+  "signalk": {
+    "status": "active (running)",
+    "uptime": "~14 minutes",
+    "config": "/home/aneto/.signalk/plugin-config-data/signalk-to-influxdb2.json",
+    "token_set": "XxIolCzqcNaLrP3..."
+  },
+  "influxdb": {
+    "write_test": "401 (expected — debug.test is test only)",
+    "real_data": "✅ CPU temperature 49.1°C (fresh from 2026-05-04 00:48:43)",
+    "bucket": "midnight_rider",
+    "org": "MidnightRider"
+  },
+  "pipeline": {
+    "signal_k_to_influxdb": "✅ ACTIVE",
+    "latest_measurement": "environment.system.cpuTemperature",
+    "data_age_seconds": "<60 seconds",
+    "measurements_count": "8+ (moon, sun, CPU, IMU acceleration)"
+  },
+  "dashboard_status": "Ready — 00-system-status.json will show live data"
+}
