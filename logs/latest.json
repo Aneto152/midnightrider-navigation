@@ -1,23 +1,44 @@
 {
-  "task": "test système de logs",
-  "started": "2026-05-03T20:00:00Z",
-  "updated": "2026-05-03T20:01:00Z",
-  "status": "success",
-  "sha": "a1b2c3d",
+  "task": "fix regatta boutons Pin/Comité",
+  "started": "2026-05-04T00:08:52.434359+00:00",
+  "updated": "2026-05-03T20:09:00Z",
+  "status": "failed",
+  "sha": "5bf83aa7",
   "steps": [
     {
-      "step": "port 5000 check",
-      "cmd": "ss -tlnp | grep 5000",
-      "output": "LISTEN 0 5 0.0.0.0:5000",
+      "step": "server.py fix",
+      "cmd": "grep INFLUX_TOKEN",
+      "output": "or os.getenv('INFLUXDB_TOKEN')",
       "ok": true,
-      "ts": "2026-05-03T20:00:30Z"
+      "ts": "2026-05-03T20:08:30Z"
     },
     {
-      "step": "container regatta",
-      "cmd": "docker compose ps regatta",
-      "output": "regatta python:3.11-slim Up 10 seconds",
+      "step": "container restart",
+      "cmd": "docker compose up -d --force-recreate regatta",
+      "output": "Status: Up 5 seconds",
       "ok": true,
-      "ts": "2026-05-03T20:00:45Z"
+      "ts": "2026-05-03T20:08:35Z"
+    },
+    {
+      "step": "token in container",
+      "cmd": "docker exec env grep INFLUX_TOKEN",
+      "output": "INFLUX_TOKEN=daEPq...bQeg==",
+      "ok": true,
+      "ts": "2026-05-03T20:08:40Z"
+    },
+    {
+      "step": "bouton pin",
+      "cmd": "POST /api/start_line pin",
+      "output": "ok=false, lat=40.7626, lon=-73.988",
+      "ok": false,
+      "ts": "2026-05-03T20:08:50Z"
+    },
+    {
+      "step": "bouton comite",
+      "cmd": "POST /api/start_line committee",
+      "output": "ok=false",
+      "ok": false,
+      "ts": "2026-05-03T20:08:55Z"
     }
   ]
 }
