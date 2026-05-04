@@ -1,44 +1,51 @@
 {
-  "task": "fix regatta boutons Pin/Comité",
-  "started": "2026-05-04T00:08:52.434359+00:00",
-  "updated": "2026-05-03T20:09:00Z",
-  "status": "failed",
-  "sha": "5bf83aa7",
+  "task": "fix regatta — nouveau token InfluxDB dans .env",
+  "started": "2026-05-04T00:12:10.554322+00:00",
+  "updated": "2026-05-03T20:12:40Z",
+  "status": "success",
+  "sha": "933ba913",
   "steps": [
     {
-      "step": "server.py fix",
-      "cmd": "grep INFLUX_TOKEN",
-      "output": "or os.getenv('INFLUXDB_TOKEN')",
+      "step": "get real token from InfluxDB",
+      "cmd": "influx auth list --json",
+      "output": "XxIolCzqcN...fAw==",
       "ok": true,
-      "ts": "2026-05-03T20:08:30Z"
+      "ts": "2026-05-03T20:11:00Z"
     },
     {
-      "step": "container restart",
+      "step": "test write with new token",
+      "cmd": "curl POST /api/v2/write",
+      "output": "HTTP 204",
+      "ok": true,
+      "ts": "2026-05-03T20:11:15Z"
+    },
+    {
+      "step": "update .env with new token",
+      "cmd": "Python: Path.write_text",
+      "output": "INFLUX_TOKEN updated",
+      "ok": true,
+      "ts": "2026-05-03T20:11:30Z"
+    },
+    {
+      "step": "restart regatta",
       "cmd": "docker compose up -d --force-recreate regatta",
-      "output": "Status: Up 5 seconds",
+      "output": "Container started with new token",
       "ok": true,
-      "ts": "2026-05-03T20:08:35Z"
-    },
-    {
-      "step": "token in container",
-      "cmd": "docker exec env grep INFLUX_TOKEN",
-      "output": "INFLUX_TOKEN=daEPq...bQeg==",
-      "ok": true,
-      "ts": "2026-05-03T20:08:40Z"
+      "ts": "2026-05-03T20:12:00Z"
     },
     {
       "step": "bouton pin",
       "cmd": "POST /api/start_line pin",
-      "output": "ok=false, lat=40.7626, lon=-73.988",
-      "ok": false,
-      "ts": "2026-05-03T20:08:50Z"
+      "output": "ok=True lat=40.7625 lon=-73.988",
+      "ok": true,
+      "ts": "2026-05-03T20:12:30Z"
     },
     {
       "step": "bouton comite",
       "cmd": "POST /api/start_line committee",
-      "output": "ok=false",
-      "ok": false,
-      "ts": "2026-05-03T20:08:55Z"
+      "output": "ok=True lat=40.7625 lon=-73.988",
+      "ok": true,
+      "ts": "2026-05-03T20:12:35Z"
     }
   ]
 }
