@@ -1,0 +1,19 @@
+{
+  "task": "Fix Signal K double-instance bug",
+  "timestamp": "2026-05-03T21:02:00Z",
+  "status": "success",
+  "findings": [
+    "Signal K was running BOTH via systemd AND docker-compose",
+    "Caused potential port conflicts and confusion",
+    "Systemd instance: /home/aneto/.signalk (native Node.js)",
+    "Docker instance: docker-compose (with volume signalk-data)"
+  ],
+  "actions": [
+    "Stopped systemd service: systemctl stop signalk",
+    "Disabled systemd: systemctl disable signalk",
+    "Verified data-model-status.json datasource UIDs are correct",
+    "Restarted Docker Signal K container",
+    "Verified data flowing to InfluxDB (CPU temp <2min old)"
+  ],
+  "result": "✅ Single instance (Docker), InfluxDB pipeline active"
+}
