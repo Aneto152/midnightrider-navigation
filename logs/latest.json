@@ -1,37 +1,37 @@
 {
-  "task": "fix SignalK→InfluxDB token + dashboard status queries",
-  "started": "2026-05-04T00:23:10.915340+00:00",
-  "updated": "2026-05-03T20:23:40Z",
+  "task": "fix signalk-to-influxdb2 token",
+  "started": "2026-05-04T00:36:04.991811+00:00",
+  "updated": "2026-05-03T20:36:10Z",
   "status": "success",
-  "sha": "9effc48",
+  "sha": "",
   "steps": [
     {
-      "step": "find SignalK config",
-      "cmd": "find + grep influxdb",
-      "output": "/home/aneto/.signalk/plugin-config-data/signalk-to-influxdb2.json",
+      "step": "security check .gitignore",
+      "cmd": "verify .env protection",
+      "output": ".env NOT tracked, *.token added",
       "ok": true,
-      "ts": "2026-05-03T20:22:00Z"
+      "ts": "2026-05-03T20:35:00Z"
     },
     {
-      "step": "update SignalK token",
-      "cmd": "Python: update token in config",
+      "step": "update signalk-to-influxdb2 token",
+      "cmd": "Python: update config (outside repo)",
       "output": "Old: daEPq... → New: XxIol...",
       "ok": true,
-      "ts": "2026-05-03T20:22:15Z"
+      "ts": "2026-05-03T20:35:30Z"
     },
     {
-      "step": "create status dashboard",
-      "cmd": "Generate 00-system-status.json",
-      "output": "8 sensors with Flux queries",
+      "step": "restart Signal K",
+      "cmd": "systemctl restart signalk",
+      "output": "Restarted successfully",
       "ok": true,
-      "ts": "2026-05-03T20:23:00Z"
+      "ts": "2026-05-03T20:35:45Z"
     },
     {
-      "step": "commit & push",
-      "cmd": "git commit + git push",
-      "output": "SHA 9effc48",
+      "step": "security scan staged files",
+      "cmd": "git diff --cached --name-only",
+      "output": "No config files staged — safe",
       "ok": true,
-      "ts": "2026-05-03T20:23:30Z"
+      "ts": "2026-05-03T20:36:00Z"
     }
   ]
 }
