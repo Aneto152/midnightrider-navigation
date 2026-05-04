@@ -27,13 +27,13 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "# \u2693 Midnight Rider \u2014 Data Model Status\n_Real-time operational status of all measurements and sensors. **Green** = active data in last 30s. **Orange** = stale (30s-5min). **Red** = no data._"
+        "content": "# ⚓ Midnight Rider — Data Model Status\n_Real-time operational status of all measurements and sensors. **Green** = active data in last 30s. **Orange** = stale (30s-5min). **Red** = no data._"
       }
     },
     {
       "id": 2,
       "type": "row",
-      "title": "\ud83d\udd0c SENSORS \u2014 Hardware Status",
+      "title": "🔌 SENSORS — Hardware Status",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -46,7 +46,7 @@
       "id": 3,
       "type": "stat",
       "title": "Signal K",
-      "description": "Signal K server \u2192 NMEA 2000",
+      "description": "Signal K server → NMEA 2000",
       "gridPos": {
         "x": 0,
         "y": 3,
@@ -116,7 +116,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -30s)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"sog_kts\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.speedOverGround\")|>last()"
         }
       ]
     },
@@ -194,7 +194,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -30s)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"latitude\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.position.latitude\")|>last()"
         }
       ]
     },
@@ -272,7 +272,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -30s)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"tws_kts\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.wind.speedTrue\")|>last()"
         }
       ]
     },
@@ -350,7 +350,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -30s)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"heel_deg\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.attitude.roll\")|>last()"
         }
       ]
     },
@@ -428,7 +428,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -60s)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"depth_m\")\n |> count()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.0}))"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.depth.belowKeel\")|>last()"
         }
       ]
     },
@@ -513,7 +513,7 @@
     {
       "id": 9,
       "type": "row",
-      "title": "\ud83e\udded NAVIGATION",
+      "title": "🧭 NAVIGATION",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -546,7 +546,7 @@
         "defaults": {
           "unit": "",
           "decimals": 6,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -572,7 +572,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"latitude\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.position.latitude\")|>last()"
         }
       ]
     },
@@ -600,7 +600,7 @@
         "defaults": {
           "unit": "",
           "decimals": 6,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -626,7 +626,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"longitude\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.position.longitude\")|>last()"
         }
       ]
     },
@@ -654,7 +654,7 @@
         "defaults": {
           "unit": "velocityKn",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -680,7 +680,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"sog_kts\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.speedOverGround\")|>last()"
         }
       ]
     },
@@ -708,7 +708,7 @@
         "defaults": {
           "unit": "degree",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -734,7 +734,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"cog_deg\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.courseOverGroundTrue\")|>last()"
         }
       ]
     },
@@ -762,7 +762,7 @@
         "defaults": {
           "unit": "degree",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -816,7 +816,7 @@
         "defaults": {
           "unit": "velocityKn",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -870,7 +870,7 @@
         "defaults": {
           "unit": "degree",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -896,7 +896,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"heel_deg\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.attitude.roll\")|>last()"
         }
       ]
     },
@@ -924,7 +924,7 @@
         "defaults": {
           "unit": "degree",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -950,7 +950,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"pitch_deg\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"navigation.attitude.pitch\")|>last()"
         }
       ]
     },
@@ -978,7 +978,7 @@
         "defaults": {
           "unit": "lengthm",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1004,7 +1004,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation\" and r._field == \"depth_m\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.depth.belowKeel\")|>last()"
         }
       ]
     },
@@ -1032,7 +1032,7 @@
         "defaults": {
           "unit": "",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1065,7 +1065,7 @@
     {
       "id": 20,
       "type": "row",
-      "title": "\ud83d\udca8 WIND & ENVIRONMENT",
+      "title": "💨 WIND & ENVIRONMENT",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -1098,7 +1098,7 @@
         "defaults": {
           "unit": "velocityKn",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1124,7 +1124,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"tws_kts\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.wind.speedTrue\")|>last()"
         }
       ]
     },
@@ -1152,7 +1152,7 @@
         "defaults": {
           "unit": "degree",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1206,7 +1206,7 @@
         "defaults": {
           "unit": "degree",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1232,7 +1232,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"awa_deg\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.wind.angleApparent\")|>last()"
         }
       ]
     },
@@ -1260,7 +1260,7 @@
         "defaults": {
           "unit": "velocityKn",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1286,7 +1286,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"aws_kts\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.wind.speedApparent\")|>last()"
         }
       ]
     },
@@ -1314,7 +1314,7 @@
         "defaults": {
           "unit": "degree",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1340,7 +1340,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"twd_deg\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.wind.directionTrue\")|>last()"
         }
       ]
     },
@@ -1368,7 +1368,7 @@
         "defaults": {
           "unit": "celsius",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1394,7 +1394,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"air_temp_c\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.outside.temperature\")|>last()"
         }
       ]
     },
@@ -1422,7 +1422,7 @@
         "defaults": {
           "unit": "celsius",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1448,7 +1448,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment\" and r._field == \"water_temp_c\")\n |> last()"
+          "query": "from(bucket:\"midnight_rider\")|>range(start:-5m)|>filter(fn:(r)=>r._measurement==\"environment.water.temperature\")|>last()"
         }
       ]
     },
@@ -1476,7 +1476,7 @@
         "defaults": {
           "unit": "pressurehpa",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1509,7 +1509,7 @@
     {
       "id": 29,
       "type": "row",
-      "title": "\u26a1 PERFORMANCE",
+      "title": "⚡ PERFORMANCE",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -1542,7 +1542,7 @@
         "defaults": {
           "unit": "velocityKn",
           "decimals": 2,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1596,7 +1596,7 @@
         "defaults": {
           "unit": "velocityKn",
           "decimals": 2,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1650,7 +1650,7 @@
         "defaults": {
           "unit": "percentunit",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1704,7 +1704,7 @@
         "defaults": {
           "unit": "degree",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1737,7 +1737,7 @@
     {
       "id": 34,
       "type": "row",
-      "title": "\ud83d\udda5\ufe0f SYSTEM \u2014 Raspberry Pi",
+      "title": "🖥️ SYSTEM — Raspberry Pi",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -1770,7 +1770,7 @@
         "defaults": {
           "unit": "celsius",
           "decimals": 1,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1824,7 +1824,7 @@
         "defaults": {
           "unit": "percent",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1878,7 +1878,7 @@
         "defaults": {
           "unit": "percent",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
@@ -1932,7 +1932,7 @@
         "defaults": {
           "unit": "percent",
           "decimals": 0,
-          "noValue": "\u2014",
+          "noValue": "—",
           "color": {
             "mode": "thresholds"
           },
