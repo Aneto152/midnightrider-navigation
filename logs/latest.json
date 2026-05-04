@@ -1,0 +1,23 @@
+{
+  "task": "test système de logs",
+  "started": "2026-05-03T20:00:00Z",
+  "updated": "2026-05-03T20:01:00Z",
+  "status": "success",
+  "sha": "a1b2c3d",
+  "steps": [
+    {
+      "step": "port 5000 check",
+      "cmd": "ss -tlnp | grep 5000",
+      "output": "LISTEN 0 5 0.0.0.0:5000",
+      "ok": true,
+      "ts": "2026-05-03T20:00:30Z"
+    },
+    {
+      "step": "container regatta",
+      "cmd": "docker compose ps regatta",
+      "output": "regatta python:3.11-slim Up 10 seconds",
+      "ok": true,
+      "ts": "2026-05-03T20:00:45Z"
+    }
+  ]
+}

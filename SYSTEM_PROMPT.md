@@ -94,3 +94,45 @@ NE PAS modifier de fichier en PHASE 1.
 
 **Last Updated** : 2026-05-03  
 **Version** : v1.0-orchestration
+
+
+---
+
+## LOGGING OBLIGATOIRE (lu par l'IA coordinatrice via GitHub API)
+
+**Chaque tâche** doit être loggée dans `logs/latest.json` via `write_log.py`.
+Ce fichier est lu directement par l'IA coordinatrice — c'est elle qui vérifie et valide.
+
+### Workflow avec logs :
+
+```bash
+# PHASE 1 — PLAN : initialiser le log
+python3 logs/write_log.py --init --task "description de la tâche"
+
+# PHASE 2 — CODE : après chaque commande importante
+python3 logs/write_log.py --step "nom étape" \
+ --cmd "commande exécutée" \
+ --out "$(commande 2>&1 | tail -5)" \
+ --ok # ou omettre --ok si échec
+
+# PHASE 3 — VERIFY : finaliser (commit automatique du log)
+python3 logs/write_log.py --finalize --ok # ou sans --ok si échec
+```
+
+### Format de logs/latest.json :
+
+```json
+{
+  "task": "description",
+  "started": "2026-05-03T23:55:00Z",
+  "updated": "2026-05-03T23:56:00Z",
+  "status": "success|failed|running",
+  "sha": "a3f8c21",
+  "steps": [
+    {"step": "nom", "cmd": "...", "output": "...", "ok": true, "ts": "..."}
+  ]
+}
+```
+
+**Règle absolue**: `--finalize` est la seule commande qui commite et pushe.
+Ne jamais git push sans passer par `--finalize`.
