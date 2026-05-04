@@ -10,6 +10,7 @@ GRAFANA_USER = os.getenv("GRAFANA_USER", "admin")
 GRAFANA_PASS = os.getenv("GRAFANA_PASSWORD", "admin")
 
 DASHBOARDS = [
+    "00-system-status.json",
     "01-cockpit.json",
     "01-navigation-dashboard.json",
     "03-performance.json",
