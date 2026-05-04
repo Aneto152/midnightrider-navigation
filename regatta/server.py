@@ -6,7 +6,7 @@ import json, time, urllib.parse, urllib.request, os
 import weather_collector
 
 INFLUX_URL = "http://localhost:8086"
-INFLUX_TOKEN = os.getenv('INFLUX_TOKEN', '')
+INFLUX_TOKEN = os.getenv('INFLUX_TOKEN') or os.getenv('INFLUXDB_TOKEN', '')
 INFLUX_ORG = "MidnightRider"
 INFLUX_BUCKET = "midnight_rider"
 SIGNALK_URL = "http://localhost:3000"

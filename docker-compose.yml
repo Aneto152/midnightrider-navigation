@@ -98,8 +98,6 @@ services:
       - ./regatta:/app
       - ./:/repo
     command: python server.py
-    environment:
-      - INFLUX_TOKEN=${INFLUXDB_TOKEN}
     env_file:
       - .env
     depends_on:
