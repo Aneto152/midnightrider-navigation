@@ -3,7 +3,8 @@
   "title": "00 — System Status",
   "tags": [
     "midnight-rider",
-    "status"
+    "status",
+    "sensors"
   ],
   "timezone": "America/New_York",
   "schemaVersion": 38,
