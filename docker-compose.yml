@@ -34,7 +34,9 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_X_FRAME_OPTIONS=SAMEORIGIN
-      - INFLUX_TOKEN=${INFLUX_TOKEN}
+      # CRITICAL: INFLUX_TOKEN required for datasource YAML substitution
+      # Without this: ${INFLUX_TOKEN} = empty string → 401 Unauthorized
+      # Rotate: docker compose up -d grafana (NOT restart)
       - INFLUX_TOKEN=${INFLUX_TOKEN}
     depends_on:
       - influxdb
@@ -54,7 +56,6 @@ services:
       - LON=-73.5387
       - NOAA_STATION=8467150
       - INFLUX_URL=http://localhost:8086
-      - INFLUX_TOKEN=${INFLUX_TOKEN}
       - INFLUX_ORG=MidnightRider
       - INFLUX_BUCKET=midnight_rider
     depends_on:

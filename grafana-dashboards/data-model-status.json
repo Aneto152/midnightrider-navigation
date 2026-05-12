@@ -27,13 +27,13 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "# ⚓ Midnight Rider — Data Model Status\n_Statut opérationnel en temps réel. **🟢 ACTIVE** = données < 30s. **🟡 STALE** = données entre 30s et 5min. **🔴 NO DATA** = aucune donnée depuis 5min._"
+        "content": "# \u2693 Midnight Rider \u2014 Data Model Status\n_Statut op\u00e9rationnel en temps r\u00e9el. **\ud83d\udfe2 ACTIVE** = donn\u00e9es < 30s. **\ud83d\udfe1 STALE** = dernier point > 30s (instruments non actifs). **\ud83d\udd34 NO DATA** = aucune donn\u00e9e depuis 5min._"
       }
     },
     {
       "id": 2,
       "type": "row",
-      "title": "🛠️ SERVICES — Signal K + InfluxDB",
+      "title": "\ud83d\udee0\ufe0f SERVICES \u2014 Signal K + InfluxDB",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -46,7 +46,7 @@
       "id": 3,
       "type": "stat",
       "title": "Signal K API",
-      "description": "Signal K natif (systemd)\n📐 navigation.speedOverGround",
+      "description": "Signal K natif (systemd)\n\ud83d\udcd0 navigation.speedOverGround",
       "gridPos": {
         "x": 0,
         "y": 3,
@@ -67,7 +67,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -93,11 +93,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -107,7 +107,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -126,15 +126,15 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
     {
       "id": 4,
       "type": "stat",
-      "title": "SK→InfluxDB",
-      "description": "Pipeline signalk-to-influxdb2\n📐 environment.system.cpuTemperature",
+      "title": "SK\u2192InfluxDB",
+      "description": "Pipeline signalk-to-influxdb2\n\ud83d\udcd0 environment.system.cpuTemperature",
       "gridPos": {
         "x": 4,
         "y": 3,
@@ -155,7 +155,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -181,11 +181,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -195,7 +195,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -214,14 +214,14 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.cpuTemperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.cpuTemperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
     {
       "id": 5,
       "type": "row",
-      "title": "📡 GNSS — UM982 NANO-HED10L",
+      "title": "\ud83d\udce1 GNSS \u2014 UM982 NANO-HED10L",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -234,7 +234,7 @@
       "id": 6,
       "type": "stat",
       "title": "SOG",
-      "description": "UM982 @ 1 Hz\n📐 navigation.speedOverGround",
+      "description": "UM982 @ 1 Hz\n\ud83d\udcd0 navigation.speedOverGround",
       "gridPos": {
         "x": 0,
         "y": 7,
@@ -255,7 +255,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -281,11 +281,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -295,7 +295,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -314,7 +314,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -322,7 +322,7 @@
       "id": 7,
       "type": "stat",
       "title": "COG",
-      "description": "UM982 @ 1 Hz\n📐 navigation.courseOverGroundTrue",
+      "description": "UM982 @ 1 Hz\n\ud83d\udcd0 navigation.courseOverGroundTrue",
       "gridPos": {
         "x": 4,
         "y": 7,
@@ -343,7 +343,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -369,11 +369,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -383,7 +383,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -402,7 +402,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.courseOverGroundTrue\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.courseOverGroundTrue\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -410,7 +410,7 @@
       "id": 8,
       "type": "stat",
       "title": "Heading",
-      "description": "UM982 + WIT @ 1 Hz\n📐 navigation.headingTrue",
+      "description": "UM982 + WIT @ 1 Hz\n\ud83d\udcd0 navigation.headingTrue",
       "gridPos": {
         "x": 8,
         "y": 7,
@@ -431,7 +431,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -457,11 +457,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -471,7 +471,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -490,7 +490,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -498,7 +498,7 @@
       "id": 9,
       "type": "stat",
       "title": "Latitude",
-      "description": "UM982 @ 1 Hz\n📐 navigation.position",
+      "description": "UM982 @ 1 Hz\n\ud83d\udcd0 navigation.position",
       "gridPos": {
         "x": 12,
         "y": 7,
@@ -519,7 +519,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -545,11 +545,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -559,7 +559,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -578,7 +578,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.position\" and r._field == \"lat\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.position\" and r._field == \"lat\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -586,7 +586,7 @@
       "id": 10,
       "type": "stat",
       "title": "Longitude",
-      "description": "UM982 @ 1 Hz\n📐 navigation.position",
+      "description": "UM982 @ 1 Hz\n\ud83d\udcd0 navigation.position",
       "gridPos": {
         "x": 16,
         "y": 7,
@@ -607,7 +607,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -633,11 +633,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -647,7 +647,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -666,7 +666,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.position\" and r._field == \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.position\" and r._field == \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -674,7 +674,7 @@
       "id": 11,
       "type": "stat",
       "title": "Satellites",
-      "description": "UM982 @ 1 Hz\n📐 navigation.gnss.satellites",
+      "description": "UM982 @ 1 Hz\n\ud83d\udcd0 navigation.gnss.satellites",
       "gridPos": {
         "x": 20,
         "y": 7,
@@ -695,7 +695,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -721,11 +721,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -735,7 +735,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -754,14 +754,14 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.gnss.satellites\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.gnss.satellites\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
     {
       "id": 12,
       "type": "row",
-      "title": "🧭 IMU — WIT WT901BLECL",
+      "title": "\ud83e\udded IMU \u2014 WIT WT901BLECL",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -774,7 +774,7 @@
       "id": 13,
       "type": "stat",
       "title": "Roll",
-      "description": "WIT BLE @ 30 Hz\n📐 navigation.attitude.roll",
+      "description": "WIT BLE @ 30 Hz\n\ud83d\udcd0 navigation.attitude.roll",
       "gridPos": {
         "x": 0,
         "y": 11,
@@ -795,7 +795,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -821,11 +821,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -835,7 +835,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -854,7 +854,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.attitude.roll\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.attitude.roll\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -862,7 +862,7 @@
       "id": 14,
       "type": "stat",
       "title": "Pitch",
-      "description": "WIT BLE @ 30 Hz\n📐 navigation.attitude.pitch",
+      "description": "WIT BLE @ 30 Hz\n\ud83d\udcd0 navigation.attitude.pitch",
       "gridPos": {
         "x": 4,
         "y": 11,
@@ -883,7 +883,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -909,11 +909,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -923,7 +923,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -942,7 +942,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.attitude.pitch\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.attitude.pitch\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -950,7 +950,7 @@
       "id": 15,
       "type": "stat",
       "title": "Yaw",
-      "description": "WIT BLE @ 30 Hz\n📐 navigation.attitude.yaw",
+      "description": "WIT BLE @ 30 Hz\n\ud83d\udcd0 navigation.attitude.yaw",
       "gridPos": {
         "x": 8,
         "y": 11,
@@ -971,7 +971,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -997,11 +997,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -1011,7 +1011,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -1030,7 +1030,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.attitude.yaw\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.attitude.yaw\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -1038,7 +1038,7 @@
       "id": 16,
       "type": "stat",
       "title": "Accel X",
-      "description": "WIT BLE @ 30 Hz\n📐 navigation.acceleration.x",
+      "description": "WIT BLE @ 30 Hz\n\ud83d\udcd0 navigation.acceleration.x",
       "gridPos": {
         "x": 12,
         "y": 11,
@@ -1059,7 +1059,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -1085,11 +1085,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -1099,7 +1099,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -1118,14 +1118,14 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.acceleration.x\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.acceleration.x\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
     {
       "id": 17,
       "type": "row",
-      "title": "💨 VENT — B&G WS320 ⏳ Non connecté",
+      "title": "\ud83d\udca8 VENT \u2014 B&G WS320 \u23f3 Non connect\u00e9",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -1138,7 +1138,7 @@
       "id": 18,
       "type": "stat",
       "title": "AWS",
-      "description": "B&G WS320 NMEA 2000\n📐 environment.wind.speedApparent",
+      "description": "B&G WS320 NMEA 2000\n\ud83d\udcd0 environment.wind.speedApparent",
       "gridPos": {
         "x": 0,
         "y": 15,
@@ -1159,7 +1159,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -1185,11 +1185,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -1199,7 +1199,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -1218,7 +1218,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.speedApparent\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.speedApparent\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -1226,7 +1226,7 @@
       "id": 19,
       "type": "stat",
       "title": "AWA",
-      "description": "B&G WS320 NMEA 2000\n📐 environment.wind.angleApparent",
+      "description": "B&G WS320 NMEA 2000\n\ud83d\udcd0 environment.wind.angleApparent",
       "gridPos": {
         "x": 4,
         "y": 15,
@@ -1247,7 +1247,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -1273,11 +1273,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -1287,7 +1287,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -1306,7 +1306,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.angleApparent\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.angleApparent\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -1314,7 +1314,7 @@
       "id": 20,
       "type": "stat",
       "title": "TWS",
-      "description": "B&G WS320 NMEA 2000\n📐 environment.wind.speedTrue",
+      "description": "B&G WS320 NMEA 2000\n\ud83d\udcd0 environment.wind.speedTrue",
       "gridPos": {
         "x": 8,
         "y": 15,
@@ -1335,7 +1335,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -1361,11 +1361,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -1375,7 +1375,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -1394,7 +1394,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.speedTrue\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.speedTrue\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
@@ -1402,7 +1402,7 @@
       "id": 21,
       "type": "stat",
       "title": "TWD",
-      "description": "B&G WS320 NMEA 2000\n📐 environment.wind.directionTrue",
+      "description": "B&G WS320 NMEA 2000\n\ud83d\udcd0 environment.wind.directionTrue",
       "gridPos": {
         "x": 12,
         "y": 15,
@@ -1423,7 +1423,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -1449,11 +1449,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -1463,7 +1463,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -1482,14 +1482,14 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.directionTrue\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.directionTrue\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     },
     {
       "id": 22,
       "type": "row",
-      "title": "🖥️ SYSTÈME — Raspberry Pi 4",
+      "title": "\ud83d\udda5\ufe0f SYST\u00c8ME \u2014 Raspberry Pi 4",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -1502,7 +1502,7 @@
       "id": 23,
       "type": "stat",
       "title": "CPU Temp",
-      "description": "RPi sysfs @ 5s\n📐 environment.system.cpuTemperature",
+      "description": "RPi sysfs @ 5s\n\ud83d\udcd0 environment.system.cpuTemperature",
       "gridPos": {
         "x": 0,
         "y": 19,
@@ -1523,7 +1523,7 @@
       "fieldConfig": {
         "defaults": {
           "unit": "",
-          "noValue": "❌ NO DATA",
+          "noValue": "\u274c NO DATA",
           "color": {
             "mode": "thresholds"
           },
@@ -1549,11 +1549,11 @@
               "type": "value",
               "options": {
                 "0.5": {
-                  "text": "⚠️ STALE",
+                  "text": "\u26a0\ufe0f STALE",
                   "color": "orange"
                 },
                 "1": {
-                  "text": "✅ ACTIVE",
+                  "text": "\u2705 ACTIVE",
                   "color": "green"
                 }
               }
@@ -1563,7 +1563,7 @@
               "options": {
                 "match": "null",
                 "result": {
-                  "text": "❌ NO DATA",
+                  "text": "\u274c NO DATA",
                   "color": "red"
                 }
               }
@@ -1582,7 +1582,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.cpuTemperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> aggregateWindow(every: 30s, fn: count, createEmpty: true)\n |> last()\n |> map(fn: (r) => ({r with _value: if r._value > 0 then 1.0 else 0.5}))"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.cpuTemperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     }
