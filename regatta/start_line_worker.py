@@ -50,11 +50,7 @@ def bearing_deg(lat1, lon1, lat2, lon2):
     return (math.degrees(math.atan2(y, x)) + 360) % 360
 
 def signed_distance_to_line(boat_lat, boat_lon, pin_lat, pin_lon, rc_lat, rc_lon):
-    """
-    Perpendicular signed distance from boat to start line (pin→RC).
-    Positive = boat is behind line (safe/CLEAR side).
-    Negative = boat is over line (OCS).
-    """
+    """Perpendicular signed distance from boat to start line (pin→RC)."""
     R = 6371000.0
     cos_lat = math.cos(math.radians(pin_lat))
     bx = R * math.radians(boat_lon - pin_lon) * cos_lat
@@ -188,98 +184,77 @@ def get_twd_deg():
     return None
 
 # ── Read pin/RC from InfluxDB ─────────────────────────────────
-PIN_RC_FIELD_MAP = {}  # populated at startup
+PIN_RC_STATE = {"pin_lat": None, "pin_lon": None, "rc_lat": None, "rc_lon": None}
+DISCOVERY_DONE = False
 
-def discover_pin_rc_fields():
-    """Query InfluxDB to find which field names store pin/RC coordinates."""
-    global PIN_RC_FIELD_MAP
+def discover_and_read_pin_rc():
+    """Query InfluxDB for latest pin/RC coords using mark tag."""
+    global PIN_RC_STATE, DISCOVERY_DONE
     
-    # Query all field names in regatta.start_line
-    rows = influx_query(
+    # Query pin marker (mark=pin tag)
+    flux_pin = (
         'from(bucket:"midnight_rider")\n'
         ' |> range(start: -24h)\n'
-        ' |> filter(fn: (r) => r._measurement == "regatta.start_line")\n'
-        ' |> keep(columns: ["_field"])\n'
-        ' |> distinct(column: "_field")'
-    )
-    
-    fields = [r["_field"] for r in rows]
-    print(f"[worker] regatta.start_line fields: {fields}")
-    
-    # Try common naming patterns
-    patterns = {
-        "pin_lat": ["pin_lat", "pin_latitude", "lat_pin", "pinLat"],
-        "pin_lon": ["pin_lon", "pin_longitude", "lon_pin", "pinLon"],
-        "rc_lat": ["rc_lat", "rc_latitude", "lat_rc", "rcLat", "committee_lat", "boat_lat"],
-        "rc_lon": ["rc_lon", "rc_longitude", "lon_rc", "rcLon", "committee_lon", "boat_lon"],
-    }
-    
-    for key, candidates in patterns.items():
-        for c in candidates:
-            if c in fields:
-                PIN_RC_FIELD_MAP[key] = c
-                print(f"[worker]   {key} → {c}")
-                break
-    
-    return len(PIN_RC_FIELD_MAP) == 4
-
-def get_start_line_coords():
-    """Read latest pin/RC coords from InfluxDB."""
-    if not PIN_RC_FIELD_MAP or len(PIN_RC_FIELD_MAP) < 4:
-        return None, None, None, None
-    
-    flux = (
-        'from(bucket:"midnight_rider")\n'
-        ' |> range(start: -24h)\n'
-        ' |> filter(fn: (r) => r._measurement == "regatta.start_line")\n'
-        ' |> filter(fn: (r) => '
-        f'r._field == "{PIN_RC_FIELD_MAP.get("pin_lat", "")}" or '
-        f'r._field == "{PIN_RC_FIELD_MAP.get("pin_lon", "")}" or '
-        f'r._field == "{PIN_RC_FIELD_MAP.get("rc_lat", "")}" or '
-        f'r._field == "{PIN_RC_FIELD_MAP.get("rc_lon", "")}")\n'
+        ' |> filter(fn: (r) => r._measurement == "regatta.start_line" and r.mark == "pin")\n'
+        ' |> filter(fn: (r) => r._field == "lat" or r._field == "lon")\n'
         ' |> last()'
     )
     
-    rows = influx_query(flux)
-    vals = {}
-    for row in rows:
-        field = row["_field"]
+    # Query rc marker (mark=rc tag)
+    flux_rc = (
+        'from(bucket:"midnight_rider")\n'
+        ' |> range(start: -24h)\n'
+        ' |> filter(fn: (r) => r._measurement == "regatta.start_line" and r.mark == "rc")\n'
+        ' |> filter(fn: (r) => r._field == "lat" or r._field == "lon")\n'
+        ' |> last()'
+    )
+    
+    pin_rows = influx_query(flux_pin)
+    rc_rows = influx_query(flux_rc)
+    
+    if not DISCOVERY_DONE:
+        if pin_rows:
+            print("[worker] ✅ Found PIN marker in InfluxDB")
+        if rc_rows:
+            print("[worker] ✅ Found RC marker in InfluxDB")
+        DISCOVERY_DONE = True
+    
+    # Parse pin coordinates
+    for row in pin_rows:
         try:
-            vals[field] = float(row["_value"])
+            if row["_field"] == "lat":
+                PIN_RC_STATE["pin_lat"] = float(row["_value"])
+            elif row["_field"] == "lon":
+                PIN_RC_STATE["pin_lon"] = float(row["_value"])
         except Exception:
             pass
     
-    pin_lat = vals.get(PIN_RC_FIELD_MAP.get("pin_lat"))
-    pin_lon = vals.get(PIN_RC_FIELD_MAP.get("pin_lon"))
-    rc_lat = vals.get(PIN_RC_FIELD_MAP.get("rc_lat"))
-    rc_lon = vals.get(PIN_RC_FIELD_MAP.get("rc_lon"))
+    # Parse rc coordinates
+    for row in rc_rows:
+        try:
+            if row["_field"] == "lat":
+                PIN_RC_STATE["rc_lat"] = float(row["_value"])
+            elif row["_field"] == "lon":
+                PIN_RC_STATE["rc_lon"] = float(row["_value"])
+        except Exception:
+            pass
     
-    return pin_lat, pin_lon, rc_lat, rc_lon
+    return PIN_RC_STATE["pin_lat"], PIN_RC_STATE["pin_lon"], PIN_RC_STATE["rc_lat"], PIN_RC_STATE["rc_lon"]
 
 # ── Main loop ─────────────────────────────────────────────────
 def main():
     print(f"[worker] Midnight Rider — Start Line Geometry Worker")
     print(f"[worker] InfluxDB: {INFLUX_URL} | Signal K: {SIGNALK_URL}")
     print(f"[worker] Update rate: {INTERVAL}s")
-    print(f"[worker] Discovering pin/RC coordinate field names...")
-    
-    # Discover coordinate field names
-    for attempt in range(10):
-        if discover_pin_rc_fields():
-            print(f"[worker] ✅ Field mapping complete")
-            break
-        print(f"[worker] Retry {attempt+1}/10 in 5s...")
-        time.sleep(5)
-    
-    if not PIN_RC_FIELD_MAP or len(PIN_RC_FIELD_MAP) < 4:
-        print("[worker] ⚠️ Could not auto-discover all coordinate fields")
-        print("[worker] Mark pin and RC boat positions in regatta interface first")
-        print("[worker] Then restart this worker")
+    print(f"[worker] Waiting for pin/RC markers and boat GPS...")
+    print(f"[worker] (Mark pin + RC in regatta UI at http://localhost:5000/)")
     
     iteration = 0
+    last_print = 0
+    
     while True:
         try:
-            pin_lat, pin_lon, rc_lat, rc_lon = get_start_line_coords()
+            pin_lat, pin_lon, rc_lat, rc_lon = discover_and_read_pin_rc()
             
             if all(v is not None for v in [pin_lat, pin_lon, rc_lat, rc_lon]):
                 boat_lat, boat_lon = get_boat_position()
@@ -293,7 +268,8 @@ def main():
                     )
                     
                     if influx_write(fields):
-                        if iteration % 10 == 0:  # log every 10s
+                        now = time.time()
+                        if now - last_print > 10:  # Log every 10s
                             print(
                                 f"[worker] ✅ {fields['line_side']:5s} | "
                                 f"dist={fields['distance_to_line_m']:6.1f}m | "
@@ -301,15 +277,16 @@ def main():
                                 f"rc={fields['pin_rc_dist_m']:6.1f}m | "
                                 f"bias={fields['line_bias_deg'] if fields['line_bias_deg'] else '-':>5}°"
                             )
+                            last_print = now
+                    else:
+                        if iteration % 30 == 0:
+                            print("[worker] ⚠️ InfluxDB write failed")
                 else:
                     if iteration % 30 == 0:
-                        print("[worker] ⚠️ No boat GPS from Signal K")
+                        print("[worker] ⏳ Waiting for boat GPS from Signal K...")
             else:
                 if iteration % 30 == 0:
-                    print("[worker] ⏳ Waiting for pin/RC positions to be marked")
-                # Retry field discovery if not found
-                if len(PIN_RC_FIELD_MAP) < 4:
-                    discover_pin_rc_fields()
+                    print("[worker] ⏳ Waiting for pin/RC markers to be set (or no GPS yet)...")
         
         except Exception as e:
             print(f"[worker] Error: {e}")
