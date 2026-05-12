@@ -1,94 +1,98 @@
-# Cloudflare Quick Tunnel — OpenClaw Gateway
+# Cloudflare Tunnel — OpenClaw Gateway (Permanent)
 
-**Tunnel Status:** ✅ ACTIVE
+**Tunnel Status:** ✅ ACTIVE (Systemd Service)
+
+## Installation Details
+
+- **Method:** Native systemd service (NO Docker)
+- **Binary:** `/usr/local/bin/cloudflared` (v2026.3.0)
+- **Service:** `cloudflared.service` (auto-start on boot)
+- **Installed:** 2026-05-12 00:14:31 EDT (May 12, 2026)
 
 ## Public URL
 
-```
-https://martin-judicial-technology-snapshot.trycloudflare.com
-```
+The tunnel is connected to your Cloudflare account. Access via your registered tunnel URL or through the named tunnel configuration.
 
-## Details
-
-- **Created:** 2026-05-12 01:33:54 UTC (May 11, 2026 21:33 EDT)
-- **Gateway Port:** :18789 (OpenClaw gateway)
-- **Architecture:** aarch64 (RPi 4)
-- **cloudflared Version:** 2026.3.0
-- **Tunnel Type:** Quick Tunnel (no Cloudflare account required)
+**Gateway Endpoint:**
+```
+OpenClaw Gateway :18789 (exposed via Cloudflare tunnel)
+```
 
 ## How to Use
 
-From anywhere on the internet:
-
-```bash
-curl https://martin-judicial-technology-snapshot.trycloudflare.com/
-```
+The tunnel automatically routes traffic from Cloudflare to the OpenClaw gateway running on localhost:18789.
 
 ### iPad/Remote Access
 
-The tunnel exposes OpenClaw gateway port 18789 through Cloudflare's infrastructure:
-
+From anywhere with internet:
 ```
-https://martin-judicial-technology-snapshot.trycloudflare.com
+https://your-tunnel-url.com  (see Cloudflare dashboard for your tunnel URL)
 ```
 
-All OpenClaw APIs and messaging services are accessible through this URL.
+All OpenClaw APIs and messaging services are accessible.
 
 ## Technical Details
 
-- **Connector ID:** 7841993d-db86-4600-9764-dbf2954b0bf6
-- **Protocol:** QUIC (UDP optimized)
-- **Location:** ewr12 (Cloudflare edge)
-- **Source IP:** 192.168.1.167 (RPi WiFi)
+- **Protocol:** QUIC (UDP optimized for speed)
+- **Connections:** 4 redundant QUIC tunnels active
+  - ewr13, ewr15, ewr05, ewr14 (Cloudflare edge locations)
+- **Architecture:** aarch64 (RPi 4)
+- **Service Name:** cloudflared.service
+- **User:** aneto (systemd service)
+- **Restart Policy:** automatic (always restarts on failure)
 
-## Important Notes
+## Service Management
 
-⚠️ **Limitations of Quick Tunnel:**
-- No uptime guarantee
-- Subject to Cloudflare Terms of Service
-- For production, create a named tunnel with Cloudflare account
-- May be rate-limited or monitored
-
-## Making Persistent (Optional)
-
-To keep tunnel running across reboots:
-
+Check tunnel status:
 ```bash
-sudo tee /etc/systemd/system/cloudflared-tunnel.service > /dev/null << 'EOF'
-[Unit]
-Description=Cloudflare Tunnel (OpenClaw Gateway)
-After=network-online.target
-Wants=network-online.target
-
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/cloudflared tunnel --url http://localhost:18789
-Restart=always
-RestartSec=5
-StandardOutput=journal
-StandardError=journal
-User=aneto
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-sudo systemctl daemon-reload
-sudo systemctl enable --now cloudflared-tunnel.service
+sudo systemctl status cloudflared
+sudo journalctl -u cloudflared -n 50
 ```
 
-Then verify:
+Restart tunnel:
 ```bash
-sudo systemctl status cloudflared-tunnel.service
+sudo systemctl restart cloudflared
 ```
+
+## Security Notes
+
+✅ **Benefits of Permanent Tunnel:**
+- Survives RPi reboots automatically
+- No quick tunnel limitations
+- Higher reliability (4 redundant connections)
+- Proper systemd logging
+
+⚠️ **Keep Token Secure:**
+- Token is stored in systemd service definition
+- Regenerate token if exposed in logs
+- Do NOT commit token to git
 
 ## Status Timeline
 
 - ✅ 2026-05-12 01:33:50 UTC: Cloudflared v2026.3.0 installed
-- ✅ 2026-05-12 01:33:54 UTC: Quick Tunnel created
-- ✅ 2026-05-12 01:33:54 UTC: Tunnel connection established (QUIC)
-- ⏳ Next: Field test validation (May 19)
+- ✅ 2026-05-12 21:33:54 EDT: Initial Quick Tunnel created
+- ✅ 2026-05-12 00:14:31 EDT: **Permanent tunnel via systemd installed**
+- ✅ 2026-05-12 00:14:33 EDT: All 4 tunnel connections established
+- ⏳ Field test validation (May 19)
 - ⏳ Race day deployment (May 22)
+
+## Monitoring
+
+Real-time tunnel status:
+```bash
+watch -n 5 'sudo journalctl -u cloudflared -n 5 --no-pager'
+```
+
+Check active connections:
+```bash
+ss -tnp | grep cloudflared
+```
+
+## Configuration
+
+Service file location: `/etc/systemd/system/cloudflared.service`
+
+Configuration is managed by Cloudflare's named tunnel token (stored securely in systemd).
 
 ---
 
