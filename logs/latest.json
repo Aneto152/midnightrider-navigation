@@ -1,43 +1,37 @@
 {
-  "task": "diagnostic-post-incident-reseau-2026-05-12",
-  "date": "2026-05-12T12:40:33.884702",
+  "task": "Restore GitHub auth (new PAT) and push diagnostic commit 6a17046",
+  "date": "2026-05-12T12:59:23.475470",
   "status": "SUCCESS",
   "steps_completed": [
-    "signalk-running-13h",
-    "influxdb-up-13h",
-    "grafana-healthy-v12.3.1",
-    "portal-http200-env-blocked",
-    "regatta-up-13h",
-    "mdns-operational-0pct-loss",
-    "network-incident-2026-05-11-resolved",
-    "cloudflare-removed",
-    "disk-ram-ok"
+    "New GitHub PAT stored in ~/.git-credentials (chmod 600, outside repo)",
+    "git credential.helper set to store",
+    "Remote URL confirmed HTTPS",
+    "Local commit 6a17046 pushed to origin/main",
+    "Diagnostic log updated post-push"
   ],
   "errors": [],
+  "github_push_result": {
+    "commit": "6a17046",
+    "message": "diag: diagnostic complet post-incident 2026-05-12 \u2014 all systems READY",
+    "status": "pushed successfully",
+    "remote": "https://github.com/Aneto152/midnightrider-navigation.git",
+    "branch": "main"
+  },
   "services_status": {
-    "signalk": "running 13h uptime since 2026-05-11 23:10",
-    "influxdb": "up 13 hours",
-    "grafana": "healthy v12.3.1",
-    "portal_8888": "http200 env-blocked-404",
-    "regatta": "up 13 hours",
-    "mdns": "operational 0pct packet loss"
+    "signalk": "running \u2014 13h uptime since 2026-05-11 23:10",
+    "influxdb": "running \u2014 13h uptime",
+    "grafana": "healthy \u2014 v12.3.1",
+    "portal": "http 200 \u2014 env blocked (404)",
+    "regatta": "up 13 hours"
   },
-  "network_incident_2026_05_11": {
-    "status": "resolved-workaround-active",
-    "root_cause": "wlan0 dual-IP mDNS resolved to hotspot 192.168.4.1",
-    "fix": "avahi-mdns-fix.service deployed",
+  "network": {
+    "mdns": "operational \u2014 avahi-mdns-fix.service active",
     "ipad_access": "working via 192.168.1.167",
-    "cloudflare": "removed 2026-05-12 11:18 EDT"
-  },
-  "system_resources": {
-    "disk_root": "22pct 25G of 117G",
-    "ram_available_mb": 5194,
-    "load": 1.33,
-    "uptime_hours": 13.4
+    "incident_may11": "RESOLVED with workaround"
   },
   "readiness": {
-    "field_test_2026_05_19": "READY",
-    "race_block_island_2026_05_22": "READY"
+    "field_test_may19": "READY",
+    "race_day_may22": "READY"
   },
-  "next_recommended": "pre-field-test-checklist-2026-05-19"
+  "next_recommended": "Dust can now verify diagnostic from GitHub repository"
 }
