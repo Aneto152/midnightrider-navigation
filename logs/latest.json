@@ -1,37 +1,48 @@
 {
-  "task": "Restore GitHub auth (new PAT) and push diagnostic commit 6a17046",
-  "date": "2026-05-12T12:59:23.475470",
+  "task": "Full system diagnostic post-incident + GitHub auth restore",
+  "date": "2026-05-12T18:22:00Z",
   "status": "SUCCESS",
   "steps_completed": [
-    "New GitHub PAT stored in ~/.git-credentials (chmod 600, outside repo)",
-    "git credential.helper set to store",
-    "Remote URL confirmed HTTPS",
-    "Local commit 6a17046 pushed to origin/main",
-    "Diagnostic log updated post-push"
+    "Signal K: running (systemctl) \u2014 13h uptime",
+    "InfluxDB: running (Docker) \u2014 13h uptime",
+    "Grafana: healthy v12.3.1 (Docker)",
+    "Portal: HTTP 200 \u2014 .env blocked (404)",
+    "Regatta server: running (Docker)",
+    "mDNS: operational \u2014 avahi-mdns-fix.service active",
+    "iPad access: working via 192.168.1.167",
+    "Network incident May 11: RESOLVED",
+    "GitHub auth: restored \u2014 new PAT in ~/.git-credentials (chmod 600)",
+    "Commits pushed: 6a17046 (diagnostic) + 58d8469 (auth fix)"
   ],
   "errors": [],
-  "github_push_result": {
-    "commit": "6a17046",
-    "message": "diag: diagnostic complet post-incident 2026-05-12 \u2014 all systems READY",
-    "status": "pushed successfully",
-    "remote": "https://github.com/Aneto152/midnightrider-navigation.git",
-    "branch": "main"
-  },
   "services_status": {
-    "signalk": "running \u2014 13h uptime since 2026-05-11 23:10",
-    "influxdb": "running \u2014 13h uptime",
-    "grafana": "healthy \u2014 v12.3.1",
-    "portal": "http 200 \u2014 env blocked (404)",
-    "regatta": "up 13 hours"
+    "signalk": "running \u2014 systemctl \u2014 port 3000",
+    "influxdb": "running \u2014 Docker \u2014 port 8086",
+    "grafana": "healthy \u2014 Docker \u2014 port 3001 \u2014 v12.3.1",
+    "portal": "running \u2014 Docker \u2014 port 5000",
+    "regatta": "running \u2014 Docker \u2014 port 5000",
+    "openclaw_gateway": "port 18789 \u2014 local only"
   },
   "network": {
-    "mdns": "operational \u2014 avahi-mdns-fix.service active",
-    "ipad_access": "working via 192.168.1.167",
-    "incident_may11": "RESOLVED with workaround"
+    "mdns": "operational",
+    "avahi_fix_service": "active",
+    "ipad_primary_url": "http://192.168.1.167:5000",
+    "packet_loss": "0%",
+    "incident_may11": "RESOLVED"
+  },
+  "system_resources": {
+    "disk_used": "22% (25G / 117G)",
+    "ram_available_mb": 5194,
+    "load": 1.33
+  },
+  "git": {
+    "auth_method": "HTTPS PAT \u2014 ~/.git-credentials (chmod 600)",
+    "head_commit": "58d8469",
+    "branch": "main"
   },
   "readiness": {
     "field_test_may19": "READY",
     "race_day_may22": "READY"
   },
-  "next_recommended": "Dust can now verify diagnostic from GitHub repository"
+  "next_recommended": "Pre-race validation checklist \u2014 week of May 19"
 }
