@@ -56,10 +56,14 @@
         // Get host from parameter (default to localhost)
         const host = params.get('host') || 'localhost';
         
-        // Build direct Grafana URL (kiosk mode, no iframe needed)
-        const grafanaUrl = `http://${host}:3001/d/${dashboard}?kiosk&refresh=5s`;
+        // Read theme preference from portal localStorage
+        const nightMode = localStorage.getItem('midnightrider-night-mode');
+        const grafanaTheme = (nightMode === 'on') ? 'dark' : 'light';
         
-        console.log('Redirecting to:', grafanaUrl);
+        // Build direct Grafana URL with theme parameter (kiosk mode, no iframe needed)
+        const grafanaUrl = `http://${host}:3001/d/${dashboard}?kiosk&refresh=5s&theme=${grafanaTheme}`;
+        
+        console.log('Theme:', grafanaTheme, '→ Redirecting to:', grafanaUrl);
 
         // Redirect directly to Grafana (no iframe)
         window.location.href = grafanaUrl;
