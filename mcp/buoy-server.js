@@ -33,8 +33,7 @@ async function queryInfluxDB(fluxQuery) {
   return new Promise((resolve, reject) => {
     const postData = fluxQuery;
     const options = {
-      hostname: 'localhost',
-      port: 8086,
+      hostname: (() => { try { return new URL(INFLUX_URL).hostname; } catch(e) { return 'localhost'; } })()), port: (() => { try { return parseInt(new URL(INFLUX_URL).port) || 8086; } catch(e) { return 8086; } })(),
       path: `/api/v2/query?org=${INFLUX_ORG}`,
       method: 'POST',
       headers: {
@@ -108,28 +107,30 @@ async function getBuoyData() {
     const query = `from(bucket:"${INFLUX_BUCKET}")
       |> range(start: -1h)
       |> filter(fn: (r) => r._measurement =~ /^buoy\\./)
-      |> group(columns: ["station"])
-      |> last()`;
+            |> last()`;
 
     const results = await queryInfluxDB(query);
     
     const buoyData = {};
     for (const result of results) {
-      const station = result.station || 'unknown';
-      const measurement = result._measurement;
+      const station = result.buoy_station || result.station || 'unknown';
+      const path = result.path || '';
       const value = result._value;
-      const location = result.location || 'unknown';
       
       if (!buoyData[station]) {
         buoyData[station] = {
-          location: location,
           station: station,
           buoy_info: BUOYS[station] || {},
           measurements: {}
         };
       }
       
-      buoyData[station].measurements[measurement] = value;
+      // Map Signal K paths to measurement keys
+      if (path.includes('wind') && path.includes('speed')) buoyData[station].measurements['wind_speed'] = value;
+      else if (path.includes('wind') && path.includes('gust')) buoyData[station].measurements['wind_gust'] = value;
+      else if (path.includes('wind') && path.includes('direction')) buoyData[station].measurements['wind_direction'] = value;
+      else if (path.includes('wave') && path.includes('height')) buoyData[station].measurements['wave_height'] = value;
+      else if (path.includes('water') && path.includes('temperature')) buoyData[station].measurements['water_temp'] = value;
     }
 
     // Format response
@@ -146,11 +147,11 @@ async function getBuoyData() {
         name: info.name,
         location: `${info.lat}°N, ${info.lon}°W`,
         distance_from_stamford: info.distance,
-        wind_speed_knots: data.measurements['buoy.wind_speed_knots'] ? parseFloat(data.measurements['buoy.wind_speed_knots']).toFixed(1) : null,
-        wind_gust_knots: data.measurements['buoy.wind_gust_knots'] ? parseFloat(data.measurements['buoy.wind_gust_knots']).toFixed(1) : null,
-        wind_direction_degrees: data.measurements['buoy.wind_direction'] ? parseFloat(data.measurements['buoy.wind_direction']).toFixed(0) : null,
-        wave_height_meters: data.measurements['buoy.wave_height'] ? parseFloat(data.measurements['buoy.wave_height']).toFixed(2) : null,
-        water_temperature_celsius: data.measurements['buoy.water_temperature'] ? parseFloat(data.measurements['buoy.water_temperature']).toFixed(1) : null
+        wind_speed_knots: data.measurements['wind_speed'] ? parseFloat(data.measurements['wind_speed']).toFixed(1) : null,
+        wind_gust_knots: data.measurements['wind_gust'] ? parseFloat(data.measurements['wind_gust']).toFixed(1) : null,
+        wind_direction_degrees: data.measurements['wind_direction'] ? parseFloat(data.measurements['wind_direction']).toFixed(0) : null,
+        wave_height_meters: data.measurements['wave_height'] ? parseFloat(data.measurements['wave_height']).toFixed(2) : null,
+        water_temperature_celsius: data.measurements['water_temp'] ? parseFloat(data.measurements['water_temp']).toFixed(1) : null
       });
     }
 

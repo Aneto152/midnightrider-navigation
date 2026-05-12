@@ -155,7 +155,7 @@ def main():
     print("════════════════════════════════════════════════════════════\n")
     
     dashboard_dir = 'grafana-dashboards'
-    dashboard_files = glob.glob(f'{dashboard_dir}/0[1-9]-*.json')
+    dashboard_files = glob.glob(f'{dashboard_dir}/0[0-9]-*.json')
     
     if not dashboard_files:
         print(f"❌ No dashboards found in {dashboard_dir}")

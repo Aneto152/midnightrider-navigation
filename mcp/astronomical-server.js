@@ -34,8 +34,7 @@ async function queryInfluxDB(fluxQuery) {
     const postData = fluxQuery;
 
     const options = {
-      hostname: 'localhost',
-      port: 8086,
+      hostname: (() => { try { return new URL(INFLUX_URL).hostname; } catch(e) { return 'localhost'; } })()), port: (() => { try { return parseInt(new URL(INFLUX_URL).port) || 8086; } catch(e) { return 8086; } })(),
       path: `/api/v2/query?org=${INFLUX_ORG}`,
       method: 'POST',
       headers: {
@@ -108,8 +107,8 @@ function parseFluxResponse(csvData) {
       for (let j = 0; j < headers.length && j < values.length; j++) {
         record[headers[j]] = values[j];
       }
-      if (currentTable && Object.keys(record).length > 0) {
-        Object.assign(currentTable, record);
+      if (Object.keys(record).length > 0) {
+        results.push(record);
       }
     }
   }

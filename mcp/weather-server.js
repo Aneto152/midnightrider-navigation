@@ -27,8 +27,7 @@ async function queryInfluxDB(fluxQuery) {
   return new Promise((resolve, reject) => {
     const postData = fluxQuery;
     const options = {
-      hostname: 'localhost',
-      port: 8086,
+      hostname: (() => { try { return new URL(INFLUX_URL).hostname; } catch(e) { return 'localhost'; } })()), port: (() => { try { return parseInt(new URL(INFLUX_URL).port) || 8086; } catch(e) { return 8086; } })(),
       path: `/api/v2/query?org=${INFLUX_ORG}`,
       method: 'POST',
       headers: {
@@ -101,31 +100,33 @@ async function getCurrentWeather() {
   try {
     const query = `from(bucket:"${INFLUX_BUCKET}")
       |> range(start: -30m)
-      |> filter(fn: (r) => r._measurement =~ /^weather\\./ and r.location == "stamford")
+      |> filter(fn: (r) => r._measurement == "environment")
       |> last()`;
 
     const results = await queryInfluxDB(query);
     
+    // Map Signal K paths to weather fields
     const weatherData = {};
     for (const result of results) {
-      const measurement = result._measurement;
+      const path = result.path || '';
       const value = result._value;
-      weatherData[measurement] = value;
+      if (path.includes('temperature')) weatherData['temperature'] = value;
+      else if (path.includes('humidity')) weatherData['humidity'] = value;
+      else if (path.includes('pressure')) weatherData['pressure'] = value;
+      else if (path.includes('wind') && path.includes('speed')) weatherData['wind_speed'] = value;
+      else if (path.includes('wind') && path.includes('direction')) weatherData['wind_direction'] = value;
     }
 
     return {
       timestamp: new Date().toISOString(),
-      temperature_celsius: weatherData['weather.temperature'] ? parseFloat(weatherData['weather.temperature']).toFixed(1) : null,
-      temperature_fahrenheit: weatherData['weather.temperature'] ? (parseFloat(weatherData['weather.temperature']) * 9/5 + 32).toFixed(1) : null,
-      humidity_percent: weatherData['weather.humidity'] ? parseFloat(weatherData['weather.humidity']).toFixed(0) : null,
-      pressure_hpa: weatherData['weather.pressure'] ? parseFloat(weatherData['weather.pressure']).toFixed(1) : null,
-      wind_speed_kmh: weatherData['weather.wind_speed'] ? parseFloat(weatherData['weather.wind_speed']).toFixed(1) : null,
-      wind_speed_knots: weatherData['weather.wind_speed'] ? (parseFloat(weatherData['weather.wind_speed']) / 1.852).toFixed(1) : null,
-      wind_direction_degrees: weatherData['weather.wind_direction'] ? parseFloat(weatherData['weather.wind_direction']).toFixed(0) : null,
-      wind_gust_kmh: weatherData['weather.wind_gust'] ? parseFloat(weatherData['weather.wind_gust']).toFixed(1) : null,
-      wind_gust_knots: weatherData['weather.wind_gust'] ? (parseFloat(weatherData['weather.wind_gust']) / 1.852).toFixed(1) : null,
-      precipitation_mm: weatherData['weather.precipitation'] ? parseFloat(weatherData['weather.precipitation']).toFixed(1) : null,
-      condition: weatherData['weather.condition'] || 'Unknown',
+      temperature_celsius: weatherData['temperature'] ? parseFloat(weatherData['temperature']).toFixed(1) : null,
+      temperature_fahrenheit: weatherData['temperature'] ? (parseFloat(weatherData['temperature']) * 9/5 + 32).toFixed(1) : null,
+      humidity_percent: weatherData['humidity'] ? parseFloat(weatherData['humidity']).toFixed(0) : null,
+      pressure_hpa: weatherData['pressure'] ? parseFloat(weatherData['pressure']).toFixed(1) : null,
+      wind_speed_kmh: weatherData['wind_speed'] ? parseFloat(weatherData['wind_speed']).toFixed(1) : null,
+      wind_speed_knots: weatherData['wind_speed'] ? (parseFloat(weatherData['wind_speed']) / 1.852).toFixed(1) : null,
+      wind_direction_degrees: weatherData['wind_direction'] ? parseFloat(weatherData['wind_direction']).toFixed(0) : null,
+      condition: 'Data from environment measurement',
       assessment: assessWeather(weatherData)
     };
   } catch (err) {
@@ -141,16 +142,18 @@ async function getWeatherTrend() {
     // Compare last 30 min with previous 30 min
     const recent = await queryInfluxDB(`from(bucket:"${INFLUX_BUCKET}")
       |> range(start: -30m)
-      |> filter(fn: (r) => r._measurement == "weather.temperature" and r.location == "stamford")
+      |> filter(fn: (r) => r._measurement == "environment" and r._field == "value")
+      |> filter(fn: (r) => r.path =~ /temperature/)
       |> last()`);
     
     const previous = await queryInfluxDB(`from(bucket:"${INFLUX_BUCKET}")
       |> range(start: -60m, stop: -30m)
-      |> filter(fn: (r) => r._measurement == "weather.temperature" and r.location == "stamford")
+      |> filter(fn: (r) => r._measurement == "environment" and r._field == "value")
+      |> filter(fn: (r) => r.path =~ /temperature/)
       |> last()`);
 
-    const recentTemp = recent.length > 0 ? parseFloat(recent[0]._value) : null;
-    const previousTemp = previous.length > 0 ? parseFloat(previous[0]._value) : null;
+    const recentTemp = recent.length > 0 ? parseFloat(recent[0].value || recent[0]._value) : null;
+    const previousTemp = previous.length > 0 ? parseFloat(previous[0].value || previous[0]._value) : null;
 
     let trend = 'Stable';
     let tempChange = 0;
