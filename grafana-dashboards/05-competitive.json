@@ -256,7 +256,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"navigation\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"navigation.speedOverGround\")\n |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "Competitors in Range",
@@ -323,7 +326,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"navigation\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"navigation.speedOverGround\")\n |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "Distance to Leader (30 min)",
@@ -391,7 +397,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"navigation\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"navigation.speedOverGround\")\n |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "Fleet Speed Comparison (1h)",

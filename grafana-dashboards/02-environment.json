@@ -268,7 +268,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"environment\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"environment.current.drift\")\n |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "Current Speed",
@@ -336,7 +339,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"environment\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"environment.water.waves.significantWaveHeight\")\n |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "Wave Height History (1h)",
@@ -405,7 +411,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"environment\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"environment.outside.temperature\")\n |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "Temperature Trends (12h)",

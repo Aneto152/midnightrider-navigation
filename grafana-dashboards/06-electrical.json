@@ -272,7 +272,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"electrical\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"electrical.batteries.house.temperature\")\n |> aggregateWindow(every: v.windowPeriod, fn: last, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "System Temperature",
@@ -340,7 +343,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"electrical\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"electrical.batteries.house.voltage\")\n |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "Battery Voltage Curve (12h)",
@@ -408,7 +414,10 @@
           "datasource": {
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
-          }
+          },
+          "rawQuery": true,
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r[\"_measurement\"] == \"electrical\")\n |> filter(fn: (r) => r[\"_field\"] == \"value\")\n |> filter(fn: (r) => r[\"path\"] == \"electrical.batteries.house.current\")\n |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n |> yield(name: \"last\")",
+          "hide": false
         }
       ],
       "title": "Power Consumption (1h)",
