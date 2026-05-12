@@ -154,7 +154,7 @@ def main():
     print("🚀 PHASE 3 — Apply Flux Unit Conversions to All Dashboards")
     print("════════════════════════════════════════════════════════════\n")
     
-    dashboard_dir = 'docs/grafana-dashboards'
+    dashboard_dir = 'grafana-dashboards'
     dashboard_files = glob.glob(f'{dashboard_dir}/0[1-9]-*.json')
     
     if not dashboard_files:

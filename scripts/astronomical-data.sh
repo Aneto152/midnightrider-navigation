@@ -14,7 +14,7 @@ set -e
 INFLUX_URL="http://localhost:8086"
 INFLUX_TOKEN="${INFLUX_TOKEN:-}"
 INFLUX_ORG="MidnightRider"
-INFLUX_BUCKET="signalk"
+INFLUX_BUCKET="${INFLUX_BUCKET:-midnight_rider}"
 
 # Default coordinates (Stamford Harbor, CT - Long Island Sound)
 LAT=${LAT:-41.0534}
@@ -44,7 +44,7 @@ try {
 
   // Function to get moon phase name
   function getMoonPhase(phase) {
-    const p = (phase / (2 * Math.PI)) * 100;
+    const p = phase * 100;
     if (p < 6.25) return 'new_moon';
     if (p < 18.75) return 'waxing_crescent';
     if (p < 31.25) return 'first_quarter';
@@ -85,7 +85,7 @@ echo "[$(date)] Astro data: $ASTRO"
 echo "[$(date)] Fetching tides from NOAA..."
 BEGIN_DATE=$(date +%Y%m%d)
 # Use compatible date syntax (works on both GNU and BusyBox)
-END_DATE=$(date -v+1d +%Y%m%d 2>/dev/null || date -d "+1 day" +%Y%m%d 2>/dev/null || date +%Y%m%d)
+END_DATE=$(node -e "const d=new Date();d.setDate(d.getDate()+1);process.stdout.write(d.toISOString().split('T')[0].replace(/-/g,''))")
 
 TIDES_JSON=$(curl -s "${NOAA_API}?station=${NOAA_STATION}&begin_date=${BEGIN_DATE}&end_date=${END_DATE}&product=predictions&datum=MLLW&time_zone=lst_ldt&units=metric&format=json")
 
@@ -162,7 +162,7 @@ if [ -n "$LINES" ]; then
     "${INFLUX_URL}/api/v2/write?org=${INFLUX_ORG}&bucket=${INFLUX_BUCKET}&precision=ns" \
     -H "Authorization: Token ${INFLUX_TOKEN}" \
     -H "Content-Type: text/plain" \
-    -d "$(echo -e "$LINES" | sed '$ d')" \
+    -d "$(echo -e "$LINES" )" \
     -w "\n%{http_code}")
   
   HTTP_CODE=$(echo "$RESPONSE" | tail -1)

@@ -1,32 +1,41 @@
 {
-  "task": "flux-queries-patch-24-panels",
-  "date": "2026-05-12T16:33:54.134293",
+  "task": "p1-code-bugfixes-10-bugs",
+  "date": "2026-05-12T17:04:28.153662",
   "status": "SUCCESS",
   "steps_completed": [
-    "24 Flux queries written across 4 dashboards (title-based mapping)",
-    "02-environment: 6 panels with queries (temp, waves, pressure, current, trends)",
-    "04-wind-current: 6 panels with queries (AWS, AWA, TWS, TWD, shifts, current)",
-    "05-competitive: 6 panels with queries (SOG/VMG fallback until AIS available)",
-    "06-electrical: 6 panels with queries (voltage, SOC, current, temp, curves)",
-    "Grafana restarted \u2014 all 9 dashboards active with Flux queries",
-    "Data pipeline midnight_rider bucket verified and ready"
+    "BUG-01: astronomical-data.sh INFLUX_BUCKET: signalk \u2192 env var midnight_rider",
+    "BUG-02: astronomical-data.sh moon phase formula: phase*100 (not /2\u03c0*100)",
+    "BUG-03: astronomical-data.sh sed drop-last removed (tideLowLevel preserved)",
+    "BUG-04: astronomical-data.sh END_DATE uses Node.js (Alpine/Docker safe)",
+    "BUG-05: apply-flux-conversions.py path fixed + map() parenthesis fixed",
+    "BUG-07: requirements.txt websockets>=11.0 added",
+    "BUG-08: current_vector_calc.py timeout=5 \u2192 open_timeout=5",
+    "BUG-09: alert_notifier.py Telegram ID \u2192 env var TELEGRAM_RECIPIENT",
+    "BUG-10: 5 dashboard UIDs aligned (performance-analysis, wind-current-tactical, crew-management, race-block-island, alerts-monitoring)",
+    "BUG-11: courseOverGround \u2192 courseOverGroundTrue verified (already done in earlier session)",
+    "AGENTS.md: portal port corrected 8888 \u2192 5000"
   ],
   "errors": [],
   "services_status": {
-    "signalk": "running \u2014 writing to midnight_rider",
-    "influxdb": "running",
-    "grafana": "running \u2014 restarted \u2014 9 dashboards active, all panels have Flux queries"
+    "signalk": "active",
+    "influxdb": "healthy",
+    "grafana": "running"
   },
-  "dashboards_status": {
-    "02-environment": "6/6 panels with queries",
-    "04-wind-current": "6/6 panels with queries",
-    "05-competitive": "6/6 panels with queries",
-    "06-electrical": "6/6 panels with queries"
-  },
-  "patch_strategy": "title-based mapping (12 new + 12 preserved from passe2 = 24 total)",
+  "files_modified": [
+    "scripts/astronomical-data.sh (4 bugs)",
+    "scripts/apply-flux-conversions.py (2 bugs)",
+    "requirements.txt (1 bug)",
+    "scripts/current_vector_calc.py (1 bug)",
+    "regatta/alert_notifier.py (1 bug)",
+    "grafana-dashboards/03-performance.json (uid fix)",
+    "grafana-dashboards/04-wind-current.json (uid fix)",
+    "grafana-dashboards/09-crew.json (uid fix)",
+    "grafana-dashboards/07-race.json (uid fix)",
+    "grafana-dashboards/08-alerts.json (uid fix)",
+    "AGENTS.md (port correction)"
+  ],
   "readiness": {
     "field_test_may19": "\u2705 READY",
     "race_day_may22": "\u2705 READY"
-  },
-  "next_recommended": "Field test May 19 \u2014 verify all dashboards display live data on iPad"
+  }
 }

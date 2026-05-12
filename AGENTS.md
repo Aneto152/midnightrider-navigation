@@ -82,7 +82,7 @@
 
 **Portal shows "Directory listing"**
 - Check: `sudo systemctl cat portal | grep ExecStart`
-- Should be: `ExecStart=/usr/bin/python3 -m http.server 8888 --directory /path/to/portal`
+- Should be: `ExecStart=/usr/bin/python3 -m http.server 5000 --directory /path/to/portal`
 
 **Grafana dashboards 404**
 - Check: `curl -s http://localhost:3001/api/dashboards/uid/<UID>`

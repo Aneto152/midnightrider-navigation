@@ -205,7 +205,7 @@ async def send_signalk_delta(drift: float, set_rad: float) -> bool:
         }
         
         uri = f"{SIGNALK_WS}?subscribe=none"
-        async with websockets.connect(uri, timeout=5) as websocket:
+        async with websockets.connect(uri, open_timeout=5) as websocket:
             await websocket.send(json.dumps(delta))
             print(f"  ↔️  Signal K: current.drift={drift:.3f}m/s, current.set={math.degrees(set_rad):.1f}°")
             return True

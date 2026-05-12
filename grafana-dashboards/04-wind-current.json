@@ -458,7 +458,7 @@
   "timepicker": {},
   "timezone": "America/New_York",
   "title": "04 \u2014 WIND & CURRENT (Tactical Analysis)",
-  "uid": "04-wind-current",
+  "uid": "wind-current-tactical",
   "version": 1,
   "weekStart": "monday"
 }

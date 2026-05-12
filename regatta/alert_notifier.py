@@ -1,3 +1,4 @@
+import os
 #!/usr/bin/env python3
 """
 MidnightRider — Notificateur d'alertes
@@ -44,7 +45,7 @@ def send_telegram(message):
     try:
         payload = json.dumps({
             "channel": "telegram",
-            "to": "8686179485",
+            "to": os.getenv('TELEGRAM_RECIPIENT', ''),
             "text": message
         }).encode()
         req = urllib.request.Request(
