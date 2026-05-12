@@ -1,0 +1,16 @@
+[Unit]
+Description=Force avahi mDNS to 192.168.1.167
+After=avahi-daemon.service network-online.target
+Wants=network-online.target
+Requires=avahi-daemon.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/avahi-publish-address -R MidnightRider.local 192.168.1.167
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
