@@ -31,7 +31,7 @@
       },
       "pluginVersion": "9.0.0",
       "targets": [],
-      "title": "🏁 LIGNE DE DÉPART",
+      "title": "\ud83c\udfc1 LIGNE DE D\u00c9PART",
       "type": "row"
     },
     {
@@ -39,7 +39,7 @@
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
       },
-      "description": "Secondes avant le départ",
+      "description": "Secondes avant le d\u00e9part",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -104,7 +104,7 @@
           "refId": "A"
         }
       ],
-      "title": "⏱️ Chrono Départ",
+      "title": "\u23f1\ufe0f Chrono D\u00e9part",
       "type": "stat"
     },
     {
@@ -172,7 +172,7 @@
           "refId": "A"
         }
       ],
-      "title": "📏 Distance à la ligne",
+      "title": "\ud83d\udccf Distance \u00e0 la ligne",
       "type": "stat"
     },
     {
@@ -191,15 +191,15 @@
               "options": {
                 "CLEAR": {
                   "color": "green",
-                  "text": "✅ CLEAR"
+                  "text": "\u2705 CLEAR"
                 },
                 "CLOSE": {
                   "color": "yellow",
-                  "text": "⚠️ CLOSE"
+                  "text": "\u26a0\ufe0f CLOSE"
                 },
                 "OCS": {
                   "color": "red",
-                  "text": "🔴 OCS"
+                  "text": "\ud83d\udd34 OCS"
                 }
               },
               "type": "value"
@@ -250,7 +250,7 @@
           "refId": "A"
         }
       ],
-      "title": "🚦 Position / Ligne",
+      "title": "\ud83d\udea6 Position / Ligne",
       "type": "stat"
     },
     {
@@ -310,7 +310,7 @@
           "refId": "A"
         }
       ],
-      "title": "🟡 Pin Bouée — Bearing",
+      "title": "\ud83d\udfe1 Pin Bou\u00e9e \u2014 Bearing",
       "type": "stat"
     },
     {
@@ -370,7 +370,7 @@
           "refId": "A"
         }
       ],
-      "title": "🟡 Pin Bouée — Distance",
+      "title": "\ud83d\udfe1 Pin Bou\u00e9e \u2014 Distance",
       "type": "stat"
     },
     {
@@ -430,7 +430,7 @@
           "refId": "A"
         }
       ],
-      "title": "🚤 Comité — Bearing",
+      "title": "\ud83d\udea4 Comit\u00e9 \u2014 Bearing",
       "type": "stat"
     },
     {
@@ -490,7 +490,7 @@
           "refId": "A"
         }
       ],
-      "title": "🚤 Comité — Distance",
+      "title": "\ud83d\udea4 Comit\u00e9 \u2014 Distance",
       "type": "stat"
     },
     {
@@ -498,7 +498,7 @@
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
       },
-      "description": "Pin bouée → Bateau comité",
+      "description": "Pin bou\u00e9e \u2192 Bateau comit\u00e9",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -551,7 +551,7 @@
           "refId": "A"
         }
       ],
-      "title": "📐 Longueur ligne",
+      "title": "\ud83d\udcd0 Longueur ligne",
       "type": "stat"
     },
     {
@@ -559,7 +559,7 @@
         "type": "influxdb",
         "uid": "efifgp8jvgj5sf"
       },
-      "description": "Négatif = bouée favorite, Positif = comité",
+      "description": "N\u00e9gatif = bou\u00e9e favorite, Positif = comit\u00e9",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -620,7 +620,7 @@
           "refId": "A"
         }
       ],
-      "title": "⚖️ Biais ligne",
+      "title": "\u2696\ufe0f Biais ligne",
       "type": "stat"
     },
     {
@@ -640,7 +640,7 @@
       },
       "id": 110,
       "options": {
-        "content": "### Interface régate\n\n[🏁 Ouvrir](http://midnightrider.local:8888/regatta/)\n\nChrono · Ligne · Bouées",
+        "content": "### Interface r\u00e9gate\n\n[\ud83c\udfc1 Ouvrir](http://midnightrider.local:8888/regatta/)\n\nChrono \u00b7 Ligne \u00b7 Bou\u00e9es",
         "mode": "markdown"
       },
       "pluginVersion": "9.0.0",
@@ -662,7 +662,7 @@
   },
   "timepicker": {},
   "timezone": "America/New_York",
-  "title": "07 — RACE (Block Island Race — May 22, 2026)",
+  "title": "07 \u2014 RACE (Block Island Race \u2014 May 22, 2026)",
   "uid": "07-race",
   "version": 2,
   "weekStart": "monday"

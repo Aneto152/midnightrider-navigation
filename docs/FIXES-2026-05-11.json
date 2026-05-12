@@ -18,7 +18,7 @@
     "FIX_2": {
       "name": "Weather bucket references",
       "status": "VERIFIED",
-      "details": "No references to 'weather_lis' bucket found in dashboards or alert configs",
+      "details": "No references to 'midnight_rider' bucket found in dashboards or alert configs",
       "notes": "Alert bucket errors in logs were pre-existing, not blocking current operations"
     },
     "FIX_3": {

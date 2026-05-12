@@ -3,7 +3,7 @@
   "issue": "iPad cannot access Portal :5000 or Grafana :3001 via mDNS hostname",
   "root_cause": {
     "mdns": "avahi-daemon advertising on link-local (169.254.119.236) instead of WiFi (192.168.1.167)",
-    "bucket_errors": "Grafana alert rules reference non-existent bucket 'weather_lis'",
+    "bucket_errors": "Grafana alert rules reference non-existent bucket 'midnight_rider'",
     "duplicate_dashboard": "UID 07-race appears twice in provisioning"
   },
   "service_status": {
@@ -26,7 +26,7 @@
   "fixes_needed": [
     "Reconfigure avahi-daemon to bind to wlan0 (not link-local)",
     "Remove duplicate 07-race dashboard from provisioning",
-    "Update/remove alert rules referencing 'weather_lis' bucket",
+    "Update/remove alert rules referencing 'midnight_rider' bucket",
     "Verify all services respond on 192.168.1.167"
   ]
 }
