@@ -1,35 +1,46 @@
 {
-  "task": "Documentation gaps fix \u2014 3 files (SOK-BMS, CHANGELOG, INDEX)",
-  "date": "2026-05-12T14:38:12.960117",
+  "task": "security-and-docker-fixes-pass1",
+  "date": "2026-05-12T16:09:44.788023",
   "status": "SUCCESS",
   "steps_completed": [
-    "docs/INTEGRATION/SOK-BMS-INTEGRATION.md created (212 lines, broken link fixed)",
-    "CHANGELOG.md updated with v1.0.1 section (May 11-12 events, fixes, removals)",
-    "docs/INDEX.md updated (2026-05-12 date, 2 new files referenced)"
+    "docker-compose.override.yml: hardcoded secrets replaced with env vars",
+    "docker-compose.override.yml: INFLUX_DB_INIT_BUCKET changed signalk \u2192 midnight_rider",
+    "docker-compose.yml: orphan signalk-data volume removed",
+    "datasource-influxdb.yaml: uid efifgp8jvgj5sf added",
+    "datasource-influxdb.yaml: hardcoded token (XxIol...) replaced with ${INFLUX_TOKEN}",
+    "docker-compose.yml: INFLUX_TOKEN passed to grafana service environment"
   ],
   "errors": [],
-  "files_created": {
-    "SOK-BMS-INTEGRATION.md": "Complete BMS integration guide (BLE setup, Signal K paths, InfluxDB verify, Grafana dashboard, alert rules)"
+  "files_modified": {
+    "docker-compose.override.yml": "adminpass \u2192 ${INFLUX_DB_INIT_PASSWORD}, token \u2192 ${INFLUX_DB_INIT_ADMIN_TOKEN}, bucket: signalk \u2192 midnight_rider",
+    "docker-compose.yml": "orphan signalk-data volume removed, INFLUX_TOKEN added to grafana env",
+    "datasource-influxdb.yaml": "uid added (efifgp8jvgj5sf), token XxIol... \u2192 ${INFLUX_TOKEN}"
   },
-  "files_updated": {
-    "CHANGELOG.md": "v1.0.1 section added (mDNS fix, GitHub auth restore, Cloudflare removed, docs added)",
-    "docs/INDEX.md": "Date updated to 2026-05-12, DASHBOARDS-README.md + SOK-BMS-INTEGRATION.md referenced"
+  "security": {
+    "hardcoded_secrets_removed": [
+      "INFLUX_DB_INIT_PASSWORD=adminpass",
+      "INFLUX_DB_INIT_ADMIN_TOKEN=MidnightRider-Token-2026-04-25",
+      "token: XxIolCzqcNaLrP3tEzcKdmKUoxmlut4M1mrkVaQPhh6jzd2QZ3bKp6zV42_2ciYNKOYcFSEp_Ej4FWt2kS2fAw=="
+    ],
+    "replaced_with_env_vars": [
+      "${INFLUX_DB_INIT_PASSWORD}",
+      "${INFLUX_DB_INIT_ADMIN_TOKEN}",
+      "${INFLUX_TOKEN}"
+    ]
   },
   "services_status": {
-    "signalk": "running \u2014 13h uptime",
-    "influxdb": "running \u2014 13h uptime",
-    "grafana": "healthy v12.3.1",
+    "signalk": "running (systemd, unchanged)",
+    "influxdb": "running (unchanged \u2014 changes apply on next docker compose up)",
+    "grafana": "running (unchanged \u2014 needs reload to pick up new datasource UID)",
     "portal": "running",
     "regatta": "running"
   },
-  "git": {
-    "commit": "064fa2e",
-    "message": "docs: fix 3 gaps \u2014 SOK-BMS integration, CHANGELOG v1.0.1, INDEX updated",
-    "pushed": true
+  "validation": {
+    "docker_compose_yml": "VALID (YAML)",
+    "override_yml": "VALID (YAML)",
+    "datasource_yaml": "VALID (YAML)",
+    "secrets_in_git_diff": "REMOVED (showing deleted lines only, not added)",
+    "docker_config": "Valid (env vars expected)"
   },
-  "readiness": {
-    "field_test_may19": "READY",
-    "race_day_may22": "READY"
-  },
-  "next_recommended": "Pre-race validation checklist \u2014 week of May 19"
+  "next_recommended": "COMMIT & PUSH \u2014 Denis can verify with Dust"
 }

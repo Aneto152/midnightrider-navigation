@@ -34,6 +34,7 @@ services:
       - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_X_FRAME_OPTIONS=SAMEORIGIN
+      - INFLUX_TOKEN=${INFLUX_TOKEN}
     depends_on:
       - influxdb
 
@@ -114,6 +115,4 @@ volumes:
   grafana-data:
     external: true
   grafana-config:
-    external: true
-  signalk-data:
     external: true
