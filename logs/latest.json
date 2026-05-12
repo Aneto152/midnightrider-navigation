@@ -1,44 +1,31 @@
 {
-  "task": "Full system diagnostic post-incident + GitHub auth restore",
-  "date": "2026-05-12T18:22:00Z",
+  "task": "Documentation gaps fix \u2014 3 files (SOK-BMS, CHANGELOG, INDEX)",
+  "date": "2026-05-12T14:38:12.960117",
   "status": "SUCCESS",
   "steps_completed": [
-    "Signal K: running (systemctl) \u2014 13h uptime",
-    "InfluxDB: running (Docker) \u2014 13h uptime",
-    "Grafana: healthy v12.3.1 (Docker)",
-    "Portal: HTTP 200 \u2014 .env blocked (404)",
-    "Regatta server: running (Docker)",
-    "mDNS: operational \u2014 avahi-mdns-fix.service active",
-    "iPad access: working via 192.168.1.167",
-    "Network incident May 11: RESOLVED",
-    "GitHub auth: restored \u2014 new PAT in ~/.git-credentials (chmod 600)",
-    "Commits pushed: 6a17046 (diagnostic) + 58d8469 (auth fix)"
+    "docs/INTEGRATION/SOK-BMS-INTEGRATION.md created (212 lines, broken link fixed)",
+    "CHANGELOG.md updated with v1.0.1 section (May 11-12 events, fixes, removals)",
+    "docs/INDEX.md updated (2026-05-12 date, 2 new files referenced)"
   ],
   "errors": [],
+  "files_created": {
+    "SOK-BMS-INTEGRATION.md": "Complete BMS integration guide (BLE setup, Signal K paths, InfluxDB verify, Grafana dashboard, alert rules)"
+  },
+  "files_updated": {
+    "CHANGELOG.md": "v1.0.1 section added (mDNS fix, GitHub auth restore, Cloudflare removed, docs added)",
+    "docs/INDEX.md": "Date updated to 2026-05-12, DASHBOARDS-README.md + SOK-BMS-INTEGRATION.md referenced"
+  },
   "services_status": {
-    "signalk": "running \u2014 systemctl \u2014 port 3000",
-    "influxdb": "running \u2014 Docker \u2014 port 8086",
-    "grafana": "healthy \u2014 Docker \u2014 port 3001 \u2014 v12.3.1",
-    "portal": "running \u2014 Docker \u2014 port 5000",
-    "regatta": "running \u2014 Docker \u2014 port 5000",
-    "openclaw_gateway": "port 18789 \u2014 local only"
-  },
-  "network": {
-    "mdns": "operational",
-    "avahi_fix_service": "active",
-    "ipad_primary_url": "http://192.168.1.167:5000",
-    "packet_loss": "0%",
-    "incident_may11": "RESOLVED"
-  },
-  "system_resources": {
-    "disk_used": "22% (25G / 117G)",
-    "ram_available_mb": 5194,
-    "load": 1.33
+    "signalk": "running \u2014 13h uptime",
+    "influxdb": "running \u2014 13h uptime",
+    "grafana": "healthy v12.3.1",
+    "portal": "running",
+    "regatta": "running"
   },
   "git": {
-    "auth_method": "HTTPS PAT \u2014 ~/.git-credentials (chmod 600)",
-    "head_commit": "58d8469",
-    "branch": "main"
+    "commit": "064fa2e",
+    "message": "docs: fix 3 gaps \u2014 SOK-BMS integration, CHANGELOG v1.0.1, INDEX updated",
+    "pushed": true
   },
   "readiness": {
     "field_test_may19": "READY",
