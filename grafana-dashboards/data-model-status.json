@@ -8,7 +8,7 @@
   ],
   "timezone": "browser",
   "refresh": "10s",
-  "version": 3,
+  "version": 6,
   "schemaVersion": 39,
   "time": {
     "from": "now-1h",
@@ -27,7 +27,7 @@
       },
       "options": {
         "mode": "markdown",
-        "content": "## \u2693 Midnight Rider \u2014 Data Model Status\n_Statut op\u00e9rationnel en temps r\u00e9el. **\ud83d\udfe2 ACTIVE** = donn\u00e9es < 30s. **\ud83d\udfe0 STALE** = dernier point > 30s. **\ud83d\udd34 NO DATA** = aucune donn\u00e9e depuis 5min. **R\u00e9sum\u00e9** = pire cas de l'instrument._"
+        "content": "## \u2693 Midnight Rider \u2014 Data Model Status\n_R\u00e9f\u00e9rence compl\u00e8te : 12 instruments, 50+ mesures. **\ud83d\udfe2 ACTIVE** = < 30s. **\ud83d\udfe0 STALE** = > 30s. **\ud83d\udd34 NO DATA** = non connect\u00e9. **\u2b21 R\u00e9sum\u00e9** = pire cas._"
       }
     },
     {
@@ -45,8 +45,8 @@
     {
       "id": 3,
       "type": "stat",
-      "title": "\u2b21 R\u00c9SUM\u00c9",
-      "description": "Statut global \u2014 pire cas de tous les capteurs",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
       "gridPos": {
         "x": 0,
         "y": 3,
@@ -134,7 +134,6 @@
       "id": 4,
       "type": "stat",
       "title": "Signal K",
-      "description": "systemd @ 1Hz",
       "gridPos": {
         "x": 3,
         "y": 3,
@@ -222,7 +221,6 @@
       "id": 5,
       "type": "stat",
       "title": "\u2192 InfluxDB",
-      "description": "signalk-to-influxdb2 pipeline",
       "gridPos": {
         "x": 6,
         "y": 3,
@@ -309,7 +307,7 @@
     {
       "id": 6,
       "type": "row",
-      "title": "\ud83d\udce1 GNSS \u2014 UM982 NANO-HED10L",
+      "title": "\ud83d\udce1 GNSS \u2014 UM982 NANO-HED10L \u2705 USB",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -321,8 +319,8 @@
     {
       "id": 7,
       "type": "stat",
-      "title": "\u2b21 R\u00c9SUM\u00c9 GPS",
-      "description": "Statut global \u2014 pire cas de tous les capteurs",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
       "gridPos": {
         "x": 0,
         "y": 6,
@@ -410,7 +408,6 @@
       "id": 8,
       "type": "stat",
       "title": "SOG",
-      "description": "",
       "gridPos": {
         "x": 3,
         "y": 6,
@@ -498,7 +495,6 @@
       "id": 9,
       "type": "stat",
       "title": "COG",
-      "description": "",
       "gridPos": {
         "x": 6,
         "y": 6,
@@ -586,7 +582,6 @@
       "id": 10,
       "type": "stat",
       "title": "LAT",
-      "description": "",
       "gridPos": {
         "x": 9,
         "y": 6,
@@ -674,7 +669,6 @@
       "id": 11,
       "type": "stat",
       "title": "LON",
-      "description": "",
       "gridPos": {
         "x": 12,
         "y": 6,
@@ -762,7 +756,6 @@
       "id": 12,
       "type": "stat",
       "title": "SAT",
-      "description": "",
       "gridPos": {
         "x": 15,
         "y": 6,
@@ -848,8 +841,95 @@
     },
     {
       "id": 13,
+      "type": "stat",
+      "title": "Fix",
+      "gridPos": {
+        "x": 18,
+        "y": 6,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.gnss.methodQuality\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 14,
       "type": "row",
-      "title": "\ud83e\udded IMU \u2014 WIT WT901BLECL",
+      "title": "\ud83e\udded IMU \u2014 WIT WT901BLECL \u2705 BLE @ 30Hz",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -859,10 +939,10 @@
       }
     },
     {
-      "id": 14,
+      "id": 15,
       "type": "stat",
-      "title": "\u2b21 R\u00c9SUM\u00c9 IMU",
-      "description": "Statut global \u2014 pire cas de tous les capteurs",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
       "gridPos": {
         "x": 0,
         "y": 9,
@@ -947,10 +1027,9 @@
       ]
     },
     {
-      "id": 15,
+      "id": 16,
       "type": "stat",
-      "title": "Hdg/Yaw",
-      "description": "",
+      "title": "Cap/Yaw",
       "gridPos": {
         "x": 3,
         "y": 9,
@@ -1035,10 +1114,9 @@
       ]
     },
     {
-      "id": 16,
+      "id": 17,
       "type": "stat",
       "title": "Roulis",
-      "description": "",
       "gridPos": {
         "x": 6,
         "y": 9,
@@ -1123,10 +1201,9 @@
       ]
     },
     {
-      "id": 17,
+      "id": 18,
       "type": "stat",
       "title": "Tangage",
-      "description": "",
       "gridPos": {
         "x": 9,
         "y": 9,
@@ -1211,10 +1288,9 @@
       ]
     },
     {
-      "id": 18,
+      "id": 19,
       "type": "stat",
       "title": "Acc X",
-      "description": "",
       "gridPos": {
         "x": 12,
         "y": 9,
@@ -1299,10 +1375,9 @@
       ]
     },
     {
-      "id": 19,
+      "id": 20,
       "type": "stat",
       "title": "Acc Y",
-      "description": "",
       "gridPos": {
         "x": 15,
         "y": 9,
@@ -1387,10 +1462,9 @@
       ]
     },
     {
-      "id": 20,
+      "id": 21,
       "type": "stat",
       "title": "Acc Z",
-      "description": "",
       "gridPos": {
         "x": 18,
         "y": 9,
@@ -1475,9 +1549,96 @@
       ]
     },
     {
-      "id": 21,
+      "id": 22,
+      "type": "stat",
+      "title": "Giration",
+      "gridPos": {
+        "x": 21,
+        "y": 9,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.rateOfTurn\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 23,
       "type": "row",
-      "title": "\ud83d\udca8 VENT \u2014 B&G WS320 (\u23f3 Non connect\u00e9 si NO DATA)",
+      "title": "\ud83c\udf0a VAGUES \u2014 Wave Analyzer (calcul\u00e9 IMU)",
       "collapsed": false,
       "gridPos": {
         "x": 0,
@@ -1487,10 +1648,10 @@
       }
     },
     {
-      "id": 22,
+      "id": 24,
       "type": "stat",
-      "title": "\u2b21 R\u00c9SUM\u00c9 VENT",
-      "description": "Statut global \u2014 pire cas de tous les capteurs",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
       "gridPos": {
         "x": 0,
         "y": 12,
@@ -1570,18 +1731,378 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.speedApparent\" or r._measurement == \"environment.wind.angleApparent\" or r._measurement == \"environment.wind.speedTrue\" or r._measurement == \"environment.wind.directionTrue\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.waves.significantHeight\" or r._measurement == \"environment.waves.period\" or r._measurement == \"environment.waves.direction\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
         }
       ]
     },
     {
-      "id": 23,
+      "id": 25,
       "type": "stat",
-      "title": "AWS",
-      "description": "",
+      "title": "Hs",
       "gridPos": {
         "x": 3,
         "y": 12,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.waves.significantHeight\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "type": "stat",
+      "title": "Tp",
+      "gridPos": {
+        "x": 6,
+        "y": 12,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.waves.period\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "type": "stat",
+      "title": "Dir. Vagues",
+      "gridPos": {
+        "x": 9,
+        "y": 12,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.waves.direction\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "type": "row",
+      "title": "\ud83c\udf2c\ufe0f CALYPSO Ultrasonic \u2014 BLE \u23f3",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 29,
+      "type": "stat",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
+      "gridPos": {
+        "x": 0,
+        "y": 15,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 PARTIEL",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 OK",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 HORS LIGNE",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.speedApparent\" or r._measurement == \"environment.wind.angleApparent\" or r._measurement == \"environment.outside.temperature\" or r._measurement == \"environment.outside.pressure\" or r._measurement == \"navigation.headingMagnetic\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "type": "stat",
+      "title": "AWS",
+      "gridPos": {
+        "x": 3,
+        "y": 15,
         "w": 3,
         "h": 2
       },
@@ -1663,13 +2184,12 @@
       ]
     },
     {
-      "id": 24,
+      "id": 31,
       "type": "stat",
       "title": "AWA",
-      "description": "",
       "gridPos": {
         "x": 6,
-        "y": 12,
+        "y": 15,
         "w": 3,
         "h": 2
       },
@@ -1751,13 +2271,1082 @@
       ]
     },
     {
-      "id": 25,
+      "id": 32,
       "type": "stat",
-      "title": "TWS",
-      "description": "",
+      "title": "Temp Ext",
       "gridPos": {
         "x": 9,
-        "y": 12,
+        "y": 15,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.outside.temperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "type": "stat",
+      "title": "Pression",
+      "gridPos": {
+        "x": 12,
+        "y": 15,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.outside.pressure\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "type": "stat",
+      "title": "Cap Cal",
+      "gridPos": {
+        "x": 15,
+        "y": 15,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.headingMagnetic\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "type": "stat",
+      "title": "Roll Cal",
+      "gridPos": {
+        "x": 18,
+        "y": 15,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.attitude.roll\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "type": "stat",
+      "title": "Pitch Cal",
+      "gridPos": {
+        "x": 21,
+        "y": 15,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.attitude.pitch\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "type": "row",
+      "title": "\ud83c\udf21\ufe0f BAROM\u00c8TRE \u2014 NMEA2000 \u23f3",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 17,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 38,
+      "type": "stat",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
+      "gridPos": {
+        "x": 0,
+        "y": 18,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 PARTIEL",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 OK",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 HORS LIGNE",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.outside.pressure\" or r._measurement == \"environment.outside.temperature\" or r._measurement == \"environment.outside.humidity\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "type": "stat",
+      "title": "Pression",
+      "gridPos": {
+        "x": 3,
+        "y": 18,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.outside.pressure\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "type": "stat",
+      "title": "Temp Air",
+      "gridPos": {
+        "x": 6,
+        "y": 18,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.outside.temperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "type": "stat",
+      "title": "Humidit\u00e9",
+      "gridPos": {
+        "x": 9,
+        "y": 18,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.outside.humidity\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "type": "row",
+      "title": "\ud83d\udca8 VENT \u2014 B&G WS320 \u23f3 NMEA2000",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 20,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 43,
+      "type": "stat",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 PARTIEL",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 OK",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 HORS LIGNE",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.speedApparent\" or r._measurement == \"environment.wind.angleApparent\" or r._measurement == \"environment.wind.speedTrue\" or r._measurement == \"environment.wind.directionTrue\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "type": "stat",
+      "title": "AWS",
+      "gridPos": {
+        "x": 3,
+        "y": 21,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.speedApparent\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "type": "stat",
+      "title": "AWA",
+      "gridPos": {
+        "x": 6,
+        "y": 21,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.wind.angleApparent\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "type": "stat",
+      "title": "TWS",
+      "gridPos": {
+        "x": 9,
+        "y": 21,
         "w": 3,
         "h": 2
       },
@@ -1839,13 +3428,12 @@
       ]
     },
     {
-      "id": 26,
+      "id": 47,
       "type": "stat",
       "title": "TWD",
-      "description": "",
       "gridPos": {
         "x": 12,
-        "y": 12,
+        "y": 21,
         "w": 3,
         "h": 2
       },
@@ -1927,25 +3515,25 @@
       ]
     },
     {
-      "id": 27,
+      "id": 48,
       "type": "row",
-      "title": "\ud83d\udda5\ufe0f SYST\u00c8ME \u2014 Raspberry Pi 4",
+      "title": "\ud83d\udd31 FOND & LOCH \u2014 B&G \u23f3 NMEA2000",
       "collapsed": false,
       "gridPos": {
         "x": 0,
-        "y": 14,
+        "y": 23,
         "w": 24,
         "h": 1
       }
     },
     {
-      "id": 28,
+      "id": 49,
       "type": "stat",
-      "title": "\u2b21 R\u00c9SUM\u00c9 RPi",
-      "description": "Statut global \u2014 pire cas de tous les capteurs",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
       "gridPos": {
         "x": 0,
-        "y": 15,
+        "y": 24,
         "w": 3,
         "h": 2
       },
@@ -2022,18 +3610,1896 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.cpuTemperature\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.speedThroughWater\" or r._measurement == \"environment.depth.belowKeel\" or r._measurement == \"environment.depth.belowSurface\" or r._measurement == \"environment.water.temperature\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
         }
       ]
     },
     {
-      "id": 29,
+      "id": 50,
       "type": "stat",
-      "title": "CPU Temp",
-      "description": "RPi sysfs @ 5s",
+      "title": "STW",
       "gridPos": {
         "x": 3,
-        "y": 15,
+        "y": 24,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.speedThroughWater\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "type": "stat",
+      "title": "Fond/quille",
+      "gridPos": {
+        "x": 6,
+        "y": 24,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.depth.belowKeel\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "type": "stat",
+      "title": "Fond/surface",
+      "gridPos": {
+        "x": 9,
+        "y": 24,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.depth.belowSurface\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "type": "stat",
+      "title": "Temp Eau",
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.water.temperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "type": "row",
+      "title": "\ud83c\udfc6 PERFORMANCE \u2014 Polaire (Signal K)",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 26,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 55,
+      "type": "stat",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
+      "gridPos": {
+        "x": 0,
+        "y": 27,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 PARTIEL",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 OK",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 HORS LIGNE",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance.polarSpeed\" or r._measurement == \"performance.polarSpeedRatio\" or r._measurement == \"performance.vmg\" or r._measurement == \"performance.leeway\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "type": "stat",
+      "title": "% Polaire",
+      "gridPos": {
+        "x": 3,
+        "y": 27,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance.polarSpeedRatio\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "type": "stat",
+      "title": "VMG",
+      "gridPos": {
+        "x": 6,
+        "y": 27,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance.vmg\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "type": "stat",
+      "title": "Vit. Polaire",
+      "gridPos": {
+        "x": 9,
+        "y": 27,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance.polarSpeed\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "type": "stat",
+      "title": "Leeway",
+      "gridPos": {
+        "x": 12,
+        "y": 27,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance.leeway\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "type": "stat",
+      "title": "Angle Beat",
+      "gridPos": {
+        "x": 15,
+        "y": 27,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance.beatAngle\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "type": "stat",
+      "title": "Angle Gybe",
+      "gridPos": {
+        "x": 18,
+        "y": 27,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance.gybeAngle\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "type": "stat",
+      "title": "TWA cible",
+      "gridPos": {
+        "x": 21,
+        "y": 27,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"performance.targetAngle\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "type": "row",
+      "title": "\u26a1 BATTERIE \u2014 SOK \u23f3",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 29,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 64,
+      "type": "stat",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
+      "gridPos": {
+        "x": 0,
+        "y": 30,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 PARTIEL",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 OK",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 HORS LIGNE",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"electrical.batteries.house.capacity.stateOfCharge\" or r._measurement == \"electrical.batteries.house.voltage\" or r._measurement == \"electrical.batteries.house.current\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "type": "stat",
+      "title": "SOC %",
+      "gridPos": {
+        "x": 3,
+        "y": 30,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"electrical.batteries.house.capacity.stateOfCharge\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "type": "stat",
+      "title": "Voltage",
+      "gridPos": {
+        "x": 6,
+        "y": 30,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"electrical.batteries.house.voltage\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "type": "stat",
+      "title": "Courant",
+      "gridPos": {
+        "x": 9,
+        "y": 30,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"electrical.batteries.house.current\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "type": "stat",
+      "title": "Temp Batt",
+      "gridPos": {
+        "x": 12,
+        "y": 30,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"electrical.batteries.house.temperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "type": "row",
+      "title": "\ud83d\udcfb AIS \u2014 \u23f3 NMEA2000/S\u00e9rie",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 70,
+      "type": "stat",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
+      "gridPos": {
+        "x": 0,
+        "y": 33,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 PARTIEL",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 OK",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 HORS LIGNE",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.ais.enabled\" or r._measurement == \"navigation.ais.targetCount\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "type": "stat",
+      "title": "R\u00e9cepteur",
+      "gridPos": {
+        "x": 3,
+        "y": 33,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.ais.enabled\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "type": "stat",
+      "title": "Cibles AIS",
+      "gridPos": {
+        "x": 6,
+        "y": 33,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"navigation.ais.targetCount\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "type": "row",
+      "title": "\ud83d\udda5\ufe0f SYST\u00c8ME \u2014 Raspberry Pi 4",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 35,
+        "w": 24,
+        "h": 1
+      }
+    },
+    {
+      "id": 74,
+      "type": "stat",
+      "title": "\u2b21 R\u00e9sum\u00e9",
+      "description": "Pire cas \u2014 rouge si un capteur hors ligne",
+      "gridPos": {
+        "x": 0,
+        "y": 36,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 PARTIEL",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 OK",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 HORS LIGNE",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.cpuTemperature\" or r._measurement == \"environment.system.cpuUsage\" or r._measurement == \"environment.system.memoryUsed\")\n |> filter(fn: (r) => r._field != \"lat\" and r._field != \"lon\")\n |> group()\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))\n |> min()"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "type": "stat",
+      "title": "CPU Temp",
+      "gridPos": {
+        "x": 3,
+        "y": 36,
         "w": 3,
         "h": 2
       },
@@ -2111,6 +5577,267 @@
             "uid": "efifgp8jvgj5sf"
           },
           "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.cpuTemperature\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "type": "stat",
+      "title": "CPU %",
+      "gridPos": {
+        "x": 6,
+        "y": 36,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.cpuUsage\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "type": "stat",
+      "title": "RAM",
+      "gridPos": {
+        "x": 9,
+        "y": 36,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.memoryUsed\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "type": "stat",
+      "title": "Disque",
+      "gridPos": {
+        "x": 12,
+        "y": 36,
+        "w": 3,
+        "h": 2
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ]
+        },
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "",
+          "noValue": "\u2717 NO DATA",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.4
+              },
+              {
+                "color": "green",
+                "value": 0.9
+              }
+            ]
+          },
+          "mappings": [
+            {
+              "type": "value",
+              "options": {
+                "0.5": {
+                  "text": "\u26a0 STALE",
+                  "color": "orange"
+                },
+                "1": {
+                  "text": "\u2714 ACTIVE",
+                  "color": "green"
+                }
+              }
+            },
+            {
+              "type": "special",
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "\u2717 NO DATA",
+                  "color": "red"
+                }
+              }
+            }
+          ]
+        }
+      },
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket:\"midnight_rider\")\n |> range(start: -5m)\n |> filter(fn: (r) => r._measurement == \"environment.system.diskUsed\" and r._field != \"lat\" and r._field != \"lon\")\n |> last()\n |> map(fn: (r) => ({r with _value: if int(v: now()) - int(v: r._time) < 30000000000 then 1.0 else 0.5}))"
         }
       ]
     }
