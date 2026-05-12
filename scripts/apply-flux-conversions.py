@@ -17,7 +17,7 @@ CONVERSIONS = {
     "environment.wind.speedTrue": {"map": "r._value * 1.94384", "unit": "knots", "type": "speed"},
     "environment.wind.speedApparent": {"map": "r._value * 1.94384", "unit": "knots", "type": "speed"},
     "performance.velocityMadeGood": {"map": "r._value * 1.94384", "unit": "knots", "type": "speed"},
-    "performance.current.speed": {"map": "r._value * 1.94384", "unit": "knots", "type": "speed"},
+    "environment.current.drift": {"map": "r._value * 1.94384", "unit": "knots", "type": "speed"},
     
     # Angles: rad → degrees
     "navigation.attitude.roll": {"map": "r._value * 57.2958", "unit": "degree", "type": "angle"},

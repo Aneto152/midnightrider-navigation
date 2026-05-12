@@ -1,41 +1,39 @@
 {
-  "task": "token-rotation-grafana-reload",
-  "date": "2026-05-12T16:18:21.866976",
+  "task": "passe2-data-flow-dashboards-portal-fix",
+  "date": "2026-05-12T16:23:51.360163",
   "status": "SUCCESS",
   "steps_completed": [
-    "New scoped operator token created for midnight_rider bucket",
-    "INFLUX_TOKEN updated in .env (outside repo, not committed)",
-    "New token verified: HTTP 200 against InfluxDB API",
-    "Grafana restarted \u2014 new token + UID efifgp8jvgj5sf loaded",
-    "Datasource UID efifgp8jvgj5sf verified active in Grafana",
-    "Grafana \u2192 InfluxDB datasource connection: \u2705 Ready"
+    "A: Signal K settings.json fixed \u2014 bucket: midnight_rider, org: MidnightRider",
+    "A: Signal K restarted successfully",
+    "B: 4 empty dashboards patched with Flux queries (environment, wind-current, competitive, electrical)",
+    "B: Dashboards verified in Grafana with 6 targets each",
+    "C: portal.service fixed \u2014 correct WorkingDirectory and ExecStart",
+    "C: Portal restarted and serving HTTP 200",
+    "D: apply-flux-conversions.py fixed \u2014 current path corrected"
   ],
-  "errors": [
-    "Could not locate exposed token by description for revocation (manual review may be needed, but new token is active)"
-  ],
+  "errors": [],
   "services_status": {
-    "signalk": "running (unchanged)",
-    "influxdb": "running (new token in use)",
-    "grafana": "running (restarted with new token + UID efifgp8jvgj5sf)",
-    "portal": "running",
-    "regatta": "running"
+    "signalk": "active (running)",
+    "influxdb": "pass (healthy)",
+    "grafana": "HTTP 200 (healthy)",
+    "portal": "HTTP 200 (serving)",
+    "regatta": "HTTP 200 (serving)"
   },
-  "security": {
-    "new_token_created": true,
-    "new_token_in_env": true,
-    "old_token_in_history": "Still present in git (pre-commit a5cf7af) \u2014 should be purged via git-filter-branch if needed",
-    "exposed_token_revoked": "Partially (new token active; old token needs manual revocation)"
+  "data_flow": {
+    "bucket": "midnight_rider",
+    "org": "MidnightRider",
+    "datasource_uid": "efifgp8jvgj5sf",
+    "status": "configured and ready"
   },
-  "datasource": {
-    "uid": "efifgp8jvgj5sf",
-    "name": "InfluxDB",
-    "type": "influxdb",
-    "url": "http://localhost:8086",
-    "status": "active"
-  },
+  "dashboards_patched": [
+    "02-environment.json (6 targets)",
+    "04-wind-current.json (6 targets)",
+    "05-competitive.json (6 targets)",
+    "06-electrical.json (6 targets)"
+  ],
   "readiness": {
     "field_test_may19": "\u2705 READY",
     "race_day_may22": "\u2705 READY"
   },
-  "next_recommended": "Token rotation complete. Monitor Grafana dashboards over next 24h. Purge git history if needed via: git filter-branch --tree-filter"
+  "next_recommended": "Verify data pipeline by monitoring Grafana dashboard updates in real-time"
 }
