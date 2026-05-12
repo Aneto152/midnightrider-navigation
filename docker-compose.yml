@@ -1,49 +1,34 @@
 services:
-
-  # ─────────────────────────────────────────
-  # InfluxDB v2.8
-  # ─────────────────────────────────────────
   influxdb:
     image: influxdb:2.8
     container_name: influxdb
     restart: unless-stopped
     ports:
-      - "8086:8086"
+    - 8086:8086
     volumes:
-      - influxdb-data:/var/lib/influxdb2
-      - influxdb-config:/etc/influxdb2
-
-  # ─────────────────────────────────────────
-  # Grafana v12.3.1
-  # ─────────────────────────────────────────
+    - influxdb-data:/var/lib/influxdb2
+    - influxdb-config:/etc/influxdb2
   grafana:
     image: grafana/grafana:12.3.1
     container_name: grafana
     restart: unless-stopped
     network_mode: host
     volumes:
-      - grafana-data:/var/lib/grafana
-      - grafana-config:/etc/grafana
-      - ./grafana-custom.ini:/etc/grafana/provisioning/grafana.ini
-      - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
-      - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
-      - ./grafana-dashboards:/var/lib/grafana/dashboards
+    - grafana-data:/var/lib/grafana
+    - grafana-config:/etc/grafana
+    - ./grafana-custom.ini:/etc/grafana/provisioning/grafana.ini
+    - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
+    - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
+    - ./grafana-dashboards:/var/lib/grafana/dashboards
     environment:
-      - GF_SERVER_HTTP_PORT=3001
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_X_FRAME_OPTIONS=SAMEORIGIN
-      # CRITICAL: INFLUX_TOKEN required for datasource YAML substitution
-      # Without this: ${INFLUX_TOKEN} = empty string → 401 Unauthorized
-      # Rotate: docker compose up -d grafana (NOT restart)
-      - INFLUX_TOKEN=${INFLUX_TOKEN}
+    - GF_SERVER_HTTP_PORT=3001
+    - GF_AUTH_ANONYMOUS_ENABLED=true
+    - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+    - GF_SECURITY_ADMIN_USER=admin
+    - GF_SECURITY_X_FRAME_OPTIONS=SAMEORIGIN
+    - INFLUX_TOKEN=${INFLUX_TOKEN}
     depends_on:
-      - influxdb
-
-  # ─────────────────────────────────────────
-  # Astronomical Data (sun/moon/tides)
-  # ─────────────────────────────────────────
+    - influxdb
   astronomical:
     build:
       context: .
@@ -52,63 +37,54 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      - LAT=41.0534
-      - LON=-73.5387
-      - NOAA_STATION=8467150
-      - INFLUX_URL=http://localhost:8086
-      - INFLUX_ORG=MidnightRider
-      - INFLUX_BUCKET=midnight_rider
+    - LAT=41.0534
+    - LON=-73.5387
+    - NOAA_STATION=8467150
+    - INFLUX_URL=http://localhost:8086
+    - INFLUX_ORG=MidnightRider
+    - INFLUX_BUCKET=midnight_rider
     depends_on:
-      - influxdb
-
-  # ═════════════════════════════════════════════════════════════════
-  # SIGNALK DISABLED — USE NATIVE SYSTEMD ONLY
-  # ═════════════════════════════════════════════════════════════════
-  # Signal K runs in NATIVE SYSTEMD mode, not Docker
-  # Management:
-  #   sudo systemctl start|stop|restart|status signalk
-  # Do NOT start via docker-compose — causes port 3000 conflicts
-  # ═════════════════════════════════════════════════════════════════
-  # signalk_disabled:
-  #   image: signalk/signalk-server:latest
-  #   container_name: signalk
-  #   restart: unless-stopped
-  #   network_mode: host
-  #   group_add:
-  #     - "46"   # plugdev — accès ports série USB
-  #     - "20"   # dialout
-  #   environment:
-  #     - ALLOW_READONLY=true
-  #   volumes:
-  #     - signalk-data:/home/node/.signalk
-  #   # USB removed: Kplex handles /dev/ttyUSB0 (WIT)
-  #   # Signal K connects to Kplex TCP:10110
-  #   # YDWG-02 NMEA2000 (if needed, uncomment)
-  #   # devices:
-  #   #   - /dev/ttyACM0:/dev/ttyACM0
-  #   depends_on:
-  #     - influxdb
-  #     - astronomical
-
-  # ─────────────────────────────────────────
-  # Regatta Server (race planning & weather)
-  # ─────────────────────────────────────────
+    - influxdb
   regatta:
-    image: python:3.11-slim
     container_name: regatta
     restart: unless-stopped
     network_mode: host
     working_dir: /app
     volumes:
-      - ./regatta:/app
-      - ./:/repo
+    - ./regatta:/app
+    - ./:/repo
     command: python server.py
     env_file:
-      - .env
+    - .env
     depends_on:
-      - influxdb
-
-# Volumes externes — déjà créés et remplis avec les données migrées
+    - influxdb
+    build:
+      context: ./regatta
+      dockerfile: Dockerfile
+  start-line-worker:
+    container_name: start-line-worker
+    restart: unless-stopped
+    network_mode: host
+    working_dir: /app
+    volumes:
+    - ./regatta:/app
+    command: python start_line_worker.py
+    env_file:
+    - .env
+    environment:
+      INFLUX_URL: http://localhost:8086
+      SIGNALK_URL: http://localhost:3000
+      WORKER_INTERVAL: '1.0'
+    depends_on:
+    - influxdb
+    logging:
+      driver: json-file
+      options:
+        max-size: 5m
+        max-file: '2'
+    build:
+      context: ./regatta
+      dockerfile: Dockerfile
 volumes:
   influxdb-data:
     external: true
