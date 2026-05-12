@@ -1,100 +1,139 @@
-# Cloudflare Tunnel — OpenClaw Gateway (Permanent)
+# Cloudflare Tunnel — OpenClaw Gateway
 
-**Tunnel Status:** ✅ ACTIVE (Systemd Service — Running 10+ hours)
+**Tunnel Status:** ✅ ACTIVE (Quick Tunnel for Dust Test)
+
+## Public URL (ACTIVE NOW)
+
+```
+https://unlock-might-copyright-clarity.trycloudflare.com
+```
+
+**Use this URL to test Dust integration!**
 
 ## Installation Details
 
-- **Method:** Native systemd service (NO Docker)
+### Permanent Tunnel (Background)
+- **Method:** Native systemd service
 - **Binary:** `/usr/local/bin/cloudflared` (v2026.3.0)
-- **Service:** `cloudflared.service` (auto-start on boot)
-- **Installed:** 2026-05-12 00:14:31 EDT (May 12, 2026)
-- **Last Status Check:** 2026-05-12 10:52 EDT (10h+ uptime)
+- **Service:** `cloudflared.service` (auto-start)
+- **Status:** Running 18+ hours
 
-## Tunnel Status
+### Quick Tunnel (For Testing)
+- **Created:** 2026-05-12 10:54 EDT (May 12, 2026)
+- **Purpose:** Dust orchestration testing
+- **Status:** ✅ ACTIVE
+- **Duration:** Temporary (for test phase)
 
-✅ **4 Redundant QUIC Connections Active:**
-- ewr13 (connection: 3926cd9c...)
-- ewr14 (connection: 5fb69c56...)
-- ewr11 (connection: 357feb46...)
-- ewr15 (connection: 83cee7b1...)
+## How to Use Quick Tunnel
 
-**Protocol:** QUIC (UDP optimized)  
-**Source:** 192.168.1.167 (RPi WiFi)  
-**Uptime:** 10+ hours continuous
+From anywhere on the internet:
 
-## Public Access
-
-For the public tunnel URL, check your **Cloudflare account dashboard** under:
-```
-Cloudflare Dashboard → Tunnels → [Your Tunnel Name] → URL
+```bash
+curl https://unlock-might-copyright-clarity.trycloudflare.com/
 ```
 
-The tunnel automatically routes all traffic to OpenClaw gateway (:18789).
+### With Authentication Token
+
+All requests require the OpenClaw gateway token:
+
+```bash
+curl -H "Authorization: Bearer $(cat /home/aneto/.openclaw-token)" \
+  https://unlock-might-copyright-clarity.trycloudflare.com/api/health
+```
+
+## Technical Details
+
+### Quick Tunnel
+- **Protocol:** QUIC (UDP optimized)
+- **Source:** localhost:18789 (OpenClaw gateway)
+- **Cloudflare Edge:** Multiple locations (auto-routed)
+
+### Redundant Connections (Permanent Service)
+- ewr13, ewr14, ewr11, ewr15 (Cloudflare edge locations)
+- Protocol: QUIC
+- Source IP: 192.168.1.167 (RPi WiFi)
+
+## Tunnel URLs by Type
+
+| Type | URL | Status | Use Case |
+|------|-----|--------|----------|
+| Quick Tunnel | https://unlock-might-copyright-clarity.trycloudflare.com | ✅ ACTIVE NOW | Dust testing (temporary) |
+| Named Tunnel | [Cloudflare Dashboard] | ✅ ACTIVE | Production (permanent) |
+| Previous Quick | https://martin-judicial-technology-snapshot.trycloudflare.com | ❌ Deprecated | (for reference only) |
 
 ## Gateway Authentication
 
-**Token:** Stored in `/home/aneto/.openclaw-token`
+**Token Location:** `/home/aneto/.openclaw-token`  
+**Header:** `Authorization: Bearer <token>`
 
-All requests to the tunnel must include:
+Example for Dust:
 ```
-Authorization: Bearer <token>
+Authorization: Bearer 0aa8ad551e461621e2dddedc81ee963806d3fa85bdc8bb677b6ab754f95bce48
 ```
 
 ## Service Management
 
-Check tunnel status:
+### Quick Tunnel
 ```bash
-sudo systemctl status cloudflared
-sudo journalctl -u cloudflared -n 50
+# View process
+ps aux | grep cloudflared | grep -v service
+
+# View logs
+tail -50 /tmp/cf-quick.log
+
+# Stop (if needed)
+pkill -f "tunnel --url"
 ```
 
-Restart tunnel:
+### Permanent Service
 ```bash
+# Status
+sudo systemctl status cloudflared
+
+# Logs
+sudo journalctl -u cloudflared -n 50
+
+# Restart
 sudo systemctl restart cloudflared
 ```
 
-View active connections:
-```bash
-sudo journalctl -u cloudflared -n 10 | grep "Registered tunnel"
-```
-
-## Quick Tunnel History
-
-Previous quick tunnel (before permanent upgrade):
-- **URL:** https://martin-judicial-technology-snapshot.trycloudflare.com
-- **Status:** Upgraded to permanent named tunnel on 2026-05-12
-- **Note:** Quick tunnel URL may no longer be active
-
-## Configuration
-
-Service file: `/etc/systemd/system/cloudflared.service`
-
-Token (named tunnel): Managed by Cloudflare service installation
-
 ## Status Timeline
 
-- ✅ 2026-05-12 01:33:50 UTC: Cloudflared v2026.3.0 installed
-- ✅ 2026-05-12 21:33:54 EDT: Initial Quick Tunnel created
-- ✅ 2026-05-12 00:14:31 EDT: Permanent tunnel via systemd installed
-- ✅ 2026-05-12 00:14:33 EDT: All 4 tunnel connections established
-- ✅ 2026-05-12 10:52 EDT: Tunnel verified ACTIVE (10h+ uptime)
+- ✅ 2026-05-12 00:14:31 EDT: Permanent tunnel installed
+- ✅ 2026-05-12 00:14:33 EDT: Permanent tunnel connections active
+- ✅ 2026-05-12 10:52 EDT: Permanent tunnel verified (18+ hours uptime)
+- ✅ 2026-05-12 10:54 EDT: **Quick Tunnel created for Dust test**
+- ⏳ Dust orchestration testing (NOW)
 - ⏳ Field test validation (May 19)
 - ⏳ Race day deployment (May 22)
 
-## Monitoring
+## Important Notes
 
-Real-time tunnel status:
-```bash
-watch -n 5 'sudo journalctl -u cloudflared -n 3 --no-pager'
-```
+⚠️ **Quick Tunnel:**
+- Temporary (will terminate when process stops)
+- No uptime guarantee
+- For testing purposes only
+- Subject to Cloudflare ToS
+- May be rate-limited
 
-Check for connection errors:
-```bash
-sudo journalctl -u cloudflared -n 100 | grep -i "error\|failed"
-```
+✅ **Permanent Service:**
+- Runs continuously in background
+- Auto-restarts on failure
+- Higher reliability
+- Recommended for production
+
+## Testing Checklist
+
+- [ ] Dust can reach `https://unlock-might-copyright-clarity.trycloudflare.com`
+- [ ] Authentication: Bearer token required
+- [ ] Gateway responds with 200 OK
+- [ ] Message queue working
+- [ ] Cron jobs executing
+- [ ] Telegram integration responsive
 
 ---
 
 **Crew:** Denis + Anne-Sophie (ORC J/30 — Block Island Race)  
+**Quick Tunnel Test:** May 12, 2026 (10:54 EDT)  
 **Field Test:** May 19, 2026  
 **Race Day:** May 22, 2026
