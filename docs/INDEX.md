@@ -86,6 +86,10 @@ Complete step-by-step integration for each hardware component:
 
 ### Dashboard Suite
 
+- **DASHBOARDS-README.md** — Complete 9-dashboard reference with UIDs, refresh rates, access methods
+
+
+
 - **[GRAFANA-DASHBOARDS.md](SOFTWARE/GRAFANA-DASHBOARDS.md)** — 9 dashboards reference
   - COCKPIT (main navigation)
   - ENVIRONMENT (sea & weather)
@@ -209,5 +213,5 @@ docs/
 
 ---
 
-**Last updated:** 2026-04-27  
+**Last updated:** 2026-05-12  
 **Status:** Production-ready for Block Island Race 2026 (May 22)

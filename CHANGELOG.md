@@ -1,5 +1,60 @@
 # CHANGELOG — Midnight Rider Navigation System
 
+## [1.0.1] — 2026-05-12 (Post-Incident Hotfix)
+
+### Fixed
+- mDNS resolution issue (May 11): wlan0 dual-IP causing iPad hostname resolution to hotspot instead of WiFi
+  - Deployed avahi-mdns-fix.service to force mDNS to advertise correct interface
+  - Workaround: Direct IP access (192.168.1.167) fully functional
+  - Status: RESOLVED — mDNS now resolving correctly
+- GitHub authentication: Restored PAT (personal access token) for continued deployment
+  - New token stored securely in ~/.git-credentials (chmod 600, outside repo)
+  - HTTPS remote configured
+  - All pending commits pushed successfully
+
+### Removed
+- Cloudflare tunnel infrastructure (May 12, 11:18 EDT)
+  - Removed cloudflared binary, systemd services, and all temporary logs
+  - Reason: Not required for field test deployment; local network access sufficient
+  - Remote access alternatives: SSH port forwarding, Raspberry Pi Connect, local VPN
+
+### Documentation
+- Created docs/DASHBOARDS-README.md: Complete 9-dashboard reference with live UIDs
+- Created docs/INTEGRATION/SOK-BMS-INTEGRATION.md: LiFePO4 battery BMS integration guide
+- Updated docs/INDEX.md: Added missing file references (v1.0.1 changes)
+- Diagnostic log: logs/latest.json with full post-incident system status
+
+### System Status (Verified 2026-05-12 14:22 EDT)
+- Signal K: running, 13h uptime since 2026-05-11 23:10
+- InfluxDB: running (Docker), 13h uptime
+- Grafana: healthy v12.3.1
+- Portal: HTTP 200, .env blocked (404)
+- Regatta: running (Docker), 13h uptime
+- mDNS: operational, 0% packet loss (avahi-mdns-fix.service active)
+- iPad access: working via 192.168.1.167 + hostname (midnightrider.local)
+- System resources: Disk 22%, RAM 5194MB, Load 1.33
+
+### Commits (May 12, 2026)
+- 08ad87f: Network & Grafana fixes
+- 601fd10: avahi-mdns-fix.service installed
+- 17ce7ea: cloudflared tunnel installed
+- 00c2a5a: Permanent tunnel via systemd
+- c267589: Gateway token auth
+- ace5b66: cloudflared completely removed
+- 6a17046: diagnostic complet post-incident 2026-05-12
+- 58d8469: ops: restore GitHub PAT auth
+- a37fefe: log: session 2026-05-12 diagnostic
+- cb727a1: docs: add DASHBOARDS-README.md
+
+### Readiness Assessment
+- ✅ Field Test (May 19, 2026): READY
+- ✅ Race Day (May 22, 2026 — Block Island Race): READY
+- ✅ All critical systems operational
+- ✅ Network incident resolved
+- ✅ GitHub push pipeline restored
+
+---
+
 ## [1.0.0] — 2026-05-22 (Block Island Race)
 
 ### Added
