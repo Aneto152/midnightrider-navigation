@@ -90,3 +90,4 @@ docs/agents/
 # Secrets — automatic protection
 *.env
 *.token
+.openclaw-token
