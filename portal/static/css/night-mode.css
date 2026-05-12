@@ -1,0 +1,170 @@
+/* MidnightRider — Night Mode
+ * Optimized for iPad cockpit use at night
+ * Preserves night vision: no blue/white, uses red/amber palette
+ * Toggle via: document.body.classList.toggle('night-mode')
+ */
+
+/* ── Day mode baseline (no change — portal default) ─────── */
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ── Night mode ──────────────────────────────────────────── */
+body.night-mode {
+  background-color: #0d0d0d !important;
+  color: #cc4400 !important;
+}
+
+/* Navigation bar */
+body.night-mode nav,
+body.night-mode .navbar,
+body.night-mode header {
+  background-color: #1a0a00 !important;
+  border-bottom: 1px solid #cc4400 !important;
+}
+
+body.night-mode nav a,
+body.night-mode .navbar a,
+body.night-mode header a {
+  color: #cc4400 !important;
+}
+
+/* Cards and panels */
+body.night-mode .card,
+body.night-mode .panel,
+body.night-mode .box,
+body.night-mode .widget,
+body.night-mode [class*="card"],
+body.night-mode [class*="panel"] {
+  background-color: #1a0800 !important;
+  border-color: #661a00 !important;
+  color: #cc4400 !important;
+}
+
+/* Stat values — large cockpit numbers */
+body.night-mode .stat-value,
+body.night-mode .value,
+body.night-mode [class*="stat"],
+body.night-mode h1, body.night-mode h2, body.night-mode h3 {
+  color: #ff6600 !important;
+  text-shadow: 0 0 8px rgba(255, 102, 0, 0.4);
+}
+
+/* Tables */
+body.night-mode table {
+  border-color: #661a00 !important;
+}
+
+body.night-mode th {
+  background-color: #1a0800 !important;
+  color: #cc4400 !important;
+}
+
+body.night-mode td {
+  color: #cc4400 !important;
+  border-color: #661a00 !important;
+}
+
+body.night-mode tr:hover {
+  background-color: #2a1000 !important;
+}
+
+/* Buttons */
+body.night-mode button,
+body.night-mode .btn {
+  background-color: #2a0a00 !important;
+  color: #cc4400 !important;
+  border-color: #cc4400 !important;
+}
+
+body.night-mode button:hover,
+body.night-mode .btn:hover {
+  background-color: #3d1400 !important;
+}
+
+/* Input fields */
+body.night-mode input,
+body.night-mode select,
+body.night-mode textarea {
+  background-color: #1a0800 !important;
+  color: #cc4400 !important;
+  border-color: #661a00 !important;
+}
+
+/* Links */
+body.night-mode a {
+  color: #ff8800 !important;
+}
+
+/* Grafana iframes — dim slightly */
+body.night-mode iframe {
+  filter: brightness(0.7) sepia(0.5) hue-rotate(-20deg);
+  transition: filter 0.3s ease;
+}
+
+/* Status indicators */
+body.night-mode .status-ok,
+body.night-mode .success,
+body.night-mode [class*="success"] {
+  color: #885500 !important;
+}
+
+body.night-mode .status-warn,
+body.night-mode .warning,
+body.night-mode [class*="warn"] {
+  color: #aa6600 !important;
+}
+
+body.night-mode .status-error,
+body.night-mode .danger,
+body.night-mode [class*="error"],
+body.night-mode [class*="danger"] {
+  color: #ff2200 !important;
+}
+
+/* ── Night mode toggle button (always visible) ───────────── */
+#night-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid #888;
+  background: rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#night-toggle:hover {
+  transform: scale(1.1);
+  border-color: #cc4400;
+}
+
+body.night-mode #night-toggle {
+  border-color: #cc4400;
+  background: rgba(26, 8, 0, 0.9);
+}
+
+/* ── Cockpit mode (extra large numbers) ─────────────────── */
+body.cockpit-mode .stat-value,
+body.cockpit-mode .value,
+body.cockpit-mode [class*="stat-num"] {
+  font-size: 4rem !important;
+  font-family: 'Roboto Mono', monospace !important;
+  letter-spacing: 2px;
+}
+
+body.night-mode.cockpit-mode .stat-value,
+body.night-mode.cockpit-mode .value {
+  color: #ff6600 !important;
+  text-shadow: 0 0 12px rgba(255, 102, 0, 0.6);
+}

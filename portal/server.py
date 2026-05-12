@@ -19,6 +19,10 @@ PORTAL = ROOT / "portal"
 REGATTA = ROOT / "regatta"
 
 class PortalHandler(http.server.BaseHTTPRequestHandler):
+    def log_message(self, fmt, *args):
+        """Suppress default logging unless it's an API call"""
+        if args and ("/api/" in str(args[0]) or "favicon" not in str(args[0])):
+            pass  # Suppress
 
     def do_GET(self):
         path = self.path.split("?")[0].split("#")[0]
@@ -27,18 +31,27 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         if path in ("/", ""):
             self._serve_file(PORTAL / "index.html")
 
+        # /manifest.json → root manifest (for PWA)
+        elif path == "/manifest.json":
+            self._serve_file(PORTAL / "static" / "manifest.json")
+
         # /regatta/* → regatta/
         elif path.startswith("/regatta/"):
             rel = path[len("/regatta/"):]
             target = REGATTA / rel if rel else REGATTA / "index.html"
             self._serve_file(target)
 
+        # /static/* → portal/static/
+        elif path.startswith("/static/"):
+            rel = path[len("/static/"):]
+            self._serve_file(PORTAL / "static" / rel)
+
         # /portal/* → portal/ (optional direct access)
         elif path.startswith("/portal/"):
             rel = path[len("/portal/"):]
             self._serve_file(PORTAL / rel)
 
-        # Files at root: viewer.html, *.css, *.js, *.svg
+        # Files at root: viewer.html, *.css, *.js, *.svg, *.json, *.png, *.ico
         elif "." in Path(path).name:
             self._serve_file(PORTAL / path.lstrip("/"))
 
@@ -111,15 +124,14 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         except Exception as e:
             print(f"[ERROR] shutdown failed: {e}")
 
-    def log_message(self, fmt, *args):
-        if args and "/api/" in str(args[0]):
-            print(f"[Portal] {fmt % args}")
+
 
 if __name__ == "__main__":
     socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), PortalHandler) as httpd:
         print(f"✅ Portal démarré sur http://0.0.0.0:{PORT}")
         print(f"   / → {PORTAL}/index.html")
+        print(f"   /static/* → {PORTAL}/static/")
         print(f"   /regatta/ → {REGATTA}/")
         print(f"   POST /api/shutdown → sudo shutdown -h now")
         try:

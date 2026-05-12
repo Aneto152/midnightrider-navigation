@@ -1,0 +1,17 @@
+{
+  "name": "Midnight Rider Navigation",
+  "short_name": "MR Nav",
+  "description": "Navigation dashboard for J/30 sailing vessel",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d0d0d",
+  "theme_color": "#cc4400",
+  "orientation": "landscape",
+  "icons": [
+    {
+      "src": "/static/img/midnight-rider-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
