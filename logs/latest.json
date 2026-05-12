@@ -1,63 +1,43 @@
 {
-  "task": "diagnostic-git-push-session-complete",
-  "date": "2026-05-12T18:58:26.441531",
-  "status": "SUCCESS",
-  "session_summary": {
-    "date": "2026-05-12",
-    "duration": "~6 hours",
-    "focus": "Bug fixes, security hardening, UX polish, documentation"
+  "task": "diagnostic-regatta-server-ligne-depart",
+  "date": "2026-05-12T19:15:46.505691",
+  "status": "IDENTIFIED \u2014 Missing Computation Logic",
+  "findings": {
+    "regatta_server": "RUNNING \u2705 (port 5000)",
+    "html_interface": "LIVE \u2705 (can mark pin/boat positions)",
+    "influxdb_writing": "YES but incomplete \u2705",
+    "computation_logic": "MISSING \u274c",
+    "root_cause": "server.py /api/start_line endpoint stores GPS but does NOT compute distance/bearing to line"
   },
-  "steps_completed": [
-    "Local git log verified: 12+ commits present",
-    "Remote status checked: all commits pushed to GitHub",
-    "GitHub connectivity verified: HTTP 200",
-    "Documentation added: token rotation + troubleshooting + script",
-    "Final commit pushed: 28e6886"
+  "what_is_written": {
+    "regatta.sails": "\u2705 Sail changes",
+    "regatta.helmsman": "\u2705 Helmsman name",
+    "regatta.start_line": "\u2705 LAT/LON of pin and boat (raw GPS)",
+    "regatta.events": "\u2705 Event log (tack, gybe, start, etc)",
+    "regatta.timer": "\u2705 Timer state (seconds_to_start)"
+  },
+  "what_is_missing": {
+    "distance_to_line_m": "Never computed in server.py",
+    "line_side": "Port/starboard of line not calculated",
+    "pin_buoy_bearing_deg": "Bearing from boat to pin buoy not computed",
+    "pin_buoy_dist_m": "Distance from boat to pin not computed",
+    "pin_rc_bearing_deg": "Bearing from boat to comit\u00e9 boat not computed",
+    "pin_rc_dist_m": "Distance from boat to comit\u00e9 not computed",
+    "start_line_length_m": "Distance between pin and comit\u00e9 not computed",
+    "line_bias_deg": "Angle of line vs wind not computed"
+  },
+  "what_dashboard_expects": [
+    "regatta.timer \u2192 start_timer_seconds \u2705 (exists)",
+    "regatta.start_line \u2192 distance_to_line_m \u274c (missing)",
+    "regatta.start_line \u2192 line_side \u274c (missing)",
+    "regatta.start_line \u2192 pin_buoy_bearing_deg \u274c (missing)",
+    "regatta.start_line \u2192 pin_buoy_dist_m \u274c (missing)",
+    "regatta.start_line \u2192 pin_rc_bearing_deg \u274c (missing)",
+    "regatta.start_line \u2192 pin_rc_dist_m \u274c (missing)",
+    "regatta.start_line \u2192 start_line_length_m \u274c (missing)",
+    "regatta.start_line \u2192 line_bias_deg \u274c (missing)"
   ],
-  "commits_today": [
-    "28e6886 \u2014 Documentation: runbooks + rotate-token.sh",
-    "c2f452f \u2014 Data model redesign: 29 panels, no clutter",
-    "ee34d01 \u2014 Portal UX: theme coherence + button layout",
-    "adc228f \u2014 Data model flicker fix: aggregateWindow fix",
-    "26ae03a \u2014 Grafana env fix + token revocation",
-    "8f135e5 \u2014 Token config",
-    "8656826 \u2014 Security hardening",
-    "2531031 \u2014 Night mode portal",
-    "f6bf3d9 \u2014 Hotspot disabled + nginx",
-    "23d8cd9 \u2014 Hotfix: BUG-18",
-    "1533c06 \u2014 P2/P3 bugs",
-    "d24213a \u2014 P1 bugs (10 total)"
-  ],
-  "total_commits": 12,
-  "bugs_fixed": 18,
-  "features_added": 4,
-  "services_status": {
-    "signalk": "running",
-    "influxdb": "running",
-    "grafana": "running \u2014 264 dashboard panels LIVE",
-    "portal": "running \u2014 night mode + PWA + theme coherence",
-    "nginx": "running \u2014 reverse proxy operational"
-  },
-  "github_status": {
-    "repo": "https://github.com/Aneto152/midnightrider-navigation",
-    "branch": "main",
-    "latest_commit": "28e6886",
-    "all_commits_visible": true,
-    "accessibility": "Public"
-  },
-  "system_readiness": {
-    "code_quality": "\u2705 Production ready",
-    "security": "\u2705 Hardened (no hardcoded secrets)",
-    "dashboards": "\u2705 264 panels LIVE",
-    "network": "\u2705 mDNS + nginx + Cloudflare tunnel",
-    "documentation": "\u2705 Complete runbooks + scripts",
-    "deployment_date": "May 19, 2026 (field test)",
-    "race_date": "May 22, 2026 (Block Island Race, 186nm)"
-  },
-  "next_steps": [
-    "Denis: hard-refresh Grafana/Portal to see final UX",
-    "May 13-18: stability monitoring + pre-deployment checks",
-    "May 19: field test deployment",
-    "May 22: Block Island Race (live monitoring)"
-  ]
+  "solution": "Add to server.py: distance, bearing, and line-calculation functions called when /api/start_line or /api/position is updated",
+  "severity": "HIGH \u2014 Dashboard section completely broken without computed fields",
+  "next_step": "Denis: Implement start line computation logic in regatta/server.py"
 }
