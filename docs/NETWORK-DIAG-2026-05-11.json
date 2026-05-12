@@ -1,0 +1,32 @@
+{
+  "date": "2026-05-11T21:09:00Z",
+  "issue": "iPad cannot access Portal :5000 or Grafana :3001 via mDNS hostname",
+  "root_cause": {
+    "mdns": "avahi-daemon advertising on link-local (169.254.119.236) instead of WiFi (192.168.1.167)",
+    "bucket_errors": "Grafana alert rules reference non-existent bucket 'weather_lis'",
+    "duplicate_dashboard": "UID 07-race appears twice in provisioning"
+  },
+  "service_status": {
+    "portal_5000": "HTTP 200 (accessible locally)",
+    "grafana_3001": "HTTP 200 (accessible locally)",
+    "signalk_3000": "Running (systemd)",
+    "influxdb_8086": "HTTP 200 (Docker bridge)"
+  },
+  "network": {
+    "rpi_wifi_ip": "192.168.1.167",
+    "mdns_current": "169.254.119.236 (link-local IPv6)",
+    "mdns_hostname": "MidnightRider.local"
+  },
+  "immediate_workaround": {
+    "ipad_access": "Use direct IP instead of hostname",
+    "portal": "http://192.168.1.167:5000",
+    "grafana": "http://192.168.1.167:3001",
+    "signalk": "http://192.168.1.167:3000"
+  },
+  "fixes_needed": [
+    "Reconfigure avahi-daemon to bind to wlan0 (not link-local)",
+    "Remove duplicate 07-race dashboard from provisioning",
+    "Update/remove alert rules referencing 'weather_lis' bucket",
+    "Verify all services respond on 192.168.1.167"
+  ]
+}
