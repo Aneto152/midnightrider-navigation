@@ -14,4 +14,4 @@ datasources:
       defaultBucket: midnight_rider
       tlsSkipVerify: true
     secureJsonData:
-      token: 3IKE-xKAiFnZ5NqieOmlZM61bfqrbr08WfaVc1JkjH8e40KbO6KwTJCoFb1I_fHANseyWdVx0nOuhVHaNc_ZTw
+      token: ${INFLUX_TOKEN}
