@@ -1,25 +1,45 @@
 {
-  "task": "hotfix-bug18-mcp-syntax-error",
-  "date": "2026-05-12T17:21:23.569857",
+  "task": "hotspot-disable-nginx-mdns-cleanup",
+  "date": "2026-05-12T17:31:20.486583",
   "status": "SUCCESS",
-  "issue": "P2/P3 fix introduced extra ) in IIFE closure: })()), \u2192 })(), ",
   "steps_completed": [
-    "BUG-18: extra ) removed in 7 MCP servers",
-    "node --check verified: all 7 servers syntax-valid"
+    "Hotspot (192.168.4.1) disabled \u2014 removed from dhcpcd.conf and wlan0",
+    "192.168.4.1 IP address removed from interface (immediate effect)",
+    "avahi-mdns-fix.service disabled (workaround no longer needed)",
+    "avahi-daemon.conf: clean config, allow_interfaces=wlan0,eth0 only",
+    "avahi restarted \u2014 now advertising 192.168.1.167 only (wlan0)",
+    "nginx installed (v1.26.3) and configured as reverse proxy",
+    "nginx site midnightrider enabled: port 80 \u2192 portal:8888",
+    "default nginx site disabled",
+    "nginx config syntax verified OK",
+    "nginx started and enabled"
   ],
-  "files_fixed": [
-    "mcp/astronomical-server.js",
-    "mcp/buoy-server.js",
-    "mcp/crew-server.js",
-    "mcp/polar-server.js",
-    "mcp/race-server.js",
-    "mcp/racing-server.js",
-    "mcp/weather-server.js"
-  ],
-  "errors": [],
   "services_status": {
-    "signalk": "running",
-    "influxdb": "running",
-    "grafana": "running"
+    "signalk": "running (unchanged)",
+    "influxdb": "running (unchanged)",
+    "grafana": "running (unchanged)",
+    "portal": "running on port 8888",
+    "nginx": "running \u2014 port 80 \u2192 portal:8888",
+    "avahi-daemon": "running \u2014 advertising 192.168.1.167 only",
+    "hostapd": "disabled (hotspot removed)",
+    "avahi-mdns-fix": "disabled (no longer needed)"
+  },
+  "access_urls": {
+    "portal_via_nginx": "http://midnightrider.local (iPad)",
+    "portal_direct": "http://192.168.1.167:8888",
+    "grafana": "http://midnightrider.local/grafana/",
+    "signalk": "http://midnightrider.local/signalk/"
+  },
+  "validation": {
+    "Portal via nginx (port 80)": "HTTP 200 \u2705",
+    "Portal direct (port 8888)": "HTTP 200 \u2705",
+    "mDNS (midnightrider.local)": "192.168.1.167 only \u2705",
+    "nginx config": "syntax OK \u2705"
+  },
+  "network": {
+    "wlan0_ip": "192.168.1.167",
+    "hotspot_ip": "REMOVED (192.168.4.1 disabled)",
+    "router_ping": "OK (192.168.1.1 reachable)",
+    "wifi_connection": "Intact and stable"
   }
 }
