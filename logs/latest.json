@@ -1,37 +1,43 @@
 {
-  "task": "Complete system diagnostics — SignalK→InfluxDB pipeline",
-  "started": "2026-05-04T00:36:04.991811+00:00",
-  "updated": "2026-05-03T20:45:50Z",
-  "status": "success",
-  "sha": "",
-  "steps": [
-    {
-      "step": "InfluxDB data check",
-      "cmd": "schema.measurements + data query",
-      "output": "Moon illumination, CPU temp, IMU acceleration data present",
-      "ok": true,
-      "ts": "2026-05-03T20:45:00Z"
-    },
-    {
-      "step": "Signal K daemon",
-      "cmd": "systemctl status signalk",
-      "output": "Active (running) since 20:35 — 10min uptime",
-      "ok": true,
-      "ts": "2026-05-03T20:45:15Z"
-    },
-    {
-      "step": "Signal K API",
-      "cmd": "curl http://localhost:3000/signalk/v1/api",
-      "output": "Server ready, vessel UUID: fdcfc5d2-9e90-401f...",
-      "ok": true,
-      "ts": "2026-05-03T20:45:30Z"
-    },
-    {
-      "step": "Recent measurements",
-      "cmd": "Flux query last 5 minutes",
-      "output": "environment, navigation, system data flowing",
-      "ok": true,
-      "ts": "2026-05-03T20:45:45Z"
-    }
-  ]
+  "task": "diagnostic-post-incident-reseau-2026-05-12",
+  "date": "2026-05-12T12:40:33.884702",
+  "status": "SUCCESS",
+  "steps_completed": [
+    "signalk-running-13h",
+    "influxdb-up-13h",
+    "grafana-healthy-v12.3.1",
+    "portal-http200-env-blocked",
+    "regatta-up-13h",
+    "mdns-operational-0pct-loss",
+    "network-incident-2026-05-11-resolved",
+    "cloudflare-removed",
+    "disk-ram-ok"
+  ],
+  "errors": [],
+  "services_status": {
+    "signalk": "running 13h uptime since 2026-05-11 23:10",
+    "influxdb": "up 13 hours",
+    "grafana": "healthy v12.3.1",
+    "portal_8888": "http200 env-blocked-404",
+    "regatta": "up 13 hours",
+    "mdns": "operational 0pct packet loss"
+  },
+  "network_incident_2026_05_11": {
+    "status": "resolved-workaround-active",
+    "root_cause": "wlan0 dual-IP mDNS resolved to hotspot 192.168.4.1",
+    "fix": "avahi-mdns-fix.service deployed",
+    "ipad_access": "working via 192.168.1.167",
+    "cloudflare": "removed 2026-05-12 11:18 EDT"
+  },
+  "system_resources": {
+    "disk_root": "22pct 25G of 117G",
+    "ram_available_mb": 5194,
+    "load": 1.33,
+    "uptime_hours": 13.4
+  },
+  "readiness": {
+    "field_test_2026_05_19": "READY",
+    "race_block_island_2026_05_22": "READY"
+  },
+  "next_recommended": "pre-field-test-checklist-2026-05-19"
 }
