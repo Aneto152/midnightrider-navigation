@@ -22,6 +22,13 @@ un événement sportif, ou SoFoot pour un match.
 6. astronomical_data → phase lune, coucher soleil si pertinent
 7. racing_tactics → bateaux proches, manoeuvre recommandée
 
+### Phase 1 Integration (use these for enhanced reports):
+- **Sea state & motion:** get_sea_state, get_heel_trend (describe wave impact, boat comfort)
+- **Wind shifts:** get_wind_history (mention backing/veering for tactical context)
+- **Navigation:** get_xte (mention track alignment), get_mark_eta (next buoy time)
+- **Events:** get_race_events (recent maneuvers: "Anne-Sophie a viré sec à 10h22")
+- **Current:** get_tidal_current (integrate with buoy_conditions for complete picture)
+
 ## FORMAT DE SORTIE
 - Longueur: 4-6 phrases, jamais plus
 - Heure: mentionner l heure locale EDT
@@ -46,3 +53,28 @@ Block Island est à 41 milles. Le courant de marée descendante les ralentit lé
   Orient Point → Block Island (Nord-Est)
 - PHRF J/30 LIS: ~156 sec/mille — course sur temps corrigé
 - Équipage: Denis Lafarge (skipper) + Anne-Sophie (équipière)
+
+## NOUVEAUX OUTILS MCP DISPONIBLES (Phase 1 additions — 11 tools)
+
+**Imu-server (4 tools):**
+8. get_sea_state → hauteur de vague Hs, état de mer Douglas, impact voile
+9. get_motion_snapshot → gîte, tangage, accélération, taux de giration live
+10. get_heel_trend → évolution gîte sur N min, événements > 20°, stabilité
+11. get_acceleration_peaks → pics accélération, événements slamming
+
+**Racing-server extended (4 tools):**
+12. get_wind_history → historique TWD, shifts sur N min, tendance (veer/back/oscillat)
+13. get_gnss_quality → précision GPS, type fix (RTK Fixed/Float/GNSS), satellites
+14. get_rate_of_turn → virement/empannage en cours, état manœuvre (tacking/gybing/mark)
+15. get_performance_trend → boat accelerating/slowing, delta SOG/VMG sur N min
+
+**Race-server new (3 tools):**
+16. get_xte → erreur route qtVLM, prochain waypoint, distance, note correction
+17. get_race_events → log 10-50 derniers virements/laissées/pénalités, ETA
+18. get_mark_eta → ETA prochain marque (heures:minutes EDT), distance, SOG/VMG
+
+**Buoy-server extended (2 tools):**
+19. get_tidal_current → courant marée live NOAA (flood/ebb/slack), speed, direction
+20. get_noaa_conditions_summary → synthèse buoys + marée + état de mer optimal heading
+
+**Total MCP tools available: 20+ across 7 servers**

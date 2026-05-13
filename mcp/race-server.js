@@ -386,6 +386,15 @@ async function handleTool(name, args) {
       case 'get_race_marks':
         return await getRaceMarks();
 
+      case 'get_xte':
+        return await getXTE();
+
+      case 'get_race_events':
+        return await getRaceEvents(args.last_n || 10);
+
+      case 'get_mark_eta':
+        return await getMarkETA();
+
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
@@ -440,6 +449,21 @@ async function handleRequest(request) {
             name: 'get_race_marks',
             description: 'Get race course marks (windward, leeward, gates, finish)',
             inputSchema: { type: 'object', properties: {} }
+          },
+          {
+            name: 'get_xte',
+            description: 'Get cross-track error (XTE) from qtVLM rhumb line',
+            inputSchema: { type: 'object', properties: {} }
+          },
+          {
+            name: 'get_race_events',
+            description: 'Get recent race events (tacks, gybes, mark roundings)',
+            inputSchema: { type: 'object', properties: { last_n: { type: 'number' } } }
+          },
+          {
+            name: 'get_mark_eta',
+            description: 'Get estimated time of arrival to next mark',
+            inputSchema: { type: 'object', properties: {} }
           }
         ]
       }
@@ -470,6 +494,161 @@ async function handleRequest(request) {
       message: 'Method not found'
     }
   };
+}
+
+/**
+ * Get Cross-Track Error (XTE) from qtVLM
+ */
+async function getXTE() {
+  try {
+    const response = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'localhost',
+        port: 3000,
+        path: '/signalk/v1/api/navigation/courseRhumbline',
+        method: 'GET'
+      };
+      const req = http.request(options, (res) => {
+        let data = '';
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => {
+          try { resolve(JSON.parse(data)); } catch { resolve(null); }
+        });
+      });
+      req.on('error', () => reject(null));
+      req.end();
+    });
+
+    if (!response || !response.crossTrackError) {
+      return { xte_m: 0, xte_nm: 0, xte_side: 'on_track', qtVLM_active: false, note: 'qtVLM not active' };
+    }
+
+    const xteM = response.crossTrackError?.value || 0;
+    const xteNm = xteM / 1852;
+    const xteSide = xteM > 0 ? 'starboard' : (xteM < 0 ? 'port' : 'on_track');
+    const nextPoint = response.nextPoint?.value || {};
+    const distNm = (nextPoint.position?.distance || 0) / 1852;
+
+    return {
+      xte_m: Math.round(xteM),
+      xte_nm: parseFloat(xteNm.toFixed(2)),
+      xte_side: xteSide,
+      next_waypoint_name: nextPoint.position?.name || 'Unknown',
+      next_waypoint_lat: nextPoint.position?.latitude || 0,
+      next_waypoint_lon: nextPoint.position?.longitude || 0,
+      distance_to_waypoint_nm: parseFloat(distNm.toFixed(2)),
+      qtVLM_active: true,
+      note: `${Math.abs(Math.round(xteM))}m to ${xteSide} of rhumb line — steer ${xteSide === 'starboard' ? 'port' : 'starboard'} to correct`
+    };
+  } catch (err) {
+    return { error: 'XTE unavailable', qtVLM_active: false };
+  }
+}
+
+/**
+ * Get Race Events from regatta server
+ */
+async function getRaceEvents(lastN = 10) {
+  try {
+    const response = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'localhost',
+        port: 5000,
+        path: '/api/event',
+        method: 'GET'
+      };
+      const req = http.request(options, (res) => {
+        let data = '';
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => {
+          try { resolve(JSON.parse(data)); } catch { resolve([]); }
+        });
+      });
+      req.on('error', () => reject([]));
+      req.end();
+    });
+
+    const allEvents = Array.isArray(response) ? response : (response.events || []);
+    const recentEvents = allEvents.slice(-Math.min(lastN, 50));
+    const lastEvent = recentEvents[recentEvents.length - 1] || {};
+    const maneuvers = recentEvents.filter(e => ['tack', 'gybe', 'mark_rounding'].includes(e.type));
+    const lastManeuver = maneuvers[maneuvers.length - 1];
+
+    return {
+      events: recentEvents.map(e => ({ time: e.time, type: e.type, description: e.description })),
+      event_types: ['tack', 'gybe', 'mark_rounding', 'start', 'finish', 'penalty'],
+      total_events_today: allEvents.length,
+      last_event: { time: lastEvent.time, description: lastEvent.description },
+      last_maneuver: lastManeuver ? { time: lastManeuver.time, type: lastManeuver.type, description: lastManeuver.description } : null
+    };
+  } catch (err) {
+    return { error: 'Events unavailable', events: [], total_events_today: 0 };
+  }
+}
+
+/**
+ * Calculate ETA to next mark
+ */
+async function getMarkETA() {
+  try {
+    const posResponse = await new Promise((resolve, reject) => {
+      const options = {
+        hostname: 'localhost',
+        port: 3000,
+        path: '/signalk/v1/api/navigation',
+        method: 'GET'
+      };
+      const req = http.request(options, (res) => {
+        let data = '';
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => {
+          try { resolve(JSON.parse(data)); } catch { resolve(null); }
+        });
+      });
+      req.on('error', () => reject(null));
+      req.end();
+    });
+
+    if (!posResponse || !posResponse.position) {
+      return { error: 'Position unavailable' };
+    }
+
+    const ownLat = posResponse.position?.value?.latitude || 0;
+    const ownLon = posResponse.position?.value?.longitude || 0;
+    const sog = (posResponse.speedOverGround?.value || 0) / 0.51444;
+    const vmg = (posResponse.speedMadeGood?.value || 0) / 0.51444;
+    const markLat = posResponse.courseRhumbline?.nextPoint?.value?.position?.latitude || ownLat;
+    const markLon = posResponse.courseRhumbline?.nextPoint?.value?.position?.longitude || ownLon;
+    const markName = posResponse.courseRhumbline?.nextPoint?.value?.position?.name || 'Next Mark';
+
+    const R = 3440.065;
+    const dLat = (markLat - ownLat) * Math.PI / 180;
+    const dLon = (markLon - ownLon) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos(ownLat * Math.PI / 180) * Math.cos(markLat * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
+    const c = 2 * Math.asin(Math.sqrt(a));
+    const distanceNm = R * c;
+
+    const etaHours = sog > 0 ? distanceNm / sog : 0;
+    const etaMinutes = Math.round((etaHours % 1) * 60);
+    const etaHoursInt = Math.floor(etaHours);
+
+    const now = new Date();
+    const eta = new Date(now.getTime() + etaHours * 3600000);
+    const etaLocalTime = eta.toLocaleString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'America/New_York' });
+
+    return {
+      mark_name: markName,
+      distance_nm: parseFloat(distanceNm.toFixed(2)),
+      sog_kts: parseFloat(sog.toFixed(1)),
+      vmg_kts: parseFloat(vmg.toFixed(1)),
+      eta_hours: etaHoursInt,
+      eta_minutes: etaMinutes,
+      eta_local_time: etaLocalTime,
+      note: `${markName} in ${etaHoursInt}h ${etaMinutes}min at current SOG of ${sog.toFixed(1)} kts`
+    };
+  } catch (err) {
+    return { error: 'ETA calculation failed' };
+  }
 }
 
 /**
