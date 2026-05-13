@@ -44,6 +44,19 @@ cp .env.example .env.local
 # Edit .env.local with your credentials
 
 # 3. Start services
+
+### Docker Volumes (Required Before First Start)
+
+Create external volumes before running docker compose:
+
+```bash
+docker volume create influxdb-data
+docker volume create grafana-data
+```
+
+Then start services:
+
+```bash
 docker compose up -d influxdb grafana
 
 # 4. Start Signal K (if native install)
