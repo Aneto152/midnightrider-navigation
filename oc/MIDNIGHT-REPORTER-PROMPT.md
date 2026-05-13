@@ -78,3 +78,19 @@ Block Island est à 41 milles. Le courant de marée descendante les ralentit lé
 20. get_noaa_conditions_summary → synthèse buoys + marée + état de mer optimal heading
 
 **Total MCP tools available: 20+ across 7 servers**
+
+
+## Competitor Tracking — AIS Integration (competitor-server.js)
+
+**5 Tools:**
+- get_competitor_fleet(max_distance) — all tracked boats sorted by distance
+- get_nearest_competitor() — closest boat + gaining/losing + tactical note
+- get_fleet_pressure() — port/starboard distribution, rules analysis
+- get_competitor_trend(mmsi, minutes) — distance trend over time
+- get_fleet_summary() — narrative fleet overview for reports
+
+**Usage in Reports:**
+- "Lucky (Juan K 88) remains 0.8nm to our starboard bow, gaining slowly" (get_nearest_competitor)
+- "Fleet pressure favors starboard tack — 3 boats to stbd, 2 to port" (get_fleet_pressure)
+- "ARMA (GP42) and Kent Racing (Class 40) within 3nm" (get_competitor_fleet)
+- "Nine boats tracked now via AIS — Midnight Rider system live" (get_fleet_summary)

@@ -1,19 +1,20 @@
 {
-  "task": "MCP Phase 1 COMPLETE \u2014 5 new tools + Midnight Reporter update",
-  "date": "2026-05-13T18:44:56.697968",
+  "task": "mcp/competitor-server.js created \u2014 AIS fleet tracking 5 tools",
+  "date": "2026-05-13T18:47:25.746490",
   "status": "SUCCESS",
-  "phase_1_completion": {
-    "prompt_1_3": "\u2705 imu-server.js: 4 tools (sea_state, motion_snapshot, heel_trend, accel_peaks)",
-    "prompt_2_3": "\u2705 racing-server.js: +4 tools (wind_history, gnss_quality, rot, perf_trend)",
-    "prompt_3_3": "\u2705 race-server.js: +3 tools (xte, race_events, mark_eta)"
-  },
   "steps_completed": [
-    "race-server.js: 3 tools implemented (XTE, events, mark ETA)",
-    "buoy-server.js: 2 tools implemented (tidal_current, conditions_summary)",
-    "MIDNIGHT-REPORTER-PROMPT.md: 11 new tools added to tool list",
-    "All MCP servers syntax verified with node --check",
-    "Tool sequence documented for reporter integration"
+    "competitor-server.js: 5 tools (412 lines)",
+    "get_competitor_fleet: all AIS targets sorted by distance",
+    "get_nearest_competitor: closest boat + gaining/losing analysis",
+    "get_fleet_pressure: port/stbd distribution + rights",
+    "get_competitor_trend: 15min distance history per MMSI",
+    "get_fleet_summary: narrative for Midnight Reporter",
+    "Graceful fallback when AIS not connected",
+    "Reads competitors.json (69 boats) for metadata",
+    "InfluxDB queries on competitor_tracking measurement",
+    "Syntax verified with node --check"
   ],
+  "errors": [],
   "mcp_servers_now": {
     "astronomical": 4,
     "buoy": 5,
@@ -21,26 +22,17 @@
     "racing": 7,
     "race": 6,
     "weather": 2,
-    "imu": 4
+    "imu": 4,
+    "competitor": 5
   },
-  "total_tools": 30,
-  "total_servers": 7,
-  "midnight_reporter_status": "FULLY EQUIPPED \u2014 20+ MCP tools available",
-  "errors": [],
+  "total_mcp_tools": 35,
+  "total_mcp_servers": 8,
   "services_status": {
     "signalk": "not touched",
     "influxdb": "not touched",
-    "mcp": "Phase 1 complete \u2014 7 servers with 30+ tools"
+    "mcp": "8 servers now, competitor-server on port 3006"
   },
-  "syntax_checks": {
-    "race-server.js": "PASS",
-    "buoy-server.js": "PASS"
-  },
+  "midnight_reporter_status": "FULLY EQUIPPED \u2014 competitor tracking integrated",
   "dust_readable": true,
-  "next_steps": [
-    "Phase 2: competitor-server.js (AIS integration)",
-    "Phase 2: electrical-server.js (SOK BMS)",
-    "Grafana dashboard deployment (May 18)",
-    "Field test May 19, Race day May 22"
-  ]
+  "next_recommended": "Phase 2: electrical-server.js (SOK BMS) + test all 8 servers"
 }

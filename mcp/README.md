@@ -428,3 +428,11 @@ MIT
 **Tools:** get_sea_state, get_motion_snapshot, get_heel_trend, get_acceleration_peaks
 
 Exposes WIT WT901BLECL motion data and Wave Analyzer metrics.
+
+## 8. competitor-server.js — AIS Fleet Tracking
+**Port:** 3006
+**Source:** InfluxDB competitor_tracking measurement + regatta/competitors.json
+**Tools:** get_competitor_fleet, get_nearest_competitor, get_fleet_pressure, get_competitor_trend, get_fleet_summary
+**Status:** Production-ready, graceful fallback when AIS unavailable
+
+Tracks nearby competitors via AIS. Provides tactical information for racing decisions.
