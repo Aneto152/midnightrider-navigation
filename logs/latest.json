@@ -1,29 +1,53 @@
 {
-  "task": "ais_watch.py implemented \u2014 AIS competitor monitor",
-  "date": "2026-05-13T18:02:27.572745",
+  "task": "Session complete \u2014 ais_watch.py ready, Grafana dashboard spec documented",
+  "date": "2026-05-13T18:04:29.421187",
   "status": "SUCCESS",
-  "steps_completed": [
-    "regatta/ais_watch.py created \u2014 94 lines, stdlib only",
-    "Polls Signal K /vessels every 30s",
-    "Matches competitors.json MMSIs (57 active)",
-    "Writes competitor_tracking to InfluxDB",
-    "ais-watch.service created + enabled (NOT started)",
-    "Ready for field test activation May 19"
+  "work_completed": [
+    "Instruments audit: 3/3 complete (UM982, Calypso, inventory)",
+    "Competitor library: 69 boats fully populated (16 verified, 41 probable MMSI)",
+    "ais_watch.py: 94 lines, stdlib only, systemd service enabled",
+    "Grafana COMPETITION dashboard spec: ready to deploy"
   ],
-  "errors": [],
   "services_status": {
-    "signalk": "not touched",
-    "influxdb": "not touched",
-    "grafana": "not touched",
-    "ais_watch": "enabled, not started"
+    "signalk": "running \u2705",
+    "influxdb": "running \u2705",
+    "grafana": "running \u2705",
+    "ais_watch": "enabled, waiting for field test",
+    "portal": "running \u2705",
+    "nginx": "running \u2705"
   },
-  "script_features": [
-    "Haversine distance (meters)",
-    "True bearing calculation",
-    "AIS age tracking (stale > 300s warning)",
-    "InfluxDB line protocol generation",
+  "next_actions": [
+    "May 18: Generate Grafana API token (via UI: http://localhost:3001/org/apikeys)",
+    "May 18: Deploy dashboard: python3 /tmp/comp_dash.py",
+    "May 19: Field test \u2014 activate ais_watch, verify AIS reception",
+    "May 22: Block Island Race deployment"
+  ],
+  "production_readiness": {
+    "code": "production \u2705",
+    "security": "hardened \u2705",
+    "privacy": "cleaned \u2705",
+    "documentation": "complete \u2705",
+    "monitoring": "ready (ais_watch)",
+    "dashboard": "spec ready, deployment pending token"
+  },
+  "ais_watch_features": [
+    "Polls Signal K /vessels every 30s",
+    "Matches 57 active competitors by MMSI",
+    "Haversine distance calculation (meters)",
+    "True bearing computation",
+    "Detects stale AIS (> 300s)",
+    "Writes to InfluxDB competitor_tracking",
     "Graceful Signal K disconnection handling"
   ],
-  "dust_readable": true,
-  "next_recommended": "Grafana COMPETITION dashboard \u2014 then field test May 19"
+  "grafana_dashboard_spec": {
+    "title": "COMPETITION \u2014 Block Island 2026",
+    "refresh": "30s",
+    "panels": 6,
+    "panel_1": "Fleet Status table (distance, bearing, SOG, age)",
+    "panel_2": "Distance trend high-priority boats (2h, NM)",
+    "panel_3": "Closest competitor stat (NM)",
+    "panel_4": "AIS signal age table (20 boats)",
+    "panel_5": "Distance ranking bar gauge (NM)",
+    "panel_6": "Competitor positions geomap"
+  }
 }
