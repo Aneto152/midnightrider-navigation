@@ -95,7 +95,7 @@ AI Coaching (Claude MCPs)
 | Plugin | Source | Output | Frequency | Status |
 |--------|--------|--------|-----------|--------|
 | **signalk-wit-imu-ble** v2.2 | WIT IMU (BLE) | navigation.attitude.{roll, pitch, yaw}, navigation.acceleration.{x, y, z}, navigation.rateOfTurn | 30+ Hz | ✅ LIVE |
-| **signalk-um982-gnss** v2.0 | UM982 (UART) | navigation.position, navigation.headingTrue, navigation.speedOverGround, navigation.courseOverGround | 1 Hz | ✅ LIVE |
+| **signalk-um982-proprietary** v2.0 | UM982 (UART) | navigation.position, navigation.headingTrue, navigation.speedOverGround, navigation.courseOverGround | 1 Hz | ✅ LIVE |
 | **signalk-wave-analyzer** v1.1 | WIT accel (derived) | environment.water.waves.{significantWaveHeight, period, seaState, accelRms} | Every 5s | ✅ LIVE |
 | **signalk-sails-management-v2** | performance data (derived) | performance.sails.{jibTrimRecommendation, mainTrimRecommendation, currentTrim} | Real-time | ✅ LIVE |
 | **signalk-to-influxdb2** | All Signal K paths | InfluxDB bucket: midnight_rider | 1s | ✅ LIVE |
@@ -236,7 +236,7 @@ Signal K Hub → InfluxDB Cloud → Grafana Cloud
 ### Real-Time (Every Second)
 
 1. **GPS UM982** sends position + true heading (1 Hz)
-   → Signal K plugin (um982-gnss)
+   → Signal K plugin (um982-proprietary)
    → navigation.position, navigation.headingTrue
 
 2. **WIT IMU** sends acceleration + orientation (30+ Hz)
@@ -283,7 +283,7 @@ Signal K Hub → InfluxDB Cloud → Grafana Cloud
 ├─ plugin-config-data/
 │  ├─ signalk-wave-analyzer.json
 │  ├─ signalk-wit-imu-ble.json
-│  ├─ signalk-um982-gnss.json
+│  ├─ signalk-um982-proprietary.json
 │  ├─ signalk-to-influxdb2.json
 │  └─ signalk-sails-management-v2.json
 ├─ node_modules/

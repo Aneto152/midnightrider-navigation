@@ -139,3 +139,16 @@ candump can0  # (requires CANdump tool + SocketCAN)
 **STATUS:** ✅ Operational  
 **Last Updated:** 2026-04-25  
 **Critical for Race:** YES (essential bridge)
+
+
+---
+
+## Signal K Source Reference
+
+| Property | Value |
+|----------|-------|
+| Signal K source name | N/A — transparent bridge |
+| Plugin / script | signalk-to-nmea2000 |
+| Physical connection | USB ↔ NMEA 2000 (Micro-C bus) |
+
+> Acts as bidirectional bridge only — no Signal K paths of its own.

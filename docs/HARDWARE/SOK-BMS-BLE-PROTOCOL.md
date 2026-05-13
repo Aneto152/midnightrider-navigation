@@ -327,3 +327,16 @@ class SOK_BMS:
 **Documentation créée:** Avril 2026  
 **Statut:** Référence pour intégration future  
 **Prochain step:** Intégration quand batterie à bord (May 2026)
+
+
+---
+
+## Signal K Source Reference
+
+| Property | Value |
+|----------|-------|
+| Signal K source name | sok_bms (direct InfluxDB — no Signal K source) |
+| Plugin / script | sok_bms_reader.py (custom script) |
+| Physical connection | Bluetooth LE |
+
+> Bypasses Signal K. Writes directly to InfluxDB measurement sok_bms in native units. Refresh: 0.2 Hz (1/5s BLE limitation).

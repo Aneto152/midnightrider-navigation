@@ -1,14 +1,15 @@
 {
-  "task": "Instruments audit: critical doc fixes (1/3)",
-  "date": "2026-05-13T16:55:50.747501",
+  "task": "Instruments audit (2/3): Grafana + sources + regressions fixed",
+  "date": "2026-05-13T17:00:48.195296",
   "status": "SUCCESS",
   "steps_completed": [
-    "UM982 datasheet: headingTrue=radians (SI), SOG=m/s, COG\u2192CourseOverGroundTrue fixed",
-    "Calypso datasheet: directionApparent\u2192angleApparent + status corrected to \u23f3 not connected",
-    "Calypso datasheet: B&G WS320 primary note already present",
-    "DATA-SCHEMA: SOK BMS frequency 1Hz \u2192 0.2Hz (BLE limit)",
-    "SOK BMS paths harmonized: electrical.batteries.house (Signal K convention)",
-    "ARCHITECTURE: YDNU-02 USB/NMEA2000 + SOK BMS TIER2 + B&G WS320 added"
+    "REGRESSION FIX: UM982 frequency restored to 1 Hz (was wrongly 0.2 Hz)",
+    "REGRESSION FIX: UM982 headingTrue already radians (verified)",
+    "SOURCE NAMES: um982_gnss + um982_primary \u2192 um982-proprietary (9 occurrences)",
+    "PLUGIN NAME: signalk-parser-nmea0183 \u2192 signalk-um982-proprietary",
+    "GRAFANA-UNIT-CONVERSIONS: rateOfTurn + cpuTemp + SOK BMS + SOC + aggregateWindow added",
+    "All 7 hardware datasheets: Signal K Source Reference section added",
+    "DATA-SCHEMA: Wave Analyzer 3 paths added"
   ],
   "errors": [],
   "services_status": {
@@ -18,11 +19,14 @@
     "regatta": "not touched"
   },
   "dust_readable": true,
-  "ground_truth_findings": {
-    "um982_plugin": "signalk-um982-proprietary",
-    "um982_source": "um982-proprietary (proprietary #HEADINGA sentences)",
-    "sok_bms_path": "electrical.batteries.house (verified in DATA-SCHEMA)",
-    "calypso_status": "Not connected \u2014 optional sensor (B&G WS320 primary)"
+  "source_names_canonical": {
+    "um982": "um982-proprietary",
+    "wit_imu": "wit_hull",
+    "calypso": "calypso_ble (inactive)",
+    "vulcan": "vulcan_internal",
+    "ws320": "nmea2000_ws320",
+    "rpi4": "signalk-system-stats",
+    "sok_bms": "direct InfluxDB (no Signal K)"
   },
-  "next_recommended": "Instruments audit (2/3): GRAFANA-UNIT-CONVERSIONS + source names"
+  "next_recommended": "Instruments audit (3/3): architecture cleanup + inventory file"
 }

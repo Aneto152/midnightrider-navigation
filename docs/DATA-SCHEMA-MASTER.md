@@ -71,7 +71,7 @@ Tous les instruments ci-dessous transitent par ce bus :
 
 | Instrument | Protocole | Plugin Signal K | Statut |
 |---|---|---|---|
-| UM982 NANO-HED10L | NMEA 0183 / USB | signalk-parser-nmea0183 | ✅ Actif |
+| UM982 NANO-HED10L | NMEA 0183 / USB | signalk-um982-proprietary | ✅ Actif |
 | WIT WT901BLECL IMU | BLE JSON | bleak_wit.py | ✅ Actif |
 | Calypso ULTRASONIC | BLE | signalk-calypso (prévu) | ⏳ Non connecté |
 | Système RPi 4 | sysfs / proc | signalk-system-stats | ✅ Actif |
@@ -84,7 +84,7 @@ Tous les instruments ci-dessous transitent par ce bus :
 
 | # | Instrument | Type | Protocole | Fréquence | Mesures principales | Statut |
 |---|---|---|---|---|---|---|
-| 1 | UM982 NANO-HED10L | GNSS dual-antenna | NMEA / USB | 0.2 Hz (1/5s — BLE battery limit) | Position, SOG, COG, Heading | ✅ Actif |
+| 1 | UM982 NANO-HED10L | GNSS dual-antenna | NMEA / USB | 1 Hz | Position, SOG, COG, Heading | ✅ Actif |
 | 2 | WIT WT901BLECL IMU | Accéléromètre/gyro | BLE JSON | 30 Hz | Roll, pitch, yaw, accél, temp | ✅ Actif |
 | 3 | B&G WS320 | Anémomètre mécanique | NMEA 2000 | 1 Hz | TWS, TWD, AWA, AWS | ⏳ Non connecté |
 | 4 | Système RPi 4 | CPU, mémoire, temp | Signal K internal | 5 s | CPU temp, load, storage | ✅ Actif |
@@ -115,9 +115,9 @@ Aucune donnée n'est perdue. La fusion ou la priorité est appliquée à la couc
 |---|---|---|---|---|
 | Vent (TWS/TWD) | B&G WS320 (NMEA 2000), Calypso (BLE) | environment.wind.* | nmea2000_ws320, calypso_ble | WS320 prioritaire (mât, plus précis en vitesse) |
 | Attitude (roll/pitch/yaw) | WIT WT901BLECL (BLE, hull), Calypso (BLE, masthead) | navigation.attitude.* | wit_hull, calypso_masthead | WIT prioritaire (30 Hz vs 1 Hz Calypso) |
-| Heading | UM982 (GNSS dual-ant), Calypso (masthead) | navigation.headingTrue | um982_gnss, calypso_masthead | UM982 prioritaire (RTK Float, précis) |
-| Position GPS | UM982 (principal), B&G Vulcan (secondaire) | navigation.position | um982_primary, vulcan_internal | UM982 prioritaire (dual-antenna, RTK) |
-| SOG / COG | UM982 (principal), B&G Vulcan (secondaire) | navigation.speedOverGround, navigation.courseOverGroundTrue | um982_primary, vulcan_internal | UM982 prioritaire |
+| Heading | UM982 (GNSS dual-ant), Calypso (masthead) | navigation.headingTrue | um982-proprietary, calypso_masthead | UM982 prioritaire (RTK Float, précis) |
+| Position GPS | UM982 (principal), B&G Vulcan (secondaire) | navigation.position | um982-proprietary, vulcan_internal | UM982 prioritaire (dual-antenna, RTK) |
+| SOG / COG | UM982 (principal), B&G Vulcan (secondaire) | navigation.speedOverGround, navigation.courseOverGroundTrue | um982-proprietary, vulcan_internal | UM982 prioritaire |
 | Température de l'air | Calypso (masthead), NOAA API (externe) | environment.outside.temperature | calypso_masthead, noaa_api | Calypso si connecté, NOAA sinon |
 
 ### Configuration Signal K requise
@@ -395,7 +395,7 @@ Signal K :3000
 
 | Sentence NMEA 0183 | Données | Source Signal K | Fréquence |
 |---|---|---|---|
-| $GPGGA / $GPRMC | Position, SOG, COG | UM982 (primary) | 0.2 Hz (1/5s — BLE battery limit) |
+| $GPGGA / $GPRMC | Position, SOG, COG | UM982 (primary) | 1 Hz |
 | $HEHDT | Heading true | UM982 | 1 Hz |
 | $WIMWV | Vent apparent (AWA, AWS) | B&G WS320 | 1 Hz (dès connexion) |
 | $WIMWD | Vent vrai (TWD, TWS) | B&G WS320 | 1 Hz (dès connexion) |

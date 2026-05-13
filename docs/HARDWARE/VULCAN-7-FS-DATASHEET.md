@@ -139,3 +139,16 @@ Midnight Rider Data → Signal K Hub
 **STATUS:** ✅ Installed & Operational  
 **Last Updated:** 2026-04-25  
 **Next Review:** Post-race (May 22)
+
+
+---
+
+## Signal K Source Reference
+
+| Property | Value |
+|----------|-------|
+| Signal K source name | vulcan_internal |
+| Plugin / script | signalk-to-nmea2000 (secondary) |
+| Physical connection | NMEA 2000 via YDNU-02 |
+
+> Secondary redundant source for position, SOG, COG.

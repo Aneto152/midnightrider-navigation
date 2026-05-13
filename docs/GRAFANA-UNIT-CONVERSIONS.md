@@ -309,3 +309,100 @@ After each conversion:
 
 Date: 2026-04-27 22:55 EDT
 Ready for PHASE 3 (Grafana panel updates)
+
+---
+
+## 5. Rate of Turn — rad/s → °/s
+
+Signal K path: `navigation.rateOfTurn`
+Signal K unit: rad/s (SI)
+Display unit: °/s
+
+```flux
+from(bucket: "midnight_rider")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r["_measurement"] == "navigation.rateOfTurn")
+  |> filter(fn: (r) => r["_field"] == "value")
+  |> aggregateWindow(every: 5s, fn: mean, createEmpty: false)
+  |> map(fn: (r) => ({r with _value: r._value * 57.2958}))
+```
+
+---
+
+## 6. CPU Temperature — K → °C (Raspberry Pi system stats)
+
+Signal K path: `environment.system.cpuTemperature`
+Signal K unit: Kelvin (K)
+Display unit: °C
+Source: `signalk-system-stats`
+
+```flux
+from(bucket: "midnight_rider")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r["_measurement"] == "environment.system.cpuTemperature")
+  |> filter(fn: (r) => r["_field"] == "value")
+  |> aggregateWindow(every: 30s, fn: mean, createEmpty: false)
+  |> map(fn: (r) => ({r with _value: r._value - 273.15}))
+```
+
+---
+
+## 7. SOK BMS Battery Data (direct InfluxDB — no SI conversion)
+
+> The SOK BMS reader writes directly to InfluxDB measurement sok_bms.
+> Data is already in display units — no conversion needed in Grafana.
+> Source: signalk-um982-proprietary is NOT involved — SOK bypasses Signal K.
+> Refresh: 0.2 Hz (1 read per 5s — BLE battery hardware limitation).
+
+| Field | Unit stored | Display | Grafana unit |
+|-------|------------|---------|--------------|
+| voltage_v | V | V | none |
+| current_a | A | A | none |
+| soc_pct | % | % | none |
+| temp_bms_c | °C | °C | none |
+| temp_mos_c | °C | °C | none |
+| capacity_ah | Ah | Ah | none |
+
+```flux
+// Battery SOC example
+from(bucket: "midnight_rider")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r["_measurement"] == "sok_bms")
+  |> filter(fn: (r) => r["_field"] == "soc_pct")
+  |> aggregateWindow(every: 30s, fn: mean, createEmpty: false)
+```
+
+---
+
+## 8. State of Charge — ratio 0–1 → % (when via Signal K)
+
+Signal K path: `electrical.batteries.house.stateOfCharge`
+Signal K unit: ratio 0–1 (SI)
+Display unit: %
+
+```flux
+from(bucket: "midnight_rider")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r["_measurement"] == "electrical.batteries.house.stateOfCharge")
+  |> filter(fn: (r) => r["_field"] == "value")
+  |> aggregateWindow(every: 30s, fn: mean, createEmpty: false)
+  |> map(fn: (r) => ({r with _value: r._value * 100.0}))
+```
+
+---
+
+## Standard aggregateWindow Reference
+
+| Dashboard | Auto-refresh | Recommended aggregateWindow |
+|-----------|-------------|----------------------------|
+| COCKPIT | 5s | every: 5s, fn: mean |
+| PERFORMANCE | 5s | every: 5s, fn: mean |
+| RACE | 5s | every: 5s, fn: mean |
+| WIND & CURRENT | 10s | every: 10s, fn: mean |
+| ALERTS | 10s | every: 10s, fn: last |
+| ENVIRONMENT | 30s | every: 30s, fn: mean |
+| ELECTRICAL | 30s | every: 30s, fn: mean |
+| COMPETITIVE | 30s | every: 30s, fn: mean |
+| CREW | 30s | every: 30s, fn: last |
+
+> Always use createEmpty: false to avoid null gaps in charts.

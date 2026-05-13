@@ -183,3 +183,16 @@ Expected: Hs shows corrected value (NO 14% error)
 **STATUS:** ✅ Operational (Charging complete → Ready)  
 **Last Updated:** 2026-04-25  
 **Next Review:** Pre-race calibration (May 19)
+
+
+---
+
+## Signal K Source Reference
+
+| Property | Value |
+|----------|-------|
+| Signal K source name | wit_hull |
+| Plugin / script | signalk-wit-imu-ble (bleak_wit.py) |
+| Physical connection | Bluetooth LE |
+
+> Mounted on hull. 30 Hz BLE polling.

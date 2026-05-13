@@ -107,3 +107,16 @@ environment.outside.temperature (K, converted from °C)
 **STATUS:** ⏳ Optional for race (works, minor bugs don't affect racing)  
 **Last Updated:** 2026-04-25  
 **Post-Race Action:** Rewrite script with fixes
+
+
+---
+
+## Signal K Source Reference
+
+| Property | Value |
+|----------|-------|
+| Signal K source name | calypso_ble (when active) |
+| Plugin / script | signalk-calypso-ultrasonic (optional) |
+| Physical connection | Bluetooth LE (not active — B&G WS320 is primary) |
+
+> Primary wind source is B&G WS320 (nmea2000_ws320 via YDNU-02).

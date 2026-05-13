@@ -56,7 +56,7 @@ $GNVTG,course_true,T,course_mag,M,speed_kts,N,speed_kmh,K*checksum
 
 ### Signal K Integration
 
-**Plugin:** `signalk-um982-gnss` (v2.0)
+**Plugin:** `signalk-um982-proprietary` (v2.0)
 
 **Paths Published:**
 ```
@@ -123,3 +123,16 @@ curl http://localhost:3000/signalk/v1/api/vessels/self/navigation/
 **STATUS:** ✅ Operational  
 **Last Updated:** 2026-04-25  
 **Next Action:** Verify antenna offset (ACTION-ITEMS)
+
+
+---
+
+## Signal K Source Reference
+
+| Property | Value |
+|----------|-------|
+| Signal K source name | um982-proprietary |
+| Plugin / script | signalk-um982-proprietary |
+| Physical connection | USB serial (/dev/ttyUSB0) |
+
+> Uses proprietary #HEADINGA sentences for dual-antenna heading.

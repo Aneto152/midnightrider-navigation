@@ -134,7 +134,7 @@ Portal Web
    └─ Fournit: attitude.roll, .pitch, .yaw + acceleration.x/y/z
    └─ Débit: 600 records/min
 
-✅ signalk-um982-gnss
+✅ signalk-um982-proprietary
    └─ Fournit: speedOverGround, courseOverGroundTrue, gnss.satellites
    └─ Débit: 60 records/min
 
@@ -159,7 +159,7 @@ environment.system.cpuTemperature:     359 records ✅
 ### Timestamps Vérifiés
 ```
 Dernière donnée reçue: 2026-04-27T19:44:39.079Z (en direct)
-Source: signalk-um982-gnss.UM982-NMEA
+Source: signalk-um982-proprietary.UM982-NMEA
 Valeur: navigation.speedOverGround = 0.159 kt
 ```
 

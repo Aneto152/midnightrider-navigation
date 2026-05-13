@@ -171,3 +171,16 @@
 **STATUS:** ✅ Operational  
 **Last Updated:** 2026-04-25  
 **Critical for Race:** YES (host for all software)
+
+
+---
+
+## Signal K Source Reference
+
+| Property | Value |
+|----------|-------|
+| Signal K source name | signalk-system-stats |
+| Plugin / script | signalk-system-stats |
+| Physical connection | Internal RPi system |
+
+> Reports cpuTemperature (K), CPU load, RAM, disk usage.
