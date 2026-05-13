@@ -142,7 +142,7 @@ cat /dev/ttyUSB0 | grep "HDT"
 **Diagnosis:**
 ```bash
 # Check BLE connection
-bluetoothctl info E9:10:DB:8B:CE:C7
+bluetoothctl info XX:XX:XX:XX:XX:XX
 
 # Check Python driver running
 ps aux | grep bleak_wit.py
@@ -154,7 +154,7 @@ curl -s http://localhost:3000/signalk/v1/api/vessels/self/navigation/attitude
 **Fixes:**
 - Recharge battery (may be depleted: 8h runtime)
 - Power-cycle WIT: turn off 10 sec, back on
-- Re-pair BLE: `bluetoothctl remove E9:10:DB:8B:CE:C7; bluetoothctl pair ...`
+- Re-pair BLE: `bluetoothctl remove XX:XX:XX:XX:XX:XX; bluetoothctl pair ...`
 - Restart Python driver: check systemd service or manual run
 - Move closer to RPi (range ~10m, interference may reduce it)
 

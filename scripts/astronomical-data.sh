@@ -17,8 +17,8 @@ INFLUX_ORG="MidnightRider"
 INFLUX_BUCKET="${INFLUX_BUCKET:-midnight_rider}"
 
 # Default coordinates (Stamford Harbor, CT - Long Island Sound)
-LAT=${LAT:-41.0534}
-LON=${LON:--73.5387}
+LAT=${LAT:-${BOAT_LAT}}
+LON=${LON:-${BOAT_LON}}
 
 # NOAA tides station (Stamford Harbor, CT)
 NOAA_STATION=${NOAA_STATION:-8467150}
@@ -33,8 +33,8 @@ cd "$(dirname "$0")"
 ASTRO_SCRIPT=$(cat << 'NEOF'
 const SunCalc = require('./node_modules/suncalc');
 
-const lat = parseFloat(process.env.LAT || 41.0534);
-const lon = parseFloat(process.env.LON || -73.5387);
+const lat = parseFloat(process.env.LAT || ${BOAT_LAT});
+const lon = parseFloat(process.env.LON || ${BOAT_LON});
 const now = new Date();
 
 try {

@@ -62,7 +62,7 @@ Claude: "What's our heading?"
 
 ```
 Claude: "Where are we?"
-→ Response: 41.0534°N, 73.5387°W (Stamford Harbor)
+→ Response: ${BOAT_LAT}°N, ${BOAT_LON}°W (Stamford Harbor)
 ```
 
 #### get_sog

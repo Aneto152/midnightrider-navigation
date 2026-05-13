@@ -37,9 +37,9 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-    - LAT=41.0534
-    - LON=-73.5387
-    - NOAA_STATION=8467150
+    - LAT=${BOAT_LAT}
+    - LON=${BOAT_LON}
+    - NOAA_STATION=${NOAA_STATION}
     - INFLUX_URL=http://localhost:8086
     - INFLUX_ORG=MidnightRider
     - INFLUX_BUCKET=midnight_rider

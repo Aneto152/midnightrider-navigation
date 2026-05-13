@@ -212,7 +212,7 @@ bluetoothctl scan on
 
 **Important:** La batterie doit être hors "storage mode" (sinon 0V aux bornes). Brancher un chargeur LiFePO4 brièvement pour activer le BMS.
 
-**Format MAC attendu:** `XX:XX:XX:XX:XX:XX` (ex: `4C:65:A8:D2:7C:A2`)
+**Format MAC attendu:** `XX:XX:XX:XX:XX:XX` (ex: `XX:XX:XX:XX:XX:XX`)
 
 ---
 

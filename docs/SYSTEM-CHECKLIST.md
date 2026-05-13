@@ -18,7 +18,7 @@
 - [ ] Record exact model → Update ARCHITECTURE-SYSTEM-MASTER
 
 **WIT IMU WT901BLECL**
-- [ ] Verify Bluetooth MAC: E9:10:DB:8B:CE:C7
+- [ ] Verify Bluetooth MAC: XX:XX:XX:XX:XX:XX
 - [ ] Test BLE connection: `sudo hcitool scan`
 - [ ] Check bleak driver running: `ps aux | grep bleak`
 - [ ] Verify 30+ Hz data rate

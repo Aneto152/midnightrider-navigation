@@ -48,7 +48,7 @@ File: `~/.signalk/plugin-config-data/signalk-astronomical.json`
 {
   "enabled": true,
   "debug": false,
-  "noaaStation": "8518750"
+  "noaaStation": "${NOAA_STATION}"
 }
 ```
 
@@ -200,14 +200,14 @@ time: 2026-04-20T00:00:00Z
 1. Go to: https://tides.noaa.gov/stations.html
 2. Search for your port (e.g., "New York Harbor")
 3. Find the station with data you want
-4. Copy the station ID (e.g., 8518750 for The Battery, NY)
+4. Copy the station ID (e.g., ${NOAA_STATION} for The Battery, NY)
 5. Update `noaaStation` in plugin config
 
 ### Common US Stations
 
 - **Long Island Sound (Stamford, CT)**: 8467150 ← **Currently configured**
 - **Long Island Sound (New Haven, CT)**: 8465705
-- **New York Harbor (The Battery)**: 8518750
+- **New York Harbor (The Battery)**: ${NOAA_STATION}
 - **Boston Harbor**: 8443970
 - **Charleston Harbor**: 8665530
 - **San Francisco Bay**: 9414290

@@ -19,7 +19,7 @@
 **Credentials:**
 - User: `admin`
 - Password: Stored in `.env.local` (not in Git)
-- Location: `/home/aneto/.openclaw/workspace/.env.local` (gitignored)
+- Location: `~/midnightrider-navigation/.env.local` (gitignored)
 
 ---
 
@@ -116,7 +116,7 @@ python3 import-dashboards-v2.py
 
 1. **On RPi, in workspace:**
    ```bash
-   cd /home/aneto/.openclaw/workspace
+   cd ~/midnightrider-navigation
    
    # Verify .env.local exists (should be there)
    cat .env.local

@@ -329,8 +329,8 @@ INFLUX_BUCKET=signalk
 
 For tides server, set in environment:
 ```
-LAT=41.0534       # Your latitude
-LON=-73.5387      # Your longitude
+LAT=${BOAT_LAT}       # Your latitude
+LON=${BOAT_LON}      # Your longitude
 NOAA_STATION=8467150  # Your NOAA tides station
 ```
 

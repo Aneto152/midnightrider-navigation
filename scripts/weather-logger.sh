@@ -21,8 +21,8 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Configuration
-LAT=${LAT:-41.0534}
-LON=${LON:--73.5387}
+LAT=${LAT:-${BOAT_LAT}}
+LON=${LON:-${BOAT_LON}}
 INFLUX_URL=${INFLUX_URL:-http://localhost:8086}
 INFLUX_TOKEN=${INFLUX_TOKEN:-}
 INFLUX_ORG=${INFLUX_ORG:-MidnightRider}

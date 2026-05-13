@@ -82,7 +82,7 @@ A simple HTML portal that displays all 9 Grafana dashboards in **kiosk mode** wi
 Serve the files via Python's built-in server:
 
 ```bash
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 
 # Start simple HTTP server
 python3 -m http.server 8000
@@ -140,7 +140,7 @@ Add to iPad home screen:
 
 2. **Start HTTP server (if using option A):**
    ```bash
-   cd /home/aneto/.openclaw/workspace
+   cd ~/midnightrider-navigation
    python3 -m http.server 8000 &
    ```
 

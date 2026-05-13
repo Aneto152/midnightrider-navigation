@@ -46,7 +46,7 @@ Default Bucket | `midnight_rider`
 ### Get Token from .env.local
 ```bash
 # On RPi, run:
-grep INFLUX_TOKEN /home/aneto/.openclaw/workspace/.env.local
+grep INFLUX_TOKEN ~/midnightrider-navigation/.env.local
 
 # Output:
 INFLUX_TOKEN="j5zWJmdrK4BoU359...=="
@@ -72,7 +72,7 @@ INFLUX_TOKEN="j5zWJmdrK4BoU359...=="
 
 ### Upload Dashboard Files
 1. Click **Upload JSON file**
-2. Navigate to: `/home/aneto/.openclaw/workspace/grafana-dashboards/`
+2. Navigate to: `~/midnightrider-navigation/grafana-dashboards/`
 3. Select: **01-cockpit.json**
 4. Click **Import**
 
@@ -223,8 +223,8 @@ Should show "active (running)"
 - iPad: http://[RPi-IP]:3001
 
 **Files:**
-- Dashboard JSONs: `/home/aneto/.openclaw/workspace/grafana-dashboards/`
-- Tokens: `/home/aneto/.openclaw/workspace/.env.local` (local only)
+- Dashboard JSONs: `~/midnightrider-navigation/grafana-dashboards/`
+- Tokens: `~/midnightrider-navigation/.env.local` (local only)
 
 ---
 

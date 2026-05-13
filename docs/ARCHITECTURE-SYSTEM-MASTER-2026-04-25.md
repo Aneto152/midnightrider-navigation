@@ -312,7 +312,7 @@ Located: `/docs/MEMORY/`
 ### Complete Dashboard Suite — 8 Dashboards, Ready to Import
 
 **Status:** ✅ Production-ready JSON files  
-**Location:** `/home/aneto/.openclaw/workspace/grafana-dashboards/`
+**Location:** `~/midnightrider-navigation/grafana-dashboards/`
 
 | Dashboard | Purpose | Refresh | Status |
 |-----------|---------|---------|--------|

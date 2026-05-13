@@ -25,7 +25,7 @@
 sudo systemctl status influxdb  # Should show "masked"
 
 # Start the containers
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 docker compose up -d influxdb grafana
 
 # Wait for startup (~10-15 sec)

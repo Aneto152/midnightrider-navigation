@@ -13,7 +13,7 @@
 ```bash
 # Click shortcut on Desktop
 # OR run manually:
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 python3 -m http.server 8888
 # Then open: http://localhost:8888
 ```
@@ -154,7 +154,7 @@ docker compose ps
 **2. Test Portal Locally**
 ```bash
 # Start HTTP server
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 python3 -m http.server 8888
 
 # Test in browser
@@ -289,7 +289,7 @@ Grafana dashboard displays fullscreen
 curl http://localhost:8888
 
 # If not, start manually:
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 python3 -m http.server 8888
 ```
 

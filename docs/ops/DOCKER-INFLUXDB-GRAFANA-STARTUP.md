@@ -9,7 +9,7 @@
 ## QUICK START
 
 ```bash
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 
 # Make sure native InfluxDB is NOT running
 sudo systemctl stop influxdb 2>/dev/null
@@ -152,7 +152,7 @@ sudo systemctl stop influxdb
 sudo systemctl disable influxdb  # (optional: prevent auto-start)
 
 # 3. Load environment variables
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 source .env
 
 # 4. Start containers

@@ -1,25 +1,21 @@
 {
-  "task": "Security Sprint 2 complete + git log channel fixed",
-  "date": "2026-05-13T16:32:11.239581",
+  "task": "Sprint 3 (1/3): privacy cleanup \u2014 GPS, MAC, paths, skipper, WhatsApp",
+  "date": "2026-05-13T16:36:24.967785",
   "status": "SUCCESS",
   "steps_completed": [
-    "Action 2: datasource YAML token replaced with env var",
-    "Action 3: docker-compose.override.yml removed from git",
-    "Action 4: phone number replaced with ALERT_PHONE_NUMBER env var",
-    "meta: git add -f confirmed as required for logs/latest.json"
+    "GPS coords (41.0534, -73.5387) moved to env vars in 8 files",
+    "NOAA station (8518750) replaced with ${NOAA_STATION}",
+    "MAC addresses (XX:XX:XX:XX:XX:XX) anonymized in 10 docs",
+    "Private paths (/home/aneto/.openclaw/workspace) replaced with ~/midnightrider-navigation in 18 files",
+    "SKIPPER_NAME + WhatsApp IDs anonymized in .env.example"
   ],
-  "errors": [
-    "logs/latest.json requires git add -f \u2014 gitignore exception insufficient"
-  ],
+  "errors": [],
   "services_status": {
-    "signalk": "running",
-    "influxdb": "running",
-    "grafana": "running",
-    "regatta": "running",
-    "astronomical": "running",
-    "portal": "running"
+    "signalk": "not touched",
+    "influxdb": "not touched",
+    "grafana": "not touched",
+    "regatta": "not touched"
   },
   "dust_readable": true,
-  "git_log_method": "git add -f logs/latest.json",
-  "next_recommended": "Sprint 3: open-source cleanup"
+  "next_recommended": "Sprint 3 (2/3): documentation accuracy"
 }

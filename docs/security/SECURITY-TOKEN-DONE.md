@@ -35,7 +35,7 @@
 ### Token Security
 - ✅ Old token (compromised): NO LONGER IN GIT
 - ✅ New token: GENERATED (temporary, 43 chars, secure random)
-- ✅ Location: `/home/aneto/.openclaw/workspace/.env` (LOCAL ONLY)
+- ✅ Location: `~/midnightrider-navigation/.env` (LOCAL ONLY)
 - ✅ Gitignore: YES (.env will never be committed)
 
 ### Configuration
@@ -66,11 +66,11 @@ docker exec influxdb influx auth create \
   --description "MidnightRider-$(date +%Y%m%d)"
 
 # 3. Copy the generated token to .env
-# Edit: /home/aneto/.openclaw/workspace/.env
+# Edit: ~/midnightrider-navigation/.env
 # Replace: INFLUX_TOKEN=<old-temp> with INFLUX_TOKEN=<new-real>
 
 # 4. Test the new token
-source /home/aneto/.openclaw/workspace/.env
+source ~/midnightrider-navigation/.env
 curl -H "Authorization: Token $INFLUX_TOKEN" \
   http://localhost:8086/api/v2/buckets
 

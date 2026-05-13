@@ -12,11 +12,11 @@
 
 InfluxDB now runs as a **Docker container**, NOT as a systemd service.
 
-**See:** `/home/aneto/.openclaw/workspace/DOCKER-INFLUXDB-GRAFANA-STARTUP.md`
+**See:** `~/midnightrider-navigation/DOCKER-INFLUXDB-GRAFANA-STARTUP.md`
 
 ### Quick Start
 ```bash
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 
 # Ensure native InfluxDB is masked
 sudo systemctl status influxdb  # Should show "masked"

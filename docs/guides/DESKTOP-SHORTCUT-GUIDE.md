@@ -35,7 +35,7 @@
 **Automatic Installation:**
 
 ```bash
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 bash install-desktop-shortcut.sh
 ```
 
@@ -73,7 +73,7 @@ gio set ~/Desktop/Midnight-Rider-Dashboard.desktop metadata::trusted true
 **Automatic Installation:**
 
 ```bash
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 bash install-macos-shortcut.command
 ```
 

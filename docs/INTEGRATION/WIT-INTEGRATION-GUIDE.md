@@ -8,7 +8,7 @@
 
 ## HARDWARE SETUP
 
-**MAC Address:** E9:10:DB:8B:CE:C7  
+**MAC Address:** XX:XX:XX:XX:XX:XX  
 **Battery:** Should be fully charged (plug in overnight)  
 **Position:** Secure at center of gravity, level when boat is level
 
@@ -26,16 +26,16 @@ bluetoothctl
 scan on
 
 # Wait for WT901BLECL to appear:
-# [NEW] Device E9:10:DB:8B:CE:C7 WT901BLE68
+# [NEW] Device XX:XX:XX:XX:XX:XX WT901BLE68
 
 # Pair
-pair E9:10:DB:8B:CE:C7
+pair XX:XX:XX:XX:XX:XX
 
 # Trust
-trust E9:10:DB:8B:CE:C7
+trust XX:XX:XX:XX:XX:XX
 
 # Connect
-connect E9:10:DB:8B:CE:C7
+connect XX:XX:XX:XX:XX:XX
 
 # Exit
 exit
@@ -44,7 +44,7 @@ exit
 ### Verify Connection
 
 ```bash
-bluetoothctl info E9:10:DB:8B:CE:C7
+bluetoothctl info XX:XX:XX:XX:XX:XX
 # Should show "Connected: yes"
 ```
 
@@ -71,7 +71,7 @@ cat /home/aneto/bleak_wit.py
   "plugins": {
     "signalk-wit-imu-ble": {
       "enabled": true,
-      "macAddress": "E9:10:DB:8B:CE:C7",
+      "macAddress": "XX:XX:XX:XX:XX:XX",
       "updateRate": 30,    // Hz (actually 100 Hz raw, filtered to 30)
       "calibration": {
         "roll_offset": 0.0,

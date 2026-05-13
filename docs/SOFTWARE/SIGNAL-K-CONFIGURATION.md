@@ -36,7 +36,7 @@
     },
     "signalk-wit-imu-ble": {
       "enabled": true,
-      "macAddress": "E9:10:DB:8B:CE:C7"
+      "macAddress": "XX:XX:XX:XX:XX:XX"
     },
     "signalk-to-nmea2000": {
       "enabled": true,

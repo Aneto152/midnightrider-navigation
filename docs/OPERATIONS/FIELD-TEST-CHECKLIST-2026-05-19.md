@@ -29,7 +29,7 @@
 - [ ] Antenna clearance from sails/rigging
 
 **WIT IMU:**
-- [ ] BLE pairing confirmed (MAC: E9:10:DB:8B:CE:C7)
+- [ ] BLE pairing confirmed (MAC: XX:XX:XX:XX:XX:XX)
 - [ ] Battery fully charged (should have been done overnight)
 - [ ] Mounting position stable (no wobble)
 - [ ] Clear line-of-sight to RPi4 (no radio interference)
@@ -69,7 +69,7 @@
 sudo systemctl status influxdb  # Should show "masked"
 
 # Start the containers
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 docker compose up -d influxdb grafana
 
 # Wait for startup (~15 sec)

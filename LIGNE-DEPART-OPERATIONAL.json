@@ -1,0 +1,54 @@
+{
+  "task": "regatta-ligne-depart-ready-for-testing",
+  "date": "2026-05-12T19:49:16.817176",
+  "status": "\u2705 FULLY OPERATIONAL \u2014 READY FOR DATA",
+  "issue_found_and_fixed": {
+    "symptom": "Worker said 'awaiting pin/RC markers' even after marks set",
+    "root_cause": "Regatta server had cached SyntaxError in Docker image",
+    "fix": "Rebuilt Docker image (--build flag)",
+    "verification": "\u2705 Regatta server HTTP 200"
+  },
+  "system_readiness": {
+    "regatta_server": "\u2705 RUNNING (http://localhost:5000)",
+    "start_line_worker": "\u2705 ACTIVE (awaiting PIN/RC coords)",
+    "influxdb": "\u2705 AUTHENTICATED (token valid)",
+    "signal_k_gps": "\u2705 LIVE (40.7628, -73.9884)",
+    "grafana": "\u2705 READY (LIGNE DE D\u00c9PART dashboard prepared)"
+  },
+  "operational_flow": [
+    "1. Denis opens http://localhost:5000",
+    "2. Denis clicks 'Mark PIN'",
+    "3. Server writes lat/lon to InfluxDB with mark=pin tag",
+    "4. Denis clicks 'Mark RC'",
+    "5. Server writes lat/lon to InfluxDB with mark=rc tag",
+    "6. Worker detects coordinates within 1 second",
+    "7. Worker reads boat GPS from Signal K",
+    "8. Worker computes 8 geometry fields",
+    "9. Worker writes to regatta.start_line @ 1 Hz",
+    "10. Grafana receives data automatically",
+    "11. LIGNE DE D\u00c9PART dashboard populates (8 panels)"
+  ],
+  "how_to_use": {
+    "step_1": "Open http://localhost:5000",
+    "step_2": "Click 'Mark PIN' button",
+    "step_3": "Click 'Mark RC' button",
+    "step_4": "Monitor worker: docker logs -f start-line-worker",
+    "step_5": "Hard-refresh Grafana: Ctrl+Shift+R",
+    "step_6": "View LIGNE DE D\u00c9PART section",
+    "step_7": "See all 8 panels with live data"
+  },
+  "expected_output": {
+    "worker_logs": "[worker] \u2705 CLEAR | dist=9.0m | pin=380.2m | rc=290.5m | bias=-2.1\u00b0",
+    "grafana_panels": 8,
+    "update_rate": "1 Hz (1 data point per second)"
+  },
+  "commits_this_session": [
+    "7d0c99f: root cause identified",
+    "d0c5fa5: initial worker",
+    "c364c1f: tag-based query fix",
+    "2421548: token refreshed",
+    "4923220: regatta server rebuild"
+  ],
+  "ready_for_field_test": true,
+  "timeline": "May 19 field test (7 days away)"
+}

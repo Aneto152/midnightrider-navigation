@@ -62,7 +62,7 @@ influx auth create \
 
 ```bash
 # Créer le fichier .env local (NOT in git)
-cat > /home/aneto/.openclaw/workspace/.env << 'EOF'
+cat > ~/midnightrider-navigation/.env << 'EOF'
 INFLUX_TOKEN=<PASTE-NEW-TOKEN-HERE>
 INFLUX_ORG=MidnightRider
 INFLUX_BUCKET=signalk
@@ -88,7 +88,7 @@ ls -la .env
 
 ```bash
 # Source le fichier .env
-source /home/aneto/.openclaw/workspace/.env
+source ~/midnightrider-navigation/.env
 
 # Vérifier
 echo $INFLUX_TOKEN  # Doit afficher le nouveau token
@@ -133,7 +133,7 @@ curl -X GET "http://localhost:8086/api/v2/buckets" \
 Une fois le nouveau token sécurisé LOCALEMENT:
 
 ```bash
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 
 # Vérifier que .env n'est PAS commité
 git status | grep ".env"  # Ne doit rien montrer

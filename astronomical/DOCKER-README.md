@@ -89,8 +89,8 @@ Edit environment variables in docker-compose.yml:
 
 ```yaml
 environment:
-  - LAT=41.0534              # Latitude (Stamford Harbor, CT)
-  - LON=-73.5387             # Longitude
+  - LAT=${BOAT_LAT}              # Latitude (Stamford Harbor, CT)
+  - LON=${BOAT_LON}             # Longitude
   - NOAA_STATION=8467150     # NOAA tides station ID
   - INFLUX_URL=http://localhost:8086
   - INFLUX_TOKEN=...         # InfluxDB token
@@ -111,8 +111,8 @@ astronomical:
   restart: unless-stopped
   network_mode: host
   environment:
-    - LAT=41.0534
-    - LON=-73.5387
+    - LAT=${BOAT_LAT}
+    - LON=${BOAT_LON}
     - NOAA_STATION=8467150
     - INFLUX_URL=http://localhost:8086
     - INFLUX_TOKEN=${INFLUX_TOKEN}
@@ -211,8 +211,8 @@ influx query 'from(bucket:"signalk")
 Edit `docker-compose.yml`:
 ```yaml
 environment:
-  - LAT=41.0534
-  - LON=-73.5387
+  - LAT=${BOAT_LAT}
+  - LON=${BOAT_LON}
 ```
 
 Then redeploy:

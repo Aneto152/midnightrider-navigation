@@ -93,8 +93,8 @@ Environment variables (optional):
 
 ```bash
 # Default coordinates (Stamford Harbor, CT)
-LAT=41.0534
-LON=-73.5387
+LAT=${BOAT_LAT}
+LON=${BOAT_LON}
 
 # NOAA station ID
 NOAA_STATION=8467150

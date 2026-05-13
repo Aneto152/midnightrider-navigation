@@ -268,7 +268,7 @@ Signal K Hub → InfluxDB Cloud → Grafana Cloud
 ## 🗂️ FILE STRUCTURE
 
 ```
-/home/aneto/.openclaw/workspace/
+~/midnightrider-navigation/
 ├─ MEMORY.md (critical lessons learned)
 ├─ ARCHITECTURE-SYSTEM-2026-04-25.md (THIS FILE)
 ├─ VULCAN-SIGNALK-INTEGRATION-2026-04-25.md (N2K config)
@@ -318,7 +318,7 @@ Signal K Hub → InfluxDB Cloud → Grafana Cloud
 
 - [ ] **Hardware Verification**
   - [ ] GPS UM982: Check dmesg + lsusb for exact model
-  - [ ] WIT IMU: Verify Bluetooth MAC (E9:10:DB:8B:CE:C7)
+  - [ ] WIT IMU: Verify Bluetooth MAC (XX:XX:XX:XX:XX:XX)
   - [ ] Calypso UP10: Test BLE connection
   - [ ] YDNU-02: Verify USB + network connectivity
   - [ ] Vulcan 7 FS: Power on, check NMEA 2000 link

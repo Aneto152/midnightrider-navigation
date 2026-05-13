@@ -51,7 +51,7 @@ cat /dev/ttyUSB0 (first 10 lines)
 
 **Checklist to verify:**
 - [ ] GPS UM982 (confirm USB device + serial port)
-- [ ] WIT IMU (confirm Bluetooth MAC: E9:10:DB:8B:CE:C7)
+- [ ] WIT IMU (confirm Bluetooth MAC: XX:XX:XX:XX:XX:XX)
 - [ ] Calypso UP10 (confirm Bluetooth presence if connected)
 - [ ] YDNU-02 (confirm USB + network connectivity)
 - [ ] Signal K running (port 3000 responding)
@@ -63,7 +63,7 @@ cat /dev/ttyUSB0 (first 10 lines)
 ## 🟡 HIGH PRIORITY (Before May 19 Field Test)
 
 ### 3. Create ARCHITECTURE-SYSTEM Living Document
-**File:** `/home/aneto/.openclaw/workspace/ARCHITECTURE-SYSTEM-2026-04-25.md`
+**File:** `~/midnightrider-navigation/ARCHITECTURE-SYSTEM-2026-04-25.md`
 **Purpose:** Single source of truth for all hardware/software/config
 **Status:** DRAFT (Denis started outline, needs completion)
 

@@ -158,7 +158,7 @@ Servers expect these measurements in `midnight_rider` bucket:
 **Action:** Update all 7 servers to use `'midnight_rider'` bucket.
 
 ```bash
-cd /home/aneto/.openclaw/workspace/mcp
+cd ~/midnightrider-navigation/mcp
 for f in *-server.js; do
   sed -i "s/'signalk'/'midnight_rider'/g" "$f"
   echo "Updated: $f"

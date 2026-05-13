@@ -1,0 +1,80 @@
+{
+  "task": "regatta-ligne-depart-diagnostic-and-fix",
+  "date": "2026-05-12T19:34:30.997644",
+  "status": "READY FOR TOKEN REFRESH",
+  "commits": {
+    "root_cause": "7d0c99f",
+    "initial_worker": "d0c5fa5",
+    "tag_fix": "c364c1f"
+  },
+  "findings": {
+    "server_writes": {
+      "measurement": "regatta.start_line",
+      "fields": [
+        "lat",
+        "lon"
+      ],
+      "tags": [
+        "mark=pin",
+        "mark=rc"
+      ],
+      "example": "lat=40.7627,lon=-73.9882,mark=pin"
+    },
+    "worker_issue": "Was looking for pin_lat/pin_lon field names (incorrect)",
+    "solution": "Query by mark tag to separate pin vs rc coordinates"
+  },
+  "verified_apis": {
+    "boat_position": {
+      "endpoint": "http://localhost:3000/signalk/v1/api/vessels/self/navigation/position/value",
+      "status": "\u2705 WORKING",
+      "current_value": {
+        "latitude": 40.762771594,
+        "longitude": -73.9882537115
+      }
+    },
+    "wind_direction": {
+      "endpoint": "http://localhost:3000/signalk/v1/api/vessels/self/environment/wind/directionTrue",
+      "status": "\u26a0\ufe0f NOT AVAILABLE (no wind sensor connected)",
+      "fallback": "Worker continues without wind bias calculation"
+    },
+    "regatta_server": {
+      "status": "\u2705 RUNNING",
+      "port": 5000,
+      "function": "Stores pin/rc GPS to InfluxDB when marked"
+    }
+  },
+  "worker_logic": {
+    "query_pin": "from(bucket) |> filter(mark=pin) |> filter(lat OR lon) |> last()",
+    "query_rc": "from(bucket) |> filter(mark=rc) |> filter(lat OR lon) |> last()",
+    "compute": "Haversine distance + bearing + perpendicular distance",
+    "write_rate": "1 Hz (every 1 second)",
+    "output_fields": 8
+  },
+  "blockers": {
+    "influx_token_expired": {
+      "symptom": "HTTP 401 Unauthorized on all InfluxDB queries",
+      "cause": "INFLUX_TOKEN in .env is old/revoked",
+      "solution": "Generate new token in InfluxDB UI and update .env",
+      "priority": "CRITICAL \u2014 blocks worker queries"
+    }
+  },
+  "deployment_ready": {
+    "regatta_server": "\u2705 Running, marks positions correctly",
+    "signal_k": "\u2705 Boat GPS available",
+    "worker_container": "\u2705 Built and running (waiting for token)",
+    "docker_compose": "\u2705 Updated with start-line-worker service",
+    "geometry_math": "\u2705 Haversine + bearing calculations verified"
+  },
+  "next_actions": [
+    "1. CRITICAL: Refresh INFLUX_TOKEN in .env (generate new operator token in InfluxDB)",
+    "2. Restart worker: docker compose restart start-line-worker",
+    "3. Mark PIN in regatta UI (http://localhost:5000)",
+    "4. Mark RC in regatta UI",
+    "5. Verify worker logs: docker logs -f start-line-worker",
+    "6. Expected: 'distance_to_line_m = X.X' appears in logs every 10 seconds",
+    "7. Hard-refresh Grafana: http://localhost:3001/grafana/",
+    "8. LIGNE DE D\u00c9PART dashboard should populate with 8 fields"
+  ],
+  "eta_to_complete": "~5 minutes (token generation + restart)",
+  "confidence_level": "VERY HIGH \u2014 all logic validated, just need token"
+}

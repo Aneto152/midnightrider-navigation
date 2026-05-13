@@ -16,7 +16,7 @@
 | **Gyro Range** | ±2000°/s (selectable) |
 | **Update Rate** | 100 Hz (max), configurable |
 | **Bluetooth** | BLE 4.2, range ~10m |
-| **MAC Address** | E9:10:DB:8B:CE:C7 (Midnight Rider unit) |
+| **MAC Address** | XX:XX:XX:XX:XX:XX (Midnight Rider unit) |
 | **Power** | 3.7V lithium battery |
 | **Battery Life** | ~8-10 hours (continuous BLE) |
 | **Size** | 34 × 34 × 16 mm |

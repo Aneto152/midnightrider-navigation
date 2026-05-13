@@ -58,7 +58,7 @@ from pathlib import Path
 
 # Load from .env.local
 def load_env_local():
-    env_local = Path("/home/aneto/.openclaw/workspace/.env.local")
+    env_local = Path("~/midnightrider-navigation/.env.local")
     config = {}
     with open(env_local, 'r') as f:
         for line in f:
@@ -100,7 +100,7 @@ GRAFANA_TOKEN = config.get("GRAFANA_TOKEN")
 
 **Run:**
 ```bash
-cd /home/aneto/.openclaw/workspace
+cd ~/midnightrider-navigation
 python3 setup-grafana-influxdb.py
 ```
 
@@ -252,7 +252,7 @@ docker compose up -d grafana influxdb
 **Locations:**
 - InfluxDB: http://localhost:8086
 - Grafana: http://localhost:3001
-- Workspace: `/home/aneto/.openclaw/workspace`
+- Workspace: `~/midnightrider-navigation`
 
 ---
 

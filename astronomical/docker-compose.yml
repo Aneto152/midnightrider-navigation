@@ -24,8 +24,8 @@ services:
     restart: "no"
     network_mode: host
     environment:
-      - LAT=41.0534
-      - LON=-73.5387
+      - LAT=${BOAT_LAT}
+      - LON=${BOAT_LON}
       - NOAA_STATION=8467150
       - INFLUX_URL=http://localhost:8086
       - INFLUX_TOKEN=${INFLUX_TOKEN}
@@ -43,8 +43,8 @@ services:
     restart: unless-stopped
     network_mode: host
     environment:
-      - LAT=41.0534
-      - LON=-73.5387
+      - LAT=${BOAT_LAT}
+      - LON=${BOAT_LON}
       - NOAA_STATION=8467150
       - INFLUX_URL=http://localhost:8086
       - INFLUX_TOKEN=${INFLUX_TOKEN}

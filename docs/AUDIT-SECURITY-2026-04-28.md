@@ -39,8 +39,8 @@ git commit -m "security: remove .env.new from tracking"
 **Problem:**
 - 49.9 KB file containing:
   - Internal system architecture details
-  - File paths (`/home/aneto/.openclaw/workspace/`)
-  - MAC addresses (BLE): `E9:10:DB:8B:CE:C7`
+  - File paths (`~/midnightrider-navigation/`)
+  - MAC addresses (BLE): `XX:XX:XX:XX:XX:XX`
   - UUIDs and PIDs
   - Port numbers and internal configuration
 - Accessible in public repo

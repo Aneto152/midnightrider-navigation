@@ -226,7 +226,7 @@ After=network.target signalk.service
 [Service]
 Type=simple
 User=aneto
-WorkingDirectory=/home/aneto/.openclaw/workspace
+WorkingDirectory=~/midnightrider-navigation
 ExecStart=/usr/bin/python3 src/reporter/media_man.py
 Restart=on-failure
 RestartSec=10
