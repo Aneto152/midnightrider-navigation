@@ -367,7 +367,7 @@ function startTimer() {
   save('tst', S.timerStart);
     pushTimerToInflux(true);
     if (timerPushInterval) clearInterval(timerPushInterval);
-    timerPushInterval = setInterval(function() { pushTimerToInflux(true); }, 5000);
+    timerPushInterval = setInterval(function() { pushTimerToInflux(true); }, 1000);
   timerInterval = setInterval(function() {
     S.timerSecs--;
     save('ts', S.timerSecs);
