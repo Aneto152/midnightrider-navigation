@@ -1,24 +1,24 @@
 {
-  "task": "repair-portal-midnightrider-local",
-  "date": "2026-05-12T22:05:14.042668",
+  "task": "Security Sprint 1 items 1-3 verification",
+  "date": "2026-05-13T10:49:49.160814",
   "status": "SUCCESS",
   "steps_completed": [
-    "Nginx: verified running and enabled",
-    "Portal :8888: verified running",
-    "Created systemctl service: midnightrider-portal",
-    "Service WorkingDirectory: /home/aneto/.openclaw/workspace",
-    "Service enabled for boot startup",
-    "Portal transitioned from nohup to systemd",
-    "Service file saved to etc/systemd/system/",
-    "All 3 ports verified: 80, 8888, 3001 \u2192 HTTP 200"
+    "Item 1: .env.new not tracked \u2014 .gitignore verified clean",
+    "Item 2: MEMORY.md and OC internal files not in public repo",
+    "Item 3: Root directory structure clean \u2014 no stray session files",
+    "Scanned for sensitive tokens \u2014 documentation files marked for Sprint 2"
+  ],
+  "findings": [
+    "Note: Documentation files contain placeholder/example token references",
+    "These are in docs/ subdirectories (not .env files)",
+    "Sprint 2 (git-filter-repo) will handle history cleanup if needed"
   ],
   "errors": [],
+  "notes": "git-filter-repo (history purge) explicitly deferred \u2014 Sprint 2",
   "services_status": {
-    "signalk": "running (not touched)",
-    "influxdb": "running (not touched)",
-    "grafana": "running (not touched)",
-    "nginx": "running + enabled (port 80)",
-    "midnightrider-portal": "running + enabled (port 8888)"
+    "signalk": "not touched",
+    "influxdb": "not touched",
+    "grafana": "not touched"
   },
-  "next_recommended": "Verify http://midnightrider.local from browser (or 192.168.1.167:80)"
-}
+  "next_recommended": "Sprint 2: git-filter-repo to purge documentation if needed"
+}test
