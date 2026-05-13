@@ -2,7 +2,7 @@
 """Regatta interface server — MidnightRider"""
 
 from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
-import json, time, urllib.parse, urllib.request, os
+import json, time, urllib.parse, urllib.request, os, math
 import weather_collector
 
 INFLUX_URL = "http://localhost:8086"
@@ -14,6 +14,9 @@ SIGNALK_URL = "http://localhost:3000"
 # Cache vent (TTL 5 min)
 wind_cache = {}
 WIND_TTL = 300
+
+# Start line cache (pin and boat coordinates)
+start_line_cache = {"pin": None, "boat": None}
 
 def write_influx(measurement, fields, tags={}):
     tag_str = ",".join(f"{k}={v}" for k,v in tags.items())
@@ -201,6 +204,89 @@ def fetch_asos(station_id):
     except Exception as e:
         return {"error": str(e)}
 
+def haversine_m(a, b):
+    """Distance in meters between two {lat, lon} points."""
+    R = 6371000
+    lat1, lon1 = math.radians(a["lat"]), math.radians(a["lon"])
+    lat2, lon2 = math.radians(b["lat"]), math.radians(b["lon"])
+    dlat, dlon = lat2 - lat1, lon2 - lon1
+    x = math.sin(dlat/2)**2 + math.cos(lat1)*math.cos(lat2)*math.sin(dlon/2)**2
+    return R * 2 * math.atan2(math.sqrt(x), math.sqrt(1-x))
+
+def bearing_deg(a, b):
+    """Bearing in degrees from point a to point b (0-360)."""
+    lat1, lon1 = math.radians(a["lat"]), math.radians(a["lon"])
+    lat2, lon2 = math.radians(b["lat"]), math.radians(b["lon"])
+    dlon = lon2 - lon1
+    x = math.sin(dlon) * math.cos(lat2)
+    y = math.cos(lat1)*math.sin(lat2) - math.sin(lat1)*math.cos(lat2)*math.cos(dlon)
+    return (math.degrees(math.atan2(x, y)) + 360) % 360
+
+def signed_dist_m(pin, rc, pos):
+    """Signed perpendicular distance from boat to start line (m)."""
+    lm = 111319.9
+    lo = lm * math.cos(math.radians((pin["lat"] + rc["lat"]) / 2))
+    bx = (rc["lon"] - pin["lon"]) * lo
+    by = (rc["lat"] - pin["lat"]) * lm
+    px = (pos["lon"] - pin["lon"]) * lo
+    py = (pos["lat"] - pin["lat"]) * lm
+    l = math.sqrt(bx*bx + by*by)
+    return 0 if l == 0 else (bx*py - by*px) / l
+
+def get_race_data():
+    """Return real-time race line geometry data."""
+    pin = start_line_cache.get("pin")
+    rc = start_line_cache.get("boat")
+    raw = get_gps_position()
+    
+    r = {
+        "ok": False,
+        "pin_set": pin is not None,
+        "rc_set": rc is not None,
+        "gps_ok": bool(raw.get("latitude")),
+        "ts": time.time()
+    }
+    
+    if raw.get("latitude"):
+        r["gps_lat"] = round(raw["latitude"], 5)
+        r["gps_lon"] = round(raw["longitude"], 5)
+    
+    if not pin or not rc or not raw.get("latitude"):
+        return r
+    
+    pos = {"lat": raw["latitude"], "lon": raw["longitude"]}
+    d = signed_dist_m(pin, rc, pos)
+    ab = abs(d)
+    
+    side = "OCS" if ab < 15 else ("CLEAR" if d > 0 else "BEHIND")
+    lb = bearing_deg(pin, rc)
+    bias = None
+    
+    try:
+        tw = get_signalk("vessels/self/environment/wind/directionTrue")
+        if tw.get("value"):
+            b = lb - (math.degrees(tw["value"]) + 90) % 360
+            if b > 180: b -= 360
+            if b < -180: b += 360
+            bias = round(b, 1)
+    except:
+        pass
+    
+    r.update({
+        "ok": True,
+        "distance_to_line_m": round(ab, 1),
+        "line_side": side,
+        "line_bias_deg": bias,
+        "line_heading_deg": round(lb, 1),
+        "start_line_length_m": round(haversine_m(pin, rc), 1),
+        "pin_bearing_deg": round(bearing_deg(pos, pin), 1),
+        "pin_dist_m": round(haversine_m(pos, pin), 1),
+        "rc_bearing_deg": round(bearing_deg(pos, rc), 1),
+        "rc_dist_m": round(haversine_m(pos, rc), 1)
+    })
+    
+    return r
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, format, *args): pass
 
@@ -243,6 +329,12 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path.startswith("/api/asos/"):
             station_id = self.path.split("/")[-1].upper()
             self.send_json(fetch_asos(station_id))
+        elif self.path == "/equipage":
+            self.serve_file("crew.html")
+        elif self.path == "/voiles":
+            self.serve_file("voiles.html")
+        elif self.path == "/api/race_data":
+            self.send_json(get_race_data())
         else:
             self.send_response(404)
             self.end_headers()
@@ -269,6 +361,7 @@ class Handler(BaseHTTPRequestHandler):
             ok = write_influx("regatta.start_line",
                 {"lat": lat, "lon": lon, "point": point},
                 {"mark": point})
+            start_line_cache[point] = {"lat": lat, "lon": lon}
             self.send_json({"ok": ok, "lat": lat, "lon": lon})
         elif self.path == "/api/weather/start":
             self.send_json(weather_collector.start())
