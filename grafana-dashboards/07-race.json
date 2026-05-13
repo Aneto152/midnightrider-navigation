@@ -100,7 +100,7 @@
             "type": "influxdb",
             "uid": "efifgp8jvgj5sf"
           },
-          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.timer\")\n |> filter(fn: (r) => r._field == \"start_timer_seconds\")\n |> last()",
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: -1h)\n |> filter(fn: (r) => r._measurement == \"regatta.timer\")\n |> filter(fn: (r) => r._field == \"seconds_to_start\")\n |> last()",
           "refId": "A"
         }
       ],
@@ -233,7 +233,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/.*/",
           "values": false
         },
         "text": {},

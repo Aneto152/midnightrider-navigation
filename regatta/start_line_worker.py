@@ -103,7 +103,12 @@ def compute_geometry(boat_lat, boat_lon, pin_lat, pin_lon, rc_lat, rc_lon, twd_d
 
 # ── InfluxDB helpers ──────────────────────────────────────────
 def influx_query(flux):
-    """Execute Flux query, return list of {_field, _value} dicts."""
+    """Execute Flux query, return list of {_field, _value} dicts.
+    
+    FIXED 2026-05-12: Parse CSV header row first to find correct column indices.
+    Previous version hardcoded parts[5] as _field which is _time (timestamp),
+    causing pin/RC coordinate reads to always return None.
+    """
     try:
         r = requests.post(
             f"{INFLUX_URL}/api/v2/query?org={INFLUX_ORG}",
@@ -111,18 +116,25 @@ def influx_query(flux):
         )
         if r.status_code == 200:
             rows = []
+            headers = None
             for line in r.text.splitlines():
                 if line.startswith("#") or not line.strip():
                     continue
-                parts = line.split(",")
-                if len(parts) >= 7:
-                    rows.append({
-                        "_field": parts[5].strip('"'),
-                        "_value": parts[6].strip('"')
-                    })
+                parts = [p.strip('"') for p in line.split(",")]
+                if headers is None:
+                    headers = parts  # First non-# line is the header
+                    continue
+                if len(parts) >= len(headers):
+                    row = dict(zip(headers, parts))
+                    field = row.get("_field", "")
+                    value = row.get("_value", "")
+                    if field:
+                        rows.append({"_field": field, "_value": value})
             return rows
+        else:
+            print(f"[worker] InfluxDB query HTTP {r.status_code}: {r.text[:100]}")
     except Exception as e:
-        pass
+        print(f"[worker] influx_query error: {e}")
     return []
 
 def influx_write(fields):
