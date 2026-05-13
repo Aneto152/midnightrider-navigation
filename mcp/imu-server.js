@@ -8,7 +8,6 @@
  *   4. get_acceleration_peaks — acceleration peaks and slam events
  */
 
-const net = require('net');
 const http = require('http');
 
 const SIGNALK_URL = process.env.SIGNALK_HTTP || 'http://localhost:3000';
@@ -294,19 +293,41 @@ async function handleRequest(request) {
   return { error: `Unknown method: ${method}` };
 }
 
-// TCP Server (port 3005)
-const server = net.createServer((socket) => {
-  socket.on('data', async (data) => {
+// Main server loop (stdio transport)
+async function main() {
+  const readline = require('readline');
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+    terminal: false
+  });
+
+  rl.on('line', async (line) => {
+    if (!line.trim()) return;
+
     try {
-      const request = JSON.parse(data.toString());
+      const request = JSON.parse(line);
       const response = await handleRequest(request);
-      socket.write(JSON.stringify({ ...response, id: request.id || 1 }) + '\n');
-    } catch (e) {
-      socket.write(JSON.stringify({ error: e.message }) + '\n');
+      console.log(JSON.stringify(response));
+    } catch (err) {
+      console.error(JSON.stringify({
+        jsonrpc: '2.0',
+        error: {
+          code: -32700,
+          message: 'Parse error',
+          data: err.message
+        }
+      }));
     }
   });
+
+  rl.on('close', () => {
+    process.exit(0);
+  });
+}
+
+main().catch(err => {
+  console.error('Fatal error:', err);
+  process.exit(1);
 });
 
-server.listen(3005, () => {
-  console.log('🌊 IMU Server listening on port 3005');
-});

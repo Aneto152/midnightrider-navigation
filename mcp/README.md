@@ -116,7 +116,7 @@ or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
         "INFLUX_URL": "http://localhost:8086",
         "INFLUX_TOKEN": "[MASKED_INFLUX_TOKEN]",
         "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
+        "INFLUX_BUCKET": "midnight_rider"
       }
     },
     "racing": {
@@ -125,7 +125,7 @@ or `%APPDATA%\Claude\claude_desktop_config.json` (Windows):
         "INFLUX_URL": "http://localhost:8086",
         "INFLUX_TOKEN": "[MASKED_INFLUX_TOKEN]",
         "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
+        "INFLUX_BUCKET": "midnight_rider"
       }
     }
   }
@@ -351,7 +351,7 @@ curl http://localhost:8086/health
 # Should return: {"status":"ok"}
 
 # Query data
-influx query 'from(bucket:"signalk") |> range(start: -1h) |> first()' \
+influx query 'from(bucket:"midnight_rider") |> range(start: -1h) |> first()' \
   --org MidnightRider
 ```
 
@@ -381,7 +381,7 @@ influx query 'from(bucket:"signalk") |> range(start: -1h) |> first()' \
 
 Verify data exists in InfluxDB:
 ```bash
-influx query 'from(bucket:"signalk") |> range(start: -1h)' --org MidnightRider
+influx query 'from(bucket:"midnight_rider") |> range(start: -1h)' --org MidnightRider
 ```
 
 If empty, check Signal K is running and plugins are active.
@@ -436,3 +436,27 @@ Exposes WIT WT901BLECL motion data and Wave Analyzer metrics.
 **Status:** Production-ready, graceful fallback when AIS unavailable
 
 Tracks nearby competitors via AIS. Provides tactical information for racing decisions.
+
+
+## Server Reference Table (Updated 2026-05-13)
+
+| Server | Port | Tools | Transport | Status | Data Source |
+|--------|------|-------|-----------|--------|-------------|
+| astronomical-server.js | 3000 | 4 | stdio | ✅ Active | InfluxDB midnight_rider |
+| buoy-server.js | 3001 | 5 | stdio | ✅ Active | InfluxDB + NOAA API |
+| polar-server.js | 3002 | 2 | stdio | ✅ Active | InfluxDB + J/30 polars |
+| racing-server.js | 3003 | 7 | stdio | ✅ Active | InfluxDB (Phase 1 extended) |
+| race-server.js | 3004 | 6 | stdio | ✅ Active | InfluxDB + Signal K |
+| weather-server.js | 3005 | 2 | stdio | ✅ Active | Open-Meteo + InfluxDB |
+| imu-server.js | 3006 | 4 | stdio | ✅ Active | InfluxDB + Signal K (Phase 1 new) |
+| competitor-server.js | 3007 | 5 | stdio | ✅ Active | InfluxDB + competitors.json (AIS tracking) |
+
+**Total:** 8 servers, 35+ MCP tools, stdio JSON-RPC protocol
+
+## Integration Notes
+
+- All servers read from `midnight_rider` InfluxDB bucket
+- Signal K integration for real-time navigation + attitude data
+- Graceful fallback when data unavailable (returns valid JSON, no errors)
+- Midnight Reporter uses all tools in coordinated sequence
+- INFLUX_TOKEN required (env var or .env file)

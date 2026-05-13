@@ -36,6 +36,7 @@ echo "$COMMENTARY"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 # Save to history log
+echo "$COMMENTARY" > /tmp/mr_commentary.txt
 python3 << 'PYEOF'
 import json,datetime,os
 log_file='/home/aneto/.openclaw/workspace/logs/reporter-history.json'
@@ -43,7 +44,8 @@ history=[]
 try:
     with open(log_file) as f: history=json.load(f)
 except: pass
-history.append({'time':datetime.datetime.now().isoformat(),'text':'COMMENTARY_PLACEHOLDER'})
+commentary=open('/tmp/mr_commentary.txt').read().strip()
+history.append({'time':datetime.datetime.now().isoformat(),'text':commentary})
 if len(history)>50: history=history[-50:]
 with open(log_file,'w') as f: json.dump(history,f,indent=2,ensure_ascii=False)
 print('Saved to history')

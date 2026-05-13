@@ -69,13 +69,13 @@ Block Island est à 41 milles. Le courant de marée descendante les ralentit lé
 15. get_performance_trend → boat accelerating/slowing, delta SOG/VMG sur N min
 
 **Race-server new (3 tools):**
-16. get_xte → erreur route qtVLM, prochain waypoint, distance, note correction
-17. get_race_events → log 10-50 derniers virements/laissées/pénalités, ETA
-18. get_mark_eta → ETA prochain marque (heures:minutes EDT), distance, SOG/VMG
+16. get_xte ⏳(PENDING) → erreur route qtVLM, prochain waypoint, distance, note correction
+17. get_race_events ⏳(PENDING) → log 10-50 derniers virements/laissées/pénalités, ETA
+18. get_mark_eta ⏳(PENDING) → ETA prochain marque (heures:minutes EDT), distance, SOG/VMG
 
 **Buoy-server extended (2 tools):**
-19. get_tidal_current → courant marée live NOAA (flood/ebb/slack), speed, direction
-20. get_noaa_conditions_summary → synthèse buoys + marée + état de mer optimal heading
+19. get_tidal_current ⏳(PENDING) → courant marée live NOAA (flood/ebb/slack), speed, direction
+20. get_noaa_conditions_summary ⏳(PENDING) → synthèse buoys + marée + état de mer optimal heading
 
 **Total MCP tools available: 20+ across 7 servers**
 

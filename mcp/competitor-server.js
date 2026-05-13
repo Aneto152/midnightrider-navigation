@@ -79,7 +79,6 @@ function parseFluxResponse(csvData) {
   if (lines.length < 4) return [];
 
   const results = [];
-  let currentRecord = {};
   const headers = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -94,6 +93,7 @@ function parseFluxResponse(csvData) {
     }
 
     if (!line.startsWith('#') && headers.length > 0) {
+      const currentRecord = {};
       const values = line.split(',');
       for (let j = 0; j < headers.length && j < values.length; j++) {
         currentRecord[headers[j]] = values[j];
@@ -238,8 +238,8 @@ async function getNearestCompetitor() {
       ais_age_s: nearest.ais_age_s,
       phrf_lis: nearest.phrf_lis,
       irc_tcc: nearest.irc_tcc,
-      gaining: nearest.distance_nm < 1.0, // Mock: would need historical data
-      delta_nm_5min: -0.1, // Mock: would need 5-min history
+      gaining: null, // requires historical data — use get_competitor_trend
+      delta_nm_5min: null, // use get_competitor_trend(mmsi) for trend data
       tactical_note: `${nearest.name} (${nearest.model}) is ${nearest.distance_nm}nm on our ${nearest.relative_position.replace('_', ' ')}`,
       ais_fresh: isFresh
     };

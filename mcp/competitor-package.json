@@ -1,25 +1,24 @@
 {
   "name": "midnight-rider-competitor-server",
   "version": "1.0.0",
-  "description": "AIS competitor fleet tracking MCP server",
+  "description": "AIS competitor fleet tracking and tactical analysis MCP server",
   "main": "competitor-server.js",
   "type": "commonjs",
   "bin": {
-    "buoy-mcp-server": "./buoy-server.js"
+    "competitor-mcp-server": "./competitor-server.js"
   },
   "scripts": {
-    "start": "node buoy-server.js"
+    "start": "node competitor-server.js"
   },
   "keywords": [
     "mcp",
     "sailing",
-    "buoy",
-    "noaa",
-    "wind",
-    "lis",
-    "long-island-sound"
+    "ais",
+    "competitor",
+    "racing",
+    "block-island"
   ],
-  "author": "Aneto (MidnightRider J/30)",
+  "author": "Denis Lafarge (Midnight Rider J/30 - Block Island Race 2026)",
   "license": "MIT",
   "engines": {
     "node": ">=18.0.0"

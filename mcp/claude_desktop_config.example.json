@@ -66,6 +66,18 @@
         "INFLUX_BUCKET": "midnight_rider"
       }
     },
+    "competitor": {
+      "command": "node",
+      "args": ["/home/aneto/.openclaw/workspace/mcp/competitor-server.js"],
+      "description": "AIS competitor fleet tracking: nearby boats, tactical pressure, distance trends",
+      "env": {
+        "INFLUX_URL": "http://localhost:8086",
+        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
+        "INFLUX_ORG": "MidnightRider",
+        "INFLUX_BUCKET": "midnight_rider",
+        "SIGNALK_HTTP": "http://localhost:3000"
+      }
+    },
     "crew": {
       "command": "node",
       "args": ["/home/aneto/.openclaw/workspace/mcp/crew-server.js"],
