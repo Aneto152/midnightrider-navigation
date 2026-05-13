@@ -204,7 +204,7 @@ def discover_and_read_pin_rc():
     flux_rc = (
         'from(bucket:"midnight_rider")\n'
         ' |> range(start: -24h)\n'
-        ' |> filter(fn: (r) => r._measurement == "regatta.start_line" and r.mark == "rc")\n'
+        ' |> filter(fn: (r) => r._measurement == "regatta.start_line" and r.mark == "boat")\n'
         ' |> filter(fn: (r) => r._field == "lat" or r._field == "lon")\n'
         ' |> last()'
     )
@@ -229,7 +229,7 @@ def discover_and_read_pin_rc():
         except Exception:
             pass
     
-    # Parse rc coordinates
+    # Parse rc/boat coordinates (server uses mark=boat for committee boat)
     for row in rc_rows:
         try:
             if row["_field"] == "lat":
