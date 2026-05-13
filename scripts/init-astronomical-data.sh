@@ -14,7 +14,7 @@ set -e
 INFLUX_URL="http://localhost:8086"
 INFLUX_TOKEN="${INFLUX_TOKEN:-}"
 INFLUX_ORG="MidnightRider"
-INFLUX_BUCKET="signalk"
+INFLUX_BUCKET="${INFLUX_BUCKET:-midnight_rider}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ASTRONOMICAL_SCRIPT="${SCRIPT_DIR}/astronomical-data.sh"

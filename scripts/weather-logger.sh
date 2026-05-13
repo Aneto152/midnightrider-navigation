@@ -26,7 +26,7 @@ LON=${LON:--73.5387}
 INFLUX_URL=${INFLUX_URL:-http://localhost:8086}
 INFLUX_TOKEN=${INFLUX_TOKEN:-}
 INFLUX_ORG=${INFLUX_ORG:-MidnightRider}
-INFLUX_BUCKET=${INFLUX_BUCKET:-signalk}
+INFLUX_BUCKET=${INFLUX_BUCKET:-midnight_rider}
 WEATHER_API=${WEATHER_API:-open-meteo}  # open-meteo or weatherapi
 
 LOG_FILE="/tmp/weather-logger.log"
@@ -126,7 +126,7 @@ process_weather() {
 
   if [ -n "$lines" ]; then
     log "Logged $(echo -e "$lines" | wc -l) weather measurements"
-    send_to_influxdb "$(echo -e "$lines" | sed '$ d')"
+    send_to_influxdb "$(echo -e "$lines" | grep -v '^$')"
   fi
 }
 

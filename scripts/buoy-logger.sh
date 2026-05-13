@@ -22,7 +22,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 INFLUX_URL=${INFLUX_URL:-http://localhost:8086}
 INFLUX_TOKEN=${INFLUX_TOKEN:-}
 INFLUX_ORG=${INFLUX_ORG:-MidnightRider}
-INFLUX_BUCKET=${INFLUX_BUCKET:-signalk}
+INFLUX_BUCKET=${INFLUX_BUCKET:-midnight_rider}
 
 LOG_FILE="/tmp/buoy-logger.log"
 
@@ -189,7 +189,7 @@ process_all_buoys() {
   
   if [ -n "$lines" ]; then
     log "Sending $count buoy measurements to InfluxDB..."
-    if send_to_influxdb "$(echo -e "$lines" | sed '$ d')"; then
+    if send_to_influxdb "$(echo -e "$lines" | grep -v '^$')"; then
       log "✅ Data sent"
     fi
   fi

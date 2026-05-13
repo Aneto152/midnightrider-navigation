@@ -21,7 +21,7 @@ if [ ! -f "$ENV_FILE" ]; then
 INFLUX_URL=http://localhost:8086
 INFLUX_TOKEN=${INFLUX_TOKEN}
 INFLUX_ORG=MidnightRider
-INFLUX_BUCKET=signalk
+INFLUX_BUCKET="${INFLUX_BUCKET:-midnight_rider}"
 
 # CLOUD (Empty during race, set after for debrief)
 INFLUX_CLOUD_URL=
