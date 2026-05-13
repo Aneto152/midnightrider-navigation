@@ -55,6 +55,11 @@ def get_navigation():
 
 def get_ais_targets(radius_nm=10):
     try:
+        # Fetch boat position
+        race_data = get_race_data()
+        boat_lat = race_data.get('gps_lat')
+        boat_lon = race_data.get('gps_lon')
+        
         data = get_signalk("vessels")
         targets = []
         self_id = None
@@ -86,6 +91,13 @@ def get_ais_targets(radius_nm=10):
                 "sog": round(sog * 1.94384, 2),
                 "cog": round(cog * 57.2958, 1)
             })
+        
+        # Apply radius filter
+        if boat_lat and boat_lon:
+            targets = [t for t in targets
+                      if haversine_m(boat_lat, boat_lon,
+                                   t['lat'], t['lon']) <= radius_nm * 1852]
+        
         return targets
     except Exception as e:
         print(f"AIS error: {e}")
@@ -341,7 +353,14 @@ class Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         length = int(self.headers.get("Content-Length", 0))
-        body = json.loads(self.rfile.read(length)) if length else {}
+        try:
+            body = json.loads(self.rfile.read(length)) if length else {}
+        except (json.JSONDecodeError, ValueError):
+            self.send_response(400)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(b'{"error": "Invalid JSON body"}')
+            return
 
         if self.path == "/api/sail":
             ok = write_influx("regatta.sails",
