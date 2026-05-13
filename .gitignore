@@ -9,8 +9,10 @@ config/local/
 
 # 🚢 Données de Navigation (Privées)
 data/raw/
-data/logs/
-logs/
+data/logs/*
+!logs/latest.json
+logs/*
+!logs/latest.json
 *.log
 *.log.*
 offline_queue.json

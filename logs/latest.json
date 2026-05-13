@@ -1,23 +1,21 @@
 {
-  "task": "InfluxDB token recovery \u2014 Sprint 2 prerequisite",
-  "date": "2026-05-13T12:39:56.402505",
+  "task": "meta: enable Dust log reading via GitHub API",
+  "date": "2026-05-13T12:48:25.520347",
   "status": "SUCCESS",
   "steps_completed": [
-    "InfluxDB token recovered via docker exec CLI",
-    "New token created: MidnightRider-Token-2026-05-13-recovered",
-    ".env updated with new valid token",
-    "Grafana, astronomical, regatta restarted",
-    "All services HTTP 200 verified"
+    ".gitignore updated: logs/* with !logs/latest.json exception",
+    "logs/latest.json force-added to git tracking",
+    "Dust can now read this log via GitHub API after each task"
   ],
-  "errors": [
-    "Previous tokens were revoked \u2014 root cause: April security audit"
-  ],
+  "errors": [],
   "services_status": {
-    "signalk": "not touched",
+    "signalk": "running",
     "influxdb": "running \u2014 new token active",
-    "grafana": "restarted \u2014 HTTP 200",
-    "astronomical": "restarted \u2014 HTTP 200",
-    "regatta": "restarted \u2014 HTTP 200"
+    "grafana": "running",
+    "regatta": "running",
+    "astronomical": "running",
+    "portal": "running"
   },
-  "next_recommended": "Resume Sprint 2: datasource YAML, override gitignore, phone env var"
+  "dust_readable": true,
+  "next_recommended": "Resume Security Sprint 2: datasource YAML + override gitignore + phone env var"
 }
