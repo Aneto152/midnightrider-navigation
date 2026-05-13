@@ -309,6 +309,27 @@ function post(path, data, cb) {
   xhr.send(JSON.stringify(data));
 }
 
+
+// --- Timer → InfluxDB (Dust fix 2026-05-12) ---
+// Pushes timer state to /api/timer every 5s so Grafana can display countdown
+var timerPushInterval = null;
+
+function pushTimerToInflux(active) {
+    var label = '';
+    var secs = S.timerSecs;
+    if (secs >= 270) label = 'J-5min';
+    else if (secs >= 210) label = 'J-4min';
+    else if (secs >= 150) label = 'J-3min';
+    else if (secs >= 30) label = 'J-1min';
+    else if (secs >= 0) label = 'Depart';
+    else label = 'Apres';
+    post('/api/timer', {
+        seconds_to_start: secs,
+        label: label,
+        active: active !== false
+    }, null);
+}
+
 // --- Timer ---
 function timerDisplay() {
   var s = S.timerSecs;
@@ -344,6 +365,9 @@ function startTimer() {
   S.timerStart = Date.now();
   save('tr', '1');
   save('tst', S.timerStart);
+    pushTimerToInflux(true);
+    if (timerPushInterval) clearInterval(timerPushInterval);
+    timerPushInterval = setInterval(function() { pushTimerToInflux(true); }, 5000);
   timerInterval = setInterval(function() {
     S.timerSecs--;
     save('ts', S.timerSecs);
