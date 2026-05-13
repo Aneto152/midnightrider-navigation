@@ -1,28 +1,39 @@
 {
-  "session_date": "2026-05-13",
-  "session_duration": "~1.5 hours",
-  "status": "\u2705 PRODUCTION READY",
-  "major_accomplishments": [
-    "Instruments audit complete (1/3, 2/3, 3/3)",
-    "Competitor library foundation created",
-    "Baseline competitors.json ready",
-    "All systems verified and documented"
+  "task": "Competitor library populated \u2014 69 boats Block Island Race Week 2026",
+  "date": "2026-05-13T17:25:12.321749",
+  "status": "SUCCESS",
+  "fleet_stats": {
+    "total_boats": 69,
+    "active_for_ais_watch": 56,
+    "boats_with_mmsi": 57,
+    "no_mmsi": 12,
+    "midnight_rider_excluded": true
+  },
+  "mmsi_confidence": {
+    "verified": 16,
+    "probable": 41,
+    "not_found": 12
+  },
+  "steps_completed": [
+    "regatta/competitors.json: 69 boats real fleet data",
+    "56 active AIS targets (can be watched)",
+    "12 boats disabled (no MMSI found)",
+    "57 boats with MMSIs (verified + probable)",
+    "Midnight Rider (self) marked active:false priority:self",
+    "Ratings fields present (None \u2014 to populate before May 19)"
   ],
-  "commits_today": [
-    "a8612eb: Instruments audit 1/3 \u2014 UM982/Calypso/DATA-SCHEMA fixes",
-    "8d147ea: Instruments audit 2/3 \u2014 source names + Grafana conversions",
-    "a3a6230: Instruments audit 3/3 \u2014 hull 511 inventory + cleanup",
-    "461638a: Competitor library foundation \u2014 schema, JSON, architecture",
-    "d6956e2: Competitors.json baseline \u2014 verified boats + template"
-  ],
-  "ready_for_field_test": true,
-  "field_test_date": "2026-05-19",
-  "race_date": "2026-05-22",
-  "next_actions": [
-    "Populate remaining 66 competitors when fleet list available",
-    "Enter PHRF/IRC ratings for each boat",
+  "errors": [],
+  "services_status": {
+    "signalk": "not touched",
+    "influxdb": "not touched",
+    "grafana": "not touched",
+    "regatta": "not touched"
+  },
+  "dust_readable": true,
+  "next_steps": [
+    "Populate PHRF/IRC ratings for each boat",
     "Build ais_watch.py from specification",
-    "Deploy Grafana COMPETITION dashboard",
-    "Verify AIS receiver integration"
+    "Verify Signal K sees AIS targets on field test May 19",
+    "Deploy Grafana COMPETITION dashboard"
   ]
 }
