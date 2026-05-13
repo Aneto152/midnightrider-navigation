@@ -1,24 +1,23 @@
 {
-  "task": "Security Sprint 1 items 1-3 verification",
-  "date": "2026-05-13T10:49:49.160814",
+  "task": "InfluxDB token recovery \u2014 Sprint 2 prerequisite",
+  "date": "2026-05-13T12:39:56.402505",
   "status": "SUCCESS",
   "steps_completed": [
-    "Item 1: .env.new not tracked \u2014 .gitignore verified clean",
-    "Item 2: MEMORY.md and OC internal files not in public repo",
-    "Item 3: Root directory structure clean \u2014 no stray session files",
-    "Scanned for sensitive tokens \u2014 documentation files marked for Sprint 2"
+    "InfluxDB token recovered via docker exec CLI",
+    "New token created: MidnightRider-Token-2026-05-13-recovered",
+    ".env updated with new valid token",
+    "Grafana, astronomical, regatta restarted",
+    "All services HTTP 200 verified"
   ],
-  "findings": [
-    "Note: Documentation files contain placeholder/example token references",
-    "These are in docs/ subdirectories (not .env files)",
-    "Sprint 2 (git-filter-repo) will handle history cleanup if needed"
+  "errors": [
+    "Previous tokens were revoked \u2014 root cause: April security audit"
   ],
-  "errors": [],
-  "notes": "git-filter-repo (history purge) explicitly deferred \u2014 Sprint 2",
   "services_status": {
     "signalk": "not touched",
-    "influxdb": "not touched",
-    "grafana": "not touched"
+    "influxdb": "running \u2014 new token active",
+    "grafana": "restarted \u2014 HTTP 200",
+    "astronomical": "restarted \u2014 HTTP 200",
+    "regatta": "restarted \u2014 HTTP 200"
   },
-  "next_recommended": "Sprint 2: git-filter-repo to purge documentation if needed"
+  "next_recommended": "Resume Sprint 2: datasource YAML, override gitignore, phone env var"
 }
