@@ -30,6 +30,12 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 .helm-timer.active { border-color: #4fc3f7; color: #fff; }
 .helm-timer.warn { border-color: #ffb300; color: #ffb300; }
 .ht-time { font-size: 1.3em; font-weight: bold; font-family: monospace; display: block; margin-top: 2px; }
+
+.rd-row{display:grid;gap:8px;margin-bottom:8px}
+.rd-box{background:#0a1628;border-radius:8px;padding:10px 8px;text-align:center;border:1px solid #1e3a5f}
+.rd-lbl{font-size:.7em;color:#546e7a;text-transform:uppercase;margin-bottom:3px}
+.rd-val{font-size:1.5em;font-weight:bold;font-family:monospace}
+.rd-sub{font-size:.78em;color:#90caf9;margin-top:2px}
 </style>
 </head>
 <body>
@@ -38,6 +44,7 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 
 <div class="status">
   <span id="gps">GPS: —</span>
+  <span><a href="/equipage" style="color:#4fc3f7;text-decoration:none;margin:0 6px">👥 Équipage</a> | <a href="/voiles" style="color:#4fc3f7;text-decoration:none;margin:0 6px">⛵ Voiles</a></span>
   <span id="clock">—</span>
 </div>
 
@@ -75,23 +82,9 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
   </div>
 </div>
 
-<div class="section">
-  <h2>🔧 Mode</h2>
-  <div class="grid2">
-    <button id="mode-voile" onclick="setMode('voile')">⛵ Voile</button>
-    <button id="mode-moteur" onclick="setMode('moteur')">🛥 Moteur</button>
-  </div>
-</div>
 
-<div id="sails-section">
-  <div class="section">
-    <h2>⛵ Voile d'avant</h2>
-    <div class="grid4">
-      <button id="fs-J1" onclick="setForesail('J1')">J1</button>
-      <button id="fs-J2" onclick="setForesail('J2')">J2</button>
-      <button id="fs-J3" onclick="setForesail('J3')">J3</button>
-      <button id="fs-Spi" onclick="setForesail('Spi')">Spi</button>
-    </div>
+
+
   </div>
   <div class="section">
     <h2>⛵ Grande voile</h2>
@@ -100,25 +93,6 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
       <button id="ms-r1" onclick="setMainsail('1 ris')">1 ris</button>
       <button id="ms-r2" onclick="setMainsail('2 ris')">2 ris</button>
     </div>
-  </div>
-</div>
-
-<div class="section">
-  <h2>🧑‍✈️ Barreur</h2>
-  <div class="grid4" style="margin-bottom:8px">
-    <button id="helm-Denis" onclick="setHelmsman('Denis')">Denis</button>
-    <button id="helm-AnSo" onclick="setHelmsman('Anne-Sophie')">Anne-Sophie</button>
-    <button id="helm-Andrea" onclick="setHelmsman('Andrea')">Andrea</button>
-    <button id="helm-Autre" onclick="setHelmsman('Autre')">Autre</button>
-  </div>
-  <div class="grid4" id="helm-timers">
-    <div class="helm-timer" id="ht-Denis">Denis<br><span class="ht-time">0:00</span></div>
-    <div class="helm-timer" id="ht-AnSo">Anne-So.<br><span class="ht-time">0:00</span></div>
-    <div class="helm-timer" id="ht-Andrea">Andrea<br><span class="ht-time">0:00</span></div>
-    <div class="helm-timer" id="ht-Autre">Autre<br><span class="ht-time">0:00</span></div>
-  </div>
-  <div style="text-align:right;margin-top:6px">
-    <button style="width:auto;padding:6px 12px;font-size:0.75em" onclick="resetHelmTimers()">↺ Reset chrono</button>
   </div>
 </div>
 
@@ -133,6 +107,24 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
   </div>
 </div>
 
+<div class="section">
+ <h2>🏁 Données Ligne <span id="rd-age" style="font-size:.75em;color:#546e7a;font-weight:normal"></span></h2>
+ <div id="rd-empty" style="text-align:center;color:#546e7a;padding:16px;font-size:.9em">⚓ Marquer Pin + Comité pour activer les données temps réel</div>
+ <div id="rd-data" style="display:none">
+ <div class="rd-row" style="grid-template-columns:1fr 1fr">
+ <div class="rd-box" id="rd-dbox"><div class="rd-lbl">Distance Ligne</div><div class="rd-val" id="rd-dist">—</div></div>
+ <div class="rd-box" id="rd-sbox"><div class="rd-lbl">Position</div><div class="rd-val" id="rd-side">—</div></div>
+ </div>
+ <div class="rd-row" style="grid-template-columns:1fr 1fr">
+ <div class="rd-box"><div class="rd-lbl">Biais</div><div class="rd-val" id="rd-bias">—</div></div>
+ <div class="rd-box"><div class="rd-lbl">Longueur</div><div class="rd-val" id="rd-len">—</div></div>
+ </div>
+ <div class="rd-row" style="grid-template-columns:1fr 1fr">
+ <div class="rd-box"><div class="rd-lbl">📍 Pin</div><div class="rd-val" id="rd-pb">—</div><div class="rd-sub" id="rd-pd">—</div></div>
+ <div class="rd-box"><div class="rd-lbl">⚓ Comité</div><div class="rd-val" id="rd-rb">—</div><div class="rd-sub" id="rd-rd">—</div></div>
+ </div>
+ </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -541,6 +533,9 @@ setInterval(wxStatus, 10000);
 wxStatus();
 
 setInterval(updateStatus, 1000);
+function updateRaceData(){var x=new XMLHttpRequest();x.open('GET','/api/race_data');x.onload=function(){try{var d=JSON.parse(x.responseText);var em=document.getElementById('rd-empty'),da=document.getElementById('rd-data');if(!d.pin_set||!d.rc_set){em.style.display='block';da.style.display='none';return}em.style.display='none';da.style.display='block';document.getElementById('rd-age').textContent=Math.round(Date.now()/1000-d.ts)+'s';var dm=d.distance_to_line_m,dv=document.getElementById('rd-dist');dv.textContent=dm!==undefined?Math.round(dm)+' m':'—';dv.style.color=dm<50?'#ef5350':dm<100?'#ffb300':'#fff';document.getElementById('rd-dbox').style.borderColor=dm<50?'#ef5350':dm<100?'#ffb300':'#1e3a5f';var sc={CLEAR:'#66bb6a',OCS:'#ef5350',BEHIND:'#ffb300'},sv=document.getElementById('rd-side');sv.textContent=d.line_side||'—';sv.style.color=sc[d.line_side]||'#fff';document.getElementById('rd-sbox').style.borderColor=sc[d.line_side]||'#1e3a5f';var bv=document.getElementById('rd-bias');if(d.line_bias_deg!=null){var b=d.line_bias_deg;bv.textContent=(b>0?'+':'')+b+'°';bv.style.color=Math.abs(b)>5?'#ffb300':'#66bb6a'}else{bv.textContent=d.line_heading_deg?d.line_heading_deg+'°':'—';bv.style.color='#90caf9'}document.getElementById('rd-len').textContent=d.start_line_length_m?Math.round(d.start_line_length_m)+' m':'—';document.getElementById('rd-pb').textContent=d.pin_bearing_deg?Math.round(d.pin_bearing_deg)+'°':'—';document.getElementById('rd-pd').textContent=d.pin_dist_m?Math.round(d.pin_dist_m)+' m':'—';document.getElementById('rd-rb').textContent=d.rc_bearing_deg?Math.round(d.rc_bearing_deg)+'°':'—';document.getElementById('rd-rd').textContent=d.rc_dist_m?Math.round(d.rc_dist_m)+' m':'—'}catch(e){}};x.send()}
+setInterval(updateRaceData,1000);updateRaceData();
+
 updateStatus();
 restoreState();
 updateHelmTimers();
