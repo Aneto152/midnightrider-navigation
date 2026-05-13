@@ -1,0 +1,16 @@
+[Unit]
+Description=Midnight Rider Portal Server
+After=network.target docker.service
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto/.openclaw/workspace
+ExecStart=/usr/bin/python3 portal/server.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
