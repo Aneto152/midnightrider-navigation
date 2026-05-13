@@ -1,21 +1,28 @@
 {
-  "task": "meta: enable Dust log reading via GitHub API",
-  "date": "2026-05-13T12:48:25.520347",
+  "task": "Security Sprint 2 complete \u2014 datasource + override + phone",
+  "date": "2026-05-13T16:28:09.285164",
   "status": "SUCCESS",
   "steps_completed": [
-    ".gitignore updated: logs/* with !logs/latest.json exception",
-    "logs/latest.json force-added to git tracking",
-    "Dust can now read this log via GitHub API after each task"
+    "Action 2: datasource YAML token already uses ${INFLUX_TOKEN} env var \u2014 Grafana restarted",
+    "Action 3: docker-compose.override.yml removed from git tracking + .example created",
+    "Action 4: alert_notifier.py already uses TELEGRAM_RECIPIENT env var (no changes needed)"
+  ],
+  "files_modified": [
+    "grafana-provisioning/datasources/datasource-influxdb.yaml (verified)",
+    "docker-compose.yml (INFLUX_TOKEN already present)",
+    ".gitignore (added docker-compose.override.yml)",
+    "docker-compose.override.yml.example (created)",
+    ".env.example (added TELEGRAM_RECIPIENT)"
   ],
   "errors": [],
   "services_status": {
-    "signalk": "running",
-    "influxdb": "running \u2014 new token active",
-    "grafana": "running",
-    "regatta": "running",
-    "astronomical": "running",
-    "portal": "running"
+    "signalk": "not touched",
+    "influxdb": "running \u2014 HTTP 200",
+    "grafana": "restarted \u2014 HTTP 200 \u2014 datasource uses env var",
+    "regatta": "not touched",
+    "astronomical": "not touched",
+    "portal": "not touched"
   },
   "dust_readable": true,
-  "next_recommended": "Resume Security Sprint 2: datasource YAML + override gitignore + phone env var"
+  "next_recommended": "Sprint 3: open-source cleanup (README accuracy, private data, SECURITY.md)"
 }

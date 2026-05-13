@@ -1,3 +1,6 @@
+# Copy this file to docker-compose.override.yml and fill in real values
+# Never commit the real docker-compose.override.yml
+
 version: '3.8'
 services:
   influxdb:
