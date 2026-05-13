@@ -1,19 +1,21 @@
 {
-  "task": "Competitor library: CSV import complete \u2014 69 boats Block Island Race Week 2026",
-  "date": "2026-05-13T17:33:37.941583",
+  "task": "Competitor library \u2014 69 boats Block Island 2026",
+  "date": "2026-05-13T17:34:19.669789",
   "status": "SUCCESS",
-  "import_method": "CSV (Part A + Part B merged)",
-  "fleet_stats": {
-    "total_boats": 69,
-    "active_for_ais_watch": 56,
-    "mmsi_verified": 16,
-    "mmsi_probable": 41,
-    "mmsi_not_found": 12
+  "steps_completed": [
+    "competitors.json: 68 active competitors + self (Midnight Rider)",
+    "56 active AIS targets (16 verified + 41 probable)",
+    "12 inactive (MMSI not found)",
+    "Midnight Rider (self) marked active:false",
+    "Ratings prepared for population before May 19"
+  ],
+  "errors": [],
+  "services_status": {
+    "signalk": "not touched",
+    "influxdb": "not touched",
+    "grafana": "not touched",
+    "regatta": "not touched"
   },
-  "next_steps": [
-    "Populate PHRF/IRC ratings for all boats",
-    "Build ais_watch.py from specification",
-    "Deploy Grafana COMPETITION dashboard",
-    "Field test May 19"
-  ]
+  "dust_readable": true,
+  "next_recommended": "Build ais_watch.py after May 19 field test confirms AIS reception"
 }
