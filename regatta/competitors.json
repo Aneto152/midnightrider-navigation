@@ -1,0 +1,187 @@
+{
+  "_meta": {
+    "description": "Midnight Rider \u2014 Competitor Library",
+    "vessel": "Midnight Rider \u2014 J/30 hull 511",
+    "fleet": "Long Island Sound / Block Island Race Week",
+    "updated": "2026-05-13",
+    "format_version": "1.0",
+    "maintainer": "Denis Lafarge",
+    "ais_watch_enabled": true,
+    "note": "Fill in real MMSI and ratings before field test. MMSI = 9-digit number on AIS transponder certificate."
+  },
+  "competitors": [
+    {
+      "id": "competitor_001",
+      "active": true,
+      "boat_name": "BOAT_NAME_HERE",
+      "sail_number": "US-XXXXX",
+      "skipper": "SKIPPER_NAME_HERE",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/30",
+        "year": 1983,
+        "loa_ft": 29.9,
+        "hull_color": "white",
+        "keel": "fin"
+      },
+      "ais": {
+        "mmsi": "000000000",
+        "callsign": "",
+        "ais_name": "",
+        "note": "MMSI from AIS transponder certificate or MarineTraffic.com search"
+      },
+      "ratings": {
+        "PHRF_LIS": {
+          "value": 0,
+          "unit": "seconds/mile",
+          "year": 2026,
+          "source": "PHRF-LIS certificate",
+          "note": "Long Island Sound fleet handicap"
+        },
+        "PHRF_OFFSHORE": {
+          "value": 0,
+          "unit": "seconds/mile",
+          "year": 2026,
+          "source": "PHRF offshore certificate",
+          "note": "Used for Block Island Race and offshore events"
+        },
+        "IRC": {
+          "TCC": 0.0,
+          "certificate_number": "",
+          "year": 2026,
+          "note": "Time Correction Coefficient \u2014 multiply elapsed time by TCC"
+        },
+        "ORR": {
+          "GPH": 0.0,
+          "certificate_number": "",
+          "year": 2026,
+          "note": "General Purpose Handicap \u2014 seconds/mile at target speed"
+        },
+        "J30_CLASS": {
+          "one_design": true,
+          "note": "J/30 one-design class rules \u2014 no rating adjustment"
+        }
+      },
+      "events": [
+        "Block Island Race Week 2026",
+        "LIS Championship 2026"
+      ],
+      "priority": "high",
+      "notes": ""
+    },
+    {
+      "id": "competitor_002",
+      "active": true,
+      "boat_name": "BOAT_NAME_HERE",
+      "sail_number": "US-XXXXX",
+      "skipper": "SKIPPER_NAME_HERE",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/30",
+        "year": 1984,
+        "loa_ft": 29.9,
+        "hull_color": "white",
+        "keel": "fin"
+      },
+      "ais": {
+        "mmsi": "000000000",
+        "callsign": "",
+        "ais_name": "",
+        "note": "Verify MMSI via VHF DSC directory or MarineTraffic"
+      },
+      "ratings": {
+        "PHRF_LIS": {
+          "value": 0,
+          "unit": "seconds/mile",
+          "year": 2026,
+          "source": "",
+          "note": ""
+        },
+        "PHRF_OFFSHORE": {
+          "value": 0,
+          "unit": "seconds/mile",
+          "year": 2026,
+          "source": "",
+          "note": ""
+        },
+        "IRC": {
+          "TCC": 0.0,
+          "certificate_number": "",
+          "year": 2026,
+          "note": ""
+        },
+        "ORR": {
+          "GPH": 0.0,
+          "certificate_number": "",
+          "year": 2026,
+          "note": ""
+        },
+        "J30_CLASS": {
+          "one_design": true,
+          "note": ""
+        }
+      },
+      "events": [
+        "Block Island Race Week 2026"
+      ],
+      "priority": "high",
+      "notes": ""
+    },
+    {
+      "id": "competitor_003",
+      "active": false,
+      "boat_name": "BOAT_NAME_HERE",
+      "sail_number": "US-XXXXX",
+      "skipper": "SKIPPER_NAME_HERE",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/30",
+        "year": 1985,
+        "loa_ft": 29.9,
+        "hull_color": "white",
+        "keel": "fin"
+      },
+      "ais": {
+        "mmsi": "000000000",
+        "callsign": "",
+        "ais_name": "",
+        "note": "Add real MMSI when activated"
+      },
+      "ratings": {
+        "PHRF_LIS": {
+          "value": 0,
+          "unit": "seconds/mile",
+          "year": 2026,
+          "source": "",
+          "note": ""
+        },
+        "PHRF_OFFSHORE": {
+          "value": 0,
+          "unit": "seconds/mile",
+          "year": 2026,
+          "source": "",
+          "note": ""
+        },
+        "IRC": {
+          "TCC": 0.0,
+          "certificate_number": "",
+          "year": 2026,
+          "note": ""
+        },
+        "ORR": {
+          "GPH": 0.0,
+          "certificate_number": "",
+          "year": 2026,
+          "note": ""
+        },
+        "J30_CLASS": {
+          "one_design": true,
+          "note": ""
+        }
+      },
+      "events": [],
+      "priority": "medium",
+      "notes": "Template entry \u2014 activate when boat enters regatta"
+    }
+  ]
+}
