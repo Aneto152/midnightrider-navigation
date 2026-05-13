@@ -203,7 +203,7 @@ Si ANT1 à l'AVANT et ANT2 à l'ARRIÈRE (longitudinal) :
   → offset = 0°
 ```
 
-**Plugin config (signalk-um982-gnss.json):**
+**Plugin config (signalk-um982-proprietary.json):**
 ```json
 {
   "antennaAxis": "port-starboard",  // ← TRANSVERSAL (tribord-bâbord)

@@ -205,7 +205,7 @@ POSITION_UPDATE_INTERVAL_MIN=30
 ### Recipients
 
 Example group:
-- Denis Lafarge (skipper) - 33612345678
+- Skipper (WhatsApp number in .env SKIPPER_PHONE)
 - Anne-Sophie (crew) - 33698765432
 - Shore team lead - 33555123456
 - Family WhatsApp group - [group ID]

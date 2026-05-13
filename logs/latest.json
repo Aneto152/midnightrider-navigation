@@ -1,15 +1,13 @@
 {
-  "task": "Instruments audit (2/3): Grafana + sources + regressions fixed",
-  "date": "2026-05-13T17:00:48.195296",
+  "task": "Instruments audit COMPLETE (3/3) \u2014 inventory + cleanup",
+  "date": "2026-05-13T17:07:29.841828",
   "status": "SUCCESS",
   "steps_completed": [
-    "REGRESSION FIX: UM982 frequency restored to 1 Hz (was wrongly 0.2 Hz)",
-    "REGRESSION FIX: UM982 headingTrue already radians (verified)",
-    "SOURCE NAMES: um982_gnss + um982_primary \u2192 um982-proprietary (9 occurrences)",
-    "PLUGIN NAME: signalk-parser-nmea0183 \u2192 signalk-um982-proprietary",
-    "GRAFANA-UNIT-CONVERSIONS: rateOfTurn + cpuTemp + SOK BMS + SOC + aggregateWindow added",
-    "All 7 hardware datasheets: Signal K Source Reference section added",
-    "DATA-SCHEMA: Wave Analyzer 3 paths added"
+    "All docs: Lowrance \u2192 B&G Vulcan nomenclature verified clean",
+    "DATA-SCHEMA-MASTER: header date updated 2026-05-13",
+    "docs/HARDWARE/INSTRUMENT-INVENTORY.md created \u2014 J/30 hull 511, 6 active + 2 planned instruments",
+    "Final check: no old source names (um982-gnss cleaned), no hardcoded directionApparent",
+    "Privacy cleanup: phone numbers removed from WHATSAPP_REPORTER.md"
   ],
   "errors": [],
   "services_status": {
@@ -19,14 +17,8 @@
     "regatta": "not touched"
   },
   "dust_readable": true,
-  "source_names_canonical": {
-    "um982": "um982-proprietary",
-    "wit_imu": "wit_hull",
-    "calypso": "calypso_ble (inactive)",
-    "vulcan": "vulcan_internal",
-    "ws320": "nmea2000_ws320",
-    "rpi4": "signalk-system-stats",
-    "sok_bms": "direct InfluxDB (no Signal K)"
-  },
-  "next_recommended": "Instruments audit (3/3): architecture cleanup + inventory file"
+  "audit_complete": true,
+  "instruments_active": 6,
+  "instruments_planned": 2,
+  "next_recommended": "System ready \u2014 field test May 19, Block Island Race May 22"
 }
