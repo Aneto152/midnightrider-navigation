@@ -1,21 +1,25 @@
 {
-  "task": "Security Sprint 2 complete \u2014 datasource + override + phone",
-  "date": "2026-05-13T16:30:20.845947",
+  "task": "Security Sprint 2 complete + git log channel fixed",
+  "date": "2026-05-13T16:32:11.239581",
   "status": "SUCCESS",
   "steps_completed": [
-    "Action 2: datasource YAML token replaced with env var \u2014 Grafana restarted",
-    "Action 3: docker-compose.override.yml removed from git + .example created",
-    "Action 4: phone number replaced with ALERT_PHONE_NUMBER env var"
+    "Action 2: datasource YAML token replaced with env var",
+    "Action 3: docker-compose.override.yml removed from git",
+    "Action 4: phone number replaced with ALERT_PHONE_NUMBER env var",
+    "meta: git add -f confirmed as required for logs/latest.json"
   ],
-  "errors": [],
+  "errors": [
+    "logs/latest.json requires git add -f \u2014 gitignore exception insufficient"
+  ],
   "services_status": {
-    "signalk": "not touched",
+    "signalk": "running",
     "influxdb": "running",
-    "grafana": "restarted",
-    "regatta": "not touched",
-    "astronomical": "not touched",
-    "portal": "not touched"
+    "grafana": "running",
+    "regatta": "running",
+    "astronomical": "running",
+    "portal": "running"
   },
   "dust_readable": true,
-  "next_recommended": "Sprint 3: open-source cleanup (README, private data, SECURITY.md)"
+  "git_log_method": "git add -f logs/latest.json",
+  "next_recommended": "Sprint 3: open-source cleanup"
 }
