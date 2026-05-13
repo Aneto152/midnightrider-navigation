@@ -1,0 +1,54 @@
+<!DOCTYPE html><html lang="fr"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>MidnightRider — Équipage</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,sans-serif;background:#0a1628;color:#fff;min-height:100vh;padding:12px}
+h1{text-align:center;font-size:1.3em;margin-bottom:12px;color:#4fc3f7}
+.s{background:#112240;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid #1e3a5f}
+.s h2{font-size:.85em;color:#4fc3f7;text-transform:uppercase;margin-bottom:10px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+button{padding:14px 6px;border:2px solid #1e3a5f;border-radius:10px;background:#0a1628;color:#fff;font-size:.88em;cursor:pointer;width:100%}
+button.on{background:#1565c0;border-color:#4fc3f7}
+.bk{display:block;text-align:center;color:#4fc3f7;text-decoration:none;margin-bottom:12px;font-size:.9em}
+.ht{background:#0a1628;border-radius:8px;padding:8px;text-align:center;font-size:.8em;color:#90caf9;border:1px solid #1e3a5f}
+.ht.active{border-color:#4fc3f7;color:#fff}
+.ht.warn{border-color:#ffb300;color:#ffb300}
+.htt{font-size:1.3em;font-weight:bold;font-family:monospace;display:block;margin-top:2px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1565c0;color:#fff;padding:10px 20px;border-radius:20px;font-size:.88em;display:none;z-index:999}
+</style></head><body>
+<h1>👥 Équipage</h1>
+<a class="bk" href="/">⬅ Interface Régate</a>
+<div class="s"><h2>🧑‍✈️ Barreur actif</h2>
+<div class="g4" style="margin-bottom:8px">
+<button id="h-Denis" onclick="sH('Denis')">Denis</button>
+<button id="h-AnSo" onclick="sH('Anne-Sophie')">Anne-Sophie</button>
+<button id="h-Andrea" onclick="sH('Andrea')">Andrea</button>
+<button id="h-Autre" onclick="sH('Autre')">Autre</button>
+</div>
+<div class="g4">
+<div class="ht" id="ht-Denis">Denis<span class="htt">0:00</span></div>
+<div class="ht" id="ht-AnSo">Anne-So.<span class="htt">0:00</span></div>
+<div class="ht" id="ht-Andrea">Andrea<span class="htt">0:00</span></div>
+<div class="ht" id="ht-Autre">Autre<span class="htt">0:00</span></div>
+</div>
+<div style="text-align:right;margin-top:6px">
+<button style="width:auto;padding:6px 12px;font-size:.75em" onclick="rH()">↺ Reset chrono</button>
+</div></div>
+<div class="toast" id="toast"></div>
+<script>
+var ids=['Denis','AnSo','Andrea','Autre'];
+var sc={Denis:+localStorage.getItem('hs-Denis')||0,AnSo:+localStorage.getItem('hs-AnSo')||0,Andrea:+localStorage.getItem('hs-Andrea')||0,Autre:+localStorage.getItem('hs-Autre')||0};
+var ac=localStorage.getItem('ha')||'',ht=+localStorage.getItem('hst')||0;
+if(ac&&ht>0){sc[ac]+=Math.floor((Date.now()-ht)/1000);ht=Date.now();localStorage.setItem('hst',ht);localStorage.setItem('hs-'+ac,sc[ac])}
+function sv(k,v){localStorage.setItem(k,v)}
+function pad(n){return n<10?'0'+n:''+n}
+function hfmt(s){var h=Math.floor(s/3600),m=Math.floor(s%3600/60),ss=s%60;return(h>0?h+':'+pad(m):m)+':'+pad(ss)}
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.style.display='block';setTimeout(function(){t.style.display='none'},2000)}
+function post(p,d){var x=new XMLHttpRequest();x.open('POST',p);x.setRequestHeader('Content-Type','application/json');x.send(JSON.stringify(d))}
+function upd(){ids.forEach(function(id){var el=document.getElementById('ht-'+id);if(!el)return;var s=sc[id]+(ac===id&&ht>0?Math.floor((Date.now()-ht)/1000):0);el.querySelector('.htt').textContent=hfmt(s);el.className='ht'+(ac===id?' active':'')+(s>=7200?' warn':'')})}
+function sH(name){var mp={Denis:'Denis','Anne-Sophie':'AnSo',Andrea:'Andrea',Autre:'Autre'},id=mp[name];if(ac&&ac!==id&&ht>0){sc[ac]+=Math.floor((Date.now()-ht)/1000);sv('hs-'+ac,sc[ac])}ids.forEach(function(i){document.getElementById('h-'+i).className=''});document.getElementById('h-'+id).className='on';ac=id;ht=Date.now();sv('ha',id);sv('hst',ht);post('/api/helmsman',{name:name});toast('🧑‍✈️ '+name);upd()}
+function rH(){ids.forEach(function(id){sc[id]=0;sv('hs-'+id,'0')});ac='';ht=0;sv('ha','');sv('hst','0');ids.forEach(function(id){document.getElementById('h-'+id).className=''});upd();toast('↺ Remis à zéro')}
+if(ac){var e=document.getElementById('h-'+ac);if(e)e.className='on'}
+setInterval(upd,1000);upd();
+</script></body></html>
