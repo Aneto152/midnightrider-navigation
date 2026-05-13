@@ -30,7 +30,6 @@
       "id": "c001",
       "active": true,
       "boat_name": "Abilyn",
-      "sail_number": "",
       "skipper": "Josh Reisberg",
       "vessel": {
         "make": "J/Boats",
@@ -43,7 +42,7 @@
         "mmsi": "368042460",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified via MarineTraffic"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -74,20 +73,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/120"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c002",
       "active": true,
       "boat_name": "Alibi",
-      "sail_number": "",
       "skipper": "John Sartorius",
       "vessel": {
         "make": "J/Boats",
@@ -131,20 +130,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/120"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c003",
       "active": true,
       "boat_name": "ARMA",
-      "sail_number": "",
       "skipper": "Dubois/Eaves/Krow",
       "vessel": {
         "make": "Grand Prix",
@@ -188,20 +187,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "GP42"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c004",
       "active": true,
       "boat_name": "BANTER",
-      "sail_number": "",
       "skipper": "Matthew Gimple",
       "vessel": {
         "make": "Andrews",
@@ -245,20 +244,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Andrews 40"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
-      "priority": "high",
-      "notes": ""
+      "priority": "medium",
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c005",
       "active": true,
       "boat_name": "Blitzen",
-      "sail_number": "",
       "skipper": "John Storck Jr",
       "vessel": {
         "make": "J/Boats",
@@ -302,20 +301,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/130"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c006",
       "active": false,
       "boat_name": "Blitzkrieg",
-      "sail_number": "",
       "skipper": "Matthew Schaedler",
       "vessel": {
         "make": "J/Boats",
@@ -359,20 +358,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/122"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c007",
       "active": false,
       "boat_name": "Blue Skies",
-      "sail_number": "",
       "skipper": "William Gunther",
       "vessel": {
         "make": "Alden",
@@ -416,20 +415,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Alden 50"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "low",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c008",
       "active": true,
       "boat_name": "Cathexis",
-      "sail_number": "",
       "skipper": "Bryan & Kara Schapperle",
       "vessel": {
         "make": "X-Yachts",
@@ -442,7 +441,7 @@
         "mmsi": "338249654",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -473,20 +472,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "X-38"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c009",
       "active": true,
       "boat_name": "Celeritas",
-      "sail_number": "",
       "skipper": "William Beery",
       "vessel": {
         "make": "Soverel",
@@ -530,20 +529,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Soverel 33"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c010",
       "active": false,
       "boat_name": "Charlotte",
-      "sail_number": "",
       "skipper": "Richard West",
       "vessel": {
         "make": "J/Boats",
@@ -587,20 +586,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/120"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c011",
       "active": true,
       "boat_name": "Christopher Dragon XII",
-      "sail_number": "",
       "skipper": "Linda & Andrew Weiss",
       "vessel": {
         "make": "Italia Yachts",
@@ -644,20 +643,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Italia 11.98"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c012",
       "active": true,
       "boat_name": "Co-Conspirator",
-      "sail_number": "",
       "skipper": "Matt Roleke & Trace Dittenhofer",
       "vessel": {
         "make": "J/Boats",
@@ -670,7 +669,7 @@
         "mmsi": "338507533",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -701,20 +700,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/33"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c013",
       "active": true,
       "boat_name": "Cool Breeze",
-      "sail_number": "",
       "skipper": "USCGA",
       "vessel": {
         "make": "Mills",
@@ -758,20 +757,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Mills 43"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c014",
       "active": false,
       "boat_name": "Cougar",
-      "sail_number": "",
       "skipper": "Leonard Sitar",
       "vessel": {
         "make": "J/Boats",
@@ -815,20 +814,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/160"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c015",
       "active": true,
       "boat_name": "Dire Wolf",
-      "sail_number": "",
       "skipper": "Constantine Baris",
       "vessel": {
         "make": "J/Boats",
@@ -872,20 +871,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/122"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c016",
       "active": true,
       "boat_name": "DUET",
-      "sail_number": "",
       "skipper": "Andrian Lubimov",
       "vessel": {
         "make": "J/Boats",
@@ -929,20 +928,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/120"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c017",
       "active": true,
       "boat_name": "Eagle",
-      "sail_number": "",
       "skipper": "Steven Levy",
       "vessel": {
         "make": "J/Boats",
@@ -986,20 +985,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/121"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c018",
       "active": true,
       "boat_name": "Eclipse",
-      "sail_number": "",
       "skipper": "Marc Berkowitz",
       "vessel": {
         "make": "Sabre",
@@ -1043,20 +1042,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Sabre 386"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c019",
       "active": true,
       "boat_name": "Elan",
-      "sail_number": "",
       "skipper": "US Coast Guard Academy",
       "vessel": {
         "make": "Nautor",
@@ -1100,20 +1099,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Swan 53"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c020",
       "active": true,
       "boat_name": "Eventyr",
-      "sail_number": "",
       "skipper": "Michael Kohler",
       "vessel": {
         "make": "J/Boats",
@@ -1157,20 +1156,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/99"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c021",
       "active": true,
       "boat_name": "Fireball",
-      "sail_number": "",
       "skipper": "Bill & Jackie Baxter",
       "vessel": {
         "make": "J/Boats",
@@ -1214,20 +1213,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/111"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c022",
       "active": true,
       "boat_name": "Flying Lady",
-      "sail_number": "",
       "skipper": "Phillip Dickey",
       "vessel": {
         "make": "Nautor",
@@ -1271,20 +1270,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Swan 46"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c023",
       "active": true,
       "boat_name": "Fortissimo",
-      "sail_number": "",
       "skipper": "USMMA",
       "vessel": {
         "make": "Ionic",
@@ -1328,20 +1327,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "IC37"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c024",
       "active": true,
       "boat_name": "FULL TILT",
-      "sail_number": "",
       "skipper": "Jonathan Thomson",
       "vessel": {
         "make": "J/Boats",
@@ -1385,20 +1384,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/109"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c025",
       "active": true,
       "boat_name": "Good News",
-      "sail_number": "",
       "skipper": "Macrae Sykes",
       "vessel": {
         "make": "J/Boats",
@@ -1442,20 +1441,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/125"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c026",
       "active": true,
       "boat_name": "Groupe 5",
-      "sail_number": "",
       "skipper": "NEKA Sailing",
       "vessel": {
         "make": "Beneteau",
@@ -1499,20 +1498,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Figaro 2"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c027",
       "active": true,
       "boat_name": "Habiru",
-      "sail_number": "",
       "skipper": "Steve Losik",
       "vessel": {
         "make": "J/Boats",
@@ -1525,7 +1524,7 @@
         "mmsi": "338413878",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -1556,20 +1555,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/121"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c028",
       "active": false,
       "boat_name": "Hunter",
-      "sail_number": "",
       "skipper": "USMMA",
       "vessel": {
         "make": "Mills",
@@ -1582,7 +1581,7 @@
         "mmsi": null,
         "callsign": "",
         "ais_name": "",
-        "note": "US Merchant Marine Academy — MMSI not found"
+        "note": "US Merchant Marine Academy"
       },
       "ratings": {
         "PHRF_LIS": {
@@ -1613,20 +1612,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Mills 41"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "low",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c029",
       "active": true,
       "boat_name": "Imagine",
-      "sail_number": "",
       "skipper": "Matt Blake",
       "vessel": {
         "make": "X-Yachts",
@@ -1670,20 +1669,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "X-38"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c030",
       "active": true,
       "boat_name": "Inisharon",
-      "sail_number": "",
       "skipper": "Jim Murphy",
       "vessel": {
         "make": "Lyman Morse",
@@ -1727,20 +1726,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Seguin 49"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
-      "priority": "high",
-      "notes": ""
+      "priority": "medium",
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c031",
       "active": true,
       "boat_name": "In Theory",
-      "sail_number": "",
       "skipper": "Peter McWhinnie",
       "vessel": {
         "make": "JPK",
@@ -1753,7 +1752,7 @@
         "mmsi": "368070090",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -1784,20 +1783,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "JPK 1080"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c032",
       "active": false,
       "boat_name": "Katara56",
-      "sail_number": "",
       "skipper": "Daniel Griffin",
       "vessel": {
         "make": "X-Yachts",
@@ -1810,7 +1809,7 @@
         "mmsi": null,
         "callsign": "",
         "ais_name": "",
-        "note": "CAY flag — MMSI not found"
+        "note": "CAY flag"
       },
       "ratings": {
         "PHRF_LIS": {
@@ -1841,20 +1840,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "X-56"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c033",
       "active": true,
       "boat_name": "Kent Racing",
-      "sail_number": "",
       "skipper": "Tim Kent",
       "vessel": {
         "make": "IMOCA/Open",
@@ -1867,7 +1866,7 @@
         "mmsi": "368198940",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -1898,20 +1897,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Class 40"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c034",
       "active": true,
       "boat_name": "Lioness",
-      "sail_number": "",
       "skipper": "Lion Sailing Sailmakers",
       "vessel": {
         "make": "Davidson",
@@ -1955,20 +1954,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Sydney 38"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c035",
       "active": true,
       "boat_name": "Loki",
-      "sail_number": "",
       "skipper": "David Rosow",
       "vessel": {
         "make": "J/Boats",
@@ -2012,20 +2011,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/122"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c036",
       "active": true,
       "boat_name": "Lucky",
-      "sail_number": "",
       "skipper": "Bryon Ehrhart",
       "vessel": {
         "make": "Juan K",
@@ -2069,20 +2068,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Juan K 88"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c037",
       "active": true,
       "boat_name": "Madison",
-      "sail_number": "",
       "skipper": "Brian Spears",
       "vessel": {
         "make": "J/Boats",
@@ -2126,20 +2125,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/120"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c038",
       "active": true,
       "boat_name": "Masquerade",
-      "sail_number": "",
       "skipper": "Andrew Burton",
       "vessel": {
         "make": "Baltic Yachts",
@@ -2183,20 +2182,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Baltic 47"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c039",
       "active": true,
       "boat_name": "Max",
-      "sail_number": "",
       "skipper": "Moritz Hilf",
       "vessel": {
         "make": "Structures",
@@ -2240,26 +2239,25 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Pogo 50"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c040",
       "active": false,
       "boat_name": "Midnight Rider - PMP Strategy",
-      "sail_number": "US-511",
       "skipper": "Denis Lafarge",
       "vessel": {
         "make": "J/Boats",
         "model": "J/30",
-        "year": 1984,
-        "hull": 511,
+        "year": null,
         "hull_color": "white",
         "keel": "fin"
       },
@@ -2267,7 +2265,7 @@
         "mmsi": "338554109",
         "callsign": "",
         "ais_name": "",
-        "note": "OUR OWN VESSEL — excluded from tracking"
+        "note": "OUR VESSEL"
       },
       "ratings": {
         "PHRF_LIS": {
@@ -2297,21 +2295,21 @@
           "note": ""
         },
         "J30_CLASS": {
-          "one_design": true,
-          "note": "J/30 one-design"
+          "one_design": false,
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "self",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c041",
       "active": true,
       "boat_name": "Monhegan",
-      "sail_number": "",
       "skipper": "Martinus van Breems",
       "vessel": {
         "make": "J/Boats",
@@ -2355,20 +2353,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/44"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c042",
       "active": true,
       "boat_name": "MXM",
-      "sail_number": "",
       "skipper": "Roman Brushtein",
       "vessel": {
         "make": "Custom",
@@ -2381,7 +2379,7 @@
         "mmsi": "368447410",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -2412,26 +2410,26 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Custom 36"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c043",
       "active": false,
       "boat_name": "Oakcliff Farr 40 Blue",
-      "sail_number": "",
       "skipper": "Oakcliff Sailing",
       "vessel": {
         "make": "Farr",
         "model": "Farr 40",
         "year": null,
-        "hull_color": "blue",
+        "hull_color": "white",
         "keel": "fin"
       },
       "ais": {
@@ -2469,26 +2467,26 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Farr 40"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c044",
       "active": false,
       "boat_name": "Oakcliff Farr 40 Red",
-      "sail_number": "",
       "skipper": "Oakcliff Sailing",
       "vessel": {
         "make": "Farr",
         "model": "Farr 40",
         "year": null,
-        "hull_color": "red",
+        "hull_color": "white",
         "keel": "fin"
       },
       "ais": {
@@ -2526,20 +2524,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Farr 40"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c045",
       "active": false,
       "boat_name": "OC-86",
-      "sail_number": "",
       "skipper": "Oakcliff Sailing",
       "vessel": {
         "make": "RP",
@@ -2552,7 +2550,7 @@
         "mmsi": null,
         "callsign": "",
         "ais_name": "",
-        "note": "Large offshore racer — MMSI not found"
+        "note": "Notable offshore racer"
       },
       "ratings": {
         "PHRF_LIS": {
@@ -2583,20 +2581,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "RP 86"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c046",
       "active": true,
       "boat_name": "Palantir 5",
-      "sail_number": "",
       "skipper": "June & Amanda Kendrick",
       "vessel": {
         "make": "J/Boats",
@@ -2609,7 +2607,7 @@
         "mmsi": "367559290",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -2640,20 +2638,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/44"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c047",
       "active": true,
       "boat_name": "Phantom",
-      "sail_number": "",
       "skipper": "Chris Schoen",
       "vessel": {
         "make": "X-Yachts",
@@ -2697,20 +2695,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "XP 44"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c048",
       "active": true,
       "boat_name": "Pterodactyl",
-      "sail_number": "",
       "skipper": "Scott Weisman",
       "vessel": {
         "make": "Custom",
@@ -2723,7 +2721,7 @@
         "mmsi": "368253380",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -2754,20 +2752,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Custom 45"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c049",
       "active": false,
       "boat_name": "Quickdraw",
-      "sail_number": "",
       "skipper": "Martin Zonnenberg",
       "vessel": {
         "make": "J/Boats",
@@ -2811,20 +2809,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/111"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c050",
       "active": true,
       "boat_name": "Ragana",
-      "sail_number": "",
       "skipper": "Darius Peleda",
       "vessel": {
         "make": "Cape Fear",
@@ -2868,20 +2866,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Cape Fear 38"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c051",
       "active": true,
       "boat_name": "Rocksteady",
-      "sail_number": "",
       "skipper": "Baudoin Lorans",
       "vessel": {
         "make": "X-Yachts",
@@ -2925,20 +2923,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "XP 44"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c052",
       "active": true,
       "boat_name": "Rumba",
-      "sail_number": "",
       "skipper": "Ove Haxthausen",
       "vessel": {
         "make": "J/Boats",
@@ -2982,20 +2980,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/133"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c053",
       "active": true,
       "boat_name": "Save the Sound",
-      "sail_number": "",
       "skipper": "Douglas McKeige",
       "vessel": {
         "make": "J/Boats",
@@ -3008,7 +3006,7 @@
         "mmsi": "338535733",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -3039,20 +3037,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/99"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c054",
       "active": true,
       "boat_name": "Scylla",
-      "sail_number": "",
       "skipper": "Markus Lahrkamp",
       "vessel": {
         "make": "Dehler",
@@ -3096,20 +3094,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Dehler 46"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c055",
       "active": true,
       "boat_name": "Skye",
-      "sail_number": "",
       "skipper": "Ty Anderson",
       "vessel": {
         "make": "Farr",
@@ -3153,20 +3151,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Farr 39"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c056",
       "active": false,
       "boat_name": "SqueeZeplay",
-      "sail_number": "",
       "skipper": "Gregg Brinegar",
       "vessel": {
         "make": "Intensity",
@@ -3210,20 +3208,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "IMX 40"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c057",
       "active": true,
       "boat_name": "Stratos",
-      "sail_number": "",
       "skipper": "Marcus Wunderlich",
       "vessel": {
         "make": "Jeanneau",
@@ -3267,20 +3265,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Sun Fast 3300"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c058",
       "active": true,
       "boat_name": "Summer Grace",
-      "sail_number": "",
       "skipper": "Kevin Kelley",
       "vessel": {
         "make": "J/Boats",
@@ -3293,7 +3291,7 @@
         "mmsi": "338147636",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -3324,20 +3322,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/122"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c059",
       "active": true,
       "boat_name": "Sunny Side",
-      "sail_number": "",
       "skipper": "Cary James",
       "vessel": {
         "make": "J/Boats",
@@ -3381,20 +3379,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/109"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c060",
       "active": true,
       "boat_name": "Tacktile",
-      "sail_number": "",
       "skipper": "Jeffrey Wilson",
       "vessel": {
         "make": "Sabre",
@@ -3407,7 +3405,7 @@
         "mmsi": "338406561",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -3438,20 +3436,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Sabre 42"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c061",
       "active": true,
-      "boat_name": "Thinn Man",
-      "sail_number": "",
+      "boat_name": "Thin Man",
       "skipper": "Todd Aven & Todd Diffee",
       "vessel": {
         "make": "J/Boats",
@@ -3464,7 +3462,7 @@
         "mmsi": "368114910",
         "callsign": "",
         "ais_name": "",
-        "note": "Verified"
+        "note": ""
       },
       "ratings": {
         "PHRF_LIS": {
@@ -3495,20 +3493,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/99"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c062",
       "active": true,
       "boat_name": "Touch of Grey",
-      "sail_number": "",
       "skipper": "Trevor Roach",
       "vessel": {
         "make": "J/Boats",
@@ -3552,20 +3550,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/121"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c063",
       "active": true,
       "boat_name": "Towhee",
-      "sail_number": "",
       "skipper": "Paul Jennings",
       "vessel": {
         "make": "Custom",
@@ -3609,20 +3607,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Cal 40"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "verified"
     },
     {
       "id": "c064",
       "active": false,
       "boat_name": "Velocity2",
-      "sail_number": "",
       "skipper": "Kevin Marks",
       "vessel": {
         "make": "J/Boats",
@@ -3666,20 +3664,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/99"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "not_found"
     },
     {
       "id": "c065",
       "active": true,
       "boat_name": "Windfall",
-      "sail_number": "",
       "skipper": "Shawn Bay",
       "vessel": {
         "make": "Beneteau",
@@ -3723,20 +3721,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "Beneteau 46"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c066",
       "active": true,
       "boat_name": "Wizard",
-      "sail_number": "",
       "skipper": "Adam Zakka & Jonathan Krumeich",
       "vessel": {
         "make": "J/Boats",
@@ -3780,20 +3778,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/99"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c067",
       "active": true,
       "boat_name": "Young American",
-      "sail_number": "",
       "skipper": "Peter Becker & Adrien Blanc",
       "vessel": {
         "make": "J/Boats",
@@ -3837,20 +3835,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/105"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c068",
       "active": true,
-      "boat_name": "Zèlèe",
-      "sail_number": "",
+      "boat_name": "Zelee",
       "skipper": "Lindsey Lind",
       "vessel": {
         "make": "JPK",
@@ -3894,20 +3892,20 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "JPK 1030"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "high",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     },
     {
       "id": "c069",
       "active": true,
       "boat_name": "Zig Zag",
-      "sail_number": "",
       "skipper": "Andrew Clark",
       "vessel": {
         "make": "J/Boats",
@@ -3951,14 +3949,15 @@
         },
         "J30_CLASS": {
           "one_design": false,
-          "note": "J/122"
+          "note": ""
         }
       },
       "events": [
         "Block Island Race Week 2026"
       ],
       "priority": "medium",
-      "notes": ""
+      "notes": "",
+      "mmsi_confidence": "probable"
     }
   ]
 }

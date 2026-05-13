@@ -1,39 +1,19 @@
 {
-  "task": "Competitor library populated \u2014 69 boats Block Island Race Week 2026",
-  "date": "2026-05-13T17:25:12.321749",
+  "task": "Competitor library: CSV import complete \u2014 69 boats Block Island Race Week 2026",
+  "date": "2026-05-13T17:33:37.941583",
   "status": "SUCCESS",
+  "import_method": "CSV (Part A + Part B merged)",
   "fleet_stats": {
     "total_boats": 69,
     "active_for_ais_watch": 56,
-    "boats_with_mmsi": 57,
-    "no_mmsi": 12,
-    "midnight_rider_excluded": true
+    "mmsi_verified": 16,
+    "mmsi_probable": 41,
+    "mmsi_not_found": 12
   },
-  "mmsi_confidence": {
-    "verified": 16,
-    "probable": 41,
-    "not_found": 12
-  },
-  "steps_completed": [
-    "regatta/competitors.json: 69 boats real fleet data",
-    "56 active AIS targets (can be watched)",
-    "12 boats disabled (no MMSI found)",
-    "57 boats with MMSIs (verified + probable)",
-    "Midnight Rider (self) marked active:false priority:self",
-    "Ratings fields present (None \u2014 to populate before May 19)"
-  ],
-  "errors": [],
-  "services_status": {
-    "signalk": "not touched",
-    "influxdb": "not touched",
-    "grafana": "not touched",
-    "regatta": "not touched"
-  },
-  "dust_readable": true,
   "next_steps": [
-    "Populate PHRF/IRC ratings for each boat",
+    "Populate PHRF/IRC ratings for all boats",
     "Build ais_watch.py from specification",
-    "Verify Signal K sees AIS targets on field test May 19",
-    "Deploy Grafana COMPETITION dashboard"
+    "Deploy Grafana COMPETITION dashboard",
+    "Field test May 19"
   ]
 }
