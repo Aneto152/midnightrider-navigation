@@ -84,14 +84,14 @@ Tous les instruments ci-dessous transitent par ce bus :
 
 | # | Instrument | Type | Protocole | Fréquence | Mesures principales | Statut |
 |---|---|---|---|---|---|---|
-| 1 | UM982 NANO-HED10L | GNSS dual-antenna | NMEA / USB | 1 Hz | Position, SOG, COG, Heading | ✅ Actif |
+| 1 | UM982 NANO-HED10L | GNSS dual-antenna | NMEA / USB | 0.2 Hz (1/5s — BLE battery limit) | Position, SOG, COG, Heading | ✅ Actif |
 | 2 | WIT WT901BLECL IMU | Accéléromètre/gyro | BLE JSON | 30 Hz | Roll, pitch, yaw, accél, temp | ✅ Actif |
 | 3 | B&G WS320 | Anémomètre mécanique | NMEA 2000 | 1 Hz | TWS, TWD, AWA, AWS | ⏳ Non connecté |
 | 4 | Système RPi 4 | CPU, mémoire, temp | Signal K internal | 5 s | CPU temp, load, storage | ✅ Actif |
 | 5 | NOAA NDBC | Météo côtière (buoys LIS) | HTTP API | 30 min | Vent, pression, temp eau | 🔨 À construire |
 | 6 | Open-Meteo | Prévisions météo | HTTP API | 6h (scheduler) | Vent prévu, pression, gust | ✅ Actif |
 | 7 | Regatta Server | Timer, équipage | HTTP local :5000 | Event-driven | Timer départ, watch crew, scoring | ✅ Actif |
-| 8 | SOK BMS LiFePO4 | Batterie maison | BLE (BMS protocol) | 1 Hz | Voltage, current, SOC, temp cell | ⏳ Non connecté (~5 mai) |
+| 8 | SOK BMS LiFePO4 | Batterie maison | BLE (BMS protocol) | 0.2 Hz (1/5s — BLE battery limit) | Voltage, current, SOC, temp cell | ⏳ Non connecté (~5 mai) |
 | 9 | Yacht Devices YDNU-02 | Gateway NMEA 2000 ↔ USB | NMEA 2000 bidirectionnel | passthrough | Bridge instruments NMEA 2000 → Signal K (et retour) | ✅ Actif |
 | 10 | B&G Vulcan (écrans) | Chartplotter avec GPS interne | NMEA 2000 | 1 Hz | Position GPS, SOG, COG (source secondaire) | ✅ Actif |
 | 11 | Loch (à installer) | Capteur vitesse dans l'eau | NMEA 2000 (via YDNU-02) | 1 Hz | STW, distance parcourue | ⏳ Non installé |
@@ -239,9 +239,9 @@ Basé sur audit direct du 28 avril 2026.
 | environment.outside.temperature | NOAA API | Kelvin | N/A | 30 min | 🔨 À construire (NOAA API) |
 | environment.water.temperature | NOAA API | Kelvin | N/A | 30 min | 🔨 À construire (NOAA API) |
 | environment.outside.pressure | NOAA API | Pa | N/A | 30 min | 🔨 À construire (NOAA API) |
-| electrical.batteries.house.voltage | SOK BMS (future) | V | N/A | 1 Hz | ⏳ Non connecté |
-| electrical.batteries.house.current | SOK BMS (future) | A | N/A | 1 Hz | ⏳ Non connecté |
-| electrical.batteries.house.stateOfCharge | SOK BMS (future) | ratio 0-1 | N/A | 1 Hz | ⏳ Non connecté |
+| electrical.batteries.house.voltage | SOK BMS (future) | V | N/A | 0.2 Hz (1/5s — BLE battery limit) | ⏳ Non connecté |
+| electrical.batteries.house.current | SOK BMS (future) | A | N/A | 0.2 Hz (1/5s — BLE battery limit) | ⏳ Non connecté |
+| electrical.batteries.house.stateOfCharge | SOK BMS (future) | ratio 0-1 | N/A | 0.2 Hz (1/5s — BLE battery limit) | ⏳ Non connecté |
 | regatta.timer.startTime | Regatta Server | ISO 8601 | 2026-05-22T14:00:00Z | event | ✅ |
 | regatta.crew.watch | Regatta Server | string | "crew-A" | event | ✅ |
 
@@ -264,7 +264,7 @@ Basé sur audit direct du 28 avril 2026.
   - Archive (24h mean): 7 ans
 
 **Fréquence globale d'écriture:**
-  - **Estimated:** ~3,000 points/min (1,800 de WIT à 30 Hz + 1,200 navigation/wind à 1 Hz)
+  - **Estimated:** ~3,000 points/min (1,800 de WIT à 30 Hz + 1,200 navigation/wind à 0.2 Hz (1/5s — BLE battery limit))
   - **Vérification requise:** Phase 1.3
 
 | Measurement (nom exact InfluxDB) | Field | Unité brute | Valeur sample (28 avr) | Points/min | Conversion requise |
@@ -395,7 +395,7 @@ Signal K :3000
 
 | Sentence NMEA 0183 | Données | Source Signal K | Fréquence |
 |---|---|---|---|
-| $GPGGA / $GPRMC | Position, SOG, COG | UM982 (primary) | 1 Hz |
+| $GPGGA / $GPRMC | Position, SOG, COG | UM982 (primary) | 0.2 Hz (1/5s — BLE battery limit) |
 | $HEHDT | Heading true | UM982 | 1 Hz |
 | $WIMWV | Vent apparent (AWA, AWS) | B&G WS320 | 1 Hz (dès connexion) |
 | $WIMWD | Vent vrai (TWD, TWS) | B&G WS320 | 1 Hz (dès connexion) |

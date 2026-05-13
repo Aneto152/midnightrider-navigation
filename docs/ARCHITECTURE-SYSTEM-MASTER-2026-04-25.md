@@ -177,6 +177,7 @@ Located: `/docs/HARDWARE/`
 | **WIT WT901BLECL** | WIT-WT901BLECL-DATASHEET.md | IMU specs + BLE protocol |
 | **Calypso UP10** | CALYPSO-UP10-DATASHEET.md | Anemometer specs |
 | **YDNU-02** | YDNU-02-GATEWAY-DATASHEET.md | NMEA 2000 gateway specs |
+- `docs/HARDWARE/SOK-BMS-BLE-PROTOCOL.md` — SOK Battery BMS BLE
 | **Raspberry Pi 4** | RASPBERRY-PI4-DATASHEET.md | Computer specs |
 
 ---

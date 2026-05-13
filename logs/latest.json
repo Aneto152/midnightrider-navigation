@@ -1,14 +1,14 @@
 {
-  "task": "Sprint 3 (3/3): open source files complete",
-  "date": "2026-05-13T16:40:33.354217",
+  "task": "Instruments audit: critical doc fixes (1/3)",
+  "date": "2026-05-13T16:55:50.747501",
   "status": "SUCCESS",
   "steps_completed": [
-    "SECURITY.md created \u2014 vulnerability disclosure policy",
-    "CODE_OF_CONDUCT.md created \u2014 community standards",
-    "docker volume create added to install guide (README)",
-    ".gitignore final audit passed \u2014 all sensitive patterns covered",
-    "No private data in tracked files",
-    "No hardcoded credentials"
+    "UM982 datasheet: headingTrue=radians (SI), SOG=m/s, COG\u2192CourseOverGroundTrue fixed",
+    "Calypso datasheet: directionApparent\u2192angleApparent + status corrected to \u23f3 not connected",
+    "Calypso datasheet: B&G WS320 primary note already present",
+    "DATA-SCHEMA: SOK BMS frequency 1Hz \u2192 0.2Hz (BLE limit)",
+    "SOK BMS paths harmonized: electrical.batteries.house (Signal K convention)",
+    "ARCHITECTURE: YDNU-02 USB/NMEA2000 + SOK BMS TIER2 + B&G WS320 added"
   ],
   "errors": [],
   "services_status": {
@@ -18,9 +18,11 @@
     "regatta": "not touched"
   },
   "dust_readable": true,
-  "files_created": [
-    "SECURITY.md",
-    "CODE_OF_CONDUCT.md"
-  ],
-  "next_recommended": "System fully open-source ready \u2014 field test May 19"
+  "ground_truth_findings": {
+    "um982_plugin": "signalk-um982-proprietary",
+    "um982_source": "um982-proprietary (proprietary #HEADINGA sentences)",
+    "sok_bms_path": "electrical.batteries.house (verified in DATA-SCHEMA)",
+    "calypso_status": "Not connected \u2014 optional sensor (B&G WS320 primary)"
+  },
+  "next_recommended": "Instruments audit (2/3): GRAFANA-UNIT-CONVERSIONS + source names"
 }

@@ -46,14 +46,14 @@
 ## SIGNAL K INTEGRATION
 
 **Plugin:** `signalk-calypso-ultrasonic` (optional)  
-**Status:** ✅ Connected (BLE)
+**Status:** ⏳ Not connected — optional sensor (B&G WS320 is primary wind sensor)
 
 **Paths Published (when enabled):**
 ```
 environment.wind.speedTrue      (m/s, converted from knots)
 environment.wind.directionTrue  (radians)
 environment.wind.speedApparent  (m/s)
-environment.wind.directionApparent (radians)
+environment.wind.angleApparent (radians)
 environment.outside.temperature (K, converted from °C)
 ```
 

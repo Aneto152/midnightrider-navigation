@@ -63,7 +63,7 @@ $GNVTG,course_true,T,course_mag,M,speed_kts,N,speed_kmh,K*checksum
 navigation.position           {lat, lon}
 navigation.headingTrue        (degrees, 0-360°)
 navigation.speedOverGround    (m/s)
-navigation.courseOverGround   (radians, 0-2π)
+navigation.courseOverGroundTrue   (radians, 0-2π)
 navigation.rateOfTurn         (derived from dual antenna)
 ```
 
@@ -85,7 +85,7 @@ cat /dev/ttyUSB0 | grep -E "RMC|HDT|GGA"
 curl http://localhost:3000/signalk/v1/api/vessels/self/navigation/
   - .position (should show lat/lon ±2m accuracy)
   - .headingTrue (should show ±0.5° precision)
-  - .speedOverGround (should show knots)
+  - .speedOverGround (m/s in Signal K — displayed as knots in Grafana × 1.94384)
 ```
 
 ---

@@ -232,10 +232,10 @@ Le plugin doit :
 2. Envoyer les commandes (cmd_info, cmd_detail, etc.)
 3. Parser les réponses et vérifier CRC8
 4. Mettre à jour les paths Signal K:
-   - `electrical.batteries.main.voltage`
-   - `electrical.batteries.main.current`
-   - `electrical.batteries.main.temperature`
-   - `electrical.batteries.main.capacity`
+   - `electrical.batteries.house.voltage`
+   - `electrical.batteries.house.current`
+   - `electrical.batteries.house.temperature`
+   - `electrical.batteries.house.capacity`
    - etc.
 
 **Template de plugin :** Se référer à la documentation Signal K et aux plugins existants dans `~/.signalk/node_modules/`
