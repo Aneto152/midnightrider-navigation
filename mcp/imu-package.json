@@ -1,0 +1,27 @@
+{
+  "name": "midnight-rider-imu-server",
+  "version": "1.0.0",
+  "description": "IMU motion, sea state and wave analyzer MCP server",
+  "main": "imu-server.js",
+  "type": "commonjs",
+  "bin": {
+    "buoy-mcp-server": "./buoy-server.js"
+  },
+  "scripts": {
+    "start": "node buoy-server.js"
+  },
+  "keywords": [
+    "mcp",
+    "sailing",
+    "buoy",
+    "noaa",
+    "wind",
+    "lis",
+    "long-island-sound"
+  ],
+  "author": "Aneto (MidnightRider J/30)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

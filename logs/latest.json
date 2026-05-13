@@ -1,34 +1,25 @@
 {
-  "task": "Midnight Reporter agent created",
-  "date": "2026-05-13T18:19:54.532322",
+  "task": "MCP imu-server.js created \u2014 sea state + motion + heel trend",
+  "date": "2026-05-13T18:33:03.028218",
   "status": "SUCCESS",
   "steps_completed": [
-    "oc/MIDNIGHT-REPORTER-PROMPT.md: journalist persona for Block Island Race",
-    "scripts/midnight-reporter.sh: trigger script \u2192 OC \u2192 WhatsApp",
-    "Uses all 7 MCP servers: polar, race, weather, crew, buoy, astronomical, racing",
-    "Distribution: WhatsApp famille via existing test-whatsapp.sh",
-    "History logging: logs/reporter-history.json"
+    "mcp/imu-server.js: 4 tools (sea_state, motion_snapshot, heel_trend, accel_peaks)",
+    "mcp/imu-package.json created",
+    "Reads: WIT WT901BLECL + InfluxDB midnight_rider bucket",
+    "mcp/README.md updated with imu-server entry"
   ],
-  "components": [
-    "System prompt: 2472 bytes, French journalistic style",
-    "Trigger script: 58 lines, bash + Python",
-    "MCP integration: 7 servers in sequence"
-  ],
-  "features": [
-    "Real-time race commentary generation",
-    "4-6 phrase format for WhatsApp",
-    "Automatic history tracking (50 max entries)",
-    "HDT timestamps (time zone: America/New_York)",
-    "Units: knots, degrees, nautical miles"
+  "tools": [
+    "get_sea_state \u2014 wave height, period, Douglas scale",
+    "get_motion_snapshot \u2014 roll, pitch, yaw, acceleration, rate of turn",
+    "get_heel_trend \u2014 heel statistics over N minutes",
+    "get_acceleration_peaks \u2014 slam events, comfort index"
   ],
   "errors": [],
   "services_status": {
     "signalk": "not touched",
     "influxdb": "not touched",
-    "grafana": "not touched",
-    "mcp_servers": "not modified",
-    "whatsapp": "integration ready"
+    "mcp": "imu-server added"
   },
   "dust_readable": true,
-  "next_recommended": "Test: bash scripts/midnight-reporter.sh \u2014 verify OC API listening on port 18789"
+  "next_recommended": "Phase 1 Prompt 2/3: add wind history + GNSS quality to racing-server.js"
 }

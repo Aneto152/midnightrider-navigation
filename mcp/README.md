@@ -423,3 +423,8 @@ MIT
 ---
 
 **Ready to race with AI coaching!** 🏁⛵
+
+## imu-server.js — IMU Motion & Sea State
+**Tools:** get_sea_state, get_motion_snapshot, get_heel_trend, get_acceleration_peaks
+
+Exposes WIT WT901BLECL motion data and Wave Analyzer metrics.
