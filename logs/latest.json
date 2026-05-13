@@ -1,25 +1,18 @@
 {
-  "task": "MCP imu-server.js created \u2014 sea state + motion + heel trend",
-  "date": "2026-05-13T18:33:03.028218",
+  "task": "racing-server.js: 4 new tools added (wind history, GNSS, ROT, performance trend)",
+  "date": "2026-05-13T18:38:36.692055",
   "status": "SUCCESS",
   "steps_completed": [
-    "mcp/imu-server.js: 4 tools (sea_state, motion_snapshot, heel_trend, accel_peaks)",
-    "mcp/imu-package.json created",
-    "Reads: WIT WT901BLECL + InfluxDB midnight_rider bucket",
-    "mcp/README.md updated with imu-server entry"
-  ],
-  "tools": [
-    "get_sea_state \u2014 wave height, period, Douglas scale",
-    "get_motion_snapshot \u2014 roll, pitch, yaw, acceleration, rate of turn",
-    "get_heel_trend \u2014 heel statistics over N minutes",
-    "get_acceleration_peaks \u2014 slam events, comfort index"
+    "get_wind_history: TWD shift analysis over N minutes",
+    "get_gnss_quality: satellite count + RTK fix type",
+    "get_rate_of_turn: maneuver state detection",
+    "get_performance_trend: SOG/VMG acceleration analysis"
   ],
   "errors": [],
   "services_status": {
     "signalk": "not touched",
-    "influxdb": "not touched",
-    "mcp": "imu-server added"
+    "mcp": "racing-server extended"
   },
   "dust_readable": true,
-  "next_recommended": "Phase 1 Prompt 2/3: add wind history + GNSS quality to racing-server.js"
+  "next_recommended": "Phase 1 Prompt 3/3: add XTE + events + tidal current to racing-server and buoy-server"
 }
