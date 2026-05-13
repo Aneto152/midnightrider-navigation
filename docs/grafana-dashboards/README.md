@@ -42,7 +42,7 @@ bash scripts/import-grafana-dashboards.sh
 
 - Dashboard UIDs and IDs reset on import (prevents conflicts)
 - Reconfigure InfluxDB datasource after fresh install
-- All 9 dashboards contain 60+ alert rules
+- All 16 dashboards contain 60+ alert rules
 - Charts auto-refresh at configured intervals
 
 ## 🔄 Recovery
@@ -58,7 +58,7 @@ bash scripts/import-grafana-dashboards.sh
 
 # 3. Verify
 curl http://localhost:3001/api/dashboards
-# Should list all 9 dashboards
+# Should list all 16 dashboards
 ```
 
 ## 📈 Data Sources

@@ -3,7 +3,7 @@
 **Date:** 2026-04-26 21:35 EDT  
 **Status:** ✅ Production-ready  
 **Method:** HTTP Basic Auth (Grafana API + HTTP)  
-**All Dashboards:** ✅ 9 dashboards imported successfully  
+**All Dashboards:** ✅ 16 dashboards imported successfully  
 
 ---
 
@@ -46,7 +46,7 @@ python3 setup-grafana-influxdb-v3.py
 ```
 
 ### 2. `import-dashboards-v2.py`
-**Purpose:** Import all 9 dashboards into Grafana
+**Purpose:** Import all 16 dashboards into Grafana
 
 **What it does:**
 1. Loads credentials from `.env.local`
@@ -125,7 +125,7 @@ python3 import-dashboards-v2.py
    python3 setup-grafana-influxdb-v3.py
    python3 import-dashboards-v2.py
    
-   # Verify all 9 dashboards in Grafana
+   # Verify all 16 dashboards in Grafana
    # Open: http://localhost:3001
    # Click Dashboards → should see all 9
    ```
@@ -157,7 +157,7 @@ python3 import-dashboards-v2.py
 2. **Access Grafana:**
    - Open http://localhost:3001 or iPad WiFi
    - Credentials stored locally (admin + .env.local password)
-   - All 9 dashboards available
+   - All 16 dashboards available
 
 ---
 
@@ -267,7 +267,7 @@ INFLUX_TOKEN = config.get("INFLUX_TOKEN")
 1. **Field Test (May 19):**
    - Boot system
    - Run setup scripts (or confirm already configured)
-   - Test all 9 dashboards
+   - Test all 16 dashboards
    - Verify live data from Signal K
    - Test iPad connectivity
 

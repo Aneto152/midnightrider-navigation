@@ -29,7 +29,7 @@ curl http://localhost:3001/api/health
 ```
 Desktop:     http://localhost:3001/d/cockpit-main (F5)
 iPad WiFi:   http://MidnightRider.local:8888 (puis cliquer COCKPIT)
-Portal:      http://localhost:8888 (9 dashboards)
+Portal:      http://localhost:8888 (16 dashboards)
 ```
 
 ---
@@ -137,7 +137,7 @@ Sources:
 ☐ Vérifier InfluxDB reçoit des données
 ☐ Ouvrir Grafana COCKPIT (F5)
 ☐ Affichage sur iPad en fullscreen (F key)
-☐ Tester les 9 dashboards
+☐ Tester les 16 dashboards
 ☐ Vérifier no errors, no crashes
 ☐ Contrôler batterie SOK si arrivée
 ```

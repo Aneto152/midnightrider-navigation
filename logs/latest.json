@@ -1,13 +1,13 @@
 {
-  "task": "Sprint 3 (1/3): privacy cleanup \u2014 GPS, MAC, paths, skipper, WhatsApp",
-  "date": "2026-05-13T16:36:24.967785",
+  "task": "Sprint 3 (2/3): documentation accuracy",
+  "date": "2026-05-13T16:37:39.289458",
   "status": "SUCCESS",
   "steps_completed": [
-    "GPS coords (41.0534, -73.5387) moved to env vars in 8 files",
-    "NOAA station (8518750) replaced with ${NOAA_STATION}",
-    "MAC addresses (XX:XX:XX:XX:XX:XX) anonymized in 10 docs",
-    "Private paths (/home/aneto/.openclaw/workspace) replaced with ~/midnightrider-navigation in 18 files",
-    "SKIPPER_NAME + WhatsApp IDs anonymized in .env.example"
+    "README: git clone URL fixed (Aneto152/midnightrider-navigation) \u2014 4 occurrences",
+    "README: portal service documented (port 8888 + systemctl)",
+    "README: services summary table added (all 7 services)",
+    "Docs: dashboard count reconciled (16 dashboards across 20 files)",
+    "SYSTEM-SUMMARY: accuracy claim updated to 2026-05-13"
   ],
   "errors": [],
   "services_status": {
@@ -17,5 +17,5 @@
     "regatta": "not touched"
   },
   "dust_readable": true,
-  "next_recommended": "Sprint 3 (2/3): documentation accuracy"
+  "next_recommended": "Sprint 3 (3/3): open source files (SECURITY.md, CODE_OF_CONDUCT.md)"
 }

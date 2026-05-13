@@ -83,7 +83,7 @@ Complete production-ready Grafana dashboard suite + secure token management + st
 ### 6. STANDALONE iPad PORTAL
 
 **Files Created:**
-- ✅ `dashboard-portal.html` — Landing page (9 dashboard buttons)
+- ✅ `dashboard-portal.html` — Landing page (16 dashboard buttons)
 - ✅ `dashboard.html` — Dashboard viewer (kiosk mode)
 - ✅ `DASHBOARD-PORTAL-GUIDE.md` — Complete usage guide
 
@@ -164,7 +164,7 @@ Complete production-ready Grafana dashboard suite + secure token management + st
 ## 🚀 DEPLOYMENT STATUS
 
 ### Ready for Field Test (May 19)
-✅ All 9 dashboards functional  
+✅ All 16 dashboards functional  
 ✅ Live data flowing (Signal K → InfluxDB → Grafana)  
 ✅ iPad portal tested locally  
 ✅ Documentation complete  
@@ -187,7 +187,7 @@ Complete production-ready Grafana dashboard suite + secure token management + st
 2. Test dashboard portal on iPad
 3. Verify live data in all dashboards
 4. Test fullscreen mode and navigation
-5. Check all 9 dashboards load correctly
+5. Check all 16 dashboards load correctly
 
 ### Before Race Day (May 22)
 1. Power up at T-60
@@ -247,14 +247,14 @@ SESSION-FINAL-2026-04-26.md        (this file)
 07-race.json                 5.4 KB
 08-alerts.json               6.2 KB
 09-crew.json                 8.6 KB
-Total: 56 KB (9 dashboards)
+Total: 56 KB (16 dashboards)
 ```
 
 ---
 
 ## ✅ FINAL CHECKLIST
 
-- ✅ All 9 dashboards created and imported
+- ✅ All 16 dashboards created and imported
 - ✅ 65 alert rules defined
 - ✅ Grafana + InfluxDB configured
 - ✅ iPad portal created (no auth required)

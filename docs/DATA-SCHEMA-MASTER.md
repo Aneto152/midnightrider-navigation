@@ -40,7 +40,7 @@
     midnight_rider     NMEA 0183 TCP données calibrées
          │
          ▼
-    Grafana :3001 — 9 dashboards · 65 alertes
+    Grafana :3001 — 16 dashboards · 65 alertes
          │
          ▼
     MCP (7 serveurs · 37 outils)

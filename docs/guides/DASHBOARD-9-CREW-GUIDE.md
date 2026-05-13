@@ -240,7 +240,7 @@ Dashboard 9 (crew-management)
 - [ ] Fatigue Index calculated correctly
 - [ ] All 5 crew alerts created in Grafana Alerting
 - [ ] iPad displays dashboard correctly
-- [ ] Navigation links work (all 9 dashboards)
+- [ ] Navigation links work (all 16 dashboards)
 - [ ] Ready for field test (May 19)
 
 ---

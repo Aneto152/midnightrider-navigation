@@ -121,7 +121,7 @@ python3 setup-grafana-influxdb.py
 ### Option A: Automatic (via script)
 ```bash
 python3 setup-grafana-influxdb.py  # Configure datasource
-python3 import-dashboards.py        # Import 9 dashboards
+python3 import-dashboards.py        # Import 16 dashboards
 ```
 
 ### Option B: Manual (via Web UI)
@@ -134,7 +134,7 @@ python3 import-dashboards.py        # Import 9 dashboards
    - Bucket: `midnight_rider`
    - Token: (paste from `.env.local`)
 5. Dashboards → Import → Upload JSON
-6. Select all 9 dashboard files
+6. Select all 16 dashboard files
 
 ---
 

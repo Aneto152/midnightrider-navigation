@@ -121,7 +121,7 @@ midnightrider-navigation/
 │   ├── 01-cockpit.json            ← Main navigation
 │   ├── 02-environment.json
 │   ├── 03-performance.json
-│   ├── ... (9 dashboards total)
+│   ├── ... (16 dashboards total)
 │   └── DASHBOARDS-README.md
 │
 ├── grafana-alerts/                ← Alert rules

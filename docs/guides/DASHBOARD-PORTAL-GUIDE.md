@@ -28,7 +28,7 @@ A simple HTML portal that displays all 9 Grafana dashboards in **kiosk mode** wi
 2. **Navigate to:** `http://[RPi-IP]:3001/dashboard-portal.html`
    - Example: `http://192.168.1.100:3001/dashboard-portal.html`
 
-3. **You'll see 9 dashboard buttons:**
+3. **You'll see 16 dashboard buttons:**
    - 🏠 COCKPIT
    - 🌊 ENVIRONMENT
    - ⚡ PERFORMANCE
@@ -55,7 +55,7 @@ A simple HTML portal that displays all 9 Grafana dashboards in **kiosk mode** wi
 ### Files:
 
 **dashboard-portal.html**
-- Landing page with 9 dashboard buttons
+- Landing page with 16 dashboard buttons
 - Responsive grid layout
 - iPad-optimized styling
 
@@ -122,7 +122,7 @@ Add to iPad home screen:
 - [ ] RPi network IP known (e.g., 192.168.1.100)
 - [ ] iPad connected to same WiFi (MidnightRider)
 - [ ] Test on iPad: Navigate to `http://[RPi-IP]:3001/dashboard-portal.html`
-- [ ] All 9 dashboard buttons work
+- [ ] All 16 dashboard buttons work
 - [ ] Fullscreen mode works
 - [ ] Menu navigation works
 
@@ -269,7 +269,7 @@ Modify CSS variables in both HTML files:
 
 4. **Race day (May 22):**
    - Use dashboard portal for crew display
-   - Monitor all 9 dashboards as needed
+   - Monitor all 16 dashboards as needed
 
 ---
 

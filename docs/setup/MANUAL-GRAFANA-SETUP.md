@@ -81,7 +81,7 @@ INFLUX_TOKEN="j5zWJmdrK4BoU359...=="
 - **Data source:** Select `InfluxDB` from dropdown
 - Click **Import**
 
-### Repeat for all 9 dashboards
+### Repeat for all 16 dashboards
 Do the above for:
 - `01-cockpit.json`
 - `02-environment.json`
@@ -194,7 +194,7 @@ Should show "active (running)"
 ### Dashboard won't load
 
 **Check:**
-1. All 9 dashboards imported?
+1. All 16 dashboards imported?
 2. Each has `InfluxDB` datasource selected?
 3. InfluxDB datasource configured?
 4. Grafana restarted? Try:

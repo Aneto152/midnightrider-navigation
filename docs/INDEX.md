@@ -90,7 +90,7 @@ Complete step-by-step integration for each hardware component:
 
 
 
-- **[GRAFANA-DASHBOARDS.md](SOFTWARE/GRAFANA-DASHBOARDS.md)** — 9 dashboards reference
+- **[GRAFANA-DASHBOARDS.md](SOFTWARE/GRAFANA-DASHBOARDS.md)** — 16 dashboards reference
   - COCKPIT (main navigation)
   - ENVIRONMENT (sea & weather)
   - PERFORMANCE (speed analysis)
@@ -151,7 +151,7 @@ Alert categories:
 
 - **Desktop:** http://localhost:3001 (Grafana)
 - **iPad WiFi:** http://MidnightRider.local:8888 (Portal)
-- **Portal Landing:** 9 dashboard buttons
+- **Portal Landing:** 16 dashboard buttons
 - **Kiosk Mode:** Full-screen with no menus
 
 ---

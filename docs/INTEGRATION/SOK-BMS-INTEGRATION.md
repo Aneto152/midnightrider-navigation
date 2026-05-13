@@ -202,7 +202,7 @@ Open http://192.168.1.167:3001/d/electrical-power
 
 - HARDWARE/SOK-BMS-BLE-PROTOCOL.md — BLE frame structure & GATT details
 - HARDWARE/UM982-GNSS-DATASHEET.md — GPS/heading (not battery-related)
-- docs/SOFTWARE/GRAFANA-DASHBOARDS.md — All 9 dashboards
+- docs/SOFTWARE/GRAFANA-DASHBOARDS.md — All 16 dashboards
 - docs/OPERATIONS/FIELD-TEST-CHECKLIST-2026-05-19.md — Pre-test validation
 
 ---

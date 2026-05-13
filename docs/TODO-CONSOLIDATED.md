@@ -110,7 +110,7 @@
   - Time range: Last 24 hours
 
 - [ ] **Add to Navigation Links**
-  - Update all 9 dashboard navigation links
+  - Update all 16 dashboard navigation links
   - New dashboard: "🔋 BATTERY"
 
 - [ ] **Add Alerts**
@@ -133,7 +133,7 @@
 
 - [ ] **Write to InfluxDB via Signal K**
   - Plugin sends to existing signalk-to-influxdb2 pipeline
-  - Data available for 9 dashboards
+  - Data available for 16 dashboards
 
 - [ ] **Test Integration**
   - Start Signal K and plugin
@@ -341,7 +341,7 @@
 - [x] iPad WiFi works
 - [ ] Live data visible (verification needed)
 - [ ] Portal navigation smooth
-- [ ] All 9 dashboards interactive
+- [ ] All 16 dashboards interactive
 - [ ] Alerts working (no false positives)
 - [ ] Battery integration (May 5+)
 - [ ] Field test verified (May 19)

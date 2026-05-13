@@ -307,7 +307,7 @@ open ~/Desktop/Midnight\ Rider\ Dashboard.app/
 
 **During Race:**
 1. Use Dashboard Portal to navigate dashboards
-2. All 9 dashboards accessible from portal
+2. All 16 dashboards accessible from portal
 3. Fullscreen mode for clean display
 
 ---

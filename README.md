@@ -36,7 +36,7 @@ Perfect for racing, cruising, or research.
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/denislafarge/midnight-rider.git
+git clone https://github.com/Aneto152/midnightrider-navigation.git
 cd midnight-rider
 
 # 2. Copy config template
@@ -212,7 +212,7 @@ See `.env.example` for full list.
 ### Clone & Setup
 
 ```bash
-git clone https://github.com/denislafarge/midnight-rider.git
+git clone https://github.com/Aneto152/midnightrider-navigation.git
 cd midnight-rider
 python3 -m venv venv
 source venv/bin/activate
@@ -251,8 +251,8 @@ Free to use, modify, and distribute.
 
 ### Issues & Contributions
 
-- Found a bug? [Open an issue](https://github.com/denislafarge/midnight-rider/issues)
-- Have an idea? [Create a discussion](https://github.com/denislafarge/midnight-rider/discussions)
+- Found a bug? [Open an issue](https://github.com/Aneto152/midnightrider-navigation/issues)
+- Have an idea? [Create a discussion](https://github.com/Aneto152/midnightrider-navigation/discussions)
 - Want to contribute? See [`CONTRIBUTING.md`](CONTRIBUTING.md)
 
 ---
@@ -271,7 +271,7 @@ Free to use, modify, and distribute.
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Core system | ✅ Production | Ready for racing |
-| Dashboards | ✅ Complete | 9 dashboards + 65 alerts |
+| Dashboards | ✅ Complete | 16 dashboards + 65 alerts |
 | iPad portal | ✅ Ready | Offline mode + auto-reconnect |
 | Battery monitor | ✅ Ready | SOK BMS via BLE |
 | Media Man | ✅ Ready | WhatsApp reporting |
@@ -282,3 +282,34 @@ Free to use, modify, and distribute.
 ---
 
 **Built with ⛵ for sailors who care about data.**
+
+## Portal Service (port 8888)
+
+The portal is a lightweight Python HTTP server serving the navigation dashboard.
+
+Start manually:
+```bash
+cd ~/midnightrider-navigation
+python3 portal/server.py &
+```
+
+Managed by systemctl (persistent):
+```bash
+sudo systemctl start midnightrider-portal
+sudo systemctl enable midnightrider-portal
+sudo systemctl status midnightrider-portal
+```
+
+Access: http://midnightrider.local or http://192.168.1.167
+
+## Services Summary
+
+| Service | Port | Manager | Description |
+|---------------|------|-----------|------------------------------------|
+| Signal K | 3000 | systemctl | NMEA data hub |
+| Portal | 8888 | systemctl | Navigation dashboard (nginx proxy) |
+| InfluxDB | 8086 | Docker | Time-series data storage |
+| Grafana | 3001 | Docker | Data visualization |
+| Regatta | 5000 | Docker | Race planning and management |
+| Astronomical | — | Docker | Sun/moon/tide data collector |
+| Nginx | 80 | systemctl | Reverse proxy → portal + grafana |

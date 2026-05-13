@@ -25,7 +25,7 @@ Safari → http://MidnightRider.local:8888
 
 ### Features
 - ✅ No login required (kiosk mode)
-- ✅ 9 dashboards accessible
+- ✅ 16 dashboards accessible
 - ✅ Fullscreen support
 - ✅ Works offline (after initial load)
 
@@ -55,7 +55,7 @@ Safari → http://MidnightRider.local:8888
      │                            │
  index.html                   viewer.html
  (Landing page)           (Redirect to Grafana)
- (9 dashboards)                 │
+ (16 dashboards)                 │
                                 │
                     ┌───────────v───────────┐
                     │  Grafana Dashboard     │
@@ -82,7 +82,7 @@ Safari → http://MidnightRider.local:8888
 ### Portal Files (HTML)
 
 **index.html** (5.6 KB)
-- Landing page with 9 dashboard buttons
+- Landing page with 16 dashboard buttons
 - Beautiful gradient dark theme
 - Responsive grid layout
 - Links all pass `&host=MidnightRider.local` parameter
@@ -159,7 +159,7 @@ python3 -m http.server 8888
 
 # Test in browser
 # Desktop: http://localhost:8888
-# Should see landing page with 9 dashboards
+# Should see landing page with 16 dashboards
 ```
 
 **3. Test on iPad**
@@ -389,7 +389,7 @@ border: 2px solid rgba(0, 212, 255, 0.3);
 - [ ] Services running (Signal K, Docker, Grafana, InfluxDB)
 - [ ] HTML portal loads on http://localhost:8888 (Desktop)
 - [ ] HTML portal loads on http://MidnightRider.local:8888 (iPad)
-- [ ] All 9 dashboards accessible
+- [ ] All 16 dashboards accessible
 - [ ] Dashboard displays without login popup
 - [ ] Live data appears in dashboards
 - [ ] Fullscreen toggle works (F key, button, double-tap)
@@ -419,7 +419,7 @@ border: 2px solid rgba(0, 212, 255, 0.3);
 
 **Before Race Day (May 19):**
 - Test on both Desktop and iPad
-- Verify all 9 dashboards load
+- Verify all 16 dashboards load
 - Check live data appears
 - Test fullscreen toggle
 

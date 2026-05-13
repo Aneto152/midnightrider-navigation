@@ -61,7 +61,7 @@ Denis opens Grafana and sees the dashboards load—but all panels show **"No dat
 ```
 ❌ COCKPIT dashboard: No data
 ❌ ENVIRONMENT dashboard: No data  
-❌ All 9 dashboards: Silent
+❌ All 16 dashboards: Silent
 ```
 
 But tests show:
@@ -263,7 +263,7 @@ Before the May 22 Block Island Race, Midnight Rider had to verify:
 - ✅ No data gaps > 10 seconds
 
 ### Dashboard Stability ✅
-- ✅ 9/9 dashboards render without errors
+- ✅ 9/16 dashboards render without errors
 - ✅ No "Page error" or "datasource not found" messages
 - ✅ Kiosk mode (fullscreen) works on iPad
 - ✅ Graphs update every 1-5 seconds
@@ -344,7 +344,7 @@ Flux is a real query language. Broken queries = silent data loss. Test queries i
 
 ### May 19: Field Test
 - Boot the system on the water
-- Verify all 9 dashboards live-update with real ocean data
+- Verify all 16 dashboards live-update with real ocean data
 - Test iPad WiFi range (up to 100 feet from the boat)
 - Validate alert thresholds with crew feedback
 

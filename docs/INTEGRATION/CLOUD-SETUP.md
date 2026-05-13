@@ -193,7 +193,7 @@ After sync complete:
 ### Grafana Cloud
 - https://yourname.grafana.net
 - View dashboards with live data
-- All 9 dashboards accessible
+- All 16 dashboards accessible
 
 ---
 

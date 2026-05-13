@@ -177,7 +177,7 @@ CREW:        http://localhost:3001/d/crew-management
 ALERTS:      http://localhost:3001/d/alerts-monitoring
 ```
 
-### Portal Web (9 dashboards)
+### Portal Web (16 dashboards)
 ```
 http://localhost:8888          ← Desktop
 http://MidnightRider.local:8888 ← iPad WiFi
@@ -217,7 +217,7 @@ scripts/install-midnight-rider.sh
   └─ Installation complète du système (7 phases)
   
 scripts/import-grafana-dashboards.sh
-  └─ Import automatique des 9 dashboards
+  └─ Import automatique des 16 dashboards
 ```
 
 ---
@@ -242,7 +242,7 @@ scripts/import-grafana-dashboards.sh
 - [ ] Vérifier InfluxDB (35,000+ records/heure)
 - [ ] Ouvrir Grafana COCKPIT et appuyer F5 (données en direct)
 - [ ] Tester sur iPad WiFi: http://MidnightRider.local:8888
-- [ ] Vérifier tous les 9 dashboards
+- [ ] Vérifier tous les 16 dashboards
 - [ ] Vérifier la batterie SOK si arrivée
 
 ### Jour de Course (May 22)

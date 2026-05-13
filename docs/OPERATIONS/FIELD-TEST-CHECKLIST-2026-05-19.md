@@ -213,7 +213,7 @@ curl http://localhost:3001/api/health
 **iPad Grafana:**
 - [ ] Connect to WiFi: `MidnightRider`
 - [ ] Open http://localhost:3001
-- [ ] All 4 dashboards load
+- [ ] All 16 dashboards load
 - [ ] Real-time data flowing
 - [ ] Status: ✅ PASS / ❌ FAIL
 
