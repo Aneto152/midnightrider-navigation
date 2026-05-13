@@ -1,21 +1,29 @@
 {
-  "task": "Competitor library \u2014 69 boats Block Island 2026",
-  "date": "2026-05-13T17:34:19.669789",
+  "task": "ais_watch.py implemented \u2014 AIS competitor monitor",
+  "date": "2026-05-13T18:02:27.572745",
   "status": "SUCCESS",
   "steps_completed": [
-    "competitors.json: 68 active competitors + self (Midnight Rider)",
-    "56 active AIS targets (16 verified + 41 probable)",
-    "12 inactive (MMSI not found)",
-    "Midnight Rider (self) marked active:false",
-    "Ratings prepared for population before May 19"
+    "regatta/ais_watch.py created \u2014 94 lines, stdlib only",
+    "Polls Signal K /vessels every 30s",
+    "Matches competitors.json MMSIs (57 active)",
+    "Writes competitor_tracking to InfluxDB",
+    "ais-watch.service created + enabled (NOT started)",
+    "Ready for field test activation May 19"
   ],
   "errors": [],
   "services_status": {
     "signalk": "not touched",
     "influxdb": "not touched",
     "grafana": "not touched",
-    "regatta": "not touched"
+    "ais_watch": "enabled, not started"
   },
+  "script_features": [
+    "Haversine distance (meters)",
+    "True bearing calculation",
+    "AIS age tracking (stale > 300s warning)",
+    "InfluxDB line protocol generation",
+    "Graceful Signal K disconnection handling"
+  ],
   "dust_readable": true,
-  "next_recommended": "Build ais_watch.py after May 19 field test confirms AIS reception"
+  "next_recommended": "Grafana COMPETITION dashboard \u2014 then field test May 19"
 }
