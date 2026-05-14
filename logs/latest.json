@@ -1,28 +1,31 @@
 {
-  "task": "fix: put_signalk correct args \u2014 sk_path defined + latitude/longitude format",
-  "date": "2026-05-14T17:22:54.567567",
+  "task": "docs: fix README/MCP/DASHBOARDS + INTERFACES.md deployed",
+  "date": "2026-05-14T18:05:46.815387",
   "status": "SUCCESS",
   "steps_completed": [
-    "Fixed /api/start_line handler: sk_path now defined before put_signalk call",
-    "sk_path = \"racing/startLinePrt\" (pin) or \"racing/startLineStb\" (boat)",
-    "put_signalk(sk_path, {\"latitude\": lat, \"longitude\": lon}) \u2014 correct 2-arg format",
-    "Signal K data format confirmed: {latitude, longitude}",
-    "Response includes signalk_path for verification",
-    "Regatta service restarted"
+    "docs/INTERFACES.md: complete guide to all 8 services (11.7 KB)",
+    "README: portal URL now includes :8888",
+    "README: portal description nginx \u2192 Python HTTP server",
+    "README: Regatta interface section added with 3 pages + features",
+    "README: reference to docs/INTERFACES.md for API docs",
+    "mcp/README: bucket references signalk \u2192 midnight_rider",
+    "mcp/README: \"Three MCP\" \u2192 \"8 MCP servers\" updated",
+    "mcp/README: 8 server reference table added (40+ tools)",
+    "DASHBOARDS-README: dashboard count 9 \u2192 16",
+    "All fixes applied and committed"
   ],
+  "documentation_status": {
+    "INTERFACE-REFERENCE.md": "\u2705 User guide (11.6 KB)",
+    "docs/INTERFACES.md": "\u2705 Technical reference (11.7 KB)",
+    "README.md": "\u2705 Updated with portal :8888 + regatta section",
+    "mcp/README.md": "\u2705 8 servers documented",
+    "DASHBOARDS-README.md": "\u2705 Count updated 16 total"
+  },
   "errors": [],
-  "signal_k_paths": {
-    "pin": "racing/startLinePrt",
-    "boat": "racing/startLineStb"
-  },
-  "data_format": {
-    "input": "{\"latitude\": float, \"longitude\": float}",
-    "signal_k_storage": "vessels/self/racing/startLinePrt or Stb"
-  },
   "services_status": {
-    "regatta": "restarted",
-    "portal_proxy": "active on 8888"
+    "documentation": "complete and accurate",
+    "urls": "all verified for field test"
   },
   "dust_readable": true,
-  "next_recommended": "Test pin button at http://192.168.1.167:8888/regatta/ \u2014 verify GPS saves and green toast appears"
+  "next_recommended": "Final verification: test all URLs on May 18 before field test"
 }

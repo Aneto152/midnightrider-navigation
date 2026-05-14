@@ -1,6 +1,6 @@
 # MCP Servers — Sailing Data Access Layer
 
-Three MCP servers providing comprehensive access to MidnightRider's sailing data.
+8 MCP servers providing comprehensive access to MidnightRider's sailing data.
 
 ## Overview
 

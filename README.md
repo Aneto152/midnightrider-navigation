@@ -313,16 +313,29 @@ sudo systemctl enable midnightrider-portal
 sudo systemctl status midnightrider-portal
 ```
 
-Access: http://midnightrider.local or http://192.168.1.167
+Access: http://midnightrider.local:8888 or http://192.168.1.167:8888
 
 ## Services Summary
 
 | Service | Port | Manager | Description |
 |---------------|------|-----------|------------------------------------|
 | Signal K | 3000 | systemctl | NMEA data hub |
-| Portal | 8888 | systemctl | Navigation dashboard (nginx proxy) |
+| Portal | 8888 | systemctl | Navigation dashboard (Python HTTP server + proxy to regatta:5000) |
 | InfluxDB | 8086 | Docker | Time-series data storage |
 | Grafana | 3001 | Docker | Data visualization |
 | Regatta | 5000 | Docker | Race planning and management |
 | Astronomical | — | Docker | Sun/moon/tide data collector |
 | Nginx | 80 | systemctl | Reverse proxy → portal + grafana |
+
+## Regatta Interface
+
+Access the race management interface at http://192.168.1.167:8888/regatta/
+
+| Page | URL | Features |
+|------|-----|----------|
+| Race | /regatta/ | Timer, start line pin/comité, GPS, AIS |
+| Crew | /regatta/crew.html | Helmsman, crew roster |
+| Sails | /regatta/voiles.html | Sail selection, mode |
+
+See docs/INTERFACES.md for complete API documentation.
+
