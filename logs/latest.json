@@ -1,19 +1,17 @@
 {
-  "task": "fix: start_line GPS validation + haversine_m AIS signature",
-  "date": "2026-05-13T23:25:59.057196",
+  "task": "fix: markLine shows GPS error toast instead of silent fail",
+  "date": "2026-05-13T23:36:56.974445",
   "status": "SUCCESS",
   "steps_completed": [
-    "FIX 1: /api/start_line validates GPS before storing pin",
-    "FIX 1: Returns error if GPS unavailable (lat/lon == 0 or null)",
-    "FIX 1: Rounds lat/lon to 5 decimals on success",
-    "FIX 2: haversine_m AIS call uses dict args ({\"lat\": x, \"lon\": y})",
-    "Syntax verified: regatta/server.py valid Python",
-    "Service: docker compose restart regatta"
+    "regatta/index.html: added else clause to markLine callback",
+    "On GPS error: shows \"\u274c GPS indisponible\" toast",
+    "On GPS error: dims button for 3 seconds visual feedback",
+    "User now sees why pin/boat mark failed instead of silent fail"
   ],
   "errors": [],
   "services_status": {
-    "regatta": "restarting"
+    "portal": "needs hard-refresh (Ctrl+Shift+R)"
   },
   "dust_readable": true,
-  "next_recommended": "Verify pin button returns GPS or error"
+  "next_recommended": "Hard-refresh browser to load new index.html"
 }

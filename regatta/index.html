@@ -407,6 +407,10 @@ function markLine(point) {
       if (point === 'pin') { linePin = pt; localStorage.setItem('line-pin', JSON.stringify(pt)); }
       else { lineBoat = pt; localStorage.setItem('line-boat', JSON.stringify(pt)); }
       toast('📍 ' + label + ' marqué(e)');
+    } else {
+      toast('❌ ' + (res.error || 'GPS indisponible'), 3000);
+      btn.style.opacity = '0.5';
+      setTimeout(function() { btn.style.opacity = '1'; }, 3000);
     }
   });
 }
