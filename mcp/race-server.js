@@ -368,6 +368,104 @@ function determineCourseType(marks) {
   return 'Unknown/Custom course';
 }
 
+
+/**
+ * Get Cross-Track Error (XTE) from Signal K qtVLM
+ */
+async function getXTE() {
+  try {
+    // Read from Signal K courseRhumbline
+    const xteUrl = `${SIGNALK_URL}/signalk/v1/api/navigation/courseRhumbline/crossTrackError`;
+    const nextUrl = `${SIGNALK_URL}/signalk/v1/api/navigation/courseRhumbline/nextPoint`;
+    
+    const xteData = await fetch(xteUrl).then(r => r.json()).catch(() => null);
+    const nextData = await fetch(nextUrl).then(r => r.json()).catch(() => null);
+    
+    const xte_m = xteData?.value || 0;
+    const xte_nm = Math.abs(xte_m) / 1852;
+    const side = xte_m > 0 ? 'starboard' : (xte_m < 0 ? 'port' : 'on_track');
+    const next = nextData?.value || {};
+    const dist_m = next.distance || null;
+    
+    return {
+      xte_m: parseFloat(xte_m.toFixed(1)),
+      xte_nm: parseFloat(xte_nm.toFixed(3)),
+      xte_side: side,
+      qtVLM_active: xteData?.value !== undefined,
+      next_waypoint_name: next.name || 'Unknown',
+      distance_to_waypoint_nm: dist_m ? parseFloat((dist_m / 1852).toFixed(2)) : null,
+      note: Math.abs(xte_m) > 100 ? `${Math.abs(xte_m).toFixed(0)}m to ${side} of rhumb line` : 'On track'
+    };
+  } catch (err) {
+    return { error: err.message, qtVLM_active: false };
+  }
+}
+
+/**
+ * Get Race Events log from regatta server
+ */
+async function getRaceEvents(lastN = 10) {
+  try {
+    const url = 'http://localhost:5000/api/event';
+    const response = await fetch(url).then(r => r.json()).catch(() => []);
+    const events = (Array.isArray(response) ? response : (response?.events || [])).slice(-Math.min(lastN, 50));
+    const maneuvers = events.filter(e => ['tack', 'gybe', 'mark_rounding'].includes(e?.type));
+    
+    return {
+      events: events,
+      total_events: events.length,
+      last_event: events[events.length - 1] || null,
+      last_maneuver: maneuvers[maneuvers.length - 1] || null,
+      event_types: [...new Set(events.map(e => e?.type).filter(Boolean))]
+    };
+  } catch (err) {
+    return { error: err.message, events: [] };
+  }
+}
+
+/**
+ * Get ETA to next waypoint/mark
+ */
+async function getMarkETA() {
+  try {
+    const posUrl = `${SIGNALK_URL}/signalk/v1/api/navigation/position`;
+    const sogUrl = `${SIGNALK_URL}/signalk/v1/api/navigation/speedOverGround`;
+    const nextUrl = `${SIGNALK_URL}/signalk/v1/api/navigation/courseRhumbline/nextPoint`;
+    
+    const [posData, sogData, nextData] = await Promise.all([
+      fetch(posUrl).then(r => r.json()).catch(() => null),
+      fetch(sogUrl).then(r => r.json()).catch(() => null),
+      fetch(nextUrl).then(r => r.json()).catch(() => null)
+    ]);
+    
+    const sogMs = sogData?.value || 0;
+    const sogKts = sogMs * 1.94384;
+    const distM = nextData?.value?.distance || null;
+    const distNm = distM ? distM / 1852 : null;
+    const etaH = (distNm && sogKts > 0.5) ? (distNm / sogKts) : null;
+    
+    const now = new Date();
+    let etaTime = null;
+    if (etaH) {
+      const eta = new Date(now.getTime() + etaH * 3600000);
+      etaTime = eta.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', timeZone: 'America/New_York' }) + ' EDT';
+    }
+    
+    return {
+      mark_name: nextData?.value?.name || 'Next mark',
+      distance_nm: distNm ? parseFloat(distNm.toFixed(2)) : null,
+      sog_kts: parseFloat(sogKts.toFixed(1)),
+      eta_hours: etaH ? parseFloat(etaH.toFixed(2)) : null,
+      eta_minutes: etaH ? Math.round(etaH * 60) : null,
+      eta_local_time: etaTime,
+      note: etaTime ? `${nextData?.value?.name || 'Mark'} in ${Math.floor(etaH)}h ${Math.round((etaH % 1) * 60)}min at ${sogKts.toFixed(1)}kts` : 'Speed too low for ETA estimate'
+    };
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
+
 /**
  * Handle MCP tool calls
  */
@@ -385,6 +483,15 @@ async function handleTool(name, args) {
 
       case 'get_race_marks':
         return await getRaceMarks();
+
+      case 'get_xte':
+        return await getXTE();
+
+      case 'get_race_events':
+        return await getRaceEvents(args.last_n || 10);
+
+      case 'get_mark_eta':
+        return await getMarkETA();
 
       case 'get_xte':
         return await getXTE();
@@ -443,6 +550,21 @@ async function handleRequest(request) {
           {
             name: 'get_distance_to_line',
             description: 'Get distance to start line with recommendations',
+            inputSchema: { type: 'object', properties: {} }
+          },
+          {
+            name: 'get_xte',
+            description: 'Get cross-track error (XTE) from qtVLM rhumb line',
+            inputSchema: { type: 'object', properties: {} }
+          },
+          {
+            name: 'get_race_events',
+            description: 'Get race events log (tacks, gybes, mark roundings)',
+            inputSchema: { type: 'object', properties: { last_n: { type: 'number' } } }
+          },
+          {
+            name: 'get_mark_eta',
+            description: 'Get ETA to next mark in hours/minutes EDT',
             inputSchema: { type: 'object', properties: {} }
           },
           {

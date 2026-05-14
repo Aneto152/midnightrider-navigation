@@ -233,6 +233,70 @@ async function getWindComparison() {
   }
 }
 
+
+/**
+ * Get Tidal Current from NOAA API
+ */
+async function getTidalCurrent() {
+  try {
+    const stationId = process.env.NOAA_STATION || 'ACT4176';
+    const url = `https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?station=${stationId}&product=currents&time_zone=lst_ldt&units=english&format=json`;
+    
+    const response = await fetch(url);
+    const data = await response.json();
+    const curr = (data?.data || [])[0] || {};
+    
+    const speed = parseFloat(curr.s) || 0;
+    const dir = parseFloat(curr.d) || 0;
+    const type = speed < 0.1 ? 'slack' : (dir > 135 && dir < 315) ? 'ebb' : 'flood';
+    
+    return {
+      station_id: stationId,
+      current_speed_kts: parseFloat(speed.toFixed(2)),
+      current_direction_deg: Math.round(dir),
+      current_type: type,
+      time_local: curr.t || new Date().toISOString(),
+      racing_note: `${type.charAt(0).toUpperCase() + type.slice(1)} current ${speed.toFixed(1)}kts from ${dir}° — ${type === 'flood' ? 'favors northbound track' : 'favors southbound track'}`
+    };
+  } catch (err) {
+    return { error: err.message, current_type: 'unknown' };
+  }
+}
+
+/**
+ * Get comprehensive NOAA conditions summary
+ */
+async function getNoaaConditionsSummary() {
+  try {
+    const [buoyData, tidalData] = await Promise.all([
+      getBuoyData().catch(() => null),
+      getTidalCurrent().catch(() => null)
+    ]);
+    
+    const buoy = buoyData || { error: 'unavailable' };
+    const tidal = tidalData || { error: 'unavailable' };
+    
+    return {
+      nearest_buoy: {
+        name: buoy.buoy_name || 'Ambrose Light',
+        wind_speed_kts: buoy.wind_speed_knots || 0,
+        wind_direction_deg: buoy.wind_direction_degrees || 0,
+        wave_height_ft: (buoy.wave_height_meters || 0) * 3.28084
+      },
+      tidal_current: {
+        current_speed_kts: tidal.current_speed_kts || 0,
+        current_direction_deg: tidal.current_direction_deg || 0,
+        current_type: tidal.current_type || 'unknown'
+      },
+      sea_state_description: `${buoy.wind_speed_knots || '?'}kts from ${buoy.wind_direction_degrees || '?'}°, waves ${((buoy.wave_height_meters || 0) * 3.28084).toFixed(1)}ft. Current ${tidal.current_type || '?'} ${tidal.current_speed_kts || '?'}kts.`,
+      racing_note: tidal.racing_note || 'Current data unavailable'
+    };
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
+
 /**
  * Handle MCP tool calls
  */
@@ -250,6 +314,12 @@ async function handleTool(name, args) {
 
       case 'get_noaa_conditions_summary':
         return await getNOAAConditionsSummary();
+
+      case 'get_tidal_current':
+        return await getTidalCurrent();
+
+      case 'get_noaa_conditions_summary':
+        return await getNoaaConditionsSummary();
 
       default:
         throw new Error(`Unknown tool: ${name}`);
@@ -289,6 +359,16 @@ async function handleRequest(request) {
           {
             name: 'get_buoy_data',
             description: 'Get current wind and wave data from all NOAA buoys in Long Island Sound',
+            inputSchema: { type: 'object', properties: {} }
+          },
+          {
+            name: 'get_tidal_current',
+            description: 'Get live NOAA tidal current (flood/ebb/slack, speed, direction)',
+            inputSchema: { type: 'object', properties: {} }
+          },
+          {
+            name: 'get_noaa_conditions_summary',
+            description: 'Get comprehensive NOAA buoy + tidal current conditions summary',
             inputSchema: { type: 'object', properties: {} }
           },
           {
