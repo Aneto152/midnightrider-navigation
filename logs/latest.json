@@ -1,26 +1,25 @@
 {
-  "task": "verify: SIGNALK_HTTP Docker bridge networking for regatta container",
-  "date": "2026-05-13T23:43:41.905042",
+  "task": "fix: portal proxy /api/* to regatta:5000",
+  "date": "2026-05-13T23:54:00.443953",
   "status": "SUCCESS",
   "steps_completed": [
-    "Tested Signal K reachability from Docker container",
-    "Confirmed: localhost:3000 \u2705 and 172.17.0.1:3000 \u2705 working",
-    "regatta uses network_mode: host (direct localhost access)",
-    "server.py hardcoded to http://localhost:3000 (correct)",
-    "/api/position returns live GPS: 40.763\u00b0N, 73.988\u00b0W \u2705",
-    "Pin/boat mark button now has GPS data available"
+    "portal/server.py: _proxy_to_regatta() method added",
+    "do_GET: /api/* requests proxied to localhost:5000",
+    "do_POST: /api/* requests proxied to localhost:5000",
+    "Portal service restarted",
+    "/api/position verified via http://localhost:8888/api/position \u2705",
+    "GPS coordinates returned: 40.763\u00b0N, 73.988\u00b0W"
   ],
   "errors": [],
-  "verification": {
-    "localhost_3000": "HTTP 200 \u2705",
-    "docker_bridge_172_17_0_1": "HTTP 200 \u2705",
-    "api_position": "Returns GPS coordinates \u2705"
-  },
   "services_status": {
-    "signal_k": "running on localhost:3000",
-    "regatta": "running with network_mode: host",
-    "start_line_worker": "running with network_mode: host"
+    "portal": "restarted with proxy enabled",
+    "regatta": "accessible via port 8888"
+  },
+  "endpoint_access": {
+    "direct": "http://localhost:5000/api/position",
+    "via_portal": "http://localhost:8888/api/position",
+    "via_hostname": "http://192.168.1.167:8888/api/position"
   },
   "dust_readable": true,
-  "next_recommended": "Test start line pin/boat marking \u2014 GPS coordinates should save correctly"
+  "next_recommended": "Test pin/comit\u00e9 buttons at http://192.168.1.167:8888/regatta/"
 }

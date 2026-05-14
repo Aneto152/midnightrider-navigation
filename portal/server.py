@@ -27,8 +27,12 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")[0].split("#")[0]
 
+        # /api/* → proxy to regatta:5000
+        if path.startswith("/api/"):
+            self._proxy_to_regatta("GET")
+
         # Root → portal/index.html
-        if path in ("/", ""):
+        elif path in ("/", ""):
             self._serve_file(PORTAL / "index.html")
 
         # /manifest.json → root manifest (for PWA)
@@ -61,6 +65,8 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path == "/api/shutdown":
             self._handle_shutdown()
+        elif self.path.startswith("/api/"):
+            self._proxy_to_regatta("POST")
         else:
             self.send_error(404, "Not Found")
 
@@ -70,6 +76,37 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
         self.end_headers()
+
+    def _proxy_to_regatta(self, method):
+        """Proxy /api/* requests to regatta server on localhost:5000"""
+        import urllib.request
+        import urllib.error
+        
+        length = int(self.headers.get('Content-Length', 0))
+        body = self.rfile.read(length) if length else None
+        url = f'http://localhost:5000{self.path}'
+        
+        req = urllib.request.Request(url, data=body, method=method)
+        if body:
+            req.add_header('Content-Type', self.headers.get('Content-Type', 'application/json'))
+        
+        try:
+            resp = urllib.request.urlopen(req, timeout=5)
+            data = resp.read()
+            self.send_response(resp.status)
+            self.send_header('Content-Type', resp.headers.get('Content-Type', 'application/json'))
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.send_header('Content-Length', str(len(data)))
+            self.end_headers()
+            self.wfile.write(data)
+        except urllib.error.HTTPError as e:
+            data = e.read()
+            self.send_response(e.code)
+            self.send_header('Content-Type', 'application/json')
+            self.end_headers()
+            self.wfile.write(data)
+        except Exception as e:
+            self.send_error(502, f'Regatta proxy error: {e}')
 
     def _serve_file(self, filepath):
         filepath = Path(filepath)
