@@ -1,32 +1,19 @@
 {
-  "task": "Phase 1 (3/3) complete \u2014 get_xte, get_race_events, get_mark_eta, get_tidal_current, get_noaa_conditions_summary",
-  "date": "2026-05-13T21:03:22.420908",
+  "task": "fix: start_line GPS validation + haversine_m AIS signature",
+  "date": "2026-05-13T23:25:59.057196",
   "status": "SUCCESS",
   "steps_completed": [
-    "race-server.js: get_xte (qtVLM XTE + next waypoint)",
-    "race-server.js: get_race_events (tacks, gybes, mark roundings from /api/event)",
-    "race-server.js: get_mark_eta (ETA to next mark in EDT)",
-    "buoy-server.js: get_tidal_current (NOAA API flood/ebb/slack)",
-    "buoy-server.js: get_noaa_conditions_summary (wind + wave + current synthesis)",
-    "Removed PENDING markers from MIDNIGHT-REPORTER-PROMPT.md",
-    "All tools now operational and integrated with Midnight Reporter"
+    "FIX 1: /api/start_line validates GPS before storing pin",
+    "FIX 1: Returns error if GPS unavailable (lat/lon == 0 or null)",
+    "FIX 1: Rounds lat/lon to 5 decimals on success",
+    "FIX 2: haversine_m AIS call uses dict args ({\"lat\": x, \"lon\": y})",
+    "Syntax verified: regatta/server.py valid Python",
+    "Service: docker compose restart regatta"
   ],
   "errors": [],
-  "mcp_ecosystem": {
-    "servers": 8,
-    "total_tools": 40,
-    "phase_1_status": "COMPLETE \u2705"
-  },
-  "syntax_verification": {
-    "race-server.js": "PASS \u2705",
-    "buoy-server.js": "PASS \u2705"
-  },
   "services_status": {
-    "signalk": "not touched",
-    "influxdb": "not touched",
-    "mcp": "8 servers, 40 tools, Phase 1 complete"
+    "regatta": "restarting"
   },
-  "midnight_reporter_status": "FULLY EQUIPPED \u2014 all MCP tools available",
   "dust_readable": true,
-  "next_recommended": "Test Midnight Reporter: bash scripts/midnight-reporter.sh"
+  "next_recommended": "Verify pin button returns GPS or error"
 }

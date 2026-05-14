@@ -95,8 +95,7 @@ def get_ais_targets(radius_nm=10):
         # Apply radius filter
         if boat_lat and boat_lon:
             targets = [t for t in targets
-                      if haversine_m(boat_lat, boat_lon,
-                                   t['lat'], t['lon']) <= radius_nm * 1852]
+                      if haversine_m({"lat": boat_lat, "lon": boat_lon}, {"lat": t['lat'], "lon": t['lon']}) <= radius_nm * 1852]
         
         return targets
     except Exception as e:
@@ -375,13 +374,17 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path == "/api/start_line":
             pos = get_gps_position()
             point = body.get("point", "pin")
-            lat = pos.get("latitude", 0)
-            lon = pos.get("longitude", 0)
+            lat = pos.get("latitude")
+            lon = pos.get("longitude")
+            # Validate GPS before storing pin
+            if not lat or not lon or (abs(lat) < 0.001 and abs(lon) < 0.001):
+                self.send_json({"ok": False, "error": "GPS unavailable — cannot pin location", "lat": None, "lon": None})
+                return
             ok = write_influx("regatta.start_line",
                 {"lat": lat, "lon": lon, "point": point},
                 {"mark": point})
             start_line_cache[point] = {"lat": lat, "lon": lon}
-            self.send_json({"ok": ok, "lat": lat, "lon": lon})
+            self.send_json({"ok": ok, "lat": round(lat, 5), "lon": round(lon, 5)})
         elif self.path == "/api/weather/start":
             self.send_json(weather_collector.start())
         elif self.path == "/api/weather/stop":
