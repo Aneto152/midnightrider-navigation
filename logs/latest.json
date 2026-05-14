@@ -1,26 +1,28 @@
 {
-  "task": "refactor: start_line stored in Signal K racing.startLinePrt/Stb",
-  "date": "2026-05-14T00:08:59.636859",
+  "task": "fix: put_signalk correct args \u2014 sk_path defined + latitude/longitude format",
+  "date": "2026-05-14T17:22:54.567567",
   "status": "SUCCESS",
   "steps_completed": [
-    "put_signalk() function added for REST PUT to Signal K",
-    "load_start_line_from_signalk() restores cache at server startup",
-    "POST /api/start_line now PUTs to Signal K (racing/startLinePrt or startLineStb)",
-    "Signal K stores coordinates persistently",
-    "start_line_cache persists across regatta restarts",
-    "regatta service restarted"
+    "Fixed /api/start_line handler: sk_path now defined before put_signalk call",
+    "sk_path = \"racing/startLinePrt\" (pin) or \"racing/startLineStb\" (boat)",
+    "put_signalk(sk_path, {\"latitude\": lat, \"longitude\": lon}) \u2014 correct 2-arg format",
+    "Signal K data format confirmed: {latitude, longitude}",
+    "Response includes signalk_path for verification",
+    "Regatta service restarted"
   ],
-  "signal_k_integration": {
-    "pin_path": "racing/startLinePrt",
-    "boat_path": "racing/startLineStb",
-    "data_format": "{\"latitude\": float, \"longitude\": float}",
-    "auto_relay": "Signal K plugin relays to InfluxDB automatically"
-  },
   "errors": [],
+  "signal_k_paths": {
+    "pin": "racing/startLinePrt",
+    "boat": "racing/startLineStb"
+  },
+  "data_format": {
+    "input": "{\"latitude\": float, \"longitude\": float}",
+    "signal_k_storage": "vessels/self/racing/startLinePrt or Stb"
+  },
   "services_status": {
     "regatta": "restarted",
-    "signal_k": "ready for racing paths"
+    "portal_proxy": "active on 8888"
   },
   "dust_readable": true,
-  "next_recommended": "Test pin button \u2014 verify Signal K GET racing/startLinePrt returns stored coordinates"
+  "next_recommended": "Test pin button at http://192.168.1.167:8888/regatta/ \u2014 verify GPS saves and green toast appears"
 }

@@ -410,11 +410,12 @@ class Handler(BaseHTTPRequestHandler):
             if not lat or not lon or (abs(lat) < 0.001 and abs(lon) < 0.001):
                 self.send_json({"ok": False, "error": "GPS unavailable — cannot pin location", "lat": None, "lon": None})
                 return
-            ok = put_signalk(sk_path,
-                {"lat": lat, "lon": lon, "point": point},
-                {"mark": point})
-            start_line_cache[point] = {"lat": lat, "lon": lon}
-            self.send_json({"ok": ok, "lat": round(lat, 5), "lon": round(lon, 5)})
+            # Signal K path: pin=startLinePrt, boat=startLineStb
+            sk_path = "racing/startLinePrt" if point == "pin" else "racing/startLineStb"
+            ok = put_signalk(sk_path, {"latitude": lat, "longitude": lon})
+            if ok:
+                start_line_cache[point] = {"lat": lat, "lon": lon}
+            self.send_json({"ok": ok, "lat": round(lat, 5), "lon": round(lon, 5), "signalk_path": sk_path})
         elif self.path == "/api/weather/start":
             self.send_json(weather_collector.start())
         elif self.path == "/api/weather/stop":
