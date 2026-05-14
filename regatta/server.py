@@ -45,6 +45,36 @@ def get_signalk(path):
     except:
         return {}
 
+
+def put_signalk(path, value):
+    """Write a value to Signal K via REST PUT."""
+    try:
+        url = f"{SIGNALK_URL}/signalk/v1/api/vessels/self/{path.replace('.', '/')}"
+        data = json.dumps({"value": value}).encode()
+        req = urllib.request.Request(url, data=data, method="PUT")
+        req.add_header("Content-Type", "application/json")
+        urllib.request.urlopen(req, timeout=3)
+        return True
+    except Exception as e:
+        print(f"Signal K PUT {path}: {e}")
+        return False
+
+def load_start_line_from_signalk():
+    """On startup: restore start line from Signal K datastore."""
+    global start_line_cache
+    for point, sk_path in [("pin", "racing/startLinePrt"),
+                           ("boat", "racing/startLineStb")]:
+        try:
+            data = get_signalk(f"vessels/self/{sk_path}")
+            if data and data.get("value"):
+                v = data["value"]
+                if v.get("latitude") and v.get("longitude"):
+                    start_line_cache[point] = {
+                        "lat": v["latitude"], "lon": v["longitude"]}
+                    print(f"Restored {point} from Signal K: {v}")
+        except Exception as e:
+            print(f"Could not restore {point} from Signal K: {e}")
+
 def get_navigation():
     sog_data = get_signalk("vessels/self/navigation/speedOverGround")
     cog_data = get_signalk("vessels/self/navigation/courseOverGroundTrue")
@@ -380,7 +410,7 @@ class Handler(BaseHTTPRequestHandler):
             if not lat or not lon or (abs(lat) < 0.001 and abs(lon) < 0.001):
                 self.send_json({"ok": False, "error": "GPS unavailable — cannot pin location", "lat": None, "lon": None})
                 return
-            ok = write_influx("regatta.start_line",
+            ok = put_signalk(sk_path,
                 {"lat": lat, "lon": lon, "point": point},
                 {"mark": point})
             start_line_cache[point] = {"lat": lat, "lon": lon}
@@ -426,6 +456,7 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
 
 if __name__ == "__main__":
+    load_start_line_from_signalk()
     server = ThreadingHTTPServer(("0.0.0.0", 5000), Handler)
     print("Regatta server on :5000")
     server.serve_forever()

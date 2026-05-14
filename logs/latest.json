@@ -1,25 +1,26 @@
 {
-  "task": "fix: portal proxy /api/* to regatta:5000",
-  "date": "2026-05-13T23:54:00.443953",
+  "task": "refactor: start_line stored in Signal K racing.startLinePrt/Stb",
+  "date": "2026-05-14T00:08:59.636859",
   "status": "SUCCESS",
   "steps_completed": [
-    "portal/server.py: _proxy_to_regatta() method added",
-    "do_GET: /api/* requests proxied to localhost:5000",
-    "do_POST: /api/* requests proxied to localhost:5000",
-    "Portal service restarted",
-    "/api/position verified via http://localhost:8888/api/position \u2705",
-    "GPS coordinates returned: 40.763\u00b0N, 73.988\u00b0W"
+    "put_signalk() function added for REST PUT to Signal K",
+    "load_start_line_from_signalk() restores cache at server startup",
+    "POST /api/start_line now PUTs to Signal K (racing/startLinePrt or startLineStb)",
+    "Signal K stores coordinates persistently",
+    "start_line_cache persists across regatta restarts",
+    "regatta service restarted"
   ],
+  "signal_k_integration": {
+    "pin_path": "racing/startLinePrt",
+    "boat_path": "racing/startLineStb",
+    "data_format": "{\"latitude\": float, \"longitude\": float}",
+    "auto_relay": "Signal K plugin relays to InfluxDB automatically"
+  },
   "errors": [],
   "services_status": {
-    "portal": "restarted with proxy enabled",
-    "regatta": "accessible via port 8888"
-  },
-  "endpoint_access": {
-    "direct": "http://localhost:5000/api/position",
-    "via_portal": "http://localhost:8888/api/position",
-    "via_hostname": "http://192.168.1.167:8888/api/position"
+    "regatta": "restarted",
+    "signal_k": "ready for racing paths"
   },
   "dust_readable": true,
-  "next_recommended": "Test pin/comit\u00e9 buttons at http://192.168.1.167:8888/regatta/"
+  "next_recommended": "Test pin button \u2014 verify Signal K GET racing/startLinePrt returns stored coordinates"
 }
