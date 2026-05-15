@@ -1,0 +1,648 @@
+apiVersion: 1
+groups:
+  - orgId: 1
+    name: midnight-rider-alerts
+    folder: Midnight Rider Alerts
+    interval: 1m
+    rules:
+      # Safety (10)
+      - uid: mr-safety-heel
+        title: "⛵ Safety: Heel >22°"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-2m)|>filter(fn:(r)=>r._measurement=="navigation.attitude" and r._field=="roll")|>last()|>map(fn:(r)=>({r with _value:r._value*57.2958}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [22.0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 30s
+        annotations:
+          description: "⛵ Safety: Heel >22°"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-pitch
+        title: "⚓ Safety: Pitch >15°"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-2m)|>filter(fn:(r)=>r._measurement=="navigation.attitude" and r._field=="pitch")|>last()|>map(fn:(r)=>({r with _value:r._value*57.2958}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [15.0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 30s
+        annotations:
+          description: "⚓ Safety: Pitch >15°"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-battery
+        title: "🔋 Safety: Battery <10V"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-2m)|>filter(fn:(r)=>r._measurement=="sok_bms" and r._field=="voltage_v")|>last()'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [10.0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 1m
+        annotations:
+          description: "🔋 Safety: Battery <10V"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-signalk
+        title: "📡 Safety: Signal K Down"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-3m)|>filter(fn:(r)=>r._measurement=="navigation.speedOverGround")|>count()|>map(fn:(r)=>({r with _value:float(v:r._value)}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [1.0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: Alerting
+        execErrState: Error
+        for: 2m
+        annotations:
+          description: "📡 Safety: Signal K Down"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-gps
+        title: "📍 Safety: GPS Loss"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-3m)|>filter(fn:(r)=>r._measurement=="navigation.position")|>count()|>map(fn:(r)=>({r with _value:float(v:r._value)}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [1.0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: Alerting
+        execErrState: Error
+        for: 1m
+        annotations:
+          description: "📍 Safety: GPS Loss"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-sensor
+        title: "⚠️ Safety: Sensor Failure"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-5m)|>filter(fn:(r)=>r._measurement=="navigation.attitude")|>count()|>map(fn:(r)=>({r with _value:float(v:r._value)}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [1.0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          description: "⚠️ Safety: Sensor Failure"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-network
+        title: "🌐 Safety: Network Down"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-5m)|>filter(fn:(r)=>r._field=="value")|>count()|>map(fn:(r)=>({r with _value:float(v:r._value)}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [1.0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: Alerting
+        execErrState: Error
+        for: 5m
+        annotations:
+          description: "🌐 Safety: Network Down"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-influx
+        title: "💾 Safety: InfluxDB Stale"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-5m)|>filter(fn:(r)=>r._field=="value")|>count()|>map(fn:(r)=>({r with _value:float(v:r._value)}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [1.0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: Alerting
+        execErrState: Error
+        for: 5m
+        annotations:
+          description: "💾 Safety: InfluxDB Stale"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-temp
+        title: "🌡️ Safety: Temp >80°C"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-2m)|>filter(fn:(r)=>r._measurement=="system.cpu_temp" and r._field=="value")|>last()'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [80.0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          description: "🌡️ Safety: Temp >80°C"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      - uid: mr-safety-hull
+        title: "🚢 Safety: Hull Breach"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-1m)|>filter(fn:(r)=>r._measurement=="__none__hullBreach")|>count()|>map(fn:(r)=>({r with _value:float(v:r._value)}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 1m
+        annotations:
+          description: "🚢 Safety: Hull Breach"
+          category: Safety
+        labels:
+          severity: critical
+          category: Safety
+
+      # Performance (6 core rules)
+      - uid: mr-perf-vmg
+        title: "🔽 Perf: VMG <1kt"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-2m)|>filter(fn:(r)=>r._measurement=="performance.velocityMadeGood" and r._field=="value")|>last()|>map(fn:(r)=>({r with _value:r._value*1.94384}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [1.0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          description: "🔽 Perf: VMG <1kt"
+          category: Performance
+        labels:
+          severity: warning
+          category: Performance
+
+      - uid: mr-perf-waves
+        title: "🌊 Perf: Wave Height >4m"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-2m)|>filter(fn:(r)=>r._measurement=="environment.water.waves.significantWaveHeight" and r._field=="value")|>last()'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [4.0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        annotations:
+          description: "🌊 Perf: Wave Height >4m"
+          category: Performance
+        labels:
+          severity: warning
+          category: Performance
+
+      - uid: mr-perf-soc
+        title: "🔋 Sys: Battery SOC <20%"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-2m)|>filter(fn:(r)=>r._measurement=="sok_bms" and r._field=="soc_pct")|>last()'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [20.0]
+                    type: lt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 2m
+        annotations:
+          description: "🔋 Sys: Battery SOC <20%"
+          category: Systems
+        labels:
+          severity: critical
+          category: Systems
+
+      - uid: mr-perf-wind
+        title: "⛈️ Wx: Squall >30kts"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-2m)|>filter(fn:(r)=>r._measurement=="environment.wind.speedTrue" and r._field=="value")|>last()|>map(fn:(r)=>({r with _value:r._value*1.94384}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [30.0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 3m
+        annotations:
+          description: "⛈️ Wx: Squall >30kts"
+          category: Weather
+        labels:
+          severity: critical
+          category: Weather
+
+      - uid: mr-race-start
+        title: "🏁 Race: Start Line"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-1m)|>filter(fn:(r)=>r._measurement=="__none__startLineCross")|>count()|>map(fn:(r)=>({r with _value:float(v:r._value)}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 30s
+        annotations:
+          description: "🏁 Race: Start Line"
+          category: Racing
+        labels:
+          severity: critical
+          category: Racing
+
+      - uid: mr-race-penalty
+        title: "⚖️ Race: Penalty"
+        condition: B
+        data:
+          - refId: A
+            datasourceUid: efifgp8jvgj5sf
+            model:
+              datasource:
+                type: influxdb
+                uid: efifgp8jvgj5sf
+              query: 'from(bucket:"midnight_rider")|>range(start:-1m)|>filter(fn:(r)=>r._measurement=="__none__penalty")|>count()|>map(fn:(r)=>({r with _value:float(v:r._value)}))'
+              refId: A
+          - refId: B
+            datasourceUid: '-100'
+            model:
+              type: threshold
+              refId: B
+              expression: A
+              conditions:
+                - evaluator:
+                    params: [0]
+                    type: gt
+                  operator:
+                    type: and
+                  query:
+                    params: [A]
+                  reducer:
+                    params: []
+                    type: last
+                  type: query
+        noDataState: OK
+        execErrState: Error
+        for: 1m
+        annotations:
+          description: "⚖️ Race: Penalty"
+          category: Racing
+        labels:
+          severity: critical
+          category: Racing
