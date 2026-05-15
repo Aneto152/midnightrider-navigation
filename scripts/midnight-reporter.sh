@@ -22,7 +22,7 @@ COMMENTARY=$(curl -s -X POST http://localhost:18789/chat \
     -d "{
         \"system\": $(cat $PROMPT_FILE | python3 -c "import sys,json; print(json.dumps(sys.stdin.read()))"),
         \"message\": \"Génère un flash info maintenant. Utilise tous les MCP tools disponibles.\",
-        \"tools\": [\"polar_performance\",\"race_progress\",\"weather_conditions\",\"crew_status\",\"buoy_conditions\",\"astronomical_data\",\"racing_tactics\"]
+        \"tools\": [\"polar_performance\",\"race_progress\",\"weather_conditions\",\"crew_status\",\"buoy_conditions\",\"astronomical_data\",\"racing_tactics\",\"get_battery_status\",\"get_system_health\",\"get_sea_state\",\"get_heel_trend\",\"get_wind_history\",\"get_gnss_quality\",\"get_performance_trend\",\"get_competitor_fleet\",\"get_nearest_competitor\",\"get_fleet_summary\",\"get_lis_wind_analysis\",\"get_tidal_current\",\"get_mark_eta\"]
     }" 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('response','Error: no response'))" 2>/dev/null)
 
 if [ -z "$COMMENTARY" ]; then
