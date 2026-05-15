@@ -39,6 +39,10 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         elif path == "/manifest.json":
             self._serve_file(PORTAL / "static" / "manifest.json")
 
+        # /reporter → portal/reporter.html
+        elif path in ("/reporter", "/reporter/"):
+            self._serve_file(PORTAL / "reporter.html")
+
         # /regatta/* → regatta/
         elif path.startswith("/regatta/"):
             rel = path[len("/regatta/"):]
@@ -65,6 +69,10 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
     def do_POST(self):
         if self.path == "/api/shutdown":
             self._handle_shutdown()
+        elif self.path == "/api/reporter/generate":
+            self._handle_reporter()
+        elif self.path == "/api/reporter/history":
+            self._handle_reporter_history()
         elif self.path.startswith("/api/"):
             self._proxy_to_regatta("POST")
         else:
@@ -160,6 +168,53 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
             subprocess.Popen(["sudo", "shutdown", "-h", "now"])
         except Exception as e:
             print(f"[ERROR] shutdown failed: {e}")
+
+    def _handle_reporter(self):
+        """Trigger Midnight Reporter via background subprocess"""
+        import threading
+        
+        def run_reporter():
+            try:
+                subprocess.run(
+                    ["bash", "/home/aneto/.openclaw/workspace/scripts/midnight-reporter.sh"],
+                    capture_output=True,
+                    timeout=120
+                )
+            except Exception as e:
+                print(f"[REPORTER] Error: {e}")
+        
+        # Run in background thread
+        threading.Thread(target=run_reporter, daemon=True).start()
+        
+        # Return immediately
+        body = json.dumps({"ok": True, "message": "Reporter lancé — flash en cours de génération"}).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _handle_reporter_history(self):
+        """Return recent reporter flashes from history file"""
+        history_file = Path("/home/aneto/.openclaw/workspace/logs/reporter-history.json")
+        
+        try:
+            if history_file.exists():
+                data = json.loads(history_file.read_text())
+            else:
+                data = []
+        except Exception as e:
+            print(f"[REPORTER_HISTORY] Error reading: {e}")
+            data = []
+        
+        body = json.dumps(data).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
 
 
 
