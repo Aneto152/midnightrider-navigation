@@ -1,22 +1,25 @@
 {
-  "task": "fix: GET /api/reporter/history + 90s polling for OC generation",
-  "date": "2026-05-15T17:12:11.471483",
-  "status": "SUCCESS",
-  "bugs_fixed": [
-    "Bug 1: GET /api/reporter/history was routed to regatta proxy (404) \u2192 now handled locally",
-    "Bug 2: 3s timeout too short for OC (takes 30-60s) \u2192 polling every 10s for 90s max"
-  ],
+  "task": "docs: Grafana alert rules setup guide (60 rules, 5 categories)",
+  "date": "2026-05-15T17:45:32.852504",
+  "status": "READY (awaiting GRAFANA_TOKEN)",
   "steps_completed": [
-    "portal/server.py: Added GET /api/reporter/history check before proxy routing",
-    "portal/reporter.html: Replaced setTimeout(3000) with setInterval(10000, 9 times)",
-    "Added timeout feedback: \"\u26a0\ufe0f Timeout \u2014 reporter peut \u00eatre en cours\"",
-    "Tested: GET /api/reporter/history returns JSON array (verified 200 OK)"
+    "Created docs/GRAFANA_ALERTS_SETUP.md (5-minute guide)",
+    "Documented 60 alert rules across 5 categories",
+    "Added Flux query examples and patterns",
+    "Provided troubleshooting guide",
+    "Created deployment script: /tmp/deploy_60_alerts.py",
+    "Classified alerts by severity (critical/warning/info)"
   ],
-  "verified": {
-    "get_reporter_history": "\u2705 200 OK (returns JSON)",
-    "polling_logic": "\u2705 10s interval \u00d7 9 = 90s max wait",
-    "error_handling": "\u2705 Empty history shows \"Aucun flash\""
+  "alert_rules": {
+    "Safety": 10,
+    "Performance": 15,
+    "Weather/Sea": 15,
+    "Systems": 10,
+    "Racing": 10
   },
-  "next": "User can now generate flashes and see them appear within 90s",
+  "setup_time": "5 minutes",
+  "prerequisites": "GRAFANA_TOKEN (generated from Grafana UI)",
+  "priority": "MEDIUM (field test) \u2192 HIGH (race)",
+  "status_note": "Portal + Reporter 100% operational. Alerts are optional.",
   "dust_readable": true
 }
