@@ -27,8 +27,12 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         path = self.path.split("?")[0].split("#")[0]
 
+        # /api/reporter/history → handle locally (not regatta)
+        if path == "/api/reporter/history":
+            self._handle_reporter_history()
+
         # /api/* → proxy to regatta:5000
-        if path.startswith("/api/"):
+        elif path.startswith("/api/"):
             self._proxy_to_regatta("GET")
 
         # Root → portal/index.html

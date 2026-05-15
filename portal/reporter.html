@@ -123,7 +123,18 @@
                 const r = await fetch('/api/reporter/generate', { method: 'POST' });
                 const d = await r.json();
                 st.textContent = d.message || 'Flash généré ✅';
-                setTimeout(loadHistory, 3000);
+                
+                // Poll every 10s for up to 90s (OC takes ~30-60s to generate)
+                let polls = 0;
+                const poll = setInterval(async () => {
+                    polls++;
+                    await loadHistory();
+                    const entries = document.querySelectorAll('.card');
+                    if (entries.length > 0 || polls >= 9) {
+                        clearInterval(poll);
+                        if (polls >= 9) st.textContent = '⚠️ Timeout — reporter peut être en cours';
+                    }
+                }, 10000);
             } catch (e) {
                 st.textContent = '❌ ' + e.message;
             }
