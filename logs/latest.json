@@ -1,17 +1,17 @@
 {
-  "task": "reporter.sh 20 tools + S\u00c9QUENCE OBLIGATOIRE 9 \u00e9tapes",
-  "date": "2026-05-15T18:35:12.054228",
+  "task": "portal: Racing + R\u00e9gatte merged \u2192 single card",
+  "date": "2026-05-15T18:41:34.279062",
   "status": "SUCCESS",
-  "fixes": [
-    "midnight-reporter.sh: 7 \u2192 20 tools (added 13 MCP tools from 5 servers)",
-    "MIDNIGHT-REPORTER-PROMPT.md: S\u00c9QUENCE OBLIGATOIRE 9 \u00e9tapes (steps 8-9 already complete)",
-    "New tools added: battery_status, system_health, sea_state, heel_trend, wind_history, gnss_quality, performance_trend, competitor_fleet, nearest_competitor, fleet_summary, lis_wind_analysis, tidal_current, mark_eta"
+  "changes": [
+    "Removed Racing Dashboard card (Grafana 07-race duplicate)",
+    "Kept R\u00e9gatte card (/regatta)",
+    "Updated title to French: R\u00e9gatte",
+    "Updated description: Course, timer, marks, start line, et tactique"
   ],
   "verification": {
-    "tools_in_script": "13/13 added tools found",
-    "sequence_steps": 11,
-    "critical_tools_documented": true
+    "total_cards": 14,
+    "regatta_links": 4,
+    "racing_grafana_removed": true
   },
-  "next_step": "Test: bash scripts/midnight-reporter.sh",
   "dust_readable": true
 }
