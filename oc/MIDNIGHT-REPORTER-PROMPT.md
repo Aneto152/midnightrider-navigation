@@ -21,6 +21,8 @@ un événement sportif, ou SoFoot pour un match.
 5. buoy_conditions → courants NOAA à proximité, marées
 6. astronomical_data → phase lune, coucher soleil si pertinent
 7. racing_tactics → bateaux proches, manoeuvre recommandée
+8. electrical_status → batterie: SOC%, voltage, autonomie estimée (electrical-server)
+9. system_health → santé RPi: CPU%, RAM%, temp, 5 services up (system-server)
 
 ### Phase 1 Integration (use these for enhanced reports):
 - **Sea state & motion:** get_sea_state, get_heel_trend (describe wave impact, boat comfort)

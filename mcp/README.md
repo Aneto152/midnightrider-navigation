@@ -1,6 +1,6 @@
 # MCP Servers — Sailing Data Access Layer
 
-8 MCP servers providing comprehensive access to MidnightRider's sailing data.
+10 MCP servers providing comprehensive access to MidnightRider's sailing data.
 
 ## Overview
 
@@ -493,3 +493,18 @@ Tracks nearby competitors via AIS. Provides tactical information for racing deci
 - Graceful fallback when data unavailable (returns valid JSON, no errors)
 - Midnight Reporter uses all tools in coordinated sequence
 - INFLUX_TOKEN required (env var or .env file)
+
+
+## system-server.js — Raspberry Pi System Health (Phase 3)
+
+**Port:** 3008  
+**Tools:** 5 (get_system_health, get_services_status, get_network_status, get_performance_metrics, get_system_summary)  
+**Source:** os module + /proc filesystem + /sys + HTTP ping  
+**Status:** ✅ Active
+
+Monitors Raspberry Pi system health for race operations:
+- CPU%, RAM%, disk usage, temperature
+- All 5 core services (Signal K, InfluxDB, Grafana, Regatta, Portal)
+- Network configuration (IP, hostname, mDNS)
+- Load average, process uptime
+- Performance metrics (Node.js version, platform)

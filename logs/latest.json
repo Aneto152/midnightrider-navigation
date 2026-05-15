@@ -1,47 +1,30 @@
 {
-  "task": "mcp: get_lis_wind_analysis \u2014 LIS tactical wind CT vs RI, InfluxDB integration",
-  "date": "2026-05-15T15:39:12.924590",
+  "task": "docs: 10 MCP servers + reporter battery/system + INTERFACES lis_wind verification",
+  "date": "2026-05-15T15:47:31.080421",
   "status": "SUCCESS",
   "steps_completed": [
-    "buoy-server.js: getLisWindAnalysis() function added",
-    "Reads InfluxDB lis_wind measurement (9 stations)",
-    "Groups by zone: CT-Nord, CT-NordEst, RI, LI-Est, LI-Centre",
-    "Calculates: ct_avg_kts, ri_avg_kts, li_avg_kts",
-    "Computes: delta_ct_minus_ri_kts",
-    "Returns: favored_coast (tactical recommendation)",
-    "Added to tools list (removed duplicates)",
-    "Case handler added for tools/call",
-    "Reporter prompt updated with tool reference",
-    "Syntax validated"
+    "mcp/README.md: updated server count 8 \u2192 10",
+    "mcp/README.md: updated tool count 40+ \u2192 50+",
+    "mcp/README.md: added system-server.js section (Phase 3)",
+    "MIDNIGHT-REPORTER-PROMPT.md: added battery status to main sequence",
+    "MIDNIGHT-REPORTER-PROMPT.md: added system health to main sequence",
+    "docs/INTERFACES.md: added lis_wind collector section (9 stations)",
+    "docs/INTERFACES.md: added NDBC verification instructions",
+    "docs/INTERFACES.md: added unit handling clarification"
   ],
-  "tool_function": {
-    "name": "get_lis_wind_analysis",
-    "description": "LIS tactical wind analysis \u2014 CT vs RI zones, 9 stations, delta kts",
-    "returns": {
-      "ct_avg_kts": "Connecticut coast average wind (knots)",
-      "ri_avg_kts": "Rhode Island coast average wind (knots)",
-      "li_avg_kts": "Long Island average wind (knots)",
-      "delta_ct_minus_ri_kts": "CT minus RI (positive = CT stronger)",
-      "favored_coast": "Tactical recommendation (CT stronger, RI stronger, or Uniform)",
-      "zones": "Breakdown by zone with all station values",
-      "tactical_note": "Human-readable tactical guidance",
-      "stations_count": "Number of stations reporting"
-    }
+  "changes": {
+    "mcp_readme": "System-server documented (Phase 3 completion)",
+    "reporter_prompt": "Battery + system health now in main reporting sequence",
+    "interfaces_doc": "LIS wind verification procedure documented"
   },
-  "tactical_use_cases": [
-    "Pre-race: \"Where is the wind advantage?\"",
-    "Strategy: \"Should we tack toward CT or RI?\"",
-    "Crew brief: \"Current wind delta tells us to...\"",
-    "Midnight Reporter: Incorporate into French race narrative",
-    "Real-time: Monitor delta changes during race"
-  ],
-  "data_source": "InfluxDB lis_wind measurement (9 LIS stations, 15-min collection)",
-  "integration": {
-    "buoy_server_version": "+ get_lis_wind_analysis (6th tool)",
-    "mcp_tools_total": "6 in buoy-server",
-    "reporter_integration": "Can call for tactical analysis"
+  "verification_ready": {
+    "lis_wind_collector": "scripts/lis_wind_collector.py ready",
+    "ndbc_verification": "curl -s https://www.ndbc.noaa.gov/data/realtime2/44017.txt",
+    "field_test_date": "May 19, 2026",
+    "unit_check": "Compare NDBC WSPD field 6 vs InfluxDB speed_kts"
   },
-  "ready_for_field_test": true,
-  "blocking_issue": false,
-  "errors": []
+  "documentation_complete": true,
+  "errors": [],
+  "dust_readable": true,
+  "next_step": "Field test May 19 \u2014 verify NDBC units + start ais-watch service"
 }

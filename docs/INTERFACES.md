@@ -401,3 +401,39 @@ Send message "reporter" to OC via Telegram → triggers script automatically
 
 **Last Updated:** 2026-05-14 17:39 EDT  
 **Status:** ✅ **100% OPERATIONAL — READY FOR FIELD TEST MAY 19**
+
+
+## lis_wind Collector — 9 LIS Weather Stations
+
+**Script:** `scripts/lis_wind_collector.py`  
+**Collection:** Every 15 minutes (systemd timer: lis-wind.timer)  
+**InfluxDB:** Measurement: `lis_wind` (bucket: midnight_rider)  
+**Stations:** 9 total (5 ASOS + 2 NOAA + 2 NDBC)
+
+| Station ID | Name | Type | Zone | Source |
+|---|---|---|---|---|
+| KBDR | Bridgeport CT | ASOS | CT-Nord | api.weather.gov |
+| KHVN | New Haven CT | ASOS | CT-Nord | api.weather.gov |
+| KGON | New London CT | ASOS | CT-NordEst | api.weather.gov |
+| KOXC | Oxford CT | ASOS | CT-Intérieur | api.weather.gov |
+| KPVD | Providence RI | ASOS | RI | api.weather.gov |
+| NWPR1 | Newport RI | NOAA | RI | tidesandcurrents |
+| PTCR1 | Pt Judith RI | NOAA | RI | tidesandcurrents |
+| 44017 | Montauk NY | NDBC | LI-Est | ndbc.noaa.gov |
+| 44022 | Long Island | NDBC | LI-Centre | ndbc.noaa.gov |
+
+**Unit Handling:**
+- ASOS: m/s → ×1.94384 → knots
+- NOAA: knots (native)
+- NDBC: knots (native)
+- **Output:** All stored in knots
+
+**Verification (May 19 field test):**
+```bash
+# Confirm NDBC raw units match stored values
+curl -s https://www.ndbc.noaa.gov/data/realtime2/44017.txt | head -3
+# Compare WSPD (field 6) against InfluxDB lis_wind.speed_kts value
+```
+
+**Dashboard:** 10-WIND LIS (Grafana)  
+**MCP Tool:** `get_lis_wind_analysis()` (buoy-server) — CT vs RI tactical delta
