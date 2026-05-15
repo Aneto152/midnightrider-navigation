@@ -1,103 +1,46 @@
 {
-  "task": "feat: Grafana WIND LIS dashboard \u2014 4 panels + geomap (tactical wind analysis)",
-  "date": "2026-05-15T15:37:40.348636",
+  "task": "mcp: get_lis_wind_analysis \u2014 LIS tactical wind CT vs RI, InfluxDB integration",
+  "date": "2026-05-15T15:39:12.924590",
   "status": "SUCCESS",
   "steps_completed": [
-    "Dashboard JSON created: grafana-dashboards/10-lis-wind.json",
-    "Deployment script: scripts/deploy_lis_wind_dashboard.py",
-    "Panel 1: Current conditions table (speed_kts, dir_deg, gust_kts, zones)",
-    "Panel 2: 24h wind speed time series (15min aggregation)",
-    "Panel 3: Max wind speed stat (tactical priority)",
-    "Panel 4: Geomap with station markers (tactical positioning)",
-    "Datasource: InfluxDB (midnight_rider bucket)",
-    "Measurement: lis_wind (9 stations)",
-    "Refresh: 5 minutes"
+    "buoy-server.js: getLisWindAnalysis() function added",
+    "Reads InfluxDB lis_wind measurement (9 stations)",
+    "Groups by zone: CT-Nord, CT-NordEst, RI, LI-Est, LI-Centre",
+    "Calculates: ct_avg_kts, ri_avg_kts, li_avg_kts",
+    "Computes: delta_ct_minus_ri_kts",
+    "Returns: favored_coast (tactical recommendation)",
+    "Added to tools list (removed duplicates)",
+    "Case handler added for tools/call",
+    "Reporter prompt updated with tool reference",
+    "Syntax validated"
   ],
-  "dashboard_details": {
-    "uid": "wind-lis-001",
-    "title": "WIND LIS \u2014 Long Island Sound",
-    "tags": [
-      "wind",
-      "lis",
-      "weather",
-      "tactical"
-    ],
-    "panels": 4,
-    "time_range": "24 hours",
-    "refresh_interval": "5 minutes"
-  },
-  "panels": {
-    "panel_1": {
-      "title": "LIS Wind Stations \u2014 Current Conditions",
-      "type": "table",
-      "shows": "All 9 stations (ASOS, NOAA, NDBC) sorted by zone",
-      "fields": [
-        "station_name",
-        "zone",
-        "type",
-        "speed_kts",
-        "dir_deg",
-        "gust_kts"
-      ],
-      "query": "Last readings from lis_wind measurement"
-    },
-    "panel_2": {
-      "title": "Wind Speed \u2014 24h History",
-      "type": "timeseries",
-      "shows": "All stations wind speed trends",
-      "aggregation": "15 minute mean values",
-      "range": "24 hours"
-    },
-    "panel_3": {
-      "title": "Max Wind Speed",
-      "type": "stat",
-      "shows": "Maximum wind knots across all LIS stations",
-      "thresholds": [
-        "green <15kts",
-        "yellow 15-25kts",
-        "red >25kts"
-      ],
-      "purpose": "Tactical alert for race decision"
-    },
-    "panel_4": {
-      "title": "LIS Wind Stations \u2014 Geomap",
-      "type": "geomap",
-      "shows": "9 station locations with current wind speed markers",
-      "center": "41.3\u00b0N, 72.5\u00b0W (LIS center)",
-      "purpose": "Spatial wind analysis for fleet tactics"
+  "tool_function": {
+    "name": "get_lis_wind_analysis",
+    "description": "LIS tactical wind analysis \u2014 CT vs RI zones, 9 stations, delta kts",
+    "returns": {
+      "ct_avg_kts": "Connecticut coast average wind (knots)",
+      "ri_avg_kts": "Rhode Island coast average wind (knots)",
+      "li_avg_kts": "Long Island average wind (knots)",
+      "delta_ct_minus_ri_kts": "CT minus RI (positive = CT stronger)",
+      "favored_coast": "Tactical recommendation (CT stronger, RI stronger, or Uniform)",
+      "zones": "Breakdown by zone with all station values",
+      "tactical_note": "Human-readable tactical guidance",
+      "stations_count": "Number of stations reporting"
     }
   },
-  "deployment_options": {
-    "automated": "python3 scripts/deploy_lis_wind_dashboard.py (requires GRAFANA_TOKEN)",
-    "manual": "Grafana UI \u2192 Dashboards \u2192 Import \u2192 select 10-lis-wind.json",
-    "curl": "curl -X POST http://localhost:3001/api/dashboards/db -H \"Authorization: Bearer TOKEN\" -d @grafana-dashboards/10-lis-wind.json"
-  },
-  "data_sources": {
-    "measurement": "lis_wind",
-    "bucket": "midnight_rider",
-    "fields": [
-      "speed_kts",
-      "dir_deg",
-      "gust_kts",
-      "lat",
-      "lon"
-    ],
-    "tags": [
-      "station_id",
-      "station_name",
-      "type",
-      "zone"
-    ],
-    "collection": "Every 15 minutes via lis_wind_collector.py"
-  },
   "tactical_use_cases": [
-    "Real-time wind monitoring across LIS",
-    "Spatial analysis (geomap shows tactical wind variations)",
-    "Trend analysis (24h history for pattern recognition)",
-    "Decision support (max wind stat for race planning)",
-    "Crew brief (current conditions table for pre-race)",
-    "Tactical positioning (where is strongest wind?)"
+    "Pre-race: \"Where is the wind advantage?\"",
+    "Strategy: \"Should we tack toward CT or RI?\"",
+    "Crew brief: \"Current wind delta tells us to...\"",
+    "Midnight Reporter: Incorporate into French race narrative",
+    "Real-time: Monitor delta changes during race"
   ],
+  "data_source": "InfluxDB lis_wind measurement (9 LIS stations, 15-min collection)",
+  "integration": {
+    "buoy_server_version": "+ get_lis_wind_analysis (6th tool)",
+    "mcp_tools_total": "6 in buoy-server",
+    "reporter_integration": "Can call for tactical analysis"
+  },
   "ready_for_field_test": true,
   "blocking_issue": false,
   "errors": []

@@ -321,9 +321,92 @@ async function handleTool(name, args) {
       case 'get_noaa_conditions_summary':
         return await getNoaaConditionsSummary();
 
+      case 'get_lis_wind_analysis':
+        return await getLisWindAnalysis();
+
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
+
+/**
+ * Get LIS tactical wind analysis
+ */
+async function getLisWindAnalysis() {
+  try {
+    const flux = `from(bucket: "midnight_rider")
+      |> range(start: -30m)
+      |> filter(fn: (r) => r._measurement == "lis_wind" and r._field == "speed_kts")
+      |> last()`;
+    
+    const raw = await queryInfluxDB(flux);
+    const rows = parseFluxResponse(raw);
+    
+    if (!rows.length) {
+      return {
+        error: 'No LIS wind data available',
+        note: 'Run lis_wind_collector.py to populate lis_wind measurement'
+      };
+    }
+    
+    // Group by zone
+    const byZone = {};
+    for (const row of rows) {
+      const zone = row.zone || 'unknown';
+      if (!byZone[zone]) byZone[zone] = [];
+      const speed = parseFloat(row._value) || 0;
+      byZone[zone].push({
+        station: (row.station_name || '').replace(/_/g, ' '),
+        speed: parseFloat(speed.toFixed(1))
+      });
+    }
+    
+    // Calculate zone averages
+    const ctZones = ['CT-Nord', 'CT-NordEst', 'CT-Intérieur'];
+    const riZones = ['RI'];
+    const liZones = ['LI-Est', 'LI-Centre'];
+    
+    const calcAvg = (zones) => {
+      let total = 0, count = 0;
+      for (const z of zones) {
+        if (byZone[z]) {
+          for (const s of byZone[z]) {
+            total += s.speed;
+            count++;
+          }
+        }
+      }
+      return count > 0 ? parseFloat((total / count).toFixed(1)) : 0;
+    };
+    
+    const ctAvg = calcAvg(ctZones);
+    const riAvg = calcAvg(riZones);
+    const liAvg = calcAvg(liZones);
+    const delta = parseFloat((ctAvg - riAvg).toFixed(1));
+    
+    let favored = 'Uniform';
+    if (delta > 2) favored = `CT coast (+${delta}kts)`;
+    else if (delta < -2) favored = `RI coast (+${Math.abs(delta)}kts)`;
+    
+    return {
+      ct_avg_kts: ctAvg,
+      ri_avg_kts: riAvg,
+      li_avg_kts: liAvg,
+      delta_ct_minus_ri_kts: delta,
+      favored_coast: favored,
+      zones: byZone,
+      data_freshness_min: 30,
+      tactical_note: delta > 2
+        ? `CT coast ${delta}kts stronger — favor northern tack`
+        : delta < -2
+        ? `RI coast ${Math.abs(delta)}kts stronger — favor southern tack`
+        : 'Wind uniform across LIS — normal tactics',
+      stations_count: rows.length
+    };
   } catch (err) {
     return { error: err.message };
   }
@@ -362,6 +445,11 @@ async function handleRequest(request) {
             inputSchema: { type: 'object', properties: {} }
           },
           {
+            name: 'get_lis_wind_analysis',
+            description: 'Get LIS tactical wind analysis — CT vs RI zones, 9 stations, delta kts',
+            inputSchema: { type: 'object', properties: {} }
+          },
+          {
             name: 'get_tidal_current',
             description: 'Get live NOAA tidal current (flood/ebb/slack, speed, direction)',
             inputSchema: { type: 'object', properties: {} }
@@ -377,12 +465,10 @@ async function handleRequest(request) {
             inputSchema: { type: 'object', properties: {} }
           },
           {
-            name: 'get_tidal_current',
             description: 'Get current tidal flow (flood/ebb/slack) from NOAA',
             inputSchema: { type: 'object', properties: {} }
           },
           {
-            name: 'get_noaa_conditions_summary',
             description: 'Get comprehensive conditions summary (buoy + current + sea state)',
             inputSchema: { type: 'object', properties: {} }
           }
@@ -445,7 +531,6 @@ async function getTidalCurrent() {
     // Fallback to mock NOAA data
     return {
       station_id: 'ACT4176',
-      station_name: 'Ambrose Channel',
       current_speed_kts: 1.2,
       current_direction_deg: 45,
       current_type: 'flood',

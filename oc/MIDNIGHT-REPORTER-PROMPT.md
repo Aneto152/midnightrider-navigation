@@ -116,3 +116,13 @@ Block Island est à 41 milles. Le courant de marée descendante les ralentit lé
 - get_system_summary() — French narrative for reporter
 
 **Integration:** Use when discussing system status, service availability, RPi health during race.
+
+
+## LIS Wind Analysis (buoy-server.js — Phase 2 Extension)
+
+- get_lis_wind_analysis() — CT vs RI wind delta, zone averages (9 stations)
+  * Returns: ct_avg_kts, ri_avg_kts, delta_ct_minus_ri_kts
+  * Favored coast: CT (stronger) or RI (stronger) or Uniform
+  * Tactical note: which tack favors wind advantage?
+
+**Integration:** Use before tactical discussions. Informs crew brief and sail selection.
