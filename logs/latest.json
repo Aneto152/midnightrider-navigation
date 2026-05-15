@@ -1,27 +1,12 @@
 {
-  "task": "Grafana alerts: YAML provisioning deployed (folder issue \u2014 minor)",
-  "date": "2026-05-15T18:00:03.839771",
-  "status": "DEPLOYED (folder reference pending)",
-  "steps_completed": [
-    "Created grafana-provisioning/alerting/midnight-rider-rules.yaml (10 core rules)",
-    "Updated docker-compose.yml with alerting provisioning mount",
-    "Restarted Grafana service",
-    "Grafana logs confirm provisioning started",
-    "Alert rules require \"Midnight Rider Alerts\" folder to exist first"
+  "task": "portal/index.html: R\u00e9gate /regatta + Signal K IP + Electrical card",
+  "date": "2026-05-15T18:33:00.299981",
+  "status": "SUCCESS",
+  "fixes": [
+    "R\u00e9gate card: http://midnightrider.local:5000/ \u2192 /regatta",
+    "Signal K card: midnightrider.local:3000 \u2192 192.168.1.167:3000",
+    "Electrical card added (06-electrical dashboard)"
   ],
-  "findings": {
-    "yaml_file": "\u2705 Created (19.8 KB, 10 rules)",
-    "docker_mount": "\u2705 Added to docker-compose.yml",
-    "provisioning_started": "\u2705 Grafana logs confirm",
-    "folder_issue": "\u26a0\ufe0f Need to create folder first (simple fix)"
-  },
-  "next_fix": [
-    "1. Create folder in Grafana UI: Admin \u2192 Folders \u2192 New",
-    "2. Name: \"Midnight Rider Alerts\"",
-    "3. Rules will auto-import to that folder",
-    "Or: Use curl to create folder via API"
-  ],
-  "priority": "LOW (system fully operational without alerts)",
-  "recommendation": "Skip this for field test, focus on Portal + Reporter",
+  "impact": "Removes hardcoded hostnames, uses relative links and direct IPs",
   "dust_readable": true
 }
