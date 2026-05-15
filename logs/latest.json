@@ -1,42 +1,90 @@
 {
-  "task": "fix: weather_collector.py \u2014 NDBC/ASOS unit conversion corrected",
-  "date": "2026-05-15T00:03:21.702797",
-  "status": "FIXED",
-  "fixes_applied": [
-    "fetch_ndbc(): field names changed to wind_speed_kts, wind_gust_kts (clarifies KNOTS)",
-    "fetch_asos(): field names changed to wind_speed_ms, wind_gust_ms (clarifies M/S)",
-    "collect_once(): separate handling for NDBC (native knots) vs ASOS (native m/s)",
-    "Removed incorrect multiply-by-1.94384 for NDBC data",
-    "Added proper division-by-1.94384 to convert NDBC knots to m/s",
-    "Docstrings added to clarify native units for each source"
+  "task": "feat: lis_wind_collector.py \u2014 9 LIS wind stations \u2192 InfluxDB (all units: knots)",
+  "date": "2026-05-15T15:36:09.020638",
+  "status": "SUCCESS",
+  "steps_completed": [
+    "lis_wind_collector.py: unified wind collector for all LIS sources",
+    "9 stations: 5 ASOS + 2 NOAA + 2 NDBC",
+    "All wind speeds normalized to KNOTS",
+    "ASOS m/s \u2192 knots (\u00d71.94384)",
+    "NOAA buoys units=english \u2192 knots (native)",
+    "NDBC buoys \u2192 knots (native)",
+    "InfluxDB measurement: lis_wind",
+    "Collection interval: 15 minutes",
+    "Fields: speed_kts, dir_deg, gust_kts, lat, lon"
   ],
-  "unit_conversion_logic": {
-    "NDBC_input": "KNOTS (p[6] = WSPD field)",
-    "NDBC_output": "wind_speed_kts (direct), wind_speed_ms (\u00f71.94384)",
-    "ASOS_input": "M/S (API windSpeed field)",
-    "ASOS_output": "wind_speed_ms (direct), wind_speed_kts (\u00d71.94384)"
+  "stations_coverage": {
+    "ASOS_5": [
+      "KBDR (Bridgeport CT)",
+      "KHVN (New Haven CT)",
+      "KGON (New London CT)",
+      "KOXC (Oxford CT)",
+      "KPVD (Providence RI)"
+    ],
+    "NOAA_2": [
+      "NWPR1 (Newport RI)",
+      "PTCR1 (Pt Judith RI)"
+    ],
+    "NDBC_2": [
+      "44017 (Montauk NY)",
+      "44022 (Long Island)"
+    ]
   },
-  "corrected_calculations": {
-    "NDBC_10knots_before": "19.4 knots (bug: multiply by 1.94384)",
-    "NDBC_10knots_after": "10.0 knots \u2192 stored as 10.0 kts + 5.15 m/s \u2705",
-    "ASOS_5ms_before": "9.7 knots (multiply applied to m/s)",
-    "ASOS_5ms_after": "5.0 m/s \u2192 stored as 5.0 m/s + 9.72 kts \u2705"
+  "unit_handling": {
+    "ASOS_input": "m/s (api.weather.gov)",
+    "ASOS_conversion": "m/s \u00d7 1.94384 = knots",
+    "NOAA_input": "units=english (knots native)",
+    "NOAA_direct": "knots (no conversion)",
+    "NDBC_input": "knots native",
+    "NDBC_direct": "knots (no conversion)",
+    "output_all": "knots (unified)"
   },
-  "validation": {
-    "buoy_NWPR1_test": "Real obs: 10 knots \u2192 stored as 10.0 kts \u2705",
-    "asos_KBDR_test": "Real obs: 5 m/s \u2192 stored as 5.0 m/s + 9.72 kts \u2705",
-    "unit_consistency": "\u2705 Both knots and m/s stored for all stations"
+  "influxdb_schema": {
+    "measurement": "lis_wind",
+    "tags": [
+      "station_id",
+      "station_name",
+      "type",
+      "zone"
+    ],
+    "fields": [
+      "speed_kts",
+      "dir_deg",
+      "gust_kts",
+      "lat",
+      "lon"
+    ],
+    "bucket": "midnight_rider",
+    "precision": "nanoseconds"
   },
-  "downstream_impact": {
-    "buoy_server.js": "\u2705 Now reads correct wind_speed_kts",
-    "midnight_reporter": "\u2705 French narratives use correct wind values",
-    "regatta_interface": "\u2705 Weather display shows accurate NDBC data"
+  "deployment": {
+    "script_location": "scripts/lis_wind_collector.py",
+    "executable": true,
+    "dependencies": "Python 3 stdlib only (no pip packages)",
+    "env_vars": [
+      "INFLUX_URL",
+      "INFLUX_TOKEN",
+      "INFLUX_ORG",
+      "INFLUX_BUCKET"
+    ],
+    "interval": "15 minutes",
+    "error_handling": "Graceful \u2014 skips failed stations, logs errors"
   },
-  "files_changed": [
-    "regatta/weather_collector.py"
+  "features": {
+    "unified_units": "\u2705 All stations report knots",
+    "coordinates": "\u2705 Lat/lon included for spatial analysis",
+    "error_recovery": "\u2705 Fails gracefully, continues collection",
+    "logging": "\u2705 Station status, counts, errors printed",
+    "timeout": "\u2705 8s per fetch (prevents hangs)",
+    "influx_fallback": "\u2705 Skips write if no token, continues loop"
+  },
+  "next_steps": [
+    "Test live collection: python3 scripts/lis_wind_collector.py",
+    "Verify InfluxDB lis_wind measurement populated",
+    "Create systemd service + 15min timer",
+    "Build Grafana LIS Wind dashboard (Prompt 3/4)"
   ],
-  "errors": [],
   "ready_for_field_test": true,
   "blocking_issue": false,
-  "test_recommendation": "Fetch live NDBC data (e.g., NWPR1) and verify InfluxDB values match real observations"
+  "errors": []
 }
