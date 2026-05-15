@@ -1,31 +1,25 @@
 {
-  "task": "docs: fix README/MCP/DASHBOARDS + INTERFACES.md deployed",
-  "date": "2026-05-14T18:05:46.815387",
-  "status": "SUCCESS",
-  "steps_completed": [
-    "docs/INTERFACES.md: complete guide to all 8 services (11.7 KB)",
-    "README: portal URL now includes :8888",
-    "README: portal description nginx \u2192 Python HTTP server",
-    "README: Regatta interface section added with 3 pages + features",
-    "README: reference to docs/INTERFACES.md for API docs",
-    "mcp/README: bucket references signalk \u2192 midnight_rider",
-    "mcp/README: \"Three MCP\" \u2192 \"8 MCP servers\" updated",
-    "mcp/README: 8 server reference table added (40+ tools)",
-    "DASHBOARDS-README: dashboard count 9 \u2192 16",
-    "All fixes applied and committed"
-  ],
-  "documentation_status": {
-    "INTERFACE-REFERENCE.md": "\u2705 User guide (11.6 KB)",
-    "docs/INTERFACES.md": "\u2705 Technical reference (11.7 KB)",
-    "README.md": "\u2705 Updated with portal :8888 + regatta section",
-    "mcp/README.md": "\u2705 8 servers documented",
-    "DASHBOARDS-README.md": "\u2705 Count updated 16 total"
+  "task": "verify: put_signalk implementation already correct from commit c377ad1",
+  "date": "2026-05-14T23:24:52.413114",
+  "status": "VERIFIED_OPERATIONAL",
+  "verification_results": {
+    "sk_path_definition": "\u2705 \"racing/startLinePrt\" (pin) or \"racing/startLineStb\" (boat)",
+    "put_signalk_call": "\u2705 put_signalk(sk_path, {\"latitude\": lat, \"longitude\": lon})",
+    "response_format": "\u2705 Includes signalk_path for verification",
+    "gps_validation": "\u2705 Checks for null and (0,0) values before storing",
+    "cache_update": "\u2705 Updates start_line_cache on success"
   },
+  "system_health": {
+    "cpu_percent": 25.5,
+    "memory_percent": 64.4,
+    "disk_percent": 21.9,
+    "temp_celsius": 48.7
+  },
+  "regatta_status": "\u2705 Docker container operational",
+  "portal_proxy_status": "\u2705 Port 8888 active",
+  "signal_k_integration": "\u2705 Ready to receive PUT requests on racing paths",
   "errors": [],
-  "services_status": {
-    "documentation": "complete and accurate",
-    "urls": "all verified for field test"
-  },
+  "note": "Code is correct from previous fix (c377ad1). No changes needed.",
   "dust_readable": true,
-  "next_recommended": "Final verification: test all URLs on May 18 before field test"
+  "next_step": "Test start line workflow on field test May 19"
 }
