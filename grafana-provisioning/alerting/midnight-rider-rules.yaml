@@ -2,7 +2,7 @@ apiVersion: 1
 groups:
   - orgId: 1
     name: midnight-rider-alerts
-    folder: Midnight Rider Alerts
+    folder: General
     interval: 1m
     rules:
       # Safety (10)
