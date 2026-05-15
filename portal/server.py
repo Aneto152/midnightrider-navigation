@@ -43,10 +43,18 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         elif path in ("/reporter", "/reporter/"):
             self._serve_file(PORTAL / "reporter.html")
 
+        # /regatta → regatta/index.html (exact match)
+        elif path in ("/regatta", "/regatta/"):
+            self._serve_file(REGATTA / "index.html")
+
         # /regatta/* → regatta/
         elif path.startswith("/regatta/"):
             rel = path[len("/regatta/"):]
-            target = REGATTA / rel if rel else REGATTA / "index.html"
+            # If no extension, try .html
+            if rel and "." not in rel:
+                target = REGATTA / f"{rel}.html"
+            else:
+                target = REGATTA / rel if rel else REGATTA / "index.html"
             self._serve_file(target)
 
         # /static/* → portal/static/
