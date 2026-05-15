@@ -1,25 +1,15 @@
 {
-  "task": "docs: Grafana alert rules setup guide (60 rules, 5 categories)",
-  "date": "2026-05-15T17:45:32.852504",
-  "status": "READY (awaiting GRAFANA_TOKEN)",
+  "task": "Grafana alerts: deployment script ready, token generation requires manual setup",
+  "date": "2026-05-15T17:52:05.619817",
+  "status": "READY (manual token setup required)",
   "steps_completed": [
-    "Created docs/GRAFANA_ALERTS_SETUP.md (5-minute guide)",
-    "Documented 60 alert rules across 5 categories",
-    "Added Flux query examples and patterns",
-    "Provided troubleshooting guide",
-    "Created deployment script: /tmp/deploy_60_alerts.py",
-    "Classified alerts by severity (critical/warning/info)"
+    "Created scripts/deploy_grafana_alerts.py with 60 alert rules",
+    "Verified Grafana v12.3.1 running on port 3001",
+    "Identified API changes in Grafana v12 (service accounts)",
+    "Admin credentials needed (not default \"admin\")"
   ],
-  "alert_rules": {
-    "Safety": 10,
-    "Performance": 15,
-    "Weather/Sea": 15,
-    "Systems": 10,
-    "Racing": 10
-  },
-  "setup_time": "5 minutes",
-  "prerequisites": "GRAFANA_TOKEN (generated from Grafana UI)",
-  "priority": "MEDIUM (field test) \u2192 HIGH (race)",
-  "status_note": "Portal + Reporter 100% operational. Alerts are optional.",
+  "next_action": "Find Grafana admin password and generate API token manually",
+  "blocking": "Admin password unknown (likely in docker-compose or .env)",
+  "priority": "MEDIUM (alerts optional, system operational without them)",
   "dust_readable": true
 }
