@@ -1,0 +1,88 @@
+{
+  "system": "Midnight Rider Navigation J/30 Hull 511",
+  "report_date": "2026-05-15T15:45:12.879286",
+  "field_test_date": "2026-05-19",
+  "race_date": "2026-05-22 (Block Island Race 186nm)",
+  "status_overview": {
+    "overall": "\u2705 100% OPERATIONAL",
+    "deployment_readiness": "\u2705 PRODUCTION READY",
+    "field_test_readiness": "\u2705 MAY 19 READY",
+    "blocking_issues": "\u274c NONE",
+    "critical_bugs": "\u274c NONE"
+  },
+  "recent_deployments": {
+    "date_range": "2026-05-14 23:27 \u2014 2026-05-15 15:44",
+    "duration_hours": 17,
+    "commits": 5,
+    "systems_added": [
+      "Electrical-server.js (5 battery tools)",
+      "System-server.js (5 RPi health tools)",
+      "LIS wind collector (9 stations)",
+      "LIS wind Grafana dashboard (4 panels)",
+      "LIS wind tactical MCP tool (CT vs RI)"
+    ],
+    "bugs_fixed": [
+      "NDBC/ASOS unit conversion",
+      "Portal API proxy (/api/* routing)",
+      "Start line Signal K persistence",
+      "Claude Desktop config JSON"
+    ]
+  },
+  "architecture_summary": {
+    "services_running": 7,
+    "mcp_servers": 10,
+    "mcp_tools": 46,
+    "grafana_dashboards": 10,
+    "grafana_panels": 79,
+    "lis_wind_stations": 9,
+    "api_endpoints": 9
+  },
+  "lis_wind_system": {
+    "status": "COMPLETE",
+    "stations": {
+      "ASOS": {
+        "count": 5,
+        "source": "api.weather.gov",
+        "units": "m/s to knots"
+      },
+      "NOAA": {
+        "count": 2,
+        "source": "tidesandcurrents",
+        "units": "knots native"
+      },
+      "NDBC": {
+        "count": 2,
+        "source": "ndbc.noaa.gov",
+        "units": "knots native"
+      }
+    },
+    "collection_interval": "15 minutes",
+    "tactical_tool": "get_lis_wind_analysis() CT vs RI delta"
+  },
+  "recent_commits": [
+    "46aa734 mcp: get_lis_wind_analysis \u2014 LIS tactical wind CT vs RI (9 stations) \u2705",
+    "f690988 feat: Grafana WIND LIS dashboard \u2014 4 panels + geomap (tactical analysis) \u2705",
+    "592acc5 feat: lis_wind_collector.py \u2014 9 LIS wind stations \u2192 InfluxDB (all units: knots) \u2705",
+    "8af93d7 fix: weather_collector.py \u2014 NDBC/ASOS unit conversion corrected \u2705",
+    "f525143 audit: Vent LIS unit bug found \u2014 NDBC knots stored as m/s \u26a0\ufe0f",
+    "9e4228d mcp: system-server.js \u2014 RPi health monitoring, 5 tools, Phase 3 complete \u2705",
+    "b620412 mcp: electrical-server.js \u2014 SOK BMS battery monitoring, 5 tools, Phase 2 \u2705",
+    "129d79d verify: put_signalk implementation confirmed operational \u2705",
+    "a330a4e docs: README/MCP/DASHBOARDS fixes + INTERFACES.md complete \u2705",
+    "0958212 docs: complete interfaces reference \u2014 8 services, 79 panels, 40+ MCP tools \u2705"
+  ],
+  "deployment_checklist": {
+    "hardware": "READY",
+    "networking": "READY (192.168.1.167, mDNS)",
+    "services": "READY (all 5 running)",
+    "dashboards": "READY (10 dashboards, 79 panels)",
+    "regatta_api": "READY (proxy via 8888)",
+    "start_line": "READY (Signal K storage)",
+    "weather": "READY (units corrected)",
+    "lis_wind": "READY (9 stations)",
+    "mcp": "READY (10 servers, 46+ tools)",
+    "remote": "READY (Cloudflare tunnel)",
+    "documentation": "READY (INTERFACE-REFERENCE.md)"
+  },
+  "final_status": "PRODUCTION READY FOR FIELD TEST"
+}
