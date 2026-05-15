@@ -70,6 +70,7 @@ def write_influx(measurement, tags, fields, timestamp_ns=None):
         return False
 
 def fetch_ndbc(station_id):
+    """Fetch NDBC buoy data. Wind speeds are in KNOTS (native NDBC format)."""
     try:
         url = f"https://www.ndbc.noaa.gov/data/realtime2/{station_id}.txt"
         req = urllib.request.Request(url, headers={"User-Agent": "MidnightRider/1.0"})
@@ -80,8 +81,8 @@ def fetch_ndbc(station_id):
         def val(v): return None if v == 'MM' else float(v)
         return {
             "wind_dir": val(p[5]),
-            "wind_speed": val(p[6]),
-            "wind_gust": val(p[7]),
+            "wind_speed_kts": val(p[6]),  # WSPD in KNOTS (NDBC native)
+            "wind_gust_kts": val(p[7]),   # GUST in KNOTS (NDBC native)
             "wave_height": val(p[8]),   # WVHT m
             "wave_period": val(p[9]),   # DPD sec
             "wave_dir": val(p[11]) if len(p) > 11 else None,  # MWD deg
@@ -94,6 +95,7 @@ def fetch_ndbc(station_id):
         return None
 
 def fetch_asos(station_id):
+    """Fetch ASOS (airport) data. Wind speeds are in M/S (native API format)."""
     try:
         url = f"https://api.weather.gov/stations/{station_id}/observations/latest"
         req = urllib.request.Request(url, headers={
@@ -109,8 +111,8 @@ def fetch_asos(station_id):
         pres = gv("barometricPressure")
         return {
             "wind_dir": gv("windDirection"),
-            "wind_speed": gv("windSpeed"),
-            "wind_gust": gv("windGust"),
+            "wind_speed_ms": gv("windSpeed"),  # M/S (ASOS native)
+            "wind_gust_ms": gv("windGust"),    # M/S (ASOS native)
             "pressure": pres / 100 if pres else None,  # Pa → hPa
             "air_temp": gv("temperature"),
             "water_temp": None,
@@ -177,14 +179,27 @@ def collect_once():
             "zone": stn["zone"]
         }
         fields = {}
-        if data["wind_dir"] is not None:
+        if data.get("wind_dir") is not None:
             fields["wind_dir"] = data["wind_dir"]
-        if data["wind_speed"] is not None:
-            fields["wind_speed_ms"] = data["wind_speed"]
-            fields["wind_speed_kts"] = round(data["wind_speed"] * 1.94384, 2)
-        if data["wind_gust"] is not None:
-            fields["wind_gust_ms"] = data["wind_gust"]
-            fields["wind_gust_kts"] = round(data["wind_gust"] * 1.94384, 2)
+        
+        # Handle wind based on source (NDBC=knots, ASOS=m/s)
+        if data.get("wind_speed_kts") is not None:
+            # NDBC provides KNOTS
+            fields["wind_speed_kts"] = round(data["wind_speed_kts"], 2)
+            fields["wind_speed_ms"] = round(data["wind_speed_kts"] / 1.94384, 2)
+        elif data.get("wind_speed_ms") is not None:
+            # ASOS provides M/S
+            fields["wind_speed_ms"] = round(data["wind_speed_ms"], 2)
+            fields["wind_speed_kts"] = round(data["wind_speed_ms"] * 1.94384, 2)
+        
+        if data.get("wind_gust_kts") is not None:
+            # NDBC provides KNOTS
+            fields["wind_gust_kts"] = round(data["wind_gust_kts"], 2)
+            fields["wind_gust_ms"] = round(data["wind_gust_kts"] / 1.94384, 2)
+        elif data.get("wind_gust_ms") is not None:
+            # ASOS provides M/S
+            fields["wind_gust_ms"] = round(data["wind_gust_ms"], 2)
+            fields["wind_gust_kts"] = round(data["wind_gust_ms"] * 1.94384, 2)
         if data["pressure"] is not None:
             fields["pressure_hpa"] = data["pressure"]
         if data["air_temp"] is not None:
