@@ -1,25 +1,56 @@
 {
-  "task": "verify: put_signalk implementation already correct from commit c377ad1",
-  "date": "2026-05-14T23:24:52.413114",
-  "status": "VERIFIED_OPERATIONAL",
-  "verification_results": {
-    "sk_path_definition": "\u2705 \"racing/startLinePrt\" (pin) or \"racing/startLineStb\" (boat)",
-    "put_signalk_call": "\u2705 put_signalk(sk_path, {\"latitude\": lat, \"longitude\": lon})",
-    "response_format": "\u2705 Includes signalk_path for verification",
-    "gps_validation": "\u2705 Checks for null and (0,0) values before storing",
-    "cache_update": "\u2705 Updates start_line_cache on success"
+  "task": "mcp: system-server.js \u2014 RPi health monitoring, 5 tools, Phase 3 complete",
+  "date": "2026-05-14T23:35:31.472637",
+  "status": "SUCCESS",
+  "steps_completed": [
+    "system-server.js: 5 tools for Raspberry Pi monitoring",
+    "get_system_health: CPU/RAM/disk/temp/uptime \u2014 os module + /proc + /sys",
+    "get_services_status: HTTP ping all 5 services (SK/InfluxDB/Grafana/Regatta/Portal)",
+    "get_network_status: IP, hostname, URLs, interfaces",
+    "get_performance_metrics: load average, memory, process info",
+    "get_system_summary: French narrative for Midnight Reporter",
+    "system-package.json created",
+    "claude_desktop_config.example.json: system server added",
+    "MIDNIGHT-REPORTER-PROMPT.md: system tools added",
+    "All files validated"
+  ],
+  "tools_summary": {
+    "get_system_health": "CPU%, RAM%, disk%, temp, uptime, alerts",
+    "get_services_status": "HTTP ping 5 services, response times, down services list",
+    "get_network_status": "IP, hostname, URLs, network interfaces",
+    "get_performance_metrics": "load average, memory, Node.js version, RPi uptime",
+    "get_system_summary": "French narrative, all_operational flag, alerts"
   },
-  "system_health": {
-    "cpu_percent": 25.5,
-    "memory_percent": 64.4,
-    "disk_percent": 21.9,
-    "temp_celsius": 48.7
+  "system_thresholds": {
+    "CPU_WARNING": "80%",
+    "CPU_CRITICAL": "95%",
+    "RAM_WARNING": "80%",
+    "RAM_CRITICAL": "90%",
+    "DISK_WARNING": "80%",
+    "DISK_CRITICAL": "90%",
+    "TEMP_WARNING": "70\u00b0C",
+    "TEMP_CRITICAL": "80\u00b0C"
   },
-  "regatta_status": "\u2705 Docker container operational",
-  "portal_proxy_status": "\u2705 Port 8888 active",
-  "signal_k_integration": "\u2705 Ready to receive PUT requests on racing paths",
+  "data_sources": [
+    "os module (CPU, RAM, uptime, load average)",
+    "/sys/class/thermal/thermal_zone0/temp (CPU temperature)",
+    "df command (disk usage)",
+    "HTTP ping (service status)",
+    "networkInterfaces() (network info)"
+  ],
+  "services_monitored": [
+    "Signal K (port 3000)",
+    "InfluxDB (port 8086)",
+    "Grafana (port 3001)",
+    "Regatta (port 5000)",
+    "Portal (port 8888)"
+  ],
+  "status_operational": {
+    "system_server": "\u2705 Ready",
+    "mcp_servers": "10 total (Phase 3 complete)",
+    "mcp_tools": "50+ total",
+    "all_phases": "\u2705 Complete"
+  },
   "errors": [],
-  "note": "Code is correct from previous fix (c377ad1). No changes needed.",
-  "dust_readable": true,
-  "next_step": "Test start line workflow on field test May 19"
+  "next_step": "Prepare field test checklist for May 19"
 }

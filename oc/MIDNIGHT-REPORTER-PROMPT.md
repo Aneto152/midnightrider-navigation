@@ -105,3 +105,14 @@ Block Island est à 41 milles. Le courant de marée descendante les ralentit lé
 - get_electrical_summary() — French narrative for reporter
 
 **Integration:** All tools available via stdio. Call when discussing battery status, power management, or race autonomy planning.
+
+
+## System Health (system-server.js — Phase 3)
+
+- get_system_health() — CPU%, RAM%, disk%, temp°C, uptime, alerts
+- get_services_status() — HTTP ping all 5 services (Signal K/InfluxDB/Grafana/Regatta/Portal)
+- get_network_status() — IP, hostname, URLs, interfaces
+- get_performance_metrics() — load average, memory, Node.js version
+- get_system_summary() — French narrative for reporter
+
+**Integration:** Use when discussing system status, service availability, RPi health during race.

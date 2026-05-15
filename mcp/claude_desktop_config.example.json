@@ -139,6 +139,16 @@
         "/home/aneto"
       ],
       "disabled": false
+    },
+    "system": {
+      "command": "node",
+      "args": [
+        "/home/aneto/.openclaw/workspace/mcp/system-server.js"
+      ],
+      "description": "RPi system health: CPU, RAM, disk, temp, all services status",
+      "env": {
+        "SIGNALK_HTTP": "http://localhost:3000"
+      }
     }
   }
 }
