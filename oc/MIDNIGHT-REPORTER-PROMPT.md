@@ -94,3 +94,14 @@ Block Island est à 41 milles. Le courant de marée descendante les ralentit lé
 - "Fleet pressure favors starboard tack — 3 boats to stbd, 2 to port" (get_fleet_pressure)
 - "ARMA (GP42) and Kent Racing (Class 40) within 3nm" (get_competitor_fleet)
 - "Nine boats tracked now via AIS — Midnight Rider system live" (get_fleet_summary)
+
+
+## Battery & Electrical (electrical-server.js — Phase 2)
+
+- get_battery_status() — voltage, SOC%, current, temperature, health state
+- get_battery_trend(minutes) — charging/discharging rate, autonomy estimate  
+- get_power_summary() — power consumption, charging rate, autonomy hours
+- get_battery_alerts() — SOC/temp/voltage threshold alerts
+- get_electrical_summary() — French narrative for reporter
+
+**Integration:** All tools available via stdio. Call when discussing battery status, power management, or race autonomy planning.

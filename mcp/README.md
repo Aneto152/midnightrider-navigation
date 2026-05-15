@@ -451,7 +451,40 @@ Tracks nearby competitors via AIS. Provides tactical information for racing deci
 | imu-server.js | 3006 | 4 | stdio | ✅ Active | InfluxDB + Signal K (Phase 1 new) |
 | competitor-server.js | 3007 | 5 | stdio | ✅ Active | InfluxDB + competitors.json (AIS tracking) |
 
-**Total:** 8 servers, 35+ MCP tools, stdio JSON-RPC protocol
+
+## 9. electrical-server.js — SOK BMS Battery Monitoring (Phase 2)
+
+**Purpose:** Monitor battery health, autonomy, and power consumption.
+
+**Location:** `mcp/electrical-server.js`
+
+**Tools:**
+- `get_battery_status` — Voltage, SOC%, current, temperature, state
+- `get_battery_trend` — Charging/discharging rate, autonomy estimate
+- `get_power_summary` — Power balance, consumption, autonomy hours
+- `get_battery_alerts` — Threshold violations (SOC, temp, voltage)
+- `get_electrical_summary` — French narrative for Midnight Reporter
+
+**Data Source:** InfluxDB `sok_bms` measurement (direct write from SOK BMS)
+
+**Status:** Production-ready, graceful fallback when BMS not connected (returns "not yet connected" message)
+
+**Thresholds:**
+- SOC < 20% → CRITICAL
+- SOC < 35% → WARNING
+- Temp > 45°C → WARNING
+- Temp > 55°C → CRITICAL
+- Voltage < 12.0V → WARNING
+- Voltage > 14.8V → WARNING
+
+**Use Cases:**
+- Real-time battery monitoring during race
+- Autonomy planning (how long can we race?)
+- Temperature management (charge rate optimization)
+- Midnight Reporter battery status narrative
+
+
+**Total:** 9 servers, 40+ MCP tools, stdio JSON-RPC protocol
 
 ## Integration Notes
 
