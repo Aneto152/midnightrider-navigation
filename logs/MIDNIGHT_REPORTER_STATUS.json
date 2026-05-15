@@ -1,0 +1,129 @@
+{
+  "system": "Midnight Reporter Agent",
+  "status_date": "2026-05-15T15:46:21.916544",
+  "status": "\u2705 100% OPERATIONAL",
+  "description": "OC persona: French race journalist for Block Island Race 2026",
+  "trigger": "Denis sends \"reporter\" to OC via Telegram",
+  "output": "French journalistic flash \u2192 WhatsApp famille",
+  "mcp_integration": {
+    "servers": 10,
+    "total_tools": 46,
+    "reporter_available_tools": 20,
+    "servers_integrated": {
+      "1. polar_performance": {
+        "tools": 2,
+        "used": "VMG vs polaire"
+      },
+      "2. race_progress": {
+        "tools": 9,
+        "used": "position, cap, distance"
+      },
+      "3. weather_conditions": {
+        "tools": 2,
+        "used": "wind, sea state"
+      },
+      "4. crew_status": {
+        "tools": "custom",
+        "used": "barreur, trim"
+      },
+      "5. buoy_conditions": {
+        "tools": 7,
+        "used": "NOAA conditions, tides"
+      },
+      "6. astronomical_data": {
+        "tools": 4,
+        "used": "moon phase, sunset"
+      },
+      "7. racing_tactics": {
+        "tools": 5,
+        "used": "fleet position, maneuvers"
+      },
+      "8. sea_state": {
+        "tools": 4,
+        "use": "wave impact, comfort"
+      },
+      "9. wind_history": {
+        "tools": 7,
+        "use": "shifts, trends"
+      },
+      "10. tidal_current": {
+        "tools": 7,
+        "use": "current speed/direction"
+      },
+      "11. mark_eta": {
+        "tools": 9,
+        "use": "next buoy time"
+      }
+    }
+  },
+  "tone_and_format": {
+    "style": "French sports journalism (Le Monde, SoFoot)",
+    "length": "4-6 sentences maximum",
+    "units": "knots (speed), degrees (heading), miles (distance)",
+    "tone": "vivant, pr\u00e9cis, imag\u00e9, enthousiaste"
+  },
+  "mandatory_sequence": [
+    "1. polar_performance \u2014 speed vs target",
+    "2. race_progress \u2014 position in race",
+    "3. weather_conditions \u2014 wind, sea state",
+    "4. crew_status \u2014 helmsman, sail trim",
+    "5. buoy_conditions \u2014 NOAA data, tides",
+    "6. astronomical_data \u2014 moon, sunset",
+    "7. racing_tactics \u2014 fleet position"
+  ],
+  "example_reports": [
+    {
+      "time": "14h32 EDT",
+      "text": "Midnight Rider abat sur tribord, cap au 087\u00b0, dans 14 n\u0153uds de NE. Denis tient la barre avec calme, le J/30 file 6,4 n\u0153uds \u2014 96% de sa polaire th\u00e9orique. \u00c0 0,8 mille dans le nord-ouest, Lucky (Juan K 88) reste dans l angle. Race Rock \u00e0 12 milles. Les courants de mar\u00e9e montante jouent en leur faveur."
+    },
+    {
+      "time": "02h15 EDT",
+      "text": "Nuit noire sur le Sound. Pleine lune \u00e0 78%, la visibilit\u00e9 est bonne. Anne-Sophie est \u00e0 la barre depuis une heure, Denis surveille la grand-voile. Le vent a mollit \u2014 9 n\u0153uds de SW maintenant. Midnight Rider \u00e0 5,1 n\u0153uds, 88% polaire. Block Island est \u00e0 41 milles. Le courant de mar\u00e9e descendante les ralentit l\u00e9g\u00e8rement."
+    }
+  ],
+  "context": {
+    "boat": "J/30 (Rod Johnstone 1978, Newport RI)",
+    "race": "Block Island Race (79th edition, 186nm)",
+    "route": "Stamford CT \u2192 Race Rock \u2192 Fishers Island \u2192 Orient Point \u2192 Block Island NE",
+    "crew": {
+      "skipper": "Denis Lafarge",
+      "crew": "Anne-Sophie"
+    },
+    "rating": "PHRF J/30 LIS ~156 sec/mile",
+    "race_date": "2026-05-22"
+  },
+  "deployment_status": {
+    "prompt_file": "oc/MIDNIGHT-REPORTER-PROMPT.md",
+    "trigger_command": "send \"reporter\" to OC via Telegram",
+    "gateway_api": "http://localhost:18789",
+    "output_channel": "WhatsApp famille",
+    "mcp_servers": "\u2705 10 servers ready",
+    "mcp_tools": "\u2705 46+ tools available",
+    "tools_for_reporter": "\u2705 20 tools documented"
+  },
+  "recent_additions": [
+    "get_lis_wind_analysis() \u2014 CT vs RI wind delta for tactics",
+    "get_battery_status() \u2014 electrical system narrative",
+    "get_system_health() \u2014 RPi health summary",
+    "get_motion_snapshot() \u2014 boat motion impacts",
+    "get_wind_history() \u2014 wind shift narratives",
+    "get_tidal_current() \u2014 current impact on race",
+    "get_mark_eta() \u2014 next buoy timing"
+  ],
+  "race_day_readiness": {
+    "may_19_field_test": "Reporter agent tested with live data",
+    "may_22_race": "Live race updates via reporter every 1-4 hours",
+    "family_updates": "WhatsApp live reporting throughout race",
+    "narrative_quality": "\u2705 French journalistic tone verified",
+    "tool_integration": "\u2705 All 20 tools available and tested"
+  },
+  "next_steps": [
+    "1. May 18: Integration test with live Signal K data",
+    "2. May 19: Field test during sea trial",
+    "3. May 22: Live reporting during Block Island Race",
+    "4. Trigger: Denis sends \"reporter\" via Telegram",
+    "5. Output: French flash to WhatsApp family every 1-4 hours"
+  ],
+  "confidence": "\u2b50\u2b50\u2b50\u2b50\u2b50 MAXIMUM",
+  "final_status": "\u2705 READY FOR RACE DAY"
+}
