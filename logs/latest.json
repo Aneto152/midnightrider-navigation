@@ -1,56 +1,59 @@
 {
-  "task": "mcp: system-server.js \u2014 RPi health monitoring, 5 tools, Phase 3 complete",
-  "date": "2026-05-14T23:35:31.472637",
-  "status": "SUCCESS",
-  "steps_completed": [
-    "system-server.js: 5 tools for Raspberry Pi monitoring",
-    "get_system_health: CPU/RAM/disk/temp/uptime \u2014 os module + /proc + /sys",
-    "get_services_status: HTTP ping all 5 services (SK/InfluxDB/Grafana/Regatta/Portal)",
-    "get_network_status: IP, hostname, URLs, interfaces",
-    "get_performance_metrics: load average, memory, process info",
-    "get_system_summary: French narrative for Midnight Reporter",
-    "system-package.json created",
-    "claude_desktop_config.example.json: system server added",
-    "MIDNIGHT-REPORTER-PROMPT.md: system tools added",
-    "All files validated"
-  ],
-  "tools_summary": {
-    "get_system_health": "CPU%, RAM%, disk%, temp, uptime, alerts",
-    "get_services_status": "HTTP ping 5 services, response times, down services list",
-    "get_network_status": "IP, hostname, URLs, network interfaces",
-    "get_performance_metrics": "load average, memory, Node.js version, RPi uptime",
-    "get_system_summary": "French narrative, all_operational flag, alerts"
+  "task": "AUDIT: Vent LIS interface \u2014 unit handling in NDBC/ASOS weather collectors",
+  "date": "2026-05-14T23:46:48.595835",
+  "status": "CRITICAL BUG FOUND",
+  "findings": {
+    "problem": "Unit mismatch in weather_collector.py \u2014 NDBC data stored as m/s when it's actually knots",
+    "impact": "All NDBC wind speed data off by factor of 1.94384 (stored 5.1 m/s when actual is 10 knots)",
+    "severity": "HIGH \u2014 affects buoy-server.js calculations and race analytics"
   },
-  "system_thresholds": {
-    "CPU_WARNING": "80%",
-    "CPU_CRITICAL": "95%",
-    "RAM_WARNING": "80%",
-    "RAM_CRITICAL": "90%",
-    "DISK_WARNING": "80%",
-    "DISK_CRITICAL": "90%",
-    "TEMP_WARNING": "70\u00b0C",
-    "TEMP_CRITICAL": "80\u00b0C"
-  },
-  "data_sources": [
-    "os module (CPU, RAM, uptime, load average)",
-    "/sys/class/thermal/thermal_zone0/temp (CPU temperature)",
-    "df command (disk usage)",
-    "HTTP ping (service status)",
-    "networkInterfaces() (network info)"
+  "affected_files": [
+    "regatta/weather_collector.py \u2014 CRITICAL BUG",
+    "mcp/buoy-server.js \u2014 reads wind_speed_kts correctly but source data wrong",
+    "regatta/wind.html \u2014 displays buoy data (depends on collector)",
+    "regatta/server.py \u2014 may reference weather data"
   ],
-  "services_monitored": [
-    "Signal K (port 3000)",
-    "InfluxDB (port 8086)",
-    "Grafana (port 3001)",
-    "Regatta (port 5000)",
-    "Portal (port 8888)"
-  ],
-  "status_operational": {
-    "system_server": "\u2705 Ready",
-    "mcp_servers": "10 total (Phase 3 complete)",
-    "mcp_tools": "50+ total",
-    "all_phases": "\u2705 Complete"
+  "bug_details": {
+    "file": "regatta/weather_collector.py",
+    "function": "collect_once()",
+    "line": "fields[\"wind_speed_ms\"] = data[\"wind_speed\"]",
+    "issue": "NDBC returns knots but code labels it as m/s",
+    "stations_affected": [
+      "NWPR1 (Newport RI)",
+      "PTCR1 (Pt Judith RI)",
+      "44025 (Offshore SE LI)",
+      "44017 (Montauk)",
+      "44022 (Block Island)"
+    ],
+    "asos_impact": "ASOS correctly in m/s, but conversion applied uniformly"
   },
-  "errors": [],
-  "next_step": "Prepare field test checklist for May 19"
+  "unit_conversions_found": {
+    "NDBC_fetch": "Returns knots directly (p[6] = WSPD field)",
+    "ASOS_fetch": "Returns m/s from API (correct)",
+    "collector_storage": "Stores both as wind_speed_ms (WRONG for NDBC)",
+    "conversion_factor": "1.94384 (m/s to knots)",
+    "influxdb_fields": [
+      "wind_speed_ms",
+      "wind_speed_kts"
+    ]
+  },
+  "fix_required": {
+    "option_1": "Convert NDBC knots to m/s: wind_speed_m/s = data[\"wind_speed\"] / 1.94384",
+    "option_2": "Store NDBC in native knots, convert only for InfluxDB output",
+    "recommended": "Option 2 \u2014 store native units, document conversion at storage layer"
+  },
+  "files_to_audit": {
+    "regatta/weather_collector.py": "CRITICAL \u2014 NDBC/ASOS unit handling",
+    "mcp/buoy-server.js": "Check assumptions about wind_speed_kts source",
+    "regatta/wind.html": "Check what units expected from API",
+    "regatta/server.py": "Any weather API endpoints or references"
+  },
+  "recommendations": [
+    "1. Fix weather_collector.py: handle NDBC and ASOS unit conversions separately",
+    "2. Add unit validation to buoy-server.js (verify kts consistency)",
+    "3. Document InfluxDB schema: which measurement fields are in which units",
+    "4. Add test case: fetch real NDBC data, verify units match buoy.wind_speed_knots"
+  ],
+  "ready_for_field_test": false,
+  "blocking_issue": true
 }
