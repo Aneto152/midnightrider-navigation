@@ -1,17 +1,15 @@
 {
-  "task": "portal: Racing + R\u00e9gatte merged \u2192 single card",
-  "date": "2026-05-15T18:41:34.279062",
+  "task": "fix: GPS cache 30s + timeout 5s",
+  "date": "2026-05-15T18:56:20.017002",
   "status": "SUCCESS",
-  "changes": [
-    "Removed Racing Dashboard card (Grafana 07-race duplicate)",
-    "Kept R\u00e9gatte card (/regatta)",
-    "Updated title to French: R\u00e9gatte",
-    "Updated description: Course, timer, marks, start line, et tactique"
+  "steps_completed": [
+    "_gps_cache dict added (lat/lon/ts)",
+    "get_gps_position: checks cache first (< 30s)",
+    "get_gps_position: timeout increased 2s \u2192 5s",
+    "get_gps_position: falls back to stale cache on timeout",
+    "Regatta restarted",
+    "GPS endpoint verified: 40.7626\u00b0N, 73.9881\u00b0W"
   ],
-  "verification": {
-    "total_cards": 14,
-    "regatta_links": 4,
-    "racing_grafana_removed": true
-  },
+  "impact": "Pin button now works reliably \u2014 GPS cached, timeout increased",
   "dust_readable": true
 }

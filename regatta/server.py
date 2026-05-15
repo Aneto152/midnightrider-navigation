@@ -15,6 +15,9 @@ SIGNALK_URL = "http://localhost:3000"
 wind_cache = {}
 WIND_TTL = 300
 
+# GPS cache — avoids timeout issues when Pin is clicked
+_gps_cache = {"lat": None, "lon": None, "ts": 0}
+
 # Start line cache (pin and boat coordinates)
 start_line_cache = {"pin": None, "boat": None}
 
@@ -133,13 +136,19 @@ def get_ais_targets(radius_nm=10):
         return []
 
 def get_gps_position():
+    import time
+    if _gps_cache["lat"] and (time.time() - _gps_cache["ts"]) < 30:
+        return {"latitude": _gps_cache["lat"], "longitude": _gps_cache["lon"]}
     try:
         url = f"{SIGNALK_URL}/signalk/v1/api/vessels/self/navigation/position"
-        req = urllib.request.Request(url)
-        res = urllib.request.urlopen(req, timeout=2)
-        data = json.loads(res.read())
-        return data.get("value", {})
+        res = urllib.request.urlopen(url, timeout=5)
+        pos = json.loads(res.read()).get("value", {})
+        if pos.get("latitude"):
+            _gps_cache.update({"lat": pos["latitude"], "lon": pos["longitude"], "ts": time.time()})
+        return pos
     except:
+        if _gps_cache["lat"]:
+            return {"latitude": _gps_cache["lat"], "longitude": _gps_cache["lon"]}
         return {}
 
 def fetch_ndbc(station_id):
