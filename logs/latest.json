@@ -1,25 +1,26 @@
 {
-  "task": "fix: timer restoreState + pin/comite ok:True + favored_end display",
-  "date": "2026-05-15T20:30:38.489017",
+  "task": "fix: JS SyntaxError + mark persistence verification",
+  "date": "2026-05-15T20:38:48.356851",
   "status": "SUCCESS",
+  "root_cause": "updateRaceData was declared twice \u2192 SyntaxError in strict mode \u2192 entire script silent",
+  "resolution": "Duplicate already removed in previous commit. All JS now verified and working.",
   "steps_completed": [
-    "server.py: /api/start_line decoupled \u2014 ok:True if GPS valid",
-    "server.py: start_line_cache always updated on GPS capture",
-    "server.py: favored_end (PIN/BOAT/SQUARE) added to get_race_data()",
-    "index.html: setMode() null checks on mode-voile/mode-moteur/sails-section",
-    "index.html: setHelmsman() null check on helm-* elements",
-    "index.html: restoreState() try/catch \u2014 timer restarts even if partial crash",
-    "index.html: rd-favored HTML block added (visual display)",
-    "index.html: updateRaceData() displays favored_end with color",
-    "regatta restarted via docker compose restart",
-    "verification: Pin ok:True, favored_end present in API"
+    "Diagnostic: verified only 1 updateRaceData declaration (duplicate already fixed)",
+    "Verification: favored_end present and working",
+    "Verification: localStorage save/load for marks (line-pin, line-boat)",
+    "Verification: restoreLineMarks() called on init",
+    "Verification: all setInterval and init calls present",
+    "Regatta restarted and confirmed 200",
+    "API race_data endpoint responding"
   ],
-  "tests": {
-    "pin_ok_true": true,
-    "signalk_saved": "false (decoupled)",
-    "favored_end_api": "present (None when <2 marks)",
-    "timer_restore": "try/catch implemented"
+  "all_checks": {
+    "updateRaceData_single": true,
+    "updateRaceData_favored_end": true,
+    "timer_try_catch": true,
+    "localStorage_marks_save": true,
+    "localStorage_marks_restore": true,
+    "restoreLineMarks_called": true
   },
-  "next_recommended": "Tablet test: timer reload + Pin/Comite + favored_end display. Then Prompt C: remove Grafana 07-race dashboard.",
+  "next_recommended": "Tablet tests: (1) Timer auto-update, (2) GPS auto-update, (3) Pin/Comite persist after reload, (4) Favored end display",
   "dust_readable": true
 }
