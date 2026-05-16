@@ -322,6 +322,16 @@ def get_race_data():
     except:
         pass
     
+    # Determine favored end
+    favored = None
+    if bias is not None:
+        if abs(bias) <= 1:
+            favored = "SQUARE"
+        elif bias > 0:
+            favored = "BOAT"
+        else:
+            favored = "PIN"
+    
     r.update({
         "ok": True,
         "distance_to_line_m": round(ab, 1),
@@ -332,7 +342,8 @@ def get_race_data():
         "pin_bearing_deg": round(bearing_deg(pos, pin), 1),
         "pin_dist_m": round(haversine_m(pos, pin), 1),
         "rc_bearing_deg": round(bearing_deg(pos, rc), 1),
-        "rc_dist_m": round(haversine_m(pos, rc), 1)
+        "rc_dist_m": round(haversine_m(pos, rc), 1),
+        "favored_end": favored
     })
     
     return r
@@ -421,10 +432,11 @@ class Handler(BaseHTTPRequestHandler):
                 return
             # Signal K path: pin=startLinePrt, boat=startLineStb
             sk_path = "racing/startLinePrt" if point == "pin" else "racing/startLineStb"
-            ok = put_signalk(sk_path, {"latitude": lat, "longitude": lon})
-            if ok:
-                start_line_cache[point] = {"lat": lat, "lon": lon}
-            self.send_json({"ok": ok, "lat": round(lat, 5), "lon": round(lon, 5), "signalk_path": sk_path})
+            # Always save to cache — GPS valid = success for UI
+            # Signal K is best-effort persistence only
+            start_line_cache[point] = {"lat": lat, "lon": lon}
+            ok_sk = put_signalk(sk_path, {"latitude": lat, "longitude": lon})
+            self.send_json({"ok": True, "lat": round(lat, 5), "lon": round(lon, 5), "signalk_path": sk_path, "signalk_saved": ok_sk})
         elif self.path == "/api/weather/start":
             self.send_json(weather_collector.start())
         elif self.path == "/api/weather/stop":

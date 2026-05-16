@@ -1,29 +1,25 @@
 {
-  "task": "arch: single entry point 8888/regatta \u2014 port 5000 localhost only, GPS cache 30s",
-  "date": "2026-05-15T20:26:04.355850",
+  "task": "fix: timer restoreState + pin/comite ok:True + favored_end display",
+  "date": "2026-05-15T20:30:38.489017",
   "status": "SUCCESS",
   "steps_completed": [
-    "docker-compose: regatta uses network_mode:host (localhost:5000 only)",
-    "server.py: GPS cache 30s TTL present + timeout 5s verified",
-    "regatta/index.html: nav links fixed (/equipage\u2192/regatta/crew, /voiles\u2192/regatta/voiles)",
-    "portal/index.html: Racing (07-race) card removed",
-    "portal/index.html: Regatta URL \u2192 /regatta (relative)",
-    "portal/index.html: Signal K \u2192 192.168.1.167:3000 (direct IP)",
-    "regatta restarted: docker compose restart"
+    "server.py: /api/start_line decoupled \u2014 ok:True if GPS valid",
+    "server.py: start_line_cache always updated on GPS capture",
+    "server.py: favored_end (PIN/BOAT/SQUARE) added to get_race_data()",
+    "index.html: setMode() null checks on mode-voile/mode-moteur/sails-section",
+    "index.html: setHelmsman() null check on helm-* elements",
+    "index.html: restoreState() try/catch \u2014 timer restarts even if partial crash",
+    "index.html: rd-favored HTML block added (visual display)",
+    "index.html: updateRaceData() displays favored_end with color",
+    "regatta restarted via docker compose restart",
+    "verification: Pin ok:True, favored_end present in API"
   ],
-  "verification": {
-    "regatta_portal_200": true,
-    "gps_via_proxy": "OK (40.7626, -73.9880)",
-    "crew_200": true,
-    "voiles_200": true,
-    "07_race_removed": true
+  "tests": {
+    "pin_ok_true": true,
+    "signalk_saved": "false (decoupled)",
+    "favored_end_api": "present (None when <2 marks)",
+    "timer_restore": "try/catch implemented"
   },
-  "architecture": {
-    "entry_point": "http://192.168.1.167:8888/regatta/",
-    "port_5000": "localhost only (network_mode: host)",
-    "gps_cache": "30s TTL",
-    "navigation": "consolidated via portal proxy"
-  },
-  "next_step": "PROMPT B: fix timer restoreState + pin/comite decoupled + favored_end display",
+  "next_recommended": "Tablet test: timer reload + Pin/Comite + favored_end display. Then Prompt C: remove Grafana 07-race dashboard.",
   "dust_readable": true
 }

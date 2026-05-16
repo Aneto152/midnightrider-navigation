@@ -109,7 +109,14 @@ button.span2 { grid-column: span 2; padding: 18px; font-size: 1em; font-weight: 
 
 <div class="section">
  <h2>🏁 Données Ligne <span id="rd-age" style="font-size:.75em;color:#546e7a;font-weight:normal"></span></h2>
- <div id="rd-empty" style="text-align:center;color:#546e7a;padding:16px;font-size:.9em">⚓ Marquer Pin + Comité pour activer les données temps réel</div>
+ <div id="rd-favored" style="display:none;margin-bottom:12px">
+  <div id="rd-fav-box" style="text-align:center;padding:14px 8px;border-radius:10px;border:2px solid #546e7a;background:#0a1628">
+    <div style="font-size:.65em;color:#546e7a;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">⭐ Côté Favorisé</div>
+    <div id="rd-fav-label" style="font-size:1.6em;font-weight:bold;font-family:monospace">—</div>
+    <div id="rd-fav-bias" style="font-size:.8em;color:#90caf9;margin-top:4px"></div>
+  </div>
+</div>
+<div id="rd-empty" style="text-align:center;color:#546e7a;padding:16px;font-size:.9em">⚓ Marquer Pin + Comité pour activer les données temps réel</div>
  <div id="rd-data" style="display:none">
  <div class="rd-row" style="grid-template-columns:1fr 1fr">
  <div class="rd-box" id="rd-dbox"><div class="rd-lbl">Distance Ligne</div><div class="rd-val" id="rd-dist">—</div></div>
@@ -419,9 +426,12 @@ function markLine(point) {
 function setMode(mode) {
   S.mode = mode;
   save('md', mode);
-  document.getElementById('mode-voile').className = mode === 'voile' ? 'on' : '';
-  document.getElementById('mode-moteur').className = mode === 'moteur' ? 'stop on' : '';
-  document.getElementById('sails-section').style.display = mode === 'moteur' ? 'none' : 'block';
+  var elV = document.getElementById('mode-voile');
+  var elM = document.getElementById('mode-moteur');
+  var elS = document.getElementById('sails-section');
+  if (elV) elV.className = mode === 'voile' ? 'on' : '';
+  if (elM) elM.className = mode === 'moteur' ? 'stop on' : '';
+  if (elS) elS.style.display = mode === 'moteur' ? 'none' : 'block';
   post('/api/event', {type: 'mode', note: mode}, null);
   toast(mode === 'moteur' ? '🛥 Moteur' : '⛵ Voile');
 }
@@ -451,7 +461,8 @@ function setMainsail(sail) {
 // --- Barreur ---
 function setHelmsman(name) {
   ['Denis','AnSo','Andrea','Autre'].forEach(function(id) {
-    document.getElementById('helm-' + id).className = '';
+    var el = document.getElementById('helm-' + id);
+    if (el) el.className = '';
   });
   var map = {'Denis': 'Denis', 'Anne-Sophie': 'AnSo', 'Andrea': 'Andrea', 'Autre': 'Autre'};
   var id = map[name];
@@ -494,9 +505,17 @@ function restoreState() {
   if (S.foresail) setForesail(S.foresail);
   if (S.mainsail) setMainsail(S.mainsail);
   if (S.helmsman) setHelmsman(S.helmsman);
-  if (S.timerRunning) {
-    S.timerRunning = false; // reset pour permettre startTimer
-    startTimer();
+  try {
+    if (S.timerRunning) {
+      S.timerRunning = false;
+      startTimer();
+    }
+  } catch(e) {
+    console.error('restoreState error:', e);
+    if (localStorage.getItem('tr') === '1') {
+      S.timerRunning = false;
+      startTimer();
+    }
   }
 }
 
@@ -537,7 +556,7 @@ setInterval(wxStatus, 10000);
 wxStatus();
 
 setInterval(updateStatus, 1000);
-function updateRaceData(){var x=new XMLHttpRequest();x.open('GET','/api/race_data');x.onload=function(){try{var d=JSON.parse(x.responseText);var em=document.getElementById('rd-empty'),da=document.getElementById('rd-data');if(!d.pin_set||!d.rc_set){em.style.display='block';da.style.display='none';return}em.style.display='none';da.style.display='block';document.getElementById('rd-age').textContent=Math.round(Date.now()/1000-d.ts)+'s';var dm=d.distance_to_line_m,dv=document.getElementById('rd-dist');dv.textContent=dm!==undefined?Math.round(dm)+' m':'—';dv.style.color=dm<50?'#ef5350':dm<100?'#ffb300':'#fff';document.getElementById('rd-dbox').style.borderColor=dm<50?'#ef5350':dm<100?'#ffb300':'#1e3a5f';var sc={CLEAR:'#66bb6a',OCS:'#ef5350',BEHIND:'#ffb300'},sv=document.getElementById('rd-side');sv.textContent=d.line_side||'—';sv.style.color=sc[d.line_side]||'#fff';document.getElementById('rd-sbox').style.borderColor=sc[d.line_side]||'#1e3a5f';var bv=document.getElementById('rd-bias');if(d.line_bias_deg!=null){var b=d.line_bias_deg;bv.textContent=(b>0?'+':'')+b+'°';bv.style.color=Math.abs(b)>5?'#ffb300':'#66bb6a'}else{bv.textContent=d.line_heading_deg?d.line_heading_deg+'°':'—';bv.style.color='#90caf9'}document.getElementById('rd-len').textContent=d.start_line_length_m?Math.round(d.start_line_length_m)+' m':'—';document.getElementById('rd-pb').textContent=d.pin_bearing_deg?Math.round(d.pin_bearing_deg)+'°':'—';document.getElementById('rd-pd').textContent=d.pin_dist_m?Math.round(d.pin_dist_m)+' m':'—';document.getElementById('rd-rb').textContent=d.rc_bearing_deg?Math.round(d.rc_bearing_deg)+'°':'—';document.getElementById('rd-rd').textContent=d.rc_dist_m?Math.round(d.rc_dist_m)+' m':'—'}catch(e){}};x.send()}
+function updateRaceData(){var x=new XMLHttpRequest();x.open('GET','/api/race_data');x.onload=function(){try{var d=JSON.parse(x.responseText);var em=document.getElementById('rd-empty'),da=document.getElementById('rd-data');if(!d.pin_set||!d.rc_set){em.style.display='block';da.style.display='none';return}em.style.display='none';da.style.display='block';document.getElementById('rd-age').textContent=Math.round(Date.now()/1000-d.ts)+'s';var dm=d.distance_to_line_m,dv=document.getElementById('rd-dist');dv.textContent=dm!==undefined?Math.round(dm)+' m':'—';dv.style.color=dm<50?'#ef5350':dm<100?'#ffb300':'#fff';document.getElementById('rd-dbox').style.borderColor=dm<50?'#ef5350':dm<100?'#ffb300':'#1e3a5f';var sc={CLEAR:'#66bb6a',OCS:'#ef5350',BEHIND:'#ffb300'},sv=document.getElementById('rd-side');sv.textContent=d.line_side||'—';sv.style.color=sc[d.line_side]||'#fff';document.getElementById('rd-sbox').style.borderColor=sc[d.line_side]||'#1e3a5f';var bv=document.getElementById('rd-bias');if(d.line_bias_deg!=null){var b=d.line_bias_deg;bv.textContent=(b>0?'+':'')+b+'°';bv.style.color=Math.abs(b)>5?'#ffb300':'#66bb6a'}else{bv.textContent=d.line_heading_deg?d.line_heading_deg+'°':'—';bv.style.color='#90caf9'}document.getElementById('rd-len').textContent=d.start_line_length_m?Math.round(d.start_line_length_m)+' m':'—';document.getElementById('rd-pb').textContent=d.pin_bearing_deg?Math.round(d.pin_bearing_deg)+'°':'—';document.getElementById('rd-pd').textContent=d.pin_dist_m?Math.round(d.pin_dist_m)+' m':'—';document.getElementById('rd-rb').textContent=d.rc_bearing_deg?Math.round(d.rc_bearing_deg)+'°':'—';document.getElementById('rd-rd').textContent=d.rc_dist_m?Math.round(d.rc_dist_m)+' m':'—';var fwrap=document.getElementById('rd-favored'),fbox=document.getElementById('rd-fav-box'),flbl=document.getElementById('rd-fav-label'),fbias=document.getElementById('rd-fav-bias');if(fwrap&&fbox&&flbl&&fbias){if(d.favored_end&&d.pin_set&&d.rc_set){fwrap.style.display='block';var isSQ=(d.favored_end==='SQUARE'),isPIN=(d.favored_end==='PIN');flbl.textContent=isSQ?'⚖ LIGNE CARRÉE':(isPIN?'📡 BOUÉE (PIN)':'⚓ COMITÉ');flbl.style.color=isSQ?'#90caf9':(isPIN?'#66bb6a':'#4fc3f7');fbias.textContent=d.line_bias_deg!=null?'Biais: '+(d.line_bias_deg>0?'+':'')+d.line_bias_deg+'°':'';fbox.style.borderColor=isSQ?'#546e7a':(isPIN?'#66bb6a':'#4fc3f7')}else{fwrap.style.display='none'}}}catch(e){}};x.send()}
 setInterval(updateRaceData,1000);updateRaceData();
 
 updateStatus();
