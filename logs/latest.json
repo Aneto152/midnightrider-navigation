@@ -1,43 +1,29 @@
 {
-  "timestamp": "2026-05-15T19:21:23.429909",
-  "system": "Midnight Rider Navigation - Diagnostic Report",
-  "status": "\u2705 ALL SYSTEMS OPERATIONAL",
-  "findings": {
-    "signal_k_access": {
-      "host_reachability": "\u2705 HTTP 200 (http://localhost:3000)",
-      "container_config": "\u2705 network_mode: host (regatta, astronomical)",
-      "server_py_config": "\u2705 SIGNALK_URL = \"http://localhost:3000\"",
-      "status": "FULLY OPERATIONAL"
-    },
-    "gps_subsystem": {
-      "cache": "\u2705 _gps_cache enabled (lat/lon/ts)",
-      "cache_ttl": "30 seconds",
-      "timeout": "5 seconds (upgraded from 2s)",
-      "fallback": "\u2705 Returns stale cache on timeout",
-      "endpoint": "\u2705 /api/position (relative URL)",
-      "status": "FULLY OPERATIONAL"
-    },
-    "regatta_ui": {
-      "gps_display": "\u2705 updateStatus() polls /api/position every 1s",
-      "pin_button": "\u2705 get_gps_position() on Pin click (cached + 5s timeout)",
-      "timer_restore": "\u2705 restoreState() restarts timer on page load",
-      "status": "FULLY OPERATIONAL"
-    },
-    "docker_networking": {
-      "regatta": "\u2705 network_mode: host",
-      "astronomical": "\u2705 network_mode: host",
-      "signalk_internal": "Running on host (systemd)",
-      "status": "FULLY OPERATIONAL"
-    }
-  },
+  "task": "arch: single entry point 8888/regatta \u2014 port 5000 localhost only, GPS cache 30s",
+  "date": "2026-05-15T20:26:04.355850",
+  "status": "SUCCESS",
+  "steps_completed": [
+    "docker-compose: regatta uses network_mode:host (localhost:5000 only)",
+    "server.py: GPS cache 30s TTL present + timeout 5s verified",
+    "regatta/index.html: nav links fixed (/equipage\u2192/regatta/crew, /voiles\u2192/regatta/voiles)",
+    "portal/index.html: Racing (07-race) card removed",
+    "portal/index.html: Regatta URL \u2192 /regatta (relative)",
+    "portal/index.html: Signal K \u2192 192.168.1.167:3000 (direct IP)",
+    "regatta restarted: docker compose restart"
+  ],
   "verification": {
-    "signal_k_http_200": true,
-    "gps_cache_active": true,
-    "timeout_5s": true,
-    "relative_urls": true,
-    "network_mode_host": true
+    "regatta_portal_200": true,
+    "gps_via_proxy": "OK (40.7626, -73.9880)",
+    "crew_200": true,
+    "voiles_200": true,
+    "07_race_removed": true
   },
-  "conclusion": "System is production-ready for May 19 field test",
-  "confidence": "\u2b50\u2b50\u2b50\u2b50\u2b50 MAXIMUM",
+  "architecture": {
+    "entry_point": "http://192.168.1.167:8888/regatta/",
+    "port_5000": "localhost only (network_mode: host)",
+    "gps_cache": "30s TTL",
+    "navigation": "consolidated via portal proxy"
+  },
+  "next_step": "PROMPT B: fix timer restoreState + pin/comite decoupled + favored_end display",
   "dust_readable": true
 }
