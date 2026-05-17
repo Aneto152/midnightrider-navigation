@@ -100,6 +100,10 @@ module.exports = function(app) {
       const yawRad = (yawDeg * Math.PI) / 180;
 
       // Build Signal K delta
+      // NOTE: WIT axes remapped per physical verification (Denis 2026-05-17):
+      // WIT Pitch (field[1]) → SK roll (gîte: bâbord/tribord)
+      // WIT Roll (field[0]) → SK pitch (assiette: étrave haut/bas)
+      // WIT Yaw (field[2]) → SK yaw (cap magnétique, calibration en mer)
       const delta = {
         context: 'vessels.self',
         source: {
@@ -111,9 +115,9 @@ module.exports = function(app) {
           source: { label: 'wit-nmea' },
           timestamp: new Date().toISOString(),
           values: [
-            { path: 'navigation.attitude.roll', value: rollRad },
-            { path: 'navigation.attitude.pitch', value: pitchRad },
-            { path: 'navigation.attitude.yaw', value: yawRad }
+            { path: 'navigation.attitude.roll', value: pitchRad },      // WIT Pitch = gîte
+            { path: 'navigation.attitude.pitch', value: rollRad },      // WIT Roll = assiette
+            { path: 'navigation.attitude.yaw', value: yawRad }          // WIT Yaw = cap (post-magneto)
           ]
         }]
       };
