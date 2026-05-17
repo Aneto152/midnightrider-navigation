@@ -1,49 +1,40 @@
 {
-  "task": "pgn-127257-configuration-check",
-  "timestamp": "2026-05-17T19:10:20.216691",
-  "status": "\u2705 CONFIGURATION VERIFIED",
-  "findings": {
-    "signalk_to_nmea2000_plugin": {
-      "enabled": true,
-      "config_file": "/home/aneto/.signalk/plugin-config-data/signalk-to-nmea2000.json",
-      "pgns_enabled": [
-        "129025 (Position Rapid Update)",
-        "129026 (Course Over Ground)",
-        "129029 (Time & Date)",
-        "127250 (Heading)",
-        "130306 (Wind Data)",
-        "127257 (Attitude) \u2705 ENABLED",
-        "128259 (Speed Through Water)",
-        "128267 (Water Depth)"
-      ]
-    },
-    "pgn_127257_status": {
-      "pgn_number": "127257",
-      "data_name": "Attitude (roll/pitch/yaw)",
-      "enabled_in_config": true,
-      "required_sk_path": "navigation/attitude",
-      "required_format": "{roll, pitch, yaw} composite object",
-      "current_sk_status": "\u2705 PRESENT (verified via injection test)",
-      "expected_n2k_output": "Heel angle, Pitch angle, Yaw angle to Vulcan 7"
-    },
-    "sk_api_logs": {
-      "recent_requests": [
-        "GET /navigation/attitude 200 (multiple hits)",
-        "GET /navigation/attitude/roll 200 (scalar path)",
-        "May 17 19:02:30-19:02:36: active requests during injection test"
-      ],
-      "status": "\u2705 API responding to requests"
-    },
-    "signal_k_server_status": "\u2705 Running (signalk-server active)",
-    "composite_object_verification": "\u2705 Tested and confirmed via injection"
+  "task": "patch-attitude-js-individual-paths",
+  "timestamp": "2026-05-17T19:13:35.890036",
+  "status": "\u2705 CRITICAL FIX APPLIED",
+  "root_cause": "attitude.js listened to composite \"navigation.attitude\" \u2014 never fires in Signal K 2.x",
+  "impact": "PGN 127257 was never emitted, Vulcan 7 heel angle never received data",
+  "fix_applied": {
+    "file": "/home/aneto/.signalk/node_modules/signalk-to-nmea2000/conversions/attitude.js",
+    "change": "Modified keys array to listen to individual scalar paths",
+    "before": [
+      "navigation.attitude"
+    ],
+    "after": [
+      "navigation.attitude.roll",
+      "navigation.attitude.pitch",
+      "navigation.attitude.yaw"
+    ],
+    "callback": "Updated to accept (roll, pitch, yaw) parameters"
   },
-  "expected_data_flow": {
-    "source": "WIT IMU (signalk-wit-imu-ble)",
-    "signal_k_path": "navigation/attitude {roll, pitch, yaw}",
-    "sk_to_nmea2000": "Reads composite object",
-    "pgn_generation": "127257 (Attitude)",
-    "n2k_transmission": "To YDNU-2 gateway",
-    "final_display": "Vulcan 7 heel/pitch angle display"
+  "changes_made": [
+    "pgn: 127250 \u2192 127257 (correct PGN number)",
+    "title: Updated to clarify WIT IMU source",
+    "keys: Changed from composite to individual scalar paths",
+    "callback signature: (attitude) \u2192 (roll, pitch, yaw)",
+    "Added null check: if any value is null, return null",
+    "tests: Updated to match new scalar input format"
+  ],
+  "verification": {
+    "signal_k_restart": "\u2705 Successful",
+    "service_status": "\u2705 Running (active)",
+    "sk_api_responding": "\u2705 Confirmed",
+    "pgn_127257_emission": "\u23f3 To be verified on May 19 field test"
   },
-  "field_test_readiness": "\u2705 READY \u2014 Configuration verified, data flow confirmed"
+  "expected_behavior": {
+    "before_patch": "PGN 127257 never emitted (composite path never fires)",
+    "after_patch": "PGN 127257 emitted every 2 seconds when WIT attitude data present",
+    "vulcan_7_display": "Should now receive heel/pitch angles on N2K bus"
+  },
+  "field_test_impact": "\ud83c\udfaf CRITICAL \u2014 May significantly improve Vulcan 7 integration"
 }
