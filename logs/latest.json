@@ -1,26 +1,50 @@
 {
-  "task": "fix: JS SyntaxError + mark persistence verification",
-  "date": "2026-05-15T20:38:48.356851",
-  "status": "SUCCESS",
-  "root_cause": "updateRaceData was declared twice \u2192 SyntaxError in strict mode \u2192 entire script silent",
-  "resolution": "Duplicate already removed in previous commit. All JS now verified and working.",
-  "steps_completed": [
-    "Diagnostic: verified only 1 updateRaceData declaration (duplicate already fixed)",
-    "Verification: favored_end present and working",
-    "Verification: localStorage save/load for marks (line-pin, line-boat)",
-    "Verification: restoreLineMarks() called on init",
-    "Verification: all setInterval and init calls present",
-    "Regatta restarted and confirmed 200",
-    "API race_data endpoint responding"
-  ],
-  "all_checks": {
-    "updateRaceData_single": true,
-    "updateRaceData_favored_end": true,
-    "timer_try_catch": true,
-    "localStorage_marks_save": true,
-    "localStorage_marks_restore": true,
-    "restoreLineMarks_called": true
+  "task": "calypso-ble-reconnect-diagnostic",
+  "date": "2026-05-17T15:09:39.445470",
+  "status": "DEVICE_NOT_FOUND",
+  "findings": {
+    "service": "calypso-wind.service \u2705 configured",
+    "restart_policy": "Restart=always (10s intervals) \u2705",
+    "restart_counter": "168 attempts since restart",
+    "ble_device": "F8:5F:12:9D:D2:EE",
+    "ble_status": "\u274c NOT FOUND",
+    "error": "BleakDeviceNotFoundError: Device not found",
+    "timestamp": "Multiple attempts from 15:08:47 to 15:09:28 EDT"
   },
-  "next_recommended": "Tablet tests: (1) Timer auto-update, (2) GPS auto-update, (3) Pin/Comite persist after reload, (4) Favored end display",
-  "dust_readable": true
+  "root_cause": "Calypso anemometer offline or out of BLE range",
+  "possible_reasons": [
+    "Device powered off",
+    "Battery depleted",
+    "Out of BLE range (>10m typical)",
+    "BLE adapter issue (hci0)",
+    "Firmware issue or stuck state"
+  ],
+  "actions_taken": [
+    "Service restarted \u2705",
+    "Restart=always confirmed \u2705",
+    "Auto-restart configured (10s intervals) \u2705"
+  ],
+  "next_steps": [
+    "Check Calypso physical power/battery",
+    "Verify device is within BLE range of RPi",
+    "Check BLE adapter status: hciconfig",
+    "Restart Bluetooth service if needed",
+    "Reset Calypso device (power cycle)",
+    "Re-pair device if necessary"
+  ],
+  "field_test_impact": {
+    "date": "2026-05-19",
+    "wind_data": "UNAVAILABLE until device reconnects",
+    "severity": "HIGH (wind required for race)",
+    "workaround": "None \u2014 must fix BLE connection before launch"
+  },
+  "services_status": {
+    "signalk": "running \u2705",
+    "calypso_wind": "running (but device not found) \u26a0\ufe0f",
+    "nmea_bridge": "running \u2705",
+    "n2k_gateway": "running \u2705",
+    "influxdb": "running \u2705",
+    "grafana": "running \u2705",
+    "regatta": "running \u2705"
+  }
 }
