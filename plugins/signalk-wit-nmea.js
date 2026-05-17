@@ -117,7 +117,8 @@ module.exports = function(app) {
           values: [
             { path: 'navigation.attitude.roll', value: pitchRad },      // WIT Pitch = gîte
             { path: 'navigation.attitude.pitch', value: rollRad },      // WIT Roll = assiette
-            { path: 'navigation.attitude.yaw', value: yawRad }          // WIT Yaw = cap (post-magneto)
+            { path: 'navigation.attitude.yaw', value: yawRad },         // WIT Yaw = cap (post-magneto)
+            { path: 'navigation.attitude', value: { roll: pitchRad, pitch: rollRad, yaw: yawRad } }  // Composite for PGN 127257 → Vulcan 7
           ]
         }]
       };
