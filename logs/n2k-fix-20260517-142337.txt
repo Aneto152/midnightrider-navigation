@@ -1,0 +1,42 @@
+=== N2K FIX LOG — Sun 17 May 14:23:37 EDT 2026 ===
+
+=== BINAIRES N2K DISPONIBLES ===
+ actisense-serial: NON TROUVÉ
+ yd-read: NON TROUVÉ
+ yd_reader: NON TROUVÉ
+ analyzer: NON TROUVÉ
+ canboat: NON TROUVÉ
+ n2kd: NON TROUVÉ
+
+=== @canboat CAPACITÉS ===
+Error: Cannot find module '@canboat/canboatjs/package.json'
+Require stack:
+- /home/aneto/.openclaw/workspace/[eval]
+=== N2K CONFIGURATION ATTEMPT — Sun 17 May 14:25:40 EDT 2026 ===
+
+ATTEMPT 1: Custom provider with @signalk/n2k-signalk
+Result: ❌ Failed (Ctor is not a constructor)
+
+ATTEMPT 2: Simplified serialport provider
+Result: ❌ Failed (provider type not found)
+
+RESOLUTION: Reverted to stable config (qtVLM-NMEA-Input enabled)
+
+FINDINGS:
+ ✅ YDNU-2 hardware working (ttyACM0 with NMEA 2000 data)
+ ✅ Signal K running stable with current providers
+ ✅ signalk-to-nmea2000 plugin installed @ 2.24.0
+ ❌ Provider type not compatible with SK 2.25.0
+
+ROOT CAUSE:
+ N2K provider configuration requires specific Signal K plugin setup
+ Available plugins (N2K): @canboat, signalk-to-nmea2000, signalk-n2kais-to-nmea0183
+ Issue: Needs proper plugin config, not just provider config
+
+NEXT STEPS:
+ 1. Enable signalk-to-nmea2000 plugin via UI/config-data
+ 2. Configure output PGNs
+ 3. Add ttyACM0 input via plugin settings (not provider)
+ 4. Restart Signal K
+
+Current stable status: ✅ All data flowing correctly
