@@ -1,50 +1,21 @@
 {
-  "task": "calypso-ble-reconnect-diagnostic",
-  "date": "2026-05-17T15:09:39.445470",
-  "status": "DEVICE_NOT_FOUND",
-  "findings": {
-    "service": "calypso-wind.service \u2705 configured",
-    "restart_policy": "Restart=always (10s intervals) \u2705",
-    "restart_counter": "168 attempts since restart",
-    "ble_device": "F8:5F:12:9D:D2:EE",
-    "ble_status": "\u274c NOT FOUND",
-    "error": "BleakDeviceNotFoundError: Device not found",
-    "timestamp": "Multiple attempts from 15:08:47 to 15:09:28 EDT"
+  "task": "calypso-status-check",
+  "timestamp": "2026-05-17T15:17:53.320770",
+  "status": "OFFLINE \u2014 Device not found",
+  "service": {
+    "name": "calypso-wind.service",
+    "state": "active (running)",
+    "uptime": "9s",
+    "restart_counter": 33,
+    "restart_interval": "5s"
   },
-  "root_cause": "Calypso anemometer offline or out of BLE range",
-  "possible_reasons": [
-    "Device powered off",
-    "Battery depleted",
-    "Out of BLE range (>10m typical)",
-    "BLE adapter issue (hci0)",
-    "Firmware issue or stuck state"
-  ],
-  "actions_taken": [
-    "Service restarted \u2705",
-    "Restart=always confirmed \u2705",
-    "Auto-restart configured (10s intervals) \u2705"
-  ],
-  "next_steps": [
-    "Check Calypso physical power/battery",
-    "Verify device is within BLE range of RPi",
-    "Check BLE adapter status: hciconfig",
-    "Restart Bluetooth service if needed",
-    "Reset Calypso device (power cycle)",
-    "Re-pair device if necessary"
-  ],
-  "field_test_impact": {
-    "date": "2026-05-19",
-    "wind_data": "UNAVAILABLE until device reconnects",
-    "severity": "HIGH (wind required for race)",
-    "workaround": "None \u2014 must fix BLE connection before launch"
+  "device": {
+    "mac": "F8:5F:12:9D:D2:EE",
+    "status": "\u274c NOT FOUND",
+    "last_error": "BleakDeviceNotFoundError at 15:17:38 EDT",
+    "attempts": "Continuous (every 5s)"
   },
-  "services_status": {
-    "signalk": "running \u2705",
-    "calypso_wind": "running (but device not found) \u26a0\ufe0f",
-    "nmea_bridge": "running \u2705",
-    "n2k_gateway": "running \u2705",
-    "influxdb": "running \u2705",
-    "grafana": "running \u2705",
-    "regatta": "running \u2705"
-  }
+  "wind_data_in_sk": "\u274c 404 Not Found",
+  "note": "Device offline since at least 15:08 EDT (40+ min). Service continuously trying to reconnect.",
+  "field_test_readiness": "\u274c NOT READY \u2014 Wind critical for racing"
 }
