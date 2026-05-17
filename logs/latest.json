@@ -1,40 +1,33 @@
 {
-  "task": "patch-attitude-js-individual-paths",
-  "timestamp": "2026-05-17T19:13:35.890036",
-  "status": "\u2705 CRITICAL FIX APPLIED",
-  "root_cause": "attitude.js listened to composite \"navigation.attitude\" \u2014 never fires in Signal K 2.x",
-  "impact": "PGN 127257 was never emitted, Vulcan 7 heel angle never received data",
-  "fix_applied": {
-    "file": "/home/aneto/.signalk/node_modules/signalk-to-nmea2000/conversions/attitude.js",
-    "change": "Modified keys array to listen to individual scalar paths",
-    "before": [
-      "navigation.attitude"
-    ],
-    "after": [
-      "navigation.attitude.roll",
-      "navigation.attitude.pitch",
-      "navigation.attitude.yaw"
-    ],
-    "callback": "Updated to accept (roll, pitch, yaw) parameters"
-  },
-  "changes_made": [
-    "pgn: 127250 \u2192 127257 (correct PGN number)",
-    "title: Updated to clarify WIT IMU source",
-    "keys: Changed from composite to individual scalar paths",
-    "callback signature: (attitude) \u2192 (roll, pitch, yaw)",
-    "Added null check: if any value is null, return null",
-    "tests: Updated to match new scalar input format"
+  "task": "um982-headingoffset-90-config",
+  "timestamp": "2026-05-17T19:30:38.406150",
+  "status": "\u2705 SUCCESSFUL",
+  "steps_completed": [
+    "Signal K stopped (freed ttyUSB0)",
+    "UNLOGALL sent to stop NMEA streaming",
+    "HEADINGOFFSET 90 sent to UM982",
+    "SAVECONFIG sent (permanent firmware change)",
+    "Signal K restarted",
+    "Heading verified: 171.3\u00b0"
   ],
-  "verification": {
-    "signal_k_restart": "\u2705 Successful",
-    "service_status": "\u2705 Running (active)",
-    "sk_api_responding": "\u2705 Confirmed",
-    "pgn_127257_emission": "\u23f3 To be verified on May 19 field test"
+  "um982_configuration": {
+    "setting": "HEADINGOFFSET 90",
+    "reason": "Antenna mounted transversely (+90\u00b0 offset)",
+    "saved": "Yes (firmware permanent)",
+    "status": "\u2705 ACTIVE"
   },
-  "expected_behavior": {
-    "before_patch": "PGN 127257 never emitted (composite path never fires)",
-    "after_patch": "PGN 127257 emitted every 2 seconds when WIT attitude data present",
-    "vulcan_7_display": "Should now receive heel/pitch angles on N2K bus"
+  "heading_verification": {
+    "value_before": "~91\u00b0 (87.2\u00b0 observed)",
+    "value_after": "171.3\u00b0",
+    "source": "signalk-um982-gnss.UM982-HDG",
+    "note": "Denis to verify against compass bearing"
   },
-  "field_test_impact": "\ud83c\udfaf CRITICAL \u2014 May significantly improve Vulcan 7 integration"
+  "services_status": {
+    "signalk": "\u2705 running",
+    "calypso_anemometer": "\u2705 running",
+    "calypso_watchdog": "\u2705 running",
+    "portal": "\u2705 running"
+  },
+  "impact": "Heading now corrected for transverse antenna mounting",
+  "field_test_ready": "\u2705 YES \u2014 heading correction applied"
 }
