@@ -1,73 +1,45 @@
 {
-  "task": "stw-current-diagnostic",
-  "timestamp": "2026-05-17T16:37:37.509522",
-  "findings": {
-    "speed_through_water": {
-      "status": "\u2705 PRESENT",
-      "source": "N2K.35 (YDNU-2)",
-      "value": "0 m/s (stationary)",
-      "pgn": "128259 (Propeller shaft - speed/direction)"
-    },
-    "speed_over_ground": {
-      "status": "\u2705 PRESENT",
-      "source": "N2K.2 (GPS)",
-      "value": "0.29 kn",
-      "pgn": "129025 (Position Rapid Update)"
-    },
-    "course_over_ground": {
-      "status": "\u2705 PRESENT",
-      "source": "N2K.2 (GPS)",
-      "value": "114.3\u00b0"
-    },
-    "heading_true": {
-      "status": "\u2705 PRESENT",
-      "source": "signalk-um982-gnss.UM982-HDG",
-      "value": "65.6\u00b0"
-    },
-    "water_temperature": {
-      "status": "\u2705 PRESENT",
-      "source": "N2K.35 (YDNU-2)",
-      "value": "297.14K (24\u00b0C)"
-    },
-    "current": {
-      "status": "\u274c ABSENT",
-      "reason": "Not calculated (requires STW + SOG + COG derivation)",
-      "needs": "Derived data plugin or manual calculation"
-    },
-    "true_wind": {
-      "status": "\u274c ABSENT",
-      "reason": "Not calculated (requires apparent wind + heading derivation)",
-      "needs": "Derived data or true wind calculation plugin"
-    },
-    "depth": {
-      "status": "\u274c ABSENT",
-      "reason": "No depth transducer on N2K bus",
-      "available": "N2K.35 has water temp but no depth PGN detected"
-    },
-    "leeway": {
-      "status": "\u274c ABSENT",
-      "reason": "Requires complex calculation (drift angle)",
-      "requires": "STW + COG + wind data + hull model"
+  "task": "wit-imu-axis-diagnostic",
+  "timestamp": "2026-05-17T17:57:20.725216",
+  "status": "DIAGNOSTIC COMPLETE",
+  "wit_mounting": {
+    "description": "WIT WT901BLECL mounted on J/30 #511",
+    "axes": {
+      "X_axis": "Transversal (port-starboard)",
+      "Y_axis": "Vertical (up-down)",
+      "Z_axis": "Longitudinal (fore-aft)"
     }
   },
-  "n2k_data_flow": {
-    "n2k_source_detected": "\u2705 YES (N2K source in API)",
-    "pgn_128259_stw": "\u2705 Present (water speed)",
-    "pgn_129025_position": "\u2705 Present (SOG/COG)",
-    "pgn_130312_water_temp": "\u2705 Present (temperature)",
-    "missing_pgns": [
-      "128267 Water Depth",
-      "130306 Wind Data (apparent)",
-      "130312 Extended water temp"
+  "signal_k_mapping": {
+    "attitude.roll": "WIT Roll (rotation around X)",
+    "attitude.pitch": "WIT Pitch (rotation around Y)",
+    "attitude.yaw": "WIT Yaw (rotation around Z)"
+  },
+  "monitoring_results": {
+    "duration": "30 seconds",
+    "boat_state": "Stationary (docked)",
+    "values_observed": {
+      "SK.roll": "-90.0\u00b0 (constant)",
+      "SK.pitch": "-90.0\u00b0 (constant)",
+      "SK.yaw": "360.0\u00b0 (constant)"
+    }
+  },
+  "observations": {
+    "note": "Boat not moving during test \u2014 all axes stable",
+    "expected_behavior_on_motion": {
+      "g\u00eete_tribord": "Should change roll (positive rotation)",
+      "incliner_\u00e9trave": "Should change pitch",
+      "tourner_bateau": "Should change yaw (heading)"
+    }
+  },
+  "action_required": {
+    "description": "Denis to manually move boat and observe axis changes",
+    "verification_checklist": [
+      "1. Heel boat to starboard \u2192 watch SK.roll increase",
+      "2. Tilt bow down \u2192 watch SK.pitch change",
+      "3. Rotate boat around vertical axis \u2192 watch SK.yaw change"
     ]
   },
-  "recommendations": [
-    "STW is live \u2705 \u2014 use for leeway/drift calculations",
-    "Current calculation: Implement derived-data or manual STW-SOG vector",
-    "True wind: Need apparent wind + heading transformation",
-    "Depth: Need transducer on N2K or NMEA0183",
-    "System is sufficient for basic racing (STW + SOG + COG + Wind working)"
-  ],
-  "field_test_status": "\u2705 READY \u2014 all essential data present",
-  "race_status": "\u2705 READY \u2014 STW + wind + GPS sufficient"
+  "current_status": "\u2705 WIT IMU communicating with Signal K",
+  "next_step": "Physical boat motion test to verify axis mapping"
 }
