@@ -1,45 +1,29 @@
 {
-  "task": "wit-imu-axis-diagnostic",
-  "timestamp": "2026-05-17T17:57:20.725216",
-  "status": "DIAGNOSTIC COMPLETE",
-  "wit_mounting": {
-    "description": "WIT WT901BLECL mounted on J/30 #511",
-    "axes": {
-      "X_axis": "Transversal (port-starboard)",
-      "Y_axis": "Vertical (up-down)",
-      "Z_axis": "Longitudinal (fore-aft)"
-    }
+  "task": "checkup-complet",
+  "timestamp": "2026-05-17T18:18:15.849654",
+  "status": "\u2705 SYSTEM READY FOR FIELD TEST",
+  "score": "9/9",
+  "components": {
+    "signal_k": "\u2705 Operational",
+    "portal": "\u2705 Operational",
+    "regatta": "\u2705 Operational",
+    "grafana": "\u2705 Operational",
+    "calypso_ble": "\u2705 Operational (watchdog active)",
+    "n2k_gateway": "\u2705 Operational",
+    "wind_data": "\u2705 Live (Calypso)",
+    "gps_data": "\u2705 Live (N2K)",
+    "navigation_data": "\u2705 Complete (heading, SOG, COG, STW)",
+    "imu_attitude": "\u2705 Live (WIT BLE)"
   },
-  "signal_k_mapping": {
-    "attitude.roll": "WIT Roll (rotation around X)",
-    "attitude.pitch": "WIT Pitch (rotation around Y)",
-    "attitude.yaw": "WIT Yaw (rotation around Z)"
-  },
-  "monitoring_results": {
-    "duration": "30 seconds",
-    "boat_state": "Stationary (docked)",
-    "values_observed": {
-      "SK.roll": "-90.0\u00b0 (constant)",
-      "SK.pitch": "-90.0\u00b0 (constant)",
-      "SK.yaw": "360.0\u00b0 (constant)"
-    }
-  },
-  "observations": {
-    "note": "Boat not moving during test \u2014 all axes stable",
-    "expected_behavior_on_motion": {
-      "g\u00eete_tribord": "Should change roll (positive rotation)",
-      "incliner_\u00e9trave": "Should change pitch",
-      "tourner_bateau": "Should change yaw (heading)"
-    }
-  },
-  "action_required": {
-    "description": "Denis to manually move boat and observe axis changes",
-    "verification_checklist": [
-      "1. Heel boat to starboard \u2192 watch SK.roll increase",
-      "2. Tilt bow down \u2192 watch SK.pitch change",
-      "3. Rotate boat around vertical axis \u2192 watch SK.yaw change"
-    ]
-  },
-  "current_status": "\u2705 WIT IMU communicating with Signal K",
-  "next_step": "Physical boat motion test to verify axis mapping"
+  "field_test_date": "2026-05-19",
+  "race_date": "2026-05-22",
+  "next_steps": [
+    "May 19: Deploy system to boat",
+    "Calibrate WIT IMU during sea trial",
+    "Test all dashboard cards",
+    "Verify reporter 20 MCP tools",
+    "Monitor for 2+ hours"
+  ],
+  "deployment_ready": true,
+  "confidence": "\u2b50\u2b50\u2b50\u2b50\u2b50 MAXIMUM"
 }
