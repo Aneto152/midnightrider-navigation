@@ -1,34 +1,30 @@
 {
-  "task": "hci0-reset-calypso-reconnect",
-  "timestamp": "2026-05-17T15:59:59.067542",
-  "status": "\u2705 SUCCESS",
-  "steps": {
-    "1_stop_service": "\u2705 calypso-anemometer stopped",
-    "2_hci0_down": "\u2705 hci0 brought down",
-    "3_hci0_up": "\u2705 hci0 brought up",
-    "4_ble_scan": "\u2705 Calypso F8:5F:12:9D:D2:EE FOUND",
-    "5_service_restart": "\u2705 calypso-anemometer restarted",
-    "6_wind_data": "\u2705 AWA=45.0\u00b0 from Signal K"
+  "task": "calypso-watchdog-service",
+  "timestamp": "2026-05-17T16:25:27.731455",
+  "status": "\u2705 DEPLOYED",
+  "components": {
+    "script": "/usr/local/bin/calypso-watchdog.py",
+    "service": "/etc/systemd/system/calypso-watchdog.service",
+    "status": "active (running)"
   },
-  "calypso_status": {
-    "device_mac": "F8:5F:12:9D:D2:EE",
-    "ble_scan": "FOUND \u2705",
-    "connected": "yes (briefly showed Connected: yes/no)",
-    "data_flowing": "YES \u2705"
+  "behavior": {
+    "check_interval": "30 seconds",
+    "reset_threshold": "120 seconds (2 minutes)",
+    "action_on_dropout": "HCI0 reset + calypso-anemometer restart",
+    "automatic": "YES \u2014 no human intervention needed"
   },
-  "signal_k_wind": {
-    "awa": "45.0\u00b0",
-    "source": "Calypso.XX",
-    "timestamp": "2026-05-17T19:39:34.000Z",
-    "status": "OPERATIONAL \u2705"
+  "services_status": {
+    "signalk": "\u2705 running",
+    "calypso-anemometer": "\u2705 running",
+    "calypso-watchdog": "\u2705 running",
+    "portal": "\u2705 running",
+    "regatta": "\u2705 running",
+    "grafana": "\u2705 running",
+    "influxdb": "\u2705 running"
   },
-  "root_cause_resolved": "BlueZ stack had stale handle from phone disconnect. HCI0 reset cleared it.",
-  "field_test_ready": "YES \u2705",
-  "notes": [
-    "Service auto-restart alone was insufficient",
-    "Complete HCI0 reset was required",
-    "Device came back immediately after reset",
-    "Wind data now flowing to Signal K",
-    "System ready for May 19 field test"
-  ]
+  "wind_data": "\u2705 AWA=347.0\u00b0 (live)",
+  "field_test_ready": "\u2705 YES",
+  "race_ready": "\u2705 YES \u2014 system auto-recovers from BLE dropout",
+  "deployment_date": "2026-05-17",
+  "next_event": "May 19 Field Test, May 22 Block Island Race"
 }
