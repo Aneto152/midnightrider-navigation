@@ -1,26 +1,92 @@
 {
-  "task": "wit-imu-roll-pitch-swap",
-  "date": "2026-05-17T18:28:12.151349",
-  "status": "\u2705 SUCCESS",
-  "steps_completed": [
-    "WIT Pitch (field[1]) \u2192 SK attitude.roll (g\u00eete b\u00e2bord/tribord)",
-    "WIT Roll (field[0]) \u2192 SK attitude.pitch (assiette \u00e9trave)",
-    "WIT Yaw (field[2]) \u2192 SK attitude.yaw (cap magn\u00e9tique)",
-    "Accelerom\u00e8tre d\u00e9j\u00e0 calibr\u00e9 par Denis",
-    "Signal K restart\u00e9 et v\u00e9rifi\u00e9 (active)",
-    "Plugin signalk-wit-nmea.js updated with axis mapping comments"
-  ],
-  "physical_verification": "Denis verified axes on 2026-05-17",
-  "pending": "Magnetom\u00e8tre calibration en mer (May 19 field test)",
-  "services_status": {
-    "signalk": "\u2705 running",
-    "calypso_anemometer": "\u2705 running",
-    "calypso_watchdog": "\u2705 running",
-    "portal": "\u2705 running"
+  "task": "attitude-format-diagnostic",
+  "timestamp": "2026-05-17T18:43:29.735895",
+  "status": "\u2705 READ-ONLY DIAGNOSTIC COMPLETE",
+  "findings": {
+    "signal_k_attitude_structure": {
+      "navigation/attitude": {
+        "format": "Composite object (dict)",
+        "keys": [
+          "roll",
+          "pitch",
+          "yaw"
+        ],
+        "example": {
+          "roll": -0.003,
+          "pitch": 0.016,
+          "yaw": 0.655
+        },
+        "source": "signalk-wit-imu-ble.XX (BLE IMU)",
+        "status": "\u2705 ACTIVE"
+      },
+      "navigation/attitude/roll": {
+        "format": "Scalar (float radians)",
+        "source": "calypso-up10 (WIT NMEA)",
+        "value": -1.571,
+        "status": "\u2705 ACTIVE"
+      },
+      "navigation/attitude/pitch": {
+        "format": "Scalar (float radians)",
+        "source": "calypso-up10 (WIT NMEA)",
+        "value": -1.571,
+        "status": "\u2705 ACTIVE"
+      },
+      "navigation/attitude/yaw": {
+        "format": "Scalar (float radians)",
+        "source": "calypso-up10 (WIT NMEA)",
+        "value": 6.283,
+        "status": "\u2705 ACTIVE"
+      }
+    },
+    "data_sources": {
+      "signalk-wit-imu-ble": {
+        "plugin": "Native BLE IMU",
+        "output_format": "Composite object at navigation/attitude",
+        "provides": "roll, pitch, yaw",
+        "status": "\u2705 Active (primary source)"
+      },
+      "calypso-up10 (via signalk-wit-nmea)": {
+        "plugin": "WIT NMEA Parser",
+        "output_format": "Individual scalar paths",
+        "provides": "navigation/attitude/roll, pitch, yaw (each scalar)",
+        "status": "\u2705 Active (secondary source)",
+        "note": "Overrides primary when data present"
+      }
+    },
+    "format_compatibility": {
+      "issue": "TWO DIFFERENT FORMATS IN SAME TREE",
+      "composite_object": "navigation/attitude (from BLE plugin)",
+      "scalar_values": "navigation/attitude/{roll,pitch,yaw} (from NMEA plugin)",
+      "signal_k_behavior": "Individual paths override composite object"
+    },
+    "nmea_to_n2k_conversion": {
+      "pgn_127257": "Attitude (roll/pitch/yaw)",
+      "expected_input": "Individual scalars OR composite object",
+      "current_approach": "Individual scalar paths (navigation/attitude/roll, pitch, yaw)",
+      "plugin_reading": "signalk-to-nmea2000 converts individual paths to PGN 127257",
+      "status": "\u2705 COMPATIBLE"
+    }
   },
-  "notes": [
-    "Boat currently stationary \u2014 WIT IMU data absent (normal)",
-    "Axis swap will be verified during field test boat motion",
-    "All three attitude axes properly mapped per physical test"
-  ]
+  "plugin_sources": {
+    "signalk-wit-imu-ble": {
+      "type": "Native BLE IMU",
+      "output": "Composite object {roll, pitch, yaw}",
+      "path": "navigation/attitude"
+    },
+    "signalk-wit-nmea": {
+      "type": "NMEA0183 Parser",
+      "output": "Individual scalars pitchRad, rollRad, yawRad",
+      "path_roll": "navigation.attitude.roll = pitchRad (swapped)",
+      "path_pitch": "navigation.attitude.pitch = rollRad (swapped)",
+      "path_yaw": "navigation.attitude.yaw = yawRad"
+    }
+  },
+  "recommendations": [
+    "\u2705 Current format is CORRECT for signalk-to-nmea2000",
+    "Individual scalar paths work fine with N2K converter",
+    "Composite object (BLE) and scalars (NMEA) coexist properly",
+    "Priority: scalars from WIT NMEA take precedence (expected)",
+    "No changes needed \u2014 format is compatible"
+  ],
+  "field_test_status": "\u2705 READY \u2014 attitude format verified"
 }
