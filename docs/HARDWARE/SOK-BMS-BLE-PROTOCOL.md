@@ -1,142 +1,227 @@
-# SOK Battery BMS — Protocole Bluetooth BLE
+# SOK BATTERY SK12V100PC — HARDWARE DATASHEET & BMS BLE PROTOCOL
 
-**Dernière mise à jour :** Avril 2026  
-**Source :** Reverse-engineering de l'app Android ABC-BMS (com.sjty.sbs_bms)  
-**Documentation uniquement** — intégration à faire quand la batterie est à bord
-
----
-
-## 1. Vue d'ensemble
-
-La SOK 12V 100Ah LiFePO4 embarque un BMS (Battery Management System) avec module Bluetooth BLE intégré. L'app officielle s'appelle ABC-BMS (iOS et Android).
-
-Le protocole BLE a été reverse-engineeré et permet une lecture complète des données depuis un Raspberry Pi sans passer par l'app officielle.
-
-**Mot de passe ABC-BMS (réglages avancés):** `200010`
+**Manufacturer:** SOK Battery (Canada/USA)  
+**Model:** SK12V100PC — 12V 100Ah LiFePO4 with Bluetooth BMS  
+**Chemistry:** Lithium Iron Phosphate (LiFePO4)  
+**BMS Type:** JBD (JiaBaiDa) built-in BLE BMS  
+**Date:** 2026-05-19  
+**Status:** ✅ Field Test Ready (May 19, 2026)
 
 ---
 
-## 2. Comportements importants du BMS
+## BATTERY SPECIFICATIONS
 
-| Situation | Symptôme | Solution |
-|-----------|----------|----------|
-| Batterie en storage mode | 0V aux bornes, batterie invisible en BLE scan | Brancher un chargeur LiFePO4 quelques secondes |
-| BLE inactif prolongé | BLE ne broadcast plus après inactivité | Déclencher un courant de charge ou décharge |
-| État protection | CMOS ou DMOS grisé dans l'app | Voir section PROT State dans l'app |
+### Electrical
+
+| Spec | Value |
+|------|-------|
+| **Nominal Voltage** | 12.8 V (4S LiFePO4) |
+| **Capacity** | 100 Ah @ 0.2C |
+| **Energy** | 1280 Wh |
+| **Cell Configuration** | 4 cells in series (4S) |
+| **Max Continuous Discharge** | 100 A |
+| **Peak Discharge Current** | 170 A (≤ 4 s) |
+| **Max Charge Current** | 70 A |
+| **Recommended Charge Current** | < 50 A |
+| **Recommended Charge Voltage** | 13.8 V – 14.6 V |
+| **Recommended Low Voltage Disconnect** | 10.4 V |
+| **Self-Discharge Rate** | ≤ 3% per month |
+
+### Performance
+
+| Spec | Value |
+|------|-------|
+| **Cycle Life** | 3000+ cycles @ 100% DoD / 6000+ cycles @ 80% DoD |
+| **Operating Temp — Discharge** | -20°C to +60°C |
+| **Operating Temp — Charge** | 0°C to +45°C |
+| **Storage Temperature** | -10°C to +35°C (recommended: 13.5V–13.6V charge level) |
+
+### Physical
+
+| Spec | Value |
+|------|-------|
+| **Dimensions (L×W×H)** | 260 × 170 × 210 mm (10.24 × 6.69 × 8.27 in) |
+| **Weight** | 11.2 kg (24.7 lbs) |
+| **Enclosure** | Clear sealed plastic (PC — polycarbonate) |
+| **Certifications** | UL1973 & IEC62619 (cells) |
+| **Warranty** | 5 years |
+
+### Cell Voltage Reference (LiFePO4)
+
+| State | Cell Voltage | Battery Voltage |
+|-------|-------------|----------------|
+| **Full (100% SoC)** | 3.65 V | 14.6 V |
+| **Nominal** | 3.20 V | 12.8 V |
+| **Low Warning** | 3.00 V | 12.0 V |
+| **Low Cutoff (BMS)** | 2.50 V | 10.0 V |
+| **Max imbalance threshold** | ΔV > 0.2 V | → Alert |
 
 ---
 
-## 3. Paramètres BLE
+## BUILT-IN BMS
 
-| Paramètre | Valeur |
-|-----------|--------|
-| Service UUID | `0000FFF0-0000-1000-8000-00805F9B34FB` |
-| Notify UUID (RX) | `0000FFF1-0000-1000-8000-00805F9B34FB` |
-| Write UUID (TX) | `0000FFF2-0000-1000-8000-00805F9B34FB` |
-| Standard UUIDs | `00002a29` (fabricant), `00002a24` (modèle), `00002a26` (firmware), `00002a25` (n° série) |
+### Overview
+
+The SOK SK12V100PC uses a **JBD (JiaBaiDa) BMS** with an integrated Bluetooth Low Energy
+module. The official app is **ABC-BMS** (iOS & Android — `com.sjty.sbs_bms`).
+
+The BLE protocol has been reverse-engineered from the ABC-BMS app, enabling direct
+integration with the RPi without the official app.
+
+### BMS Protection Layers
+
+The BMS implements **two layers** of protection:
+
+**Layer 1 — Software Protection (CMOS / DMOS):**
+
+| Trigger | Protection |
+|---------|-----------|
+| Any cell voltage > charge limit | CMOS OFF (charging disabled) |
+| Charge current > limit | CMOS OFF |
+| Temperature < 0°C during charge | CMOS OFF (+ heater if model H) |
+| Temperature > 45°C during charge | CMOS OFF |
+| BMS temp > limit during charge | CMOS OFF |
+| Any cell voltage < discharge limit | DMOS OFF (discharging disabled) |
+| Battery voltage < discharge limit | DMOS OFF |
+| Discharge current > limit | DMOS OFF |
+| Temperature > 60°C during discharge | DMOS OFF |
+| Short circuit detected | DMOS OFF |
+
+**Layer 2 — Hardware Protection:**
+
+- Short circuit
+- Overcurrent (hardware threshold)
+- Over-discharge (hardware voltage threshold)
+- Overcharge (hardware voltage threshold)
+
+### Cell Balancing
+
+The BMS uses **passive balancing** (resistor drain method):
+
+| Condition | Value |
+|-----------|-------|
+| **Type** | Passive (resistive drain on high cells) |
+| **Balance resistor** | 33–47 Ω (varies by firmware version) |
+| **Activation threshold** | Any cell > 3.4V AND ΔV > 25 mV AND charge current ≥ 1A |
+| **Fast balance (firmware ≥ v4)** | ΔV > 10 mV if any cell > 3.6V |
+| **Balance time (1% imbalance)** | ~12–22 hours (depends on firmware version) |
+
+> ⚠️ Cell imbalance is normal at high and low SoC due to LiFePO4 voltage curve characteristics.
+> Monitor imbalance at the same voltage point each time for accurate trending.
+
+### Storage Mode
+
+The BMS has a **storage mode** that completely shuts down the BMS to minimize self-discharge:
+
+- In storage mode: **0V at terminals, BLE invisible to scanners**
+- To wake up: connect a LiFePO4 charger for a few seconds
+- Storage charge level: 13.5V–13.6V (≈ 50% SoC)
+
+### ABC-BMS App Access
+
+| Parameter | Value |
+|-----------|-------|
+| **App name** | ABC-BMS |
+| **Platforms** | iOS + Android |
+| **Package ID** | `com.sjty.sbs_bms` |
+| **Basic settings password** | `200010` |
+
+**Key screens:**
+- **Home:** voltage, current, individual cell voltages, CMOS/DMOS state
+- **PROT State:** active protection triggers (charge and discharge separately)
+- **Basic Settings:** idle calibration, sleep time, storage mode, recovery, reboot, reset
 
 ---
 
-## 4. Commandes disponibles
+## BLUETOOTH LE PROTOCOL
 
-Chaque commande est un tableau de 5 bytes, suivi d'un byte CRC8 calculé à l'envoi.
+### BLE Parameters
 
-| Nom | Bytes | Code réponse | Données retournées |
-|-----|-------|--------------|-------------------|
-| cmd_name | `[0xee, 0xc0, 0x00, 0x00, 0x00]` | 0xCCF1 | Nom du BMS (ex: "SK12V100") |
-| cmd_info | `[0xee, 0xc1, 0x00, 0x00, 0x00]` | 0xccf0 | SOC, courant, cycles |
-| cmd_detail | `[0xee, 0xc2, 0x00, 0x00, 0x00]` | 0xCCF4 | Tension cellules individuelles |
-| cmd_setting | `[0xee, 0xc3, 0x00, 0x00, 0x00]` | 0xCCF3 | Paramètres BMS (capacité, année, etc.) |
-| cmd_protection | `[0xee, 0xc4, 0x00, 0x00, 0x00]` | 0xCCF5 | États de protection (CMOS, DMOS, etc.) |
-| cmd_break | `[0xdd, 0xc0, 0x00, 0x00, 0x00]` | - | Interruption de communication |
+| Parameter | Value |
+|-----------|-------|
+| **BLE Service UUID** | `0000FFF0-0000-1000-8000-00805F9B34FB` |
+| **Notify UUID (RX — read data)** | `0000FFF1-0000-1000-8000-00805F9B34FB` |
+| **Write UUID (TX — send commands)** | `0000FFF2-0000-1000-8000-00805F9B34FB` |
+| **Standard: Manufacturer Name** | `00002a29-0000-1000-8000-00805f9b34fb` |
+| **Standard: Model Number** | `00002a24-0000-1000-8000-00805f9b34fb` |
+| **Standard: Firmware Revision** | `00002a26-0000-1000-8000-00805f9b34fb` |
+| **Standard: Serial Number** | `00002a25-0000-1000-8000-00805f9b34fb` |
 
-**Format d'envoi :** `command_bytes + [minicrc(command_bytes)]`
+### Command Format
 
----
+Each command is **5 bytes** followed by a **CRC8 checksum** byte:
 
-## 5. Format des réponses (notifications BLE)
-
-Toutes les réponses sont vérifiées avec un CRC8 (dernier byte du message).  
-Le type de message est identifié par les 2 premiers bytes.
-
-### 0xccf0 — Status (réponse à cmd_info)
-
-| Offset | Longueur | Type | Contenu |
-|--------|----------|------|---------|
-| 0-1 | 2 | uint16 BE | Type de message (`0xccf0`) |
-| 2-4 | 3 | int24 LE | Tension totale (mV) |
-| 5-7 | 3 | int24 LE | Courant instantané (µA, divisé par 1 000 000 pour A) |
-| 8-10 | 3 | int24 LE | Puissance (W) |
-| 11-13 | 3 | int24 LE | Courant moyen (µA) |
-| 14-15 | 2 | uint16 LE | Nombre de cycles |
-| 16-17 | 2 | uint16 LE | SOC (%) |
-
-**Exemple :** Courant = 0x000100 (µA) → 1A
-
-### 0xCCF1 — Nom (réponse à cmd_name)
-
-| Offset | Longueur | Type | Contenu |
-|--------|----------|------|---------|
-| 0-1 | 2 | uint16 BE | Type de message (`0xccf1`) |
-| 2-9 | 8 | ASCII/UTF-8 | Nom du BMS (ex: "SK12V100") |
-
-### 0xCCF2 — Température (incluse dans cmd_info)
-
-| Offset | Longueur | Type | Contenu |
-|--------|----------|------|---------|
-| 5-6 | 2 | int16 LE | Température BMS (°C, signé) |
-| 7-8 | 2 | int16 LE | Température MOS (°C, signé) |
-
-### 0xCCF3 — Infos fabricant (réponse à cmd_setting)
-
-| Offset | Longueur | Type | Contenu |
-|--------|----------|------|---------|
-| 0-1 | 2 | uint16 BE | Type de message (`0xccf3`) |
-| 2 | 1 | uint8 | Année de fabrication (ajouter 2000) |
-| 3-4 | 2 | uint16 LE | Mois/jour fabrication |
-| 5-7 | 3 | uint24 BE | Capacité nominale (Ah, divisée par 128) |
-| 8-9 | 2 | uint16 LE | État chauffe-batterie (0=off, 1=on) |
-| 10-11 | 2 | uint16 LE | Tension nominale (V × 100) |
-
-### 0xCCF4 — Tension cellules (réponse à cmd_detail)
-
-| Offset | Longueur | Type | Contenu |
-|--------|----------|------|---------|
-| 0-1 | 2 | uint16 BE | Type de message (`0xccf4`) |
-| 2+(x*4) | 1 | uint8 | Index de la cellule (1-4) |
-| 3+(x*4) | 2 | uint16 LE | Tension de la cellule (mV) |
-| 5+(x*4) | 1 | uint8 | Réservé |
-
-**Tension totale (calcul) :** Somme des 4 cellules / 1000 (en V)
-
-**Exemple :**
 ```
-Cellule 1: 3250 mV
-Cellule 2: 3245 mV
-Cellule 3: 3240 mV
-Cellule 4: 3255 mV
-Total: (3250 + 3245 + 3240 + 3255) / 1000 = 12.99 V
+[command_bytes (5)] + [minicrc(command_bytes) (1)]
 ```
 
-### 0xCCF5 — Protection (réponse à cmd_protection)
+### Available Commands
 
-| Offset | Longueur | Type | Contenu |
-|--------|----------|------|---------|
-| 0-1 | 2 | uint16 BE | Type de message (`0xccf5`) |
-| 2 | 1 | uint8 | Flags de protection |
-| 3 | 1 | uint8 | État CMOS (0=normal, 1=déclenché) |
-| 4 | 1 | uint8 | État DMOS (0=normal, 1=déclenché) |
-| 5+ | - | - | Autres états de protection |
+| Command | Bytes (hex) | Response Code | Data Returned |
+|---------|-------------|---------------|---------------|
+| `cmd_name` | `[0xee, 0xc0, 0x00, 0x00, 0x00]` | `0xCCF1` | BMS name (e.g., "SK12V100") |
+| `cmd_info` | `[0xee, 0xc1, 0x00, 0x00, 0x00]` | `0xccf0` | SoC, current, voltage, cycles |
+| `cmd_detail` | `[0xee, 0xc2, 0x00, 0x00, 0x00]` | `0xCCF4` | Individual cell voltages |
+| `cmd_setting` | `[0xee, 0xc3, 0x00, 0x00, 0x00]` | `0xCCF3` | BMS config (capacity, year, etc.) |
+| `cmd_protection` | `[0xee, 0xc4, 0x00, 0x00, 0x00]` | `0xCCF5` | Protection states (CMOS, DMOS) |
+| `cmd_break` | `[0xdd, 0xc0, 0x00, 0x00, 0x00]` | — | Interrupt communication |
 
----
+### Response Formats
 
-## 6. Algorithme CRC8
+All responses include a **CRC8 checksum** as the last byte. Message type is identified
+by the first 2 bytes.
 
-Utilisé pour la vérification d'intégrité des données.
+#### `0xccf0` — Status (response to `cmd_info`)
+
+| Offset | Length | Type | Content |
+|--------|--------|------|---------|
+| 0–1 | 2 | uint16 BE | Message type (`0xccf0`) |
+| 2–4 | 3 | int24 LE | Total voltage (mV) |
+| 5–7 | 3 | int24 LE | Instantaneous current (µA → divide by 1,000,000 for A) |
+| 8–10 | 3 | int24 LE | Power (W) |
+| 11–13 | 3 | int24 LE | Average current (µA) |
+| 14–15 | 2 | uint16 LE | Cycle count |
+| 16–17 | 2 | uint16 LE | SoC (%) |
+
+> Example: current = `0x000100` (µA) → 1A charge
+
+#### `0xCCF4` — Cell Voltages (response to `cmd_detail`)
+
+| Offset | Length | Type | Content |
+|--------|--------|------|---------|
+| 0–1 | 2 | uint16 BE | Message type (`0xCCF4`) |
+| 2+(x×4) | 1 | uint8 | Cell index (1–4) |
+| 3+(x×4) | 2 | uint16 LE | Cell voltage (mV) |
+| 5+(x×4) | 1 | uint8 | Reserved |
+
+> Total voltage (V) = (cell1 + cell2 + cell3 + cell4) / 1000
+
+#### `0xCCF3` — Manufacturer Info (response to `cmd_setting`)
+
+| Offset | Length | Type | Content |
+|--------|--------|------|---------|
+| 0–1 | 2 | uint16 BE | Message type (`0xCCF3`) |
+| 2 | 1 | uint8 | Manufacturing year (add 2000) |
+| 3–4 | 2 | uint16 LE | Month/day of manufacture |
+| 5–7 | 3 | uint24 BE | Nominal capacity (Ah, divide by 128) |
+| 8–9 | 2 | uint16 LE | Heater state (0=off, 1=on) |
+| 10–11 | 2 | uint16 LE | Nominal voltage (V × 100) |
+
+#### `0xCCF5` — Protection State (response to `cmd_protection`)
+
+| Offset | Length | Type | Content |
+|--------|--------|------|---------|
+| 0–1 | 2 | uint16 BE | Message type (`0xCCF5`) |
+| 2 | 1 | uint8 | Protection flags |
+| 3 | 1 | uint8 | CMOS state (0=normal, 1=triggered) |
+| 4 | 1 | uint8 | DMOS state (0=normal, 1=triggered) |
+| 5+ | — | — | Additional protection states |
+
+### CRC8 Algorithm
 
 ```python
 def minicrc(data):
-    """Calcule le CRC8 pour les données BMS SOK"""
+    """CRC8 algorithm for SOK BMS data verification"""
     i = 0
     for b in data:
         i ^= b & 255
@@ -147,196 +232,219 @@ def minicrc(data):
                 i = i >> 1
     return i
 
-# Utilisation
-data = [0xee, 0xc0, 0x00, 0x00, 0x00]
+# Usage
+data = [0xee, 0xc1, 0x00, 0x00, 0x00]  # cmd_info
 crc = minicrc(data)
-data_with_crc = data + [crc]
-# Résultat : [0xee, 0xc0, 0x00, 0x00, 0x00, crc_value]
+command_with_crc = data + [crc]
+```
+
+### Communication Flow
+
+```
+1. Scan BLE → find "SOK" or "ABC-BMS" device
+2. Connect (bleak.BleakClient)
+3. Subscribe to Notify UUID (0000FFF1)
+4. Write cmd_info on Write UUID (0000FFF2)
+5. Wait for response 0xccf0
+6. Parse and verify CRC8
+7. Write to InfluxDB
+8. Wait 5 seconds
+9. Repeat from step 3
 ```
 
 ---
 
-## 7. Données disponibles pour InfluxDB
+## MIDNIGHT RIDER INTEGRATION
 
-| Measurement | Field | Unité | Source | Calcul |
-|-------------|-------|-------|--------|--------|
-| `sok_bms` | `soc_pct` | % | 0xccf0 offset 16 | Valeur directe |
-| `sok_bms` | `voltage_v` | V | 0xccf0 offset 2 | Valeur / 1000 |
-| `sok_bms` | `current_a` | A | 0xccf0 offset 5 | Valeur / 1 000 000 |
-| `sok_bms` | `power_w` | W | 0xccf0 offset 8 | Valeur directe |
-| `sok_bms` | `temp_bms_c` | °C | 0xCCF2 offset 5 | Valeur directe |
-| `sok_bms` | `temp_mos_c` | °C | 0xCCF2 offset 7 | Valeur directe |
-| `sok_bms` | `cycles` | nb | 0xccf0 offset 14 | Valeur directe |
-| `sok_bms` | `cell_1_mv` | mV | 0xCCF4 | Tension cellule 1 |
-| `sok_bms` | `cell_2_mv` | mV | 0xCCF4 | Tension cellule 2 |
-| `sok_bms` | `cell_3_mv` | mV | 0xCCF4 | Tension cellule 3 |
-| `sok_bms` | `cell_4_mv` | mV | 0xCCF4 | Tension cellule 4 |
-| `sok_bms` | `cell_imbalance_mv` | mV | 0xCCF4 | Max - Min cellules |
-| `sok_bms` | `capacity_ah` | Ah | 0xCCF3 | Capacité nominale |
-| `sok_bms` | `year_mfg` | année | 0xCCF3 offset 2 | 2000 + valeur |
-| `sok_bms` | `prot_cmos` | bool | 0xCCF5 | État CMOS |
-| `sok_bms` | `prot_dmos` | bool | 0xCCF5 | État DMOS |
+### Architecture
 
----
+```
+SOK Battery (BLE BMS)
+     ↓ Bluetooth LE
+RPi 4 (192.168.1.167) — hci0 BLE adapter
+     ↓ sok_bms_reader.py (Python + bleak)
+     ↓ DIRECT write (bypasses Signal K)
+InfluxDB (port 8086, Docker)
+     ↓ measurement: sok_bms
+Grafana (port 3001) — Dashboard 06: ELECTRICAL
+```
 
-## 8. Dépendances Python requises
+> ⚠️ The SOK BMS writes **directly to InfluxDB** — it does NOT go through Signal K.
+> This is by design (BLE rate limitation of 0.2 Hz is not suited for Signal K real-time paths).
+
+### Python Script
+
+| Parameter | Value |
+|-----------|-------|
+| **Script** | `sok_bms_reader.py` |
+| **Library** | `bleak` (async BLE) + `influxdb-client` |
+| **Read rate** | 0.2 Hz (1 read per 5 seconds — BLE constraint) |
+| **InfluxDB measurement** | `sok_bms` |
+| **Signal K source** | None (direct InfluxDB bypass) |
+
+**Required dependencies:**
 
 ```bash
 pip3 install bleak influxdb-client
 sudo apt-get install -y python3-dbus libglib2.0-dev
 ```
 
-**Dépendances:**
-- **bleak** — Abstraction BLE multi-plateforme (async)
-- **influxdb-client** — Client Python InfluxDB v2
-- **dbus** — Interface D-Bus pour BlueZ (Linux)
-- **glib2** — Bibliothèque système requise par BlueZ
+**Class structure:**
 
----
-
-## 9. Trouver la MAC address de la batterie
-
-À faire **quand la batterie est présente et allumée** :
-
-```bash
-# Scan rapide pour SOK
-sudo hcitool lescan | grep -i "SOK\|ABC\|BMS"
-
-# Scan large si rien trouvé
-sudo hcitool lescan
-
-# Alternative avec bluetoothctl
-bluetoothctl scan on
-# Appuyer Ctrl+C quand MAC trouvée
-```
-
-**Important:** La batterie doit être hors "storage mode" (sinon 0V aux bornes). Brancher un chargeur LiFePO4 brièvement pour activer le BMS.
-
-**Format MAC attendu:** `XX:XX:XX:XX:XX:XX` (ex: `XX:XX:XX:XX:XX:XX`)
-
----
-
-## 10. Intégration Signal K
-
-Quand la batterie sera intégrée, créer un plugin Signal K :
-
-```
-~/.signalk/node_modules/signalk-sok-bms-ble/
-├── package.json
-├── index.js (plugin principal)
-└── README.md
-```
-
-Le plugin doit :
-1. Scanner la batterie SOK via BLE
-2. Envoyer les commandes (cmd_info, cmd_detail, etc.)
-3. Parser les réponses et vérifier CRC8
-4. Mettre à jour les paths Signal K:
-   - `electrical.batteries.house.voltage`
-   - `electrical.batteries.house.current`
-   - `electrical.batteries.house.temperature`
-   - `electrical.batteries.house.capacity`
-   - etc.
-
-**Template de plugin :** Se référer à la documentation Signal K et aux plugins existants dans `~/.signalk/node_modules/`
-
----
-
-## 11. Fichier d'intégration autonome
-
-Pour une première intégration rapide (avant integration Signal K) :
-
-```
-/home/aneto/sok_bms_reader.py
-```
-
-Ce script autonome doit :
-1. Se connecter au BMS via BLE (bleak)
-2. Envoyer commandes périodiquement
-3. Parser les réponses
-4. Écrire dans InfluxDB
-5. Tourner en service systemd ou cron
-
-**Structure :**
 ```python
 class SOK_BMS:
     async def connect(mac_address)
-    async def read_status()      # cmd_info
-    async def read_detail()      # cmd_detail
-    async def read_settings()    # cmd_setting
+    async def read_status()      # cmd_info  → 0xccf0
+    async def read_detail()      # cmd_detail → 0xCCF4
+    async def read_settings()    # cmd_setting → 0xCCF3
     async def write_to_influx()
 ```
 
+### InfluxDB Data Fields (measurement: `sok_bms`)
+
+| Field | Unit | Source | Calculation |
+|-------|------|--------|------------|
+| `soc_pct` | % | 0xccf0 offset 16 | Direct value |
+| `voltage_v` | V | 0xccf0 offset 2 | Value / 1000 |
+| `current_a` | A | 0xccf0 offset 5 | Value / 1,000,000 |
+| `power_w` | W | 0xccf0 offset 8 | Direct value |
+| `temp_bms_c` | °C | 0xCCF2 offset 5 | Direct value (signed) |
+| `temp_mos_c` | °C | 0xCCF2 offset 7 | Direct value (signed) |
+| `cycles` | count | 0xccf0 offset 14 | Direct value |
+| `cell_1_mv` | mV | 0xCCF4 | Cell 1 voltage |
+| `cell_2_mv` | mV | 0xCCF4 | Cell 2 voltage |
+| `cell_3_mv` | mV | 0xCCF4 | Cell 3 voltage |
+| `cell_4_mv` | mV | 0xCCF4 | Cell 4 voltage |
+| `cell_imbalance_mv` | mV | 0xCCF4 | max(cells) − min(cells) |
+| `capacity_ah` | Ah | 0xCCF3 | Value / 128 |
+| `year_mfg` | year | 0xCCF3 offset 2 | 2000 + value |
+| `prot_cmos` | bool | 0xCCF5 | CMOS state |
+| `prot_dmos` | bool | 0xCCF5 | DMOS state |
+
+### Grafana Dashboard — 06: ELECTRICAL
+
+Access: `http://192.168.1.167:3001/d/electrical-power`
+
+| Panel | Data | Alert Threshold |
+|-------|------|----------------|
+| **SoC %** | State of charge gauge (0–100%) | < 20% → warning, < 5% → critical |
+| **Cell Voltages** | 4-cell balance chart | ΔV > 0.2V → cell imbalance alert |
+| **Current** | Charge/discharge current (A) | — |
+| **Temperature** | BMS + MOS temperature (°C) | > 60°C → critical |
+| **Cell Imbalance** | Max − Min cell voltage (mV) | > 200 mV → warning |
+| **Energy Reserve** | Hours remaining @ current draw | — |
+
+**Alert Rules:**
+
+| Rule | Condition | Severity |
+|------|-----------|---------|
+| `electrical_soc_low` | SoC < 20% | ⚠️ Warning |
+| `electrical_soc_critical` | SoC < 5% | 🔴 Critical |
+| `electrical_cell_imbalance` | ΔV > 0.2V | ⚠️ Warning |
+| `electrical_bms_overtemp` | Temp > 60°C | 🔴 Critical |
+| `electrical_disconnect` | No data > 5 min | 🔴 Critical |
+
 ---
 
-## 12. Référence complète des UUIDs
+## BLE DEVICE DISCOVERY
 
-### Service Principal
-- `0000FFF0-0000-1000-8000-00805F9B34FB` — Service BMS propriétaire
+**When battery is powered and out of storage mode:**
 
-### Caractéristiques
-- `0000FFF1-0000-1000-8000-00805F9B34FB` — RX (Notify, lecture données)
-- `0000FFF2-0000-1000-8000-00805F9B34FB` — TX (Write, envoi commandes)
+```bash
+# Quick scan for SOK BMS
+sudo hcitool lescan | grep -i "SOK\|ABC\|BMS"
 
-### Standards BLE GATT
-- `00002a29-0000-1000-8000-00805f9b34fb` — Manufacturer Name
-- `00002a24-0000-1000-8000-00805f9b34fb` — Model Number String
-- `00002a26-0000-1000-8000-00805f9b34fb` — Firmware Revision String
-- `00002a25-0000-1000-8000-00805f9b34fb` — Serial Number String
+# Alternative with bluetoothctl
+bluetoothctl scan on
+# Press Ctrl+C when MAC address found
 
----
-
-## 13. Notes de développement
-
-- **Async/await:** Utiliser `bleak` et `asyncio` pour la non-bloquante
-- **Timeout :** 5-10 secondes par commande (BLE peut être lent)
-- **Retry:** Implémenter une logique de reconnexion en cas de déconnexion
-- **Logging:** Utiliser Python `logging` pour débogage
-- **Rate limiting:** Limiter à ~1 lecture par 5 secondes (batterie peut pas suivre sinon)
-- **CRC8:** Vérifier CRC8 **avant** de traiter les données
-- **Erreurs:** Gérer les exceptions BLE (timeout, déconnexion, parsing)
-
----
-
-## 14. Exemple de flux complet
-
+# Verify BLE connectivity
+sudo gatttool -b <MAC_ADDRESS> --interactive
+> connect
+> char-read-hnd 0x0003
 ```
-1. Scanner BLE → Trouver "SOK" ou "ABC-BMS"
-2. Connecter (bleak.BleakClient)
-3. Notifier le UUID RX (0000FFF1)
-4. Écrire cmd_info sur UUID TX (0000FFF2)
-5. Attendre réponse 0xccf0
-6. Parser et vérifier CRC8
-7. Écrire dans InfluxDB
-8. Attendre 5 secondes
-9. Répéter à partir de l'étape 3
+
+> ⚠️ If battery shows 0V at terminals: it is in **storage mode**.
+> Connect a LiFePO4 charger briefly to wake up the BMS.
+> The BLE device will become visible again within 30 seconds.
+
+---
+
+## PRE-RACE VERIFICATION
+
+```bash
+# 1. Verify BLE device visible
+sudo hcitool lescan | grep -i "SOK"
+
+# 2. Run BMS reader script
+python3 /home/aneto/sok_bms_reader.py --once
+# Expected: JSON output with soc_pct, voltage_v, cell voltages
+
+# 3. Verify InfluxDB receiving data
+docker exec influxdb influx query \
+  -o MidnightRider \
+  --token $(grep INFLUXDB_TOKEN .env | cut -d= -f2) \
+  'from(bucket:"midnight_rider")
+   |> range(start: -5m)
+   |> filter(fn: (r) => r._measurement == "sok_bms")
+   |> limit(n: 5)'
+
+# 4. Check Grafana dashboard 06
+# http://192.168.1.167:3001/d/electrical-power
+# Expected: SoC gauge, cell voltages, all panels populated
+
+# 5. Quick health check
+# - SoC > 80% before race
+# - Cell imbalance < 50 mV (ΔV)
+# - Temperature < 40°C
+# - No CMOS or DMOS protection active
 ```
 
 ---
 
-## 15. Ressources externes
+## SAFETY NOTES
 
-- **Protocole BLE:** Bluetooth SIG Specification v5.3
-- **BlueZ (Linux Bluetooth):** https://github.com/bluez/bluez
-- **Bleak (Python BLE):** https://github.com/hbldh/bleak
-- **ABC-BMS App:** iOS/Android (reverse-engineered)
-- **Dbus-serialbattery:** https://github.com/Louisvdw/dbus-serialbattery/discussions/571
+⚠️ **Never discharge below 10% SoC** → accelerates LiFePO4 cell degradation
+
+⚠️ **Cell imbalance > 0.2V** → indicates BMS issue, inspect immediately
+
+⚠️ **Overtemperature > 60°C** → cease charging, check ventilation
+
+⚠️ **CMOS OFF** → charging disabled by BMS protection — check PROT State in app
+
+⚠️ **DMOS OFF** → discharging disabled by BMS protection — check PROT State in app
+
+⚠️ **Storage mode** → BMS fully shut down (0V at terminals). Wake with LiFePO4 charger.
+
+⚠️ **Do not connect to alternators or non-smart chargers** → risk of overcharge
+
+✅ **Cycle count monitoring** → track degradation (target: 3000+ cycles before replacement)
 
 ---
 
-**Documentation créée:** Avril 2026  
-**Statut:** Référence pour intégration future  
-**Prochain step:** Intégration quand batterie à bord (May 2026)
+## KNOWN ISSUES & NOTES
 
+| Issue | Status | Note |
+|-------|--------|------|
+| SOC accuracy on first delivery | Known | SOC/capacity may be inaccurate before full cycle. Use cell voltages for reference. |
+| BLE invisible after prolonged inactivity | By design | BMS enters sleep mode. Trigger charge/discharge to wake. |
+| BLE invisible after factory delivery | By design | Storage mode (0V). Connect charger briefly to activate. |
+| Passive balancing speed | Known | 12–22h to overcome 1% imbalance — normal for LiFePO4 BMS |
+| SoC inaccurate after deep discharge | Known | Recalibrate with full charge cycle |
 
 ---
 
-## Signal K Source Reference
+## CHANGE LOG
 
-| Property | Value |
-|----------|-------|
-| Signal K source name | sok_bms (direct InfluxDB — no Signal K source) |
-| Plugin / script | sok_bms_reader.py (custom script) |
-| Physical connection | Bluetooth LE |
+| Date | Change | Author |
+|------|--------|--------|
+| 2026-04-25 | Initial BLE protocol documentation (French only, no hardware specs) | OC |
+| 2026-05-12 | Integration guide created, field test readiness confirmed | OC |
+| 2026-05-19 | Full datasheet revision: added hardware specs, translated to English, corrected status, consolidated BLE protocol + integration reference | Denis / Dust |
 
-> Bypasses Signal K. Writes directly to InfluxDB measurement sok_bms in native units. Refresh: 0.2 Hz (1/5s BLE limitation).
+---
+
+**Last Updated:** 2026-05-19  
+**Status:** ✅ Field Test Ready  
+**Crew:** Denis + Anne-Sophie (ORC J/30 — Block Island Race)  
+**Next Action:** Validate SoC % accuracy during first on-water session
