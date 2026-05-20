@@ -1,358 +1,522 @@
-# ARCHITECTURE SYSTEM — MIDNIGHT RIDER (J/30)
-**Version:** 1.0-MASTER  
-**Date:** 2026-04-25  
-**Status:** ✅ PRODUCTION-READY for Block Island Race (May 22, 2026)
+# MIDNIGHT RIDER — ARCHITECTURE SYSTÈME DE RÉFÉRENCE
+
+**Voilier :** J/30 hull 511 — Midnight Rider  
+**Skipper :** Denis LAFARGE  
+**Date :** 2026-05-20  
+**Version :** 4.0 — Canonical Reference  
+**Statut :** ✅ Production — Block Island Race 2026-05-22
+
+> Ce document est la **référence canonique** de l'architecture système.  
+> En cas de divergence avec un autre fichier, ce document fait foi.  
+> Mettre à jour après chaque modification structurelle significative.
 
 ---
 
-## 🔧 CORRECTIONS RÉCENTES (2026-04-25)
+## 1. VUE D'ENSEMBLE
 
-### [CORRIGÉ LE 25/04/2026 11:15] MCP Racing Server — Unit Conversion Bug
-**File:** `mcp/racing-server.js`  
-**Issue:** Speed values from Signal K (m/s) returned as "knots" without conversion  
-**Impact:** All speed-based calculations (VMG, polar lookups, crew coaching) using 50% wrong values  
-**Fix:** Added ÷ 0.51444 conversion for get_sog, get_stw, get_vmg, get_wind_apparent, get_wind_true  
-**Commit:** `66067b6`
-
-### [CORRIGÉ LE 25/04/2026 11:15] Regatta Server — Single-Threaded Blocking
-**File:** `regatta/server.py`  
-**Issue:** HTTPServer blocked on long I/O (NOAA buoy/weather timeouts = 10+ sec freeze)  
-**Impact:** UI unresponsive during weather API calls, crew queries queue indefinitely  
-**Fix:** HTTPServer → ThreadingHTTPServer (each request in separate thread)  
-**Commit:** `eab1f8e`
-
----
-
-# ⚠️ DOCUMENT VIVANT — RÈGLE ABSOLUE
-
-## CE DOCUMENT EST LA SINGLE SOURCE OF TRUTH
+Midnight Rider embarque un système de navigation open-source basé sur un Raspberry Pi 4,
+collectant les données de tous les instruments via trois réseaux physiques distincts
+(NMEA 2000, Bluetooth LE, USB), les centralisant dans Signal K, les persistant dans
+InfluxDB et les visualisant dans Grafana.
 
 ```
-RÈGLE 1: TOUJOURS À JOUR
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-AVANT toute modification du système → Lire ce document
-APRÈS toute modification → Mettre à jour ce document IMMÉDIATEMENT
-
-Un document obsolète est PIRE qu'aucun document.
-
-CHECKLIST MISE À JOUR OBLIGATOIRE:
- □ Modèle matériel vérifié → TIER 2 HARDWARE (remplacer [À VÉRIFIER])
- □ Nouveau capteur connecté → TIER 2 + TIER 3 INTEGRATION
- □ Nouveau plugin Signal K → TIER 4 SOFTWARE
- □ Nouveau script créé → TIER 4 SOFTWARE
- □ Nouveau MCP déployé → TIER 5 MCP
- □ Architecture cloud modifiée → TIER 4 SOFTWARE
- □ Changement priorité source → TIER 2 HARDWARE
- □ Nouveau PGN vers Vulcan → TIER 3 INTEGRATION
-
-FORMAT CORRECTION OBLIGATOIRE:
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-[CORRIGÉ LE JJ/MM/YYYY] ancienne valeur → nouvelle valeur réelle
-
-EXEMPLE:
-  Avant: "modèle : NANO-HED10L [À VÉRIFIER]"
-  Après: "[CORRIGÉ LE 25/04/2026] NANO-HED10L → [MODÈLE RÉEL]"
+┌─────────────────────────────────────────────────────────────────┐
+│                    MIDNIGHT RIDER — STACK                       │
+│                                                                 │
+│  CAPTEURS ──► COLLECTE ──► TRAITEMENT ──► STOCKAGE ──► VISU   │
+│                                                                 │
+│  UM982 (USB)  ──────────────────────────► Signal K :3000       │
+│  WIT IMU (BLE) ─────────────────────────► │                    │
+│  Calypso UP10 (BLE/UDP) ────────────────► │ ──► InfluxDB :8086 │
+│  WS320 (N2K/YDNU-02) ───────────────────► │         │          │
+│  YDBC-05 (N2K/YDNU-02) ─────────────────► │         │          │
+│  AIS700 (N2K/YDNU-02) ──────────────────► │         │          │
+│                                           │         │          │
+│  SOK BMS (BLE) ─────────────────────────────────────► InfluxDB │
+│                                                      │          │
+│                                           │         ▼          │
+│  Signal K ──► signalk-to-nmea2000 ──────────────► Grafana :3001│
+│                    │                                            │
+│                    ▼                                            │
+│               YDNU-02 (USB/N2K) ──► N2K backbone               │
+│                                    ├── Vulcan 7 FS              │
+│                                    ├── WS320 base               │
+│                                    ├── YDBC-05                  │
+│                                    └── AIS700                   │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-# ⚠️ DIRECTIVE OC — VÉRIFICATION SYSTÉMATIQUE OBLIGATOIRE
+## 2. MATÉRIEL EMBARQUÉ
+
+### 2.1 Serveur de navigation
+
+| Composant | Détail |
+|-----------|--------|
+| **Raspberry Pi 4 Model B** | 4 Go RAM, microSD 64 Go |
+| **IP locale fixe** | 192.168.1.167 |
+| **OS** | Raspberry Pi OS (Debian 12 Bookworm) |
+| **Rôle** | Signal K server, Docker host (InfluxDB, Grafana), gateway BLE, scripts Python |
+| **Alimentation** | 12V → 5V USB-C via convertisseur DC/DC |
+| **Accès local** | SSH (`aneto@192.168.1.167`) |
+| **Accès distant** | Cloudflare Tunnel (voir `CLOUDFLARE-TUNNEL-URL.md`) |
+
+### 2.2 Instruments actifs
+
+| # | Instrument | Modèle | Protocole | Rôle principal |
+|---|------------|--------|-----------|---------------|
+| 1 | GPS + Cap | Unicore UM982 | USB serial | Position, cap vrai, SOG, COG |
+| 2 | IMU | WIT WT901BLECL | Bluetooth LE 5.0 | Gîte, assiette, accélération |
+| 3 | Vent masthead | Calypso UP10 | Bluetooth LE | Vent apparent/vrai + temp air |
+| 4 | Vent masthead (N2K) | B&G WS320 | NMEA 2000 | Vent apparent → Vulcan 7 direct |
+| 5 | Passerelle N2K | Yacht Devices YDNU-02 | USB + NMEA 2000 | Bridge Signal K ↔ N2K |
+| 6 | Chartplotter | B&G Vulcan 7 FS | NMEA 2000 | Affichage helm + GPS secondaire |
+| 7 | Batterie | SOK SK12V100PC LiFePO4 | Bluetooth LE | Monitoring BMS (direct InfluxDB) |
+| 8 | Baromètre | Yacht Devices YDBC-05 | NMEA 2000 | Pression atmosphérique |
+| 9 | Transpondeur AIS | B&G AIS700 Class B | NMEA 2000 | AIS TX/RX + sécurité |
+
+### 2.3 Bus NMEA 2000 — Charge réseau
+
+| Appareil | LEN | Rôle sur le bus |
+|----------|-----|----------------|
+| YDNU-02 Gateway | 1 | Bridge USB ↔ N2K |
+| Vulcan 7 FS | 1 | Chartplotter + réception données |
+| WS320 Base Station | 2 | Émetteur vent via BLE→N2K |
+| YDBC-05 Barometer | 1 | Émetteur pression |
+| AIS700 | 1 | Transpondeur AIS |
+| **Total** | **6 / 50 LEN max** | ✅ |
+
+---
+
+## 3. RÉSEAUX PHYSIQUES
+
+### 3.1 USB (série)
 
 ```
-CE DOCUMENT EST NOTRE MEILLEURE VUE À DATE DE L'ARCHITECTURE.
-IL PEUT CONTENIR DES ERREURS, APPROXIMATIONS OU ÉLÉMENTS OBSOLÈTES.
+RPi 4 USB-A
+  └── /dev/ttyACM0 ──► YDNU-02 (CDC ACM, VID:0483 PID:A217)
+                           │
+                           └── NMEA 2000 backbone (250 kbps)
 
-RÈGLE ABSOLUE POUR OC — À APPLIQUER À CHAQUE SESSION:
+RPi 4 USB-A
+  └── /dev/ttyUSB0 ──► UM982 GNSS (CH340/CP2102, 115200 baud, 8N1)
+```
 
-1. VÉRIFIER AVANT D'AGIR
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Avant d'utiliser une information comme hypothèse de travail,
-vérifier par rapport à la réalité observée sur le RPi:
+> ⚠️ YDNU-02 utilise le driver CDC ACM (pas FTDI) → port `/dev/ttyACM*`  
+> ⚠️ UM982 utilise un convertisseur USB-série → port `/dev/ttyUSB*`
 
-# Plugins Signal K réellement installés
-cd ~/.signalk && npm list --depth=0 2>/dev/null | grep signalk
+### 3.2 Bluetooth LE (hci0)
 
-# Services systemd actifs
-systemctl list-units --state=active | grep -E "signalk|influx|grafana|qtvlm"
+```
+RPi 4 BLE adapter (hci0)
+  ├── WIT WT901BLECL    ← IMU (BLE 5.0, device: "WT901BLE__")
+  ├── Calypso UP10      ← Anémomètre (BLE 4.x, device: "ULTRASONIC")
+  └── SOK Battery BMS   ← BMS LiFePO4 (BLE, JBD protocol)
+```
 
-# Scripts Python actifs
-ls -la /home/aneto/*.py /home/aneto/*.sh /home/aneto/*.py /home/aneto/*.sh 2>/dev/null
+**Services systemd associés :**
 
-# Ports série (GPS exact device name)
-ls -la /dev/ttyUSB* /dev/ttyACM* /dev/gnss* 2>/dev/null
-dmesg | grep -i usb | tail -20
-udevadm info -a -p $(udevadm trigger -p /dev/ttyUSB0 -d -n 2>/dev/null | head -1) 2>/dev/null
+| Service | Instrument | Rôle |
+|---------|-----------|------|
+| `signalk.service` | WIT (via plugin) | Lecture IMU, injection SK |
+| `calypso_anemometer` | Calypso UP10 | Lecture vent BLE → UDP 4123 |
+| `calypso_watchdog` | Calypso UP10 | Redémarrage auto si déconnexion |
+| `sok_bms_reader` | SOK BMS | Lecture BMS → direct InfluxDB |
 
-# Paths Signal K réellement alimentés
-curl -s http://localhost:3000/signalk/v1/api/vessels/self 2>/dev/null | \
-  python3 -c "import json,sys; d=json.load(sys.stdin); \
-  [print(f'{k}: {d[k]}') for k in sorted(d.keys())]" 2>/dev/null
+### 3.3 NMEA 2000 (backbone bateau)
 
-# Vérifier InfluxDB et Grafana
-curl -s http://localhost:8086/api/v2/health 2>/dev/null
-curl -s http://localhost:3001/api/health 2>/dev/null
+```
+YDNU-02 ──T── Vulcan 7 FS
+         │
+         ├──T── WS320 Base Station
+         │
+         ├──T── YDBC-05 Barometer
+         │
+         ├──T── AIS700
+         │
+         [T] Terminateurs aux deux extrémités
+```
 
-2. CORRIGER ET METTRE À JOUR
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Si une information vérifiée diffère de ce document:
-  → Corriger IMMÉDIATEMENT dans ce fichier
-  → Format: [CORRIGÉ LE JJ/MM/YYYY] ancienne → nouvelle
-  → Ne JAMAIS laisser une erreur connue sans corriger
+### 3.4 Réseau IP (WiFi)
 
-3. COMPLÉTER LES [À VÉRIFIER] ET [À COMPLÉTER]
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Dès qu'une information manquante devient connue:
-  → La remplir dans ce document
-  → Changer le statut: 🔴 / 🟡 / ✅
-  → Ajouter annotation [CORRIGÉ LE ...]
-
-4. SINGLE SOURCE OF TRUTH
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Ce document est la référence ABSOLUE de l'architecture Midnight Rider.
-Tout ce qui n'y est pas documenté n'existe pas pour OC.
-
-Toute décision d'architecture doit:
-  1. Se baser sur ce document
-  2. Être exécutée
-  3. Mettre à jour ce document IMMÉDIATEMENT après
+```
+RPi 4 (192.168.1.167)
+  ├── Point d'accès WiFi (hostapd)
+  │     SSID: MidnightRider / password: voir wifi-ap.txt
+  │     Connecté: téléphones équipage, tablettes
+  │
+  └── Cloudflare Tunnel ──► Internet (accès distant sécurisé)
 ```
 
 ---
 
-# 📊 ARCHITECTURE OVERVIEW
+## 4. STACK LOGICIELLE
+
+### 4.1 Services et ports
+
+| Service | Port | Protocole | Mode de démarrage | Technologie |
+|---------|------|-----------|------------------|-------------|
+| **Signal K** | 3000 | HTTP/WS | `systemctl` (**JAMAIS docker**) | Node.js |
+| **InfluxDB** | 8086 | HTTP | `docker compose` | Docker |
+| **Grafana** | 3001 | HTTP | `docker compose` | Docker |
+| **OpenClaw Gateway** | 18789 | HTTP | `systemctl` | Local only |
+| **Regatta Server** | 5000 | HTTP | `docker compose` | Docker |
+| **Signal K UDP RX** | 4123 | UDP | Interne Signal K | Calypso injection |
+
+> ⚠️ **RÈGLE ABSOLUE :**  
+> Signal K = `systemctl` UNIQUEMENT  
+> InfluxDB + Grafana = `docker compose` UNIQUEMENT  
+> Ne jamais inverser ces deux règles.
+
+### 4.2 Signal K — Plugins actifs
+
+| Plugin | Rôle | Source SK |
+|--------|------|-----------|
+| `signalk-um982-gnss` | Lecture UM982 (NMEA+proprietary) | `signalk-um982-gnss.UM982-HDG` |
+| `signalk-wit-imu-ble` | Lecture WIT IMU BLE | `signalk-wit-imu-ble.XX` |
+| `signalk-to-nmea2000` | Émission PGNs → YDNU-02 → N2K | — |
+| `signalk-to-influxdb2` | Persistence SK → InfluxDB | — |
+| `signalk-performance-polars` | Calcul VMG, efficacité polaire | `performance.*` |
+| `signalk-astronomical` | Données soleil/lune | `environment.sun.*` |
+| `signalk-rpi-cpu-temp` | Temp CPU RPi | `environment.rpi.*` |
+| `signalk-sails-management-v2` | Gestion voiles | `sails.*` |
+| `signalk-app-dock` | Dashboard Signal K webapp | — |
+| `signalk-to-nmea0183` | Export NMEA 0183 (WiFi) | — |
+| `freeboard-sk` | Carte nautique webapp | — |
+| `kip` | Instrument display webapp | — |
+| `course-provider` | Calculs de navigation | — |
+
+### 4.3 Docker Compose — Services
+
+```yaml
+# docker-compose.yml — résumé
+services:
+  influxdb:
+    image: influxdb:2.x
+    ports: ["8086:8086"]
+    volumes: [influxdb-data:/var/lib/influxdb2]
+
+  grafana:
+    image: grafana/grafana:latest
+    ports: ["3001:3000"]
+    volumes: [grafana-data:/var/lib/grafana]
+    depends_on: [influxdb]
+
+  regatta-server:
+    ports: ["5000:5000"]
+```
+
+### 4.4 InfluxDB — Organisation des données
+
+| Paramètre | Valeur |
+|-----------|--------|
+| **Organisation** | MidnightRider |
+| **Bucket principal** | `midnight_rider` |
+| **Rétention** | Illimitée (racing data) |
+| **Token** | Stocké dans `.env` (jamais dans git) |
+
+**Measurements clés :**
+
+| Measurement | Source | Champs principaux |
+|-------------|--------|------------------|
+| `navigation` | Signal K → signalk-to-influxdb2 | headingTrue, position, SOG, COG |
+| `environment` | Signal K → signalk-to-influxdb2 | wind.*, outside.*, water.* |
+| `attitude` | Signal K → signalk-to-influxdb2 | roll, pitch, yaw |
+| `performance` | Signal K → signalk-to-influxdb2 | targetSpeed, polarEfficiency, VMG |
+| `sok_bms` | Python direct | soc_pct, voltage_v, current_a, cell_1_4_mv |
+| `astronomical` | signalk-astronomical | sunrise, sunset, moon phase |
+| `sails` | signalk-sails-management | active_sail, reef_state |
+
+### 4.5 Grafana — Dashboards
+
+| # | Nom | Contenu |
+|---|-----|---------|
+| 01 | Cockpit | Cap, position, SOG, COG, gîte |
+| 02 | Environment | Vent (AWS/TWS/AWA/TWA), pression baro, temp |
+| 03 | Performance | Polaires, VMG, efficacité, target speed |
+| 04 | Wind & Current | Vent détaillé, courant estimé |
+| 05 | Competitive | Données course, laylines |
+| 06 | Electrical | SOK BMS — SoC, tension, cellules, température |
+| 07 | Race | Dashboard régate complet |
+| 08 | Alerts | Alertes actives et historique |
+| 09 | Crew | Dashboard équipage (vue simplifiée) |
+
+---
+
+## 5. FLUX DE DONNÉES DÉTAILLÉS
+
+### 5.1 Cap vrai (headingTrue)
 
 ```
-╔═══════════════════════════════════════════════════════════════════════╗
-║                        MIDNIGHT RIDER SYSTEM                         ║
-╠═══════════════════════════════════════════════════════════════════════╣
-║                                                                       ║
-║  SENSORS (Boat)          PROCESSING (RPi4)      DISPLAY & OUTPUT    ║
-║  ───────────────         ──────────────────     ─────────────────   ║
-║                                                                       ║
-║  GPS UM982              Signal K v2.25          Vulcan 7 FS (MFD)   ║
-║  └─ Position    ────→   ├─ Hub + API           └─ NMEA 2000       ║
-║  └─ Heading             ├─ 5 Custom Plugins                        ║
-║  └─ Speed               ├─ InfluxDB → Grafana → iPad Dashboard    ║
-║                         ├─ qtVLM (routing)                         ║
-║  WIT IMU                └─ 7 MCP Servers (Claude AI)               ║
-║  └─ Roll/Pitch   ────→                                             ║
-║  └─ Acceleration        (NMEA 2000 via YDNU-02 Gateway)           ║
-║                                                                       ║
-║  Calypso UP10           (Optional: InfluxDB Cloud + Grafana Cloud)  ║
-║  └─ Wind    ────→                                                   ║
-║  └─ Temp                                                             ║
-║                                                                       ║
-║  NMEA 2000 Backbone                                                 ║
-║  └─ Loch, AIS, Baro     ──→                                         ║
-║                                                                       ║
-╚═══════════════════════════════════════════════════════════════════════╝
+UM982 GNSS (ANT1 + ANT2)
+  HEADINGOFFSET 90 appliqué (firmware permanent, NVRAM, 2026-05-17)
+  ↓ USB /dev/ttyUSB0 (115200 baud)
+signalk-um982-gnss plugin
+  ↓ Signal K — navigation.headingTrue (radians)
+  ├──► InfluxDB → Grafana 01-Cockpit
+  └──► signalk-to-nmea2000
+         ↓ PGN 127250 (Vessel Heading)
+         YDNU-02 → N2K bus
+         └── Vulcan 7 FS (affichage helm)
+```
+
+### 5.2 Gîte / Assiette (attitude)
+
+```
+WIT WT901BLECL (BLE 5.0, 30 Hz)
+  ↓ bleak_wit.py → signalk-wit-imu-ble plugin
+  ↓ Signal K — navigation.attitude.{roll, pitch, yaw}
+  │              navigation.acceleration.{x, y, z}
+  │              navigation.rateOfTurn
+  ├──► InfluxDB → Grafana 01-Cockpit
+  ├──► Wave Analyzer v1.1 (heel correction)
+  │       ↓ environment.water.waves.*
+  └──► signalk-to-nmea2000
+         ↓ PGN 127257 (Attitude)    ← attitude.js patché 2026-05-17
+         YDNU-02 → N2K bus
+         └── Vulcan 7 FS (affichage gîte en temps réel)
+```
+
+### 5.3 Vent (priorité sources)
+
+```
+Calypso UP10 (BLE → UDP 4123) — PRIORITÉ 1 pour Signal K
+  ↓ calypso-anemometer Python (systemd)
+  ↓ Signal K Delta UDP port 4123
+  ↓ environment.wind.{speedApparent, angleApparent, speedTrue, directionTrue}
+  ├──► InfluxDB → Grafana 02-Environment
+  └──► signalk-to-nmea2000 → PGN 130306 → Vulcan 7
+
+B&G WS320 (BLE → base station → N2K) — PRIORITÉ 2 pour Signal K
+  ↓ NMEA 2000 PGN 130306 (5 Hz) — DIRECT vers Vulcan 7 FS
+  └──► YDNU-02 → Signal K (source secondaire)
+```
+
+### 5.4 Position GPS
+
+```
+UM982 GNSS (Primary — 1.5m accuracy autonomous)
+  ↓ PGNs 129025, 129026, 129029 → Signal K → InfluxDB → Grafana
+
+Vulcan 7 FS internal GPS (Fallback — 3m accuracy)
+  ↓ PGNs 129025, 129026 sur N2K bus (si UM982 absent)
+```
+
+### 5.5 Batterie (SOK BMS)
+
+```
+SOK SK12V100PC BMS (BLE — JBD protocol)
+  ↓ sok_bms_reader.py (Python, 0.2 Hz)
+  ↓ DIRECT → InfluxDB measurement: sok_bms
+  [Signal K non impliqué — bypass intentionnel]
+  └──► Grafana 06-Electrical
+```
+
+### 5.6 Pression atmosphérique
+
+```
+YDBC-05 (N2K PGNs 130310/130311/130314 @ 0.5 Hz)
+  ↓ N2K bus → YDNU-02 → Signal K
+  ↓ environment.outside.pressure (Pascal)
+  ├──► InfluxDB → Grafana 02-Environment
+  └──► Vulcan 7 FS (page données environnement)
+```
+
+### 5.7 AIS
+
+```
+AIS700 Class B (N2K PGNs 129038–129810)
+  ↓ N2K bus → YDNU-02 → Signal K
+  ↓ vessels.<MMSI>.{name, position, SOG, COG, ...}
+  ├──► InfluxDB (log trafic AIS)
+  └──► Vulcan 7 FS (targets sur carte)
 ```
 
 ---
 
-# 📚 DOCUMENTATION STRUCTURE (7 TIERS)
+## 6. PRIORITÉS DES SOURCES SIGNAL K
 
-## TIER 0: MASTER (This File)
-- ✅ **ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md** ← You are here
-  - Living document rules
-  - OC verification directives
-  - System overview
-  - Documentation index
-
----
-
-## TIER 1: SYSTEM OVERVIEW
-- 📄 **SYSTEM-SUMMARY.md** (1-page quick reference)
-- 📄 **SYSTEM-CHECKLIST.md** (pre-race + race-day actions)
-
----
-
-## TIER 2: HARDWARE DATASHEETS
-Located: `/docs/HARDWARE/`
-
-| Equipment | File | Purpose |
-|-----------|------|---------|
-| **Vulcan 7 FS** | VULCAN-7-FS-DATASHEET.md | B&G MFD specs + NMEA 2000 |
-| **UM982 GNSS** | UM982-GNSS-DATASHEET.md | Unicore GPS specs + sentences |
-| **WIT WT901BLECL** | WIT-WT901BLECL-DATASHEET.md | IMU specs + BLE protocol |
-| **Calypso UP10** | CALYPSO-UP10-DATASHEET.md | Anemometer specs |
-| **YDNU-02** | YDNU-02-GATEWAY-DATASHEET.md | NMEA 2000 gateway specs |
-- `docs/HARDWARE/SOK-BMS-BLE-PROTOCOL.md` — SOK Battery BMS BLE
-| **Raspberry Pi 4** | RASPBERRY-PI4-DATASHEET.md | Computer specs |
+| Path Signal K | Priorité 1 (haute) | Priorité 2 | Priorité 3 |
+|---------------|-------------------|-----------|-----------|
+| `navigation.position` | UM982 | Vulcan 7 internal GPS | — |
+| `navigation.headingTrue` | UM982 | — | — |
+| `navigation.speedOverGround` | UM982 | Vulcan 7 | — |
+| `navigation.attitude.*` | **WIT IMU** | Calypso (si --compass=on) | — |
+| `navigation.rateOfTurn` | WIT IMU | UM982 dual-antenna | — |
+| `environment.wind.*` | **Calypso UP10** | WS320 (via N2K) | — |
+| `environment.outside.temperature` | Calypso UP10 | YDBC-05 | — |
+| `environment.outside.pressure` | YDBC-05 | — | — |
+| `vessels.*` (AIS) | AIS700 | — | — |
 
 ---
 
-## TIER 3: INTEGRATION GUIDES
-Located: `/docs/INTEGRATION/`
+## 7. UNITÉS SI — RÉFÉRENCE RAPIDE
 
-| Integration | File | Purpose |
-|-------------|------|---------|
-| **Vulcan ↔ Signal K** | VULCAN-SIGNALK-INTEGRATION.md | PGN mapping + config |
-| **UM982 GPS** | UM982-INTEGRATION-GUIDE.md | Serial setup + plugin |
-| **WIT IMU** | WIT-INTEGRATION-GUIDE.md | BLE setup + bleak driver |
-| **Calypso Wind** | CALYPSO-INTEGRATION-GUIDE.md | BLE setup + plugin |
-| **YDNU-02** | YDNU-02-INTEGRATION-GUIDE.md | NMEA 2000 gateway |
-
----
-
-## TIER 4: SOFTWARE DOCUMENTATION
-Located: `/docs/SOFTWARE/`
-
-| Software | File | Purpose |
-|----------|------|---------|
-| **Signal K v2.25** | SIGNAL-K-CONFIGURATION.md | Setup + plugins |
-| **Plugins Catalog** | PLUGINS-CATALOG.md | 5 custom plugins details |
-| **Wave Analyzer v1.1** | WAVE-ANALYZER-V1.1-GUIDE.md | Heel correction algorithm |
-| **Grafana** | GRAFANA-DASHBOARDS.md | 4 pre-built dashboards |
-| **InfluxDB** | INFLUXDB-SETUP.md | Time-series database |
+| Grandeur | Unité Signal K | Affichage Grafana | Conversion |
+|----------|---------------|------------------|-----------|
+| Vitesse (SOG, vent) | m/s | nœuds | × 1.944 |
+| Cap, angle | radians | degrés | × 57.296 |
+| Température | Kelvin | °C | − 273.15 |
+| Pression | Pascal | hPa | ÷ 100 |
+| Taux de giration | rad/s | °/s | × 57.296 |
+| État de charge | ratio 0–1 | % | × 100 |
+| Position | degrés décimaux | degrés décimaux | — |
 
 ---
 
-## TIER 5: AI INTEGRATION (MCP)
-Located: `/docs/MCP/`
+## 8. RÈGLES ABSOLUES — OPÉRATION OC
 
-| Server | File | Purpose |
-|--------|------|---------|
-| **7 MCP Servers** | MCP-SERVERS-RECAP.md | Claude AI integration |
+> Ces règles s'appliquent à tout prompt généré par Dust/OC.  
+> Aucune exception sans validation explicite de Denis.
 
----
-
-## TIER 6: OPERATIONS
-Located: `/docs/OPERATIONS/`
-
-| Checklist | File | Purpose |
-|-----------|------|---------|
-| **Pre-Race** | ACTION-ITEMS-2026-04-25.md | Immediate actions |
-| **Field Test** | FIELD-TEST-CHECKLIST-2026-05-19.md | May 19-20 validation |
-| **Race Day** | RACE-DAY-CHECKLIST-2026-05-22.md | May 22 procedures |
-| **Troubleshooting** | TROUBLESHOOTING.md | Common issues + fixes |
-
----
-
-## TIER 7: KNOWLEDGE BASE
-Located: `/docs/MEMORY/`
-
-| Knowledge | File | Purpose |
-|-----------|------|---------|
-| **Lessons Learned** | MEMORY.md | Critical insights |
-| **Daily Notes** | memory/YYYY-MM-DD.md | Session logs |
+| # | Règle | Raison |
+|---|-------|--------|
+| 1 | Signal K = `systemctl` UNIQUEMENT | Port 3000, service natif |
+| 2 | InfluxDB = Docker UNIQUEMENT | Port 8086, container |
+| 3 | Grafana = Docker UNIQUEMENT | Port 3001, container |
+| 4 | Fichiers JSON = `python3` UNIQUEMENT | Jamais `sed` sur du JSON |
+| 5 | Aucun token/secret dans `git commit` | Sécurité |
+| 6 | Après chaque action : `git add -A && git commit -m '...' && git push` | Traçabilité |
+| 7 | Changement structurel = validation Denis avant exécution | Sécurité |
+| 8 | `HEADINGOFFSET 90` dans UM982 NVRAM = NE PAS écraser | Permanent, critique |
+| 9 | `attitude.js` patché (2026-05-17) = référence actuelle | PGN 127257 actif |
+| 10 | SOK BMS → direct InfluxDB (bypass Signal K) | Architecture volontaire |
 
 ---
 
-# 🔗 QUICK LINKS
+## 9. SÉCURITÉ
 
-**For quick reference, see:**
-- 1-page overview → `SYSTEM-SUMMARY.md`
-- Pre-race checklist → `ACTION-ITEMS-2026-04-25.md`
-- Hardware specs → `/docs/HARDWARE/*.md`
-- Integration setup → `/docs/INTEGRATION/*.md`
-- Software config → `/docs/SOFTWARE/*.md`
-- Race procedures → `/docs/OPERATIONS/RACE-DAY-CHECKLIST-2026-05-22.md`
+### 9.1 Secrets — Emplacement
 
----
+| Secret | Emplacement | Dans git ? |
+|--------|-------------|-----------|
+| InfluxDB token | `.env` | ❌ jamais |
+| Grafana admin password | `.env` | ❌ jamais |
+| OpenClaw token | `.openclaw-token` | ❌ jamais |
+| GitHub PAT | Env variable SSH session | ❌ jamais |
+| WiFi password | `config/wifi-ap.txt` | ⚠️ git privé seulement |
 
-# ✅ STATUS
+### 9.2 .gitignore — Fichiers exclus
 
-| Layer | Status | Files |
-|-------|--------|-------|
-| TIER 0 (Master) | ✅ Ready | 1 |
-| TIER 1 (Overview) | ⏳ Creating | 2 |
-| TIER 2 (Hardware) | ⏳ Creating | 6 |
-| TIER 3 (Integration) | ⏳ Creating | 5 |
-| TIER 4 (Software) | ⏳ Creating | 5 |
-| TIER 5 (MCP) | ✅ Ready | 1 |
-| TIER 6 (Operations) | ⏳ Creating | 4 |
-| TIER 7 (Knowledge) | ✅ Ready | 1+ |
+```
+.env
+*.env
+.openclaw-token
+*.secret
+*.key
+*.pem
+```
 
-**Total docs:** 25+ structured files
+### 9.3 Firewall UFW — Ports ouverts
 
----
+| Port | Service | Accès |
+|------|---------|-------|
+| 3000 | Signal K | LAN + Cloudflare Tunnel |
+| 3001 | Grafana | LAN + Cloudflare Tunnel |
+| 8086 | InfluxDB | LAN uniquement |
+| 22 | SSH | LAN uniquement |
+| 18789 | OpenClaw Gateway | localhost uniquement |
 
-# 🎯 HOW TO USE THIS STRUCTURE
+### 9.4 YDNU-02 Silent Mode
 
-1. **Quick Reference?** → Read `SYSTEM-SUMMARY.md`
-2. **Before modifications?** → Check relevant TIER files
-3. **Need datasheets?** → Go to `/docs/HARDWARE/`
-4. **Integration issues?** → Go to `/docs/INTEGRATION/`
-5. **Software config?** → Go to `/docs/SOFTWARE/`
-6. **Pre-race prep?** → Go to `/docs/OPERATIONS/`
-7. **Something failed?** → Check `TROUBLESHOOTING.md`
-
----
-
-# 📝 MAINTENANCE LOG
-
-| Date | Change | Who | Status |
-|------|--------|-----|--------|
-| 2026-04-25 | Created TIER 0 (this file) + structure | AI | ✅ DONE |
-| 2026-04-25 | Creating TIER 1-7 documents | AI | ⏳ IN PROGRESS |
+```bash
+# En cas de bug Signal K → protéger le bus N2K
+echo YDNU SILENT ON > /dev/ttyACM0
+# LED bleue = mode silencieux (lecture seule)
+```
 
 ---
 
-# ✍️ NEXT ACTIONS (IN PROGRESS)
+## 10. PROCÉDURES DE DÉMARRAGE
 
-- [ ] Create TIER 1: SYSTEM-SUMMARY.md + SYSTEM-CHECKLIST.md
-- [ ] Create TIER 2: 6 hardware datasheets with specs
-- [ ] Create TIER 3: 5 integration guides
-- [ ] Create TIER 4: 5 software documentation files
-- [ ] Create TIER 6: 4 operations checklists
-- [ ] Verify all links work
-- [ ] Final review + validation
+### 10.1 Démarrage normal (ordre)
+
+```bash
+# 1. Signal K (premier — toujours)
+sudo systemctl start signalk
+
+# 2. Docker (InfluxDB + Grafana + Regatta)
+cd ~/midnightrider-navigation
+docker compose up -d
+
+# 3. Services Python BLE
+sudo systemctl start calypso_anemometer calypso_watchdog
+
+# 4. Vérification
+sudo systemctl status signalk calypso_anemometer
+docker compose ps
+```
+
+### 10.2 Arrêt propre (ordre inverse)
+
+```bash
+sudo systemctl stop calypso_anemometer calypso_watchdog
+docker compose down
+sudo systemctl stop signalk
+```
+
+### 10.3 Vérification rapide pré-régate
+
+```bash
+# État des services
+sudo systemctl status signalk calypso_anemometer
+docker compose ps
+
+# Données live Signal K
+curl -s http://localhost:3000/signalk/v1/api/vessels/self/navigation/ | \
+  jq '{headingTrue, speedOverGround, position: .position.value}'
+
+# Batterie SOK
+curl -s http://localhost:3000/signalk/v1/api/vessels/self/ | \
+  jq '.electrical' 2>/dev/null || \
+  docker exec influxdb influx query \
+  'from(bucket:"midnight_rider") |> range(start: -5m) |> filter(fn:(r) => r._measurement == "sok_bms") |> last()'
+
+# Pression atmosphérique
+curl -s http://localhost:3000/signalk/v1/api/vessels/self/environment/outside/pressure | \
+  jq '.value / 100 | tostring + " hPa"'
+```
 
 ---
 
-**MIDNIGHT RIDER DOCUMENTATION — PROFESSIONAL STRUCTURE READY** ⛵
+## 11. JOURNAL DES CHANGEMENTS MAJEURS
+
+| Date | Changement | Impact |
+|------|-----------|--------|
+| 2026-04-25 | Déploiement initial RPi 4 | Système opérationnel |
+| 2026-04-28 | Audit sécurité + rotation tokens | Sécurité renforcée |
+| 2026-05-01 | Polaires J/30 v1 (incorrectes) | — |
+| 2026-05-12 | SOK BMS integration complète | Monitoring batterie actif |
+| 2026-05-13 | Inventaire instruments v1 | Documentation |
+| 2026-05-17 | **HEADINGOFFSET 90 permanent (UM982 NVRAM)** | Cap corrigé ✅ |
+| 2026-05-17 | **attitude.js patché (PGN 127257 → Vulcan 7)** | Gîte sur Vulcan ✅ |
+| 2026-05-19 | YDBC-05 barometer installé sur N2K | Pression active ✅ |
+| 2026-05-19 | AIS700 installé sur N2K | AIS actif ✅ |
+| 2026-05-20 | Révision complète documentation hardware | Datasheets à jour |
+| 2026-05-20 | Polaires J/30 v3 — données ORC réelles (UK) | Polaires corrigées ✅ |
+| 2026-05-20 | **Ce document — Architecture v4.0** | Référence canonique |
 
 ---
 
-*Last updated: 2026-04-25 10:05 EDT*  
-*Next review: Post-restructuring completion*
+## 12. FICHIERS DE RÉFÉRENCE CLÉS
 
-## GRAFANA DASHBOARDS SUITE (2026-04-25 21:15 EDT)
+| Fichier | Rôle |
+|---------|------|
+| `docs/ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md` | Ancien doc archi (partiellement obsolète) |
+| **`docs/ARCHITECTURE-REFERENCE-2026-05-20.md`** | **CE DOCUMENT — référence canonique** |
+| `docs/HARDWARE/INSTRUMENT-INVENTORY.md` | Inventaire instruments à jour |
+| `docs/DATA-SCHEMA-MASTER.md` | Schéma complet données Signal K / InfluxDB |
+| `docs/GRAFANA-UNIT-CONVERSIONS.md` | Conversions unités pour Grafana |
+| `docs/SYSTEM-SUMMARY.md` | Résumé système (référencé par Dust) |
+| `docs/DASHBOARDS-README.md` | Guide dashboards Grafana (référencé par Dust) |
+| `logs/latest.json` | Journal d'exécution OC |
+| `data/polars/j30_orc.json` | Polaires J/30 v3 — données ORC réelles |
+| `docker-compose.yml` | Configuration Docker (InfluxDB, Grafana, Regatta) |
+| `.env` | Secrets (NON versionné) |
 
-### Complete Dashboard Suite — 8 Dashboards, Ready to Import
+---
 
-**Status:** ✅ Production-ready JSON files  
-**Location:** `~/midnightrider-navigation/grafana-dashboards/`
-
-| Dashboard | Purpose | Refresh | Status |
-|-----------|---------|---------|--------|
-| 01 COCKPIT | Main navigation | 5s | ✅ Ready |
-| 02 ENVIRONMENT | Sea & weather | 30s | ✅ Ready |
-| 03 PERFORMANCE | Speed analysis | 5s | ✅ Ready |
-| 04 WIND & CURRENT | Tactical | 10s | ✅ Ready |
-| 05 COMPETITIVE | Fleet tracking | 30s | ✅ Ready |
-| 06 ELECTRICAL | Power mgmt | 30s | ✅ Ready |
-| 07 RACE | Block Island | 5s | ✅ Ready |
-| 08 ALERTS | 60 rules | 10s | ✅ Ready |
-
-### Import Procedure
-
-1. Configure InfluxDB token in Grafana (Admin → Data Sources)
-2. Upload each JSON file via Grafana import UI
-3. Test on iPad via WiFi AP
-
-### Alert Rules (60 Total)
-
-Categories:
-- Safety (10): Heel, pitch, temp, battery, system failures
-- Performance (15): VMG, polars, trim, waves, current
-- Weather (15): Wind shifts, pressure, swell, humidity
-- Systems (10): Battery, charger, comms, GPS, storage
-- Racing (10): Marks, start line, finish, fleet
-
-See Dashboard 8 (ALERTS) for complete structure.
-
-### Files
-
-- `01-cockpit.json` → 13 KB
-- `02-environment.json` → 5.5 KB
-- `03-performance.json` → 5.5 KB
-- `04-wind-current.json` → 5.4 KB
-- `05-competitive.json` → 5.4 KB
-- `06-electrical.json` → 5.5 KB
-- `07-race.json` → 5.4 KB
-- `08-alerts.json` → 6.2 KB
-- Total: 48 KB
-
-**Next:** Import and test on iPad before field test (May 19).
+**Maintenu par :** Denis LAFARGE + OC (OpenClaw via Dust)  
+**Prochain événement :** Block Island Race — 2026-05-22  
+**Contact urgence :** `logs/latest.json` → état système en temps réel
