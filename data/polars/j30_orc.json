@@ -1,38 +1,147 @@
 {
   "_meta": {
     "boat": "J/30",
-    "source": "ORC/IMS interpolated",
+    "designer": "Rod Johnstone",
+    "builder": "J Boats Inc.",
+    "year_design": 1978,
+    "source": "ORC VPP Speed Guide — J/30 class certificate (UK registry)",
+    "confidence": "high — official ORC VPP data",
+    "hull_speed_kts": 6.6,
+    "phrf_rating_typical": 153,
+    "version": "3.0",
+    "last_updated": "2026-05-20",
     "units": {
       "tws": "knots",
-      "twa": "degrees",
-      "bsp": "knots"
+      "twa": "degrees (true wind angle from bow, absolute)",
+      "bsp": "knots (boat speed through water)"
     },
-    "twa_modes": {
-      "upwind": "TWA absolu < 60°",
-      "reach": "60° ≤ TWA absolu ≤ 150°",
-      "downwind": "TWA absolu > 150°"
-    },
-    "convention": {
-      "twa_sign": "Signal K : positif tribord, négatif bâbord — utiliser valeur absolue",
-      "twa_source": "environment.wind.angleTrueWater (référencé à l'eau, pas au fond)",
-      "tws_source": "environment.wind.speedTrue (m/s → convertir en kts ×1.944)",
-      "output_unit": "kts — à convertir en m/s ÷1.944 pour Signal K"
-    },
-    "last_updated": "2026-05-01",
-    "version": "1.0"
+    "twa_columns": [30, 60, 75, 90, 105, 120, 135, 150, 180],
+    "tws_available": [8, 10, 12, 16, 20, 25],
+    "notes": [
+      "Source: ORC VPP Speed Guide for J/30 — UK class data",
+      "No TWS=6 data in source — row is extrapolated (marked accordingly)",
+      "All other rows are direct ORC VPP output",
+      "Beat VMG angle: 41-44 deg TWA (true wind angle — NOT apparent wind angle)",
+      "Run angle: 163-169 deg TWA at optimum downwind VMG",
+      "Reaching speeds above hull speed (6.6 kts) are achievable with spinnaker in planing/surfing",
+      "VMG at 90 deg TWA is always 0 by definition (perpendicular to wind)",
+      "To validate: GPS record a beat, reach and run against these targets on the water"
+    ],
+    "signal_k": {
+      "tws_path": "environment.wind.speedTrue",
+      "tws_unit": "m/s — multiply by 1.944 for knots",
+      "twa_path": "environment.wind.angleTrueWater",
+      "twa_unit": "radians — multiply by 57.296 for degrees, use abs() for port tack",
+      "bsp_output": "performance.targetSpeed",
+      "bsp_unit": "m/s — divide knots by 1.944",
+      "efficiency_path": "performance.polarEfficiency",
+      "efficiency_formula": "navigation.speedOverGround / performance.targetSpeed"
+    }
   },
+
+  "polar_table": {
+    "description": "Full ORC polar — BSP in knots at each TWA. Rows = TWS, columns = TWA.",
+    "tws_values":   [8,    10,   12,   16,   20,   25  ],
+    "twa_30":       [4.0,  4.5,  4.9,  5.0,  5.1,  5.2 ],
+    "twa_60":       [6.2,  6.65, 6.9,  7.15, 7.25, 7.35],
+    "twa_75":       [6.4,  6.9,  7.25, 7.55, 7.8,  8.05],
+    "twa_90":       [6.5,  7.0,  7.4,  7.8,  8.1,  8.3 ],
+    "twa_105":      [6.4,  6.95, 7.35, 8.0,  8.4,  8.75],
+    "twa_120":      [6.0,  6.6,  7.1,  8.0,  8.7,  9.2 ],
+    "twa_135":      [5.3,  6.2,  6.6,  7.5,  8.3,  9.0 ],
+    "twa_150":      [4.4,  5.3,  6.2,  7.1,  7.9,  8.6 ],
+    "twa_180":      [3.7,  4.5,  5.3,  6.5,  7.25, 7.9 ]
+  },
+
+  "vmg": {
+    "description": "VMG = Velocity Made Good toward/away from wind. Beat and run at optimal TWA.",
+    "tws_values":         [8,    10,   12,   16,   20,   25  ],
+    "beat_twa_deg":       [43.71,42.72,41.38,41.83,41.62,41.41],
+    "beat_bsp_kts":       [5.4,  5.82, 6.03, 6.25, 6.33, 6.42],
+    "beat_vmg_kts":       [3.9,  4.28, 4.52, 4.66, 4.73, 4.81],
+    "run_twa_deg":        [163.9,164.77,163.42,168.89,168.73,168.56],
+    "run_bsp_kts":        [4.03, 4.91, 5.85, 6.72, 7.51, 8.21],
+    "run_vmg_kts":        [3.87, 4.74, 5.61, 6.59, 7.37, 8.05]
+  },
+
   "polars": [
-    {"tws": 5, "upwind": 3.2, "reach": 4.1, "downwind": 4.8, "upwind_angle": 32, "downwind_angle": 155},
-    {"tws": 6, "upwind": 3.9, "reach": 5.0, "downwind": 5.9, "upwind_angle": 31, "downwind_angle": 155},
-    {"tws": 7, "upwind": 4.6, "reach": 5.9, "downwind": 6.9, "upwind_angle": 31, "downwind_angle": 155},
-    {"tws": 8, "upwind": 5.2, "reach": 6.7, "downwind": 7.8, "upwind_angle": 31, "downwind_angle": 155},
-    {"tws": 9, "upwind": 5.8, "reach": 7.5, "downwind": 8.7, "upwind_angle": 30, "downwind_angle": 155},
-    {"tws": 10, "upwind": 6.4, "reach": 8.2, "downwind": 9.5, "upwind_angle": 30, "downwind_angle": 155},
-    {"tws": 12, "upwind": 7.5, "reach": 9.6, "downwind": 11.0, "upwind_angle": 30, "downwind_angle": 155},
-    {"tws": 14, "upwind": 8.5, "reach": 10.9, "downwind": 12.4, "upwind_angle": 29, "downwind_angle": 155},
-    {"tws": 16, "upwind": 9.4, "reach": 12.0, "downwind": 13.7, "upwind_angle": 29, "downwind_angle": 155},
-    {"tws": 18, "upwind": 10.2, "reach": 13.0, "downwind": 14.8, "upwind_angle": 28, "downwind_angle": 155},
-    {"tws": 20, "upwind": 10.9, "reach": 13.9, "downwind": 15.8, "upwind_angle": 28, "downwind_angle": 155},
-    {"tws": 25, "upwind": 12.0, "reach": 15.2, "downwind": 17.2, "upwind_angle": 27, "downwind_angle": 155}
+    {
+      "_note": "TWS=6 — EXTRAPOLATED (not in source data)",
+      "tws": 6,
+      "upwind": 4.8,
+      "upwind_angle": 45,
+      "beat_vmg": 3.4,
+      "reach": 5.7,
+      "reach_angle": 90,
+      "downwind": 3.1,
+      "downwind_angle": 162,
+      "run_vmg": 2.9
+    },
+    {
+      "tws": 8,
+      "upwind": 5.4,
+      "upwind_angle": 43.71,
+      "beat_vmg": 3.9,
+      "reach": 6.5,
+      "reach_angle": 90,
+      "downwind": 4.03,
+      "downwind_angle": 163.9,
+      "run_vmg": 3.87
+    },
+    {
+      "tws": 10,
+      "upwind": 5.82,
+      "upwind_angle": 42.72,
+      "beat_vmg": 4.28,
+      "reach": 7.0,
+      "reach_angle": 90,
+      "downwind": 4.91,
+      "downwind_angle": 164.77,
+      "run_vmg": 4.74
+    },
+    {
+      "tws": 12,
+      "upwind": 6.03,
+      "upwind_angle": 41.38,
+      "beat_vmg": 4.52,
+      "reach": 7.4,
+      "reach_angle": 90,
+      "downwind": 5.85,
+      "downwind_angle": 163.42,
+      "run_vmg": 5.61
+    },
+    {
+      "tws": 16,
+      "upwind": 6.25,
+      "upwind_angle": 41.83,
+      "beat_vmg": 4.66,
+      "reach": 8.0,
+      "reach_angle": 105,
+      "downwind": 6.72,
+      "downwind_angle": 168.89,
+      "run_vmg": 6.59
+    },
+    {
+      "tws": 20,
+      "upwind": 6.33,
+      "upwind_angle": 41.62,
+      "beat_vmg": 4.73,
+      "reach": 8.7,
+      "reach_angle": 120,
+      "downwind": 7.51,
+      "downwind_angle": 168.73,
+      "run_vmg": 7.37
+    },
+    {
+      "tws": 25,
+      "upwind": 6.42,
+      "upwind_angle": 41.41,
+      "beat_vmg": 4.81,
+      "reach": 9.2,
+      "reach_angle": 120,
+      "downwind": 8.21,
+      "downwind_angle": 168.56,
+      "run_vmg": 8.05
+    }
   ]
 }
