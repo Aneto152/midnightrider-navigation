@@ -1,116 +1,111 @@
-# CALYPSO UP10 INTEGRATION GUIDE (OPTIONAL)
+# CALYPSO UP10 — INTEGRATION GUIDE
 
-**Status:** ⏳ Optional for race (works, known bugs)  
-**Objective:** Configure Calypso anemometer BLE connection  
-**Time:** ~30 min  
-**Difficulty:** Low
+**Status:** ✅ Operational (8 Hz, direct BLE connection)  
+**Updated:** 2026-05-21
 
----
+## Architecture
 
-## HARDWARE
+- **Service**: `calypso-anemometer` (Python package via pip)
+- **Device**: Calypso UP10 ultrasonic anemometer (BLE)
+- **Connection**: Direct BLE → UDP bridge → Signal K
+- **Rate**: 8 Hz (HZ_8 maximum)
+- **Protocol**: NMEA 2000-inspired JSON deltas over UDP/4123
 
-**Model:** Calypso UP10 Portable Solar  
-**Interface:** Bluetooth LE  
-**Range:** ~30m  
-**Data:** Wind speed (knots) + direction (degrees) + temperature
+**NOTE**: The old `signalk-calypso-ultrasonic` plugin is **OBSOLETE** — do not use.
 
----
+## Service File
 
-## BLE PAIRING
+**Location**: `/etc/systemd/system/calypso-anemometer.service`
 
+```ini
+[Unit]
+Description=Calypso Instruments Ultrasonic Anemometer for Signal K
+After=network.target
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read \
+  --subscribe \
+  --ble-address=F8:5F:12:9D:D2:EE \
+  --rate=hz_8 \
+  --target=udp+signalk+delta://localhost:4123
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+**Key Flags**:
+- `--subscribe`: Continuous reading mode
+- `--ble-address`: Device MAC (ULTRASONIC)
+- `--rate=hz_8`: 8 Hz maximum (or hz_1, hz_4)
+- `--target`: UDP → Signal K delta submission (port 4123)
+
+## Signal K Data Paths
+
+| Path | Unit | Range |
+|------|------|-------|
+| `environment.wind.speedApparent` | m/s | 0-35 |
+| `environment.wind.angleApparent` | rad | 0-2π |
+| `environment.wind.speedTrue` | m/s | derived by SK |
+| `environment.wind.directionTrue` | rad | derived by SK |
+| `environment.outside.temperature` | K | 250-320 |
+| `navigation.attitude.roll` | rad | -π to π |
+| `navigation.attitude.pitch` | rad | -π/2 to π/2 |
+| `navigation.headingMagnetic` | rad | 0-2π |
+| `electrical.batteries.99.capacity.stateOfCharge` | ratio | 0-1 |
+
+## Watchdog (Robust v2)
+
+**Service**: `calypso_robust_watchdog.service`
+
+Escalating BLE recovery:
+1. **L1 (60s)**: Restart calypso-anemometer service
+2. **L2 (120s)**: Reset hci0 adapter (down → up)
+3. **L3 (180s)**: Full BlueZ reset + remove device + re-pair
+
+Monitoring: Checks Signal K `/environment/wind/speedApparent` age every 15 seconds
+
+## Troubleshooting
+
+### Device not connecting
 ```bash
-bluetoothctl
+# Check if device is advertising
+sudo hcitool lescan 2>&1 | grep ULTRASONIC
 
-scan on
-# Look for "Calypso" or "UP10"
-
-pair <MAC_ADDRESS>
-
-trust <MAC_ADDRESS>
-
-connect <MAC_ADDRESS>
-
-exit
+# Manual re-pair
+bluetoothctl remove F8:5F:12:9D:D2:EE
+bluetoothctl trust F8:5F:12:9D:D2:EE
+sudo systemctl restart calypso-anemometer
 ```
 
----
-
-## SIGNAL K PLUGIN
-
-### Configuration
-
-```json
-{
-  "plugins": {
-    "signalk-calypso-ultrasonic": {
-      "enabled": true,
-      "macAddress": "<MAC_from_pairing>",
-      "updateRate": 1
-    }
-  }
-}
-```
-
-### Restart
-
+### hci0 soft-locked after phone disconnect
 ```bash
-sudo systemctl restart signalk
+# Full BLE stack reset
+sudo systemctl stop calypso-anemometer
+sudo systemctl stop bluetooth
+sudo hciconfig hci0 reset
+sudo systemctl start bluetooth
+sudo systemctl start calypso-anemometer
 ```
 
----
-
-## EXPECTED DATA
-
+### No wind data in Signal K
 ```bash
-curl -s http://localhost:3000/signalk/v1/api/vessels/self/environment | jq '.wind'
+# Check listener is running
+ss -ulnp | grep 4123
 
-# Output:
-# {
-#   "speedTrue": 3.6,              // m/s (from knots)
-#   "directionTrue": 5.5,          // radians (from degrees)
-#   "speedApparent": 4.2,          // m/s
-#   "directionApparent": 0.785     // radians
-# }
+# Check service status
+systemctl status calypso-anemometer --no-pager
+
+# Check logs
+journalctl -u calypso-anemometer -n 50
 ```
 
----
+## History
 
-## KNOWN ISSUES (NOT CRITICAL FOR RACE)
-
-| Issue | Severity | Timeline |
-|-------|----------|----------|
-| UUID parsing errors | High | Post-race fix (1-2h rewrite) |
-| Payload format incorrect | High | Post-race fix |
-| Temperature conversion wrong | Medium | Post-race |
-| Battery logic flawed | Low | Post-race |
-
-**Recommendation:** If data appears reasonable during field test, use it. If buggy, skip for race (not critical).
-
----
-
-## PRE-RACE DECISION
-
-```
-IF Calypso BLE connects AND data looks reasonable:
-  USE IT (bonus wind data)
-
-ELSE:
-  SKIP IT (system works without wind sensor)
-  → Polars plugin can estimate wind from GPS/IMU
-```
-
----
-
-## POST-RACE IMPROVEMENTS
-
-Planned rewrites:
-- [ ] Fix UUID discovery (currently hardcoded)
-- [ ] Rewrite payload parser (handle all variants)
-- [ ] Implement temperature correctly (K ← °C conversion)
-- [ ] Add battery level monitoring
-
----
-
-**Status:** ⏳ Optional  
-**Critical for Race:** NO  
-**Last Updated:** 2026-04-25
+- **2026-05-21**: Service fixed (added --ble-address, --target, corrected rate flag, watchdog v2)
+- **2026-05-17**: Watchdog deployed (initial L1/L2/L3 escalating recovery)
+- **Earlier**: Manual Python script + legacy plugin approach

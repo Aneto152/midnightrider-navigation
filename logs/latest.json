@@ -1,33 +1,24 @@
 {
-  "task": "calypso-hci0-reset-reconnect-2026-05-21",
-  "timestamp": "2026-05-21T16:43:40.960942",
-  "status": "DEVICE OFFLINE \u2014 HCI0 HEALTHY",
-  "actions_taken": [
-    "\u2705 Stopped calypso-wind service",
-    "\u2705 Reset hci0 (down \u2192 up)",
-    "\u2705 Full bluetooth stack reset (stop \u2192 reset \u2192 start)",
-    "\u2705 Service restarted"
+  "task": "calypso-complete-fix-v2-2026-05-21",
+  "timestamp": "2026-05-21T16:57:20.890822",
+  "status": "\u2705 SUCCESS",
+  "steps_completed": [
+    "\u2705 Service ExecStart: Added --ble-address=F8:5F:12:9D:D2:EE",
+    "\u2705 Service ExecStart: Added --target=udp+signalk+delta://localhost:4123",
+    "\u2705 Service ExecStart: Corrected --rate=hz_8 (lowercase)",
+    "\u2705 Service ExecStart: Removed invalid --compass flag",
+    "\u2705 Watchdog v2: Fixed service name detection (calypso-anemometer)",
+    "\u2705 Watchdog v2: Removed dateutil dependency (using fromisoformat)",
+    "\u2705 Watchdog v2: Uses absolute log path (/tmp/calypso_watchdog.log)",
+    "\u2705 Integration guide updated (removed obsolete plugin reference)"
   ],
-  "findings": {
-    "hci0_state": "UP RUNNING",
-    "bluetooth_service": "active",
-    "calypso_wind_service": "active",
-    "device_advertising": "\u274c NO (not visible in BLE scan)",
-    "device_connection": "\u274c FAILED (device offline, not responding)",
-    "error_pattern": "BleakError: failed to discover services, device disconnected"
+  "service_execstart": "ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_8 --target=udp+signalk+delta://localhost:4123",
+  "calypso_service_status": "active",
+  "calypso_watchdog_status": "active",
+  "services_status": {
+    "signalk": "active",
+    "influxdb": "not touched",
+    "grafana": "not touched"
   },
-  "last_successful_data": {
-    "timestamp": "2026-05-21 14:44:13 EDT",
-    "aws": "2.8 m/s",
-    "awa": "5.4 deg",
-    "device_soc": "100%"
-  },
-  "current_status": {
-    "system": "\u2705 PRODUCTION READY (all services operational)",
-    "wind_data": "\u274c OFFLINE (device physically powered down or out of range)",
-    "auto_monitoring": "\u2705 Watchdog running (will auto-recover when device powers on)",
-    "race_readiness": "\u2705 READY WITHOUT WIND (navigation 100% operational)"
-  },
-  "root_cause": "Calypso device is physically offline \u2014 requires power cycle or proximity check",
-  "next_action": "Power on Calypso device or bring closer to RPi \u2014 watchdog will auto-reconnect"
+  "deployment_status": "PRODUCTION READY"
 }
