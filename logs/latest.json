@@ -1,34 +1,36 @@
 {
-  "task": "calypso-rate-hz8-compass-on-2026-05-21",
-  "timestamp": "2026-05-21T16:12:51.273919",
-  "status": "\u2705 SUCCESS",
+  "task": "calypso-robust-watchdog-l1-l2-l3-2026-05-21",
+  "timestamp": "2026-05-21T16:22:45.383935",
+  "status": "\u2705 SUCCESS \u2014 DEPLOYED",
   "steps_completed": [
-    "Switched from custom Python script to calypso-anemometer library",
-    "Updated systemd service: --rate=HZ_8 (8 Hz maximum)",
-    "Enabled compass: --compass=ON (heading, roll, pitch)",
-    "Services restarted and running",
-    "Watchdog verified active"
+    "Deep BLE diagnostic performed",
+    "Device FOUND advertising (F8:5F:12:9D:D2:EE ULTRASONIC)",
+    "BlueZ cache cleared + full hci0 reset attempted",
+    "Device in \"not accepting connections\" state (waiting for power-on)",
+    "Robust watchdog created with L1/L2/L3 escalating recovery",
+    "Old simple watchdog replaced",
+    "calypso_robust_watchdog.service installed and running"
   ],
-  "configuration": {
-    "service_file": "/etc/systemd/system/calypso-anemometer.service",
-    "command": "calypso-anemometer read --subscribe --rate=HZ_8 --compass=ON",
-    "old_command": "/usr/bin/python3 /home/aneto/calypso-ble-reader.py (1 Hz, no compass)",
-    "new_rate": "HZ_8 (8 Hz)",
-    "compass": "ON",
-    "status": "\u2705 ACTIVE"
+  "diagnostic_findings": {
+    "device_advertising": "\u2705 YES \u2014 detected in BLE scan",
+    "device_mac": "F8:5F:12:9D:D2:EE (ULTRASONIC)",
+    "bluez_state": "Not paired, Not bonded, Not trusted, Not connected",
+    "root_cause": "Device in \"remote device not accepting connections\" state",
+    "solution": "Power cycle device \u2014 watchdog will auto-recover"
   },
+  "watchdog_levels": {
+    "L1_60s": "Restart calypso-anemometer service",
+    "L2_120s": "Reset hci0 adapter (down/up)",
+    "L3_180s": "Full BlueZ reset + remove device + re-pair + restart"
+  },
+  "hci0_state": "UP RUNNING",
+  "calypso_anemometer": "failed (waiting for device)",
+  "calypso_robust_watchdog": "\u2705 active",
+  "next_step": "Power on Calypso device \u2014 watchdog will auto-connect",
   "services_status": {
-    "calypso-anemometer": "\u2705 running (active)",
-    "calypso-watchdog": "\u2705 running (monitoring)",
     "signalk": "running (untouched)",
     "influxdb": "running (untouched)",
-    "grafana": "running (untouched)"
-  },
-  "expected_improvements": [
-    "8 Hz update rate (vs 1 Hz) \u2014 smoother UI, better tactical response",
-    "Compass enabled \u2014 heading/roll/pitch data available in SK",
-    "True wind calculations improved (with heading data)",
-    "Better wind trend detection in Grafana"
-  ],
-  "next_step": "Monitor Grafana 02-environment for wind data at 8 Hz"
+    "grafana": "running (untouched)",
+    "bluetooth": "running (healthy)"
+  }
 }
