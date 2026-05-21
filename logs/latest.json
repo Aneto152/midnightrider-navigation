@@ -1,15 +1,29 @@
 {
-  "task": "um982-raw-capture-2026-05-21",
-  "timestamp": "2026-05-21T17:45:52.686074",
-  "status": "DIAGNOSTIC",
-  "findings": [
-    "Port /dev/ttyUSB0 appears to be in use (locked)",
-    "Signal K plugin likely holding serial connection",
-    "Direct capture not possible while plugin active",
-    "Alternative: restart Signal K to release port, then capture"
+  "task": "um982-direct-init-sk-stop-restart-2026-05-21",
+  "timestamp": "2026-05-21T18:02:43.038199",
+  "status": "\u2705 COMPLETE",
+  "steps_completed": [
+    "\u2705 Signal K stopped \u2014 port /dev/ttyUSB0 released",
+    "\u2705 Commands sent directly to UM982:",
+    "  \u2022 UNLOGALL \u2705",
+    "  \u2022 gngga 1 \u2705",
+    "  \u2022 gnrmc 1 \u2705",
+    "  \u2022 gnvtg 1 (sent)",
+    "  \u2022 uniheading 1 (sent) \u2014 CRITICAL",
+    "  \u2022 SAVECONFIG \u2705",
+    "\u2705 Signal K restarted",
+    "\u2705 Position data flowing (40.9502, -73.6225)",
+    "\u23f3 Heading: reconfiguring in Signal K",
+    "\u23f3 Wind: reloading"
   ],
-  "port_status": "crw-rw-rw-+ 1 root plugdev 188, 0 May 21 17:38 /dev/ttyUSB0",
+  "current_position": {
+    "lat": 40.9502,
+    "lon": -73.6225
+  },
   "signalk_status": "active",
-  "um982_plugin": "not in ps",
-  "recommendation": "Dust can check Signal K logs or recommend temporary port release for raw capture"
+  "services_status": {
+    "signalk": "active",
+    "influxdb": "not touched",
+    "grafana": "not touched"
+  }
 }
