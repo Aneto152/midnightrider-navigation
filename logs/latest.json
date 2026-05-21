@@ -1,24 +1,24 @@
 {
-  "task": "calypso-complete-fix-v2-2026-05-21",
-  "timestamp": "2026-05-21T16:57:20.890822",
-  "status": "\u2705 SUCCESS",
-  "steps_completed": [
-    "\u2705 Service ExecStart: Added --ble-address=F8:5F:12:9D:D2:EE",
-    "\u2705 Service ExecStart: Added --target=udp+signalk+delta://localhost:4123",
-    "\u2705 Service ExecStart: Corrected --rate=hz_8 (lowercase)",
-    "\u2705 Service ExecStart: Removed invalid --compass flag",
-    "\u2705 Watchdog v2: Fixed service name detection (calypso-anemometer)",
-    "\u2705 Watchdog v2: Removed dateutil dependency (using fromisoformat)",
-    "\u2705 Watchdog v2: Uses absolute log path (/tmp/calypso_watchdog.log)",
-    "\u2705 Integration guide updated (removed obsolete plugin reference)"
+  "task": "calypso-instability-debug-2026-05-21",
+  "timestamp": "2026-05-21T17:08:35.520913",
+  "status": "DIAGNOSTIC",
+  "symptom": "Data cycle every ~15s \u2014 watchdog triggers cascading resets",
+  "root_hypothesis": "Watchdog Signal K check failing \u2192 sees no data \u2192 L1/L2/L3 cascade",
+  "observations": [
+    "\u2705 Service IS sending data (70 starts in journal, UDP messages logged)",
+    "\u2705 Device CONNECTED (bluetoothctl shows Connected: yes, 100% battery)",
+    "\u2705 hci0 UP RUNNING (healthy adapter, 80k+ ACL packets)",
+    "\u2705 Data flowing to UDP/4123 (visible in logs)",
+    "\u274c Watchdog sees age=999s (Signal K check broken)",
+    "\u274c Watchdog triggers L1/L2/L3 every ~20-30s unnecessarily"
   ],
-  "service_execstart": "ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_8 --target=udp+signalk+delta://localhost:4123",
-  "calypso_service_status": "active",
-  "calypso_watchdog_status": "active",
+  "service_restart_count": "NRestarts=0",
+  "start_count": "70",
   "services_status": {
+    "calypso_anemometer": "ERROR: Command 'systemctl is-active calypso-anemometer' returned non-zero exit status 3.",
+    "calypso_robust_watchdog": "active",
     "signalk": "active",
     "influxdb": "not touched",
     "grafana": "not touched"
-  },
-  "deployment_status": "PRODUCTION READY"
+  }
 }
