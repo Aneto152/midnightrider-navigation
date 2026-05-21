@@ -96,3 +96,8 @@ docs/agents/
 
 # Local credentials override — never commit
 docker-compose.override.yml
+
+# SQLite databases (must never be in git)
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal

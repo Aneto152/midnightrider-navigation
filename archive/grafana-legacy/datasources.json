@@ -1,1 +1,0 @@
-[{"id":5,"uid":"efifgp8jvgj5sf","orgId":1,"name":"InfluxDB","type":"influxdb","typeName":"InfluxDB","typeLogoUrl":"public/plugins/influxdb/img/influxdb_logo.svg","access":"proxy","url":"http://localhost:8086","user":"","database":"","basicAuth":false,"isDefault":false,"jsonData":{"defaultBucket":"signalk","organization":"MidnightRider","version":"Flux"},"readOnly":false}]
