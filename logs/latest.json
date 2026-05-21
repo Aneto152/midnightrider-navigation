@@ -1,23 +1,34 @@
 {
-  "task": "calypso-hci0-fix-2026-05-21",
-  "timestamp": "2026-05-21T16:03:31.244774",
+  "task": "calypso-rate-hz8-compass-on-2026-05-21",
+  "timestamp": "2026-05-21T16:12:51.273919",
   "status": "\u2705 SUCCESS",
   "steps_completed": [
-    "hci0 reset (down/up)",
-    "Bluetooth stack restarted",
-    "calypso-anemometer restarted",
-    "calypso-watchdog verified active",
-    "hci0 UP RUNNING confirmed"
+    "Switched from custom Python script to calypso-anemometer library",
+    "Updated systemd service: --rate=HZ_8 (8 Hz maximum)",
+    "Enabled compass: --compass=ON (heading, roll, pitch)",
+    "Services restarted and running",
+    "Watchdog verified active"
   ],
-  "hci0_state": "UP RUNNING",
-  "calypso_anemometer": "Command 'systemctl is-active calypso-anemometer' returned non-zero exit status 3.",
-  "calypso_watchdog": "active",
-  "bluetooth_service": "active",
-  "notes": [
-    "Calypso device not found in BLE scan on restart (normal)",
-    "Watchdog is active and will auto-reconnect when device available",
-    "hci0 adapter is healthy (UP RUNNING)",
-    "Services will auto-recover when Calypso powers back on"
+  "configuration": {
+    "service_file": "/etc/systemd/system/calypso-anemometer.service",
+    "command": "calypso-anemometer read --subscribe --rate=HZ_8 --compass=ON",
+    "old_command": "/usr/bin/python3 /home/aneto/calypso-ble-reader.py (1 Hz, no compass)",
+    "new_rate": "HZ_8 (8 Hz)",
+    "compass": "ON",
+    "status": "\u2705 ACTIVE"
+  },
+  "services_status": {
+    "calypso-anemometer": "\u2705 running (active)",
+    "calypso-watchdog": "\u2705 running (monitoring)",
+    "signalk": "running (untouched)",
+    "influxdb": "running (untouched)",
+    "grafana": "running (untouched)"
+  },
+  "expected_improvements": [
+    "8 Hz update rate (vs 1 Hz) \u2014 smoother UI, better tactical response",
+    "Compass enabled \u2014 heading/roll/pitch data available in SK",
+    "True wind calculations improved (with heading data)",
+    "Better wind trend detection in Grafana"
   ],
-  "field_test_ready": true
+  "next_step": "Monitor Grafana 02-environment for wind data at 8 Hz"
 }
