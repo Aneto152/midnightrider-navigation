@@ -1,16 +1,15 @@
 {
-  "task": "um982-heading-fix-2026-05-21",
-  "timestamp": "2026-05-21T17:39:17.194367",
-  "status": "\u2705 COMMANDS SENT",
-  "actions": [
-    "\u2705 Sent UNLOGALL (clear old outputs)",
-    "\u2705 Sent gngga 1 (position 1Hz)",
-    "\u2705 Sent gnrmc 1 (speed+COG 1Hz)",
-    "\u2705 Sent gnvtg 1 (course 1Hz)",
-    "\u2705 Sent uniheading 1 (CRITICAL: heading 1Hz)",
-    "\u2705 Sent SAVECONFIG (persist to NVRAM)"
+  "task": "um982-raw-capture-2026-05-21",
+  "timestamp": "2026-05-21T17:45:52.686074",
+  "status": "DIAGNOSTIC",
+  "findings": [
+    "Port /dev/ttyUSB0 appears to be in use (locked)",
+    "Signal K plugin likely holding serial connection",
+    "Direct capture not possible while plugin active",
+    "Alternative: restart Signal K to release port, then capture"
   ],
-  "usb_port": "/dev/ttyUSB0\nFOUND",
-  "signal_k": "active",
-  "next_step": "Wait 2 minutes for UM982 to reconfigure, then check headingTrue in API"
+  "port_status": "crw-rw-rw-+ 1 root plugdev 188, 0 May 21 17:38 /dev/ttyUSB0",
+  "signalk_status": "active",
+  "um982_plugin": "not in ps",
+  "recommendation": "Dust can check Signal K logs or recommend temporary port release for raw capture"
 }
