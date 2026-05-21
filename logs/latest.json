@@ -1,29 +1,32 @@
 {
-  "task": "calypso-watchdog-v3-fix-2026-05-21",
-  "timestamp": "2026-05-21T17:14:39.914196",
-  "status": "\u2705 SUCCESS",
-  "root_cause": "fromisoformat() crash on SK timestamp \"2026-05-21T21:12:54.654Z\" \u2192 always returns 999 \u2192 L1/L2/L3 death spiral",
-  "steps_completed": [
-    "\u2705 Stopped broken watchdog (immediate data stabilization)",
-    "\u2705 Fixed: strip microseconds before fromisoformat()",
-    "\u2705 Fixed: strip Z suffix from ISO timestamp",
-    "\u2705 Fixed: fallback to value check if timestamp unparseable",
-    "\u2705 Increased DATA_TIMEOUT 60\u2192120s (less aggressive)",
-    "\u2705 Increased CHECK_INTERVAL 15\u219230s (less frequent)",
-    "\u2705 Added COOLDOWN 60s after actions (prevent death spiral)",
-    "\u2705 Watchdog v3 deployed and verified stable"
+  "task": "calypso-raw-data-capture-analysis-2026-05-21",
+  "timestamp": "2026-05-21T17:27:00.232069",
+  "status": "DIAGNOSTIC",
+  "findings": [
+    "Device reconnected after service restart",
+    "Wind data: 6.0 kts (active streaming)",
+    "Service logs show raw JSON output from device",
+    "Raw characteristics visible in service logs",
+    "Device actively sending: wind speed, angle, attitude, battery"
   ],
-  "verification": {
-    "check_1": "AWS=3.1kts \u2705",
-    "check_2": "AWS=3.1kts \u2705",
-    "check_3": "AWS=3.1kts \u2705",
-    "result": "3 consecutive stable checks without restart"
+  "device_output_sample": {
+    "source": "calypso-up10",
+    "values": [
+      "environment.outside.temperature (K)",
+      "environment.wind.angleApparent (radians)",
+      "environment.wind.speedApparent (m/s)",
+      "navigation.attitude.roll (radians)",
+      "navigation.attitude.pitch (radians)",
+      "navigation.attitude.yaw (radians)",
+      "navigation.headingMagnetic (radians)",
+      "electrical.batteries.99.capacity.stateOfCharge (ratio)"
+    ]
   },
-  "calypso_anemometer_service": "active",
-  "calypso_robust_watchdog_v3": "active",
-  "services_status": {
-    "signalk": "active",
-    "influxdb": "not touched",
-    "grafana": "not touched"
-  }
+  "system_status": {
+    "calypso_service": "ERROR: Command 'systemctl is-active calypso-anemometer' returned non-zero exit status 3.",
+    "watchdog_v3": "active",
+    "current_wind": "6.0 kts",
+    "data_flowing": "\u2705 YES"
+  },
+  "next_step": "Dust can analyze device protocol from service logs or run dedicated capture when device fully stable"
 }
