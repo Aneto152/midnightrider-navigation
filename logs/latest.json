@@ -1,31 +1,50 @@
 {
-  "task": "git-pull-documentation-2026-05-21",
-  "timestamp": "2026-05-21T14:46:16.887784",
+  "task": "repo-cleanup-confirmed-files-2026-05-21",
+  "timestamp": "2026-05-21T15:31:34.342309",
   "status": "\u2705 SUCCESS",
+  "files_deleted": 56,
   "steps_completed": [
-    "Pre-flight checks: working tree clean",
-    "git fetch origin main: 10 incoming commits",
-    "git pull origin main: Fast-forward complete",
-    "Verified: ARCHITECTURE-REFERENCE-2026-05-20.md present",
-    "Verified: Old ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md removed",
-    "Verified: j30_orc.json polar data correct (TWS 8-25 kts)",
-    "Verified: New hardware datasheets in docs/HARDWARE/",
-    "New instruments documented: WS320, YDBC-05, AIS700"
+    "Pre-flight checks: all production files verified intact",
+    "GROUP 1: Deleted GitHub boilerplate + root session notes (8 files)",
+    "GROUP 2: Deleted archive/ folder \u2014 grafana-legacy + setup-scripts (17 files)",
+    "GROUP 3: Deleted docs/ one-shot reports and MCP docs (18 files)",
+    "GROUP 4: Deleted docs/archive/ obsolete Victron/loch content (0 files \u2014 already gone)",
+    "GROUP 5: Deleted old Grafana dashboards \u2014 duplicate naming convention (8 files)",
+    "GROUP 6: Deleted superseded alert YAML files (2 files)",
+    "GROUP 7: Deleted SQLite binary files from git (5 files)",
+    "Updated .gitignore to exclude *.sqlite and variants",
+    "Post-cleanup validation: All 9 active dashboards intact, all production files intact"
   ],
-  "commits_pulled": 10,
-  "major_changes": {
-    "architecture": "Renamed to REFERENCE-2026-05-20 (master now outdated)",
-    "hardware_datasheets": "3 new datasheets added (WS320, YDBC-05, AIS700)",
-    "polar_data": "j30_orc.json updated with expanded TWS table",
-    "system_docs": "All hardware specs refreshed"
+  "preservation_verified": {
+    "production_dashboards": "9/9 (01-cockpit through 09-crew)",
+    "architecture_docs": "\u2705 ARCHITECTURE-REFERENCE-2026-05-20.md",
+    "system_docs": "\u2705 SYSTEM-SUMMARY.md, INSTRUMENT-INVENTORY.md",
+    "hardware_datasheets": "\u2705 All HARDWARE/ directory intact",
+    "integration_guides": "\u2705 All INTEGRATION/ directory intact",
+    "operations_checklists": "\u2705 All OPERATIONS/ directory intact",
+    "polar_data": "\u2705 data/polars/j30_orc.json",
+    "docker_config": "\u2705 docker-compose.yml",
+    "signal_k_configs": "\u2705 All plugin configs preserved"
   },
-  "new_HEAD": "1e54e26",
   "services_status": {
-    "signalk": "not modified",
-    "influxdb": "not modified",
-    "grafana": "not modified",
-    "portal": "not modified"
+    "signalk": "\u2705 running \u2014 not touched",
+    "influxdb": "\u2705 running \u2014 not touched",
+    "grafana": "\u2705 running \u2014 not touched",
+    "portal": "\u2705 running \u2014 not touched"
   },
-  "next_recommended": "Review ARCHITECTURE-REFERENCE-2026-05-20.md for May 22 race preparation",
-  "field_test_status": "\u2705 Documentation synced, ready for May 22 Block Island Race"
+  "git_commit": "95224d4",
+  "pending_review": [
+    "LIGNE-DEPART*.json",
+    "Dockerfile.wit",
+    "astronomical/",
+    "deploy-dashboards.py",
+    "config/signalk-settings-wit.json",
+    "GRAFANA-COMPETITION-DEPLOY.md",
+    "docs/INTERFACES.md",
+    "docs/WHATSAPP_REPORTER.md",
+    "docs/archive/CURRENT-CALCULATOR-SYSTEM.md",
+    "docs/guides/DASHBOARD-PORTAL-*.md"
+  ],
+  "next_step": "Denis can proceed with May 22 Block Island Race \u2014 repository is clean",
+  "field_test_impact": "None \u2014 cleanup is documentation/obsolete files only"
 }
