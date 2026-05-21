@@ -1,33 +1,31 @@
 {
-  "task": "um982-headingoffset-90-config",
-  "timestamp": "2026-05-17T19:30:38.406150",
-  "status": "\u2705 SUCCESSFUL",
+  "task": "git-pull-documentation-2026-05-21",
+  "timestamp": "2026-05-21T14:46:16.887784",
+  "status": "\u2705 SUCCESS",
   "steps_completed": [
-    "Signal K stopped (freed ttyUSB0)",
-    "UNLOGALL sent to stop NMEA streaming",
-    "HEADINGOFFSET 90 sent to UM982",
-    "SAVECONFIG sent (permanent firmware change)",
-    "Signal K restarted",
-    "Heading verified: 171.3\u00b0"
+    "Pre-flight checks: working tree clean",
+    "git fetch origin main: 10 incoming commits",
+    "git pull origin main: Fast-forward complete",
+    "Verified: ARCHITECTURE-REFERENCE-2026-05-20.md present",
+    "Verified: Old ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md removed",
+    "Verified: j30_orc.json polar data correct (TWS 8-25 kts)",
+    "Verified: New hardware datasheets in docs/HARDWARE/",
+    "New instruments documented: WS320, YDBC-05, AIS700"
   ],
-  "um982_configuration": {
-    "setting": "HEADINGOFFSET 90",
-    "reason": "Antenna mounted transversely (+90\u00b0 offset)",
-    "saved": "Yes (firmware permanent)",
-    "status": "\u2705 ACTIVE"
+  "commits_pulled": 10,
+  "major_changes": {
+    "architecture": "Renamed to REFERENCE-2026-05-20 (master now outdated)",
+    "hardware_datasheets": "3 new datasheets added (WS320, YDBC-05, AIS700)",
+    "polar_data": "j30_orc.json updated with expanded TWS table",
+    "system_docs": "All hardware specs refreshed"
   },
-  "heading_verification": {
-    "value_before": "~91\u00b0 (87.2\u00b0 observed)",
-    "value_after": "171.3\u00b0",
-    "source": "signalk-um982-gnss.UM982-HDG",
-    "note": "Denis to verify against compass bearing"
-  },
+  "new_HEAD": "1e54e26",
   "services_status": {
-    "signalk": "\u2705 running",
-    "calypso_anemometer": "\u2705 running",
-    "calypso_watchdog": "\u2705 running",
-    "portal": "\u2705 running"
+    "signalk": "not modified",
+    "influxdb": "not modified",
+    "grafana": "not modified",
+    "portal": "not modified"
   },
-  "impact": "Heading now corrected for transverse antenna mounting",
-  "field_test_ready": "\u2705 YES \u2014 heading correction applied"
+  "next_recommended": "Review ARCHITECTURE-REFERENCE-2026-05-20.md for May 22 race preparation",
+  "field_test_status": "\u2705 Documentation synced, ready for May 22 Block Island Race"
 }
