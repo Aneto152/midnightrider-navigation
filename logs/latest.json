@@ -1,36 +1,32 @@
 {
-  "task": "calypso-robust-watchdog-l1-l2-l3-2026-05-21",
-  "timestamp": "2026-05-21T16:22:45.383935",
-  "status": "\u2705 SUCCESS \u2014 DEPLOYED",
-  "steps_completed": [
-    "Deep BLE diagnostic performed",
-    "Device FOUND advertising (F8:5F:12:9D:D2:EE ULTRASONIC)",
-    "BlueZ cache cleared + full hci0 reset attempted",
-    "Device in \"not accepting connections\" state (waiting for power-on)",
-    "Robust watchdog created with L1/L2/L3 escalating recovery",
-    "Old simple watchdog replaced",
-    "calypso_robust_watchdog.service installed and running"
+  "task": "calypso-debug-logs-collection-2026-05-21",
+  "timestamp": "2026-05-21T16:29:50.060556",
+  "status": "\u2705 LOGS COLLECTED \u2014 AWAITING DUST ANALYSIS",
+  "action_taken": "Collection only (no diagnosis or fixes attempted)",
+  "log_file": "logs/calypso-debug-2026-05-21.json",
+  "log_size_bytes": 22000,
+  "current_status": {
+    "calypso_anemometer_service": "FAILED (device not responding)",
+    "calypso_robust_watchdog_service": "\u2705 ACTIVE (monitoring)",
+    "hci0_adapter": "\u2705 UP RUNNING (healthy)",
+    "calypso_device_f8_5f": "\u274c OFFLINE (not advertising)"
+  },
+  "logs_included": [
+    "Service status (both calypso services)",
+    "Systemd journal logs (50 lines each service)",
+    "Bluetooth service logs (30 lines)",
+    "hci0 full adapter state",
+    "BLE scan results",
+    "Bluetoothctl device list",
+    "Device info from BlueZ cache",
+    "Service unit file",
+    "Watchdog Python script",
+    "Signal K API responses",
+    "Network listener status",
+    "Process list",
+    "Library version"
   ],
-  "diagnostic_findings": {
-    "device_advertising": "\u2705 YES \u2014 detected in BLE scan",
-    "device_mac": "F8:5F:12:9D:D2:EE (ULTRASONIC)",
-    "bluez_state": "Not paired, Not bonded, Not trusted, Not connected",
-    "root_cause": "Device in \"remote device not accepting connections\" state",
-    "solution": "Power cycle device \u2014 watchdog will auto-recover"
-  },
-  "watchdog_levels": {
-    "L1_60s": "Restart calypso-anemometer service",
-    "L2_120s": "Reset hci0 adapter (down/up)",
-    "L3_180s": "Full BlueZ reset + remove device + re-pair + restart"
-  },
-  "hci0_state": "UP RUNNING",
-  "calypso_anemometer": "failed (waiting for device)",
-  "calypso_robust_watchdog": "\u2705 active",
-  "next_step": "Power on Calypso device \u2014 watchdog will auto-connect",
-  "services_status": {
-    "signalk": "running (untouched)",
-    "influxdb": "running (untouched)",
-    "grafana": "running (untouched)",
-    "bluetooth": "running (healthy)"
-  }
+  "next_steps": "Dust will analyze logs and provide recovery guidance",
+  "ocl_responsibility": "Collection & push to git",
+  "dust_responsibility": "Analysis & recovery instructions"
 }
