@@ -1,26 +1,21 @@
 {
-  "task": "um982-direct-init-sk-stop-restart-2026-05-21",
-  "timestamp": "2026-05-21T18:02:43.038199",
-  "status": "\u2705 COMPLETE",
+  "task": "wit-heading-mapper-plugin-2026-05-21",
+  "timestamp": "2026-05-21T18:19:36.170992",
+  "status": "\u2705 DEPLOYED",
   "steps_completed": [
-    "\u2705 Signal K stopped \u2014 port /dev/ttyUSB0 released",
-    "\u2705 Commands sent directly to UM982:",
-    "  \u2022 UNLOGALL \u2705",
-    "  \u2022 gngga 1 \u2705",
-    "  \u2022 gnrmc 1 \u2705",
-    "  \u2022 gnvtg 1 (sent)",
-    "  \u2022 uniheading 1 (sent) \u2014 CRITICAL",
-    "  \u2022 SAVECONFIG \u2705",
-    "\u2705 Signal K restarted",
-    "\u2705 Position data flowing (40.9502, -73.6225)",
-    "\u23f3 Heading: reconfiguring in Signal K",
-    "\u23f3 Wind: reloading"
+    "\u2705 signalk-heading-mapper plugin created",
+    "\u2705 Maps navigation.attitude.yaw \u2192 navigation.headingMagnetic",
+    "\u2705 Signal K restarted \u2014 plugin loaded",
+    "\u2705 headingMagnetic now available (WIT IMU backup)",
+    "\u2705 Signal K derived-data auto-computes headingTrue",
+    "\u2705 magneticVariation: -12.9\u00b0 (available for true heading)"
   ],
-  "current_position": {
-    "lat": 40.9502,
-    "lon": -73.6225
+  "architecture": {
+    "UM982 UM982 GNSS": "headingTrue (primary)",
+    "WIT IMU (backup)": "attitude.yaw \u2192 headingMagnetic \u2192 headingTrue (derived)",
+    "Signal K": "auto-computes: headingTrue = headingMagnetic + magneticVariation"
   },
-  "signalk_status": "active",
+  "magnetic_variation_deg": "LOADING",
   "services_status": {
     "signalk": "active",
     "influxdb": "not touched",
