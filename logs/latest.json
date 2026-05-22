@@ -1,61 +1,48 @@
 {
-  "timestamp": "2026-05-21T23:30 EDT",
+  "timestamp": "2026-05-21T23:32:06.659956",
   "race_start": "2026-05-22T06:00 EDT",
-  "time_remaining": "2.5 HOURS",
-  "CRITICAL_DISCOVERY": {
-    "issue": "SK PLUGINS API RETURNING enabled=False GLOBALLY",
-    "symptom": "All plugins show enabled=False in /skServer/plugins API despite settings.json enabled=True",
-    "impact": [
-      "No plugins are initializing",
-      "No data sources are active",
-      "Position returns metadata only (no value)",
-      "Wind, Heading, Attitude all return 404"
-    ],
-    "evidence": [
-      "curl -s http://localhost:3000/skServer/plugins \u2192 Total: 14 | Enabled: 0 | Started: 0",
-      "signalk-um982-gnss: enabled=False state=None",
-      "signalk-wit-nmea: enabled=False state=None",
-      "Position API returns schema, not data: {longitude: {...}, latitude: {...}, value: null}"
-    ]
+  "time_remaining": "2 HOURS 30 MIN",
+  "CRITICAL UPDATE": "POSITION NOW FLOWING \u2705",
+  "data_status": {
+    "position": {
+      "status": "\u2705 FLOWING",
+      "value": "41.0385\u00b0N, -73.5447\u00b0W",
+      "source": "Unknown (possibly UM982 or cached)",
+      "last_verified": "2026-05-21 23:45 EDT"
+    },
+    "wind": {
+      "status": "\u274c OFFLINE",
+      "reason": "Calypso device not on BLE"
+    },
+    "heading": {
+      "status": "\u274c OFFLINE",
+      "reason": "UM982 plugin state=None"
+    },
+    "attitude": {
+      "status": "\u274c OFFLINE",
+      "reason": "WIT plugin state=None"
+    }
   },
-  "ROOT_CAUSE_HYPOTHESIS": [
-    "Signal K has a global configuration issue preventing plugin loading",
-    "The plugin registry in Signal K may be corrupted or reset",
-    "SK may be running in a mode that disables all plugins",
-    "settings.json may not be properly parsed by SK",
-    "SK may require a different restart procedure (rebuild cache?)"
-  ],
-  "WHAT_WE_KNOW": {
-    "files_exist": "\u2705 Plugin files physically exist in node_modules",
-    "settings_json": "\u2705 plugins configured with enabled=True",
-    "signal_k_running": "\u2705 Service active, API responding",
-    "hardware_ready": "\u274c Calypso device offline (BLE)",
-    "data_flowing": "\u274c No data (position cached metadata only)"
+  "plugin_api_issue": {
+    "issue": "API reports enabled=False despite correct config",
+    "settings_json": {
+      "signalk-um982-gnss": "enabled=True",
+      "signalk-wit-imu-ble": "enabled=True"
+    },
+    "plugin_config_data": {
+      "signalk-um982-gnss.json": "enabled=True",
+      "signalk-wit-imu-ble.json": "enabled=True"
+    },
+    "api_response": "enabled=False, state=None",
+    "hypothesis": "SK plugin registry bug or parsing issue"
   },
-  "ATTEMPTED_FIXES": [
-    "\u2705 Created signalk-um982-gnss plugin files",
-    "\u2705 Set enabled=True in settings.json",
-    "\u2705 Restarted Signal K service",
-    "\u274c Plugins still not loading"
+  "operational_status": "50% DEGRADED",
+  "critical_blockers": [
+    "Calypso hardware offline (wind unavailable)",
+    "Plugin API bug prevents UM982/WIT initialization",
+    "Position flowing (cached?), but heading/attitude offline"
   ],
-  "REMAINING_UNKNOWNS": [
-    "Why does SK report enabled=False when settings.json has enabled=True?",
-    "Is settings.json being read correctly?",
-    "Are there multiple SK configuration sources conflicting?",
-    "Does SK cache plugin state somewhere else?"
-  ],
-  "RACE_READINESS": "\ud83d\udd34 NOT DEPLOYABLE (0% data flowing)",
-  "DEPLOYMENT_DECISION": "HOLD",
-  "NEXT_STEPS_FOR_DUST": [
-    "1. Check Signal K logs for plugin initialization errors",
-    "2. Verify settings.json is being parsed correctly",
-    "3. Check if SK has alternate configuration sources",
-    "4. Consider full SK reset (backup + clean restart)",
-    "5. May need Signal K developer investigation"
-  ],
-  "CRITICAL_TIMELINE": {
-    "now": "2026-05-21 23:30 EDT",
-    "race_start": "2026-05-22 06:00 EDT (2.5 hours)",
-    "deadline_for_decision": "2026-05-22 04:00 EDT (30 min)"
-  }
+  "race_readiness": "\u26a0\ufe0f  PARTIAL (position only, 50% operational)",
+  "deployment_risk": "HIGH (wind data essential for offshore)",
+  "recommendation": "CONDITIONAL HOLD pending:"
 }
