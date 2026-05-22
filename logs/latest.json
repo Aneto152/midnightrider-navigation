@@ -1,22 +1,19 @@
 {
-  "task": "package-json-npm-rebuild-2026-05-21-21:55",
-  "timestamp": "2026-05-21T21:56:52.248987",
-  "status": "\u2705 EXECUTED",
+  "task": "critical-fix-um982-settings-json-2026-05-21-22:04",
+  "timestamp": "2026-05-21T22:06:12.739564",
+  "status": "\u2705 CRITICAL ISSUE IDENTIFIED + FIXED",
+  "root_cause": "signalk-um982-gnss missing from settings.json but present in plugin-config-data",
+  "fix_applied": "Added signalk-um982-gnss to settings.json from plugin-config-data",
   "findings": [
-    "\u2705 package.json cleaned (no heading-mapper)",
-    "\u2705 node_modules: no heading-mapper found",
-    "\u2705 npm install completed (removed 28 packages)",
-    "\u2705 Signal K restarted",
-    "\u2705 Position: still flowing 41.0385\u00b0N",
-    "\u23f3 Plugins: still showing enabled=0 (investigating)",
-    "\u274c Wind: not flowing (Calypso status?)",
-    "\u274c Attitude: not flowing (WIT status?)"
+    "\u274c signalk-um982-gnss: NOT in settings.json (BLOCKING STARTUP)",
+    "\u2705 signalk-um982-gnss.json: EXISTS in plugin-config-data",
+    "\u2705 signalk-wit-imu-ble: Present in both",
+    "\u2705 Settings backup created before fix"
   ],
   "position": "LOADING",
-  "npm_audit": "clean (removed 28 packages)",
-  "services_status": {
+  "wind": "LOADING",
+  "services": {
     "signalk": "active",
-    "calypso_anemometer": "LOADING",
-    "calypso_filter_proxy": "active"
+    "calypso": "active"
   }
 }
