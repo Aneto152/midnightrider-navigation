@@ -1,0 +1,11 @@
+=== CALYPSO STUCK ANALYSIS Fri 22 May 09:48:10 EDT 2026 ===
+
+Issue: PID 9519 froze at 09:31:13, stopped sending data
+Cause: BLE device unresponsive (not a software crash)
+Fix: Hard BLE reset + device removal
+
+Recovery status:
+aneto       1167  0.0  0.1  19576 12092 ?        Ss   09:13   0:00 /usr/bin/python3 /home/aneto/calypso_filter_proxy.py
+aneto      14930  2.1  0.3  48976 29048 ?        Ss   09:47   0:00 /usr/bin/python3 /home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --ble-connect-timeout 30 --ble-discovery-timeout 15 --rate=hz_4 --target=udp+signalk+delta://localhost:4122
+
+Current wind: 2 m/s
