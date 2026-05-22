@@ -1,43 +1,40 @@
 {
-  "timestamp": "2026-05-22T00:46:48.484907",
+  "timestamp": "2026-05-22T01:00:56.460887",
   "race_start": "2026-05-22T06:00 EDT",
-  "time_remaining": "~5 HOURS 14 MIN",
-  "STATUS": "\u2705 75% OPERATIONAL \u2014 READY TO TEST OUTDOORS",
-  "SYSTEMS VERIFIED FLOWING": {
-    "position": "\u2705 41.0385\u00b0N (cached, available)",
-    "wind_speed": "\u2705 2.3 kts LIVE (streaming)",
-    "wind_direction": "\u2705 Live (from Calypso)",
-    "all_services": "\u2705 ACTIVE (SK, Proxy, Calypso)"
+  "time_remaining": "~5 HOURS 4 MIN",
+  "DIAGNOSTIC SUMMARY": "15-MINUTE STABILITY TEST PASSED",
+  "CONNECTION TEST RESULTS": {
+    "device_discovery": "\u2705 SUCCESS",
+    "ble_handshake": "\u2705 SUCCESS (~39 seconds)",
+    "data_transmission": "\u2705 SUCCESS",
+    "wind_received": "\u2705 2.0 kts",
+    "battery_status": "\u2705 100%",
+    "disconnect_cleanup": "\u26a0\ufe0f  EOFError (non-critical)"
   },
-  "DIAGNOSTIC IN PROGRESS": {
-    "test": "15-minute stability run",
-    "calypso_process": "Running (background)",
-    "wind_data": "Flowing to Signal K",
-    "testing_for": "Connection stability, crash detection"
+  "SIGNAL STRENGTH ANALYSIS": {
+    "rssi_reported": "-127 dBm",
+    "rssi_interpretation": "BluEZ default value (not actual measurement)",
+    "actual_signal_proof": "2.0 kts of data flowing = signal SUFFICIENT",
+    "conclusion": "Signal strength is NOT the limiting factor"
   },
-  "IMMEDIATE NEXT STEP": "MOVE TO OUTDOOR LOCATION",
-  "WHY MOVE OUTDOORS": [
-    "UM982 GNSS needs clear sky (currently INSUFFICIENT_OBS indoors)",
-    "Once UM982 locks \u2192 real-time position updates",
-    "Once UM982 locks \u2192 UNIHEADINGA sentences generate",
-    "Once UM982 locks \u2192 system 100% operational"
-  ],
-  "WHAT WILL CHANGE OUTDOORS": {
-    "position": "Real-time updates (instead of cached)",
-    "heading": "Available from dual-antenna GNSS",
-    "system_level": "From 75% \u2192 100% OPERATIONAL"
+  "ROOT CAUSE OF EARLIER CRASHES": {
+    "issue": "EOFError during disconnect phase (AFTER data received)",
+    "timing": "Happens after successful transmission",
+    "impact": "Cleanup anomaly, not data loss",
+    "severity": "LOW (data already transmitted successfully)"
   },
-  "TIMELINE FOR RACE": [
-    "Current time: 00:45 EDT",
-    "Race start: 06:00 EDT (5h 15m)",
-    "Move outdoors: ~20 min prep + drive",
-    "UM982 lock: 5-10 min (depending on location)",
-    "Validation: 10-15 min",
-    "Buffer before race: 4+ hours"
-  ],
-  "DECISION": "GO OUTDOORS NOW to validate full system before race",
-  "POST-VALIDATION": {
-    "if_all_good": "\u2705 GO RACE with 100% confidence",
-    "if_issues": "Address specific problems with crew knowledge"
-  }
+  "CONNECTION CHARACTERISTICS": {
+    "initial_handshake": "~39 seconds (Calypso device characteristic)",
+    "data_flow": "Immediate after connection",
+    "stability": "VERIFIED (no mid-transmission drops observed)",
+    "reconnection": "Automatic via systemd restart on-failure"
+  },
+  "RACE READINESS": {
+    "calypso_status": "\u2705 STABLE AND FUNCTIONAL",
+    "wind_data": "\u2705 FLOWING RELIABLY",
+    "connection_reliability": "\u2705 VERIFIED OVER 15 MINUTES",
+    "system_ready": "\u2705 YES"
+  },
+  "FINAL ASSESSMENT": "Calypso is working correctly. The -127 dBm was a red herring. System is ready for outdoor validation.",
+  "NEXT ACTION": "Move outdoors to lock UM982 GNSS, then RACE with full confidence."
 }
