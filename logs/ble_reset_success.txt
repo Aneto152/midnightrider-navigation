@@ -1,0 +1,27 @@
+=== BLE RESET POST-REBOOT Fri 22 May 09:23:51 EDT 2026 ===
+
+✅ Hard BLE reset applied
+✅ Device reconnected after 14 seconds
+✅ Wind data flowing: 2.0 m/s
+
+Service status:
+● calypso_anemometer.service - Calypso Anemometer BLE Reader
+     Loaded: loaded (/etc/systemd/system/calypso_anemometer.service; enabled; preset: enabled)
+     Active: active (running) since Fri 2026-05-22 09:23:15 EDT; 35s ago
+ Invocation: 7ac9055bce734f3ea6a59249d7711446
+   Main PID: 6365 (calypso-anemome)
+      Tasks: 1 (limit: 8745)
+        CPU: 483ms
+     CGroup: /system.slice/calypso_anemometer.service
+             └─6365 /usr/bin/python3 /home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --ble-connect-timeout 30 --ble-discovery-timeout 15 --rate=hz_4 --target=udp+signalk+delta://localhost:4122
+
+
+Last journal entries:
+May 22 09:23:46 MidnightRider calypso-anemometer[6365]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 3.8571776469074686}, {"path": "environment.wind.speedApparent", "value": 2.8}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 09:23:48 MidnightRider calypso-anemometer[6365]: 2026-05-22 09:23:48,769 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 09:23:48 MidnightRider calypso-anemometer[6365]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 3.8571776469074686}, {"path": "environment.wind.speedApparent", "value": 2.8}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 09:23:48 MidnightRider calypso-anemometer[6365]: 2026-05-22 09:23:48,772 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 09:23:48 MidnightRider calypso-anemometer[6365]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 3.8571776469074686}, {"path": "environment.wind.speedApparent", "value": 2.7}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+
+Wind API check:
+{"angleApparent":{"meta":{"units":"rad","description":"Apparent wind angle, negative to port","displayUnits":{"category":"angle","targetUnit":"degree","formula":"value * 57.29577951308231","inverseFormula":"value / 57.29577951308231","symbol":"°","displayFormat":"0.0"}},"value":3.8571776469074686,"$source":"calypso-up10","timestamp":"2026-05-22T13:23:48.777Z"},"speedApparent":{"meta":{"units":"m/s","description":"Apparent wind speed","displayUnits":{"category":"speed","targetUnit":"kn","formula":"value * 1.94384","inverseFormula":"value * 0.514444","symbol":"kn","displayFormat":"0.0"}},"value":2.7,"$source":"calypso-up10","timestamp":"2026-05-22T13:23:48.777Z"}}
