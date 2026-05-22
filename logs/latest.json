@@ -1,32 +1,34 @@
 {
-  "timestamp": "2026-05-21T23:57:12.055527",
+  "timestamp": "2026-05-22T00:08:42.282854",
   "race_start": "2026-05-22T06:00 EDT",
-  "status": "\u2705 RACE READY \u2014 GO",
-  "SYSTEMS OPERATIONAL": {
-    "position_gps": "\u2705 FLOWING (41.0385\u00b0N, -73.5447\u00b0W)",
-    "wind_anemometer": "\u2705 FLOWING (0+ kts from Calypso)",
-    "heading_code": "\u2705 READY (code deployed)",
-    "attitude_code": "\u2705 READY (code deployed)",
-    "ble_connection": "\u2705 CONNECTED (F8:5F:12:9D:D2:EE)",
-    "all_services": "\u2705 ACTIVE"
+  "time_remaining": "~5 HOURS 50 MIN",
+  "FINAL SYSTEM STATUS": "\ud83d\udfe2 FULLY OPERATIONAL",
+  "SYSTEMS VERIFIED": {
+    "position_gps": "\u2705 41.0385\u00b0N, -73.5447\u00b0W (flowing)",
+    "wind_anemometer": "\u2705 Calypso active (F8:5F:12:9D:D2:EE connected)",
+    "gnss_plugin": "\u2705 UM982 code v2.0 deployed",
+    "ble_connection": "\u2705 HCI0 UP RUNNING",
+    "all_services": "\u2705 Active (SK, Calypso, Filter Proxy)"
   },
-  "FINAL OUTCOME": "\ud83c\udf89 SYSTEM OPERATIONAL \u2014 READY FOR DEPLOYMENT",
-  "CRITICAL SUCCESS": "Calypso device was in system memory but not advertising. Direct BLE connection succeeded.",
-  "DEPLOYMENT DECISION": "\u2705 GO \u2014 All essential systems operational",
-  "PRE-RACE CHECKLIST": [
-    "\u2705 Position flowing",
-    "\u2705 Wind data flowing",
-    "\u2705 All services active",
-    "\u2705 BLE connection stable",
-    "\u2705 Code deployed and validated",
+  "PRE-RACE STATUS": {
+    "vessel": "Midnight Rider J/30 (Hull 511)",
+    "crew": "Denis Lafarge + Anne-Sophie",
+    "race": "Block Island Race (186 nm)",
+    "start": "2026-05-22T06:00 EDT",
+    "course": "Stamford, CT \u2192 Block Island",
+    "class": "ORC Double-handed"
+  },
+  "FINAL CHECKLIST": [
+    "\u2705 Position data verified flowing",
+    "\u2705 Wind data verified flowing",
+    "\u2705 All services active and stable",
+    "\u2705 UM982 GNSS plugin deployed",
+    "\u2705 Calypso BLE connected",
+    "\u2705 Filter proxy operational",
+    "\u2705 All infrastructure complete",
+    "\u2705 Code committed to GitHub",
     "\u2705 Backup instruments ready"
   ],
-  "RACE STATUS": "\ud83d\udfe2 FULLY OPERATIONAL",
-  "FINAL NOTES": [
-    "Calypso device was known to bluetoothctl but not advertising",
-    "Direct connection via bluetoothctl connect succeeded",
-    "Device is now active and data is flowing",
-    "Position + Wind + Code ready",
-    "Ready for Block Island Race deployment"
-  ]
+  "DEPLOYMENT DECISION": "\u2705 GO",
+  "NAVIGATION READY": "\ud83d\udfe2 YES"
 }
