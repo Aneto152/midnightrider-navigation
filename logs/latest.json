@@ -1,61 +1,19 @@
 {
-  "timestamp": "2026-05-21T23:36:28.311765",
-  "race_start": "2026-05-22T06:00 EDT",
-  "time_remaining": "2 HOURS 15 MIN",
-  "EXECUTIVE SUMMARY": "Position flowing, but wind/heading/attitude offline due to SK plugin bootstrap bug",
-  "INVESTIGATION FINDINGS": {
-    "signal_k_bug": {
-      "description": "SK plugin initialization completely broken",
-      "evidence": [
-        "settings.json has 9 plugins with enabled=True",
-        "plugin-config-data files all have enabled=True",
-        "SK /skServer/plugins API returns ALL enabled=False",
-        "Plugin code loads correctly via require()",
-        "SK logs show NO plugin initialization messages",
-        "Issue persists across multiple restarts"
-      ],
-      "root_cause": "Signal K is not reading plugin enabled flags from settings.json during bootstrap",
-      "severity": "CRITICAL"
-    },
-    "working_data": {
-      "position": "\u2705 FLOWING (41.0385\u00b0N, -73.5447\u00b0W)",
-      "note": "Source appears to be UM982 or cached data from restart"
-    },
-    "offline_data": {
-      "wind": "\u274c Calypso hardware not on BLE",
-      "heading": "\u274c UM982 plugin not loaded (API bug)",
-      "attitude": "\u274c WIT plugin not loaded (API bug)"
-    }
-  },
-  "WHAT WAS ACCOMPLISHED": [
-    "\u2705 Created signalk-um982-gnss plugin from scratch",
-    "\u2705 Created signalk-wit-imu-ble plugin symlink",
-    "\u2705 Configured settings.json with correct plugin entries",
-    "\u2705 Fixed Calypso service (hz_8, port 4122)",
-    "\u2705 Position data restored and flowing",
-    "\u2705 Identified SK plugin bootstrap bug"
+  "task": "fix-um982-plugin-no-serialport-2026-05-21-23:46",
+  "timestamp": "2026-05-21T23:43:45.664873",
+  "status": "\u2705 PLUGIN REWRITTEN (pending SK API fix)",
+  "changes": [
+    "signalk-um982-gnss rewritten: NO serialport dependency",
+    "Plugin now listens to nmea0183out events only",
+    "UM982-Serial pipedProvider added to settings.json",
+    "Node.js require() test: PASSED",
+    "No external dependencies = compatible with Node 24"
   ],
-  "RACE READINESS": {
-    "navigation": "50% OPERATIONAL",
-    "position_gps": "\u2705 READY (flowing)",
-    "wind": "\u274c NOT READY (hardware offline)",
-    "heading": "\u274c NOT READY (plugin bug)",
-    "attitude": "\u274c NOT READY (plugin bug)",
-    "overall": "\u26a0\ufe0f  COMPROMISED (position only)"
-  },
-  "DEPLOYMENT DECISION": "\ud83d\udd34 DO NOT DEPLOY",
-  "RATIONALE": [
-    "Wind data is ESSENTIAL for offshore Block Island Race (186nm)",
-    "Racing without wind speed/angle is dangerous and unfair",
-    "Plugin bootstrap bug affects core navigation data",
-    "Time remaining (2h 15min) insufficient for SK debugging",
-    "Risk: Complete data loss offshore with inadequate instruments"
-  ],
-  "RECOMMENDED ACTION": [
-    "Contact Signal K developers for emergency plugin loading bug",
-    "Consider fallback: use standalone UM982 reader + manual wind",
-    "Or postpone race until system fully debugged",
-    "Post-race: conduct full SK stack review and update"
-  ],
-  "FINAL STATUS": "HOLD - DO NOT DEPLOY"
+  "plugin_api_issue": "Persists (enabled=False) \u2014 appears to be SK bootstrap bug, not plugin issue",
+  "next_step": "pipedProvider should auto-load when SK reads settings.json correctly",
+  "services_status": {
+    "signalk": "running",
+    "calypso_anemometer": "running",
+    "calypso_filter_proxy": "running"
+  }
 }
