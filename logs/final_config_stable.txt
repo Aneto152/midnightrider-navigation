@@ -1,0 +1,22 @@
+=== FINAL CONFIGURATION Fri 22 May 10:00:15 EDT 2026 ===
+
+✅ Service: read --subscribe (only stable command)
+✅ Status: Operational
+
+[Unit]
+Description=Calypso Anemometer BLE Reader
+After=network.target bluetooth.target
+Requires=bluetooth.target
+
+[Service]
+Type=simple
+User=aneto
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --ble-connect-timeout 30 --ble-discovery-timeout 15 --rate=hz_4 --target=udp+signalk+delta://localhost:4122
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+Wind:
+{"angleApparent":{"meta":{"units":"rad","description":"Apparent wind angle, negative to port","displayUnits":{"category":"angle","targetUnit":"degree","formula":"value * 57.29577951308231","inverseFormula":"value / 57.29577951308231","symbol":"°","displayFormat":"0.0"}},"value":0.08726646259971647,"$source":"calypso-up10","timestamp":"2026-05-22T13:49:43.453Z"},"speedApparent":{"meta":{"units":"m/s","description":"Apparent wind speed","displayUnits":{"category":"speed","targetUnit":"kn","formula":"value * 1.94384","inverseFormula":"value * 0.514444","symbol":"kn","displayFormat":"0.0"}},"value":0.8,"$source":"calypso-up10","timestamp":"2026-05-22T13:49:43.453Z"}}
