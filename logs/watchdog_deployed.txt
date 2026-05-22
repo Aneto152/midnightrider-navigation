@@ -1,0 +1,28 @@
+=== FINAL FIX WITH WATCHDOG Fri 22 May 10:06:40 EDT 2026 ===
+
+Service File:
+[Unit]
+Description=Calypso Anemometer BLE Reader
+After=network.target bluetooth.target
+Requires=bluetooth.target
+
+[Service]
+Type=simple
+User=aneto
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address F8:5F:12:9D:D2:EE --ble-connect-timeout 30 --ble-discovery-timeout 15 --rate hz_1 --target udp+signalk+delta://localhost:4122
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+Data Watchdog Status:
+[10:05:40] Data watchdog started (MAX_AGE=90s, CHECK_INTERVAL=30s)
+[10:06:10] age=26s wind=4.3m/s
+[10:06:40] age=56s wind=4.3m/s
+30s)
+[10:06:10] age=26s wind=4.3m/s
+[10:06:40] age=56s wind=4.3m/s
+
+Current Wind:
+{"angleApparent":{"meta":{"units":"rad","description":"Apparent wind angle, negative to port","displayUnits":{"category":"angle","targetUnit":"degree","formula":"value * 57.29577951308231","inverseFormula":"value / 57.29577951308231","symbol":"°","displayFormat":"0.0"}},"value":5.585053606381854,"$source":"calypso-up10","timestamp":"2026-05-22T14:05:44.107Z"},"speedApparent":{"meta":{"units":"m/s","description":"Apparent wind speed","displayUnits":{"category":"speed","targetUnit":"kn","formula":"value * 1.94384","inverseFormula":"value * 0.514444","symbol":"kn","displayFormat":"0.0"}},"value":4.3,"$source":"calypso-up10","timestamp":"2026-05-22T14:05:44.107Z"}}

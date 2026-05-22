@@ -6,7 +6,7 @@ Requires=bluetooth.target
 [Service]
 Type=simple
 User=aneto
-ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --ble-connect-timeout 30 --ble-discovery-timeout 15 --rate=hz_4 --target=udp+signalk+delta://localhost:4122
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address F8:5F:12:9D:D2:EE --ble-connect-timeout 30 --ble-discovery-timeout 15 --rate hz_1 --target udp+signalk+delta://localhost:4122
 Restart=on-failure
 RestartSec=10
 
