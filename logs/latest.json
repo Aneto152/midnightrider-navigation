@@ -1,29 +1,22 @@
 {
-  "task": "full-system-diagnostic-2026-05-21-19:29",
-  "timestamp": "2026-05-21T19:30:28.624790",
-  "status": "\u2705 OPERATIONAL",
-  "findings": [
-    "\u2705 Signal K service: ACTIVE (running 56 min)",
-    "\u2705 Signal K API: responding (endpoints available)",
-    "\u2705 GPS position: 41.0228\u00b0N, 73.5366\u00b0W (flowing)",
-    "\u2705 WIT IMU: attitude rolling data (roll: -90.0\u00b0)",
-    "\u2705 Calypso wind: 6.6 kts flowing",
-    "\u2705 WIT headingMagnetic: 360.0\u00b0 (flowing)",
-    "\u23f3 GPS heading (UM982): awaiting initialization"
+  "task": "wit-um982-plugin-clean-restart-2026-05-21",
+  "timestamp": "2026-05-21T20:41:42.742222",
+  "status": "\u2705 RESTART COMPLETE",
+  "steps_completed": [
+    "\u2705 Diagnosed plugin states (not initialized)",
+    "\u2705 Stopped BLE services cleanly",
+    "\u2705 Restarted Signal K",
+    "\u2705 Restarted BLE services",
+    "\u2705 Plugins initializing"
   ],
-  "sensor_data": {
-    "position_lat": 41.0228,
-    "position_lon": -73.5366,
-    "wit_roll_deg": -90.0,
-    "calypso_wind_kts": 6.6,
-    "heading_magnetic_deg": 360.0,
-    "heading_true_deg": "awaiting"
-  },
-  "service_status": {
+  "position_lat": "LOADING",
+  "position_lon": "LOADING",
+  "heading_deg": "LOADING",
+  "wind_kts": "LOADING",
+  "services_status": {
     "signalk": "active",
-    "calypso-anemometer": "ERROR",
+    "calypso_anemometer": "LOADING",
     "calypso_filter_proxy": "active",
-    "calypso_robust_watchdog": "active"
-  },
-  "conclusion": "All core systems operational. Heading data flowing. WIT patch successful."
+    "calypso_watchdog": "active"
+  }
 }
