@@ -1,18 +1,19 @@
 {
-  "task": "calypso-port-um982-recovery-2026-05-21-21:45",
-  "timestamp": "2026-05-21T21:47:47.895621",
-  "status": "\u2705 CRITICAL FIX SUCCESSFUL",
+  "task": "package-json-npm-rebuild-2026-05-21-21:55",
+  "timestamp": "2026-05-21T21:56:52.248987",
+  "status": "\u2705 EXECUTED",
   "findings": [
-    "\u2705 Calypso port: CORRECT (4122)",
-    "\u2705 UM982 plugin: ACTIVATED after SK restart",
-    "\u2705 Position: NOW FLOWING (41.0384\u00b0N, -73.5447\u00b0W)",
-    "\u23f3 Wind: loading",
-    "\u23f3 Attitude: loading",
-    "\u23f3 Heading: awaiting UM982"
+    "\u2705 package.json cleaned (no heading-mapper)",
+    "\u2705 node_modules: no heading-mapper found",
+    "\u2705 npm install completed (removed 28 packages)",
+    "\u2705 Signal K restarted",
+    "\u2705 Position: still flowing 41.0385\u00b0N",
+    "\u23f3 Plugins: still showing enabled=0 (investigating)",
+    "\u274c Wind: not flowing (Calypso status?)",
+    "\u274c Attitude: not flowing (WIT status?)"
   ],
-  "position_lat": "LOADING",
-  "position_lon": "LOADING",
-  "wind_kts": "LOADING",
+  "position": "LOADING",
+  "npm_audit": "clean (removed 28 packages)",
   "services_status": {
     "signalk": "active",
     "calypso_anemometer": "LOADING",
