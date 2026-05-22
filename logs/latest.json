@@ -1,19 +1,61 @@
 {
-  "task": "create-signalk-um982-gnss-plugin-2026-05-21-23:20",
-  "timestamp": "2026-05-21T23:21:23.079918",
-  "status": "\u2705 PLUGIN FILES CREATED",
-  "files_created": [
-    "/home/aneto/.signalk/node_modules/signalk-um982-gnss/index.js (5386 bytes)",
-    "/home/aneto/.signalk/node_modules/signalk-um982-gnss/package.json (328 bytes)"
-  ],
-  "plugin_id": "signalk-um982-gnss",
-  "dependencies": [
-    "\u2705 serialport: installed",
-    "\u2705 @serialport/parser-readline: installed"
-  ],
-  "services_status": {
-    "signalk": "active"
+  "timestamp": "2026-05-21T23:30 EDT",
+  "race_start": "2026-05-22T06:00 EDT",
+  "time_remaining": "2.5 HOURS",
+  "CRITICAL_DISCOVERY": {
+    "issue": "SK PLUGINS API RETURNING enabled=False GLOBALLY",
+    "symptom": "All plugins show enabled=False in /skServer/plugins API despite settings.json enabled=True",
+    "impact": [
+      "No plugins are initializing",
+      "No data sources are active",
+      "Position returns metadata only (no value)",
+      "Wind, Heading, Attitude all return 404"
+    ],
+    "evidence": [
+      "curl -s http://localhost:3000/skServer/plugins \u2192 Total: 14 | Enabled: 0 | Started: 0",
+      "signalk-um982-gnss: enabled=False state=None",
+      "signalk-wit-nmea: enabled=False state=None",
+      "Position API returns schema, not data: {longitude: {...}, latitude: {...}, value: null}"
+    ]
   },
-  "plugin_state": "None (initialization pending)",
-  "note": "Plugin physically created but SK plugin discovery not loading it yet. May need plugin registry update."
+  "ROOT_CAUSE_HYPOTHESIS": [
+    "Signal K has a global configuration issue preventing plugin loading",
+    "The plugin registry in Signal K may be corrupted or reset",
+    "SK may be running in a mode that disables all plugins",
+    "settings.json may not be properly parsed by SK",
+    "SK may require a different restart procedure (rebuild cache?)"
+  ],
+  "WHAT_WE_KNOW": {
+    "files_exist": "\u2705 Plugin files physically exist in node_modules",
+    "settings_json": "\u2705 plugins configured with enabled=True",
+    "signal_k_running": "\u2705 Service active, API responding",
+    "hardware_ready": "\u274c Calypso device offline (BLE)",
+    "data_flowing": "\u274c No data (position cached metadata only)"
+  },
+  "ATTEMPTED_FIXES": [
+    "\u2705 Created signalk-um982-gnss plugin files",
+    "\u2705 Set enabled=True in settings.json",
+    "\u2705 Restarted Signal K service",
+    "\u274c Plugins still not loading"
+  ],
+  "REMAINING_UNKNOWNS": [
+    "Why does SK report enabled=False when settings.json has enabled=True?",
+    "Is settings.json being read correctly?",
+    "Are there multiple SK configuration sources conflicting?",
+    "Does SK cache plugin state somewhere else?"
+  ],
+  "RACE_READINESS": "\ud83d\udd34 NOT DEPLOYABLE (0% data flowing)",
+  "DEPLOYMENT_DECISION": "HOLD",
+  "NEXT_STEPS_FOR_DUST": [
+    "1. Check Signal K logs for plugin initialization errors",
+    "2. Verify settings.json is being parsed correctly",
+    "3. Check if SK has alternate configuration sources",
+    "4. Consider full SK reset (backup + clean restart)",
+    "5. May need Signal K developer investigation"
+  ],
+  "CRITICAL_TIMELINE": {
+    "now": "2026-05-21 23:30 EDT",
+    "race_start": "2026-05-22 06:00 EDT (2.5 hours)",
+    "deadline_for_decision": "2026-05-22 04:00 EDT (30 min)"
+  }
 }
