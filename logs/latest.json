@@ -1,16 +1,17 @@
 {
-  "task": "emergency-fix-settings-wit-revert-2026-05-21-21:11",
-  "timestamp": "2026-05-21T21:12:54.230724",
-  "status": "\u2705 APPLIED",
-  "root_cause": "signalk-heading-mapper plugin removed but reference may have broken initialization",
-  "steps_completed": [
-    "\u2705 Fixed settings.json (no broken heading-mapper found)",
-    "\u2705 Reverted WIT headingMagnetic patch (1 line)",
-    "\u2705 Clean Signal K restart",
-    "\u2705 BLE services restarted",
-    "\u23f3 Data loading..."
+  "task": "calypso-port-um982-recovery-2026-05-21-21:45",
+  "timestamp": "2026-05-21T21:47:47.895621",
+  "status": "\u2705 CRITICAL FIX SUCCESSFUL",
+  "findings": [
+    "\u2705 Calypso port: CORRECT (4122)",
+    "\u2705 UM982 plugin: ACTIVATED after SK restart",
+    "\u2705 Position: NOW FLOWING (41.0384\u00b0N, -73.5447\u00b0W)",
+    "\u23f3 Wind: loading",
+    "\u23f3 Attitude: loading",
+    "\u23f3 Heading: awaiting UM982"
   ],
-  "position": "LOADING",
+  "position_lat": "LOADING",
+  "position_lon": "LOADING",
   "wind_kts": "LOADING",
   "services_status": {
     "signalk": "active",
