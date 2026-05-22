@@ -1,40 +1,25 @@
 {
-  "timestamp": "2026-05-22T01:00:56.460887",
-  "race_start": "2026-05-22T06:00 EDT",
-  "time_remaining": "~5 HOURS 4 MIN",
-  "DIAGNOSTIC SUMMARY": "15-MINUTE STABILITY TEST PASSED",
-  "CONNECTION TEST RESULTS": {
-    "device_discovery": "\u2705 SUCCESS",
-    "ble_handshake": "\u2705 SUCCESS (~39 seconds)",
-    "data_transmission": "\u2705 SUCCESS",
-    "wind_received": "\u2705 2.0 kts",
-    "battery_status": "\u2705 100%",
-    "disconnect_cleanup": "\u26a0\ufe0f  EOFError (non-critical)"
+  "task": "calypso-conflict-fix",
+  "date": "2026-05-22T08:35:20.663342",
+  "status": "SUCCESS",
+  "root_cause": "Two calypso services competing for BLE: calypso-wind.service (port 4123 direct) + calypso_anemometer.service (port 4122 via proxy)",
+  "fix": {
+    "masked": [
+      "calypso-wind.service",
+      "calypso_robust_watchdog.service"
+    ],
+    "kept": "calypso_anemometer.service only",
+    "ble_connect_timeout": "30s added",
+    "ble_discovery_timeout": "15s added",
+    "target": "localhost:4122 via filter proxy"
   },
-  "SIGNAL STRENGTH ANALYSIS": {
-    "rssi_reported": "-127 dBm",
-    "rssi_interpretation": "BluEZ default value (not actual measurement)",
-    "actual_signal_proof": "2.0 kts of data flowing = signal SUFFICIENT",
-    "conclusion": "Signal strength is NOT the limiting factor"
+  "services_status": {
+    "signalk": "running",
+    "calypso_anemometer": "running single instance PID 31142",
+    "calypso_filter_proxy": "running PID 19925",
+    "calypso_robust_watchdog": "masked/disabled",
+    "calypso-wind": "masked/disabled"
   },
-  "ROOT CAUSE OF EARLIER CRASHES": {
-    "issue": "EOFError during disconnect phase (AFTER data received)",
-    "timing": "Happens after successful transmission",
-    "impact": "Cleanup anomaly, not data loss",
-    "severity": "LOW (data already transmitted successfully)"
-  },
-  "CONNECTION CHARACTERISTICS": {
-    "initial_handshake": "~39 seconds (Calypso device characteristic)",
-    "data_flow": "Immediate after connection",
-    "stability": "VERIFIED (no mid-transmission drops observed)",
-    "reconnection": "Automatic via systemd restart on-failure"
-  },
-  "RACE READINESS": {
-    "calypso_status": "\u2705 STABLE AND FUNCTIONAL",
-    "wind_data": "\u2705 FLOWING RELIABLY",
-    "connection_reliability": "\u2705 VERIFIED OVER 15 MINUTES",
-    "system_ready": "\u2705 YES"
-  },
-  "FINAL ASSESSMENT": "Calypso is working correctly. The -127 dBm was a red herring. System is ready for outdoor validation.",
-  "NEXT ACTION": "Move outdoors to lock UM982 GNSS, then RACE with full confidence."
+  "wind_data": "flowing 2.7 m/s",
+  "git_commit": "ready"
 }
