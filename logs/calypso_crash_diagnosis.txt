@@ -1,0 +1,40 @@
+=== CALYPSO CRASH DIAGNOSIS Fri 22 May 09:01:33 EDT 2026 ===
+
+ROOT CAUSE: BleakDeviceNotFoundError
+The Calypso BLE device is not discoverable even though it was working.
+
+TIMELINE:
+  08:59:36 — Start attempt #4
+  09:00:06 — BleakDeviceNotFoundError (30s timeout)
+  09:00:17 — Restart attempt #5
+  09:00:47 — BleakDeviceNotFoundError again (30s timeout)
+  09:00:57 — Restart attempt #6 (now running)
+
+SERVICE STATUS:
+● calypso_anemometer.service - Calypso Anemometer BLE Reader
+     Loaded: loaded (/etc/systemd/system/calypso_anemometer.service; disabled; preset: enabled)
+     Active: activating (auto-restart) (Result: exit-code) since Fri 2026-05-22 09:01:28 EDT; 5s ago
+ Invocation: 5ade23ef7b684ecab0bc7456bc1d200b
+    Process: 40495 ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --ble-connect-timeout 30 --ble-discovery-timeout 15 --rate=hz_4 --target=udp+signalk+delta://localhost:4122 (code=exited, status=1/FAILURE)
+   Main PID: 40495 (code=exited, status=1/FAILURE)
+        CPU: 646ms
+
+May 22 09:01:28 MidnightRider systemd[1]: calypso_anemometer.service: Failed with result 'exit-code'.
+
+LAST 10 JOURNAL LINES:
+May 22 09:00:47 MidnightRider systemd[1]: calypso_anemometer.service: Main process exited, code=exited, status=1/FAILURE
+May 22 09:00:47 MidnightRider systemd[1]: calypso_anemometer.service: Failed with result 'exit-code'.
+May 22 09:00:57 MidnightRider systemd[1]: calypso_anemometer.service: Scheduled restart job, restart counter is at 6.
+May 22 09:00:57 MidnightRider systemd[1]: Started calypso_anemometer.service - Calypso Anemometer BLE Reader.
+May 22 09:00:58 MidnightRider calypso-anemometer[40495]: 2026-05-22 09:00:58,113 [calypso_anemometer.core  ] INFO    : Initializing client with Settings(ble_adapter='hci0', ble_address='F8:5F:12:9D:D2:EE', ble_discovery_timeout=15.0, ble_connect_timeout=30.0)
+May 22 09:00:58 MidnightRider calypso-anemometer[40495]: 2026-05-22 09:00:58,213 [calypso_anemometer.core  ] INFO    : Connecting to device at 'F8:5F:12:9D:D2:EE' with adapter 'None'
+May 22 09:01:28 MidnightRider calypso-anemometer[40495]: 2026-05-22 09:01:28,258 [calypso_anemometer.core  ] ERROR   : Conversation went south: BleakDeviceNotFoundError: Device with address F8:5F:12:9D:D2:EE was not found.
+May 22 09:01:28 MidnightRider calypso-anemometer[40495]: 2026-05-22 09:01:28,258 [calypso_anemometer.engine] ERROR   : BleakDeviceNotFoundError: Device with address F8:5F:12:9D:D2:EE was not found.
+May 22 09:01:28 MidnightRider systemd[1]: calypso_anemometer.service: Main process exited, code=exited, status=1/FAILURE
+May 22 09:01:28 MidnightRider systemd[1]: calypso_anemometer.service: Failed with result 'exit-code'.
+
+PROCESSES:
+aneto      19925  0.0  0.1  19576 12120 ?        Ss   07:50   0:00 /usr/bin/python3 /home/aneto/calypso_filter_proxy.py
+
+WIND:
+{"angleApparent":{"meta":{"units":"rad","description":"Apparent wind angle, negative to port","displayUnits":{"category":"angle","targetUnit":"degree","formula":"value * 57.29577951308231","inverseFormula":"value / 57.29577951308231","symbol":"°","displayFormat":"0.0"}},"value":3.787364476827695,"$source":"calypso-up10","timestamp":"2026-05-22T12:58:04.609Z"},"speedApparent":{"meta":{"units":"m/s","description":"Apparent wind speed","displayUnits":{"category":"speed","targetUnit":"kn","formula":"value * 1.94384","inverseFormula":"value * 0.514444","symbol":"kn","displayFormat":"0.0"}},"value":2.3,"$source":"calypso-up10","timestamp":"2026-05-22T12:58:04.609Z"}}
