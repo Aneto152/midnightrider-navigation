@@ -1,22 +1,77 @@
 {
-  "task": "restore-plugins-fix-calypso-final-race-prep-2026-05-21-22:24",
-  "timestamp": "2026-05-21T22:25:05.360048",
-  "status": "\u2705 CRITICAL FIX APPLIED",
-  "fixes_applied": [
-    "\u2705 Created calypso_anemometer.service with correct parameters",
-    "  \u2022 --rate=hz_8 (was hz_1)",
-    "  \u2022 --target=localhost:4122 (was 4123)",
-    "\u2705 Calypso restarted and active"
+  "timestamp": "2026-05-21T22:43:11.029397",
+  "race_status": "\ud83d\udd34 CRITICAL \u2014 2.5 HOURS TO START",
+  "hardware_status": {
+    "calypso_up10_anemometer": {
+      "mac": "F8:5F:12:9D:D2:EE",
+      "status": "\u274c NOT FOUND",
+      "action_needed": "Physical device check",
+      "instructions": [
+        "1. Press and hold POWER button on Calypso UP10",
+        "2. Wait for LED to turn BLUE (pairing mode)",
+        "3. Check LED is blinking (indicates active)",
+        "4. Bring device closer to RPi (~2 meters)",
+        "5. Run: timeout 20 hcitool lescan | grep F8:5F"
+      ]
+    },
+    "wit_imu_ble": {
+      "status": "\u23f3 SYMLINK RESTORED",
+      "action": "Plugin symlink recreated at /tmp/signalk-wit-nmea"
+    },
+    "hci0_adapter": {
+      "status": "\u2705 UP RUNNING",
+      "details": "Ready for BLE connection"
+    }
+  },
+  "software_status": {
+    "signal_k": {
+      "status": "\u2705 ACTIVE",
+      "note": "Recently restarted for plugin discovery"
+    },
+    "plugins": {
+      "total": 13,
+      "enabled": 0,
+      "started": 0,
+      "note": "\u274c Plugin initialization still not working"
+    },
+    "settings_json": {
+      "status": "\u2705 HAS um982-gnss + wit-imu-ble entries",
+      "note": "Configuration present but plugins not loading"
+    }
+  },
+  "data_status": {
+    "position": {
+      "status": "\u2705 FLOWING",
+      "value": "41.0385\u00b0N",
+      "note": "Cached from previous session"
+    },
+    "wind": {
+      "status": "\u274c OFFLINE",
+      "reason": "Calypso device not found on BLE"
+    },
+    "attitude": {
+      "status": "\u274c OFFLINE",
+      "reason": "WIT plugin not initialized"
+    },
+    "heading": {
+      "status": "\u23f3 PENDING",
+      "reason": "UM982 plugin not initialized"
+    }
+  },
+  "operational_status": "50% DEGRADED",
+  "critical_blockers": [
+    "Calypso hardware offline (wind data)",
+    "Plugin initialization broken (all state=None)",
+    "WIT IMU not initializing",
+    "UM982 GNSS not initializing"
   ],
-  "critical_changes": {
-    "calypso_rate": "hz_8",
-    "calypso_target": "localhost:4122 (through filter proxy)",
-    "service_file": "/etc/systemd/system/calypso_anemometer.service"
+  "race_readiness": {
+    "position_gps": "\u2705 READY",
+    "wind": "\u274c NOT READY",
+    "attitude_imu": "\u274c NOT READY",
+    "heading": "\u274c NOT READY",
+    "overall": "\ud83d\udd34 NOT RACE READY"
   },
-  "services_status": {
-    "signalk": "active",
-    "calypso_anemometer": "CHECKING",
-    "calypso_filter_proxy": "active"
-  },
-  "next_steps": "Verify wind data and all sensors flowing from corrected Calypso"
+  "time_to_race": "2.5 HOURS",
+  "deployment_recommendation": "HOLD \u2014 Requires hardware check + plugin debugging"
 }
