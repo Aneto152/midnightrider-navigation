@@ -1,0 +1,290 @@
+=== calypso_anemometer.service ===
+[Unit]
+Description=Calypso Anemometer BLE Reader
+After=network.target bluetooth.target
+Requires=bluetooth.target
+
+[Service]
+Type=simple
+User=aneto
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_4 --target=udp+signalk+delta://localhost:4122
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+=== calypso_robust_watchdog.service ===
+[Unit]
+Description=Calypso UP10 Robust BLE Watchdog (L1/L2/L3 escalating recovery)
+After=network.target bluetooth.target
+Wants=bluetooth.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /home/aneto/calypso_robust_watchdog.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+=== calypso-wind.service ===
+[Unit]
+Description=Calypso UP10 BLE Anemometer → Signal K (UDP bridge)
+Documentation=https://github.com/maritime-labs/calypso-anemometer
+After=network.target bluetooth.target signalk.service
+Wants=bluetooth.target
+BindsTo=signalk.service
+
+[Service]
+Type=simple
+User=aneto
+
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read \
+ --ble-address=F8:5F:12:9D:D2:EE \
+ --subscribe \
+ --rate=hz_1 \
+ --target=udp+signalk+delta://localhost:4123
+
+Restart=always
+RestartSec=5
+StartLimitInterval=60
+StartLimitBurst=10
+
+TimeoutStartSec=30
+TimeoutStopSec=10
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=calypso-wind
+
+[Install]
+WantedBy=multi-user.target
+
+=== calypso_filter_proxy.service ===
+[Unit]
+Description=Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug)
+After=network.target
+
+[Service]
+Type=simple
+User=aneto
+ExecStart=/usr/bin/python3 /home/aneto/calypso_filter_proxy.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+=== calypso_filter_proxy.py ===
+#!/usr/bin/env python3
+"""
+Calypso UDP Filter Proxy — 2026-05-21
+Known bug: calypso-anemometer v0.6.0 sends zero-valued sentinel data
+for eCompass (roll=-90°, pitch=-90°, heading=360°) and temperature (0°C).
+This proxy strips those broken paths before injecting to Signal K.
+
+Architecture:
+ calypso-anemometer → UDP:4122 (raw) → this proxy → UDP:4123 (clean) → SK
+
+WHITELIST (only these paths reach Signal K):
+ environment.wind.* — wind speed and angle (working correctly)
+ electrical.batteries.* — battery state (working correctly)
+"""
+import socket, json, sys, logging
+
+logging.basicConfig(level=logging.INFO,
+    format='%(asctime)s [calypso-filter] %(message)s')
+log = logging.getLogger(__name__)
+
+IN_PORT = 4122
+OUT_PORT = 4123
+OUT_HOST = "127.0.0.1"
+
+ALLOWED_PREFIXES = (
+    "environment.wind.",
+    "electrical.batteries.",
+)
+
+def is_allowed(path):
+    return any(path.startswith(p) for p in ALLOWED_PREFIXES)
+
+def filter_delta(raw_delta):
+    filtered_updates = []
+    blocked = []
+    for update in raw_delta.get("updates", []):
+        good = [v for v in update.get("values", []) if is_allowed(v.get("path", ""))]
+        bad = [v.get("path") for v in update.get("values", []) if not is_allowed(v.get("path", ""))]
+        if bad:
+            blocked.extend(bad)
+        if good:
+            filtered_update = dict(update)
+            filtered_update["values"] = good
+            filtered_updates.append(filtered_update)
+    if blocked:
+        log.debug(f"Blocked paths (known broken): {blocked}")
+    if filtered_updates:
+        result = dict(raw_delta)
+        result["updates"] = filtered_updates
+        return result
+    return None
+
+in_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+in_sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+in_sock.bind(("0.0.0.0", IN_PORT))
+out_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+log.info(f"Filter proxy started — UDP:{IN_PORT} → UDP:{OUT_PORT}")
+log.info(f"Whitelist: {ALLOWED_PREFIXES}")
+log.info("Blocking: roll, pitch, yaw, headingMagnetic, temperature (known zeros)")
+
+while True:
+    try:
+        data, _ = in_sock.recvfrom(65535)
+        delta = json.loads(data)
+        filtered = filter_delta(delta)
+        if filtered:
+            out_sock.sendto(json.dumps(filtered).encode(), (OUT_HOST, OUT_PORT))
+    except json.JSONDecodeError:
+        pass
+    except Exception as e:
+        log.error(f"Error: {e}")
+
+=== calypso_robust_watchdog.py ===
+#!/usr/bin/env python3
+"""Calypso Watchdog v3 — Fixed 2026-05-21
+Root cause fix: fromisoformat crash on SK timestamp format + cooldown anti-death-spiral"""
+import subprocess, time, datetime, json, os, urllib.request
+
+CALYPSO_SERVICE = "calypso-anemometer"
+MAC = "F8:5F:12:9D:D2:EE"
+SK_URL = "http://localhost:3000/signalk/v1/api/vessels/self/environment/wind"
+LOG_FILE = "/tmp/calypso_watchdog.log"
+DATA_TIMEOUT_S = 120  # Was 60 — too aggressive
+CHECK_INTERVAL_S = 30  # Was 15 — too frequent
+COOLDOWN_S = 60  # New: wait after each action before checking again
+
+def log(msg):
+    ts = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    line = f"[{ts}] {msg}"
+    print(line, flush=True)
+    with open(LOG_FILE, "a") as f:
+        f.write(line + "\n")
+
+def run(cmd, timeout=15):
+    try:
+        r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=timeout)
+        return r.returncode == 0, r.stdout + r.stderr
+    except Exception as e:
+        return False, str(e)
+
+def get_wind_age_seconds():
+    """Fixed: robust SK timestamp parsing. Falls back to value check if parse fails."""
+    try:
+        with urllib.request.urlopen(SK_URL, timeout=5) as r:
+            data = json.loads(r.read())
+        sa = data.get("speedApparent")
+        if not sa:
+            return 999
+        value = sa.get("value")
+        ts_str = sa.get("timestamp")
+        if not ts_str:
+            # Has value but no timestamp — data is fresh
+            return 0 if value is not None else 999
+        from datetime import timezone
+        # Fix: strip Z, then strip microseconds before parsing
+        ts = ts_str.strip()
+        if ts.endswith("Z"):
+            ts = ts[:-1]
+        # Remove microseconds: "2026-05-21T17:01:46.123" → "2026-05-21T17:01:46"
+        if "." in ts:
+            ts = ts.split(".")[0]
+        # Add UTC timezone
+        ts += "+00:00"
+        try:
+            dt = datetime.datetime.fromisoformat(ts)
+        except ValueError:
+            # Cannot parse — if we have a value, assume fresh
+            log(f"Cannot parse timestamp '{ts_str}' — using value fallback")
+            return 0 if value is not None else 999
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return max(0, (datetime.datetime.now(timezone.utc) - dt).total_seconds())
+    except urllib.error.URLError as e:
+        log(f"SK unreachable: {e}")
+        return 999
+    except Exception as e:
+        log(f"Wind check error: {e}")
+        return 999
+
+def action_L1():
+    log(f"L1: Restart {CALYPSO_SERVICE}")
+    run(f"sudo systemctl restart {CALYPSO_SERVICE}")
+    log(f"L1 done — cooldown {COOLDOWN_S}s")
+    time.sleep(COOLDOWN_S)
+
+def action_L2():
+    log("L2: Reset hci0")
+    run(f"sudo systemctl stop {CALYPSO_SERVICE}")
+    run("sudo hciconfig hci0 down")
+    time.sleep(3)
+    run("sudo hciconfig hci0 up")
+    time.sleep(3)
+    run(f"sudo systemctl start {CALYPSO_SERVICE}")
+    log(f"L2 done — cooldown {COOLDOWN_S}s")
+    time.sleep(COOLDOWN_S)
+
+def action_L3():
+    log("L3: Full BLE reset")
+    run(f"sudo systemctl stop {CALYPSO_SERVICE}")
+    run("sudo systemctl stop bluetooth")
+    time.sleep(3)
+    run("sudo hciconfig hci0 reset")
+    run("sudo systemctl start bluetooth")
+    time.sleep(4)
+    run("sudo hciconfig hci0 up")
+    time.sleep(2)
+    run(f"bluetoothctl remove {MAC}")
+    run("bluetoothctl power on")
+    run(f"bluetoothctl trust {MAC}")
+    run(f"sudo systemctl start {CALYPSO_SERVICE}")
+    log(f"L3 done — cooldown {COOLDOWN_S * 2}s")
+    time.sleep(COOLDOWN_S * 2)
+
+log(f"Watchdog v3 started — timeout={DATA_TIMEOUT_S}s check={CHECK_INTERVAL_S}s cooldown={COOLDOWN_S}s")
+consecutive_fails = 0
+
+while True:
+    age = get_wind_age_seconds()
+    if age < DATA_TIMEOUT_S:
+        if consecutive_fails > 0:
+            log(f"✅ Data OK (age={age:.0f}s) — reset counter")
+            consecutive_fails = 0
+    else:
+        consecutive_fails += 1
+        log(f"⚠️ No data {age:.0f}s (fail #{consecutive_fails})")
+        if consecutive_fails == 1:
+            action_L1()
+        elif consecutive_fails == 2:
+            action_L2()
+        elif consecutive_fails >= 3:
+            action_L3()
+            consecutive_fails = 0
+    time.sleep(CHECK_INTERVAL_S)
+
+=== UNIT FILES ===
+calypso-anemometer.service                                                    disabled        enabled
+calypso-watchdog.service                                                      disabled        enabled
+calypso-wind.service                                                          disabled        enabled
+calypso_anemometer.service                                                    disabled        enabled
+calypso_filter_proxy.service                                                  enabled         enabled
+calypso_robust_watchdog.service                                               disabled        enabled
+
+=== PROCESSES ===
+aneto      19925  0.0  0.1  19572 12100 ?        Ss   07:50   0:00 /usr/bin/python3 /home/aneto/calypso_filter_proxy.py
