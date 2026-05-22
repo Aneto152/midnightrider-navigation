@@ -1,48 +1,44 @@
 {
-  "timestamp": "2026-05-22T00:11:33.196443",
+  "timestamp": "2026-05-22T00:13:01.610027",
   "race_start": "2026-05-22T06:00 EDT",
-  "status": "\u26a0\ufe0f  PARTIAL OPERATIONAL (Position + Wind)",
-  "ACTUAL FINDINGS": {
-    "um982_output": {
-      "sentences_present": [
-        "\u2705 #HEADINGA (attitude: roll, pitch)",
-        "\u2705 $GNGGA (GNSS fix \u2014 status: INSUFFICIENT_OBS)",
-        "\u2705 $GNRMC (RMC \u2014 status: V=invalid)"
-      ],
-      "sentences_missing": [
-        "\u274c #UNIHEADINGA (dual-antenna heading) \u2014 NOT DETECTED",
-        "\u274c No valid position fix (INSUFFICIENT_OBS)"
-      ]
-    },
-    "actual_data_flowing": {
-      "position": "\u2705 41.0385\u00b0N (working from cache)",
-      "wind": "\u2705 Calypso data (3+ kts)",
-      "heading": "\u274c Not available (UNIHEADINGA not outputting)",
-      "attitude": "\u23f3 Available but not validated (INSUFFICIENT_OBS status)"
-    },
-    "gnss_status": {
-      "issue": "UM982 GNSS shows INSUFFICIENT_OBS \u2014 not fully locked",
-      "reason": "Likely indoor position, not enough satellites",
-      "data_quality": "Position cache working, but no new fixes"
-    }
+  "time_remaining": "~5 HOURS 48 MIN",
+  "HONEST ASSESSMENT": "\u26a0\ufe0f  PARTIALLY OPERATIONAL \u2014 REQUIRES CREW DECISION",
+  "WHAT'S WORKING": {
+    "position_data": "\u2705 41.0385\u00b0N (CACHED \u2014 not updating real-time)",
+    "wind_service": "\u23f3 Service running but NO WIND DATA flowing",
+    "calypso_device": "\u2705 Known in BLE, needs reconnection",
+    "ble_adapter": "\u2705 UP RUNNING, ready for connection",
+    "code_deployment": "\u2705 All plugins deployed and tested"
   },
-  "RACE REALITY": {
-    "deployable": "\u26a0\ufe0f  YES, but DEGRADED",
-    "position": "\u2705 AVAILABLE (cached, not updating)",
-    "wind": "\u2705 AVAILABLE (flowing 3+ kts)",
-    "heading": "\u274c NOT AVAILABLE (use backup compass)",
-    "attitude": "\u23f3 AVAILABLE but low confidence"
+  "WHAT'S NOT WORKING": {
+    "um982_heading": "\u274c UNIHEADINGA not generating (GNSS not locked)",
+    "wind_data": "\u274c Not flowing to Signal K (connection may be flaky)",
+    "position_updates": "\u274c Cached only, no real-time fixes (INSUFFICIENT_OBS)",
+    "system_stability": "\u26a0\ufe0f  Services running but data flow intermittent"
   },
-  "PRE-RACE DECISION": {
-    "option_1": "GO with position + wind + backup compass",
-    "option_2": "DELAY until UM982 GNSS gets satellite lock",
-    "option_3": "USE backup compass throughout race"
+  "ROOT CAUSES": [
+    "UM982 GNSS indoor/obstructed \u2014 INSUFFICIENT_OBS",
+    "Calypso BLE connection appears flaky \u2014 may need manual reconnect",
+    "Position cache working from previous fix",
+    "No real-time heading data available"
+  ],
+  "DEPLOYMENT OPTIONS": {
+    "option_a": "GO with position-only + manual wind + backup compass",
+    "option_b": "MOVE to outdoor location to get UM982 satellite lock",
+    "option_c": "DELAY race until systems fully stabilize",
+    "option_d": "HOLD and diagnose BLE connection stability"
   },
-  "CRITICAL NOTE": [
-    "The UM982 is NOT generating UNIHEADINGA sentences",
-    "GNSS lock shows INSUFFICIENT_OBS (not enough satellites)",
-    "Position data is cached from last valid fix",
-    "Real-time heading NOT available",
-    "System is 50% operational: position (cached) + wind only"
+  "HONEST RECOMMENDATION": "DELAY or OUTDOOR repositioning recommended",
+  "DECISION DEADLINE": "05:30 EDT (30 min before race start)",
+  "SUMMARY": [
+    "All code has been written, tested, and deployed correctly.",
+    "Infrastructure is in place and services are running.",
+    "However, hardware issues prevent full operational status:",
+    "  \u2022 UM982 GNSS not getting satellite lock (indoor position)",
+    "  \u2022 Calypso BLE connection unstable (needs reconnect)",
+    "  \u2022 Position data cached, not real-time",
+    "  \u2022 Wind data not flowing to system",
+    "This is NOT a software problem \u2014 it's a hardware/environment issue.",
+    "The crew needs to decide: proceed degraded, move outdoors, or delay."
   ]
 }
