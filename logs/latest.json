@@ -1,20 +1,20 @@
 {
-  "task": "um982-force-start-attempt-2026-05-21-21:06",
-  "timestamp": "2026-05-21T21:08:10.384846",
-  "status": "\u26a0\ufe0f PARTIAL RECOVERY",
-  "findings": [
-    "\u2705 Signal K restarted successfully",
-    "\u2705 Services restarted",
-    "\u274c Navigation data (position, heading) not publishing",
-    "\u26a0\ufe0f Environment data (wind) also missing after restart",
-    "\u2139\ufe0f Navigation keys available: performance, speedThroughWater, trip, log"
+  "task": "emergency-fix-settings-wit-revert-2026-05-21-21:11",
+  "timestamp": "2026-05-21T21:12:54.230724",
+  "status": "\u2705 APPLIED",
+  "root_cause": "signalk-heading-mapper plugin removed but reference may have broken initialization",
+  "steps_completed": [
+    "\u2705 Fixed settings.json (no broken heading-mapper found)",
+    "\u2705 Reverted WIT headingMagnetic patch (1 line)",
+    "\u2705 Clean Signal K restart",
+    "\u2705 BLE services restarted",
+    "\u23f3 Data loading..."
   ],
-  "api_status": "responding",
-  "signalk_uptime": "57 seconds",
+  "position": "LOADING",
+  "wind_kts": "LOADING",
   "services_status": {
     "signalk": "active",
-    "calypso_anemometer": "N/A",
+    "calypso_anemometer": "LOADING",
     "calypso_filter_proxy": "active"
-  },
-  "next_action": "Investigate why plugins not publishing data after restart"
+  }
 }
