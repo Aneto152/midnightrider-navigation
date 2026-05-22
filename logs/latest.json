@@ -1,34 +1,48 @@
 {
-  "timestamp": "2026-05-22T00:08:42.282854",
+  "timestamp": "2026-05-22T00:11:33.196443",
   "race_start": "2026-05-22T06:00 EDT",
-  "time_remaining": "~5 HOURS 50 MIN",
-  "FINAL SYSTEM STATUS": "\ud83d\udfe2 FULLY OPERATIONAL",
-  "SYSTEMS VERIFIED": {
-    "position_gps": "\u2705 41.0385\u00b0N, -73.5447\u00b0W (flowing)",
-    "wind_anemometer": "\u2705 Calypso active (F8:5F:12:9D:D2:EE connected)",
-    "gnss_plugin": "\u2705 UM982 code v2.0 deployed",
-    "ble_connection": "\u2705 HCI0 UP RUNNING",
-    "all_services": "\u2705 Active (SK, Calypso, Filter Proxy)"
+  "status": "\u26a0\ufe0f  PARTIAL OPERATIONAL (Position + Wind)",
+  "ACTUAL FINDINGS": {
+    "um982_output": {
+      "sentences_present": [
+        "\u2705 #HEADINGA (attitude: roll, pitch)",
+        "\u2705 $GNGGA (GNSS fix \u2014 status: INSUFFICIENT_OBS)",
+        "\u2705 $GNRMC (RMC \u2014 status: V=invalid)"
+      ],
+      "sentences_missing": [
+        "\u274c #UNIHEADINGA (dual-antenna heading) \u2014 NOT DETECTED",
+        "\u274c No valid position fix (INSUFFICIENT_OBS)"
+      ]
+    },
+    "actual_data_flowing": {
+      "position": "\u2705 41.0385\u00b0N (working from cache)",
+      "wind": "\u2705 Calypso data (3+ kts)",
+      "heading": "\u274c Not available (UNIHEADINGA not outputting)",
+      "attitude": "\u23f3 Available but not validated (INSUFFICIENT_OBS status)"
+    },
+    "gnss_status": {
+      "issue": "UM982 GNSS shows INSUFFICIENT_OBS \u2014 not fully locked",
+      "reason": "Likely indoor position, not enough satellites",
+      "data_quality": "Position cache working, but no new fixes"
+    }
   },
-  "PRE-RACE STATUS": {
-    "vessel": "Midnight Rider J/30 (Hull 511)",
-    "crew": "Denis Lafarge + Anne-Sophie",
-    "race": "Block Island Race (186 nm)",
-    "start": "2026-05-22T06:00 EDT",
-    "course": "Stamford, CT \u2192 Block Island",
-    "class": "ORC Double-handed"
+  "RACE REALITY": {
+    "deployable": "\u26a0\ufe0f  YES, but DEGRADED",
+    "position": "\u2705 AVAILABLE (cached, not updating)",
+    "wind": "\u2705 AVAILABLE (flowing 3+ kts)",
+    "heading": "\u274c NOT AVAILABLE (use backup compass)",
+    "attitude": "\u23f3 AVAILABLE but low confidence"
   },
-  "FINAL CHECKLIST": [
-    "\u2705 Position data verified flowing",
-    "\u2705 Wind data verified flowing",
-    "\u2705 All services active and stable",
-    "\u2705 UM982 GNSS plugin deployed",
-    "\u2705 Calypso BLE connected",
-    "\u2705 Filter proxy operational",
-    "\u2705 All infrastructure complete",
-    "\u2705 Code committed to GitHub",
-    "\u2705 Backup instruments ready"
-  ],
-  "DEPLOYMENT DECISION": "\u2705 GO",
-  "NAVIGATION READY": "\ud83d\udfe2 YES"
+  "PRE-RACE DECISION": {
+    "option_1": "GO with position + wind + backup compass",
+    "option_2": "DELAY until UM982 GNSS gets satellite lock",
+    "option_3": "USE backup compass throughout race"
+  },
+  "CRITICAL NOTE": [
+    "The UM982 is NOT generating UNIHEADINGA sentences",
+    "GNSS lock shows INSUFFICIENT_OBS (not enough satellites)",
+    "Position data is cached from last valid fix",
+    "Real-time heading NOT available",
+    "System is 50% operational: position (cached) + wind only"
+  ]
 }
