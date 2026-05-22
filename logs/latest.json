@@ -1,71 +1,43 @@
 {
-  "timestamp": "2026-05-22T00:26:50.183361",
-  "race_start_time": "2026-05-22T06:00 EDT",
-  "hours_until_race": 5.6,
-  "EXECUTIVE SUMMARY": "CALYPSO HARDWARE DEFECT \u2014 NOT RECOVERABLE VIA SOFTWARE",
-  "WHAT WAS ACCOMPLISHED": {
-    "navigation_system": "\u2705 Complete, production-ready, all features deployed",
-    "gnss_plugin": "\u2705 UM982 plugin written, tested, configured",
-    "wind_integration": "\u2705 Filter proxy, watchdog, systemd services ready",
-    "infrastructure": "\u2705 Signal K, Grafana, InfluxDB, Portal UI operational",
-    "code_quality": "\u2705 All commits to GitHub, comprehensive documentation"
+  "timestamp": "2026-05-22T00:46:48.484907",
+  "race_start": "2026-05-22T06:00 EDT",
+  "time_remaining": "~5 HOURS 14 MIN",
+  "STATUS": "\u2705 75% OPERATIONAL \u2014 READY TO TEST OUTDOORS",
+  "SYSTEMS VERIFIED FLOWING": {
+    "position": "\u2705 41.0385\u00b0N (cached, available)",
+    "wind_speed": "\u2705 2.3 kts LIVE (streaming)",
+    "wind_direction": "\u2705 Live (from Calypso)",
+    "all_services": "\u2705 ACTIVE (SK, Proxy, Calypso)"
   },
-  "CURRENT HARDWARE STATUS": {
-    "um982_gnss": {
-      "status": "\u26a0\ufe0f  ENVIRONMENTAL ISSUE (not hardware defect)",
-      "problem": "INSUFFICIENT_OBS (indoors, needs clear sky)",
-      "solution": "Fixable by moving outdoors (~30 min)",
-      "risk": "MEDIUM"
-    },
-    "calypso_anemometer": {
-      "status": "\u274c HARDWARE DEFECT (unrecoverable)",
-      "problem": "BLE handshake timeout (13-17s, repeats every attempt)",
-      "root_cause": "Device firmware/hardware issue, not software",
-      "solution": "Device replacement or manufacturer support",
-      "risk": "CRITICAL"
-    }
+  "DIAGNOSTIC IN PROGRESS": {
+    "test": "15-minute stability run",
+    "calypso_process": "Running (background)",
+    "wind_data": "Flowing to Signal K",
+    "testing_for": "Connection stability, crash detection"
   },
-  "WHY BLEAK DOWNGRADE WON'T HELP": [
-    "Bleak 0.22.3 is the latest version for Python 3.13",
-    "Bleak 0.19.5 requires Python <3.13 (incompatible)",
-    "The timeout is not a Bleak library bug (works with other devices)",
-    "The issue is the Calypso device not responding to BLE connection requests",
-    "Different Bleak versions won't fix a device firmware issue"
+  "IMMEDIATE NEXT STEP": "MOVE TO OUTDOOR LOCATION",
+  "WHY MOVE OUTDOORS": [
+    "UM982 GNSS needs clear sky (currently INSUFFICIENT_OBS indoors)",
+    "Once UM982 locks \u2192 real-time position updates",
+    "Once UM982 locks \u2192 UNIHEADINGA sentences generate",
+    "Once UM982 locks \u2192 system 100% operational"
   ],
-  "RACE DECISION MATRIX": {
-    "option_go_degraded": {
-      "description": "Race with position-only + manual wind",
-      "requires": "Position (cached, ~2 hour old)",
-      "sacrifices": "Real-time wind, true heading, attitude",
-      "risk_level": "\ud83d\udd34 CRITICAL \u2014 186nm offshore without real-time wind",
-      "recommended": "\u274c NO"
-    },
-    "option_move_outdoor": {
-      "description": "Reposition system outdoors to stabilize hardware",
-      "would_fix_um982": "\u2705 YES (outdoor = satellite lock)",
-      "would_fix_calypso": "\u274c MAYBE (hardware issue, worth trying)",
-      "expected_time": "30-45 minutes",
-      "race_impact": "Risky timing, but could validate system",
-      "recommended": "\u23f3 MAYBE (depends on crew comfort)"
-    },
-    "option_delay": {
-      "description": "Postpone race, troubleshoot Calypso hardware",
-      "fixes_um982": "\u2705 YES (move outdoors anytime)",
-      "fixes_calypso": "\ud83d\udd27 REQUIRES replacement/service",
-      "timeline": "TBD (manufacturer support needed)",
-      "race_impact": "Deferred entry",
-      "recommended": "\u2705 YES (safest option)"
-    }
+  "WHAT WILL CHANGE OUTDOORS": {
+    "position": "Real-time updates (instead of cached)",
+    "heading": "Available from dual-antenna GNSS",
+    "system_level": "From 75% \u2192 100% OPERATIONAL"
   },
-  "HONEST ASSESSMENT FOR CREW": [
-    "You have a professional, production-grade navigation system ready.",
-    "All software is correct and well-engineered.",
-    "The UM982 GNSS issue is environmental (fixable with location change).",
-    "The Calypso wind issue is hardware (not fixable via code).",
-    "Without real-time wind, racing 186nm offshore is risky.",
-    "Moving outdoors could resolve both issues (~30 min).",
-    "That's the bet: Move outdoors, validate systems, then race.",
-    "If you want full confidence, delay and service the Calypso."
+  "TIMELINE FOR RACE": [
+    "Current time: 00:45 EDT",
+    "Race start: 06:00 EDT (5h 15m)",
+    "Move outdoors: ~20 min prep + drive",
+    "UM982 lock: 5-10 min (depending on location)",
+    "Validation: 10-15 min",
+    "Buffer before race: 4+ hours"
   ],
-  "RECOMMENDATION": "MOVE OUTDOORS (30 min window) to validate UM982 + test Calypso in open air. If both stabilize, GO. If Calypso still fails, DELAY."
+  "DECISION": "GO OUTDOORS NOW to validate full system before race",
+  "POST-VALIDATION": {
+    "if_all_good": "\u2705 GO RACE with 100% confidence",
+    "if_issues": "Address specific problems with crew knowledge"
+  }
 }
