@@ -1,22 +1,20 @@
 {
-  "task": "wit-um982-plugin-clean-restart-2026-05-21",
-  "timestamp": "2026-05-21T20:41:42.742222",
-  "status": "\u2705 RESTART COMPLETE",
-  "steps_completed": [
-    "\u2705 Diagnosed plugin states (not initialized)",
-    "\u2705 Stopped BLE services cleanly",
-    "\u2705 Restarted Signal K",
-    "\u2705 Restarted BLE services",
-    "\u2705 Plugins initializing"
+  "task": "um982-force-start-attempt-2026-05-21-21:06",
+  "timestamp": "2026-05-21T21:08:10.384846",
+  "status": "\u26a0\ufe0f PARTIAL RECOVERY",
+  "findings": [
+    "\u2705 Signal K restarted successfully",
+    "\u2705 Services restarted",
+    "\u274c Navigation data (position, heading) not publishing",
+    "\u26a0\ufe0f Environment data (wind) also missing after restart",
+    "\u2139\ufe0f Navigation keys available: performance, speedThroughWater, trip, log"
   ],
-  "position_lat": "LOADING",
-  "position_lon": "LOADING",
-  "heading_deg": "LOADING",
-  "wind_kts": "LOADING",
+  "api_status": "responding",
+  "signalk_uptime": "57 seconds",
   "services_status": {
     "signalk": "active",
-    "calypso_anemometer": "LOADING",
-    "calypso_filter_proxy": "active",
-    "calypso_watchdog": "active"
-  }
+    "calypso_anemometer": "N/A",
+    "calypso_filter_proxy": "active"
+  },
+  "next_action": "Investigate why plugins not publishing data after restart"
 }
