@@ -1,77 +1,19 @@
 {
-  "timestamp": "2026-05-21T22:43:11.029397",
-  "race_status": "\ud83d\udd34 CRITICAL \u2014 2.5 HOURS TO START",
-  "hardware_status": {
-    "calypso_up10_anemometer": {
-      "mac": "F8:5F:12:9D:D2:EE",
-      "status": "\u274c NOT FOUND",
-      "action_needed": "Physical device check",
-      "instructions": [
-        "1. Press and hold POWER button on Calypso UP10",
-        "2. Wait for LED to turn BLUE (pairing mode)",
-        "3. Check LED is blinking (indicates active)",
-        "4. Bring device closer to RPi (~2 meters)",
-        "5. Run: timeout 20 hcitool lescan | grep F8:5F"
-      ]
-    },
-    "wit_imu_ble": {
-      "status": "\u23f3 SYMLINK RESTORED",
-      "action": "Plugin symlink recreated at /tmp/signalk-wit-nmea"
-    },
-    "hci0_adapter": {
-      "status": "\u2705 UP RUNNING",
-      "details": "Ready for BLE connection"
-    }
-  },
-  "software_status": {
-    "signal_k": {
-      "status": "\u2705 ACTIVE",
-      "note": "Recently restarted for plugin discovery"
-    },
-    "plugins": {
-      "total": 13,
-      "enabled": 0,
-      "started": 0,
-      "note": "\u274c Plugin initialization still not working"
-    },
-    "settings_json": {
-      "status": "\u2705 HAS um982-gnss + wit-imu-ble entries",
-      "note": "Configuration present but plugins not loading"
-    }
-  },
-  "data_status": {
-    "position": {
-      "status": "\u2705 FLOWING",
-      "value": "41.0385\u00b0N",
-      "note": "Cached from previous session"
-    },
-    "wind": {
-      "status": "\u274c OFFLINE",
-      "reason": "Calypso device not found on BLE"
-    },
-    "attitude": {
-      "status": "\u274c OFFLINE",
-      "reason": "WIT plugin not initialized"
-    },
-    "heading": {
-      "status": "\u23f3 PENDING",
-      "reason": "UM982 plugin not initialized"
-    }
-  },
-  "operational_status": "50% DEGRADED",
-  "critical_blockers": [
-    "Calypso hardware offline (wind data)",
-    "Plugin initialization broken (all state=None)",
-    "WIT IMU not initializing",
-    "UM982 GNSS not initializing"
+  "task": "create-signalk-um982-gnss-plugin-2026-05-21-23:20",
+  "timestamp": "2026-05-21T23:21:23.079918",
+  "status": "\u2705 PLUGIN FILES CREATED",
+  "files_created": [
+    "/home/aneto/.signalk/node_modules/signalk-um982-gnss/index.js (5386 bytes)",
+    "/home/aneto/.signalk/node_modules/signalk-um982-gnss/package.json (328 bytes)"
   ],
-  "race_readiness": {
-    "position_gps": "\u2705 READY",
-    "wind": "\u274c NOT READY",
-    "attitude_imu": "\u274c NOT READY",
-    "heading": "\u274c NOT READY",
-    "overall": "\ud83d\udd34 NOT RACE READY"
+  "plugin_id": "signalk-um982-gnss",
+  "dependencies": [
+    "\u2705 serialport: installed",
+    "\u2705 @serialport/parser-readline: installed"
+  ],
+  "services_status": {
+    "signalk": "active"
   },
-  "time_to_race": "2.5 HOURS",
-  "deployment_recommendation": "HOLD \u2014 Requires hardware check + plugin debugging"
+  "plugin_state": "None (initialization pending)",
+  "note": "Plugin physically created but SK plugin discovery not loading it yet. May need plugin registry update."
 }
