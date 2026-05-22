@@ -1,0 +1,14 @@
+[Unit]
+Description=Calypso Anemometer BLE Reader
+After=network.target bluetooth.target
+Requires=bluetooth.target
+
+[Service]
+Type=simple
+User=aneto
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --ble-connect-timeout 30 --ble-discovery-timeout 15 --rate=hz_4 --target=udp+signalk+delta://localhost:4122
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
