@@ -7364,3 +7364,7 @@
 [2026-05-29T18:53:49] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 13537)
 [2026-05-29T18:53:49] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
 [2026-05-29T18:53:49] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-29T18:53:59] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T18:53:59] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T18:54:19] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T18:54:19] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
