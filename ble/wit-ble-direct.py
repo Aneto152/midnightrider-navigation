@@ -349,14 +349,11 @@ async def run_ble_client() -> None:
                     l1_fail_count = 0
                     reconnect_delay = RECONNECT_BASE_S
                     
-                    # Configure WIT: enable quaternion output
-                    try:
-                        await client.write_gatt_char(WRITE_UUID, ENABLE_QUATERNION)
-                        await asyncio.sleep(5)  # Allow WIT to apply config
-                        log('debug', 'BLE_SETUP', 'Quaternion (0x71) enabled')
-                    except Exception as e:
-                        log('warning', 'BLE_SETUP', f'Write failed: {e}')
-                        await asyncio.sleep(5)  # Even if write failed, WIT may be reconfiguring
+                    # QUATERNION MODE: WIT WT901BLECL already in quaternion mode (NVRAM).
+                    # Write UUID ffe9 does not exist on this device — attempting write
+                    # kills BLE connection before we can subscribe to notifications.
+                    # Solution: skip write entirely, subscribe to 0x71 packets directly.
+                    log('info', 'BLE_SETUP', 'Subscribing to WIT (quaternion mode from NVRAM)')
                     
                     # Start notification handler
                     def handle_data(sender, data):
