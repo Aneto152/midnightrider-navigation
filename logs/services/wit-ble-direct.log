@@ -1604,3 +1604,21 @@
 [2026-05-29T17:03:51] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
 [2026-05-29T17:04:01] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
 [2026-05-29T17:04:01] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T17:04:21] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:04:21] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
+[2026-05-29T17:04:51] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:04:51] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
+[2026-05-29T17:05:41] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:05:41] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
+[2026-05-29T17:06:52] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:06:52] [ERROR] [wit-ble-direct] [L2] L1 failures 5 ≥ threshold 5 — resetting hci0
+[2026-05-29T17:06:58] [INFO] [wit-ble-direct] [L2] hci0 reset complete
+[2026-05-29T17:06:58] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T17:07:10] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T17:07:10] [INFO] [wit-ble-direct] [BLE_SETUP] Initializing WIT via 00002a00-0000-1000-8000-00805f9b34fb
+[2026-05-29T17:07:10] [WARNING] [wit-ble-direct] [BLE_SETUP] UNLOCK failed: [org.bluez.Error.NotAuthorized] Operation Not Authorized
+[2026-05-29T17:07:10] [WARNING] [wit-ble-direct] [BLE_SETUP] ENABLE_QUATERNION failed: [org.bluez.Error.NotAuthorized] Operation Not Authorized
+[2026-05-29T17:07:10] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to notifications
+[2026-05-29T17:07:12] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T17:08:51] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:5
+[2026-05-29T17:13:51] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:5
