@@ -73,6 +73,19 @@ bash scripts/security-audit.sh
 
 ---
 
+### git-backup.sh
+**Git repository backup utility**
+
+```bash
+bash scripts/git-backup.sh
+```
+
+- **Action**: Creates local git backup archive
+- **Output**: `logs/git-backup-YYYY-MM-DD.tar.gz`
+- **systemd**: ❌ Manual only
+
+---
+
 ## 🔐 TOKEN & CONFIGURATION
 
 ### rotate-token.sh
@@ -89,186 +102,257 @@ bash scripts/rotate-token.sh
 
 ---
 
-## 📊 DATA COLLECTION DAEMONS
+## 🌊 DATA COLLECTION DAEMONS
+
+> ⚠️ None of these have systemd service files. Start manually or via cron.
 
 ### noaa_collector.py
-**NOAA/NWS weather data collection → InfluxDB**
+**NOAA/NWS weather data collection → Signal K injection**
+
+Fetches NOAA NDBC buoy data and injects it into Signal K via WebSocket delta.
+Keeps Signal K paths alive between NOAA updates (re-injects cached values every 2 min).
 
 ```bash
-python3 scripts/noaa_collector.py
+python3 scripts/noaa_collector.py              # Daemon mode (default)
+python3 scripts/noaa_collector.py --once       # Single fetch+inject cycle
+python3 scripts/noaa_collector.py --debug      # Verbose logging
 ```
 
-- **Source**: NOAA/NWS API (LIS buoy data, wind, sea state)
-- **Interval**: Every 15 minutes
-- **Output**: `InfluxDB` → `weather` measurement
-- **systemd**: ⚠️ **Missing** — start manually or create service
-- **Dependencies**: requests, python-dotenv
+- **Source**: NOAA NDBC (ndbc.noaa.gov/data/realtime2/)
+- **Stations**: 44017 (Montauk), 44025 (Central LIS), BLTM3 (Block Island)
+- **Data**: Wind speed/direction, pressure, air temp, water temp
+- **Destination**: Signal K WebSocket → signalk-to-influxdb2 → InfluxDB
+- **Fetch interval**: Every 30 minutes (NOAA update rate)
+- **Inject interval**: Every 2 minutes (keeps SK paths alive)
+- **systemd**: ❌ None — start manually
 
 ---
 
 ### lis_wind_collector.py
-**LIS (Long Island Sound) buoy wind data → InfluxDB**
+**LIS (Long Island Sound) buoy wind data collection**
+
+Fetches wind data from 9 LIS area stations (ASOS + NOAA + NDBC) → InfluxDB.
+Provides wind context for the entire Long Island Sound for race analysis.
 
 ```bash
 python3 scripts/lis_wind_collector.py
 ```
 
-- **Source**: NOAA buoy 44065 (LIS wind, temperature, pressure)
-- **Interval**: Every 10 minutes
-- **Output**: `InfluxDB` → `lis.wind` measurement
-- **systemd**: ⚠️ **Missing** — start manually
-- **Dependencies**: requests, python-dotenv
+- **Source**: 3 APIs — ASOS (api.weather.gov), NOAA tides, NDBC buoys
+- **Stations (9)**: Bridgeport CT, New Haven CT, New London CT, Oxford CT, Providence RI, Newport RI, Pt Judith RI, Montauk NY, Long Island
+- **Data**: Wind speed (knots), direction (°), gusts (knots)
+- **Destination**: InfluxDB midnight_rider → measurement lis_wind
+- **Interval**: Every 15 minutes
+- **Grafana**: Dashboard 10 (LIS Wind)
+- **systemd**: ❌ None — start manually
 
 ---
 
 ### weather-logger.sh
-**Hourly weather archive → logs/**
+**Weather forecast logging → InfluxDB**
+
+Fetches weather forecast from Open-Meteo (free, no API key) → InfluxDB.
 
 ```bash
-bash scripts/weather-logger.sh
+bash scripts/weather-logger.sh                  # Single fetch
+bash scripts/weather-logger.sh --daemon         # Daemon (5 min intervals)
 ```
 
-- **Source**: Open-Meteo / wttr.in
-- **Output**: `logs/weather-YYYY-MM-DD.log`
-- **Frequency**: Hourly (via cron)
-- **systemd**: ⚠️ **Missing** — use cron entry instead
-- **Example cron**: `0 * * * * /home/pi/midnightrider-navigation/scripts/weather-logger.sh`
+- **Source**: Open-Meteo API (api.open-meteo.com)
+- **Data**: Temperature, humidity, pressure, wind (current + forecast 3 days)
+- **Destination**: InfluxDB midnight_rider → measurement weather.*
+- **Interval**: Every 5 minutes (daemon mode)
+- **systemd**: ❌ None — start manually or add to cron
 
 ---
 
-## 🧮 CALCULATION & PROCESSING
+## ⚙️ CALCULATION ENGINES
 
 ### current_vector_calc.py
-**Ocean current vector estimation → InfluxDB**
+**Real-time tidal current calculation from vector drift**
+
+Real-time tidal current calculation from SOG/COG vs STW/HDG vectors.
 
 ```bash
 python3 scripts/current_vector_calc.py
 ```
 
-- **Inputs**: SOG, COG, AWA, AWS, boat attitude (from Signal K)
-- **Output**: Current velocity (m/s), current direction (deg)
-- **Algorithm**: Drift analysis + set/drift calculation
-- **Interval**: Real-time (1 Hz from Signal K)
-- **systemd**: ⚠️ **Missing** — needs systemd service
-- **Dependencies**: signalk-client (Python library)
+- **Formula**: Current = SOG_vector − STW_vector → drift (m/s) + set (°)
+- **Inputs from Signal K**: SOG, COG, STW, HDG
+- **Outputs**: environment.current.drift + environment.current.setTrue
+- **Destinations**: Signal K delta + InfluxDB environment.current
+- **Interval**: Every 5 seconds
+- **Requires**: Active SOG + STW from instruments
+- **systemd**: ❌ None — start manually when needed
 
 ---
 
 ### target_speed_calc.py
-**Target speed optimization (polars + weather)**
+**Target Speed Calculator**
+
+Target speed calculation based on polar diagrams and current wind.
 
 ```bash
 python3 scripts/target_speed_calc.py
 ```
 
-- **Inputs**: True wind, boat polars, current
-- **Output**: Optimal target speed (knots)
-- **Model**: Lookup + interpolation from J30 ORC polars
-- **Update**: Every 10 seconds
-- **InfluxDB**: `navigation.target_speed`
-- **systemd**: ⚠️ **Missing**
-- **Dependencies**: json, requests
+- **Inputs**: Current TWS/TWA from Signal K, polars from data/polars/j30_orc.json
+- **Output**: Target VMG, target boat speed
+- **InfluxDB**: navigation.target_speed
+- **systemd**: ❌ None — start manually when needed
 
 ---
 
 ### wave-analyzer.py
-**Wave analysis from IMU heave data**
+**Wave Analysis Engine**
+
+Wave height and motion analysis from WIT IMU accelerometer data.
 
 ```bash
-python3 scripts/wave-analyzer.py [--freq 1] [--window 60]
+python3 scripts/wave-analyzer.py
 ```
 
-- **Input**: WIT IMU acceleration (3-axis)
-- **Output**: Significant wave height, peak period, energy spectrum
-- **Algorithm**: FFT analysis on heave component
-- **Interval**: Every 60 seconds
-- **InfluxDB**: `environment.waves`
-- **systemd**: ⚠️ **Missing** — needs service
-- **Dependencies**: scipy, numpy
+- **Input**: WIT WT901BLECL IMU via Signal K (roll/pitch/heave)
+- **Output**: Wave height, period, motion analysis → InfluxDB
+- **InfluxDB**: environment.waves
+- **systemd**: ❌ None — requires active WIT BLE connection
 
 ---
 
-## 🎯 RACE OPERATIONS
+## 🏁 RACE OPERATIONS
 
 ### race-mode.sh
-**Toggle between RACE mode (local-only) and DEBRIEF mode (cloud)**
+**Race Mode Toggle (local vs cloud)**
+
+Toggle between RACE mode (local-only) and DEBRIEF mode (cloud-ready).
 
 ```bash
-./race-mode.sh on       # Disable cloud writes (low latency)
-./race-mode.sh off      # Enable cloud writes (debrief)
-./race-mode.sh status   # Show current mode
+./scripts/race-mode.sh on       # Race mode: local InfluxDB only
+./scripts/race-mode.sh off      # Debrief mode: cloud ready
+./scripts/race-mode.sh status   # Current mode + service status
 ```
 
-- **RACE MODE**: Local InfluxDB only (no internet dependency)
-- **DEBRIEF MODE**: Hybrid (local + cloud backup)
+- **Race mode**: Disables cloud writes, optimizes for offline racing
+- **Debrief mode**: Enables cloud uploads for post-race analysis
 - **Config**: Updates `.env` RACE_MODE flag
 - **Services affected**: Signal K data pipeline
 - **systemd**: ❌ Manual only
 
 ---
 
-### post-race-cloud-sync.sh
-**Upload race day data to cloud InfluxDB**
+### race-debrief.sh
+**Post-race Workflow**
+
+Export data, generate report, sync to cloud.
 
 ```bash
-bash scripts/post-race-cloud-sync.sh 2026-05-22
+bash scripts/race-debrief.sh
 ```
 
+- **Actions**: Export race data, generate summary report, upload to cloud
+- **Requirements**: WiFi/internet for cloud upload
+- **systemd**: ❌ Manual — run after docking
+
+---
+
+### midnight-reporter.sh
+**WhatsApp Race Reporter**
+
+WhatsApp race reporter via Twilio (sends race updates to crew/shore).
+
+```bash
+bash scripts/midnight-reporter.sh
+```
+
+- **Requires**: TWILIO_* credentials in .env
+- **Template**: oc/MIDNIGHT-REPORTER-PROMPT.md
+- **systemd**: ❌ Event-driven — call manually or from regatta server
+
+---
+
+## 💾 BACKUP & MAINTENANCE
+
+### influxdb-gdrive-backup.sh
+**InfluxDB Cloud Backup**
+
+Backup InfluxDB data to Google Drive via rclone.
+
+```bash
+bash scripts/influxdb-gdrive-backup.sh
+```
+
+- **Requires**: rclone configured with Google Drive remote
+- **systemd**: ❌ Manual or cron (recommended: weekly)
+
+---
+
+### post-race-cloud-sync.sh
+**Post-race Cloud Sync**
+
+Post-race sync: local InfluxDB → InfluxDB Cloud → Grafana export.
+
+```bash
+bash scripts/post-race-cloud-sync.sh
+```
+
+- **Requires**: INFLUX_CLOUD_* credentials in .env
 - **Action**: Exports race data from local InfluxDB → cloud backup
 - **Time range**: Full day (00:00-23:59 UTC)
 - **Format**: InfluxDB line protocol
 - **Logging**: `logs/cloud-sync-YYYY-MM-DD.log`
-- **systemd**: ❌ Manual only (run after race)
-- **Requirements**: Cloud InfluxDB token in `.env`
+- **systemd**: ❌ Manual — run after race, with WiFi
 
 ---
 
-## 🔄 DEPLOYMENT & MAINTENANCE
+## 🔧 UTILITIES
 
-### install-midnight-rider.sh
-**Full system installation (new RPi or recovery)**
+### json_utils.py
+**JSON Utility Library**
+
+JSON utility library used by deployment and analysis scripts.
 
 ```bash
-sudo bash scripts/install-midnight-rider.sh
+python3 scripts/json_utils.py validate <file.json>
+python3 scripts/json_utils.py format <file.json>
 ```
 
-- **Duration**: ~30 minutes
-- **Installs**: Docker, Node.js, Signal K, Python deps, systemd services
-- **Idempotent**: Safe to run multiple times
-- **Backup**: Creates snapshot before changes
-- **systemd**: ❌ One-time setup script
+- **Note**: Used internally by other scripts
 
 ---
 
-## 📝 LOGGING & REPORTING
-
-### midnight-reporter.sh
-**Session report generation (wind, course, competitors)**
+## ⚡ QUICK REFERENCE — Common Operations
 
 ```bash
-bash scripts/midnight-reporter.sh [--full] [--compact]
-```
+# Before departure
+bash scripts/check-system.sh --full
 
-- **Output**: Markdown report to stdout or file
-- **Content**: Summary of today's race data
-- **Usage**: Share via WhatsApp / Telegram
-- **Dependencies**: jq, curl
+# Start data collection (run in background with &)
+python3 scripts/noaa_collector.py &
+python3 scripts/lis_wind_collector.py &
+python3 scripts/current_vector_calc.py &
+
+# Race day
+bash scripts/race-mode.sh on
+
+# Post-race
+bash scripts/race-mode.sh off
+bash scripts/race-debrief.sh
+```
 
 ---
 
-## 🗺️ NAVIGATION
+## 🗑️ REMOVED SCRIPTS (historical reference)
 
-### import-grafana-dashboards.sh
-**Bulk import dashboard JSONs → Grafana**
-
-```bash
-bash scripts/import-grafana-dashboards.sh
-```
-
-- **Source**: `grafana-dashboards/*.json`
-- **Destination**: Grafana (via API)
-- **Auth**: Uses GRAFANA_TOKEN from `.env`
-- **systemd**: ❌ Manual only (one-time setup)
+| Script | Reason | Replacement |
+|--------|--------|-------------|
+| buoy-logger.sh | Duplicate of lis_wind_collector.py | lis_wind_collector.py |
+| test-all-mcp.sh | Duplicate of mcp/test-servers.sh | mcp/test-servers.sh |
+| apply-flux-conversions.py | One-shot task completed | N/A |
+| deploy_grafana_alerts.py | Replaced by grafana-provisioning/ | grafana-provisioning/alerting/ |
+| import-alerts-grafana.py | Replaced by grafana-provisioning/ | grafana-provisioning/alerting/ |
+| import-grafana-dashboards.sh | Replaced by grafana-provisioning/ | grafana-provisioning/dashboards/ |
+| generate-status-dashboard.py | One-shot task completed | N/A |
+| fix-units-grafana.py | One-shot task completed | N/A |
 
 ---
 
@@ -300,3 +384,4 @@ bash scripts/import-grafana-dashboards.sh
 
 **Status**: Production (post-cleanup 2026-05-29)
 **Next review**: Post-race debrief (2026-05-22+)
+**Last audit**: 2026-05-29 — All scripts documented, 2 duplicates removed, race-mode.sh fixed

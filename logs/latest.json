@@ -1,30 +1,31 @@
 {
-  "task": "repo-cleanup-round6",
-  "date": "2026-05-28T23:08:17.338166",
+  "task": "scripts-audit-and-doc",
+  "date": "2026-05-28T23:21:54.842493",
   "status": "SUCCESS",
   "steps_completed": [
-    "Root: 7 orphans (AGENTS.md, CHANGELOG.md, SECURITY.md, orchestrate.py, Dockerfile.wit, 2 race JSON)",
-    "config/: 6 desktop shortcuts + signalk-settings-wit.json",
-    "etc/: portal.service (duplicate)",
-    "logs/: write_log.py (orphan)",
-    "plugins/: signalk-astronomical-direct.js + package (duplicate)",
-    "scripts/: 12 one-shot/superseded scripts",
-    "docs/: CLOUD-SETUP.md + INTEGRATION-INDEX.md",
-    "regatta/ + portal/: 2 misplaced files"
+    "Deleted buoy-logger.sh (duplicate of lis_wind_collector.py)",
+    "Deleted test-all-mcp.sh (duplicate of mcp/test-servers.sh)",
+    "Fixed race-mode.sh: removed dead docker compose restart astronomical reference",
+    "scripts/README.md: complete rewrite with all 20 scripts documented",
+    "Docstring/header documentation verified in all core scripts"
   ],
-  "files_deleted": 34,
+  "files_modified": [
+    "scripts/README.md",
+    "scripts/race-mode.sh",
+    "logs/oc-actions.log",
+    "logs/latest.json"
+  ],
+  "files_deleted": [
+    "scripts/buoy-logger.sh",
+    "scripts/test-all-mcp.sh"
+  ],
+  "daemon_scripts_without_systemd": [
+    "scripts/noaa_collector.py",
+    "scripts/lis_wind_collector.py",
+    "scripts/weather-logger.sh",
+    "scripts/current_vector_calc.py",
+    "scripts/wave-analyzer.py"
+  ],
   "errors": [],
-  "services_status": {
-    "signalk": "not touched",
-    "influxdb": "not touched",
-    "grafana": "not touched"
-  },
-  "pending_clarification": [
-    "scripts/noaa_collector.py \u2014 active daemon or one-shot?",
-    "scripts/current_vector_calc.py \u2014 active service?",
-    "scripts/target_speed_calc.py \u2014 active service?",
-    "scripts/wave-analyzer.py \u2014 active service?",
-    "mcp/Dockerfile \u2014 Docker or native Node.js?"
-  ],
-  "next_recommended": "Clarify 5 pending scripts then close cleanup"
+  "next_recommended": "Create systemd service files for all 5 daemon scripts before next race"
 }

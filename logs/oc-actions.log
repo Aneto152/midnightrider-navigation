@@ -38,3 +38,9 @@
 [2026-05-28T23:08:17.337763] [FILE_DELETE] [DOCS] CLOUD-SETUP.md (Cloudflare removed), INTEGRATION-INDEX.md (redundant)
 [2026-05-28T23:08:17.337763] [FILE_DELETE] [MISC] regatta/ais_watch_architecture.md, portal/Midnight-Rider-Dashboard.desktop
 [2026-05-28T23:08:17.337763] [RESULT] [ROUND6] Result: SUCCESS — 34 files deleted
+[2026-05-28T23:21:54.842175] [FILE_DELETE] [SCRIPTS] buoy-logger.sh deleted (duplicate of lis_wind_collector.py)
+[2026-05-28T23:21:54.842175] [FILE_DELETE] [SCRIPTS] test-all-mcp.sh deleted (duplicate of mcp/test-servers.sh)
+[2026-05-28T23:21:54.842175] [FILE_MODIFY] [SCRIPTS] race-mode.sh: removed dead astronomical docker reference
+[2026-05-28T23:21:54.842175] [FILE_MODIFY] [DOCS] scripts/README.md: comprehensive rewrite with all scripts documented
+[2026-05-28T23:21:54.842175] [FILE_VERIFY] [SCRIPTS] Docstring audit completed — all critical scripts verified
+[2026-05-28T23:21:54.842175] [RESULT] [SCRIPTS-AUDIT] Result: SUCCESS
