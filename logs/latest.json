@@ -1,37 +1,30 @@
 {
-  "task": "repo-cleanup-round5",
-  "date": "2026-05-28T23:01:32.998364",
+  "task": "repo-cleanup-round6",
+  "date": "2026-05-28T23:08:17.338166",
   "status": "SUCCESS",
   "steps_completed": [
-    "Docker astronomical container stopped and removed",
-    "astronomical service removed from docker-compose.yml",
-    "astronomical/ directory deleted (5 files)",
-    "memory/ directory deleted (12 session notes)",
-    "scripts/astronomical-data.sh, .service, init-astronomical-data.sh deleted",
-    "plugins/ASTRONOMICAL-README.md + INSTALLATION.md deleted"
+    "Root: 7 orphans (AGENTS.md, CHANGELOG.md, SECURITY.md, orchestrate.py, Dockerfile.wit, 2 race JSON)",
+    "config/: 6 desktop shortcuts + signalk-settings-wit.json",
+    "etc/: portal.service (duplicate)",
+    "logs/: write_log.py (orphan)",
+    "plugins/: signalk-astronomical-direct.js + package (duplicate)",
+    "scripts/: 12 one-shot/superseded scripts",
+    "docs/: CLOUD-SETUP.md + INTEGRATION-INDEX.md",
+    "regatta/ + portal/: 2 misplaced files"
   ],
-  "files_modified": [
-    "docker-compose.yml",
-    "logs/oc-actions.log",
-    "logs/latest.json"
-  ],
-  "files_deleted": [
-    "astronomical/ (5 files)",
-    "memory/ (12 files)",
-    "scripts/astronomical-data.sh",
-    "scripts/astronomical-data.service",
-    "scripts/init-astronomical-data.sh",
-    "plugins/ASTRONOMICAL-README.md",
-    "plugins/INSTALLATION.md"
-  ],
-  "note": "Signal K plugin signalk-astronomical.js handles astronomical data \u2014 Docker approach superseded",
+  "files_deleted": 34,
   "errors": [],
   "services_status": {
     "signalk": "not touched",
-    "influxdb": "running",
-    "grafana": "running",
-    "astronomical_docker": "REMOVED",
-    "signalk_astronomical_plugin": "active (unchanged)"
+    "influxdb": "not touched",
+    "grafana": "not touched"
   },
-  "next_recommended": "Verify Signal K astronomical plugin is producing data in InfluxDB"
+  "pending_clarification": [
+    "scripts/noaa_collector.py \u2014 active daemon or one-shot?",
+    "scripts/current_vector_calc.py \u2014 active service?",
+    "scripts/target_speed_calc.py \u2014 active service?",
+    "scripts/wave-analyzer.py \u2014 active service?",
+    "mcp/Dockerfile \u2014 Docker or native Node.js?"
+  ],
+  "next_recommended": "Clarify 5 pending scripts then close cleanup"
 }

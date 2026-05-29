@@ -28,3 +28,13 @@
 [2026-05-28T23:01:32.998071] [FILE_DELETE] [SCRIPTS] Deleted astronomical-data.sh, astronomical-data.service, init-astronomical-data.sh
 [2026-05-28T23:01:32.998071] [FILE_DELETE] [PLUGINS] Deleted ASTRONOMICAL-README.md, INSTALLATION.md (duplicates)
 [2026-05-28T23:01:32.998071] [RESULT] [ROUND5] Result: SUCCESS — Signal K plugin handles astronomical data
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [ROOT] AGENTS.md, CHANGELOG.md, SECURITY.md, orchestrate.py, Dockerfile.wit
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [ROOT] LIGNE-DEPART-OPERATIONAL.json, REGATTA-LIGNE-DEPART-FINAL.json
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [CONFIG] 6 desktop shortcuts + signalk-settings-wit.json
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [ETC] portal.service (duplicate of midnightrider-portal.service)
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [LOGS] write_log.py (orphan script)
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [PLUGINS] signalk-astronomical-direct.js + package (duplicate)
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [SCRIPTS] 12 one-shot/superseded scripts (INSTALL-README, apply-flux, deploy variants, update variants, test-whatsapp, install-check)
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [DOCS] CLOUD-SETUP.md (Cloudflare removed), INTEGRATION-INDEX.md (redundant)
+[2026-05-28T23:08:17.337763] [FILE_DELETE] [MISC] regatta/ais_watch_architecture.md, portal/Midnight-Rider-Dashboard.desktop
+[2026-05-28T23:08:17.337763] [RESULT] [ROUND6] Result: SUCCESS — 34 files deleted
