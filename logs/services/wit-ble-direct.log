@@ -1544,3 +1544,23 @@
 [2026-05-29T16:35:54] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 145401)
 [2026-05-29T16:35:54] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
 [2026-05-29T16:35:54] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-29T16:36:05] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T16:36:05] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T16:36:25] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T16:36:25] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
+[2026-05-29T16:36:55] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T16:36:55] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
+[2026-05-29T16:37:45] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T16:37:45] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
+[2026-05-29T16:38:55] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T16:38:55] [ERROR] [wit-ble-direct] [L2] L1 failures 5 ≥ threshold 5 — resetting hci0
+[2026-05-29T16:39:02] [INFO] [wit-ble-direct] [L2] hci0 reset complete
+[2026-05-29T16:39:02] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T16:39:12] [WARNING] [wit-ble-direct] [L1] Connection failed (1): [org.bluez.Error.Failed] le-connection-abort-by-local
+[2026-05-29T16:39:12] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
+[2026-05-29T16:39:34] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T16:39:34] [INFO] [wit-ble-direct] [BLE_SETUP] Sending RATE cmd (10Hz) to 00002a00-0000-1000-8000-00805f9b34fb
+[2026-05-29T16:39:34] [WARNING] [wit-ble-direct] [BLE_SETUP] RATE cmd failed: [org.bluez.Error.NotAuthorized] Operation Not Authorized
+[2026-05-29T16:39:34] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to notifications
+[2026-05-29T16:39:35] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T16:40:54] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
