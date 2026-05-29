@@ -314,6 +314,12 @@ _stats = {
     'last_heartbeat': time.time(),
 }
 
+# WIT state machine: prevent ENABLE_QUATERNION reset loop
+# UNINITIALIZED: send ENABLE_QUAT once (WIT resets) → WAIT_RECONNECT
+# WAIT_RECONNECT: reconnect → subscribe (no commands) → STREAMING
+# STREAMING: receive data continuously
+_wit_state = 'UNINITIALIZED'
+
 def log_heartbeat() -> None:
     """Periodic status log."""
     elapsed = time.time() - _stats['last_heartbeat']
