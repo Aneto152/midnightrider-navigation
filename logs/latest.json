@@ -1,14 +1,15 @@
 {
-  "task": "rpi-full-cleanup",
-  "timestamp": "2026-05-29T13:08:51.842446",
+  "task": "rpi-cleanup-full",
+  "timestamp": "2026-05-29T13:12:51.411123",
   "status": "SUCCESS",
-  "phases_complete": 7,
-  "services_removed": 13,
-  "scripts_archived": 75,
-  "boot_enabled": [
+  "services_removed": 6,
+  "scripts_archived": 71,
+  "services_enabled": [
     "calypso_direct",
     "wit-ble-direct",
-    "monitor-resources"
+    "monitor-resources",
+    "midnightrider-portal"
   ],
+  "cleanup_log": "logs/debug/cleanup-1312.log",
   "next_step": "sudo reboot"
 }

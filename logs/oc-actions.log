@@ -93,3 +93,9 @@
 [2026-05-29T13:08:51.842446] [INSTALL] [PIP] calypso-anemometer uninstalled
 [2026-05-29T13:08:51.842446] [CONFIG_CHANGE] [SK] signalk-um982-custom disabled
 [2026-05-29T13:08:51.842446] [RESULT] [PI-CLEANUP] SUCCESS — ready for reboot
+[2026-05-29T13:12:51.411123] [FILE_DELETE] [PI] Ghost services removed: signalk-tcp-bridge, nmea-tcp-listener, calypso_anemometer, calypso_watchdog, wit-nmea-server, portal
+[2026-05-29T13:12:51.411123] [FILE_ARCHIVE] [HOME] 71 scripts archived to ~/archive-home-20260529/
+[2026-05-29T13:12:51.411123] [CONFIG_CHANGE] [PI] Crontab cleared (backed up)
+[2026-05-29T13:12:51.411123] [CONFIG_CHANGE] [SK] signalk-um982-custom disabled
+[2026-05-29T13:12:51.411123] [DEPLOY] [SK] midnightrider-portal.service deployed
+[2026-05-29T13:12:51.411123] [RESULT] [PI-CLEANUP] COMPLETE — system ready for race
