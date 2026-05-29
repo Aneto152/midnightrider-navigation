@@ -1652,3 +1652,14 @@
 [2026-05-29T17:30:48] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
 [2026-05-29T17:35:49] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
 [2026-05-29T17:40:49] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T17:45:49] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T17:50:25] [INFO] [wit-ble-direct] [SHUTDOWN] Signal 15 received — shutting down
+[2026-05-29T17:50:27] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 197952)
+[2026-05-29T17:50:27] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
+[2026-05-29T17:50:27] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-29T17:50:37] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:50:37] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T17:50:58] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:50:58] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
+[2026-05-29T17:51:28] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:51:28] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...

@@ -382,7 +382,8 @@ async def run_ble_client() -> None:
                             log('info', 'BLE_SETUP', 'ENABLE_QUATERNION sent — WIT will reset')
                             _wit_state = 'WAIT_RECONNECT'
                             await asyncio.sleep(8)  # WIT resets during this
-                            log('info', 'BLE_SETUP', 'State→WAIT_RECONNECT: ready to reconnect')
+                            log('info', 'BLE_SETUP', 'State→WAIT_RECONNECT: reconnecting')
+                            break  # Exit: connection dead after reset, reconnect loop handles it
                         except Exception as e:
                             log('warning', 'BLE_SETUP', f'ENABLE_QUATERNION failed: {e}')
                             _wit_state = 'WAIT_RECONNECT'
@@ -423,19 +424,15 @@ async def run_ble_client() -> None:
                 _stats['l1_fails'] += 1
                 log('warning', 'L1', f'Connection failed ({l1_fail_count}): {e}')
                 
-                # L2: reset hci0 after threshold
+                # L2: clean exit → systemd restart (hci0 stays UP, no disruption)
+                # Principle: single service failure = device issue, NOT adapter issue
+                # If hci0 truly down, both services fail → systemd + bluetooth.target handles it
                 if l1_fail_count >= L2_FAIL_THRESHOLD:
-                    log('error', 'L2', f'L1 failures {l1_fail_count} ≥ threshold {L2_FAIL_THRESHOLD} — resetting hci0')
-                    try:
-                        subprocess.run('sudo hciconfig hci0 down', shell=True, timeout=10)
-                        await asyncio.sleep(3)
-                        subprocess.run('sudo hciconfig hci0 up', shell=True, timeout=10)
-                        await asyncio.sleep(3)
-                        log('info', 'L2', 'hci0 reset complete')
-                        l1_fail_count = 0
-                        reconnect_delay = RECONNECT_BASE_S
-                    except Exception as e2:
-                        log('error', 'L2', f'hci0 reset failed: {e2}')
+                    log('warning', 'L2',
+                        f'{l1_fail_count} failures ≥ threshold {L2_FAIL_THRESHOLD} — exiting cleanly')
+                    log('warning', 'L2',
+                        'systemd Restart=on-failure will handle restart')
+                    break  # Clean exit from main loop
                 
                 # Exponential backoff: 5s → 10s → 20s → ... → 60s max
                 reconnect_delay = min(reconnect_delay * 2, RECONNECT_MAX_S)
