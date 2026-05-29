@@ -424,7 +424,7 @@ async def run_ble_client() -> None:
                     while client.is_connected:
                         try:
                             await client.write_gatt_char(
-                                NOTIFY_UUID,
+                                write_uuid or NOTIFY_UUID,
                                 ENABLE_QUAT_CMD,  # FF AA 27 51 00
                                 response=False)
                             poll_errors = 0
