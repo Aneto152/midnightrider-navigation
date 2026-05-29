@@ -72,3 +72,9 @@
 [2026-05-29T08:52:39.535539] [FILE_CREATE] [SYSTEMD] wit-nmea-server.service (port 10110 running)
 [2026-05-29T08:52:39.535539] [FILE_CREATE] [DOCS] etc/systemd/system/README.md: comprehensive inventory
 [2026-05-29T08:52:39.535539] [RESULT] [SYSTEMD-AUDIT] SUCCESS
+[2026-05-29T10:31:30.030343] [SK_PLUGIN] signalk-wit-imu-ble: DISABLED (conflict resolution)
+[2026-05-29T10:31:30.030343] [FILE_CREATE] [BLE] ble/wit-ble-direct.py: unified daemon (quaternion, 16KB, async)
+[2026-05-29T10:31:30.030343] [FEATURE] quaternion-based attitude (no gimbal lock at vertical mount)
+[2026-05-29T10:31:30.030343] [FEATURE] internal recovery (L1→L2→systemd restart)
+[2026-05-29T10:31:30.030343] [FEATURE] singleton (PID file, no dual-instance)
+[2026-05-29T10:31:30.030343] [RESULT] [WIT-BLE-UNIFICATION] SUCCESS

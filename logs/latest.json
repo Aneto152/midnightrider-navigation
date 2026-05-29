@@ -1,27 +1,39 @@
 {
-  "task": "systemd-audit-consolidation",
-  "date": "2026-05-29T08:52:39.535539",
+  "task": "wit-ble-direct-unification",
+  "date": "2026-05-29T10:31:30.030343",
   "status": "SUCCESS",
-  "services_in_git": [
-    "calypso_anemometer",
-    "calypso_watchdog",
-    "avahi-mdns-fix",
-    "midnightrider-portal",
-    "monitor-resources",
-    "midnight-logs-commit (service + timer)",
-    "wit-nmea-server"
-  ],
-  "udev_rules_captured": [
-    "00-um982.rules (UM982 GNSS symlink)",
-    "99-um982.rules (UM982 alias)",
-    "99-wit-imu.rules (WIT IMU symlink)",
-    "99-rpi-keyboard.rules (RPi 500 keyboard)"
-  ],
-  "services_outside_repo": [
-    "signalk (SK installer)",
-    "influxdb (docker)",
-    "grafana (docker)",
-    "bluetooth (system)"
-  ],
+  "components": {
+    "daemon": "ble/wit-ble-direct.py (16 KB, 600+ lines, async)",
+    "features": [
+      "Native quaternion decoding (0x71 packets)",
+      "Mounting correction in quaternion space",
+      "No gimbal lock (atan2-based Euler)",
+      "Acceleration + gyro (0x61 packets)",
+      "Signal K HTTP POST delta publisher",
+      "Internal L1\u2192L2\u2192L3 recovery",
+      "Singleton enforcement (PID file)",
+      "Structured logging (rotating file)",
+      "All parameters via .env"
+    ],
+    "disabled": "signalk-wit-imu-ble SK plugin (conflict)"
+  },
+  "signal_k_paths": {
+    "attitude": [
+      "navigation.attitude.roll",
+      "navigation.attitude.pitch",
+      "navigation.attitude.yaw"
+    ],
+    "heading": [
+      "navigation.headingMagnetic"
+    ],
+    "motion": [
+      "navigation.acceleration.x",
+      "navigation.acceleration.y",
+      "navigation.acceleration.z",
+      "navigation.rateOfTurn"
+    ]
+  },
+  "deployment": "systemctl start wit-ble-direct",
+  "logs": "logs/services/wit-ble-direct.log",
   "errors": []
 }
