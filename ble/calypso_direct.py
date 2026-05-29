@@ -253,6 +253,7 @@ def _run(cmd: str, timeout: int = 15) -> tuple:
 # ══════════════════════════════════════════════════════════════════════════════
 
 _running = True
+_was_connected = False
 _stats = {
     'packets': 0,
     'last_data_ts': 0.0,
@@ -329,6 +330,7 @@ async def main() -> None:
                     log('info', 'BLE_CONNECT', 'Connected ✅')
                     delay = RECONNECT_BASE_S
                     l1_fails = 0
+                    _was_connected = True
                     _stats['first_logged'] = False
 
                     await configure_device(client)
