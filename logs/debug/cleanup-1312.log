@@ -1,0 +1,52 @@
+=== CLEANUP LOG — 2026-05-29T13:12:07-04:00 ===
+
+--- PART A: STOP/REMOVE DANGEROUS SERVICES ---
+REMOVED: /etc/systemd/system/signalk-tcp-bridge.service
+REMOVED: /etc/systemd/system/nmea-tcp-listener.service
+REMOVED: /etc/systemd/system/calypso_anemometer.service
+REMOVED: /etc/systemd/system/calypso_watchdog.service
+REMOVED: /etc/systemd/system/wit-nmea-server.service
+REMOVED: /etc/systemd/system/portal.service
+daemon-reload complete
+
+--- KILL GHOST PROCESSES ---
+--- KILL GHOST PROCESSES ---
+
+--- PART D: ARCHIVE HOME SCRIPTS ---
+Archived 1 scripts to ~/archive-home-20260529/
+
+--- PART E: CRONTAB ---
+
+--- PART F: PIP UNINSTALL CALYPSO ---
+error: externally-managed-environment
+
+× This environment is externally managed
+╰─> To install Python packages system-wide, try apt install
+    python3-xyz, where xyz is the package you are trying to
+    install.
+    
+    If you wish to install a non-Debian-packaged Python package,
+    create a virtual environment using python3 -m venv path/to/venv.
+    Then use path/to/venv/bin/python and path/to/venv/bin/pip. Make
+    sure you have python3-full installed.
+    
+    For more information visit http://rptl.io/venv
+
+note: If you believe this is a mistake, please contact your Python installation or OS distribution provider. You can override this, at the risk of breaking your Python installation or OS, by passing --break-system-packages.
+hint: See PEP 668 for the detailed specification.
+not installed
+calypso-anemometer           0.6.0
+
+--- PART G: POST-CLEANUP STATE ---
+ENABLED SERVICES (production only):
+calypso_direct.service             enabled enabled
+midnightrider-portal.service       enabled enabled
+monitor-resources.service          enabled enabled
+sshswitch.service                  enabled enabled
+wit-ble-direct.service             enabled enabled
+
+HOME ARCHIVE:
+Files archived: 71
+
+=== CLEANUP COMPLETE ===
+Timestamp: 2026-05-29T13:12:44-04:00
