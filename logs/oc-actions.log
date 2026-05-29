@@ -82,3 +82,8 @@
 [2026-05-29T10:54:02.916661] [FILE_DELETE] [PI] Legacy files removed: calypso-ble-reader.py, calypso_filter_proxy.py, calypso_robust_watchdog.py
 [2026-05-29T10:54:02.916661] [SERVICE_RESTART] [WIT] wit-ble-direct service deployed, started, and active
 [2026-05-29T10:54:02.916661] [RESULT] [WIT-SERVICE] SUCCESS
+[2026-05-29T11:50:56.548537] [FILE_MODIFY] [WIT] wit-ble-direct.py: TCP:5000 → UDP:4123 publisher
+[2026-05-29T11:50:56.548537] [CODE_FIX] [WIT] Removed asyncio.create_task(), synchronous callback
+[2026-05-29T11:50:56.548537] [SERVICE_RESTART] [WIT] wit-ble-direct deployed with UDP:4123
+[2026-05-29T11:50:56.548537] [VERIFICATION] [UDP] Port 4123 in use (SK listening)
+[2026-05-29T11:50:56.548537] [RESULT] [WIT-UDP-FIX] SUCCESS

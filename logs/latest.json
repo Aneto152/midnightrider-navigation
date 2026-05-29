@@ -1,19 +1,9 @@
 {
-  "task": "wit-service-deploy",
-  "date": "2026-05-29T10:54:02.916661",
+  "task": "wit-publisher-fix-udp",
+  "date": "2026-05-29T11:50:56.548537",
   "status": "SUCCESS",
-  "created": [
-    "etc/systemd/system/wit-ble-direct.service"
-  ],
-  "cleaned": [
-    "calypso-ble-reader.py (from /home/aneto/)",
-    "calypso_filter_proxy.py (from /home/aneto/)",
-    "calypso_robust_watchdog.py (from /home/aneto/)"
-  ],
-  "services": {
-    "wit-ble-direct": "active (deployed and running)",
-    "wit-nmea-server": "stopped (superseded)"
-  },
-  "ble_connection": "Attempting to connect to WIT (E9:10:DB:8B:CE:C7)",
+  "fix": "TCP:5000 (wrong: was Regatta Docker) \u2192 UDP:4123 (correct: SK delta input)",
+  "architecture": "WIT + Calypso both use UDP:4123 \u2192 Signal K",
+  "verification": "Port 4123 confirmed in use by SK, UDP packets flowing",
   "errors": []
 }
