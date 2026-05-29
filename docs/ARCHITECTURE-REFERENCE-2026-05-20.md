@@ -520,3 +520,76 @@ curl -s http://localhost:3000/signalk/v1/api/vessels/self/environment/outside/pr
 **Maintenu par :** Denis LAFARGE + OC (OpenClaw via Dust)  
 **Prochain événement :** Block Island Race — 2026-05-22  
 **Contact urgence :** `logs/latest.json` → état système en temps réel
+
+
+---
+
+## REPOSITORY CLEANUP & STRUCTURE — 2026-05-29
+
+### Cleanup Rounds Completed
+
+**Round 1 (commit b3aaacf):** Removed 11 debug/superseded files
+- Debug logs (3 files)
+- Duplicate documentation (2 files)
+- Superseded scripts (5 files)
+- Old dashboard version (1 file)
+
+**Round 2 (commit aae1073):** Removed 4 files, moved 3 files
+- Debug artifacts: ble_diagnostic.txt, diagnostic_raw.txt
+- MCP dedup: mcp/racing-server.js, mcp/racing-package.json
+- Root reorganization: 3 docs moved to docs/
+
+**Round 3 (commit a1a279e):** Removed 34 files
+- docs/grafana-dashboards/ (complete duplicate)
+- docs/archive/ (12 abandoned specs)
+- logs/ (12 debug artifacts)
+- .gitignore: added *.pyc rule
+
+### Repository Structure (Post-Cleanup)
+
+```
+midnightrider-navigation/
+├── grafana-dashboards/          # Active Grafana dashboard JSONs (9 dashboards)
+├── docs/                        # Documentation (architecture, integration, hardware)
+│   ├── OPERATIONS/              # Field test, race day checklists
+│   ├── HARDWARE/                # Datasheets (Calypso, UM982, WIT, Vulcan, etc.)
+│   ├── INTEGRATION/             # Setup guides for each device
+│   ├── SOFTWARE/                # Signal K, Grafana, InfluxDB docs
+│   └── index.md                 # Documentation index
+├── scripts/                     # Deployment & monitoring scripts
+├── logs/                        # Operational logs (latest.json, cleanup logs, oc-actions.log)
+├── mcp/                         # Model Context Protocol servers (race, weather, polar, etc.)
+├── plugins/                     # Signal K plugins (2 versions of astronomical)
+├── portal/                      # Web dashboard (HTTP server)
+├── regatta/                     # Race-day reporting system
+├── data/                        # Polar curves (J30 ORC)
+└── docker-compose.yml           # Container orchestration
+```
+
+### Known Plugin Duality
+
+**Astronomical Plugin:** Two versions exist in plugins/
+- signalk-astronomical.js (11.4 KB)
+- signalk-astronomical-direct.js (10.0 KB)
+
+**Status:** Configuration shows `signalk-astronomical.json` enabled with NOAA station 8518750
+**Decision:** Keep both versions; unclear which is active. Recommend consolidation in future refactor.
+
+### Pending Issues
+
+1. **logs/__pycache__/write_log.cpython-313.pyc** — Python bytecode file committed (should be in .gitignore)
+2. **Astronomical plugin duplication** — Two working versions, unclear which is "primary"
+
+### Cleanup Summary
+
+| Metric | Value |
+|--------|-------|
+| Total files deleted | 57 |
+| Total files moved | 3 |
+| Repository size reduction | ~15 KB |
+| Cleanup rounds | 3 |
+| Status | ✅ COMPLETE |
+
+---
+**Cleaned on:** 2026-05-29 22:35 UTC
+**Cleaned by:** OC Agent (automated)

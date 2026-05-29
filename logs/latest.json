@@ -1,115 +1,35 @@
 {
-  "task": "docs-logs-cleanup",
-  "date": "2026-05-28T22:32:19.699046",
+  "task": "post-cleanup-corrective",
+  "date": "2026-05-28T22:37:43.189342",
   "status": "SUCCESS",
-  "deleted": [
-    {
-      "file": "docs/grafana-dashboards/01-cockpit.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/02-environment.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/03-performance.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/04-wind-current.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/05-competitive.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/06-electrical.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/07-race.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/08-alerts.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/09-crew.json"
-    },
-    {
-      "file": "docs/grafana-dashboards/README.md"
-    },
-    {
-      "file": "docs/archive/SAILS-DECISION-MATRIX-DETAILED.md"
-    },
-    {
-      "file": "docs/archive/SAILS-MANAGEMENT-SYSTEM.md"
-    },
-    {
-      "file": "docs/archive/J30-JIBSAILS-CLASSIFICATION.md"
-    },
-    {
-      "file": "docs/archive/J30-SAILS-SPECIFICS.md"
-    },
-    {
-      "file": "docs/archive/POLAR-PERFORMANCE-INTEGRATION.md"
-    },
-    {
-      "file": "docs/archive/LAYLINES-INTEGRATION.md"
-    },
-    {
-      "file": "docs/archive/LOCH-CALIBRATION-SYSTEM.md"
-    },
-    {
-      "file": "docs/archive/CURRENT-CALCULATOR-SYSTEM.md"
-    },
-    {
-      "file": "docs/archive/VICTRON-ORION-12-18-CONFIG.md"
-    },
-    {
-      "file": "docs/archive/VICTRON-ORION-BLUETOOTH.md"
-    },
-    {
-      "file": "docs/archive/VICTRON-ORION-INTEGRATION.md"
-    },
-    {
-      "file": "docs/archive/SIGNALK-INVENTORY.md"
-    },
-    {
-      "file": "logs/all_calypso_code.txt"
-    },
-    {
-      "file": "logs/ble_reset_success.txt"
-    },
-    {
-      "file": "logs/boot_fix_enabled.txt"
-    },
-    {
-      "file": "logs/calypso_crash_diagnosis.txt"
-    },
-    {
-      "file": "logs/calypso_final_clean.txt"
-    },
-    {
-      "file": "logs/calypso_fix_final.txt"
-    },
-    {
-      "file": "logs/calypso_recovery_09h47.txt"
-    },
-    {
-      "file": "logs/calypso_recovery_success.txt"
-    },
-    {
-      "file": "logs/FINAL_DEPLOYMENT_STATUS_2026-05-15.json"
-    },
-    {
-      "file": "logs/FINAL_STATUS_2026-05-15.json"
-    },
-    {
-      "file": "logs/MIDNIGHT_REPORTER_STATUS.json"
-    },
-    {
-      "file": "logs/SESSION_STATUS_2026-05-15-1653.json"
-    }
+  "actions": [
+    "logs/oc-actions.log created with cleanup rounds 1, 2, 3",
+    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md updated with cleanup summary and docs/ structure",
+    "signalk-astronomical plugin investigated \u2014 signalk-astronomical.json enabled (NOAA 8518750)",
+    "logs/latest.json updated with this session entries"
+  ],
+  "files_modified": [
+    "logs/oc-actions.log",
+    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md"
+  ],
+  "astronomical_investigation": {
+    "versions_in_repo": [
+      "plugins/signalk-astronomical.js (11.4 KB)",
+      "plugins/signalk-astronomical-direct.js (10.0 KB)"
+    ],
+    "config_file": "~/.signalk/plugin-config-data/signalk-astronomical.json",
+    "config_enabled": true,
+    "noaa_station": "8518750",
+    "status": "Active but unclear which JS version is loaded"
+  },
+  "pending_cleanup": [
+    "logs/__pycache__/write_log.cpython-313.pyc \u2014 Python bytecode (should be .gitignore only)",
+    "Consolidate signalk-astronomical.js vs signalk-astronomical-direct.js into one version"
   ],
   "errors": [],
-  "completed_at": "2026-05-28T22:32:39.176653",
-  "summary": {
-    "total_deleted": 34,
-    "total_errors": 0
+  "services_status": {
+    "signalk": "not modified",
+    "influxdb": "not modified",
+    "grafana": "not modified"
   }
 }
