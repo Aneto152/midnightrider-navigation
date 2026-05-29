@@ -1,26 +1,20 @@
 {
-  "task": "plugins-audit-doc",
-  "date": "2026-05-28T23:29:38.551657",
+  "task": "service-fix-and-plugin-inventory",
+  "date": "2026-05-28T23:36:14.786793",
   "status": "SUCCESS",
   "steps_completed": [
-    "BUGFIX: signalk-um982-proprietary.js pitch normalized from Unicore 0-360\u00b0 to -180\u00b0/+180\u00b0",
-    "RENAME: plugins/package.json \u2192 plugins/signalk-um982-package.json",
-    "CREATE: plugins/signalk-astronomical-package.json (with suncalc + axios deps)",
-    "ENHANCE: signalk-wit-nmea.js JSDoc header (multi-source note, axis remap)",
-    "REWRITE: plugins/README.md \u2014 all 3 plugins documented (8 KB)"
+    "monitor-resources.service: WorkingDirectory corrected from .openclaw/workspace to midnightrider-navigation",
+    "midnightrider-portal.service: WorkingDirectory corrected",
+    "docs/SIGNALK-PLUGINS-INVENTORY.md created with all installed plugins (536 lines)"
   ],
   "files_modified": [
-    "plugins/signalk-um982-proprietary.js",
-    "plugins/signalk-wit-nmea.js",
-    "plugins/README.md"
+    "etc/systemd/system/monitor-resources.service",
+    "etc/systemd/system/midnightrider-portal.service",
+    "docs/SIGNALK-PLUGINS-INVENTORY.md",
+    "logs/oc-actions.log",
+    "logs/latest.json"
   ],
-  "files_renamed": [
-    "plugins/package.json \u2192 plugins/signalk-um982-package.json"
-  ],
-  "files_created": [
-    "plugins/signalk-astronomical-package.json"
-  ],
-  "design_decision": "dual-source navigation.attitude.* intentional (Denis 2026-05-29) \u2014 SK tags by source label",
-  "errors": [],
-  "next_recommended": "Deploy bugfix to Pi: cp plugins/signalk-um982-proprietary.js ~/.signalk/plugins/signalk-um982-proprietary/ && systemctl restart signalk"
+  "signalk_plugins_found": 300,
+  "signalk_plugins_active": 9,
+  "errors": []
 }

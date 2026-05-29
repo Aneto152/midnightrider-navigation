@@ -51,3 +51,7 @@
 [2026-05-28T23:29:38.551406] [FILE_CREATE] [PLUGINS] plugins/signalk-astronomical-package.json created
 [2026-05-28T23:29:38.551406] [FILE_MODIFY] [DOCS] plugins/README.md: complete rewrite covering all 3 plugins
 [2026-05-28T23:29:38.551406] [RESULT] [PLUGINS-AUDIT] Result: SUCCESS — bugfix applied, docs complete
+[2026-05-28T23:36:14.786537] [CONFIG_CHANGE] [SYSTEMD] monitor-resources.service: WorkingDirectory fixed
+[2026-05-28T23:36:14.786537] [CONFIG_CHANGE] [SYSTEMD] midnightrider-portal.service: WorkingDirectory fixed
+[2026-05-28T23:36:14.786537] [FILE_CREATE] [DOCS] docs/SIGNALK-PLUGINS-INVENTORY.md created — all SK plugins inventoried
+[2026-05-28T23:36:14.786537] [RESULT] [SERVICE-FIX] Result: SUCCESS
