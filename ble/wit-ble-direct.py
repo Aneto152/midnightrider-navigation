@@ -84,6 +84,7 @@ WRITE_UUID = '0000ffe9-0000-1000-8000-00805f9a34fb'
 
 # WIT commands
 ENABLE_QUATERNION = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])
+RATE_CMD = bytes([0xFF, 0xAA, 0x03, 0x04, 0x00])  # 10 Hz — STARTS WIT data stream (essential per SDK)
 
 # Rate codes: Hz → code
 RATE_CODES = {1: 0x01, 2: 0x02, 5: 0x03, 10: 0x04, 20: 0x05, 50: 0x06, 100: 0x07, 200: 0x08}
@@ -349,19 +350,29 @@ async def run_ble_client() -> None:
                     l1_fail_count = 0
                     reconnect_delay = RECONNECT_BASE_S
                     
-                    # WIT DATA ACTIVATION:
-                    # Try writing ENABLE_QUATERNION to the notify characteristic (ffe4).
-                    # On WitMotion devices, ffe4 is often bidirectional (notify + write).
-                    # This "wakes" the WIT and starts its data stream.
-                    # Using response=False (write-without-response) to avoid ACK hang.
+                    # WIT DATA ACTIVATION (per official SDK protocol):
+                    # Send RATE command to START the WIT data stream.
+                    # Without this, WIT connects but sends ZERO packets.
+                    # The RATE_CMD tells WIT to output 10Hz quaternion data.
+                    write_uuid = None
+                    for service in client.services:
+                        for char in service.characteristics:
+                            if 'write' in char.properties or 'write-without-response' in char.properties:
+                                write_uuid = str(char.uuid)
+                                log('debug', 'BLE_SETUP', f'Write-capable char found: {write_uuid}')
+                                break
+                        if write_uuid:
+                            break
+                    
+                    # Use discovered write char, fallback to notify char (bidirectional)
+                    cmd_uuid = write_uuid or NOTIFY_UUID
+                    log('info', 'BLE_SETUP', f'Sending RATE cmd (10Hz) to {cmd_uuid}')
                     try:
-                        await client.write_gatt_char(
-                            NOTIFY_UUID, ENABLE_QUATERNION,
-                            response=False
-                        )
-                        log('info', 'BLE_SETUP', 'Activation cmd sent to ffe4 (write-without-response)')
+                        await client.write_gatt_char(cmd_uuid, RATE_CMD, response=False)
+                        log('info', 'BLE_SETUP', 'RATE cmd sent — WIT stream starting')
+                        await asyncio.sleep(0.5)  # Brief pause for WIT to apply
                     except Exception as e:
-                        log('debug', 'BLE_SETUP', f'Write to ffe4 skipped: {e}')
+                        log('warning', 'BLE_SETUP', f'RATE cmd failed: {e}')
                     
                     log('info', 'BLE_SETUP', 'Subscribing to notifications')
                     
