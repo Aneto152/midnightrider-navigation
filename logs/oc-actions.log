@@ -87,3 +87,9 @@
 [2026-05-29T11:50:56.548537] [SERVICE_RESTART] [WIT] wit-ble-direct deployed with UDP:4123
 [2026-05-29T11:50:56.548537] [VERIFICATION] [UDP] Port 4123 in use (SK listening)
 [2026-05-29T11:50:56.548537] [RESULT] [WIT-UDP-FIX] SUCCESS
+[2026-05-29T13:08:51.842446] [FILE_DELETE] [PI] Removed 13 ghost services from /etc/systemd/system/
+[2026-05-29T13:08:51.842446] [FILE_MOVE] [HOME] ~75 dev scripts archived to ~/archive-home-20260529/
+[2026-05-29T13:08:51.842446] [CONFIG_CHANGE] [PI] Crontab cleared (backed up)
+[2026-05-29T13:08:51.842446] [INSTALL] [PIP] calypso-anemometer uninstalled
+[2026-05-29T13:08:51.842446] [CONFIG_CHANGE] [SK] signalk-um982-custom disabled
+[2026-05-29T13:08:51.842446] [RESULT] [PI-CLEANUP] SUCCESS — ready for reboot

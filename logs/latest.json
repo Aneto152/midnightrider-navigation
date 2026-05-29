@@ -1,9 +1,14 @@
 {
-  "task": "wit-publisher-fix-udp",
-  "date": "2026-05-29T11:50:56.548537",
+  "task": "rpi-full-cleanup",
+  "timestamp": "2026-05-29T13:08:51.842446",
   "status": "SUCCESS",
-  "fix": "TCP:5000 (wrong: was Regatta Docker) \u2192 UDP:4123 (correct: SK delta input)",
-  "architecture": "WIT + Calypso both use UDP:4123 \u2192 Signal K",
-  "verification": "Port 4123 confirmed in use by SK, UDP packets flowing",
-  "errors": []
+  "phases_complete": 7,
+  "services_removed": 13,
+  "scripts_archived": 75,
+  "boot_enabled": [
+    "calypso_direct",
+    "wit-ble-direct",
+    "monitor-resources"
+  ],
+  "next_step": "sudo reboot"
 }
