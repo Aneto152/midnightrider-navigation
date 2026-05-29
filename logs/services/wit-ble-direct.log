@@ -1444,3 +1444,34 @@
 [2026-05-29T15:13:37] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
 [2026-05-29T15:13:37] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
 [2026-05-29T15:13:37] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T15:16:22] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:4
+[2026-05-29T15:17:04] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T15:17:04] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T15:17:17] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T15:17:17] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
+[2026-05-29T15:17:17] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T15:21:06] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T15:21:06] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T15:21:17] [WARNING] [wit-ble-direct] [L1] Connection failed (2): [org.bluez.Error.Failed] le-connection-abort-by-local
+[2026-05-29T15:21:17] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
+[2026-05-29T15:21:39] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T15:21:39] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
+[2026-05-29T15:21:39] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T15:21:39] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:7
+[2026-05-29T15:25:09] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T15:25:09] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T15:25:21] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T15:25:21] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
+[2026-05-29T15:25:21] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T15:26:39] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:8
+[2026-05-29T15:29:11] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T15:29:11] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T15:29:22] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T15:29:22] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
+[2026-05-29T15:29:22] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T15:29:29] [INFO] [wit-ble-direct] [SHUTDOWN] Signal 15 received — shutting down
+[2026-05-29T15:29:53] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 98169)
+[2026-05-29T15:29:53] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
+[2026-05-29T15:29:53] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-29T15:30:03] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T15:30:03] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
