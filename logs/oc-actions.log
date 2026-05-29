@@ -1,0 +1,13 @@
+[2026-05-29T22:19:18] [FILE_DELETE] [REPO] cleanup round1: removed 11 debug/superseded files
+[2026-05-29T22:19:18] [RESULT] [REPO] Result: SUCCESS — grafana-dashboards/README.md, scripts/ASTRONOMICAL-README.md, scripts/deploy-alerts.py, scripts/deploy_alerts_direct.py, scripts/import-alert-rules-provisioning.py, scripts/import-alert-rules-yaml.py, mcp/test-mcp.js, plugins/signalk-astronomical-simple.js, grafana-dashboards/07-race.json, grafana-dashboards/01-navigation-dashboard.json, grafana-dashboards/02-race-dashboard.json deleted
+[2026-05-29T22:19:18] [COMMIT] SHA: b3aaacf3cb7a651a9c4e4cf3d80cfae1cc241754
+
+[2026-05-29T22:30:04] [FILE_DELETE] [REPO] cleanup round2: deleted ble_diagnostic.txt, diagnostic_raw.txt, mcp/racing-server.js, mcp/racing-package.json
+[2026-05-29T22:30:04] [FILE_MODIFY] [REPO] cleanup round2: moved 3 docs to docs/ — INTERFACE-REFERENCE.md, GRAFANA-COMPETITION-DEPLOY.md, CLOUDFLARE-TUNNEL-URL.md
+[2026-05-29T22:30:04] [RESULT] [REPO] Result: SUCCESS — 4 deleted, 3 moved, 2 skipped
+[2026-05-29T22:30:04] [COMMIT] SHA: aae10732e8ff3dd97c62469731515d8b5276f98f
+
+[2026-05-29T22:35:10] [FILE_DELETE] [REPO] cleanup round3: deleted 34 files (docs/archive, docs/grafana-dashboards, logs debug artifacts)
+[2026-05-29T22:35:10] [CONFIG_CHANGE] [BUILD] .gitignore: added *.pyc rule
+[2026-05-29T22:35:10] [RESULT] [REPO] Result: SUCCESS — 34 deleted, 0 errors
+[2026-05-29T22:35:10] [COMMIT] SHA: a1a279e34e98cb6f6ae3cd91e3f52b79c50c30a8
