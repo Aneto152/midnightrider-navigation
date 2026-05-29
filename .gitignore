@@ -101,3 +101,5 @@ docker-compose.override.yml
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+.git-credentials
+*.token
