@@ -1,0 +1,25 @@
+[Unit]
+Description=Calypso UP10 Anemometer — Direct BLE Driver
+After=network.target bluetooth.target
+Wants=bluetooth.target
+Documentation=See ble/calypso_direct.py
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto/midnightrider-navigation
+EnvironmentFile=-/home/aneto/midnightrider-navigation/.env
+ExecStartPre=-/bin/bash -c 'pkill -SIGKILL -f calypso_direct.py 2>/dev/null; sleep 1; true'
+ExecStartPre=-/bin/rm -f /tmp/calypso_direct.pid
+ExecStart=/usr/bin/python3 /home/aneto/midnightrider-navigation/ble/calypso_direct.py
+ExecStopPost=-/bin/rm -f /tmp/calypso_direct.pid
+ExecStopPost=-/bin/bash -c 'pkill -SIGKILL -f calypso_direct.py 2>/dev/null; true'
+Restart=on-failure
+RestartSec=10
+StartLimitBurst=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=calypso-direct
+
+[Install]
+WantedBy=multi-user.target
