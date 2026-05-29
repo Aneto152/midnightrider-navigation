@@ -7375,3 +7375,10 @@
 [2026-05-29T18:56:50] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
 [2026-05-29T18:56:50] [WARNING] [wit-ble-direct] [L2] 5 failures ≥ threshold 5 — exiting cleanly
 [2026-05-29T18:56:50] [WARNING] [wit-ble-direct] [L2] systemd Restart=on-failure will handle restart
+[2026-05-29T19:10:01] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 17322)
+[2026-05-29T19:10:01] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
+[2026-05-29T19:10:01] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-29T19:10:04] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T19:10:04] [INFO] [wit-ble-direct] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUATERNION
+[2026-05-29T19:10:04] [INFO] [wit-ble-direct] [BLE_SETUP] ENABLE_QUATERNION sent — WIT will reset
+[2026-05-29T19:10:12] [INFO] [wit-ble-direct] [BLE_SETUP] State→WAIT_RECONNECT: reconnecting

@@ -319,6 +319,8 @@ _stats = {
 # WAIT_RECONNECT: reconnect → subscribe (no commands) → STREAMING
 # STREAMING: receive data continuously
 _wit_state = 'UNINITIALIZED'
+_running = True
+_was_connected = False
 
 def log_heartbeat() -> None:
     """Periodic status log."""
@@ -350,10 +352,11 @@ async def run_ble_client() -> None:
             log('error', 'STARTUP', 'BLE adapter (hci0) not available — exiting')
             sys.exit(1)
         
-        while True:
+        while _running:
             try:
                 async with BleakClient(WIT_MAC) as client:
                     log('info', 'BLE_CONNECT', f'Connected to {WIT_MAC}')
+                    _was_connected = True
                     l1_fail_count = 0
                     reconnect_delay = RECONNECT_BASE_S
                     
@@ -421,7 +424,7 @@ async def run_ble_client() -> None:
                     poll_interval = 1.0 / OUTPUT_RATE_HZ  # 0.1s at 10Hz
                     poll_errors = 0
                     
-                    while client.is_connected:
+                    while client.is_connected and _running:
                         try:
                             await client.write_gatt_char(
                                 write_uuid or NOTIFY_UUID,
@@ -439,7 +442,37 @@ async def run_ble_client() -> None:
             except Exception as e:
                 l1_fail_count += 1
                 _stats['l1_fails'] += 1
-                log('warning', 'L1', f'Connection failed ({l1_fail_count}): {e}')
+                err_str = str(e)
+                log('warning', 'L1', f'Connection failed ({l1_fail_count}): {err_str}')
+                
+                # BT_RECOVERY: Zombie BLE session fix (VALIDATED 2026-05-29)
+                # If WIT was connected before but now invisible ("not found" error),
+                # it's a zombie BLE session. bluetoothctl disconnect+remove clears it
+                # WITHOUT affecting Calypso or other BLE devices (targets WIT MAC only).
+                if (_was_connected and 'not found' in err_str and l1_fail_count >= 3):
+                    log('warning', 'BT_RECOVERY',
+                        f'Zombie BLE session detected after {l1_fail_count} failures')
+                    try:
+                        log('info', 'BT_RECOVERY',
+                            f'Running: bluetoothctl disconnect {WIT_MAC}')
+                        subprocess.run(
+                            f'bluetoothctl disconnect {WIT_MAC}',
+                            shell=True, timeout=10, capture_output=True)
+                        await asyncio.sleep(2)
+                        log('info', 'BT_RECOVERY',
+                            f'Running: bluetoothctl remove {WIT_MAC}')
+                        subprocess.run(
+                            f'bluetoothctl remove {WIT_MAC}',
+                            shell=True, timeout=10, capture_output=True)
+                        await asyncio.sleep(3)
+                        l1_fail_count = 0
+                        reconnect_delay = RECONNECT_BASE_S
+                        _was_connected = False
+                        log('info', 'BT_RECOVERY',
+                            'WIT BLE cache cleared — restarting reconnect')
+                    except Exception as bt_err:
+                        log('error', 'BT_RECOVERY',
+                            f'Recovery command failed: {bt_err}')
                 
                 # L2: clean exit → systemd restart (hci0 stays UP, no disruption)
                 # Principle: single service failure = device issue, NOT adapter issue
