@@ -1597,3 +1597,10 @@
 [2026-05-29T16:52:19] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
 [2026-05-29T16:52:19] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
 [2026-05-29T16:57:19] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T17:02:19] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T17:03:49] [INFO] [wit-ble-direct] [SHUTDOWN] Signal 15 received — shutting down
+[2026-05-29T17:03:51] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 165096)
+[2026-05-29T17:03:51] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
+[2026-05-29T17:03:51] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-29T17:04:01] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:04:01] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...

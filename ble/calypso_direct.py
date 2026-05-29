@@ -93,7 +93,6 @@ SK_UDP_PORT = int(os.environ.get('SK_UDP_PORT', '4123'))
 
 RECONNECT_BASE_S = 5
 PID_FILE = '/tmp/calypso_direct.pid'
-BLE_ADAPTER_LOCK = '/tmp/ble-adapter.lock'
 
 # Calypso UP10 BLE UUIDs
 UUID_DATA = '00002a39-0000-1000-8000-00805f9b34fb'
@@ -248,23 +247,6 @@ def _run(cmd: str, timeout: int = 15) -> tuple:
     except Exception as e:
         return False, str(e)
 
-def reset_ble_adapter() -> None:
-    """L2: Reset hci0 (with coordination lock)."""
-    lock = Path(BLE_ADAPTER_LOCK)
-    if lock.exists():
-        log('warning', 'L2', 'BLE adapter lock held (WIT driver?) — waiting 30s')
-        time.sleep(30)
-        if lock.exists():
-            log('error', 'L2', 'Lock still held — skipping L2')
-            return
-    try:
-        lock.write_text(f'calypso_direct:{os.getpid()}')
-        log('warning', 'L2', 'Resetting hci0...')
-        _run('sudo hciconfig hci0 down'); time.sleep(3)
-        _run('sudo hciconfig hci0 up'); time.sleep(3)
-        log('info', 'L2', 'hci0 reset complete ✅')
-    finally:
-        lock.unlink(missing_ok=True)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 7 — BLE CONNECTION + MAIN LOOP
