@@ -363,10 +363,6 @@ async def main() -> None:
                     'hci0 NOT reset: would disrupt WIT BLE connection')
                 break  # Let systemd Restart=on-failure handle it
 
-            if l1_fails >= L2_THRESHOLD * 3:
-                log('error', 'L3', 'Repeated L2 failures — exiting for systemd restart')
-                break
-
             if _running:
                 log('info', 'BLE_SCAN', f'Reconnecting in {delay}s...')
                 await asyncio.sleep(delay)

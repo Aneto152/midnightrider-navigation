@@ -253,7 +253,7 @@ def _publish_delta(values: list) -> None:
     """Send SK delta via UDP (fire-and-forget, non-blocking)."""
     delta = {
         'updates': [{
-            'source': {'label': 'wit-ble-direct', 'type': 'BLE'},
+            'source': {'label': 'WIT', 'type': 'BLE'},
             'timestamp': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
             'values': values,
         }]

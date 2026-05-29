@@ -1,33 +1,13 @@
-[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:14] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:14] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:14] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:14] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
-[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:53:46] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:53:46] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:53:47] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:53:47] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:53:47] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:53:47] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:53:47] [INFO] [wit-ble-direct] [SHUTDOWN] Signal 15 received — shutting down
+[2026-05-29T18:53:49] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 13537)
+[2026-05-29T18:53:49] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
+[2026-05-29T18:53:49] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
 
-DATA_OUT: 1542
-SK roll: 2026-05-29T22:40:17Z -60.1 deg
+SK roll:
+2026-05-29T22:53:47Z -60.1 deg | src: Calypso.XX
