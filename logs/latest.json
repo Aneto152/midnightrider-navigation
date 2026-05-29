@@ -1,20 +1,23 @@
 {
-  "task": "service-fix-and-plugin-inventory",
-  "date": "2026-05-28T23:36:14.786793",
+  "task": "um982-gnss-cleanup-and-deploy",
+  "date": "2026-05-28T23:42:08.354615",
   "status": "SUCCESS",
   "steps_completed": [
-    "monitor-resources.service: WorkingDirectory corrected from .openclaw/workspace to midnightrider-navigation",
-    "midnightrider-portal.service: WorkingDirectory corrected",
-    "docs/SIGNALK-PLUGINS-INVENTORY.md created with all installed plugins (536 lines)"
+    "signalk-um982-gnss disabled in settings.json",
+    "signalk-um982-gnss uninstall attempted",
+    "signalk-um982-proprietary.js deployed to ~/.signalk/plugins/ (pitch bugfix included)",
+    "signalk-um982-proprietary enabled in settings.json",
+    "calypso_anemometer.service deployed",
+    "Signal K restarted"
   ],
-  "files_modified": [
-    "etc/systemd/system/monitor-resources.service",
-    "etc/systemd/system/midnightrider-portal.service",
-    "docs/SIGNALK-PLUGINS-INVENTORY.md",
-    "logs/oc-actions.log",
-    "logs/latest.json"
+  "plugins_active": [
+    "signalk-um982-proprietary (custom, pitch bugfix 2026-05-29)"
   ],
-  "signalk_plugins_found": 300,
-  "signalk_plugins_active": 9,
+  "plugins_removed": [
+    "signalk-um982-gnss (npm)"
+  ],
+  "services_restarted": [
+    "signalk"
+  ],
   "errors": []
 }

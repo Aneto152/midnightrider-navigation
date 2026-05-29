@@ -55,3 +55,10 @@
 [2026-05-28T23:36:14.786537] [CONFIG_CHANGE] [SYSTEMD] midnightrider-portal.service: WorkingDirectory fixed
 [2026-05-28T23:36:14.786537] [FILE_CREATE] [DOCS] docs/SIGNALK-PLUGINS-INVENTORY.md created — all SK plugins inventoried
 [2026-05-28T23:36:14.786537] [RESULT] [SERVICE-FIX] Result: SUCCESS
+[2026-05-28T23:42:08.354324] [SIGNALK_ACTION] signalk-um982-gnss: disabled in settings.json
+[2026-05-28T23:42:08.354324] [NPM_ACTION] signalk-um982-gnss: uninstall attempted (may have dependencies)
+[2026-05-28T23:42:08.354324] [SIGNALK_ACTION] signalk-um982-proprietary.js: deployed to ~/.signalk/plugins/
+[2026-05-28T23:42:08.354324] [SIGNALK_ACTION] signalk-um982-proprietary: enabled in settings.json
+[2026-05-28T23:42:08.354324] [SERVICE_ACTION] calypso_anemometer.service: deployed + systemd reloaded
+[2026-05-28T23:42:08.354324] [SK_RESTART] Signal K restarted via systemctl restart signalk
+[2026-05-28T23:42:08.354324] [RESULT] UM982 cleanup: SUCCESS
