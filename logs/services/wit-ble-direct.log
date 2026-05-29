@@ -1539,3 +1539,8 @@
 [2026-05-29T16:28:15] [INFO] [wit-ble-direct] [BLE_SETUP] RATE cmd sent — WIT stream starting
 [2026-05-29T16:28:16] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to notifications
 [2026-05-29T16:28:16] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T16:30:45] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:1
+[2026-05-29T16:35:35] [INFO] [wit-ble-direct] [SHUTDOWN] Signal 15 received — shutting down
+[2026-05-29T16:35:54] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 145401)
+[2026-05-29T16:35:54] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
+[2026-05-29T16:35:54] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
