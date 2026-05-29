@@ -1377,3 +1377,17 @@
 [2026-05-29T14:32:41] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
 [2026-05-29T14:32:52] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
 [2026-05-29T14:32:57] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T14:36:43] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T14:36:43] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T14:36:56] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T14:37:01] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T14:37:29] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:5
+[2026-05-29T14:40:44] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T14:40:44] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T14:40:59] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T14:41:04] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T14:42:30] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T14:44:46] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T14:44:46] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T14:44:59] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T14:45:04] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
