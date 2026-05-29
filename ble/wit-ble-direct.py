@@ -349,11 +349,21 @@ async def run_ble_client() -> None:
                     l1_fail_count = 0
                     reconnect_delay = RECONNECT_BASE_S
                     
-                    # QUATERNION MODE: WIT WT901BLECL already in quaternion mode (NVRAM).
-                    # Write UUID ffe9 does not exist on this device — attempting write
-                    # kills BLE connection before we can subscribe to notifications.
-                    # Solution: skip write entirely, subscribe to 0x71 packets directly.
-                    log('info', 'BLE_SETUP', 'Subscribing to WIT (quaternion mode from NVRAM)')
+                    # WIT DATA ACTIVATION:
+                    # Try writing ENABLE_QUATERNION to the notify characteristic (ffe4).
+                    # On WitMotion devices, ffe4 is often bidirectional (notify + write).
+                    # This "wakes" the WIT and starts its data stream.
+                    # Using response=False (write-without-response) to avoid ACK hang.
+                    try:
+                        await client.write_gatt_char(
+                            NOTIFY_UUID, ENABLE_QUATERNION,
+                            response=False
+                        )
+                        log('info', 'BLE_SETUP', 'Activation cmd sent to ffe4 (write-without-response)')
+                    except Exception as e:
+                        log('debug', 'BLE_SETUP', f'Write to ffe4 skipped: {e}')
+                    
+                    log('info', 'BLE_SETUP', 'Subscribing to notifications')
                     
                     # Start notification handler
                     def handle_data(sender, data):
