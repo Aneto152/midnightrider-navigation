@@ -1682,3 +1682,10 @@
 [2026-05-29T17:57:08] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
 [2026-05-29T17:57:08] [WARNING] [wit-ble-direct] [L2] 5 failures ≥ threshold 5 — exiting cleanly
 [2026-05-29T17:57:08] [WARNING] [wit-ble-direct] [L2] systemd Restart=on-failure will handle restart
+[2026-05-29T18:15:57] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 216205)
+[2026-05-29T18:15:57] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
+[2026-05-29T18:15:57] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-29T18:16:07] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T18:16:07] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T18:16:27] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T18:16:27] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...

@@ -85,7 +85,7 @@ WRITE_UUID = '0000ffe9-0000-1000-8000-00805f9a34fb'
 # WIT commands
 UNLOCK_CMD = bytes([0xFF, 0xAA, 0x69, 0x88, 0xB5])  # Unlock (prevents reset on config)
 ENABLE_QUAT_CMD = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])  # Enable quaternion + start stream
-RATE_CMD = bytes([0xFF, 0xAA, 0x03, 0x04, 0x00])  # 10 Hz output rate (backup)
+RATE_CMD = bytes([0xFF, 0xAA, 0x03, 0x06, 0x00])  # 10Hz (SDK: UpdateRate.R10HZ = 0x06)  # 10 Hz output rate (backup)
 
 # Rate codes: Hz → code
 RATE_CODES = {1: 0x01, 2: 0x02, 5: 0x03, 10: 0x04, 20: 0x05, 50: 0x06, 100: 0x07, 200: 0x08}
@@ -415,9 +415,26 @@ async def run_ble_client() -> None:
                     await client.start_notify(NOTIFY_UUID, handle_data)
                     log('info', 'BLE_NOTIFY', 'Notifications started')
                     
-                    # Keep connection alive
+                    # 10Hz quaternion polling loop
+                    # Each FF AA 27 51 00 request → WIT replies with one 0x71 packet
+                    # handle_data() receives and processes the reply
+                    poll_interval = 1.0 / OUTPUT_RATE_HZ  # 0.1s at 10Hz
+                    poll_errors = 0
+                    
                     while client.is_connected:
-                        await asyncio.sleep(1)
+                        try:
+                            await client.write_gatt_char(
+                                NOTIFY_UUID,
+                                ENABLE_QUAT_CMD,  # FF AA 27 51 00
+                                response=False)
+                            poll_errors = 0
+                        except Exception as e:
+                            poll_errors += 1
+                            log('debug', 'POLL', f'Poll error #{poll_errors}: {e}')
+                            if poll_errors >= 10:
+                                log('warning', 'POLL', '10 consecutive poll errors — breaking')
+                                break
+                        await asyncio.sleep(poll_interval)
             
             except Exception as e:
                 l1_fail_count += 1
