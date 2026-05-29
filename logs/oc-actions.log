@@ -11,3 +11,13 @@
 [2026-05-29T22:35:10] [CONFIG_CHANGE] [BUILD] .gitignore: added *.pyc rule
 [2026-05-29T22:35:10] [RESULT] [REPO] Result: SUCCESS — 34 deleted, 0 errors
 [2026-05-29T22:35:10] [COMMIT] SHA: a1a279e34e98cb6f6ae3cd91e3f52b79c50c30a8
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] cleanup round4: removed ~80 obsolete/redundant files
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] grafana-alerts/ (entire) — Grafana reads grafana-provisioning/alerting/
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] grafana-dashboards/data-model-status.json + DASHBOARDS-README.md
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] logs/ debug artifacts (15 files) + __pycache__
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] docs/archive/, docs/signalk-config/, docs/SOFTWARE/, docs/OPERATIONS/ (all)
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] docs/alerts (2), docs/grafana-alerts/ (all), docs/setup/ (3), docs/security/ (all)
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] docs/guides (6), docs/ops (1), docs/units (3), docs/root (13 files)
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] mcp/ 3 duplicate READMEs
+[2026-05-28T22:55:32.386790] [FILE_DELETE] [REPO] root: SYSTEM_PROMPT.md, test_orchestrate.py, deploy-dashboards.py
+[2026-05-28T22:55:32.386790] [RESULT] [REPO] Result: SUCCESS — 80 files deleted

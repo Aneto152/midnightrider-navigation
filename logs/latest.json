@@ -1,35 +1,44 @@
 {
-  "task": "post-cleanup-corrective",
-  "date": "2026-05-28T22:37:43.189342",
+  "task": "repo-cleanup-round4",
+  "date": "2026-05-28T22:55:32.387037",
   "status": "SUCCESS",
-  "actions": [
-    "logs/oc-actions.log created with cleanup rounds 1, 2, 3",
-    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md updated with cleanup summary and docs/ structure",
-    "signalk-astronomical plugin investigated \u2014 signalk-astronomical.json enabled (NOAA 8518750)",
-    "logs/latest.json updated with this session entries"
-  ],
-  "files_modified": [
-    "logs/oc-actions.log",
-    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md"
-  ],
-  "astronomical_investigation": {
-    "versions_in_repo": [
-      "plugins/signalk-astronomical.js (11.4 KB)",
-      "plugins/signalk-astronomical-direct.js (10.0 KB)"
-    ],
-    "config_file": "~/.signalk/plugin-config-data/signalk-astronomical.json",
-    "config_enabled": true,
-    "noaa_station": "8518750",
-    "status": "Active but unclear which JS version is loaded"
+  "summary": {
+    "files_deleted": 80,
+    "directories_removed": 9,
+    "categories": [
+      "Root orphans (3)",
+      "Grafana alerts (10)",
+      "Dashboard orphans (2)",
+      "Debug logs (15)",
+      "docs/archive (remaining)",
+      "docs/signalk-config (all)",
+      "docs/SOFTWARE (all)",
+      "docs/OPERATIONS (all)",
+      "docs/alerts (2)",
+      "docs/grafana-alerts (all)",
+      "docs/security (all)",
+      "docs/setup (3)",
+      "docs/guides (6)",
+      "docs/ops (1)",
+      "docs/units (3)",
+      "docs/root .md (13)",
+      "mcp/ READMEs (3)"
+    ]
   },
-  "pending_cleanup": [
-    "logs/__pycache__/write_log.cpython-313.pyc \u2014 Python bytecode (should be .gitignore only)",
-    "Consolidate signalk-astronomical.js vs signalk-astronomical-direct.js into one version"
+  "files_kept": [
+    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md",
+    "docs/SYSTEM-SUMMARY.md",
+    "docs/DATA-SCHEMA-MASTER.md",
+    "docs/INDEX.md",
+    "docs/HARDWARE/ (all datasheets)",
+    "docs/INTEGRATION/ (all guides)",
+    "docs/alerts/ALERTS-QUICK-REFERENCE.md",
+    "docs/guides/RESTORE.md",
+    "docs/ops/RECOVERY-GUIDE-SAFE.md",
+    "docs/setup/ (GRAFANA-DEPLOYMENT.md, INFLUXDB-CONFIG.md)",
+    "docs/units/UNIT-CONVERSIONS-GRAFANA.md",
+    "grafana-provisioning/ (active)",
+    "grafana-dashboards/*.json (active)"
   ],
-  "errors": [],
-  "services_status": {
-    "signalk": "not modified",
-    "influxdb": "not modified",
-    "grafana": "not modified"
-  }
+  "errors": []
 }
