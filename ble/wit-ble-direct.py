@@ -337,8 +337,7 @@ async def run_ble_client() -> None:
         
         # Dependency checks
         if not check_sk_reachable():
-            log('error', 'STARTUP', 'Signal K unreachable — exiting')
-            sys.exit(1)
+            log('warning', 'DEPENDENCY_CHECK', 'Signal K not ready at startup — will continue and retry')
         if not check_ble_adapter():
             log('error', 'STARTUP', 'BLE adapter (hci0) not available — exiting')
             sys.exit(1)
@@ -353,9 +352,11 @@ async def run_ble_client() -> None:
                     # Configure WIT: enable quaternion output
                     try:
                         await client.write_gatt_char(WRITE_UUID, ENABLE_QUATERNION)
+                        await asyncio.sleep(5)  # Allow WIT to apply config
                         log('debug', 'BLE_SETUP', 'Quaternion (0x71) enabled')
                     except Exception as e:
                         log('warning', 'BLE_SETUP', f'Write failed: {e}')
+                        await asyncio.sleep(5)  # Even if write failed, WIT may be reconfiguring
                     
                     # Start notification handler
                     def handle_data(sender, data):
@@ -379,8 +380,8 @@ async def run_ble_client() -> None:
                     log('info', 'BLE_NOTIFY', 'Notifications started')
                     
                     # Keep connection alive
-                    while True:
-                        await asyncio.sleep(5)
+                    while client.is_connected:
+                        await asyncio.sleep(1)
             
             except Exception as e:
                 l1_fail_count += 1
