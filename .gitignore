@@ -106,3 +106,8 @@ docker-compose.override.yml
 
 # Python bytecode
 *.pyc
+
+# Structured service logs — tracked for Dust (MidnightRider Coordinator) visibility
+!logs/services/*.log
+!logs/oc-actions.log
+!logs/debug/*.log

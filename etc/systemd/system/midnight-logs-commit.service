@@ -1,0 +1,11 @@
+[Unit]
+Description=Midnight Rider — Push runtime logs to GitHub
+
+[Service]
+Type=oneshot
+User=aneto
+WorkingDirectory=/home/aneto/midnightrider-navigation
+ExecStart=/bin/bash /home/aneto/midnightrider-navigation/scripts/commit-logs.sh
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=midnight-logs-commit
