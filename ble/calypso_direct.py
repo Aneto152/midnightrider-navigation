@@ -357,10 +357,11 @@ async def main() -> None:
                 log('error', 'ERROR', f'Error (L1 #{l1_fails}): {type(e).__name__}: {e}')
 
             if l1_fails >= L2_THRESHOLD:
-                log('warning', 'L2', f'{l1_fails} failures — resetting hci0')
-                reset_ble_adapter()
-                l1_fails = 0
-                delay = RECONNECT_BASE_S
+                log('warning', 'L2',
+                    f'{l1_fails} failures — clean exit for systemd restart')
+                log('warning', 'L2',
+                    'hci0 NOT reset: would disrupt WIT BLE connection')
+                break  # Let systemd Restart=on-failure handle it
 
             if l1_fails >= L2_THRESHOLD * 3:
                 log('error', 'L3', 'Repeated L2 failures — exiting for systemd restart')
