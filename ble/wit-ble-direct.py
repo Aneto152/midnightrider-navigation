@@ -269,6 +269,7 @@ def send_attitude(data: dict) -> None:
         {'path': 'navigation.attitude.yaw', 'value': data['yaw']},
         {'path': 'navigation.headingMagnetic', 'value': data['headingMagnetic']},
     ])
+    log('info', 'DATA_OUT', f'Roll={math.degrees(data["roll"]):.1f}° Pitch={math.degrees(data["pitch"]):.1f}° Hdg={math.degrees(data["headingMagnetic"]):.1f}°')
 
 def send_motion(data: dict) -> None:
     """Publish acceleration + rateOfTurn to Signal K via UDP:4123."""
