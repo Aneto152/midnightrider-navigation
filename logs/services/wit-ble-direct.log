@@ -1425,3 +1425,22 @@
 [2026-05-29T15:01:26] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
 [2026-05-29T15:01:26] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
 [2026-05-29T15:01:26] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T15:04:57] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T15:04:57] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T15:05:09] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T15:05:09] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
+[2026-05-29T15:05:09] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T15:06:22] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:1
+[2026-05-29T15:08:59] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T15:08:59] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T15:09:11] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T15:09:11] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
+[2026-05-29T15:09:12] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T15:11:22] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:2
+[2026-05-29T15:13:01] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T15:13:01] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T15:13:15] [WARNING] [wit-ble-direct] [L1] Connection failed (2): [org.bluez.Error.Failed] le-connection-abort-by-local
+[2026-05-29T15:13:15] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
+[2026-05-29T15:13:37] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T15:13:37] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to WIT (quaternion mode from NVRAM)
+[2026-05-29T15:13:37] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
