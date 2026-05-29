@@ -48,8 +48,7 @@ case "$1" in
     
     # Restart services
     cd "$SCRIPT_DIR/.."
-    docker compose restart astronomical
-    
+        
     echo ""
     echo "✅ Race mode activated!"
     echo "   All data → localhost:8086 only"
@@ -68,7 +67,7 @@ case "$1" in
     echo ""
     echo "⚠️  To enable cloud uploads:"
     echo "   1. Edit .env and add INFLUX_CLOUD_TOKEN"
-    echo "   2. docker compose restart astronomical"
+    echo "   2. Restart Signal K and InfluxDB"
     echo "   3. Then run: ./race-debrief.sh"
     ;;
 
