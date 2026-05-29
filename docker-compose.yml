@@ -30,22 +30,6 @@ services:
     - INFLUX_TOKEN=${INFLUX_TOKEN}
     depends_on:
     - influxdb
-  astronomical:
-    build:
-      context: .
-      dockerfile: astronomical/Dockerfile
-    container_name: astronomical
-    restart: unless-stopped
-    network_mode: host
-    environment:
-    - LAT=${BOAT_LAT}
-    - LON=${BOAT_LON}
-    - NOAA_STATION=${NOAA_STATION}
-    - INFLUX_URL=http://localhost:8086
-    - INFLUX_ORG=MidnightRider
-    - INFLUX_BUCKET=midnight_rider
-    depends_on:
-    - influxdb
   regatta:
     container_name: regatta
     restart: unless-stopped

@@ -1,44 +1,37 @@
 {
-  "task": "repo-cleanup-round4",
-  "date": "2026-05-28T22:55:32.387037",
+  "task": "repo-cleanup-round5",
+  "date": "2026-05-28T23:01:32.998364",
   "status": "SUCCESS",
-  "summary": {
-    "files_deleted": 80,
-    "directories_removed": 9,
-    "categories": [
-      "Root orphans (3)",
-      "Grafana alerts (10)",
-      "Dashboard orphans (2)",
-      "Debug logs (15)",
-      "docs/archive (remaining)",
-      "docs/signalk-config (all)",
-      "docs/SOFTWARE (all)",
-      "docs/OPERATIONS (all)",
-      "docs/alerts (2)",
-      "docs/grafana-alerts (all)",
-      "docs/security (all)",
-      "docs/setup (3)",
-      "docs/guides (6)",
-      "docs/ops (1)",
-      "docs/units (3)",
-      "docs/root .md (13)",
-      "mcp/ READMEs (3)"
-    ]
-  },
-  "files_kept": [
-    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md",
-    "docs/SYSTEM-SUMMARY.md",
-    "docs/DATA-SCHEMA-MASTER.md",
-    "docs/INDEX.md",
-    "docs/HARDWARE/ (all datasheets)",
-    "docs/INTEGRATION/ (all guides)",
-    "docs/alerts/ALERTS-QUICK-REFERENCE.md",
-    "docs/guides/RESTORE.md",
-    "docs/ops/RECOVERY-GUIDE-SAFE.md",
-    "docs/setup/ (GRAFANA-DEPLOYMENT.md, INFLUXDB-CONFIG.md)",
-    "docs/units/UNIT-CONVERSIONS-GRAFANA.md",
-    "grafana-provisioning/ (active)",
-    "grafana-dashboards/*.json (active)"
+  "steps_completed": [
+    "Docker astronomical container stopped and removed",
+    "astronomical service removed from docker-compose.yml",
+    "astronomical/ directory deleted (5 files)",
+    "memory/ directory deleted (12 session notes)",
+    "scripts/astronomical-data.sh, .service, init-astronomical-data.sh deleted",
+    "plugins/ASTRONOMICAL-README.md + INSTALLATION.md deleted"
   ],
-  "errors": []
+  "files_modified": [
+    "docker-compose.yml",
+    "logs/oc-actions.log",
+    "logs/latest.json"
+  ],
+  "files_deleted": [
+    "astronomical/ (5 files)",
+    "memory/ (12 files)",
+    "scripts/astronomical-data.sh",
+    "scripts/astronomical-data.service",
+    "scripts/init-astronomical-data.sh",
+    "plugins/ASTRONOMICAL-README.md",
+    "plugins/INSTALLATION.md"
+  ],
+  "note": "Signal K plugin signalk-astronomical.js handles astronomical data \u2014 Docker approach superseded",
+  "errors": [],
+  "services_status": {
+    "signalk": "not touched",
+    "influxdb": "running",
+    "grafana": "running",
+    "astronomical_docker": "REMOVED",
+    "signalk_astronomical_plugin": "active (unchanged)"
+  },
+  "next_recommended": "Verify Signal K astronomical plugin is producing data in InfluxDB"
 }
