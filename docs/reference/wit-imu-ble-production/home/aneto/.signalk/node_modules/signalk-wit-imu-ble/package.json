@@ -1,0 +1,25 @@
+{
+  "name": "signalk-wit-imu-ble",
+  "version": "2.0.0-ble",
+  "main": "index.js",
+  "description": "WIT WT901BLECL 9-axis IMU Bluetooth LE Reader - Signal K Plugin (native gatttool)",
+  "keywords": [
+    "signalk-node-server-plugin",
+    "signalk-plugin",
+    "wit",
+    "imu",
+    "bluetooth",
+    "ble",
+    "gatttool",
+    "acceleration",
+    "attitude",
+    "rate-of-turn",
+    "maritime"
+  ],
+  "author": "Denis Lafarge (MidnightRider J/30)",
+  "license": "MIT",
+  "dependencies": {},
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

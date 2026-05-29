@@ -55,3 +55,39 @@ midnight-logs-commit.timer         enabled enabled
 56 unit files listed.
 
 === PRE-BOOT FIXES COMPLETE ===
+
+=== WIT REFERENCES MOVE — 2026-05-29T13:20:33-04:00 ===
+
+--- witmotion_ble SDK → docs/reference/witmotion-ble-sdk/ ---
+Contents of witmotion-ble-sdk:
+acceleration_layout.xml
+LICENSE
+README.md
+requirements.txt
+resources
+scan.py
+stream.py
+WT901BLECL
+witmotion_ble moved to repo ✅
+
+--- wit-imu-ble-production.tar.gz: extract and inspect ---
+Contents:
+home/aneto/.signalk/node_modules/signalk-wit-imu-ble/
+home/aneto/.signalk/node_modules/signalk-wit-imu-ble/package.json
+home/aneto/.signalk/node_modules/signalk-wit-imu-ble/README.md
+home/aneto/.signalk/node_modules/signalk-wit-imu-ble/CHANGELOG.md
+home/aneto/.signalk/node_modules/signalk-wit-imu-ble/index.js
+
+Extracting to docs/reference/wit-imu-ble-production/
+Extracted ✅
+Contents:
+home
+tar.gz removed from home ✅
+
+--- HOME DIRECTORY NOW ---
+archive-home-20260529
+check-system.desktop
+midnightrider-navigation
+regatta
+
+=== MOVE COMPLETE ===
