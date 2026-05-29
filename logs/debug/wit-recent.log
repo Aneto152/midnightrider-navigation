@@ -1,62 +1,33 @@
-[2026-05-29T17:50:58] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
-[2026-05-29T17:51:28] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T17:51:28] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
-[2026-05-29T17:52:18] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T17:52:18] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
-[2026-05-29T17:53:28] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T17:53:28] [WARNING] [wit-ble-direct] [L2] 5 failures ≥ threshold 5 — exiting cleanly
-[2026-05-29T17:53:28] [WARNING] [wit-ble-direct] [L2] systemd Restart=on-failure will handle restart
-[2026-05-29T17:54:07] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 200723)
-[2026-05-29T17:54:07] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
-[2026-05-29T17:54:07] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
-[2026-05-29T17:54:17] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T17:54:17] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
-[2026-05-29T17:54:37] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T17:54:37] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
-[2026-05-29T17:55:07] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T17:55:07] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
-[2026-05-29T17:55:57] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T17:55:57] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
-[2026-05-29T17:57:08] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T17:57:08] [WARNING] [wit-ble-direct] [L2] 5 failures ≥ threshold 5 — exiting cleanly
-[2026-05-29T17:57:08] [WARNING] [wit-ble-direct] [L2] systemd Restart=on-failure will handle restart
-[2026-05-29T18:15:57] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 216205)
-[2026-05-29T18:15:57] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
-[2026-05-29T18:15:57] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
-[2026-05-29T18:16:07] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:16:07] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
-[2026-05-29T18:16:27] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:16:27] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
-[2026-05-29T18:16:57] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:16:57] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
-[2026-05-29T18:17:47] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:17:47] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
-[2026-05-29T18:18:57] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:18:57] [WARNING] [wit-ble-direct] [L2] 5 failures ≥ threshold 5 — exiting cleanly
-[2026-05-29T18:18:57] [WARNING] [wit-ble-direct] [L2] systemd Restart=on-failure will handle restart
-[2026-05-29T18:21:41] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 219099)
-[2026-05-29T18:21:41] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
-[2026-05-29T18:21:41] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
-[2026-05-29T18:21:51] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:21:51] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
-[2026-05-29T18:22:12] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:22:12] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
-[2026-05-29T18:22:42] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:22:42] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
-[2026-05-29T18:23:32] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:23:32] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
-[2026-05-29T18:24:42] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
-[2026-05-29T18:24:42] [WARNING] [wit-ble-direct] [L2] 5 failures ≥ threshold 5 — exiting cleanly
-[2026-05-29T18:24:42] [WARNING] [wit-ble-direct] [L2] systemd Restart=on-failure will handle restart
+[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:13] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:14] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:14] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:14] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:14] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:15] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.0° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:16] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
+[2026-05-29T18:40:17] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-60.1° Pitch=3.9° Hdg=-52.2°
 
-DATA_OUT count: 3
-
-HEARTBEAT history:
-[2026-05-29T17:25:48] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
-[2026-05-29T17:30:48] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
-[2026-05-29T17:35:49] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
-[2026-05-29T17:40:49] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
-[2026-05-29T17:45:49] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
-
-SK roll now:
-2026-05-29T20:35:26Z 57.2 deg
+DATA_OUT: 1542
+SK roll: 2026-05-29T22:40:17Z -60.1 deg
