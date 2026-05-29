@@ -1627,3 +1627,25 @@
 [2026-05-29T17:20:48] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 177079)
 [2026-05-29T17:20:48] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
 [2026-05-29T17:20:48] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-29T17:20:58] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:20:58] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T17:21:18] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:21:18] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
+[2026-05-29T17:21:49] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:21:49] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
+[2026-05-29T17:22:39] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:22:39] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
+[2026-05-29T17:23:49] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T17:23:49] [ERROR] [wit-ble-direct] [L2] L1 failures 5 ≥ threshold 5 — resetting hci0
+[2026-05-29T17:23:55] [INFO] [wit-ble-direct] [L2] hci0 reset complete
+[2026-05-29T17:23:55] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T17:24:07] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T17:24:07] [INFO] [wit-ble-direct] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUATERNION
+[2026-05-29T17:24:07] [WARNING] [wit-ble-direct] [BLE_SETUP] ENABLE_QUATERNION failed: [org.bluez.Error.NotAuthorized] Operation Not Authorized
+[2026-05-29T17:24:09] [WARNING] [wit-ble-direct] [L1] Connection failed (1): 
+[2026-05-29T17:24:09] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T17:24:21] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T17:24:21] [INFO] [wit-ble-direct] [BLE_SETUP] State=WAIT_RECONNECT: subscribing without commands
+[2026-05-29T17:24:21] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to notifications
+[2026-05-29T17:24:21] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T17:25:48] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
