@@ -1623,3 +1623,7 @@
 [2026-05-29T17:08:51] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:5
 [2026-05-29T17:13:51] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:5
 [2026-05-29T17:18:51] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:5
+[2026-05-29T17:20:47] [INFO] [wit-ble-direct] [SHUTDOWN] Signal 15 received — shutting down
+[2026-05-29T17:20:48] [INFO] [wit-ble-direct] [STARTUP] Singleton acquired (PID 177079)
+[2026-05-29T17:20:48] [INFO] [wit-ble-direct] [STARTUP] Starting WIT BLE client
+[2026-05-29T17:20:48] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°

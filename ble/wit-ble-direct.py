@@ -357,38 +357,39 @@ async def run_ble_client() -> None:
                     l1_fail_count = 0
                     reconnect_delay = RECONNECT_BASE_S
                     
-                    # WIT INITIALIZATION SEQUENCE (2026-05-29):
-                    # 1. Send UNLOCK: FF AA 69 88 B5 (allows config WITHOUT device reset)
-                    # 2. Send ENABLE_QUATERNION: FF AA 27 51 00 (activates stream)
-                    # WITHOUT UNLOCK, any config command causes reset after ~1 packet.
+                    # WIT STATE MACHINE (2026-05-29):
+                    # ENABLE_QUATERNION causes WIT to reset. Sending on every connection
+                    # creates reset loop. Correct sequence:
+                    # 1st connect: send ENABLE_QUATERNION → WIT resets → reconnect
+                    # 2nd+ connect: just subscribe → WIT streams continuously
+                    global _wit_state
+                    
                     write_uuid = None
                     for service in client.services:
                         for char in service.characteristics:
                             if 'write' in char.properties or 'write-without-response' in char.properties:
                                 write_uuid = str(char.uuid)
-                                log('debug', 'BLE_SETUP', f'Write char: {write_uuid}')
                                 break
                         if write_uuid:
                             break
                     
-                    cmd_uuid = write_uuid or NOTIFY_UUID
-                    log('info', 'BLE_SETUP', f'Initializing WIT via {cmd_uuid}')
-                    
-                    # Step 1: UNLOCK (must come first)
-                    try:
-                        await client.write_gatt_char(cmd_uuid, UNLOCK_CMD, response=False)
-                        log('info', 'BLE_SETUP', 'UNLOCK sent (FF AA 69 88 B5) ✅')
-                        await asyncio.sleep(0.2)
-                    except Exception as e:
-                        log('warning', 'BLE_SETUP', f'UNLOCK failed: {e}')
-                    
-                    # Step 2: ENABLE_QUATERNION (starts stream)
-                    try:
-                        await client.write_gatt_char(cmd_uuid, ENABLE_QUAT_CMD, response=False)
-                        log('info', 'BLE_SETUP', 'ENABLE_QUATERNION sent (FF AA 27 51 00) ✅')
-                        await asyncio.sleep(0.5)
-                    except Exception as e:
-                        log('warning', 'BLE_SETUP', f'ENABLE_QUATERNION failed: {e}')
+                    if _wit_state == 'UNINITIALIZED':
+                        # First connection: send ENABLE_QUATERNION once
+                        cmd_uuid = write_uuid or NOTIFY_UUID
+                        log('info', 'BLE_SETUP', f'State=UNINITIALIZED: sending ENABLE_QUATERNION')
+                        try:
+                            await client.write_gatt_char(cmd_uuid, ENABLE_QUAT_CMD, response=False)
+                            log('info', 'BLE_SETUP', 'ENABLE_QUATERNION sent — WIT will reset')
+                            _wit_state = 'WAIT_RECONNECT'
+                            await asyncio.sleep(8)  # WIT resets during this
+                            log('info', 'BLE_SETUP', 'State→WAIT_RECONNECT: ready to reconnect')
+                        except Exception as e:
+                            log('warning', 'BLE_SETUP', f'ENABLE_QUATERNION failed: {e}')
+                            _wit_state = 'WAIT_RECONNECT'
+                            break  # Connection dead after reset
+                    elif _wit_state in ('WAIT_RECONNECT', 'STREAMING'):
+                        # WIT already configured — subscribe directly, NO commands
+                        log('info', 'BLE_SETUP', f'State={_wit_state}: subscribing without commands')
                     
                     log('info', 'BLE_SETUP', 'Subscribing to notifications')
                     
