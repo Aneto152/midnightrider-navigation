@@ -1,0 +1,57 @@
+=== PRE-BOOT FIXES — 2026-05-29T13:19:43-04:00 ===
+
+--- FIX 1: Uninstall calypso-anemometer (Debian 12 workaround) ---
+Found existing installation: calypso-anemometer 0.6.0
+Uninstalling calypso-anemometer-0.6.0:
+  Successfully uninstalled calypso-anemometer-0.6.0
+calypso-anemometer: removed ✅
+
+--- FIX 2: Enable midnight-logs-commit.timer ---
+active
+timer: active ✅
+
+--- FIX 3: Enable avahi-mdns-fix ---
+Created symlink '/etc/systemd/system/multi-user.target.wants/avahi-mdns-fix.service' → '/etc/systemd/system/avahi-mdns-fix.service'.
+enabled
+avahi-mdns-fix: enabled ✅
+
+--- FINAL ENABLED SERVICES CHECK ---
+UNIT FILE                          STATE   PRESET
+accounts-daemon.service            enabled enabled
+apparmor.service                   enabled enabled
+avahi-mdns-fix.service             enabled enabled
+calypso_direct.service             enabled enabled
+console-setup.service              enabled enabled
+containerd.service                 enabled enabled
+cups-browsed.service               enabled enabled
+cups.service                       enabled enabled
+dhcpcd.service                     enabled enabled
+docker.service                     enabled enabled
+e2scrub_reap.service               enabled enabled
+glamor-test.service                enabled enabled
+init-gps.service                   enabled enabled
+keyboard-setup.service             enabled enabled
+midnightrider-portal.service       enabled enabled
+ModemManager.service               enabled enabled
+monitor-resources.service          enabled enabled
+netfilter-persistent.service       enabled enabled
+NetworkManager-dispatcher.service  enabled enabled
+NetworkManager-wait-online.service enabled enabled
+NetworkManager.service             enabled enabled
+nfs-blkmap.service                 enabled enabled
+nginx.service                      enabled enabled
+rp1-test.service                   enabled enabled
+rpi-eeprom-update.service          enabled enabled
+telegraf.service                   enabled enabled
+unattended-upgrades.service        enabled enabled
+unblock-wifi.service               enabled enabled
+wit-ble-direct.service             enabled enabled
+dpkg-db-backup.timer               enabled enabled
+e2scrub_all.timer                  enabled enabled
+fstrim.timer                       enabled enabled
+logrotate.timer                    enabled enabled
+midnight-logs-commit.timer         enabled enabled
+
+56 unit files listed.
+
+=== PRE-BOOT FIXES COMPLETE ===
