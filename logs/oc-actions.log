@@ -67,3 +67,8 @@
 [2026-05-29T00:08:05.464798] [FILE_CREATE] [DOCS] ble/README.md created — comprehensive audit + deployment guide
 [2026-05-29T00:08:05.464798] [SECURITY_CHECK] [BLE] No credentials found; MAC addresses safe to commit
 [2026-05-29T00:08:05.464798] [RESULT] [BLE-CENTRALIZATION] Result: SUCCESS
+[2026-05-29T08:52:39.535539] [FILE_MODIFY] [SYSTEMD] config/calypso_*.service → etc/systemd/system/ (git mv)
+[2026-05-29T08:52:39.535539] [FILE_CREATE] [UDEV] etc/udev/rules.d/: 4 rules captured from Pi
+[2026-05-29T08:52:39.535539] [FILE_CREATE] [SYSTEMD] wit-nmea-server.service (port 10110 running)
+[2026-05-29T08:52:39.535539] [FILE_CREATE] [DOCS] etc/systemd/system/README.md: comprehensive inventory
+[2026-05-29T08:52:39.535539] [RESULT] [SYSTEMD-AUDIT] SUCCESS

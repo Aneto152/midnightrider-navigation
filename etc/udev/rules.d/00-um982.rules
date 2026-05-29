@@ -1,0 +1,2 @@
+# Unicore UM982 GNSS Receiver (FTDI chip)
+KERNEL=="ttyUSB*", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", SYMLINK+="ttyUM982"

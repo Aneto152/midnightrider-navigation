@@ -1,60 +1,27 @@
 {
-  "task": "ble-scripts-centralization",
-  "date": "2026-05-29T00:08:05.465139",
+  "task": "systemd-audit-consolidation",
+  "date": "2026-05-29T08:52:39.535539",
   "status": "SUCCESS",
-  "steps_completed": [
-    "Searched /home/aneto/ for BLE scripts",
-    "Created ble/ directory",
-    "Copied 19 active BLE scripts + plugins",
-    "Created ble/README.md (comprehensive audit)",
-    "Security check: no credentials found"
+  "services_in_git": [
+    "calypso_anemometer",
+    "calypso_watchdog",
+    "avahi-mdns-fix",
+    "midnightrider-portal",
+    "monitor-resources",
+    "midnight-logs-commit (service + timer)",
+    "wit-nmea-server"
   ],
-  "ble_scripts_centralized": {
-    "Calypso": [
-      "calypso-ble-reader.py",
-      "calypso_filter_proxy.py",
-      "calypso_robust_watchdog.py",
-      "calypso-health-check.sh",
-      "calypso-restart.sh"
-    ],
-    "WIT IMU": [
-      "wit-ble-reader.py",
-      "wit-final-ble.py",
-      "wit-ble-handler.py",
-      "wit-battery-loop.py",
-      "wit-imu-complete.py",
-      "bleak_wit.py"
-    ],
-    "WIT Pipeline": [
-      "wit-nmea-server.py",
-      "wit-signalk-bridge-direct.py",
-      "wit-tcp-bridge.py"
-    ],
-    "UM982 GNSS": [
-      "send_um982_headinga.py",
-      "enable_gnhpr.py"
-    ],
-    "SK Plugins": [
-      "signalk-wit-nmea.js",
-      "signalk-um982-proprietary.js"
-    ]
-  },
-  "active_ble_sources": {
-    "Calypso UP10": {
-      "status": "ACTIVE",
-      "plugin": "calypso_anemometer.service",
-      "output": "wind"
-    },
-    "WIT WT901BLECL": {
-      "status": "ACTIVE",
-      "plugin": "signalk-wit-nmea.js",
-      "output": "attitude"
-    },
-    "UM982 GNSS": {
-      "status": "ACTIVE",
-      "plugin": "signalk-um982-proprietary.js",
-      "output": "RTK heading"
-    }
-  },
+  "udev_rules_captured": [
+    "00-um982.rules (UM982 GNSS symlink)",
+    "99-um982.rules (UM982 alias)",
+    "99-wit-imu.rules (WIT IMU symlink)",
+    "99-rpi-keyboard.rules (RPi 500 keyboard)"
+  ],
+  "services_outside_repo": [
+    "signalk (SK installer)",
+    "influxdb (docker)",
+    "grafana (docker)",
+    "bluetooth (system)"
+  ],
   "errors": []
 }

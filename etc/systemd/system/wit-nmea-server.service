@@ -1,0 +1,19 @@
+[Unit]
+Description=WIT WT901BLECL IMU — USB Serial to NMEA TCP Server
+After=network.target
+Documentation=See ble/wit-nmea-server.py
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto/midnightrider-navigation
+EnvironmentFile=/home/aneto/midnightrider-navigation/.env
+ExecStart=/usr/bin/python3 /home/aneto/midnightrider-navigation/ble/wit-nmea-server.py
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=wit-nmea-server
+
+[Install]
+WantedBy=multi-user.target
