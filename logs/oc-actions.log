@@ -44,3 +44,10 @@
 [2026-05-28T23:21:54.842175] [FILE_MODIFY] [DOCS] scripts/README.md: comprehensive rewrite with all scripts documented
 [2026-05-28T23:21:54.842175] [FILE_VERIFY] [SCRIPTS] Docstring audit completed — all critical scripts verified
 [2026-05-28T23:21:54.842175] [RESULT] [SCRIPTS-AUDIT] Result: SUCCESS
+[2026-05-28T23:29:38.551406] [FILE_MODIFY] [PLUGINS] signalk-um982-proprietary.js: fixed pitch normalization bug (Unicore 0-360° → -180°/+180°)
+[2026-05-28T23:29:38.551406] [FILE_MODIFY] [PLUGINS] signalk-um982-proprietary.js: added inline normalization comment
+[2026-05-28T23:29:38.551406] [FILE_MODIFY] [PLUGINS] signalk-wit-nmea.js: enhanced JSDoc header with multi-source note and axis remap
+[2026-05-28T23:29:38.551406] [FILE_RENAME] [PLUGINS] plugins/package.json renamed to signalk-um982-package.json
+[2026-05-28T23:29:38.551406] [FILE_CREATE] [PLUGINS] plugins/signalk-astronomical-package.json created
+[2026-05-28T23:29:38.551406] [FILE_MODIFY] [DOCS] plugins/README.md: complete rewrite covering all 3 plugins
+[2026-05-28T23:29:38.551406] [RESULT] [PLUGINS-AUDIT] Result: SUCCESS — bugfix applied, docs complete

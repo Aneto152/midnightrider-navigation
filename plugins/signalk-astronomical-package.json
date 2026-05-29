@@ -1,0 +1,22 @@
+{
+  "name": "signalk-astronomical",
+  "version": "1.1.0",
+  "description": "Signal K plugin for astronomical data (sun/moon times, moon phase) and NOAA tide predictions",
+  "main": "signalk-astronomical.js",
+  "keywords": ["signalk", "plugin", "astronomical", "sun", "moon", "tide", "noaa", "sunrise", "sunset"],
+  "author": "Aneto (MidnightRider J/30)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Aneto152/midnightrider-navigation"
+  },
+  "dependencies": {
+    "suncalc": "^1.9.0",
+    "axios": "^1.6.0"
+  },
+  "signalk-plugin": true,
+  "signalk-schema": {
+    "type": "object",
+    "title": "Astronomical Data + Tides"
+  }
+}

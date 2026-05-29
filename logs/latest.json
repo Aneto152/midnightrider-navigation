@@ -1,31 +1,26 @@
 {
-  "task": "scripts-audit-and-doc",
-  "date": "2026-05-28T23:21:54.842493",
+  "task": "plugins-audit-doc",
+  "date": "2026-05-28T23:29:38.551657",
   "status": "SUCCESS",
   "steps_completed": [
-    "Deleted buoy-logger.sh (duplicate of lis_wind_collector.py)",
-    "Deleted test-all-mcp.sh (duplicate of mcp/test-servers.sh)",
-    "Fixed race-mode.sh: removed dead docker compose restart astronomical reference",
-    "scripts/README.md: complete rewrite with all 20 scripts documented",
-    "Docstring/header documentation verified in all core scripts"
+    "BUGFIX: signalk-um982-proprietary.js pitch normalized from Unicore 0-360\u00b0 to -180\u00b0/+180\u00b0",
+    "RENAME: plugins/package.json \u2192 plugins/signalk-um982-package.json",
+    "CREATE: plugins/signalk-astronomical-package.json (with suncalc + axios deps)",
+    "ENHANCE: signalk-wit-nmea.js JSDoc header (multi-source note, axis remap)",
+    "REWRITE: plugins/README.md \u2014 all 3 plugins documented (8 KB)"
   ],
   "files_modified": [
-    "scripts/README.md",
-    "scripts/race-mode.sh",
-    "logs/oc-actions.log",
-    "logs/latest.json"
+    "plugins/signalk-um982-proprietary.js",
+    "plugins/signalk-wit-nmea.js",
+    "plugins/README.md"
   ],
-  "files_deleted": [
-    "scripts/buoy-logger.sh",
-    "scripts/test-all-mcp.sh"
+  "files_renamed": [
+    "plugins/package.json \u2192 plugins/signalk-um982-package.json"
   ],
-  "daemon_scripts_without_systemd": [
-    "scripts/noaa_collector.py",
-    "scripts/lis_wind_collector.py",
-    "scripts/weather-logger.sh",
-    "scripts/current_vector_calc.py",
-    "scripts/wave-analyzer.py"
+  "files_created": [
+    "plugins/signalk-astronomical-package.json"
   ],
+  "design_decision": "dual-source navigation.attitude.* intentional (Denis 2026-05-29) \u2014 SK tags by source label",
   "errors": [],
-  "next_recommended": "Create systemd service files for all 5 daemon scripts before next race"
+  "next_recommended": "Deploy bugfix to Pi: cp plugins/signalk-um982-proprietary.js ~/.signalk/plugins/signalk-um982-proprietary/ && systemctl restart signalk"
 }

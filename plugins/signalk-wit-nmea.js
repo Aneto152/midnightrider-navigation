@@ -1,12 +1,30 @@
 /**
  * Signal K Plugin - WIT IMU NMEA0183 Parser
- * 
- * Parses standard NMEA sentences from WIT WT901BLECL IMU:
- * - $HEHDT (Heading True)
- * - $HEATT (Attitude: roll, pitch, yaw)
- * 
- * Injects data into Signal K tree
- * 
+ *
+ * Parses NMEA sentences from WIT WT901BLECL IMU (BLE accelerometer/gyroscope).
+ *
+ * Sentences handled:
+ * - $HEATT — Attitude (roll, pitch, yaw in degrees)
+ * - $HEHDT — Heading True (NOT handled here — already parsed by kflex NMEA0183 provider)
+ *
+ * AXIS REMAPPING (verified physically by Denis, 2026-05-17):
+ * WIT Pitch (field[1]) → SK navigation.attitude.roll (gîte bâbord/tribord)
+ * WIT Roll (field[0]) → SK navigation.attitude.pitch (assiette étrave haut/bas)
+ * WIT Yaw (field[2]) → SK navigation.attitude.yaw (cap magnétique, post-calibration)
+ *
+ * MULTI-SOURCE NOTE (2026-05-29):
+ * signalk-um982-proprietary also writes to navigation.attitude.* from the UM982 GNSS.
+ * This is intentional — Signal K tags each delta with its source label (wit-nmea vs
+ * um982-proprietary). Both sources coexist; Grafana can filter by source if needed.
+ * WIT: faster IMU updates (dynamic heel/trim), magnetic yaw
+ * UM982: GPS-based True heading, RTK quality metadata
+ *
+ * Signal K paths produced:
+ * navigation.attitude.roll (radians, positive = starboard heel)
+ * navigation.attitude.pitch (radians, positive = bow up)
+ * navigation.attitude.yaw (radians, magnetic heading)
+ * navigation.attitude (composite object for PGN 127257 → Vulcan 7 display)
+ *
  * @author Aneto (MidnightRider J/30)
  * @version 1.0.0
  * @license MIT

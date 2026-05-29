@@ -134,8 +134,17 @@ module.exports = function(app) {
 
       // Convert degrees to radians for Signal K storage
       // Signal K uses radians internally
+      
+      // Normalize roll: Unicore range -180 to +180 → OK as-is
       const rollRad = (roll * Math.PI) / 180;
-      const pitchRad = (pitch * Math.PI) / 180;
+
+      // BUGFIX 2026-05-29: Unicore encodes pitch in 0-360° convention
+      // (documented in plugins/README.md troubleshooting section)
+      // Normalize to -180°/+180° before converting to radians
+      const pitchNorm = pitch > 180 ? pitch - 360 : pitch;
+      const pitchRad = (pitchNorm * Math.PI) / 180;
+
+      // Normalize yaw: -180 to +180 → True heading (dual-antenna GNSS)
       const yawRad = (yaw * Math.PI) / 180;
 
       // Build Signal K delta
