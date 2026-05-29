@@ -1575,3 +1575,25 @@
 [2026-05-29T16:47:42] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
 [2026-05-29T16:48:12] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
 [2026-05-29T16:48:12] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
+[2026-05-29T16:49:02] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T16:49:02] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
+[2026-05-29T16:50:13] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-05-29T16:50:13] [ERROR] [wit-ble-direct] [L2] L1 failures 5 ≥ threshold 5 — resetting hci0
+[2026-05-29T16:50:19] [INFO] [wit-ble-direct] [L2] hci0 reset complete
+[2026-05-29T16:50:19] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T16:50:31] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T16:50:31] [INFO] [wit-ble-direct] [BLE_SETUP] Initializing WIT via 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-05-29T16:50:31] [INFO] [wit-ble-direct] [BLE_SETUP] UNLOCK sent (FF AA 69 88 B5) ✅
+[2026-05-29T16:50:31] [INFO] [wit-ble-direct] [BLE_SETUP] ENABLE_QUATERNION sent (FF AA 27 51 00) ✅
+[2026-05-29T16:50:32] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to notifications
+[2026-05-29T16:50:33] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T16:52:06] [WARNING] [wit-ble-direct] [L1] Connection failed (1): No powered Bluetooth adapters found.
+[2026-05-29T16:52:06] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-05-29T16:52:18] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-29T16:52:18] [INFO] [wit-ble-direct] [BLE_SETUP] Initializing WIT via 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-05-29T16:52:18] [INFO] [wit-ble-direct] [BLE_SETUP] UNLOCK sent (FF AA 69 88 B5) ✅
+[2026-05-29T16:52:18] [INFO] [wit-ble-direct] [BLE_SETUP] ENABLE_QUATERNION sent (FF AA 27 51 00) ✅
+[2026-05-29T16:52:19] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to notifications
+[2026-05-29T16:52:19] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
+[2026-05-29T16:52:19] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T16:57:19] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
