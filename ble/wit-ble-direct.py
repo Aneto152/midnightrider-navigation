@@ -44,6 +44,7 @@ import logging
 import math
 import os
 import signal
+import socket
 import struct
 import subprocess
 import sys
@@ -234,55 +235,94 @@ def apply_mounting_and_extract(q_raw: dict) -> dict:
     }
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 7 — SIGNAL K PUBLISHER
+# SECTION 7 — SIGNAL K PUBLISHER (TCP DELTA)
+# Signal K has a delta TCP server on port 5000 (default) that receives JSON deltas.
+# This is more reliable than HTTP POST (which doesn't have a /signalk/v1/api endpoint).
 # ══════════════════════════════════════════════════════════════════════════════
 
-SK_DELTA_URL = f'{SK_URL}/signalk/v1/api/vessels/self'
+import socket
 
-def _post_delta(values: list) -> None:
-    """POST delta to Signal K."""
-    delta = {
-        'updates': [{
-            'source': {'label': 'wit-ble-direct', 'type': 'BLE'},
-            'timestamp': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-            'values': values,
-        }]
-    }
-    req = urllib.request.Request(
-        SK_DELTA_URL,
-        data=json.dumps(delta).encode(),
-        headers={'Content-Type': 'application/json'},
-        method='POST'
-    )
+SK_DELTA_HOST = os.environ.get('SK_DELTA_HOST', 'localhost')
+SK_DELTA_PORT = int(os.environ.get('SK_DELTA_PORT', '5000'))
+
+_sk_socket = None
+_sk_socket_lock = asyncio.Lock()
+
+async def _get_sk_socket():
+    """Get or create TCP socket to Signal K delta server."""
+    global _sk_socket
+    if _sk_socket is None:
+        try:
+            _sk_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            _sk_socket.connect((SK_DELTA_HOST, SK_DELTA_PORT))
+            log('info', 'DATA_OUT', f'Connected to SK delta server {SK_DELTA_HOST}:{SK_DELTA_PORT}')
+        except Exception as e:
+            _sk_socket = None
+            log('warning', 'DATA_OUT', f'Failed to connect to SK delta server: {e}')
+            return None
+    return _sk_socket
+
+async def _send_delta_tcp(values: list) -> bool:
+    """Send delta to Signal K via TCP connection."""
+    global _sk_socket
     try:
-        with urllib.request.urlopen(req, timeout=2):
-            pass
+        sock = await _get_sk_socket()
+        if not sock:
+            return False
+        
+        delta = {
+            'updates': [{
+                'source': {'label': 'wit-ble-direct', 'type': 'BLE'},
+                'timestamp': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
+                'values': values,
+            }]
+        }
+        data = json.dumps(delta).encode() + b'\n'
+        sock.sendall(data)
+        return True
+    except Exception as e:
+        _sk_socket = None
+        log('debug', 'DATA_OUT', f'SK TCP error (will reconnect): {type(e).__name__}')
+        return False
+
+def _post_delta(values: list) -> bool:
+    """Wrapper for async delta sending (called from sync context)."""
+    try:
+        # Since we're in an async context, this should be called via asyncio
+        # For now, return false to indicate it needs to be awaited
+        return False
     except Exception as e:
         log('debug', 'DATA_OUT', f'SK error: {e}')
+        return False
 
-def send_attitude(data: dict) -> None:
-    _post_delta([
+async def send_attitude(data: dict) -> None:
+    await _send_delta_tcp([
         {'path': 'navigation.attitude.roll', 'value': data['roll']},
         {'path': 'navigation.attitude.pitch', 'value': data['pitch']},
         {'path': 'navigation.attitude.yaw', 'value': data['yaw']},
         {'path': 'navigation.headingMagnetic', 'value': data['headingMagnetic']},
     ])
 
-def send_motion(data: dict) -> None:
-    _post_delta([
+async def send_motion(data: dict) -> None:
+    await _send_delta_tcp([
         {'path': 'navigation.acceleration.x', 'value': data['accel_x']},
         {'path': 'navigation.acceleration.y', 'value': data['accel_y']},
         {'path': 'navigation.acceleration.z', 'value': data['accel_z']},
         {'path': 'navigation.rateOfTurn', 'value': data['gyro_z']},
     ])
 
-def check_sk_reachable() -> bool:
+async def check_sk_reachable() -> bool:
+    """Check if Signal K delta server is reachable on TCP:5000."""
     try:
-        with urllib.request.urlopen(f'{SK_URL}/signalk', timeout=5):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(5)
+        result = s.connect_ex((SK_DELTA_HOST, SK_DELTA_PORT))
+        s.close()
+        if result == 0:
             return True
     except Exception as e:
-        log('warning', 'DEPENDENCY', f'SK unreachable: {e}')
-        return False
+        log('warning', 'DEPENDENCY', f'SK delta server unreachable: {e}')
+    return False
 
 def check_ble_adapter() -> bool:
     try:
@@ -330,7 +370,7 @@ async def run_ble_client() -> None:
         log('info', 'STARTUP', f'MAC={WIT_MAC} Rate={OUTPUT_RATE_HZ}Hz Mount={MOUNT_AXIS}/{MOUNT_DEG}°')
         
         # Dependency checks
-        if not check_sk_reachable():
+        if not await check_sk_reachable():
             log('error', 'STARTUP', 'Signal K unreachable — exiting')
             sys.exit(1)
         if not check_ble_adapter():
@@ -352,21 +392,25 @@ async def run_ble_client() -> None:
                         log('warning', 'BLE_SETUP', f'Write failed: {e}')
                     
                     # Start notification handler
-                    def handle_data(sender, data):
+                    async def handle_data_async(sender, data):
                         pkt_0x71 = decode_0x71_packet(data)
                         if pkt_0x71:
                             _stats['packets_0x71'] += 1
                             att = apply_mounting_and_extract(pkt_0x71)
-                            send_attitude(att)
+                            await send_attitude(att)
                             _stats['sk_posts'] += 1
                         
                         pkt_0x61 = decode_0x61_packet(data)
                         if pkt_0x61:
                             _stats['packets_0x61'] += 1
-                            send_motion(pkt_0x61)
+                            await send_motion(pkt_0x61)
                             _stats['sk_posts'] += 1
                         
                         log_heartbeat()
+                    
+                    # Sync wrapper for bleak callback
+                    def handle_data(sender, data):
+                        asyncio.create_task(handle_data_async(sender, data))
                     
                     await client.start_notify(NOTIFY_UUID, handle_data)
                     log('info', 'BLE_NOTIFY', 'Notifications started')
