@@ -254,6 +254,7 @@ def _run(cmd: str, timeout: int = 15) -> tuple:
 
 _running = True
 _was_connected = False
+_last_err = ''  # Last BLE error for BT_RECOVERY
 _stats = {
     'packets': 0,
     'last_data_ts': 0.0,
@@ -352,11 +353,40 @@ async def main() -> None:
             except BleakError as e:
                 l1_fails += 1
                 _stats['l1_fails'] += 1
+                _last_err = str(e)
                 log('error', 'ERROR', f'BLE error (L1 #{l1_fails}): {e}')
             except Exception as e:
                 l1_fails += 1
                 _stats['l1_fails'] += 1
+                _last_err = str(e)
                 log('error', 'ERROR', f'Error (L1 #{l1_fails}): {type(e).__name__}: {e}')
+
+            # BT_RECOVERY: Calypso was connected but now invisible = zombie BLE
+            # Targets CALYPSO_MAC only — WIT unaffected (validated 2026-05-29)
+            if _was_connected and 'not found' in _last_err.lower() and l1_fails >= 3:
+                log('warning', 'BT_RECOVERY',
+                    f'Zombie BLE after {l1_fails} failures — clearing {CALYPSO_MAC}')
+                try:
+                    import subprocess as _sp
+                    r1 = _sp.run(
+                        f'bluetoothctl disconnect {CALYPSO_MAC}',
+                        shell=True, capture_output=True, text=True, timeout=10)
+                    log('info', 'BT_RECOVERY',
+                        f'disconnect: {(r1.stdout+r1.stderr).strip()[:60]}')
+                    await asyncio.sleep(2)
+                    r2 = _sp.run(
+                        f'bluetoothctl remove {CALYPSO_MAC}',
+                        shell=True, capture_output=True, text=True, timeout=10)
+                    log('info', 'BT_RECOVERY',
+                        f'remove: {(r2.stdout+r2.stderr).strip()[:60]}')
+                    await asyncio.sleep(3)
+                    l1_fails = 0
+                    delay = RECONNECT_BASE_S
+                    _was_connected = False
+                    _last_err = ''
+                    log('info', 'BT_RECOVERY', 'Calypso BLE cleared — retrying')
+                except Exception as bt_err:
+                    log('error', 'BT_RECOVERY', f'Recovery failed: {bt_err}')
 
             if l1_fails >= L2_THRESHOLD:
                 log('warning', 'L2',
