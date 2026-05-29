@@ -1,23 +1,60 @@
 {
-  "task": "um982-gnss-cleanup-and-deploy",
-  "date": "2026-05-28T23:42:08.354615",
+  "task": "ble-scripts-centralization",
+  "date": "2026-05-29T00:08:05.465139",
   "status": "SUCCESS",
   "steps_completed": [
-    "signalk-um982-gnss disabled in settings.json",
-    "signalk-um982-gnss uninstall attempted",
-    "signalk-um982-proprietary.js deployed to ~/.signalk/plugins/ (pitch bugfix included)",
-    "signalk-um982-proprietary enabled in settings.json",
-    "calypso_anemometer.service deployed",
-    "Signal K restarted"
+    "Searched /home/aneto/ for BLE scripts",
+    "Created ble/ directory",
+    "Copied 19 active BLE scripts + plugins",
+    "Created ble/README.md (comprehensive audit)",
+    "Security check: no credentials found"
   ],
-  "plugins_active": [
-    "signalk-um982-proprietary (custom, pitch bugfix 2026-05-29)"
-  ],
-  "plugins_removed": [
-    "signalk-um982-gnss (npm)"
-  ],
-  "services_restarted": [
-    "signalk"
-  ],
+  "ble_scripts_centralized": {
+    "Calypso": [
+      "calypso-ble-reader.py",
+      "calypso_filter_proxy.py",
+      "calypso_robust_watchdog.py",
+      "calypso-health-check.sh",
+      "calypso-restart.sh"
+    ],
+    "WIT IMU": [
+      "wit-ble-reader.py",
+      "wit-final-ble.py",
+      "wit-ble-handler.py",
+      "wit-battery-loop.py",
+      "wit-imu-complete.py",
+      "bleak_wit.py"
+    ],
+    "WIT Pipeline": [
+      "wit-nmea-server.py",
+      "wit-signalk-bridge-direct.py",
+      "wit-tcp-bridge.py"
+    ],
+    "UM982 GNSS": [
+      "send_um982_headinga.py",
+      "enable_gnhpr.py"
+    ],
+    "SK Plugins": [
+      "signalk-wit-nmea.js",
+      "signalk-um982-proprietary.js"
+    ]
+  },
+  "active_ble_sources": {
+    "Calypso UP10": {
+      "status": "ACTIVE",
+      "plugin": "calypso_anemometer.service",
+      "output": "wind"
+    },
+    "WIT WT901BLECL": {
+      "status": "ACTIVE",
+      "plugin": "signalk-wit-nmea.js",
+      "output": "attitude"
+    },
+    "UM982 GNSS": {
+      "status": "ACTIVE",
+      "plugin": "signalk-um982-proprietary.js",
+      "output": "RTK heading"
+    }
+  },
   "errors": []
 }

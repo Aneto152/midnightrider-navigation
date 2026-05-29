@@ -62,3 +62,8 @@
 [2026-05-28T23:42:08.354324] [SERVICE_ACTION] calypso_anemometer.service: deployed + systemd reloaded
 [2026-05-28T23:42:08.354324] [SK_RESTART] Signal K restarted via systemctl restart signalk
 [2026-05-28T23:42:08.354324] [RESULT] UM982 cleanup: SUCCESS
+[2026-05-29T00:08:05.464798] [FILE_CREATE] [BLE] ble/ directory created — BLE scripts centralized from /home/aneto/
+[2026-05-29T00:08:05.464798] [FILE_COPY] [BLE] 19 scripts copied into ble/: Calypso (5), WIT (11), UM982 (2), SK plugins (2)
+[2026-05-29T00:08:05.464798] [FILE_CREATE] [DOCS] ble/README.md created — comprehensive audit + deployment guide
+[2026-05-29T00:08:05.464798] [SECURITY_CHECK] [BLE] No credentials found; MAC addresses safe to commit
+[2026-05-29T00:08:05.464798] [RESULT] [BLE-CENTRALIZATION] Result: SUCCESS
