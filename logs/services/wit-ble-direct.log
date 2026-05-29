@@ -1649,3 +1649,6 @@
 [2026-05-29T17:24:21] [INFO] [wit-ble-direct] [BLE_SETUP] Subscribing to notifications
 [2026-05-29T17:24:21] [INFO] [wit-ble-direct] [BLE_NOTIFY] Notifications started
 [2026-05-29T17:25:48] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T17:30:48] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T17:35:49] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
+[2026-05-29T17:40:49] [INFO] [wit-ble-direct] [HEARTBEAT] 0x71:0 0x61:0 SK:0 L1_fails:6
