@@ -78,3 +78,7 @@
 [2026-05-29T10:31:30.030343] [FEATURE] internal recovery (L1→L2→systemd restart)
 [2026-05-29T10:31:30.030343] [FEATURE] singleton (PID file, no dual-instance)
 [2026-05-29T10:31:30.030343] [RESULT] [WIT-BLE-UNIFICATION] SUCCESS
+[2026-05-29T10:54:02.916661] [FILE_CREATE] [SYSTEMD] etc/systemd/system/wit-ble-direct.service created
+[2026-05-29T10:54:02.916661] [FILE_DELETE] [PI] Legacy files removed: calypso-ble-reader.py, calypso_filter_proxy.py, calypso_robust_watchdog.py
+[2026-05-29T10:54:02.916661] [SERVICE_RESTART] [WIT] wit-ble-direct service deployed, started, and active
+[2026-05-29T10:54:02.916661] [RESULT] [WIT-SERVICE] SUCCESS
