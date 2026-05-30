@@ -368,6 +368,12 @@ def make_data_handler(logger):
             send_attitude(att, logger)
             _stats['sk_posts'] += 1
 
+        # Magnetic field + temperature (CMD_MAG response)
+        mag = decode_0x71_mag_packet(bytes(data))
+        if mag and (mag.get('hx_ut', 0) != 0.0 or 'temp_c' in mag):
+            send_mag(mag, logger)
+            _stats['sk_posts'] += 1
+
         pkt_0x61 = decode_0x61_packet(bytes(data))
         if pkt_0x61:
             _stats['packets_0x61'] += 1
@@ -474,13 +480,17 @@ async def run_ble_client(logger) -> None:
                     # Must send at desired rate to get continuous data
                     poll_interval = 1.0 / OUTPUT_RATE_HZ  # 0.1s at 10Hz
                     poll_errors = 0
+                    poll_cycle = 0
 
                     while client.is_connected and _running:
                         try:
                             await client.write_gatt_char(
-                                WRITE_UUID,  # ffe9-9a34fb (hardcoded)
-                                ENABLE_QUAT_CMD,  # FF AA 27 51 00
-                                response=False)
+                                WRITE_UUID, ENABLE_QUAT_CMD, response=False)
+                            if poll_cycle % 10 == 0 and 'CMD_MAG' in dir():  # ~1Hz
+                                await asyncio.sleep(0.015)
+                                await client.write_gatt_char(
+                                    WRITE_UUID, CMD_MAG, response=False)
+                            poll_cycle += 1
                             poll_errors = 0
                         except Exception as poll_e:
                             poll_errors += 1
