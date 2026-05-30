@@ -316,3 +316,9 @@
 [2026-05-30T12:22:57] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
 [2026-05-30T12:22:57] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to 0000ffe9-0000-1000-8000-00805f9a34fb
 [2026-05-30T12:22:57] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] ENABLE_QUAT sent — WIT will reset
+[2026-05-30T12:23:08] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State→WAIT_RECONNECT — reconnecting
+[2026-05-30T12:23:14] [INFO] [wit-ble-direct] [run_ble_client] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-30T12:23:14] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-05-30T12:23:14] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=WAIT_RECONNECT: subscribing without commands
+[2026-05-30T12:23:15] [INFO] [wit-ble-direct] [run_ble_client] [BLE_NOTIFY] Subscribed — waiting for WIT data
+[2026-05-30T12:27:54] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=0
