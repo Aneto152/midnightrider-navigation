@@ -1,14 +1,30 @@
 #!/usr/bin/env python3
 """
-wit-ble-direct.py — WIT WT901BLECL IMU BLE Driver
-===================================================
+wit-ble-direct.py — WIT WT901BLECL IMU Direct BLE Driver
+==========================================================
 
 ROLE:
  Unified, self-contained BLE daemon for the WIT WT901BLECL IMU.
- Handles: BLE connection, configuration, data parsing,
- coordinate transformation, Signal K publishing,
- reconnection, singleton enforcement, and health monitoring.
+ Handles: BLE connection, data parsing, coordinate transformation,
+ Signal K publishing, reconnection, singleton enforcement.
  NO external watchdog needed — all recovery logic is internal.
+
+DEVICE-SPECIFIC (this file):
+ - BLE UUIDs for WIT WT901BLECL
+ - Quaternion mathematics (Hamilton product, Euler conversion)
+ - Mounting correction quaternion (z/90° default)
+ - Packet decoders (0x71 quaternion, 0x61 accel/gyro)
+ - Signal K paths (attitude, acceleration, rateOfTurn)
+ - WIT initialization state machine (ENABLE_QUATERNION protocol)
+
+SHARED INFRASTRUCTURE (ble_common.py):
+ - Logger setup (RotatingFileHandler)
+ - Singleton (PID file)
+ - SK UDP publisher (UDP:4123)
+ - BLE adapter check
+ - SK reachability check
+ - BT zombie recovery (bluetoothctl disconnect/remove)
+ - Graceful signal handlers (no sys.exit — prevents BLE zombie)
 
 WHY QUATERNION:
  The WIT is mounted vertically on the companionway bulkhead.
@@ -18,9 +34,24 @@ WHY QUATERNION:
  we bypass this singularity entirely. Mounting correction is applied
  in quaternion space before any Euler conversion.
 
-COORDINATE TRANSFORM:
- WIT body frame → quaternion multiply (MOUNT_Q) → Boat frame
- Boat frame quaternion → quaternion_to_euler() → roll/pitch/yaw
+WIT BLE PROTOCOL (WT901BLECL):
+ Notify UUID : 0000ffe4-0000-1000-8000-00805f9a34fb (corrected: 9a not 9b)
+ Write UUID : 0000ffe9-0000-1000-8000-00805f9a34fb (corrected: 9a not 9b)
+
+ 0x71 packet (quaternion, 20 bytes):
+ [0]=0x55 [1]=0x71 [2-3]=Q0 [4-5]=Q1 [6-7]=Q2 [8-9]=Q3 (int16/32768)
+
+ 0x61 packet (accel+gyro, 20 bytes):
+ [0]=0x55 [1]=0x61 [2-3]=ax [4-5]=ay [6-7]=az [8-9]=gx [10-11]=gy [12-13]=gz
+
+WIT INITIALIZATION PROTOCOL:
+ Command FF AA 27 51 00 = one-shot quaternion request (not "enable" mode).
+ WIT responds with ONE 0x71 packet per request.
+
+ State machine prevents reset loop:
+ UNINITIALIZED: send command once → WIT resets → WAIT_RECONNECT
+ WAIT_RECONNECT: reconnect → subscribe (no commands) → STREAMING
+ STREAMING: receive data continuously
 
 SIGNAL K PATHS PUBLISHED:
  navigation.attitude.roll rad Heel (+ = starboard down)
@@ -32,37 +63,52 @@ SIGNAL K PATHS PUBLISHED:
  navigation.acceleration.z m/s² Vertical
  navigation.rateOfTurn rad/s From gyro Z
 
-RECOVERY (INTERNAL, no external watchdog):
+RECOVERY:
  L1: Reconnect with exponential backoff (5s → 60s max)
- L2: hci0 reset (after L2_FAIL_THRESHOLD L1 fails)
- L3: Log FATAL + exit → systemd Restart=on-failure restarts
+ BT_RECOVERY: bluetoothctl disconnect+remove (zombie session, own MAC only)
+ L2: clean exit → systemd Restart=on-failure (NO hci0 reset)
+
+ENVIRONMENT (.env):
+ WIT_BLE_ADDRESS MAC address (default: E9:10:DB:8B:CE:C7)
+ WIT_MOUNT_AXIS Mounting axis x|y|z (default: z)
+ WIT_MOUNT_ROTATION_DEG Mounting rotation degrees (default: 90)
+ WIT_OUTPUT_RATE_HZ Output rate Hz (default: 10)
+ WIT_HEARTBEAT_S Heartbeat interval (default: 300)
+ WIT_RECONNECT_MAX_S Max backoff (default: 60)
+ WIT_L2_FAIL_THRESHOLD L1 fails before L2 (default: 5)
+ SK_URL Signal K URL (default: http://localhost:3000)
+
+systemd: etc/systemd/system/wit-ble-direct.service
+PID: /tmp/wit-ble-direct.pid
 """
 
 import asyncio
-import json
-import logging
 import math
 import os
-import signal
-import socket
 import struct
-import subprocess
 import sys
 import time
-import urllib.request
-import urllib.error
-from logging.handlers import RotatingFileHandler
-from pathlib import Path
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ble_common import (
+    setup_logger,
+    acquire_singleton,
+    release_singleton,
+    publish_delta,
+    check_ble_adapter,
+    check_sk_reachable,
+    bt_recovery,
+    setup_signal_handlers,
+)
 
 try:
-    from bleak import BleakClient, BleakScanner
+    from bleak import BleakClient
 except ImportError:
     print('[FATAL] bleak not installed. Run: pip install bleak', flush=True)
     sys.exit(1)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 — CONFIGURATION
-# All from .env — never hardcode values here
 # ══════════════════════════════════════════════════════════════════════════════
 
 WIT_MAC = os.environ.get('WIT_BLE_ADDRESS', 'E9:10:DB:8B:CE:C7')
@@ -72,87 +118,48 @@ OUTPUT_RATE_HZ = int(os.environ.get('WIT_OUTPUT_RATE_HZ', '10'))
 HEARTBEAT_S = int(os.environ.get('WIT_HEARTBEAT_S', '300'))
 RECONNECT_MAX_S = int(os.environ.get('WIT_RECONNECT_MAX_S', '60'))
 L2_FAIL_THRESHOLD = int(os.environ.get('WIT_L2_FAIL_THRESHOLD', '5'))
-LOG_LEVEL_STR = os.environ.get('WIT_LOG_LEVEL', 'INFO').upper()
 SK_URL = os.environ.get('SK_URL', 'http://localhost:3000')
 
+SERVICE_NAME = 'wit-ble-direct'
 PID_FILE = '/tmp/wit-ble-direct.pid'
 RECONNECT_BASE_S = 5
 
-# WIT BLE UUIDs (CORRECTED 2026-05-29: 9a34fb not 9b34fb)
+# WIT WT901BLECL BLE UUIDs (CORRECTED 2026-05-29: 9a34fb not 9b34fb)
 NOTIFY_UUID = '0000ffe4-0000-1000-8000-00805f9a34fb'
 WRITE_UUID = '0000ffe9-0000-1000-8000-00805f9a34fb'
 
-# WIT commands
-UNLOCK_CMD = bytes([0xFF, 0xAA, 0x69, 0x88, 0xB5])  # Unlock (prevents reset on config)
-ENABLE_QUAT_CMD = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])  # Enable quaternion + start stream
-RATE_CMD = bytes([0xFF, 0xAA, 0x03, 0x06, 0x00])  # 10Hz (SDK: UpdateRate.R10HZ = 0x06)  # 10 Hz output rate (backup)
-
-# Rate codes: Hz → code
-RATE_CODES = {1: 0x01, 2: 0x02, 5: 0x03, 10: 0x04, 20: 0x05, 50: 0x06, 100: 0x07, 200: 0x08}
+# WIT command: FF AA 27 51 00 = one-shot quaternion request
+# WIT responds with ONE 0x71 packet per request.
+ENABLE_QUAT_CMD = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 2 — LOGGING
+# SECTION 2 — PROCESS STATE
 # ══════════════════════════════════════════════════════════════════════════════
 
-try:
-    REPO = subprocess.check_output(
-        ['git', '-C', os.path.dirname(os.path.abspath(__file__)),
-         'rev-parse', '--show-toplevel'],
-        stderr=subprocess.DEVNULL
-    ).decode().strip()
-except Exception:
-    REPO = os.path.expanduser('~/midnightrider-navigation')
+_running = True  # Set to False by SIGTERM/SIGINT — graceful BLE disconnect
+_was_connected = False  # BT recovery: did WIT ever connect this session?
+_last_err = ''  # BT recovery: last BLE error string
 
-LOG_DIR = os.path.join(REPO, 'logs', 'services')
-os.makedirs(LOG_DIR, exist_ok=True)
+# WIT initialization state machine
+# UNINITIALIZED: send ENABLE_QUAT once (WIT resets) → WAIT_RECONNECT
+# WAIT_RECONNECT: reconnect → subscribe (no commands) → STREAMING
+# STREAMING: receive data continuously
+_wit_state = 'UNINITIALIZED'
 
-_logger = logging.getLogger('wit-ble-direct')
-_logger.setLevel(getattr(logging, LOG_LEVEL_STR, logging.INFO))
-
-_fh = RotatingFileHandler(
-    os.path.join(LOG_DIR, 'wit-ble-direct.log'),
-    maxBytes=5 * 1024 * 1024,
-    backupCount=3,
-)
-_fh.setFormatter(logging.Formatter(
-    '[%(asctime)s] [%(levelname)s] [wit-ble-direct] %(message)s',
-    datefmt='%Y-%m-%dT%H:%M:%S'
-))
-_logger.addHandler(_fh)
-_logger.addHandler(logging.StreamHandler(sys.stdout))
-
-def log(level: str, probe: str, msg: str) -> None:
-    getattr(_logger, level.lower(), _logger.info)(f'[{probe}] {msg}')
+_stats = {
+    'packets_0x71': 0,
+    'packets_0x61': 0,
+    'sk_posts': 0,
+    'l1_fails': 0,
+    'last_heartbeat': time.time(),
+}
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 3 — SINGLETON
-# ══════════════════════════════════════════════════════════════════════════════
-
-def acquire_singleton() -> None:
-    pid_path = Path(PID_FILE)
-    if pid_path.exists():
-        try:
-            existing_pid = int(pid_path.read_text().strip())
-            os.kill(existing_pid, 0)
-            log('error', 'STARTUP', f'Another instance (PID {existing_pid}) is running. Exiting.')
-            sys.exit(1)
-        except ProcessLookupError:
-            pid_path.unlink(missing_ok=True)
-        except ValueError:
-            pid_path.unlink(missing_ok=True)
-    
-    pid_path.write_text(str(os.getpid()))
-    log('info', 'STARTUP', f'Singleton acquired (PID {os.getpid()})')
-
-def release_singleton() -> None:
-    Path(PID_FILE).unlink(missing_ok=True)
-
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 4 — QUATERNION MATH
+# SECTION 3 — QUATERNION MATHEMATICS
 # ══════════════════════════════════════════════════════════════════════════════
 
 def quaternion_multiply(q1: tuple, q2: tuple) -> tuple:
-    """Hamilton product: q1 × q2 (non-commutative)."""
+    """Hamilton product: q1 ⊗ q2 (non-commutative)."""
     w1, x1, y1, z1 = q1
     w2, x2, y2, z2 = q2
     return (
@@ -163,7 +170,10 @@ def quaternion_multiply(q1: tuple, q2: tuple) -> tuple:
     )
 
 def quaternion_to_euler(q: tuple) -> tuple:
-    """Convert quaternion to Euler (roll, pitch, yaw) in radians using atan2 (no singularity)."""
+    """
+    Convert quaternion to Euler (roll, pitch, yaw) in radians.
+    Uses atan2 formulation — no gimbal lock singularity.
+    """
     w, x, y, z = q
     roll = math.atan2(2.0*(w*x + y*z), 1.0 - 2.0*(x*x + y*y))
     sinp1 = math.sqrt(max(0.0, 1.0 + 2.0*(w*y - x*z)))
@@ -173,23 +183,27 @@ def quaternion_to_euler(q: tuple) -> tuple:
     return roll, pitch, yaw
 
 def make_mount_quaternion(axis: str, degrees: float) -> tuple:
-    """Create mounting correction quaternion."""
+    """Create mounting correction quaternion for given axis and rotation."""
     half = math.radians(degrees) / 2.0
     c, s = math.cos(half), math.sin(half)
     mapping = {'x': (c, s, 0, 0), 'y': (c, 0, s, 0), 'z': (c, 0, 0, s)}
-    if axis not in mapping:
-        log('warning', 'CONFIG', f'Unknown MOUNT_AXIS "{axis}" — defaulting to z')
-        return mapping['z']
-    return mapping[axis]
+    return mapping.get(axis, mapping['z'])
 
+# Pre-compute mounting correction at module load time
 MOUNT_Q = make_mount_quaternion(MOUNT_AXIS, MOUNT_DEG)
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 5 — PACKET DECODING
+# SECTION 4 — PACKET DECODERS
 # ══════════════════════════════════════════════════════════════════════════════
 
 def decode_0x71_packet(data: bytes) -> dict | None:
-    """Decode quaternion packet (0x71)."""
+    """
+    Decode WIT quaternion packet (0x71).
+
+    Layout: 0x55 0x71 [Q0 int16] [Q1 int16] [Q2 int16] [Q3 int16] ...
+    Each component: int16 / 32768.0
+    Returns None if packet is invalid.
+    """
     if len(data) < 11 or data[0] != 0x55 or data[1] != 0x71:
         return None
     try:
@@ -200,12 +214,18 @@ def decode_0x71_packet(data: bytes) -> dict | None:
             'q2': s16(6) / 32768.0,
             'q3': s16(8) / 32768.0,
         }
-    except Exception as e:
-        log('debug', 'DECODE', f'0x71 error: {e}')
+    except Exception:
         return None
 
 def decode_0x61_packet(data: bytes) -> dict | None:
-    """Decode acceleration/gyro packet (0x61)."""
+    """
+    Decode WIT acceleration + gyro packet (0x61).
+
+    Layout: 0x55 0x61 [ax int16] [ay int16] [az int16] [gx int16] [gy int16] [gz int16] ...
+    Accel: int16/32768 × 16g × 9.81 m/s²
+    Gyro: int16/32768 × 2000°/s → rad/s
+    Returns None if packet is invalid.
+    """
     if len(data) < 20 or data[0] != 0x55 or data[1] != 0x61:
         return None
     try:
@@ -216,16 +236,16 @@ def decode_0x61_packet(data: bytes) -> dict | None:
             'accel_z': (s16(6) / 32768.0) * 16.0 * 9.81,
             'gyro_z': (s16(12) / 32768.0) * 2000.0 * math.pi / 180.0,
         }
-    except Exception as e:
-        log('debug', 'DECODE', f'0x61 error: {e}')
+    except Exception:
         return None
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 6 — COORDINATE TRANSFORMATION
+# SECTION 5 — COORDINATE TRANSFORMATION
+# WIT body frame → quaternion multiply (MOUNT_Q) → Boat frame
 # ══════════════════════════════════════════════════════════════════════════════
 
 def apply_mounting_and_extract(q_raw: dict) -> dict:
-    """Transform WIT quaternion to boat frame."""
+    """Transform WIT quaternion to boat frame and extract Euler angles."""
     q_wit = (q_raw['q0'], q_raw['q1'], q_raw['q2'], q_raw['q3'])
     q_boat = quaternion_multiply(q_wit, MOUNT_Q)
     roll, pitch, yaw = quaternion_to_euler(q_boat)
@@ -237,288 +257,222 @@ def apply_mounting_and_extract(q_raw: dict) -> dict:
     }
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 7 — SIGNAL K PUBLISHER
-# Sends delta updates to Signal K via UDP on port 4123.
-# This is the SAME mechanism used by the Calypso driver (calypso_direct.py).
-# Architecture: BLE driver → UDP:4123 → Signal K (configured in SK settings)
-# Synchronous UDP send: fire-and-forget, non-blocking, no async issues.
+# SECTION 6 — SIGNAL K PUBLISHERS
+# Uses publish_delta() from ble_common (UDP:4123).
 # ══════════════════════════════════════════════════════════════════════════════
 
-SK_UDP_HOST = os.environ.get('SK_UDP_HOST', '127.0.0.1')
-SK_UDP_PORT = int(os.environ.get('SK_UDP_PORT', '4123'))
-
-_udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-def _publish_delta(values: list) -> None:
-    """Send SK delta via UDP (fire-and-forget, non-blocking)."""
-    delta = {
-        'updates': [{
-            'source': {'label': 'WIT', 'type': 'BLE'},
-            'timestamp': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
-            'values': values,
-        }]
-    }
-    try:
-        _udp_sock.sendto(json.dumps(delta).encode(), (SK_UDP_HOST, SK_UDP_PORT))
-    except Exception as e:
-        log('debug', 'DATA_OUT', f'UDP send error: {e}')
-
-def send_attitude(data: dict) -> None:
+def send_attitude(data: dict, logger) -> None:
     """Publish attitude + headingMagnetic to Signal K via UDP:4123."""
-    _publish_delta([
-        {'path': 'navigation.attitude.roll', 'value': data['roll']},
-        {'path': 'navigation.attitude.pitch', 'value': data['pitch']},
-        {'path': 'navigation.attitude.yaw', 'value': data['yaw']},
-        {'path': 'navigation.headingMagnetic', 'value': data['headingMagnetic']},
-    ])
-    log('info', 'DATA_OUT', f'Roll={math.degrees(data["roll"]):.1f}° Pitch={math.degrees(data["pitch"]):.1f}° Hdg={math.degrees(data["headingMagnetic"]):.1f}°')
+    publish_delta(
+        source_label='WIT',
+        values=[
+            {'path': 'navigation.attitude.roll', 'value': data['roll']},
+            {'path': 'navigation.attitude.pitch', 'value': data['pitch']},
+            {'path': 'navigation.attitude.yaw', 'value': data['yaw']},
+            {'path': 'navigation.headingMagnetic', 'value': data['headingMagnetic']},
+        ],
+        logger=logger,
+    )
+    logger.info(
+        f'[DATA_OUT] Roll={math.degrees(data["roll"]):.1f}° '
+        f'Pitch={math.degrees(data["pitch"]):.1f}° '
+        f'Hdg={math.degrees(data["headingMagnetic"]):.1f}°'
+    )
 
-def send_motion(data: dict) -> None:
+def send_motion(data: dict, logger) -> None:
     """Publish acceleration + rateOfTurn to Signal K via UDP:4123."""
-    _publish_delta([
-        {'path': 'navigation.acceleration.x', 'value': data['accel_x']},
-        {'path': 'navigation.acceleration.y', 'value': data['accel_y']},
-        {'path': 'navigation.acceleration.z', 'value': data['accel_z']},
-        {'path': 'navigation.rateOfTurn', 'value': data['gyro_z']},
-    ])
-
-def check_sk_reachable() -> bool:
-    """Check if Signal K is running by testing its REST endpoint."""
-    try:
-        with urllib.request.urlopen(f'http://localhost:3000/signalk', timeout=3):
-            return True
-    except Exception:
-        log('warning', 'DEPENDENCY_CHECK', 'Signal K REST unreachable at port 3000')
-        return False
-
-
-def check_ble_adapter() -> bool:
-    try:
-        r = subprocess.run('hciconfig hci0', shell=True, capture_output=True, text=True, timeout=5)
-        if r.returncode == 0 and 'RUNNING' in r.stdout:
-            return True
-    except Exception:
-        pass
-    log('warning', 'DEPENDENCY', 'hci0 not RUNNING')
-    return False
+    publish_delta(
+        source_label='WIT',
+        values=[
+            {'path': 'navigation.acceleration.x', 'value': data['accel_x']},
+            {'path': 'navigation.acceleration.y', 'value': data['accel_y']},
+            {'path': 'navigation.acceleration.z', 'value': data['accel_z']},
+            {'path': 'navigation.rateOfTurn', 'value': data['gyro_z']},
+        ],
+        logger=logger,
+    )
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 8 — STATS & WATCHDOG
+# SECTION 7 — HEARTBEAT
 # ══════════════════════════════════════════════════════════════════════════════
 
-_stats = {
-    'packets_0x71': 0,
-    'packets_0x61': 0,
-    'sk_posts': 0,
-    'l1_fails': 0,
-    'last_heartbeat': time.time(),
-}
-
-# WIT state machine: prevent ENABLE_QUATERNION reset loop
-# UNINITIALIZED: send ENABLE_QUAT once (WIT resets) → WAIT_RECONNECT
-# WAIT_RECONNECT: reconnect → subscribe (no commands) → STREAMING
-# STREAMING: receive data continuously
-_wit_state = 'UNINITIALIZED'
-_running = True
-_was_connected = False
-
-def log_heartbeat() -> None:
-    """Periodic status log."""
-    elapsed = time.time() - _stats['last_heartbeat']
-    if elapsed >= HEARTBEAT_S:
-        log('info', 'HEARTBEAT', 
-            f'0x71:{_stats["packets_0x71"]} 0x61:{_stats["packets_0x61"]} '
-            f'SK:{_stats["sk_posts"]} L1_fails:{_stats["l1_fails"]}')
+def log_heartbeat(logger) -> None:
+    """Periodic status log every HEARTBEAT_S seconds."""
+    global _wit_state
+    if time.time() - _stats['last_heartbeat'] >= HEARTBEAT_S:
+        if _stats['packets_0x71'] > 0 or _stats['packets_0x61'] > 0:
+            _wit_state = 'STREAMING'
+        logger.info(
+            f'[HEARTBEAT] state={_wit_state} '
+            f'0x71={_stats["packets_0x71"]} '
+            f'0x61={_stats["packets_0x61"]} '
+            f'SK={_stats["sk_posts"]} '
+            f'l1_fails={_stats["l1_fails"]}'
+        )
+        _stats['packets_0x71'] = 0
+        _stats['packets_0x61'] = 0
+        _stats['sk_posts'] = 0
         _stats['last_heartbeat'] = time.time()
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 9 — BLE CONNECTION & RECOVERY
+# SECTION 8 — BLE NOTIFICATION CALLBACK (FACTORY)
 # ══════════════════════════════════════════════════════════════════════════════
 
-async def run_ble_client() -> None:
-    """Main BLE connection loop with internal recovery."""
-    global _was_connected, _running
-    acquire_singleton()
+def make_data_handler(logger):
+    """Factory: returns a BLE notification callback bound to logger."""
+    def handle_data(sender, data):
+        """BLE notification callback — synchronous, no async issues."""
+        pkt_0x71 = decode_0x71_packet(bytes(data))
+        if pkt_0x71:
+            _stats['packets_0x71'] += 1
+            att = apply_mounting_and_extract(pkt_0x71)
+            send_attitude(att, logger)
+            _stats['sk_posts'] += 1
+
+        pkt_0x61 = decode_0x61_packet(bytes(data))
+        if pkt_0x61:
+            _stats['packets_0x61'] += 1
+            send_motion(pkt_0x61, logger)
+            _stats['sk_posts'] += 1
+
+        log_heartbeat(logger)
+    return handle_data
+
+# ══════════════════════════════════════════════════════════════════════════════
+# SECTION 9 — MAIN BLE LOOP
+# ══════════════════════════════════════════════════════════════════════════════
+
+async def run_ble_client(logger) -> None:
+    """
+    Main BLE connection loop with internal recovery.
+
+    WIT initialization state machine:
+    - UNINITIALIZED: first connect → send ENABLE_QUAT_CMD once
+      The WIT responds with 1 packet then resets. State → WAIT_RECONNECT.
+    - WAIT_RECONNECT: reconnect → subscribe only, NO commands
+      WIT streams continuously (NVRAM config retained).
+    - STREAMING: confirmed by heartbeat (packets_0x71 > 0)
+    """
+    global _running, _was_connected, _last_err, _wit_state
+
+    acquire_singleton(PID_FILE, logger)
     try:
+        logger.info('[STARTUP] ' + '=' * 58)
+        logger.info('[STARTUP] wit-ble-direct — WIT WT901BLECL IMU Driver')
+        logger.info(f'[STARTUP] MAC={WIT_MAC} Rate={OUTPUT_RATE_HZ}Hz Mount={MOUNT_AXIS}/{MOUNT_DEG}°')
+        logger.info(f'[STARTUP] L2_threshold={L2_FAIL_THRESHOLD}')
+        logger.info('[STARTUP] ' + '=' * 58)
+
+        if not check_sk_reachable():
+            logger.warning(
+                '[DEPENDENCY_CHECK] Signal K not ready at startup — will retry when publishing')
+        if not check_ble_adapter():
+            logger.error('[STARTUP] BLE adapter (hci0) not available — exiting')
+            sys.exit(1)
+
         reconnect_delay = RECONNECT_BASE_S
         l1_fail_count = 0
-        
-        log('info', 'STARTUP', f'Starting WIT BLE client')
-        log('info', 'STARTUP', f'MAC={WIT_MAC} Rate={OUTPUT_RATE_HZ}Hz Mount={MOUNT_AXIS}/{MOUNT_DEG}°')
-        
-        # Dependency checks
-        if not check_sk_reachable():
-            log('warning', 'DEPENDENCY_CHECK', 'Signal K not ready at startup — will continue and retry')
-        if not check_ble_adapter():
-            log('error', 'STARTUP', 'BLE adapter (hci0) not available — exiting')
-            sys.exit(1)
-        
+        handle_data = make_data_handler(logger)
+
         while _running:
             try:
                 async with BleakClient(WIT_MAC) as client:
-                    log('info', 'BLE_CONNECT', f'Connected to {WIT_MAC}')
-                    _was_connected = True
+                    logger.info(f'[BLE_CONNECT] Connected to {WIT_MAC}')
                     l1_fail_count = 0
                     reconnect_delay = RECONNECT_BASE_S
-                    
-                    # WIT STATE MACHINE (2026-05-29):
-                    # ENABLE_QUATERNION causes WIT to reset. Sending on every connection
-                    # creates reset loop. Correct sequence:
-                    # 1st connect: send ENABLE_QUATERNION → WIT resets → reconnect
-                    # 2nd+ connect: just subscribe → WIT streams continuously
-                    global _wit_state
-                    
+                    _was_connected = True
+
+                    # Find write characteristic (ffe9-9a34fb)
                     write_uuid = None
                     for service in client.services:
                         for char in service.characteristics:
-                            if 'write' in char.properties or 'write-without-response' in char.properties:
+                            if ('write' in char.properties
+                                or 'write-without-response' in char.properties):
                                 write_uuid = str(char.uuid)
+                                logger.debug(f'[BLE_SETUP] Write char: {write_uuid}')
                                 break
                         if write_uuid:
                             break
-                    
+
+                    # State machine
                     if _wit_state == 'UNINITIALIZED':
-                        # First connection: send ENABLE_QUATERNION once
+                        # First connection: send ENABLE_QUAT_CMD once
+                        # WIT responds with 1 packet then resets → reconnect
                         cmd_uuid = write_uuid or NOTIFY_UUID
-                        log('info', 'BLE_SETUP', f'State=UNINITIALIZED: sending ENABLE_QUATERNION')
-                        try:
-                            await client.write_gatt_char(cmd_uuid, ENABLE_QUAT_CMD, response=False)
-                            log('info', 'BLE_SETUP', 'ENABLE_QUATERNION sent — WIT will reset')
-                            _wit_state = 'WAIT_RECONNECT'
-                            await asyncio.sleep(8)  # WIT resets during this
-                            log('info', 'BLE_SETUP', 'State→WAIT_RECONNECT: reconnecting')
-                            break  # Exit: connection dead after reset, reconnect loop handles it
-                        except Exception as e:
-                            log('warning', 'BLE_SETUP', f'ENABLE_QUATERNION failed: {e}')
-                            _wit_state = 'WAIT_RECONNECT'
-                            break  # Connection dead after reset
-                    elif _wit_state in ('WAIT_RECONNECT', 'STREAMING'):
-                        # WIT already configured — subscribe directly, NO commands
-                        log('info', 'BLE_SETUP', f'State={_wit_state}: subscribing without commands')
-                    
-                    log('info', 'BLE_SETUP', 'Subscribing to notifications')
-                    
-                    # Start notification handler
-                    def handle_data(sender, data):
-                        """BLE notification callback — synchronous, no async issues."""
-                        pkt_0x71 = decode_0x71_packet(bytes(data))
-                        if pkt_0x71:
-                            _stats['packets_0x71'] += 1
-                            att = apply_mounting_and_extract(pkt_0x71)
-                            send_attitude(att)
-                            _stats['sk_posts'] += 1
-                        
-                        pkt_0x61 = decode_0x61_packet(bytes(data))
-                        if pkt_0x61:
-                            _stats['packets_0x61'] += 1
-                            send_motion(pkt_0x61)
-                            _stats['sk_posts'] += 1
-                        
-                        log_heartbeat()
-                    
-                    await client.start_notify(NOTIFY_UUID, handle_data)
-                    log('info', 'BLE_NOTIFY', 'Notifications started')
-                    
-                    # 10Hz quaternion polling loop
-                    # Each FF AA 27 51 00 request → WIT replies with one 0x71 packet
-                    # handle_data() receives and processes the reply
-                    poll_interval = 1.0 / OUTPUT_RATE_HZ  # 0.1s at 10Hz
-                    poll_errors = 0
-                    
-                    while client.is_connected and _running:
+                        logger.info(
+                            f'[BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to {cmd_uuid}')
                         try:
                             await client.write_gatt_char(
-                                write_uuid or NOTIFY_UUID,
-                                ENABLE_QUAT_CMD,  # FF AA 27 51 00
-                                response=False)
-                            poll_errors = 0
+                                cmd_uuid, ENABLE_QUAT_CMD, response=False)
+                            logger.info('[BLE_SETUP] ENABLE_QUAT sent — WIT will reset')
+                            _wit_state = 'WAIT_RECONNECT'
+                            await asyncio.sleep(8)  # WIT resets during this
+                            logger.info('[BLE_SETUP] State→WAIT_RECONNECT — reconnecting')
                         except Exception as e:
-                            poll_errors += 1
-                            log('debug', 'POLL', f'Poll error #{poll_errors}: {e}')
-                            if poll_errors >= 10:
-                                log('warning', 'POLL', '10 consecutive poll errors — breaking')
-                                break
-                        await asyncio.sleep(poll_interval)
-            
+                            logger.warning(f'[BLE_SETUP] ENABLE_QUAT failed: {e}')
+                            _wit_state = 'WAIT_RECONNECT'
+                        # Connection dead after WIT reset — exit to trigger reconnect
+                        continue
+
+                    else:
+                        # WAIT_RECONNECT or STREAMING: subscribe without commands
+                        logger.info(
+                            f'[BLE_SETUP] State={_wit_state}: subscribing without commands')
+
+                    # Subscribe to BLE notifications
+                    await client.start_notify(NOTIFY_UUID, handle_data)
+                    logger.info('[BLE_NOTIFY] Subscribed — waiting for WIT data')
+
+                    # Keep connection alive
+                    while client.is_connected and _running:
+                        await asyncio.sleep(1)
+
+                    logger.warning('[BLE_DISCONNECT] WIT disconnected — will reconnect')
+
             except Exception as e:
                 l1_fail_count += 1
                 _stats['l1_fails'] += 1
-                err_str = str(e)
-                log('warning', 'L1', f'Connection failed ({l1_fail_count}): {err_str}')
-                
-                # BT_RECOVERY: Zombie BLE session fix (VALIDATED 2026-05-29)
-                # If WIT was connected before but now invisible ("not found" error),
-                # it's a zombie BLE session. bluetoothctl disconnect+remove clears it
-                # WITHOUT affecting Calypso or other BLE devices (targets WIT MAC only).
-                if (_was_connected and 'not found' in err_str and l1_fail_count >= 3):
-                    log('warning', 'BT_RECOVERY',
-                        f'Zombie BLE session detected after {l1_fail_count} failures')
-                    try:
-                        log('info', 'BT_RECOVERY',
-                            f'Running: bluetoothctl disconnect {WIT_MAC}')
-                        subprocess.run(
-                            f'bluetoothctl disconnect {WIT_MAC}',
-                            shell=True, timeout=10, capture_output=True)
-                        await asyncio.sleep(2)
-                        log('info', 'BT_RECOVERY',
-                            f'Running: bluetoothctl remove {WIT_MAC}')
-                        subprocess.run(
-                            f'bluetoothctl remove {WIT_MAC}',
-                            shell=True, timeout=10, capture_output=True)
-                        await asyncio.sleep(3)
+                _last_err = str(e)
+                logger.warning(f'[L1] Connection failed ({l1_fail_count}): {e}')
+
+                # BT_RECOVERY: zombie session detection (validated 2026-05-29)
+                # Targets WIT_MAC only — Calypso BLE unaffected
+                if (_was_connected
+                    and 'not found' in _last_err.lower()
+                    and l1_fail_count >= 3):
+                    recovered = await bt_recovery(WIT_MAC, logger)
+                    if recovered:
                         l1_fail_count = 0
                         reconnect_delay = RECONNECT_BASE_S
                         _was_connected = False
-                        log('info', 'BT_RECOVERY',
-                            'WIT BLE cache cleared — restarting reconnect')
-                    except Exception as bt_err:
-                        log('error', 'BT_RECOVERY',
-                            f'Recovery command failed: {bt_err}')
-                
-                # L2: clean exit → systemd restart (hci0 stays UP, no disruption)
-                # Principle: single service failure = device issue, NOT adapter issue
-                # If hci0 truly down, both services fail → systemd + bluetooth.target handles it
+                        _last_err = ''
+
+                # L2: clean exit → systemd restart
+                # hci0 NOT reset: would disrupt Calypso BLE connection
                 if l1_fail_count >= L2_FAIL_THRESHOLD:
-                    log('warning', 'L2',
-                        f'{l1_fail_count} failures ≥ threshold {L2_FAIL_THRESHOLD} — exiting cleanly')
-                    log('warning', 'L2',
-                        'systemd Restart=on-failure will handle restart')
-                    break  # Clean exit from main loop
-                
-                # Exponential backoff: 5s → 10s → 20s → ... → 60s max
+                    logger.warning(
+                        f'[L2] {l1_fail_count} failures — clean exit for systemd restart')
+                    logger.warning('[L2] hci0 NOT reset: would disrupt Calypso BLE')
+                    break
+
                 reconnect_delay = min(reconnect_delay * 2, RECONNECT_MAX_S)
-                log('info', 'L1', f'Reconnecting in {reconnect_delay}s...')
+                logger.info(f'[L1] Reconnecting in {reconnect_delay}s...')
                 await asyncio.sleep(reconnect_delay)
-    
+
     finally:
-        release_singleton()
+        release_singleton(PID_FILE, logger)
+        logger.info('[SHUTDOWN] wit-ble-direct stopped — PID released')
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 10 — MAIN & SIGNAL HANDLERS
+# SECTION 10 — ENTRYPOINT
 # ══════════════════════════════════════════════════════════════════════════════
-
-_loop = None
-
-def _shutdown(sig, frame):
-    global _loop
-    log('info', 'SHUTDOWN', f'Signal {sig} received — shutting down')
-    if _loop:
-        _loop.stop()
-    sys.exit(0)
-
-signal.signal(signal.SIGTERM, _shutdown)
-signal.signal(signal.SIGINT, _shutdown)
-
-async def main():
-    await run_ble_client()
 
 if __name__ == '__main__':
-    try:
-        _loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(_loop)
-        _loop.run_until_complete(main())
-    except KeyboardInterrupt:
-        _shutdown(signal.SIGINT, None)
-    except Exception as e:
-        log('error', 'FATAL', f'Unhandled exception: {e}')
-        sys.exit(1)
+    _logger = setup_logger(SERVICE_NAME)
+
+    def _set_stop():
+        global _running
+        _running = False
+
+    setup_signal_handlers(_set_stop, _logger)
+    asyncio.run(run_ble_client(_logger))
