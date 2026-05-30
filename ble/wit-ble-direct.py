@@ -429,9 +429,27 @@ async def run_ble_client(logger) -> None:
                     await client.start_notify(NOTIFY_UUID, handle_data)
                     logger.info('[BLE_NOTIFY] Subscribed — waiting for WIT data')
 
-                    # Keep connection alive
+                    # Poll for quaternion at 10Hz
+                    # 0x71 is a ONE-SHOT response (not auto-streamed)
+                    # FF AA 27 51 00 triggers ONE 0x71 packet from WIT
+                    # Must send at desired rate to get continuous data
+                    poll_interval = 1.0 / OUTPUT_RATE_HZ  # 0.1s at 10Hz
+                    poll_errors = 0
+
                     while client.is_connected and _running:
-                        await asyncio.sleep(1)
+                        try:
+                            await client.write_gatt_char(
+                                WRITE_UUID,  # ffe9-9a34fb (hardcoded)
+                                ENABLE_QUAT_CMD,  # FF AA 27 51 00
+                                response=False)
+                            poll_errors = 0
+                        except Exception as poll_e:
+                            poll_errors += 1
+                            logger.debug(f'[POLL] Error #{poll_errors}: {poll_e}')
+                            if poll_errors >= 10:
+                                logger.warning('[POLL] 10 errors — reconnecting')
+                                break
+                        await asyncio.sleep(poll_interval)
 
                     logger.warning('[BLE_DISCONNECT] WIT disconnected — will reconnect')
 
