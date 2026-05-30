@@ -204,15 +204,15 @@ def decode_0x71_packet(data: bytes) -> dict | None:
     Each component: int16 / 32768.0
     Returns None if packet is invalid.
     """
-    if len(data) < 11 or data[0] != 0x55 or data[1] != 0x71:
+    if len(data) < 12 or data[0] != 0x55 or data[1] != 0x71:
         return None
     try:
         def s16(off): return struct.unpack_from('<h', data, off)[0]
         return {
-            'q0': s16(2) / 32768.0,
-            'q1': s16(4) / 32768.0,
-            'q2': s16(6) / 32768.0,
-            'q3': s16(8) / 32768.0,
+            'q0': s16(4) / 32768.0,  # offset 4 per datasheet (skip REG_L REG_H at 2,3)
+                'q1': s16(6) / 32768.0,
+                'q2': s16(8) / 32768.0,
+                'q3': s16(10) / 32768.0,
         }
     except Exception:
         return None
