@@ -370,6 +370,15 @@ async def run_ble_client(logger) -> None:
             logger.error('[STARTUP] BLE adapter (hci0) not available — exiting')
             sys.exit(1)
 
+        # Clear BlueZ GATT cache for WIT — prevents stale characteristic discovery
+        try:
+            import subprocess as _sp
+            _sp.run(f'bluetoothctl remove {WIT_MAC}',
+                    shell=True, capture_output=True, timeout=5)
+            logger.info(f'[STARTUP] BlueZ GATT cache cleared for {WIT_MAC}')
+        except Exception:
+            pass  # Non-fatal
+
         reconnect_delay = RECONNECT_BASE_S
         l1_fail_count = 0
         handle_data = make_data_handler(logger)
@@ -382,17 +391,13 @@ async def run_ble_client(logger) -> None:
                     reconnect_delay = RECONNECT_BASE_S
                     _was_connected = True
 
-                    # Find write characteristic (ffe9-9a34fb)
-                    write_uuid = None
-                    for service in client.services:
-                        for char in service.characteristics:
-                            if ('write' in char.properties
-                                or 'write-without-response' in char.properties):
-                                write_uuid = str(char.uuid)
-                                logger.debug(f'[BLE_SETUP] Write char: {write_uuid}')
-                                break
-                        if write_uuid:
-                            break
+                    # Use WRITE_UUID directly (ffe9-9a34fb)
+                    # DO NOT use dynamic discovery — BlueZ GATT cache returns
+                    # 0x2a00 (Device Name) as first write-capable char, causing
+                    # NotAuthorized error when we try to send ENABLE_QUAT.
+                    # ffe9-9a34fb is confirmed present on WIT WT901BLECL (2026-05-29).
+                    write_uuid = WRITE_UUID
+                    logger.debug(f'[BLE_SETUP] Using hardcoded write char: {write_uuid}')
 
                     # State machine
                     if _wit_state == 'UNINITIALIZED':
