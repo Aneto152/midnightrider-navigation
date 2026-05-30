@@ -40226,3 +40226,21 @@
 [2026-05-30T11:15:24] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
 [2026-05-30T11:15:24] [INFO] [wit-ble-direct] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUATERNION
 [2026-05-30T11:15:24] [WARNING] [wit-ble-direct] [BLE_SETUP] ENABLE_QUATERNION failed: [org.bluez.Error.NotAuthorized] Operation Not Authorized
+[2026-05-30T11:32:58] [INFO] [wit-ble-direct] [acquire_singleton] Singleton acquired (PID 31833)
+[2026-05-30T11:32:58] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] ==========================================================
+[2026-05-30T11:32:58] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] wit-ble-direct — WIT WT901BLECL IMU Driver
+[2026-05-30T11:32:58] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-30T11:32:58] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] L2_threshold=5
+[2026-05-30T11:32:58] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] ==========================================================
+[2026-05-30T11:33:01] [INFO] [wit-ble-direct] [run_ble_client] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-30T11:33:01] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Write char: 00002a00-0000-1000-8000-00805f9b34fb
+[2026-05-30T11:33:01] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to 00002a00-0000-1000-8000-00805f9b34fb
+[2026-05-30T11:33:01] [WARNING] [wit-ble-direct] [run_ble_client] [BLE_SETUP] ENABLE_QUAT failed: [org.bluez.Error.NotAuthorized] Operation Not Authorized
+[2026-05-30T11:33:04] [WARNING] [wit-ble-direct] [run_ble_client] [L1] Connection failed (1): 
+[2026-05-30T11:33:04] [INFO] [wit-ble-direct] [run_ble_client] [L1] Reconnecting in 10s...
+[2026-05-30T11:33:16] [INFO] [wit-ble-direct] [run_ble_client] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-30T11:33:16] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Write char: 00002a00-0000-1000-8000-00805f9b34fb
+[2026-05-30T11:33:16] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=WAIT_RECONNECT: subscribing without commands
+[2026-05-30T11:33:16] [INFO] [wit-ble-direct] [run_ble_client] [BLE_NOTIFY] Subscribed — waiting for WIT data
+[2026-05-30T11:37:58] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=1
+[2026-05-30T11:42:58] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=1
