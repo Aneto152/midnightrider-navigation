@@ -130,7 +130,8 @@ WRITE_UUID = '0000ffe9-0000-1000-8000-00805f9a34fb'
 
 # WIT command: FF AA 27 51 00 = one-shot quaternion request
 # WIT responds with ONE 0x71 packet per request.
-ENABLE_QUAT_CMD = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])
+ENABLE_QUAT_CMD = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])  # quaternion
+CMD_MAG = bytes([0xFF, 0xAA, 0x27, 0x3A, 0x00])  # mag+temp at 1Hz
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 2 — PROCESS STATE
@@ -217,6 +218,20 @@ def decode_0x71_packet(data: bytes) -> dict | None:
     except Exception:
         return None
 
+
+def decode_0x71_mag_packet(data: bytes) -> dict | None:
+    """Decode 0x71 response to CMD_MAG — magnetic field + temperature."""
+    if len(data) < 10 or data[0] != 0x55 or data[1] != 0x71:
+        return None
+    try:
+        def s16(off): return struct.unpack_from('<h', data, off)[0]
+        result = {'hx_ut': s16(4)/10.0, 'hy_ut': s16(6)/10.0, 'hz_ut': s16(8)/10.0}
+        if len(data) >= 18:
+            result['temp_c'] = s16(16) / 100.0
+        return result
+    except Exception:
+        return None
+
 def decode_0x61_packet(data: bytes) -> dict | None:
     """
     Decode WIT acceleration + gyro packet (0x61).
@@ -246,7 +261,9 @@ def decode_0x61_packet(data: bytes) -> dict | None:
 
 def apply_mounting_and_extract(q_raw: dict) -> dict:
     """Transform WIT quaternion to boat frame and extract Euler angles."""
-    q_wit = (q_raw['q0'], q_raw['q1'], q_raw['q2'], q_raw['q3'])
+    # WitMotion convention: Q0=x, Q1=y, Q2=z, Q3=w (scalar last)
+    # Reorder to (w, x, y, z) for our math functions
+    q_wit = (q_raw['q3'], q_raw['q0'], q_raw['q1'], q_raw['q2'])
     q_boat = quaternion_multiply(q_wit, MOUNT_Q)
     roll, pitch, yaw = quaternion_to_euler(q_boat)
     return {
@@ -254,6 +271,11 @@ def apply_mounting_and_extract(q_raw: dict) -> dict:
         'pitch': pitch,
         'yaw': yaw,
         'headingMagnetic': yaw,
+        # Raw quaternion (WitMotion convention)
+        'qw': q_raw.get('q3', 0),
+        'qx': q_raw.get('q0', 0),
+        'qy': q_raw.get('q1', 0),
+        'qz': q_raw.get('q2', 0),
     }
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -270,6 +292,11 @@ def send_attitude(data: dict, logger) -> None:
             {'path': 'navigation.attitude.pitch', 'value': data['pitch']},
             {'path': 'navigation.attitude.yaw', 'value': data['yaw']},
             {'path': 'navigation.headingMagnetic', 'value': data['headingMagnetic']},
+            # Raw quaternion (WitMotion convention: Q0=x Q1=y Q2=z Q3=w)
+            {'path': 'sensors.wit.quaternion.w', 'value': data.get('qw', 0)},
+            {'path': 'sensors.wit.quaternion.x', 'value': data.get('qx', 0)},
+            {'path': 'sensors.wit.quaternion.y', 'value': data.get('qy', 0)},
+            {'path': 'sensors.wit.quaternion.z', 'value': data.get('qz', 0)},
         ],
         logger=logger,
     )
@@ -278,6 +305,18 @@ def send_attitude(data: dict, logger) -> None:
         f'Pitch={math.degrees(data["pitch"]):.1f}° '
         f'Hdg={math.degrees(data["headingMagnetic"]):.1f}°'
     )
+
+
+def send_mag(data: dict, logger) -> None:
+    """Publish magnetic field + temperature to SK."""
+    values = [
+        {'path': 'sensors.wit.magneticField.x', 'value': data['hx_ut']},
+        {'path': 'sensors.wit.magneticField.y', 'value': data['hy_ut']},
+        {'path': 'sensors.wit.magneticField.z', 'value': data['hz_ut']},
+    ]
+    if 'temp_c' in data:
+        values.append({'path': 'sensors.wit.temperature', 'value': data['temp_c'] + 273.15})
+    publish_delta(source_label='WIT', values=values, logger=logger)
 
 def send_motion(data: dict, logger) -> None:
     """Publish acceleration + rateOfTurn to Signal K via UDP:4123."""
