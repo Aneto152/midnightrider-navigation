@@ -169,17 +169,22 @@ _stats = {
 
 def minicrc(data: bytes) -> int:
     """
-    Compute CRC8 checksum (JBD BMS protocol).
-    Polynomial: 0x8C (reversed: 0x31)
+    Compute CRC8 checksum for SOK/JBD BMS commands.
+    Algorithm: LSB-first, polynomial 0x8C (bit-reversal of 0x31).
+    Source: ABC-BMS app reverse engineering (doc/HARDWARE/SOK-BMS-BLE-PROTOCOL.md)
+
+    IMPORTANT: use LSB-first (check bit 0, shift right) with 0x8C.
+    MSB-first (check bit 7, shift left) with 0x31 produces DIFFERENT results
+    and will be rejected by the BMS.
     """
     crc = 0
     for byte in data:
-        crc ^= byte
+        crc ^= byte & 0xFF
         for _ in range(8):
-            if crc & 0x80:
-                crc = ((crc << 1) ^ 0x31) & 0xFF
+            if crc & 0x01:  # LSB-first
+                crc = (crc >> 1) ^ 0x8C
             else:
-                crc = (crc << 1) & 0xFF
+                crc = crc >> 1
     return crc
 
 def encode_command(cmd: bytes) -> bytes:
