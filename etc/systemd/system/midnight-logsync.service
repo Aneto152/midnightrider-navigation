@@ -1,0 +1,17 @@
+[Unit]
+Description=Midnight Rider — Push BLE/service logs to GitHub
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=pi
+WorkingDirectory=/home/pi/midnightrider-navigation
+ExecStart=/bin/bash -c '\
+ git add -f logs/services/ logs/debug/ logs/oc-actions.log 2>/dev/null; \
+ if ! git diff --quiet --cached HEAD 2>/dev/null; then \
+ git commit -m "logs: auto-update $(date -Iseconds)"; \
+ git push origin main; \
+ fi'
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=midnight-logsync

@@ -407,6 +407,7 @@ async def run_ble_client(logger) -> None:
                             logger.info('[BLE_SETUP] ENABLE_QUAT sent — WIT will reset')
                             _wit_state = 'WAIT_RECONNECT'
                             await asyncio.sleep(8)  # WIT resets during this
+                            await asyncio.sleep(3)  # Extra: let WIT resume advertising
                             logger.info('[BLE_SETUP] State→WAIT_RECONNECT — reconnecting')
                         except Exception as e:
                             logger.warning(f'[BLE_SETUP] ENABLE_QUAT failed: {e}')

@@ -1,0 +1,11 @@
+[Unit]
+Description=Midnight Rider — Sync logs to GitHub every 3 minutes
+After=network-online.target
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=3min
+Persistent=true
+
+[Install]
+WantedBy=timers.target
