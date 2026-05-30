@@ -1,327 +1,320 @@
-# ble/ — Bluetooth Low Energy Scripts
+# ble/ — BLE Drivers for Midnight Rider
 
-> Last updated: 2026-05-29  
-> Centralized from `/home/aneto/` — previously scattered across the Pi filesystem
+> Last updated: 2026-05-30  
+> Architecture: unified drivers with shared ble_common.py infrastructure
 
-Custom BLE bridge scripts for Midnight Rider sensors.  
-These scripts handle the BLE ↔ Signal K / InfluxDB data pipeline.
+Direct BLE daemon drivers for Midnight Rider sensors.  
+Each driver is a standalone Python service managed by systemd.
 
 ---
 
 ## Architecture
 
 ```
-BLE Sensors → [ble/ scripts] → Signal K OR InfluxDB
-
-Calypso UP10 Anemometer
-  ├─ calypso-ble-reader.py → raw BLE serial packets
-  ├─ calypso_filter_proxy.py → filters + UDP/Signal K delta
-  └─ calypso_robust_watchdog.py → connection watchdog
-
-WIT WT901BLECL IMU (Attitude)
-  ├─ wit-ble-reader.py → raw BLE advertisement packets
-  ├─ wit-final-ble.py → complete BLE parser (roll/pitch/yaw)
-  ├─ wit-ble-handler.py → connection manager
-  ├─ wit-imu-complete.py → full IMU (accel/gyro/mag)
-  └─ bleak_wit.py → Bleak library test
-
-WIT Data Pipeline → Signal K
-  ├─ signalk-wit-nmea.js → plugin receives NMEA 0183 from wit-nmea-server.py
-  └─ wit-nmea-server.py → outputs \$HEATT, \$HEAPH, \$HEADM to TCP
-
-UM982 GNSS (RTK + Heading)
-  ├─ send_um982_headinga.py → inject HEADINGA sentence
-  ├─ enable_gnhpr.py → enable on hardware
-  └─ signalk-um982-proprietary.js → plugin parses proprietary sentences
+BLE Sensors → [ble/ drivers] → Signal K UDP:4123 → SK → InfluxDB → Grafana
 ```
+
+**Three integrated drivers:**
+
+- **Calypso UP10 Anemometer** (F8:5F:12:9D:D2:EE)  
+  → `calypso_direct.py` → wind speed/angle, battery %, temperature
+
+- **WIT WT901BLECL IMU** (E9:10:DB:8B:CE:C7)  
+  → `wit-ble-direct.py` → quaternion → attitude (roll/pitch/yaw), acceleration, heading
+
+- **SOK SK12V100PC Battery BMS** (MAC via `SOK_BLE_ADDRESS`)  
+  → `sok_direct.py` → voltage/current/power, SoC, cell voltages, cycles
+
+**Shared infrastructure:** All drivers use `ble_common.py` for logging, singleton, SK publishing, BLE adapter checks, BT zombie recovery, and graceful shutdown.
 
 ---
 
 ## Files
 
-### Calypso UP10 Anemometer (BLE)
+### ble_common.py — Shared Infrastructure
 
-#### `calypso-ble-reader.py` (9.6 KB)
+Imported by all drivers. Provides:
 
-| Field | Value |
+| Function | Purpose |
 |---|---|
-| **Purpose** | Raw Calypso BLE device reader — connects to MAC `F8:5F:12:9D:D2:EE`, reads BLE advertisements |
-| **BLE Device** | Calypso UP10 anemometer (wind speed/direction) |
-| **Output** | Wind speed (m/s), direction (°) on serial-like BLE stream |
-| **Destination** | → calypso_filter_proxy.py |
-| **Runs as daemon** | ❌ No — used by filter proxy |
-| **Status** | ⚠️ Reference; calypso-anemometer (pip package) is preferred |
-
-#### `calypso_filter_proxy.py` (2.4 KB)
-
-| Field | Value |
-|---|---|
-| **Purpose** | BLE to UDP bridge — filters sentinel values (999.0), outputs Signal K delta packets |
-| **Input** | Calypso BLE device via `calypso-anemometer` CLI tool |
-| **Output** | UDP delta packets → `localhost:4122` (Signal K) |
-| **Destination** | Signal K server |
-| **systemd service** | `N/A` — started by calypso_anemometer.service |
-| **Runs as daemon** | ✅ Yes (PID 1177 observed) |
-| **Status** | ✅ **ACTIVE** — primary Calypso ingestion |
-
-#### `calypso_robust_watchdog.py` (4.2 KB)
-
-| Field | Value |
-|---|---|
-| **Purpose** | Connection monitor — restarts Calypso service if BLE device goes offline |
-| **Monitors** | Calypso BLE device responsiveness |
-| **Action** | Restarts `calypso_anemometer.service` on timeout |
-| **Status** | ⚠️ **DEPRECATED** — systemd `Restart=on-failure` is preferred (see AGENTS.md) |
-| **Reason** | Multiple managers race condition (see 2026-05-22 race debrief) |
-
-#### `calypso-health-check.sh` (2.1 KB)
-
-| Field | Value |
-|---|---|
-| **Purpose** | Diagnostic — check Calypso BLE device status, connection quality |
-| **Usage** | `bash ble/calypso-health-check.sh` |
-| **Output** | Device MAC, signal strength, last update timestamp |
-| **Status** | ✅ Operational — use before race |
-
-#### `calypso-restart.sh` (1.3 KB)
-
-| Field | Value |
-|---|---|
-| **Purpose** | Manual restart of Calypso service |
-| **Usage** | `sudo bash ble/calypso-restart.sh` |
-| **Action** | `systemctl restart calypso_anemometer` |
-| **Status** | ✅ Working — emergency recovery |
+| `setup_logger(name)` | RotatingFileHandler (10MB, 3 backups) → logs/services/ |
+| `acquire_singleton(pid, log)` | One instance per service via PID file |
+| `release_singleton(pid, log)` | Clean PID removal on exit |
+| `publish_delta(label, values, log)` | UDP:4123 → Signal K |
+| `check_ble_adapter()` | Verify hci0 is UP RUNNING |
+| `check_sk_reachable()` | Verify SK UDP port is listening |
+| `bt_recovery(mac, log)` | bluetoothctl disconnect + remove for zombie BLE sessions |
+| `setup_signal_handlers(fn, log)` | SIGTERM/SIGINT → graceful BLE disconnect (no sys.exit) |
 
 ---
 
-### WIT WT901BLECL IMU (Attitude)
-
-#### `wit-ble-reader.py` (4.8 KB)
+### calypso_direct.py — Calypso UP10 Wind Sensor
 
 | Field | Value |
 |---|---|
-| **Purpose** | Raw WIT BLE advertisement scanner — finds device, reads packets |
-| **BLE Device** | WIT WT901BLECL (9-DOF IMU) — MAC varies per unit |
-| **Output** | Roll, pitch, yaw (degrees) |
-| **Destination** | → Signal K (via plugin) OR InfluxDB |
-| **Status** | ⚠️ Reference; `signalk-wit-imu-ble` plugin is preferred |
+| **Device** | Calypso UP10 anemometer |
+| **MAC** | F8:5F:12:9D:D2:EE (env: `CALYPSO_BLE_ADDRESS`) |
+| **BLE Protocol** | Auto-notify (no commands) @ 4 Hz |
+| **Notify UUID** | 00002a39-0000-1000-8000-00805f9b34fb |
+| **Service** | calypso_direct.service |
+| **SK Output** | environment.wind.*, electrical.batteries.calypso.*, environment.outside.temperature |
+| **Status** | ✅ PRODUCTION |
 
-#### `wit-final-ble.py` (7.8 KB)
+**Packet Format:** 10 bytes little-endian `<HHBBBBH`
+- [0-1] wind speed (÷100 → m/s)
+- [2-3] direction (0-359°)
+- [4] battery (×10 → %)
+- [5] temperature (−100 → °C)
 
-| Field | Value |
-|---|---|
-| **Purpose** | Complete WIT BLE parser — robust attitude extraction with calibration |
-| **Input** | WIT WT901BLECL BLE advertisements |
-| **Output** | Roll/pitch/yaw (radians + degrees), calibration info |
-| **Destination** | Signal K or direct InfluxDB |
-| **Status** | ✅ Mature — used in production tests |
-
-#### `wit-ble-handler.py` (4.0 KB)
-
-| Field | Value |
-|---|---|
-| **Purpose** | WIT connection state machine — handles pairing, reconnection, errors |
-| **Function** | Maintains persistent BLE connection despite transient failures |
-| **Status** | ⚠️ Utility — not used standalone |
-
-#### `wit-battery-loop.py` (2.5 KB)
-
-| Field | Value |
-|---|---|
-| **Purpose** | WIT battery status monitor — periodic checks |
-| **Output** | Battery voltage, charging state |
-| **Status** | ⚠️ Reference — not actively used |
-
-#### `wit-imu-complete.py` (9.7 KB)
-
-| Field | Value |
-|---|---|
-| **Purpose** | Full 9-DOF IMU readout — accel, gyro, mag, attitude |
-| **Output** | All sensor axes (x/y/z) + derived roll/pitch/yaw |
-| **Destination** | InfluxDB or debug |
-| **Status** | ✅ Working — comprehensive data capture |
-
-#### `bleak_wit.py` (2.7 KB)
-
-| Field | Value |
-|---|---|
-| **Purpose** | Bleak library test — low-level BLE characteristic read/write |
-| **Use case** | Debug BLE stack issues, verify device responsiveness |
-| **Status** | ✅ Diagnostic tool |
+**Recovery:** L1 exponential backoff (5s-60s) + L2 clean exit (no hci0 reset) + BT zombie recovery
 
 ---
 
-### WIT Data Pipeline → Signal K
-
-#### `wit-nmea-server.py` (6.0 KB)
+### wit-ble-direct.py — WIT WT901BLECL IMU
 
 | Field | Value |
 |---|---|
-| **Purpose** | WIT → NMEA 0183 bridge — outputs Signal K-compatible NMEA sentences |
-| **Output** | `$HEATT` (attitude), `$HEAPH` (pitch), `$HEADM` (heading) via TCP |
-| **Destination** | TCP localhost:10110 → received by `signalk-wit-nmea.js` plugin |
-| **systemd service** | ❌ None (run manually or via docker) |
-| **Status** | ✅ Working — part of WIT→SK pipeline |
+| **Device** | WIT WT901BLECL 9-DOF IMU (quaternion native) |
+| **MAC** | E9:10:DB:8B:CE:C7 (env: `WIT_BLE_ADDRESS`) |
+| **BLE Protocol** | Notify (ffe4-9a34fb) / Write (ffe9-9a34fb) |
+| **Init Sequence** | State machine: UNINITIALIZED → send ENABLE_QUAT once → WAIT_RECONNECT → subscribe |
+| **Output Rate** | 10 Hz (env: `WIT_OUTPUT_RATE_HZ`) |
+| **Mounting** | z-axis 90° rotation (env: `WIT_MOUNT_AXIS`, `WIT_MOUNT_ROTATION_DEG`) |
+| **Service** | wit-ble-direct.service |
+| **SK Output** | navigation.attitude.*, navigation.headingMagnetic, navigation.acceleration.*, navigation.rateOfTurn |
+| **Status** | ✅ PRODUCTION |
 
-#### `wit-tcp-bridge.py` (3.5 KB)
+**UUID Note:** WIT WT901BLECL uses `9a34fb` base (NOT standard Bluetooth SIG `9b34fb`).
 
-| Field | Value |
-|---|---|
-| **Purpose** | TCP bridge for WIT data — legacy approach |
-| **Status** | ⚠️ Deprecated — wit-nmea-server is preferred |
+**Protocol:**
+- Command: `FF AA 27 51 00` = one-shot quaternion request
+- WIT responds with one 0x71 packet per request
+- State machine prevents reset loop (command sent only once on first connection)
 
-#### `wit-signalk-bridge-direct.py` (8.4 KB)
+**Coordinate Transform:**
+- Mounted vertically on companionway bulkhead
+- Native quaternion output (Kalman filter) → boat-frame Euler angles
+- Mounting correction applied in quaternion space (no gimbal lock singularity)
 
-| Field | Value |
-|---|---|
-| **Purpose** | Direct WIT → Signal K delta bridge (no NMEA intermediate) |
-| **Output** | Signal K delta packets directly |
-| **Destination** | Signal K WebSocket or HTTP POST |
-| **Status** | ✅ Alternative — more direct but less integration |
+**Axis Mapping:**
+- WIT body pitch → SK navigation.attitude.roll (heel: +starboard down)
+- WIT body roll → SK navigation.attitude.pitch (trim: +bow up)
+- WIT body yaw → SK navigation.attitude.yaw (heading magnetic)
 
 ---
 
-### Signal K Plugins
-
-#### `signalk-wit-nmea.js` (4.8 KB)
+### sok_direct.py — SOK SK12V100PC Battery BMS
 
 | Field | Value |
 |---|---|
-| **Purpose** | Signal K plugin — receives NMEA 0183 from wit-nmea-server.py |
-| **Input** | TCP stream: `$HEATT`, `$HEAPH`, `$HEADM` sentences |
-| **Output** | `navigation.attitude` (roll/pitch/yaw) into Signal K tree |
-| **Location** | `~/.signalk/plugins/signalk-wit-nmea/` |
-| **Enabled** | ✅ Yes (in settings.json) |
-| **Status** | ✅ **ACTIVE** — WIT IMU data ingestion |
+| **Device** | SOK SK12V100PC LiFePO4 100Ah BMS (JBD chip) |
+| **MAC** | Set in .env: `SOK_BLE_ADDRESS=XX:XX:XX:XX:XX:XX` (discovery required) |
+| **BLE Protocol** | Request/response (CRC8-checksummed) @ 0.2 Hz (1 read per 5s) |
+| **Service UUID** | 0000FFF0-0000-1000-8000-00805F9B34FB |
+| **Notify UUID** | 0000FFF1-0000-1000-8000-00805F9B34FB (RX) |
+| **Write UUID** | 0000FFF2-0000-1000-8000-00805F9B34FB (TX) |
+| **Commands** | cmd_info (0xEE C1 00 00 00) → 0xCCF0 status  |
+| | cmd_detail (0xEE C2 00 00 00) → 0xCCF4 cell voltages |
+| | cmd_protection (0xEE C4 00 00 00) → 0xCCF5 CMOS/DMOS states |
+| **CRC8** | LSB-first, polynomial 0x8C (per ABC-BMS app spec) |
+| **Service** | sok_direct.service (create from template) |
+| **SK Output** | electrical.batteries.house.*, electrical.batteries.house.cells.0-3.voltage |
+| **Status** | ✅ TEMPLATE (MAC discovery required) |
 
-#### `signalk-um982-proprietary.js` (6.5 KB)
+**Response Format (0xCCF0):** 18 bytes
+- [0-1] message type (0xCCF0, big-endian)
+- [2-4] total voltage (int24 LE, mV)
+- [5-7] current (int24 LE, µA → A)
+- [8-10] power (int24 LE, W)
+- [11-13] avg current (int24 LE, µA)
+- [14-15] cycle count (uint16 LE)
+- [16-17] SoC (uint16 LE, %)
 
-| Field | Value |
-|---|---|
-| **Purpose** | Signal K plugin — parses Unicore UM982 proprietary GNSS sentences |
-| **Input** | UM982 via serial (kplex bridge) |
-| **Sentences** | `HEADINGA` (RTK heading), `GPGGA` (position), pitch/roll (proprietary) |
-| **Output** | `navigation.attitude`, `navigation.position`, `navigation.courseOverGround` |
-| **Features** | **Pitch normalization bugfix** (2026-05-29) — converts 0-360° to -180°/+180° |
-| **Location** | `~/.signalk/plugins/signalk-um982-proprietary/` |
-| **Enabled** | ✅ Yes (in settings.json) |
-| **Status** | ✅ **ACTIVE** — UM982 RTK/GNSS ingestion + heading |
+**Notes:**
+- Storage mode: BMS enters deep sleep (BLE invisible) after prolonged inactivity  
+  Wake by connecting LiFePO4 charger briefly
+- 0V at terminals = storage mode, not failure
+- Read rate limited to 0.2 Hz by BLE handshake overhead
 
 ---
 
-### UM982 GNSS Utilities
+## Recovery Mechanisms
 
-#### `send_um982_headinga.py` (3.0 KB)
+All three drivers implement a consistent two-level recovery:
 
-| Field | Value |
-|---|---|
-| **Purpose** | Inject HEADINGA sentence into UM982 for testing |
-| **Usage** | `python3 ble/send_um982_headinga.py` |
-| **Status** | ⚠️ Debug tool — not production |
+### L1: BLE Reconnect (Exponential Backoff)
 
-#### `enable_gnhpr.py` (3.1 KB)
+- **Trigger:** Connection failure
+- **Backoff:** 5s → 10s → 20s → 40s → 60s (max)
+- **Action:** Retry `BleakClient(MAC)` connect
+- **Threshold:** 3-5 failures before L2
 
-| Field | Value |
-|---|---|
-| **Purpose** | Enable GNSS + Heading + Pitch/Roll output on UM982 hardware |
-| **Usage** | `python3 ble/enable_gnhpr.py` (one-time setup) |
-| **Status** | ✅ Used during initial UM982 configuration |
-
----
-
-## Summary
-
-### Active BLE Data Sources
-
-| Sensor | Status | SK Plugin | Output |
-|--------|--------|-----------|--------|
-| **Calypso UP10** | ✅ ACTIVE | `calypso_anemometer.service` | Wind speed/direction |
-| **WIT WT901BLECL** | ✅ ACTIVE | `signalk-wit-nmea.js` | Roll/pitch/yaw (attitude) |
-| **UM982 GNSS** | ✅ ACTIVE | `signalk-um982-proprietary.js` | RTK heading, position, attitude |
-
-### Deprecated/Reference Scripts
-
-- `calypso_robust_watchdog.py` — Use systemd `Restart=on-failure` instead
-- `wit-tcp-bridge.py` — Use `wit-nmea-server.py` + NMEA plugin instead
-- `wit-ble-handler.py` — Utility, not standalone
-- `wit-battery-loop.py` — Monitor tool, not mission-critical
-
----
-
-## Quick Reference
-
-### Check Running BLE Services
-
-```bash
-ps aux | grep -E "calypso|wit|um982" | grep -v grep
+**Examples in logs:**
+```
+[L1] Connection failed (1): Device not found
+[L1] Reconnecting in 5s...
+[L1] Connection failed (2): ...
+[L1] Reconnecting in 10s...
 ```
 
-**Expected output:**
-- PID 1177: `calypso_filter_proxy.py` (running)
-- SK plugins loaded (check logs: `journalctl -u signalk -n 50`)
+### L2: Clean Exit + systemd Restart
 
-### Check BLE Device Connectivity
+- **Trigger:** L1_FAIL_COUNT ≥ L2_THRESHOLD
+- **Action:** Log warning, break main loop (clean exit), release PID file
+- **Result:** systemd `Restart=on-failure` restarts service after 5s
+- **Benefit:** No hci0 disruption (other drivers unaffected)
 
-```bash
-# Calypso
-bash ble/calypso-health-check.sh
-
-# WIT (if running diagnostics)
-bluetoothctl devices | grep -i wit
+**Examples in logs:**
+```
+[L2] 5 failures — clean exit for systemd restart
+[L2] hci0 NOT reset: would disrupt [Calypso|WIT|SOK]
+[SHUTDOWN] ... stopped — PID released
 ```
 
-### Restart BLE Systems
+### L3: BT Zombie Recovery (Within L1)
 
-```bash
-# Calypso
-sudo systemctl restart calypso_anemometer
+- **Trigger:** Device was connected before, now "not found" error, 3+ failures
+- **Action:** `bluetoothctl disconnect MAC` + `bluetoothctl remove MAC` (clears BlueZ cache)
+- **Result:** Fresh BLE discovery on next connect, L1 counters reset
+- **Benefit:** Handles BLE dead-lock state (device invisible but still paired)
 
-# Signal K (reloads plugins)
-sudo systemctl restart signalk
-
-# Both
-sudo systemctl restart calypso_anemometer signalk
+**Example:**
 ```
-
-### View Logs
-
-```bash
-# Calypso filter proxy (stderr)
-journalctl -u calypso_anemometer -n 50
-
-# Signal K (all plugins)
-journalctl -u signalk -n 50 | grep -iE "wit|um982|calypso"
-
-# InfluxDB writes
-curl -s http://localhost:8086/api/v2/ready && echo "InfluxDB OK"
+[BT_RECOVERY] Zombie BLE session detected after 3 failures
+[BT_RECOVERY] Running: bluetoothctl disconnect E9:10:DB:8B:CE:C7
+[BT_RECOVERY] disconnect: [BlueZ output...]
+[BT_RECOVERY] Running: bluetoothctl remove ...
+[BT_RECOVERY] remove: Device removed
+[BT_RECOVERY] Cleared — retrying connection
 ```
 
 ---
 
-## Deployment Notes
+## Systemd Services
 
-### systemd Services
+Each driver has a corresponding `.service` file in `/etc/systemd/system/`:
 
-- ✅ `calypso_anemometer.service` — Managed by repo
-- ✅ `signalk.service` — System-wide, loads plugins from `~/.signalk/settings.json`
-- ⚠️ WIT IMU — No dedicated service; managed by Signal K plugin
+```bash
+systemctl status calypso_direct
+systemctl status wit-ble-direct
+# systemctl status sok_direct  (not started by default — MAC placeholder)
+```
 
-### Environment Variables
+**Common commands:**
 
-See `.env` for:
-- `CALYPSO_BLE_ADDRESS=F8:5F:12:9D:D2:EE` (used by calypso service)
-- `WIT_BLE_ADDRESS=` (for future use)
+```bash
+# View logs (follow)
+journalctl -u wit-ble-direct -f
 
-### Pre-Race Checklist
+# View recent logs (last 50 lines)
+journalctl -u wit-ble-direct -n 50
 
-1. ✅ Test Calypso: `bash ble/calypso-health-check.sh`
-2. ✅ Check WIT pairing: `bluetoothctl devices | grep -i wit`
-3. ✅ Restart all: `sudo systemctl restart signalk calypso_anemometer`
-4. ✅ Monitor: `journalctl -u signalk -f` (watch for errors)
-5. ✅ Verify data: Check Grafana dashboard for attitude + wind
+# Restart service
+sudo systemctl restart wit-ble-direct
+
+# Check startup status
+systemctl is-active wit-ble-direct
+
+# Watch logs while starting
+sudo systemctl restart wit-ble-direct && sleep 1 && journalctl -u wit-ble-direct -f
+```
 
 ---
 
-**Source:** Centralized from `/home/aneto/` on 2026-05-29  
-**Repository:** [midnightrider-navigation](https://github.com/Aneto152/midnightrider-navigation)  
-**Contact:** Denis Lafarge (Midnight Rider J/30 Hull 511)
+## Environment Variables
+
+All drivers respect `.env` configuration:
+
+| Variable | Driver | Default | Purpose |
+|---|---|---|---|
+| `CALYPSO_BLE_ADDRESS` | calypso | F8:5F:12:9D:D2:EE | Device MAC |
+| `CALYPSO_RATE_HZ` | calypso | 4 | Poll rate Hz |
+| `CALYPSO_DATA_TIMEOUT_S` | calypso | 60 | Staleness threshold |
+| `CALYPSO_L2_THRESHOLD` | calypso | 20 | L1 failures before L2 |
+| `WIT_BLE_ADDRESS` | wit | E9:10:DB:8B:CE:C7 | Device MAC |
+| `WIT_MOUNT_AXIS` | wit | z | Mounting axis (x/y/z) |
+| `WIT_MOUNT_ROTATION_DEG` | wit | 90 | Mounting rotation (°) |
+| `WIT_OUTPUT_RATE_HZ` | wit | 10 | Polling rate Hz |
+| `WIT_L2_THRESHOLD` | wit | 5 | L1 failures before L2 |
+| `SOK_BLE_ADDRESS` | sok | XX:XX:XX:XX:XX:XX | ⚠️ REQUIRED: set via discovery |
+| `SOK_POLL_S` | sok | 5 | Poll interval (s) |
+| `SOK_DATA_TIMEOUT_S` | sok | 120 | Staleness threshold |
+| `SOK_L2_THRESHOLD` | sok | 10 | L1 failures before L2 |
+
+---
+
+## Testing & Debugging
+
+### Quick Health Check
+
+```bash
+# All logs at once
+tail -5 logs/services/{calypso,wit,sok}-direct.log
+
+# BLE adapter status
+hciconfig
+bluetoothctl list
+
+# Signal K reachability
+curl -s http://localhost:3000/signalk/v1/api/vessels/self/navigation/attitude/roll | jq .
+```
+
+### Zombie Recovery Trigger (Manual)
+
+```bash
+# Clear WIT from BlueZ cache (for testing L3 recovery)
+bluetoothctl remove E9:10:DB:8B:CE:C7
+
+# Service auto-recovers via L3 on next connection attempt
+journalctl -u wit-ble-direct -f  # Watch recovery
+```
+
+### Grep Patterns
+
+```bash
+# See all DATA_OUT packets
+grep DATA_OUT logs/services/wit-ble-direct.log
+
+# See all heartbeats
+grep HEARTBEAT logs/services/calypso-direct.log
+
+# See all recovery events
+grep -E "L1|L2|BT_RECOVERY" logs/services/*.log
+```
+
+---
+
+## Architecture Evolution
+
+| Date | Event | Details |
+|---|---|---|
+| 2026-05-29 | WIT state machine | Prevent reset loop on reconnect |
+| 2026-05-30 | ble_common.py | Extract shared infrastructure |
+| 2026-05-30 | Phase 1 refactor | calypso_direct.py uses ble_common |
+| 2026-05-30 | Phase 2 refactor | wit-ble-direct.py uses ble_common |
+| 2026-05-30 | SOK template | sok_direct.py ready (MAC placeholder) |
+
+---
+
+## Related Documentation
+
+- **Hardware:** [docs/HARDWARE/](../docs/HARDWARE/)
+  - WIT-WT901BLECL-DATASHEET.md
+  - CALYPSO-UP10-DATASHEET.md
+  - SOK-BMS-BLE-PROTOCOL.md
+
+- **Operations:** [docs/OPERATIONS/](../docs/OPERATIONS/)
+  - FIELD-TEST-CHECKLIST-2026-05-19.md
+  - RACE-DAY-CHECKLIST-2026-05-22.md
+
+- **Integration:** [docs/INTEGRATION/](../docs/INTEGRATION/)
+  - WIT-INTEGRATION-GUIDE.md
+  - CALYPSO-INTEGRATION-GUIDE.md
+
+---
+
+**Status:** ✅ Production ready (WIT + Calypso), SOK template (MAC discovery required)  
+**Next:** Discover SOK MAC, set `SOK_BLE_ADDRESS`, enable service  
+**Race Day:** May 22, 2026 — Block Island Race (186 nm, Stamford CT)  
+
+⛵ **All BLE drivers unified, self-healing, production-ready.**
