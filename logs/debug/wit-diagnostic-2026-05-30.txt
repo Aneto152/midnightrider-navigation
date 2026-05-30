@@ -1,0 +1,61 @@
+WIT BLE DIAGNOSTIC — 2026-05-30 16:00 EDT
+=============================================
+
+SERVICE STATUS:
+  Running time: 3h 37min (started 12:22:54)
+  PID: 45589
+  State: active ✅
+
+STATE MACHINE:
+  Current: WAIT_RECONNECT (stuck for 3h 37min)
+  ENABLE_QUAT: Sent at 12:22:57 (SUCCESS with ffe9 UUID) ✅
+  Reconnects: Multiple (12:07, 12:15, 12:23, continuous) ✅
+  Last reconnect: ~16 minutes ago (continuous loop)
+
+DATA FLOW:
+  Quaternion packets (0x71): 0 received (3h 37min) ❌
+  BLE subscription: Active (BLE_NOTIFY logged) ✅
+  SK publishing: 0 updates (3h 37min) ❌
+  SK attitude.roll: (no data) ❌
+
+BLE CONNECTIVITY:
+  Device MAC: E9:10:DB:8B:CE:C7 ✅
+  BLE adapter (hci0): UP RUNNING ✅
+  BlueZ cache clear: Executed at startup ✅
+  Write UUID (ffe9): Correct, using hardcoded ✅
+
+RECOVERY MECHANISM:
+  L1 reconnect backoff: Working ✅
+  l1_fails counter: 0 (no errors logged) ✅
+  BT recovery: Not triggered (no "not found" errors)
+
+ROOT CAUSE ANALYSIS:
+  • WIT subscribes to NOTIFY UUID (ffe4-9a34fb) ✅
+  • BlueZ starts notifications ✅
+  • BLE connection stays open ✅
+  • BUT: No 0x71 packets arriving on notification callback ❌
+
+HYPOTHESIS:
+  1. WIT device not streaming after reset (battery low?)
+  2. BlueZ notify not propagating packets to bleak client
+  3. WIT NVRAM config lost (not retaining settings)
+  4. BLE MTU issue (packets malformed)
+  5. Device in low-power state after reset
+
+NEXT STEPS:
+  1. Check WIT device state manually (bluetoothctl)
+  2. Try manual gatttool read from notification UUID
+  3. Power-cycle WIT device (off/on reset)
+  4. Check WIT LED status (power/connection indicators)
+  5. Review ENABLE_QUAT sequence timing (might need longer delay)
+
+GIT COMMITS (this session):
+  746f96a - WIT use WRITE_UUID hardcoded + clear BlueZ cache
+  372c828 - debug: wit state check post-746f96a
+  faafbb5 - fix: truncate wit log
+  978ec07 - debug: manual log push test
+
+LOGSYNC FIX:
+  Service: Updated (removed User=pi constraint)
+  Status: Ready for next 3-min trigger
+  Manual push: Working ✅
