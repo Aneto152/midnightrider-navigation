@@ -40284,3 +40284,10 @@
 [2026-05-30T12:07:26] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Write char: 00002a00-0000-1000-8000-00805f9b34fb
 [2026-05-30T12:07:26] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to 00002a00-0000-1000-8000-00805f9b34fb
 [2026-05-30T12:07:26] [WARNING] [wit-ble-direct] [run_ble_client] [BLE_SETUP] ENABLE_QUAT failed: [org.bluez.Error.NotAuthorized] Operation Not Authorized
+[2026-05-30T12:07:31] [WARNING] [wit-ble-direct] [run_ble_client] [L1] Connection failed (1): 
+[2026-05-30T12:07:31] [INFO] [wit-ble-direct] [run_ble_client] [L1] Reconnecting in 10s...
+[2026-05-30T12:07:42] [INFO] [wit-ble-direct] [run_ble_client] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-30T12:07:42] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Write char: 00002a00-0000-1000-8000-00805f9b34fb
+[2026-05-30T12:07:42] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=WAIT_RECONNECT: subscribing without commands
+[2026-05-30T12:07:42] [INFO] [wit-ble-direct] [run_ble_client] [BLE_NOTIFY] Subscribed — waiting for WIT data
+[2026-05-30T12:12:24] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=1
