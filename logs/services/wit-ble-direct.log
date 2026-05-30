@@ -298,3 +298,21 @@
 [2026-05-30T12:15:12] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
 [2026-05-30T12:15:12] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=WAIT_RECONNECT: subscribing without commands
 [2026-05-30T12:15:12] [INFO] [wit-ble-direct] [run_ble_client] [BLE_NOTIFY] Subscribed — waiting for WIT data
+[2026-05-30T12:19:42] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=1
+[2026-05-30T12:22:41] [INFO] [wit-ble-direct] [_stop] Signal 15 — stopping cleanly (BLE disconnect will follow)
+[2026-05-30T12:22:42] [WARNING] [wit-ble-direct] [run_ble_client] [BLE_DISCONNECT] WIT disconnected — will reconnect
+[2026-05-30T12:22:44] [WARNING] [wit-ble-direct] [run_ble_client] [L1] Connection failed (1): 
+[2026-05-30T12:22:44] [INFO] [wit-ble-direct] [run_ble_client] [L1] Reconnecting in 10s...
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [release_singleton] Singleton released
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [run_ble_client] [SHUTDOWN] wit-ble-direct stopped — PID released
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [acquire_singleton] Singleton acquired (PID 45589)
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] ==========================================================
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] wit-ble-direct — WIT WT901BLECL IMU Driver
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] L2_threshold=5
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] ==========================================================
+[2026-05-30T12:22:54] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] BlueZ GATT cache cleared for E9:10:DB:8B:CE:C7
+[2026-05-30T12:22:57] [INFO] [wit-ble-direct] [run_ble_client] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-30T12:22:57] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-05-30T12:22:57] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-05-30T12:22:57] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] ENABLE_QUAT sent — WIT will reset
