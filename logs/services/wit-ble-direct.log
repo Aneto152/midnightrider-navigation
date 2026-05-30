@@ -349,3 +349,6 @@
 [2026-05-30T14:32:56] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=0
 [2026-05-30T14:37:56] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=0
 [2026-05-30T14:42:56] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=0
+[2026-05-30T14:47:56] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=0
+[2026-05-30T14:52:56] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=0
+[2026-05-30T14:57:56] [INFO] [wit-ble-direct] [log_heartbeat] [HEARTBEAT] state=WAIT_RECONNECT 0x71=0 0x61=0 SK=0 l1_fails=0
