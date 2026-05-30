@@ -337,6 +337,7 @@ def log_heartbeat() -> None:
 
 async def run_ble_client() -> None:
     """Main BLE connection loop with internal recovery."""
+    global _was_connected, _running
     acquire_singleton()
     try:
         reconnect_delay = RECONNECT_BASE_S
