@@ -308,7 +308,7 @@ async def configure_device(client: BleakClient) -> None:
             log('warning', 'CONFIG_WRITE', f'{label} failed: {e}')
 
 async def main() -> None:
-    global _running
+    global _running, _was_connected, _last_err
     acquire_singleton()
     try:
         log('info', 'STARTUP', '=' * 60)
