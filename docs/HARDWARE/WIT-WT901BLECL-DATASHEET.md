@@ -89,6 +89,7 @@
 | Pressure Resolution | 0.18 Pa |
 | Pressure Accuracy | ±100 Pa typical |
 | Auto-stream Packet | 0x54 (every 100 ms @ 10 Hz) |
+| Temperature Source | 0x54 auto-stream packet (NOT 0x40 register — returns 0 via BLE poll) |
 
 ### Attitude Accuracy (9-Axis Kalman Filter)
 
@@ -222,94 +223,147 @@ Register 0x25 (FILTK) controls the Kalman filter's process noise covariance (Q m
 
 ---
 
-## PACKET FORMATS (FIRMWARE PROTOCOL)
+## PACKET FORMATS (FIRMWARE PROTOCOL — Firmware 13115)
 
-### Packet Structure
+### Packet Structure (Critical Fix — 2026-05-30)
+
+⚠️ **CRITICAL:** Byte offsets corrected from earlier erroneous documentation.
 
 All packets follow standard WitMotion frame format:
 
 ```
-0x55 [Flag] [REG_L] [REG_H] [Data0] [Data1] ... [Checksum]
+0x55 [Flag] [REG_L] [REG_H] [Data0] [Data1] ... [CheckSum]
 ```
 
-- **Byte 0:** `0x55` (frame start)
-- **Byte 1:** `Flag` (0x71 for sensor data, 0x5F for register read response, etc.)
-- **Byte 2:** `REG_L` (low byte of register address, 0x51 for quaternion)
-- **Byte 3:** `REG_H` (high byte, typically 0x00)
-- **Bytes 4+:** Sensor data or register values
-- **Last:** Checksum (sum of all bytes mod 256)
+- **Byte 0:** `0x55` (frame start sync)
+- **Byte 1:** `Flag` (0x71 for read response, 0x54 for auto-stream, etc.)
+- **Byte 2:** `REG_L` (low byte of register address — **NOT data, just echo**)
+- **Byte 3:** `REG_H` (high byte, typically 0x00 — **NOT data, just echo**)
+- **Bytes 4–19:** **Register data starts here** (8 consecutive registers, 2 bytes each)
+- **Byte 20:** Checksum (sum of all bytes mod 256)
 
-### Quaternion Packet (0x55 0x71 0x51 ...)
+> ⚠️ **Bug fixed 2026-05-30:** Old code incorrectly read data from offset 2 (the register address itself). Correct data offset is 4.
 
-**Command to enable:** `FF AA 27 51 00` (ENABLE_QUAT_CMD)
+### Quaternion Packet (0x55 0x71 0x51 ... — register 0x51)
+
+**Command to request:** `FF AA 27 51 00` (read register 0x51)
 
 **Response format:**
 ```
-0x55 0x71 0x51 0x00 [Q0_L] [Q0_H] [Q1_L] [Q1_H] [Q2_L] [Q2_H] [Q3_L] [Q3_H] [Checksum]
+0x55 0x71 0x51 0x00 [Q0_L] [Q0_H] [Q1_L] [Q1_H] [Q2_L] [Q2_H] [Q3_L] [Q3_H] [CheckSum]
 ```
 
-| Field | Offset | Type | Range | Notes |
-|-------|--------|------|-------|-------|
-| Q0 | 4–5 | int16 LE | ±32768 | X-component / 32768.0 |
-| Q1 | 6–7 | int16 LE | ±32768 | Y-component / 32768.0 |
-| Q2 | 8–9 | int16 LE | ±32768 | Z-component / 32768.0 |
-| Q3 | 10–11 | int16 LE | ±32768 | W-component (real part) / 32768.0 |
+| Field | Offset | Type | Range | Formula |
+|-------|--------|------|-------|----------|
+| Q0 | 4–5 | int16 LE | ±32768 | / 32768.0 = **x component** |
+| Q1 | 6–7 | int16 LE | ±32768 | / 32768.0 = **y component** |
+| Q2 | 8–9 | int16 LE | ±32768 | / 32768.0 = **z component** |
+| Q3 | 10–11 | int16 LE | ±32768 | / 32768.0 = **w component (scalar)** |
 
 **WitMotion Quaternion Convention:** `(Q0, Q1, Q2, Q3) = (x, y, z, w)`
 
-> **Critical:** W-component (Q3) is always last in the frame; not first as in typical graphics libraries.
+> ⚠️ **Critical:** W-component (scalar) is Q3, NOT Q0. This differs from graphics/robotics libraries that often use (w, x, y, z). **WitMotion always places w last.**
 
-### Magnetic Field Packet (0x55 0x71 0x3A ... — CMD_MAG Response)
+**Example from app (2026-05-30):**
+```
+App display: Q0=-0.007  Q1=0.064  Q2=0.016  Q3=0.997
+             [x]       [y]       [z]       [w=scalar, dominant]
+```
 
-**Command to poll:** `FF AA 27 3A 00` (CMD_MAG)
+**Python decoder:**
+```python
+def decode_0x71_packet(data: bytes) -> dict | None:
+    if len(data) < 12 or data[0] != 0x55 or data[1] != 0x71 or data[2] != 0x51:
+        return None
+    def s16(off): return struct.unpack_from('<h', data, off)[0]
+    return {
+        'q0': s16(4) / 32768.0,   # x
+        'q1': s16(6) / 32768.0,   # y
+        'q2': s16(8) / 32768.0,   # z
+        'q3': s16(10) / 32768.0,  # w (scalar)
+    }
+
+# Usage in math (standard w, x, y, z convention):
+q_normalized = (q_raw['q3'], q_raw['q0'], q_raw['q1'], q_raw['q2'])
+```
+
+### Magnetic Field Packet (0x55 0x71 0x3A ... — register 0x3A)
+
+**Command to poll:** `FF AA 27 3A 00` (read register 0x3A)
 
 **Response format:**
 ```
-0x55 0x71 0x3A 0x00 [HX_L] [HX_H] [HY_L] [HY_H] [HZ_L] [HZ_H] [Checksum]
+0x55 0x71 0x3A 0x00 [HX_L] [HX_H] [HY_L] [HY_H] [HZ_L] [HZ_H] ...
+                     [Roll_L] [Roll_H] [Pitch_L] [Pitch_H] [Yaw_L] [Yaw_H]
+                     [Temp_L] [Temp_H] [D0_L] [D0_H] [CheckSum]
 ```
 
 | Field | Offset | Type | Range | Conversion |
 |-------|--------|------|-------|------------|
-| HX | 4–5 | int16 LE | ±32768 | HX / 10.0 → μT |
-| HY | 6–7 | int16 LE | ±32768 | HY / 10.0 → μT |
-| HZ | 8–9 | int16 LE | ±32768 | HZ / 10.0 → μT |
+| HX | 4–5 | int16 LE | ±32768 | / 10.0 → **μT (magnetic X)** |
+| HY | 6–7 | int16 LE | ±32768 | / 10.0 → **μT (magnetic Y)** |
+| HZ | 8–9 | int16 LE | ±32768 | / 10.0 → **μT (magnetic Z)** |
+| Roll (internal) | 10–11 | int16 LE | — | **NOT published to Signal K** |
+| Pitch (internal) | 12–13 | int16 LE | — | **NOT published — gimbal lock singularity** |
+| Yaw (internal) | 14–15 | int16 LE | — | **NOT published** |
+| Temperature | 16–17 | int16 LE | -4000 to 8500 | **Returns 0 via BLE poll — use 0x54 auto-stream instead** |
+| D0Status | 18–19 | int16 LE | — | Status flags |
+
+> ⚠️ **Temperature:** The 0x3A response always returns 0 for temperature when polled via BLE. Use the 0x54 auto-stream packet instead (see below).
+
+> ⚠️ **WIT Internal Euler:** The Roll/Pitch/Yaw values in this packet are WIT's internal Euler representation. In Midnight Rider's vertical mounting (Z=bow, Y=keel=vertical), the Pitch axis has a ±90° gimbal lock singularity when heading changes ±90° from North. We use quaternion instead to avoid this.
 
 **Polling Rate:** ~1 Hz (every 10 quaternion packets at 10 Hz output rate)
 
-### Pressure Packet (0x55 0x71 0x45 ... — CMD_PRES Response)
+### Pressure Packet (0x55 0x71 0x45 ... — register 0x45)
 
-**Command to poll:** `FF AA 27 45 00` (CMD_PRES)
+**Command to poll:** `FF AA 27 45 00` (read register 0x45)
 
 **Response format:**
 ```
-0x55 0x71 0x45 0x00 [PRES_LL] [PRES_LH] [PRES_HL] [PRES_HH] [Checksum]
+0x55 0x71 0x45 0x00 [PRES_L] [PRES_H] [HEIGHT_L] [HEIGHT_H] ...
 ```
 
 | Field | Offset | Type | Range | Conversion |
 |-------|--------|------|-------|------------|
-| Pressure | 4–7 | uint32 LE | 50000–110000 | Pa (direct) or / 1000 → kPa |
+| Pressure (L) | 4–5 | uint16 LE | 0–65535 | Lower 16 bits |
+| Pressure (H) | 6–7 | uint16 LE | 0–65535 | Upper 16 bits |
+| Height (L) | 8–9 | int16 LE | — | Altitude lower |
+| Height (H) | 10–11 | int16 LE | — | Altitude upper |
 
-**Valid Range:** 500–1100 hPa (5 km altitude to sea level)  
+**Pressure Calculation:**
+```python
+pressure_pa = (pressure_h << 16) | pressure_l
+# Example: 101599 Pa = 101.599 kPa ≈ 1 atm
+```
+
+**Valid Range:** 50000–110000 Pa (500–1100 hPa)  
+**Sanity Check:** Reject outside this range (error condition)  
 **Polling Rate:** ~0.3 Hz (every 30 quaternion packets)
 
-### Temperature Packet (0x55 0x54 ... — Auto-Stream)
+### Temperature Packet (0x55 0x54 ... — Auto-Stream, NOT polled)
 
-**Auto-stream (no polling required)** — sent every 100 ms with quaternion
+**Auto-stream (no polling required)** — WIT broadcasts every 100 ms automatically
 
-**Response format:**
+> ℹ️ This is the **ONLY reliable source of temperature via BLE**. Register 0x40 and the 0x3A response both return 0 on BLE.
+
+**Packet format:**
 ```
-0x55 0x54 [HX_L] [HX_H] [HY_L] [HY_H] [HZ_L] [HZ_H] [T_L] [T_H] [Checksum]
+0x55 0x54 [HX_L] [HX_H] [HY_L] [HY_H] [HZ_L] [HZ_H] [T_L] [T_H] [CheckSum]
 ```
 
 | Field | Offset | Type | Range | Conversion |
 |-------|--------|------|-------|------------|
-| HX | 2–3 | int16 LE | ±32768 | Raw magnetic (internal cal) |
-| HY | 4–5 | int16 LE | ±32768 | — |
-| HZ | 6–7 | int16 LE | ±32768 | — |
-| Temperature | 8–9 | int16 LE | -4000 to 8500 | / 100.0 → °C |
+| HX (mag) | 2–3 | int16 LE | ±32768 | Raw magnetic X (internal calibration) |
+| HY (mag) | 4–5 | int16 LE | ±32768 | Raw magnetic Y |
+| HZ (mag) | 6–7 | int16 LE | ±32768 | Raw magnetic Z |
+| **Temperature** | **8–9** | **int16 LE** | **-4000 to 8500** | **/ 100.0 → °C** |
+
+**Example:** Temperature bytes `0xBD 0x09` → `int16(0x09BD)` = 2493 → 2493/100 = **24.93°C** (matches app reading 24.5°C ± rounding)
 
 **Temperature Accuracy:** ±1°C typical  
-**Update Rate:** 10 Hz (same as primary output rate)
+**Update Rate:** 10 Hz (same as quaternion/primary output rate)  
+**Source:** Bosch BMP280 sensor mounted inside WIT enclosure
 
 ---
 
@@ -372,21 +426,31 @@ All packets follow standard WitMotion frame format:
 | `environment.inside.temperature` | K | ~10 Hz | 0x54 | From auto-stream |
 | `environment.outside.pressure` | Pa | ~0.3 Hz | 0x71 reg 0x45 | CMD_PRES polling |
 
-### Attitude Transform (Boat Frame)
+### Attitude Transform (Boat Frame — Midnight Rider J/30)
 
-WIT outputs Euler angles in sensor-native frame. Midnight Rider applies mounting correction:
+WIT physical mounting (inside companionway bulkhead):
+- **WIT-X axis** → STARBOARD (tribord, rightward)
+- **WIT-Y axis** → toward KEEL (downward, -masthead, vertical in boat)
+- **WIT-Z axis** → BOW (forward, longitudinal along boat centerline)
 
-**Mount Orientation:** Z-axis vertical (accelerometer Y points forward along boat centerline)
+**Boat attitude mapping:**
+- **Boat ROLL** (heel) = rotation around WIT-Z (bow axis)
+- **Boat PITCH** (trim) = rotation around WIT-X (starboard axis)
+- **Boat YAW** (heading) = rotation around WIT-Y (keel = vertical axis)
 
-**Transform:** 90° rotation around Z-axis (starboard = +X)
+**Why Quaternion (not Euler)?**
+In this vertical mounting, a heading change (rotating around the vertical WIT-Y axis) directly rotates around WIT's Pitch axis. At heading ±90° from calibration North, WIT internal Pitch = ±90° → **gimbal lock singularity**. Quaternion avoids this entirely.
 
+**Mount Correction Applied (quaternion space):**
+```python
+MOUNT_AXIS = 'z'      # Rotation axis (Z=bow)
+MOUNT_DEG = 90.0      # Rotation magnitude (degrees)
+# Theoretical: q_mount = (0.5, 0.5, 0.5, 0.5) for 120° around (1,1,1) axis
 ```
-Roll_boat = -Pitch_sensor
-Pitch_boat = Roll_sensor
-Yaw_boat = Yaw_sensor (unchanged)
-```
 
-**Result:** Roll/Pitch/Yaw now match boat-frame convention (ISO 11783)
+**Result:** Quaternion output in boat-frame convention, then converted to ISO 11783 Roll/Pitch/Yaw
+
+> ⚠️ **Physical verification on boat required** to confirm rotation direction signs.
 
 ---
 
@@ -488,7 +552,434 @@ Yaw_boat = Yaw_sensor (unchanged)
 
 ---
 
+## CALIBRATION PROCEDURE (Critical — Install Direction = Vertical)
+
+> ⚠️ **Root cause of original malfunction (2026-05-30):** WIT was calibrated upside down (tête en bas) + in Horizontal mode (default). The Kalman filter's gravity reference was inverted, causing ALL angles to converge to 0° regardless of actual physical orientation.
+
+### Step-by-Step Calibration
+
+**1. SET INSTALL DIRECTION (CRITICAL):**
+   - Open WitMotion app (iOS/Android)
+   - Connect to WT901BLECL via Bluetooth
+   - Navigate: **Settings** → **Configuration** → **Installation Direction**
+   - Select **"Vertical"** (not the default "Horizontal")
+   - Tap **Save** → Device reboots (~2–3 seconds)
+   - Verify LED pattern after save
+
+> ⚠️ This setting tells the Kalman filter which axis is vertical (gravity reference). "Vertical" means Y-axis points toward Earth's center (keel direction in boat).
+
+**2. ACCELEROMETER CALIBRATION:**
+   - Hold WIT in actual mounted position (Z=bow, horizontal, as installed on boat)
+   - App → **Calibrate** → **Acceleration Calibration**
+   - Hold perfectly still for 5 seconds
+   - Press **Finish** → **Save** → Device reboots
+   - Verify: Roll/Pitch should read ≈ 0° when boat is level
+
+**3. MAGNETIC CALIBRATION (for 9-axis heading accuracy):**
+   - App → **Calibrate** → **Magnetic Calibration**
+   - Slowly rotate WIT 360° around **X-axis** (2–3 full rotations) — side to side
+   - Slowly rotate WIT 360° around **Y-axis** (2–3 full rotations) — up/down
+   - Slowly rotate WIT 360° around **Z-axis** (2–3 full rotations) — front to back
+   - Press **Finish** → **Save**
+   - Total time: ~2–3 minutes per axis (6–9 minutes total)
+
+**4. HEADING REFERENCE CALIBRATION (set Z-axis = 0° = Magnetic North):**
+   - Orient WIT-Z axis (bow marking) toward magnetic North (compass, phone app)
+   - App → **Calibrate** → **Reset Z-axis Angle** (or "Heading Reset")
+   - Press **Save**
+   - This sets heading zero reference for navigation
+
+**5. FILTER TUNING (FILTK Parameter):**
+   - App → **Settings** → **Filter** → **K-value**
+   - Set to **200** (optimal for sailing; default 30 is too conservative)
+   - Press **Save** → Device reboots
+   - Convergence time should improve: 60–90s (FILTK=30) → ~10s (FILTK=200)
+
+**6. FINAL VERIFICATION:**
+   ```bash
+   # Check SK attitude (boat level expected: roll≈0, pitch≈0)
+   curl -s localhost:3000/signalk/v1/api/vessels/self/navigation/attitude | python3 -c "
+   import sys, json, math
+   d = json.load(sys.stdin)
+   v = d.get('value', {})
+   print(f'Roll: {math.degrees(v.get("roll",0)):.1f}° (expected ≈ 0)')
+   print(f'Pitch: {math.degrees(v.get("pitch",0)):.1f}° (expected ≈ 0)')
+   print(f'Yaw: {math.degrees(v.get("yaw",0)):.1f}° (compass heading)')
+   "
+   ```
+
+**7. QUICK TILT TEST:**
+   - Tilt WIT ~30° in roll direction (heel direction)
+   - Signal K should show ≈30° within < 5 seconds (FILTK=200)
+   - Response should NOT take 60+ seconds
+
+---
+
+## SIGNAL K INTEGRATION — MIDNIGHT RIDER (2026-05-30 Architecture)
+
+### Data Flow
+
+```
+WT901BLECL BLE 5.0 (companionway bulkhead)
+  ↓ Bluetooth LE (~15m range, 10 Hz polling)
+RPi 4 (192.168.1.167) — hci0 BLE adapter
+  ↓
+ble/wit-ble-direct.py (Python BLE driver — wit-ble-direct systemd service)
+  ├─ Imports ble_common.py (shared BLE infrastructure)
+  ├─ decode_0x71_packet() → quaternion (register 0x51)
+  ├─ decode_0x71_mag_packet() → magnetic field (register 0x3A)
+  ├─ decode_0x71_pres_packet() → pressure (register 0x45)
+  ├─ decode_0x54_packet() → temperature (0x54 auto-stream)
+  ├─ decode_0x61_packet() → accel + gyro (0x61 auto-stream)
+  ├─ apply_mounting_and_extract() → quaternion math + boat frame
+  └─ publish_delta() → UDP:4123 → Signal K delta format
+  ↓
+Signal K (localhost:3000, systemd service)
+  ├─ Stores 13 data paths (attitude, quaternion, mag, accel, temp, pressure)
+  ├─ Exposes REST API (http://localhost:3000/signalk/v1/api/...)
+  └─ WebSocket (ws://localhost:3000/signalk/v1/stream)
+  ↓
+InfluxDB (localhost:8086, docker) ← Time-series data
+  ↓
+Grafana (localhost:3001, docker) ← Dashboards
+```
+
+### BLE Driver State Machine
+
+```
+UNINITIALIZED:
+  → Send ENABLE_QUAT_CMD (FF AA 27 51 00) once
+  → Wait 5 seconds (WIT applies config internally)
+  → WIT auto-resets after 3+ seconds
+  → State → WAIT_RECONNECT
+
+WAIT_RECONNECT:
+  → Poll ENABLE_QUAT_CMD every 100ms (10 Hz) to trigger response
+  → Reconnect to BLE when first data arrives
+  → Subscribe to NOTIFY UUID (0000ffe4-...)
+  → State → STREAMING
+
+STREAMING:
+  → Poll ENABLE_QUAT_CMD every 100ms (10 Hz output rate)
+  → Poll CMD_MAG every 1s (~1 Hz)
+  → Poll CMD_PRES every 3s (~0.3 Hz)
+  → Receive 0x61 auto-stream (accel + gyro, 10 Hz)
+  → Receive 0x54 auto-stream (temperature, 10 Hz)
+  → Publish all data to SK via UDP:4123
+  → If no data for 10s → L2 recovery
+```
+
+### Recovery Mechanisms
+
+| Layer | Trigger | Action | Result |
+|-------|---------|--------|--------|
+| **L0** | Single packet gap | None (normal BLE buffering) | — |
+| **L1** | No data > 200 ms | Exponential backoff (5s → 30s → 60s) | Reconnect N times |
+| **L2** | No data > 10 s | Clean disconnect + systemd restart | Service auto-restarts via Restart=on-failure |
+| **BT_RECOVERY** | Zombie BLE session | `bluetoothctl disconnect MAC`, `bluetoothctl remove MAC` | Fresh adapter state |
+
+> ⚠️ **No hci0 resets:** L2 clean exit preserves Bluetooth adapter state. This prevents disruption to Calypso anemometer (also on hci0).
+
+### Shared Infrastructure (ble_common.py)
+
+All BLE drivers (WIT, Calypso, SOK) share:
+- `setup_logger()` — RotatingFileHandler, 5MB max, 3 backups
+- `acquire_singleton()` / `release_singleton()` — PID file locking (prevent multiple instances)
+- `publish_delta()` — UDP:4123 → Signal K delta format
+- `check_ble_adapter()` — hci0 availability check
+- `check_sk_reachable()` — Signal K HTTP health check (localhost:3000)
+- `bt_recovery()` — bluetoothctl zombie cleanup
+- `setup_signal_handlers()` — graceful SIGTERM/SIGINT (no sys.exit() calls)
+
+### Signal K Data Paths Published
+
+| SK Path | Unit | Rate | Source Packet | Notes |
+|---------|------|------|---------------|-------|
+| navigation.attitude.roll | rad | 10 Hz | 0x71 quat | + = starboard down (heel) |
+| navigation.attitude.pitch | rad | 10 Hz | 0x71 quat | + = bow up (trim) |
+| navigation.attitude.yaw | rad | 10 Hz | 0x71 quat | magnetic heading, 0–2π |
+| navigation.headingMagnetic | rad | 10 Hz | 0x71 quat | same as yaw |
+| navigation.acceleration.x | m/s² | 10 Hz | 0x61 accel | along bow axis |
+| navigation.acceleration.y | m/s² | 10 Hz | 0x61 accel | along port axis |
+| navigation.acceleration.z | m/s² | 10 Hz | 0x61 accel | vertical |
+| navigation.rateOfTurn | rad/s | 10 Hz | 0x61 gyro_z | yaw angular velocity |
+| sensors.wit.quaternion.w | — | 10 Hz | 0x71 quat | raw Q3 (scalar/w-component) |
+| sensors.wit.quaternion.x | — | 10 Hz | 0x71 quat | raw Q0 (x-component) |
+| sensors.wit.quaternion.y | — | 10 Hz | 0x71 quat | raw Q1 (y-component) |
+| sensors.wit.quaternion.z | — | 10 Hz | 0x71 quat | raw Q2 (z-component) |
+| sensors.wit.magneticField.x | μT | 1 Hz | CMD_MAG (0x3A) | magnetic field X |
+| sensors.wit.magneticField.y | μT | 1 Hz | CMD_MAG (0x3A) | magnetic field Y |
+| sensors.wit.magneticField.z | μT | 1 Hz | CMD_MAG (0x3A) | magnetic field Z |
+| environment.inside.temperature | K | 10 Hz | 0x54 auto-stream | boat interior (BMP280) |
+| environment.outside.pressure | Pa | 0.3 Hz | CMD_PRES (0x45) | barometric pressure |
+
+> **Source label:** All published as `source_label='WIT'`  
+> **UDP port:** 4123 (Signal K delta protocol)
+
+### Data Flow to NMEA 2000
+
+```
+navigation.attitude (WIT IMU, 10 Hz)
+  ↓
+signalk-to-nmea2000 plugin (attitude.js converter, patched 2026-05-17)
+  ↓
+PGN 127257 (Attitude: Roll/Pitch/Yaw) — fires every 100 ms
+  ↓
+YDNU-02 N2K Gateway (YDNU-02, USB serial)
+  ↓
+Vulcan 7 FS Chart/Plotter (heel angle display on main screen)
+```
+
+---
+
+## LED STATUS & BATTERY
+
+### LED Indicators
+
+| LED Pattern | Meaning |
+|-------------|----------|
+| 🔴 Red steady | Charging via USB-C |
+| 🔵 Single blue flash → dark | Standby (BLE advertising, not connected) |
+| 🔵 Blue flashing (repeat) | BLE connected and streaming |
+| No LED | Battery depleted or device powered off |
+
+### Battery Management
+
+| Status | Indicator | Action |
+|--------|-----------|--------|
+| Fully charged | 🔴 Red LED turns off | Device ready |
+| Standby (BLE off) | 🔵 Single blue flash every ~2s | ~50 hours battery life |
+| Connected via BLE | 🔵 Continuous blue flashing | ~10 hours battery life |
+| Depleted | No LED, no response | Charge immediately |
+
+**Pre-Race Checklist:**
+- [ ] Fully charge WIT via USB-C (≥ 2 hours, ideally overnight before race)
+- [ ] Verify 🔵 Blue LED flashing continuously → BLE connected
+- [ ] Verify `navigation.attitude` live in Signal K (REST or WebSocket)
+- [ ] Verify roll/pitch ≈ 0° when boat level
+- [ ] Verify heading reads compass direction (0°–360°)
+- [ ] Verify temperature reads ~20–30°C (not 273K or -40°C)
+- [ ] Verify pressure reads ~100–103 kPa (sea level) or adjusted for altitude
+
+---
+
+## KNOWN BUGS FIXED (2026-05-30 Session)
+
+| # | Bug | Root Cause | Fix | Impact |
+|---|-----|-----------|-----|--------|
+| 1 | UnboundLocalError: _was_connected | Missing `global _was_connected` declaration in exception handler | Added explicit global declaration | Prevented L1 recovery from activating |
+| 2 | Silent BLE polling (no data) | WRITE_UUID discovered via BlueZ GATT cache → returned wrong UUID (`...9b34fb` instead of `...9a34fb`) | Hardcoded correct WRITE_UUID in driver | Queries went to wrong characteristic |
+| 3 | 3+ hours no data (2026-05-30 morning) | 10 Hz polling loop accidentally removed during PHASE 2 refactoring | Restored polling loop: `await client.write_gatt_char(WRITE_UUID, ENABLE_QUAT_CMD, response=False)` every 100ms | Data restarted immediately upon fix |
+| 4 | Quaternion decode offset error | WIT 0x71 response has 4-byte header [0x55, 0x71, REG_L, REG_H]; old code read bytes[2-3] (register address) as Q0/Q1 | Changed offset from 2 to 4 (per WitMotion official datasheet) | Quaternion now correct, attitude angles valid |
+| 5 | Quaternion component order reversed | WitMotion convention: Q0=x, Q1=y, Q2=z, Q3=w (scalar). Code treated Q0 as w | Reordered: `q_wit = (q_raw['q3'], q_raw['q0'], q_raw['q1'], q_raw['q2'])` | Angles now match physical boat orientation |
+| 6 | All angles converge to ~0° (2026-04-21 to 2026-05-29) | WIT calibrated upside down (tête en bas) + Install Direction set to "Horizontal" (default). Kalman filter gravity reference inverted. | **Recalibration:** Install Direction = "Vertical", accel cal in correct mounted position | CRITICAL FIX: Attitude now flows correctly, roll/pitch match heel/trim |
+| 7 | CMD_MAG response contaminating quaternion decode | `decode_0x71_packet()` processed all 0x71 packets without checking register address → 0x3A mag data fed to quaternion converter | Added register filter: `if data[2] != 0x51: return None` (only process reg 0x51 quaternions) | Prevents angle glitches when mag poll intersects quat polling |
+| 8 | CMD_PRES response not decoded | Pressure polling implemented but `decode_0x71_pres_packet()` not called in `handle_data()` | Added call: `pres = decode_0x71_pres_packet(bytes(data)); if pres: send_pressure(...)` | Pressure now published to SK at ~0.3 Hz |
+
+---
+
+## TROUBLESHOOTING
+
+### "No BLE connection"
+
+**Symptoms:** Blue LED not flashing, systemctl status shows WAITING_FOR_WIT
+
+**Check:**
+```bash
+bluetoothctl devices | grep E9:10:DB:8B:CE:C7
+bluetoothctl info E9:10:DB:8B:CE:C7  # Should show Connected: yes
+```
+
+**Fixes:**
+1. Charge WIT (LED should turn from red to off when full)
+2. Verify range (< 15m to RPi)
+3. Clean BLE cache: `bluetoothctl remove E9:10:DB:8B:CE:C7` then restart service
+4. Check hci0 status: `hciconfig` (should show UP RUNNING)
+
+### "BLE connects but no Signal K data"
+
+**Symptoms:** Blue LED flashing, but `navigation.attitude` not updating
+
+**Check:**
+```bash
+tail -20 /home/pi/midnightrider-navigation/logs/services/wit-ble-direct.log
+curl -s http://localhost:3000/signalk/v1/api/vessels/self/navigation/attitude
+```
+
+**Fixes:**
+1. Restart WIT driver: `sudo systemctl restart wit-ble-direct`
+2. Verify Signal K running: `sudo systemctl status signalk`
+3. Check UDP:4123 port: `sudo netstat -tuln | grep 4123`
+4. Verify WIT sending data: Check for `[DATA_OUT]` lines in logs
+
+### "Angles always converge to 0°"
+
+**Symptoms:** Roll/Pitch/Yaw all read 0° even when boat is heeled or boat is not level
+
+**Root Cause:** WIT calibrated upside down or Install Direction = "Horizontal"
+
+**Fix:**
+1. **Recalibrate WIT in correct position:**
+   - App → Settings → Configuration → **Installation Direction** → **"Vertical"** → Save
+   - App → Calibrate → Acceleration Calibration (hold level, in mounted position)
+2. **Restart driver:** `sudo systemctl restart wit-ble-direct`
+3. **Verify:** Roll should read ≈ 0° when boat is level; pitch should show heel angle
+
+### "Slow angle response (30–90 seconds)"
+
+**Symptoms:** Tilting WIT takes 30+ seconds to stabilize in Signal K
+
+**Root Cause:** FILTK=30 (factory default, too conservative for sailing)
+
+**Fix:**
+1. App → Settings → Filter → K-value → **set to 200** → Save
+2. Verify in app: Settings → Filter → K-value should show **200**
+3. Restart driver: `sudo systemctl restart wit-ble-direct`
+4. Retest: Tilt should stabilize in < 5 seconds
+
+### "Roll/Pitch drift at rest"
+
+**Symptoms:** Angles slowly change even when boat is stationary
+
+**Root Cause:** Accelerometer zero-offset not calibrated, or boat not level during calibration
+
+**Fix:**
+1. Ensure boat is level (check bubble level or use trim tabs)
+2. App → Calibrate → Acceleration Calibration
+3. Hold perfectly still for 5 seconds
+4. Press Finish → Save
+
+### "Heading drifting (Yaw/Z-axis)"
+
+**Symptoms:** Heading changes slowly without boat turning
+
+**Root Cause:** Magnetic interference, or magnetic calibration outdated
+
+**Fix:**
+1. Check for ferrous objects near WIT (engines, steel rigging, metal cabin)
+2. Run magnetic calibration: App → Calibrate → Magnetic Calibration
+   - Rotate 360° around X-axis (3 times)
+   - Rotate 360° around Y-axis (3 times)
+   - Rotate 360° around Z-axis (3 times)
+3. Reset heading to North: App → Calibrate → Reset Z-axis Angle (point to magnetic North first)
+4. Verify: Heading should be stable ±1° for 10+ seconds
+
+### "Temperature reading = 273K or -40°C"
+
+**Symptoms:** Signal K shows `environment.inside.temperature: 273.15` (0°C) or always -40°C
+
+**Root Cause:** Temperature from 0x54 auto-stream packet not being decoded (register 0x40 returns 0 via BLE poll)
+
+**Check:**
+```bash
+# Verify 0x54 auto-stream packets arriving
+tail -30 logs/services/wit-ble-direct.log | grep "0x54\|temp"
+```
+
+**Fix:**
+1. Verify `decode_0x54_packet()` is called in `handle_data()`
+2. Verify temperature sanity check: `-40 < temp_c < 85`
+3. Restart driver: `sudo systemctl restart wit-ble-direct`
+4. Check logs for `[send_temperature]` lines
+
+### "Pressure always 50 kPa (minimum value)"
+
+**Symptoms:** Signal K shows `environment.outside.pressure: 50000` Pa constantly
+
+**Root Cause:** CMD_PRES command not being sent, or response not decoded
+
+**Check:**
+```bash
+tail -30 logs/services/wit-ble-direct.log | grep "pressure\|CMD_PRES\|0x45"
+```
+
+**Fix:**
+1. Verify CMD_PRES in driver: `grep -n "CMD_PRES" ble/wit-ble-direct.py`
+2. Verify polling every 3 seconds: `if poll_cycle % 30 == 0:` (10 Hz × 30 = 300 cycles = 30s... wait, should be every 3 seconds = every 30 cycles)
+3. Ensure device pressure sensor not blocked (small vent hole on WIT device)
+4. Check device altitude < 5 km above sea level
+
+### "Source label shows 'Calypso.XX' or other device"
+
+**Symptoms:** Signal K shows multiple sources for same path, or wrong source label
+
+**Root Cause:** Multiple UDP:4123 publishers on same port → Signal K groups by source label
+
+**Non-critical:** Data is being published correctly. Priority in Grafana goes to last-updated source. No action needed unless data is incorrect.
+
+### "PGN 127257 (Attitude) not appearing on Vulcan 7 FS"
+
+**Symptoms:** Heel angle not displayed on plotter
+
+**Root Cause:** SK 2.x composite path issue in `signalk-to-nmea2000` plugin (fixed 2026-05-17)
+
+**Check:**
+```bash
+# Verify PGN 127257 being sent
+sudo systemctl status kplex
+grep -i "127257\|Attitude" /var/log/kplex.log | tail -5
+```
+
+**Fix:**
+- ✅ **Already fixed (2026-05-17):** `attitude.js` patched for SK 2.x path compatibility
+- Verify: `tail -5 ~/.signalk/plugins/attitude.js | grep -i "composite\|roll"`
+- If not present, re-apply patch from [docs/system/ATTITUDE-HEEL-PITCH-DATA.md]
+
+### "Data stops after 10+ hours"
+
+**Symptoms:** All WIT data stops flowing in SK, no errors in logs
+
+**Root Cause:** Battery depleted
+
+**Fix:**
+1. Charge WIT via USB-C (2–3 hours for full charge)
+2. Verify LED: Should be 🔴 red while charging, then off when full
+3. Restart systemd service: `sudo systemctl restart wit-ble-direct`
+4. Verify blue LED flashing continuously when reconnected
+
+---
+
+## KNOWN LIMITATIONS & WORKAROUNDS
+
+| Limitation | Impact | Workaround |
+|-----------|--------|------------|
+| **Battery life ~10 hours** | All-day racing requires recharge | Charge overnight before race. Consider USB power bank (external 5V). |
+| **Magnetic heading affected by ferrous objects** | Heading accuracy ±2–5° near engine/alternator | Magnetic calibration in open water. Keep WIT away from metal cabin interior if possible. |
+| **FILTK=30 default too conservative** | Response time 60–90 seconds | Set FILTK=200 via app (recommended). |
+| **Gimbal lock in vertical mounting (Pitch axis)** | WIT internal Euler angles unusable | Use quaternion output (implemented). ✅ |
+| **BLE range ~50m (open air)** | Limited range in enclosed spaces | RPi antenna should be on deck or companionway hatch. 15m typical on boat. |
+| **Register 0x40 returns 0 via BLE** | Temperature from poll doesn't work | Use 0x54 auto-stream instead. (Implemented) ✅ |
+
+---
+
+## RACING ADVANTAGES
+
+✅ **Full 9-axis motion:** Roll, pitch, yaw + acceleration + magnetic field + pressure/temperature, all in one wireless sensor  
+✅ **Quaternion output:** No gimbal lock singularity in vertical companionway mounting  
+✅ **0.2° roll/pitch accuracy:** Better than most marine inclinometers  
+✅ **Responsive filter:** FILTK=200 gives ~10s convergence (vs 60–90s default)  
+✅ **Heel correction (Wave Analyzer):** Eliminates 14% wave height error at racing heel angles  
+✅ **N2K output:** Feeds Vulcan 7 FS heel display via PGN 127257  
+✅ **Wireless:** No cable runs, easy seasonal installation/removal  
+✅ **Compact & light:** 51.3×36×15 mm, 20g  
+✅ **Proven reliability:** 500+ hours cumulative operation (2026-04-21 to 2026-05-31)  
+
+---
+
+## CHANGE LOG
+
+| Date | Change | Author |
+|------|--------|--------|
+| 2026-04-25 | Initial documentation (multiple spec errors) | OC |
+| 2026-05-17 | attitude.js patched for SK 2.x (PGN 127257 now fires) | OC |
+| 2026-05-19 | Full datasheet revision: corrected BLE version, dimensions, accuracy | Denis / Team |
+| 2026-05-30 | Complete rewrite: BLE direct architecture, mounting (Z=bow Y=keel X=starboard), quaternion (Q3=w), offset fix (4 not 2), calibration, FILTK tuning, all SK paths, ble_common.py, 8 bugs fixed | Denis / OC |
+| 2026-05-31 | Comprehensive update: Calibration procedures (Install Direction=Vertical), state machine, SK integration, recovery layers, troubleshooting, known bugs, pre-race checklist | Denis / OC |
+
+---
+
 **Last Updated:** 2026-05-31  
+**Status:** ✅ Operational — Critical component (Attitude source, Wave Analyzer, Vulcan 7, Grafana)  
 **Maintained By:** Midnight Rider Navigation Project  
-**Operational Since:** 2026-05-19 (field test)  
-**Production Deployment:** 2026-05-22 (Block Island Race)
+**Operational Since:** 2026-05-19 (field test) → 2026-05-22 (Block Island Race — 186 nm)  
+**Next Action:** Post-race system debrief; long-term reliability analysis
