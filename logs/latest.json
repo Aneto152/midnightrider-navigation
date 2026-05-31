@@ -1,19 +1,13 @@
 {
-  "task": "calypso-doc-update",
-  "date": "2026-05-31T14:13:00.408046",
+  "task": "calypso-bt-recovery-hardening",
+  "date": "2026-05-31T14:25:45.963169",
   "status": "SUCCESS",
-  "files_updated": [
-    "ble/README.md",
-    "docs/HARDWARE/CALYPSO-UP10-DATASHEET.md",
-    "ble/calypso_direct.py"
+  "changes": [
+    "BT_RECOVERY extended: now triggers on le-connection-abort-by-local (not only not-found)",
+    "UUID_MODE write removed: firmware always in NORMAL mode, write always failed",
+    "Expected recovery time: 8 min \u2192 15-30 sec after natural disconnect"
   ],
-  "changes_applied": [
-    "Rate: 4Hz\u21928Hz throughout",
-    "L2_THRESHOLD: 20\u219210",
-    "WIT: removed WIT_MOUNT_AXIS/ROTATION, added WIT_MOUNT_Q=identity",
-    "WIT Axis Mapping: Euler-X=heading/Y=heel/Z=pitch confirmed",
-    "Architecture Evolution: 7 x 2026-05-31 entries added",
-    "Calypso debug history: 4 bugs + valid rates table + stability rules",
-    "calypso_direct.py: stability rules comment in code"
+  "files_modified": [
+    "ble/calypso_direct.py"
   ]
 }

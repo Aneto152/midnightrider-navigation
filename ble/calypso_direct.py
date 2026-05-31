@@ -240,7 +240,7 @@ def make_notify_handler(logger):
 async def configure_device(client: BleakClient, logger) -> None:
     """Configure Calypso after connection: normal mode, set rate, disable compass."""
     for uuid, val, label in [
-        (UUID_MODE, bytes([0x02]), 'NORMAL mode'),
+        # UUID_MODE write removed — Calypso firmware always in NORMAL mode, write always fails
         (UUID_RATE, bytes([RATE_MAP.get(RATE_HZ, 0x04)]), f'{RATE_HZ} Hz'),
         (UUID_COMPASS, bytes([0x00]), 'compass OFF (prevents sentinel -90/-90/360)'),
     ]:
@@ -333,11 +333,15 @@ async def main() -> None:
                 _last_err = str(e)
                 logger.error(f'[ERROR] L1 #{l1_fails}: {type(e).__name__}: {e}')
 
-            # BT_RECOVERY: zombie session detection (validated 2026-05-29)
+            # BT_RECOVERY: zombie session OR le-connection-abort (both resolvable)
             # Targets CALYPSO_MAC only — WIT BLE unaffected
+            # 'not found' = device not advertising (classic zombie)
+            # 'le-connection-abort-by-local' = BlueZ aborts LE handshake (device not ready)
+            # Both trigger: bluetoothctl disconnect + remove (see ble_common.bt_recovery)
             if (_was_connected
-                and 'not found' in _last_err.lower()
-                and l1_fails >= 3):
+                and l1_fails >= 3
+                and ('not found' in _last_err.lower()
+                     or 'le-connection-abort' in _last_err.lower())):
                 recovered = await bt_recovery(CALYPSO_MAC, logger)
                 if recovered:
                     l1_fails = 0

@@ -159,3 +159,6 @@
 [2026-05-31T14:13:04.791146] [FILE_MODIFY] [DOCS] CALYPSO-UP10-DATASHEET.md: rate 8Hz + 4-bug debug history + stability rules
 [2026-05-31T14:13:04.791146] [FILE_MODIFY] [DOCS] calypso_direct.py: startup stability comment improved
 [2026-05-31T14:13:04.791146] [RESULT] [DOCS] Calypso documentation 100% up to date
+[2026-05-31T14:25:50.048317] [FILE_MODIFY] [CALYPSO] BT_RECOVERY: added le-connection-abort trigger (8min→30s recovery)
+[2026-05-31T14:25:50.048317] [FILE_MODIFY] [CALYPSO] configure_device: removed UUID_MODE write (always failed)
+[2026-05-31T14:25:50.048317] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted with hardened recovery
