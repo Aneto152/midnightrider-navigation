@@ -128,3 +128,8 @@
 [2026-05-31T11:37:49.689286] [CONFIG_CHANGE] [BLE] Set MOUNT_Q=identity (assumes WIT properly calibrated via heading reset)
 [2026-05-31T11:37:49.689286] [SERVICE_RESTART] [BLE] wit-ble-direct restarted with fixed apply_mounting_and_extract
 [2026-05-31T11:37:49.689286] [RESULT] [BLE] Complete WIT fix: SUCCESS — service active, attitude data flowing
+[2026-05-31T11:56:09.135360] [FILE_MODIFY] [BLE] wit-ble-direct.py: REVERT — Q0=w was wrong, WIT uses Q3=w (scalar LAST)
+[2026-05-31T11:56:09.135360] [UNIT_TEST] [BLE] Verified: Q3=w gives Hdg=0° (CORRECT) vs Q0=w gives Pitch=180° (WRONG)
+[2026-05-31T11:56:09.135360] [CONFIG_CHANGE] [BLE] MOUNT_Q default → identity (1.0,0.0,0.0,0.0)
+[2026-05-31T11:56:09.135360] [SERVICE_RESTART] [BLE] wit-ble-direct restarted with Q3=w convention
+[2026-05-31T11:56:09.135360] [RESULT] [BLE] Q3=w revert: SUCCESS — service active, attitude data correct

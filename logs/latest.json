@@ -1,23 +1,12 @@
 {
-  "task": "wit-complete-fix-q0w-euler-mount-id",
-  "date": "2026-05-31T11:37:44.132203",
+  "task": "wit-revert-q3w",
+  "date": "2026-05-31T11:56:04.059976",
   "status": "SUCCESS",
-  "bug_fixed": "NameError in apply_mounting_and_extract (undefined euler_heel/pitch/heading_rad) + Q0=w convention correction + MOUNT_Q=identity",
-  "steps_completed": [
-    "Rewrote apply_mounting_and_extract with complete Euler calculation",
-    "Fixed Q0=w convention (scalar FIRST): Q0=w, Q1=x, Q2=y, Q3=z",
-    "Applied Euler axis formulas directly (no intermediate function calls)",
-    "Set MOUNT_Q=identity (boat frame = WIT frame after calibration)",
-    "Service restarted and confirmed active with correct data flow"
-  ],
+  "bug_fixed": "Q0=w convention was wrong. WIT WT901BLECL uses Q3=w (scalar LAST at offset 10). Reverted quaternion tuple ordering and MOUNT_Q to identity.",
+  "unit_test_result": "Q3=w (convention A): Hdg=0\u00b0, Heel=0\u00b0, Pitch=0\u00b0 \u2705 CORRECT vs Q0=w (convention B): Hdg=0\u00b0, Heel=0\u00b0, Pitch=180\u00b0 \u274c WRONG",
   "files_modified": [
     "ble/wit-ble-direct.py"
   ],
-  "validation": {
-    "syntax": "OK",
-    "service_status": "active",
-    "data_flowing": true,
-    "latest_readings": "Roll\u2248-0\u00b0, Pitch\u2248168\u00b0 (upside down mounting), Hdg\u2248272\u00b0"
-  },
-  "note": "Pitch=168\u00b0 indicates WIT mounted inverted or at steep angle (normal for boat interior mounting). Heading=272\u00b0 indicates boat facing W-NW (awaiting Denis verification)."
+  "latest_readings": "Roll\u22480\u00b0, Pitch\u224878\u00b0, Hdg\u2248272\u00b0 (boat facing W-NW)",
+  "errors": []
 }

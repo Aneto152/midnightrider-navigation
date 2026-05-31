@@ -28054,3 +28054,10 @@ Log truncated to 500 lines on 2026-05-31T10:29:25-04:00
 [2026-05-31T11:55:47] [INFO] [wit-ble-direct] [run_ble_client] [STARTUP] BlueZ GATT cache cleared for E9:10:DB:8B:CE:C7
 [2026-05-31T11:55:48] [WARNING] [wit-ble-direct] [run_ble_client] [L1] Connection failed (1): [org.bluez.Error.Failed] le-connection-abort-by-local
 [2026-05-31T11:55:48] [INFO] [wit-ble-direct] [run_ble_client] [L1] Reconnecting in 10s...
+[2026-05-31T11:56:00] [INFO] [wit-ble-direct] [run_ble_client] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-05-31T11:56:00] [DEBUG] [wit-ble-direct] [run_ble_client] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-05-31T11:56:00] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-05-31T11:56:00] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] ENABLE_QUAT sent — WIT will reset
+[2026-05-31T11:56:11] [INFO] [wit-ble-direct] [run_ble_client] [BLE_SETUP] State→WAIT_RECONNECT — reconnecting
+[2026-05-31T11:56:13] [WARNING] [wit-ble-direct] [run_ble_client] [L1] Connection failed (1): 
+[2026-05-31T11:56:13] [INFO] [wit-ble-direct] [run_ble_client] [L1] Reconnecting in 10s...

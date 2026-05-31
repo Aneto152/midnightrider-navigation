@@ -197,7 +197,7 @@ def make_mount_quaternion(axis: str, degrees: float) -> tuple:
 # Quaternion (0.5,-0.5,0.5,-0.5) = 120° around (-1,1,-1)/√3 axis
 # Verified by Dust 2026-05-31 via rotation matrix: WIT frame → boat frame
 # Transform: WIT-Z(bow)→X_boat, -WIT-X(port)→Y_boat(starboard), -WIT-Y(up)→Z_boat(down)
-_WIT_MOUNT_Q_STR = os.environ.get('WIT_MOUNT_Q', '0.5,-0.5,0.5,-0.5')
+_WIT_MOUNT_Q_STR = os.environ.get('WIT_MOUNT_Q', '1.0,0.0,0.0,0.0')  # identity
 try:
     _mq = [float(v.strip()) for v in _WIT_MOUNT_Q_STR.split(',')]
     if len(_mq) != 4:
@@ -331,10 +331,10 @@ def apply_mounting_and_extract(q_raw: dict) -> dict:
     """
     # Q0=w (scalar FIRST) convention — confirmed 2026-05-31
     q_wit = (
-        q_raw.get('q0', 0),  # Q0 = w (scalar)
-        q_raw.get('q1', 0),  # Q1 = x
-        q_raw.get('q2', 0),  # Q2 = y
-        q_raw.get('q3', 0),  # Q3 = z
+        q_raw.get('q3', 0),  # Q3 = w (scalar LAST) — WIT WT901BLECL confirmed
+        q_raw.get('q0', 0),  # Q0 = x
+        q_raw.get('q1', 0),  # Q1 = y
+        q_raw.get('q2', 0),  # Q2 = z
     )
     q_boat = quaternion_multiply(q_wit, MOUNT_Q)
     w, x, y, z = q_boat
@@ -356,10 +356,10 @@ def apply_mounting_and_extract(q_raw: dict) -> dict:
         'yaw': heading_rad,        # heading [0, 2π]
         'headingMagnetic': heading_rad,  # same (explicit SK path)
         # Raw quaternion (Q0=w convention)
-        'qw': q_raw.get('q0', 0),  # Q0 = w (scalar)
-        'qx': q_raw.get('q1', 0),  # Q1 = x
-        'qy': q_raw.get('q2', 0),  # Q2 = y
-        'qz': q_raw.get('q3', 0),  # Q3 = z
+        'qw': q_raw.get('q3', 0),  # Q3 = w (scalar LAST)
+        'qx': q_raw.get('q0', 0),  # Q0 = x
+        'qy': q_raw.get('q1', 0),  # Q1 = y
+        'qz': q_raw.get('q2', 0),  # Q2 = z
     }
 
 # ══════════════════════════════════════════════════════════════════════════════
