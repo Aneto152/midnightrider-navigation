@@ -141,3 +141,5 @@
 [2026-05-31T12:25:53.587200] [FILE_MODIFY] [CALYPSO] calypso_direct.py: BlueZ clear at startup + before each connection + L2_THRESHOLD=10
 [2026-05-31T12:25:53.587200] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted with hardened code
 [2026-05-31T12:25:53.587200] [RESULT] [CALYPSO] Calypso reconnect hardening: SUCCESS — service active
+[2026-05-31T12:49:14.307283] [FILE_MODIFY] [CALYPSO] calypso_direct.py: sleep 2 after bluetoothctl remove (startup + per-connection)
+[2026-05-31T12:49:14.307283] [RESULT] [CALYPSO] Connection recovery: 4+ min (6 retries) → 36 sec (1 attempt) ✅

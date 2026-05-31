@@ -274,9 +274,11 @@ async def main() -> None:
         # Initial BlueZ cache clear — prevents stale session from previous run
         try:
             import subprocess as _sp_init
+            import time as _t_init
             _sp_init.run(f'bluetoothctl remove {CALYPSO_MAC}',
                          shell=True, capture_output=True, timeout=5)
             logger.info(f'[STARTUP] BlueZ GATT cache cleared for {CALYPSO_MAC}')
+            _t_init.sleep(2)  # Wait for bluetoothd async cleanup
         except Exception:
             pass
 
@@ -289,9 +291,11 @@ async def main() -> None:
                 # Clear BlueZ GATT cache before each attempt — prevents zombie sessions
                 try:
                     import subprocess as _sp_cal
+                    import time as _t_cal
                     _sp_cal.run(f'bluetoothctl remove {CALYPSO_MAC}',
                                 shell=True, capture_output=True, timeout=5)
                     logger.info(f'[BLE_CLEANUP] BlueZ cache cleared for {CALYPSO_MAC}')
+                    _t_cal.sleep(2)  # Wait for bluetoothd async cleanup
                 except Exception:
                     pass
 
