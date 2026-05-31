@@ -155,3 +155,7 @@
 [2026-05-31T13:33:32.022712] [FILE_MODIFY] [CALYPSO] _stats[last_data_ts] reset after start_notify (watchdog false-positive fix)
 [2026-05-31T13:33:32.022712] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted
 [2026-05-31T13:33:32.022712] [RESULT] [CALYPSO] Watchdog reset fix applied — no false-positives in logs
+[2026-05-31T14:13:04.791146] [FILE_MODIFY] [DOCS] ble/README.md: rate/L2/WIT vars updated + architecture history
+[2026-05-31T14:13:04.791146] [FILE_MODIFY] [DOCS] CALYPSO-UP10-DATASHEET.md: rate 8Hz + 4-bug debug history + stability rules
+[2026-05-31T14:13:04.791146] [FILE_MODIFY] [DOCS] calypso_direct.py: startup stability comment improved
+[2026-05-31T14:13:04.791146] [RESULT] [DOCS] Calypso documentation 100% up to date

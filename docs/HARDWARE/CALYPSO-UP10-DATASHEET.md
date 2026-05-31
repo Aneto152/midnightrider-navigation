@@ -3,7 +3,7 @@
 **Manufacturer:** Calypso Instruments  
 **Model:** Ultrasonic Portable Solar (UP10)  
 **Interface:** Bluetooth Low Energy (BLE)  
-**Date:** 2026-05-19  
+**Date:** 2026-05-31  
 **Status:** ✅ Operational (systemd service running)
 
 ---
@@ -17,7 +17,7 @@
 | **Wind Speed Accuracy** | ±3% or ±0.5 knot (whichever is greater) |
 | **Wind Direction Range** | 0 – 360° |
 | **Wind Direction Accuracy** | ±5° |
-| **Update Rate** | Configurable: **1 Hz / 4 Hz (default) / 8 Hz** |
+| **Update Rate** | Configurable: **1 Hz / 4 Hz / 8 Hz (default)** — 10Hz NOT supported (0x0A ignored) |
 | **Power** | Solar panel (built-in, self-charging) |
 | **Battery Backup** | Lithium, ~48h autonomy |
 | **BLE Range** | ~30 m line-of-sight |
@@ -62,7 +62,7 @@ The device exposes the following data via BLE GATT characteristics:
 
 ```bash
 --rate=hz_1   → 1 Hz   (used on Midnight Rider)
---rate=hz_4   → 4 Hz   (driver default)
+--rate=hz_8   → 8 Hz   (driver default — max confirmed rate)
 --rate=hz_8   → 8 Hz   (max rate)
 ```
 
@@ -154,7 +154,7 @@ sudo systemctl restart calypso_anemometer
 | **Driver** | `calypso-anemometer` (Python, maritime-labs) |
 | **Injection method** | UDP Signal K Delta → port 4123 |
 | **Physical connection** | Bluetooth LE (BLE adapter `hci0` on RPi) |
-| **Data rate** | 1 Hz (configured via `--rate=hz_1`) |
+| **Data rate** | 8 Hz (configured via `CALYPSO_RATE_HZ=8`) |
 
 ### UDP Receiver in Signal K
 
@@ -277,8 +277,90 @@ The boat has two wind-related data sources:
 |------|--------|--------|
 | 2026-04-25 | Initial documentation (v1.0 — incomplete, wrong manufacturer) | OC |
 | 2026-05-19 | Full datasheet revision: corrected manufacturer, updated status to ✅ ACTIVE, corrected architecture (systemd + UDP, not plugin), added NMEA sentences, BLE protocol, data priority table, field verification commands | Denis / Dust |
+| 2026-05-31 | Four bugs fixed: (1) bluetoothctl remove per-connection destroys bond → moved to startup-only; (2) _last_data_ts not reset on reconnect → added reset after start_notify; (3) rate 0x0A (10Hz) invalid → use 0x08 (8Hz max); (4) L2_THRESHOLD 20→10 for faster recovery. Valid rates: 0x01(1Hz) / 0x04(4Hz) / 0x08(8Hz) confirmed. | OC |
 
 ---
 
-**Last Updated:** 2026-05-19  
+**Last Updated:** 2026-05-31  
 **Next Action:** Validate apparent wind angle during field test (May 19) — verify sensor orientation matches boat bow
+
+---
+
+## DEBUG HISTORY — 2026-05-31
+
+Four critical bugs found and fixed in field testing:
+
+### Bug #1: bluetoothctl remove per-connection (FIXED)
+
+**Symptom:** Connection time degraded over retries: 18min → 12min → 6min → 1.6min
+
+**Root Cause:** Calling `bluetoothctl remove {MAC}` before EVERY connection attempt destroys the BLE bond repeatedly. Calypso firmware gets confused by bond destruction.
+
+**Fix:** Removed per-connection remove from retry loop. Keep startup-only remove (once, + sleep 2). Bond maintained across retries.
+
+**SHA:** b8f1c91
+
+### Bug #2: watchdog false-positive (FIXED)
+
+**Symptom:** Watchdog fires immediately after reconnect, before first packet arrives.
+
+**Root Cause:** `_stats['last_data_ts']` not reset on reconnect. Watchdog uses stale timestamp from previous session.
+
+**Fix:** Reset `_stats['last_data_ts'] = time.time()` after `start_notify`, before watchdog loop.
+
+**SHA:** 6af4fff
+
+### Bug #3: Invalid GATT rate byte 0x0A (FIXED)
+
+**Symptom:** Rate configured to 10Hz, but data arriving at ~1Hz (default).
+
+**Root Cause:** 0x0A is not a valid rate byte in Calypso UP10 firmware. Firmware silently ignores invalid byte and uses default (1Hz).
+
+**Fix:** Changed default rate from 10 → 8 Hz. Confirmed valid rates: 0x01(1Hz) / 0x04(4Hz) / 0x08(8Hz).
+
+**SHA:** 3ca367e
+
+### Bug #4: L2_THRESHOLD=20 too high (OPTIMIZED)
+
+**Symptom:** Long delay before systemd restart on persistent BLE failure.
+
+**Root Cause:** L2_THRESHOLD=20 requires 20 L1 failures before clean exit. With exponential backoff (5s→60s), this takes ~10+ minutes.
+
+**Fix:** Reduced L2_THRESHOLD to 10. Systemd restart now within ~2 minutes.
+
+**SHA:** n/a (config change)
+
+### Valid GATT Rate Bytes (Confirmed 2026-05-31)
+
+| Byte | Rate | Status | Evidence |
+|------|------|--------|----------|
+| 0x01 | 1 Hz | ✅ Valid | Tested, working |
+| 0x04 | 4 Hz | ✅ Valid | Original default, tested |
+| 0x08 | 8 Hz | ✅ Valid | Maximum — confirmed hardware capable, rate diagnostic |
+| 0x0A | 10 Hz | ❌ Invalid | Firmware ignores, falls back to 1Hz. "10" in "UP10" = max measurments, not GATT rate. |
+
+### BLE Stability Rules (Confirmed 2026-05-31)
+
+1. **`bluetoothctl remove {MAC}` is ONLY for startup** (once, + sleep 2)
+   - Do NOT call before every retry — destroys bond
+   - Do NOT call after disconnect — let bond persist across reconnects
+   - If zombie detected (3+ failures), use BT_RECOVERY handler
+
+2. **`_stats['last_data_ts']` MUST be reset after `start_notify`**
+   - Fresh connection = fresh timestamp baseline
+   - Prevents watchdog from seeing stale data
+
+3. **Calypso has NO physical power button**
+   - Software "power cycle" = stop service + wait 3min + start
+   - Allows capacitive discharge, full BLE reset
+
+4. **Calypso can have only ONE active BLE connection**
+   - If user's phone connects, RPi BLE disconnects
+   - Monitor logs for "Connection closed by peer" on demand
+
+5. **Rate configuration must use valid GATT bytes**
+   - Use CALYPSO_RATE_HZ environment variable (values: 1/4/8)
+   - Driver internally maps to GATT bytes (0x01/0x04/0x08)
+   - Invalid values default to 1Hz (firmware fallback)
+
+---

@@ -1,6 +1,6 @@
 # ble/ — BLE Drivers for Midnight Rider
 
-> Last updated: 2026-05-30  
+> Last updated: 2026-05-31  
 > Architecture: unified drivers with shared ble_common.py infrastructure
 
 Direct BLE daemon drivers for Midnight Rider sensors.  
@@ -63,7 +63,7 @@ Imported by all drivers. Provides:
 |---|---|
 | **Device** | Calypso UP10 anemometer |
 | **MAC** | F8:5F:12:9D:D2:EE (env: `CALYPSO_BLE_ADDRESS`) |
-| **BLE Protocol** | Auto-notify (no commands) @ 4 Hz |
+| **BLE Protocol** | Auto-notify (no commands) @ 8 Hz |
 | **Notify UUID** | 00002a39-0000-1000-8000-00805f9b34fb |
 | **Service** | calypso_direct.service |
 | **SK Output** | environment.wind.*, electrical.batteries.calypso.*, environment.outside.temperature |
@@ -75,7 +75,7 @@ Imported by all drivers. Provides:
 - [4] battery (×10 → %)
 - [5] temperature (−100 → °C)
 
-**Recovery:** L1 exponential backoff (5s-60s) + L2 clean exit (no hci0 reset) + BT zombie recovery
+**Recovery:** L1 backoff (5s-60s) + L2 clean exit (L2_threshold=10) + BT zombie recovery + startup-only bluetoothctl remove (NOT per-connection — breaks bond)
 
 ---
 
@@ -88,7 +88,7 @@ Imported by all drivers. Provides:
 | **BLE Protocol** | Notify (ffe4-9a34fb) / Write (ffe9-9a34fb) |
 | **Init Sequence** | State machine: UNINITIALIZED → send ENABLE_QUAT once → WAIT_RECONNECT → subscribe |
 | **Output Rate** | 10 Hz (env: `WIT_OUTPUT_RATE_HZ`) |
-| **Mounting** | z-axis 90° rotation (env: `WIT_MOUNT_AXIS`, `WIT_MOUNT_ROTATION_DEG`) |
+| **Mounting** | X=port, Y=masthead(up), Z=bow — MOUNT_Q=identity (env: `WIT_MOUNT_Q`) |
 | **Service** | wit-ble-direct.service |
 | **SK Output** | navigation.attitude.*, navigation.headingMagnetic, navigation.acceleration.*, navigation.rateOfTurn |
 | **Status** | ✅ PRODUCTION |
@@ -105,10 +105,11 @@ Imported by all drivers. Provides:
 - Native quaternion output (Kalman filter) → boat-frame Euler angles
 - Mounting correction applied in quaternion space (no gimbal lock singularity)
 
-**Axis Mapping:**
-- WIT body pitch → SK navigation.attitude.roll (heel: +starboard down)
-- WIT body roll → SK navigation.attitude.pitch (trim: +bow up)
-- WIT body yaw → SK navigation.attitude.yaw (heading magnetic)
+**Axis Mapping (Confirmed 2026-05-31, 7 physical orientations):**
+- Euler-X formula → SK navigation.headingMagnetic (0=N, +π/2=E, normalized [0,2π])
+- Euler-Y formula → SK navigation.attitude.roll (heel: +π/2=starboard, -π/2=port)
+- Euler-Z formula → SK navigation.attitude.pitch (trim: +π/2=bow up)
+- Q3=w convention (scalar LAST at offset 10) confirmed
 
 ---
 
@@ -237,13 +238,12 @@ All drivers respect `.env` configuration:
 | Variable | Driver | Default | Purpose |
 |---|---|---|---|
 | `CALYPSO_BLE_ADDRESS` | calypso | F8:5F:12:9D:D2:EE | Device MAC |
-| `CALYPSO_RATE_HZ` | calypso | 4 | Poll rate Hz |
+| `CALYPSO_RATE_HZ` | calypso | 8 | Data rate Hz (valid: 1/4/8) |
 | `CALYPSO_DATA_TIMEOUT_S` | calypso | 60 | Staleness threshold |
-| `CALYPSO_L2_THRESHOLD` | calypso | 20 | L1 failures before L2 |
+| `CALYPSO_L2_THRESHOLD` | calypso | 10 | L1 failures before L2 |
 | `WIT_BLE_ADDRESS` | wit | E9:10:DB:8B:CE:C7 | Device MAC |
-| `WIT_MOUNT_AXIS` | wit | z | Mounting axis (x/y/z) |
-| `WIT_MOUNT_ROTATION_DEG` | wit | 90 | Mounting rotation (°) |
-| `WIT_OUTPUT_RATE_HZ` | wit | 10 | Polling rate Hz |
+| `WIT_MOUNT_Q` | wit | 1.0,0.0,0.0,0.0 | Mounting quaternion (w,x,y,z) — identity when calibrated |
+| `WIT_OUTPUT_RATE_HZ` | wit | 10 | Output rate Hz |
 | `WIT_L2_THRESHOLD` | wit | 5 | L1 failures before L2 |
 | `SOK_BLE_ADDRESS` | sok | XX:XX:XX:XX:XX:XX | ⚠️ REQUIRED: set via discovery |
 | `SOK_POLL_S` | sok | 5 | Poll interval (s) |
@@ -302,6 +302,13 @@ grep -E "L1|L2|BT_RECOVERY" logs/services/*.log
 | 2026-05-30 | Phase 1 refactor | calypso_direct.py uses ble_common |
 | 2026-05-30 | Phase 2 refactor | wit-ble-direct.py uses ble_common |
 | 2026-05-30 | SOK template | sok_direct.py ready (MAC placeholder) |
+| 2026-05-31 | WIT Q3=w fix | Confirmed scalar-last convention, unit test proof |
+| 2026-05-31 | WIT Euler mapping | Euler-X=heading, Y=heel, Z=pitch (7 orientations verified) |
+| 2026-05-31 | WIT MOUNT_Q=identity | No correction needed with proper calibration |
+| 2026-05-31 | Calypso rate 8Hz | Valid rates: 1/4/8Hz — 10Hz NOT supported (0x0A ignored) |
+| 2026-05-31 | Calypso BlueZ fix | sleep 2 after remove, startup-only remove (bond stability) |
+| 2026-05-31 | Calypso L2=10 | Faster systemd restart cycle (was 20) |
+| 2026-05-31 | Calypso watchdog fix | _stats[last_data_ts] reset after start_notify (no false-positive) |
 
 ---
 

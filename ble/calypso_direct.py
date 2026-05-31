@@ -271,7 +271,10 @@ async def main() -> None:
             logger.error('[STARTUP] BLE adapter (hci0) not available — exiting')
             sys.exit(1)
 
-        # Initial BlueZ cache clear — prevents stale session from previous run
+        # Initial BlueZ cache clear — startup ONLY (not per-connection!)
+    # CRITICAL: calling remove in the retry loop destroys the BLE bond each time
+    # → progressive instability: connection gets shorter (18min→12min→6min→1.6min)
+    # sleep 2 required: bluetoothctl remove is async, bluetoothd needs ~2s to finish
         try:
             import subprocess as _sp_init
             import time as _t_init

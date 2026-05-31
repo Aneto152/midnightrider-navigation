@@ -1,10 +1,19 @@
 {
-  "task": "calypso-watchdog-reset-fix",
-  "date": "2026-05-31T13:33:27.911554",
+  "task": "calypso-doc-update",
+  "date": "2026-05-31T14:13:00.408046",
   "status": "SUCCESS",
-  "bug": "_stats[last_data_ts] not reset on reconnect \u2192 watchdog fires immediately after start_notify, before first packet arrives",
-  "fix": "_stats[last_data_ts] = time.time() added right after start_notify, before watchdog loop",
-  "files_modified": [
+  "files_updated": [
+    "ble/README.md",
+    "docs/HARDWARE/CALYPSO-UP10-DATASHEET.md",
     "ble/calypso_direct.py"
+  ],
+  "changes_applied": [
+    "Rate: 4Hz\u21928Hz throughout",
+    "L2_THRESHOLD: 20\u219210",
+    "WIT: removed WIT_MOUNT_AXIS/ROTATION, added WIT_MOUNT_Q=identity",
+    "WIT Axis Mapping: Euler-X=heading/Y=heel/Z=pitch confirmed",
+    "Architecture Evolution: 7 x 2026-05-31 entries added",
+    "Calypso debug history: 4 bugs + valid rates table + stability rules",
+    "calypso_direct.py: stability rules comment in code"
   ]
 }
