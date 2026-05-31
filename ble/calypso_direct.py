@@ -373,13 +373,13 @@ async def main() -> None:
 
             # BT_RECOVERY: zombie session OR le-connection-abort (both resolvable)
             # Targets CALYPSO_MAC only — WIT BLE unaffected
-            # 'not found' = device not advertising (classic zombie)
-            # 'le-connection-abort-by-local' = BlueZ aborts LE handshake (device not ready)
-            # Both trigger: bluetoothctl disconnect + remove (see ble_common.bt_recovery)
-            if (_was_connected
-                and l1_fails >= 3
-                and ('not found' in _last_err.lower()
-                     or 'le-connection-abort' in _last_err.lower())):
+            # 'not found' = device not advertising → requires _was_connected (avoid unnecessary removes)
+            # 'le-connection-abort' = BlueZ aborts LE handshake → triggers REGARDLESS of _was_connected
+            # Reason: le-connection-abort needs bluetoothctl remove even after service restart
+            # (startup remove + sleep2 is not always enough if Calypso is in lockout mode)
+            le_abort = 'le-connection-abort' in _last_err.lower()
+            not_found = _was_connected and 'not found' in _last_err.lower()
+            if l1_fails >= 3 and (le_abort or not_found):
                 recovered = await bt_recovery(CALYPSO_MAC, logger)
                 if recovered:
                     l1_fails = 0

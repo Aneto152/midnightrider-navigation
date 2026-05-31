@@ -1,19 +1,10 @@
 {
-  "task": "calypso-observability",
-  "date": "2026-05-31T14:33:09.060738",
+  "task": "calypso-bt-recovery-startup",
+  "date": "2026-05-31T14:40:07.697282",
   "status": "SUCCESS",
-  "changes": [
-    "Log timestamps: ms precision (was 1s)",
-    "RATE_1MIN: per-minute packet count (expected 480 at 8Hz)",
-    "TIMING warning: inter-packet gaps >250ms (2x expected 125ms interval)",
-    "Max gap + gap count tracked per minute window"
-  ],
-  "how_to_read_logs": [
-    "RATE_1MIN X pkts/min: X~480=OK, X<<480=packet loss",
-    "TIMING Large gap Xms: BLE firmware irregularity if frequent"
-  ],
+  "bug": "BT_RECOVERY required _was_connected=True but after service restart _was_connected=False \u2192 le-connection-abort never triggered recovery",
+  "fix": "le-connection-abort now triggers BT_RECOVERY regardless of _was_connected. not-found still requires _was_connected.",
   "files_modified": [
-    "ble/calypso_direct.py",
-    "ble/ble_common.py"
+    "ble/calypso_direct.py"
   ]
 }

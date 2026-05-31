@@ -165,3 +165,5 @@
 [2026-05-31T14:33:14.144851] [FILE_MODIFY] [CALYPSO] Added ms-precision timestamps + RATE_1MIN + TIMING warnings
 [2026-05-31T14:33:14.144851] [FILE_MODIFY] [COMMON] ble_common.py: log format -> millisecond precision
 [2026-05-31T14:33:14.144851] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted with fine observability
+[2026-05-31T14:40:12.537662] [FILE_MODIFY] [CALYPSO] BT_RECOVERY: le-connection-abort triggers regardless of _was_connected
+[2026-05-31T14:40:12.537662] [SERVICE_RESTART] [CALYPSO] Manual BlueZ clean + restart to break lockout
