@@ -1,20 +1,22 @@
 {
-  "task": "wit-documentation-update",
-  "date": "2026-05-31T12:01:14.810762",
+  "task": "calypso-reconnect-hardening",
+  "date": "2026-05-31T12:25:49.482886",
   "status": "SUCCESS",
-  "summary": "Documentation updated to reflect WIT driver fixes from 2026-05-31 debugging session",
-  "key_facts_documented": [
-    "Q3=w convention (scalar LAST at offset 10) \u2014 confirmed by unit test",
-    "Mounting: WIT-X=port, WIT-Y=masthead(up), WIT-Z=bow",
-    "Euler axis mapping: X=heading, Y=heel, Z=pitch (empirically verified 7 orientations)",
-    "MOUNT_Q = identity when WIT properly calibrated",
-    "Debug history table with SHA references and unit test proof"
+  "root_cause": "BlueZ zombie session after overnight BLE disconnect. Service could not reconnect because stale BlueZ cache entry blocked new connection.",
+  "fix_immediate": "bluetoothctl remove + systemctl restart",
+  "fix_code": [
+    "Added bluetoothctl remove before EACH connection attempt (mirrors wit-ble-direct pattern)",
+    "Added initial BlueZ clear at startup (prevents stale session from previous run)",
+    "Lowered L2_THRESHOLD from 20 to 10 (faster systemd restart cycle on persistent failure)"
   ],
   "files_modified": [
-    "ble/wit-ble-direct.py (docstring fix)",
-    "docs/HARDWARE/WIT-WT901BLECL-DATASHEET.md (mounting, Euler mapping, debug history)",
-    "ble/README.md (quaternion convention, mounting section)"
+    "ble/calypso_direct.py"
   ],
+  "new_features": {
+    "startup_cleanup": "[STARTUP] BlueZ GATT cache cleared for {MAC}",
+    "connection_cleanup": "[BLE_CLEANUP] BlueZ cache cleared before each attempt",
+    "l2_threshold": 10
+  },
   "errors": [],
-  "next_recommended": "Verify heading, heel, pitch in Signal K with boat on the water"
+  "next_recommended": "Monitor calypso-direct.log over next 24h for any recurrence"
 }

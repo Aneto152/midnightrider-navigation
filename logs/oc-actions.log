@@ -137,3 +137,7 @@
 [2026-05-31T12:01:26.016082] [FILE_MODIFY] [DOCS] WIT-WT901BLECL-DATASHEET.md: mounting axes, Euler mapping table, debug history
 [2026-05-31T12:01:26.016082] [FILE_MODIFY] [DOCS] ble/README.md: quaternion convention + physical mounting section
 [2026-05-31T12:01:26.016082] [RESULT] [DOCS] WIT documentation update: SUCCESS
+[2026-05-31T12:25:53.587200] [DEBUG] [CALYPSO] Root cause: BlueZ zombie session blocked morning reconnect
+[2026-05-31T12:25:53.587200] [FILE_MODIFY] [CALYPSO] calypso_direct.py: BlueZ clear at startup + before each connection + L2_THRESHOLD=10
+[2026-05-31T12:25:53.587200] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted with hardened code
+[2026-05-31T12:25:53.587200] [RESULT] [CALYPSO] Calypso reconnect hardening: SUCCESS — service active
