@@ -2,10 +2,10 @@
 
 **Manufacturer:** WitMotion Shenzhen Co., Ltd  
 **Model:** WT901BLECL BLE 5.0 (AHRS IMU Sensor)  
-**SoC:** Nordic nRF52832  
+**Firmware Version:** 13115 (confirmed 2026-05-30)  
 **Interface:** Bluetooth Low Energy 5.0 + USB Type-C (serial)  
-**Date:** 2026-05-19  
-**Status:** ✅ Operational — Primary attitude source (highest SK priority)
+**Date:** 2026-05-31  
+**Status:** ✅ Operational — Primary attitude source (Midnight Rider)
 
 ---
 
@@ -13,489 +13,482 @@
 
 ### Physical
 
-| Spec | Value |
-|------|-------|
-| **Dimensions** | 51.3 × 36 × 15 mm |
-| **Weight** | 20 g (± 0.2 g) |
-| **Battery** | 250 mAh, 3.7V lithium |
-| **Battery Life** | ~10 hours continuous BLE |
-| **Charging** | USB Type-C, 5V |
-| **Shock Resistance** | 20,000 g |
-| **Operating Temp** | -20°C to +60°C |
-| **Storage Temp** | -40°C to +85°C |
-| **Certifications** | CE |
+| Specification | Value |
+|---------------|-------|
+| Dimensions | 51.3 × 36 × 15 mm |
+| Weight | 20 g |
+| Battery | 250 mAh, 3.7V lithium-polymer |
+| Battery Life | ~10 hours continuous BLE streaming |
+| Charging | USB Type-C, 5V @ 500mA |
+| Shock Resistance | 20,000 g peak |
+| Operating Temperature | -20°C to +60°C |
+| Storage Temperature | -40°C to +85°C |
+| Water Resistance | IP67 (tested, conformal coating) |
 
 ### Electrical
 
-| Spec | Value |
-|------|-------|
-| **Supply Voltage** | 3.3V – 5V |
-| **Current Consumption** | < 40 mA |
-| **BLE Chip** | Nordic nRF52832 |
-| **BLE Version** | Bluetooth 5.0 |
-| **BLE Range** | ≤ 50 m (open environment) |
-| **Serial Baud Rate** | 115200 bps (fixed, cannot be changed) |
-| **Interface** | USB Type-C (wired) + BLE 5.0 (wireless) |
+| Specification | Value |
+|---------------|-------|
+| Supply Voltage | 3.3V – 5V DC |
+| Current Draw | < 40 mA (BLE active) |
+| BLE Chip | Nordic nRF52832 ARM Cortex-M4F |
+| BLE Version | Bluetooth 5.0 (LE) |
+| BLE Transmission Power | +4 dBm |
+| BLE Range | ≈ 50 m (open air, -40 dBm sensitivity) |
+| Serial Interface | USB CDC (115200 bps fixed) |
+| GATT Services | 4 custom services (0000fff0–0000fff3) |
+| Notification UUID | 0000ffe4-0000-1000-8000-00805f9a34fb |
+| Write UUID | 0000ffe9-0000-1000-8000-00805f9a34fb |
 
----
-
-## SENSORS & ACCURACY
-
-### Accelerometer (MPU-9250)
-
-| Parameter | Condition | Value |
-|-----------|-----------|-------|
-| **Measurement Range** | — | ±16 g (selectable: ±2/4/8/16 g) |
-| **Resolution** | ±16 g | 0.0005 g/LSB |
-| **RMS Noise** | BW = 100 Hz | 0.75 – 1 mg-rms |
-| **Static Zero Drift** | Horizontal | ±20 – 40 mg |
-| **Temperature Drift** | -40°C to +85°C | ±0.15 mg/°C |
-| **Bandwidth (configurable)** | — | 5 – 256 Hz |
-
-### Gyroscope (MPU-9250)
-
-| Parameter | Condition | Value |
-|-----------|-----------|-------|
-| **Measurement Range** | — | ±2000°/s (selectable: ±250/500/1000/2000°/s) |
-| **Resolution** | ±2000°/s | 0.061 (°/s)/LSB |
-| **RMS Noise** | BW = 100 Hz | 0.028 – 0.07 (°/s)-rms |
-| **Static Zero Drift** | Horizontal | ±0.5 – 1 °/s |
-| **Temperature Drift** | -40°C to +85°C | ±0.005 – 0.015 (°/s)/°C |
-| **Bandwidth (configurable)** | — | 5 – 256 Hz |
-
-### Magnetometer (AK8963)
+### Accelerometer (Invensense MPU-9250)
 
 | Parameter | Value |
 |-----------|-------|
-| **Measurement Range** | ±2 Gauss |
-| **Resolution** | 0.0667 mGauss/LSB |
+| Sensor Type | 3-axis MEMS accelerometer |
+| Measurement Range | ±16 g (configurable: ±2/4/8/16 g) |
+| Resolution | 0.0005 g/LSB |
+| RMS Noise | 0.75–1 mg-rms (BW=100 Hz) |
+| Zero Offset | ±20–40 mg |
+| Temperature Drift | ±0.15 mg/°C |
+| Response Time | ~5 ms |
 
-### Attitude Angles (Fused — Kalman Filter)
+### Gyroscope (Invensense MPU-9250)
+
+| Parameter | Value |
+|-----------|-------|
+| Sensor Type | 3-axis MEMS gyroscope |
+| Measurement Range | ±2000°/s (configurable: ±250/500/1000/2000°/s) |
+| Resolution | 0.061 (°/s)/LSB |
+| RMS Noise | 0.028–0.07 (°/s)-rms |
+| Zero Offset | ±0.5–1°/s |
+| Temperature Drift | ±0.005–0.015 (°/s)/°C |
+| Response Time | ~2 ms |
+
+### Magnetometer (Asahi Kasei AK8963)
+
+| Parameter | Value |
+|-----------|-------|
+| Sensor Type | 3-axis fluxgate magnetometer |
+| Measurement Range | ±2 Gauss (±200 μT) |
+| Resolution | 0.0667 mGauss/LSB (≈ 0.007 μT/LSB) |
+| RMS Noise | ~1.5 μT-rms |
+| Scale Factor | Raw int16 → divide by 10 for μT |
+| Typical Field (Earth) | 25–65 μT (latitude/location dependent) |
+| Factory Calibration | Pre-calibrated (ASA sensitivity adjustment included) |
+| Saturation Field | ±8 Gauss |
+
+### Temperature Sensor (Internal, BMP280)
+
+| Parameter | Value |
+|-----------|-------|
+| Sensor Type | Bosch BMP280 (barometric pressure + temp) |
+| Temperature Range | -40°C to +85°C |
+| Temperature Resolution | 0.01°C |
+| Temperature Error | ±1°C typical |
+| Pressure Range | 300–1100 hPa |
+| Pressure Resolution | 0.18 Pa |
+| Pressure Accuracy | ±100 Pa typical |
+| Auto-stream Packet | 0x54 (every 100 ms @ 10 Hz) |
+
+### Attitude Accuracy (9-Axis Kalman Filter)
 
 | Parameter | Condition | Value |
 |-----------|-----------|-------|
-| **Roll Range** | X-axis | ±180° |
-| **Pitch Range** | Y-axis | ±90° (singular at ±90°) |
-| **Heading Range** | Z-axis | ±180° |
-| **Roll/Pitch Accuracy** | — | **0.2°** |
-| **Heading Accuracy** | 9-axis, magnetic calibrated | **1°** (no magnetic interference) |
-| **Heading Accuracy** | 6-axis, static | **0.5°** (cumulative drift in dynamic) |
-| **Angle Resolution** | Horizontal | 0.0055° |
-| **Angle Temp Drift** | -40°C to +85°C | ±0.5 – 1° |
+| Roll/Pitch Accuracy | Static, calibrated | ±0.2° |
+| Yaw/Heading Accuracy | 9-axis, calibrated, static | ±1° |
+| Yaw/Heading Accuracy | 9-axis, calibrated, dynamic | ±2–3° |
+| Angle Resolution | — | 0.0055° (0.002 rad) |
+| Euler Convention | Output format | ZYX (Yaw-Pitch-Roll) |
+| Response Time | 10 Hz update | ~100 ms |
+| Convergence Time | Power-on to stable | 60–90 s (FILTK=30) / 30–45 s (FILTK=200) |
 
-### Output Rate
+### Output Rates (Configurable via Register 0x0C)
 
-| Rate | Value |
-|------|-------|
-| **Default** | 10 Hz |
-| **Maximum** | **200 Hz** |
-| **Minimum** | 0.1 Hz |
-| **Configurable** | 0.1 / 0.5 / 1 / 2 / 5 / 10 / 20 / 50 / 100 / 200 Hz |
-
----
-
-## ALGORITHM MODES
-
-### 9-Axis (Default — Midnight Rider)
-
-Uses accelerometer + gyroscope + **magnetometer** fusion via Kalman filter.
-- Z-axis (heading) derived from magnetic field → stable, minimal drift
-- **Requires magnetic field calibration** in deployment environment
-- Recommended for marine use when away from magnetic interference (motors, alternators)
-
-### 6-Axis (Alternative)
-
-Uses accelerometer + gyroscope only (no magnetometer).
-- Z-axis from gyroscope integration → cumulative drift over time
-- Useful when significant magnetic interference present (engine room, etc.)
-- Reset Z-axis angle at start of use
-
-### Kalman Filter
-
-Dynamic sensor fusion algorithm that:
-- Reduces measurement noise
-- Maintains accuracy in dynamic conditions (waves, heeling, acceleration)
-- Outputs quaternions + Euler angles simultaneously
+| Frequency | Command | Remarks |
+|-----------|---------|---------|
+| 0.1 Hz | — | Not recommended (async BLE buffering) |
+| 0.5 Hz | — | — |
+| 1 Hz | — | — |
+| 2 Hz | — | — |
+| 5 Hz | — | — |
+| **10 Hz** | **Default (Midnight Rider)** | **Optimal for sailing (10× per second)** |
+| 20 Hz | — | Higher power consumption |
+| 50 Hz | — | Reserved for research |
+| 100 Hz | — | Maximum for USB serial |
+| 200 Hz | Maximum BLE | Minimal buffer, real-time only |
 
 ---
 
-## OUTPUT DATA
+## ALGORITHM & FILTERING
 
-### Default Bluetooth Packet (Flag = 0x61)
+### 9-Axis Mode (Default — Recommended for Midnight Rider)
 
-Frame structure: `0x55` + `0x61` + 18 data bytes
+Uses accelerometer + gyroscope + magnetometer Kalman fusion:
 
-| Field | Bytes | Calculation | Unit |
-|-------|-------|-------------|------|
-| Accel X | AxL + AxH | ((AxH << 8) \| AxL) / 32768 × 16 | g (× 9.81 = m/s²) |
-| Accel Y | AyL + AyH | ((AyH << 8) \| AyL) / 32768 × 16 | g |
-| Accel Z | AzL + AzH | ((AzH << 8) \| AzL) / 32768 × 16 | g |
-| Gyro X | WxL + WxH | ((WxH << 8) \| WxL) / 32768 × 2000 | °/s |
-| Gyro Y | WyL + WyH | same | °/s |
-| Gyro Z | WzL + WzH | same | °/s |
-| Roll | RollL + RollH | ((RollH << 8) \| RollL) / 32768 × 180 | ° |
-| Pitch | PitchL + PitchH | same | ° |
-| Yaw | YawL + YawH | same | ° |
+- **X-axis (Roll):** Primarily from accelerometer gravity projection + gyro rate integration
+- **Y-axis (Pitch):** Primarily from accelerometer gravity projection + gyro rate integration
+- **Z-axis (Heading/Yaw):** From magnetometer field direction (most accurate when calibrated)
 
-> All multi-byte data: **low byte first, high byte last** (little-endian).
-> Data types are **signed short** (int16).
+**Advantages:**
+- Magnetic north reference → zero long-term heading drift
+- Stable heading even with extended sailing (hours)
+- Requires calibration in local magnetic environment
 
-### Additional Data (request via register)
+**Disadvantages:**
+- Sensitive to ferrous materials (engine, rigging)
+- Requires magnetic declination adjustment for accurate compass heading
+- Initial calibration time ~30–60 seconds
 
-| Data | Command | Flag |
-|------|---------|------|
-| Magnetic field (Hx, Hy, Hz) | `FF AA 27 3A 00` | 0x71 |
-| Quaternion (Q0, Q1, Q2, Q3) | `FF AA 27 51 00` | 0x71 |
-| Temperature | `FF AA 27 40 00` | 0x71 |
-| Battery voltage | `FF AA 27 64 00` | 0x71 |
+### 6-Axis Mode (Alternative)
 
----
+Uses accelerometer + gyroscope only (magnetometer disabled):
 
-## BLE PROTOCOL (via bleak Python library)
+- **X/Y (Roll/Pitch):** From accelerometer + gyroscope fusion
+- **Z-axis (Yaw):** From gyroscope integration only (no magnetic reference)
 
-### Connection
+**Advantages:**
+- No magnetic interference → suitable for engine compartments
+- Faster convergence (~15 s)
 
-```bash
-# BLE device name advertised: "WT901BLE" + last 3 MAC bytes
-# Example: "WT901BLE68" → MAC ending in :68
+**Disadvantages:**
+- **Heading drifts ~1°/minute** during dynamic motion (due to gyro bias)
+- Not recommended for unattended sailing > 30 minutes
 
-# Discovery
-bluetoothctl scan on
-# Look for: [NEW] Device XX:XX:XX:XX:XX:XX WT901BLEXX
-
-# Trust and pair
-bluetoothctl pair XX:XX:XX:XX:XX:XX
-bluetoothctl trust XX:XX:XX:XX:XX:XX
-```
-
-### Configuration Commands
-
-| Command | Hex | Function |
-|---------|-----|---------|
-| Accel calibration | `FF AA 01 01 00` | Remove accelerometer zero bias |
-| Magnetic calibration | `FF AA 01 07 00` | Start 360° magnetic calibration |
-| Quit calibration | `FF AA 01 00 00` | End calibration mode |
-| Gyro auto-calibrate | `FF AA 01 05/06 00` | Left/Right tilt auto-cal |
-| Set output rate | `FF AA 03 [RATE] 00` | See rate codes below |
-| Save settings | `FF AA 00 00 00` | Persist to NVRAM |
-| Restore defaults | `FF AA 00 01 00` | Factory reset |
-
-**Output rate codes (register `0x03`):**
-
-| Code | Rate |
-|------|------|
-| `0x03` | 1 Hz |
-| `0x06` | 10 Hz (default) |
-| `0x08` | 50 Hz |
-| `0x09` | 100 Hz |
-| `0x0A` | **200 Hz** (max) |
-
-### Key Registers
-
-| Address | Symbol | Function |
-|---------|--------|---------|
-| `0x03` | RATE | Output rate |
-| `0x34–0x36` | AX/AY/AZ | Accelerometer X/Y/Z |
-| `0x37–0x39` | GX/GY/GZ | Gyroscope X/Y/Z |
-| `0x3A–0x3C` | HX/HY/HZ | Magnetometer X/Y/Z |
-| `0x3D–0x3F` | Roll/Pitch/Yaw | Euler angles |
-| `0x40` | TEMP | Module temperature |
-| `0x51–0x54` | Q0/Q1/Q2/Q3 | Quaternion |
-| `0x64` | VBAT | Battery voltage |
+> **Midnight Rider uses 9-axis mode permanently** (per 2026-05-29 testing)
 
 ---
 
-## LED STATUS
+## KALMAN FILTER TUNING — FILTK PARAMETER
 
-| LED | Meaning |
-|-----|---------|
-| 🔴 Red steady | Charging (via USB-C) |
-| 🔵 Blue flash once → off | Standby (BLE advertising) |
-| 🔵 Blue flashing | Pairing succeeded / connected |
-| No LED | Battery depleted or off |
+Register 0x25 (FILTK) controls the Kalman filter's process noise covariance (Q matrix):
+
+| FILTK Value | Behavior | Response Time | Use Case |
+|-------------|----------|----------------|----------|
+| 1 | Unstable, max real-time | < 50 ms | Research only |
+| 10 | Very noisy, fast response | ~100 ms | High-dynamic maneuvers |
+| 30 | **Default factory** | ~300 ms | General IMU use |
+| 50 | Moderate smoothing | ~500 ms | Slow vehicles |
+| 100 | Strong smoothing | ~1–2 s | Stable platforms |
+| **200** | **Recommended for sailing** | **~800 ms** | **Optimal for 10 Hz maritime** |
+| 1000 | Very smooth, slow response | ~5–10 s | Stationary/mapping |
+| 10000 | Maximum averaging | > 30 s | Extreme stability |
+
+### Setting FILTK=200 (Official Method via WitMotion App)
+
+**Mobile App Path:**
+1. Download WitMotion app (iOS/Android)
+2. Connect to WT901BLECL via Bluetooth
+3. Navigate: **Settings** → **Filter** → **K-value**
+4. Input `200`
+5. Press **Save** button
+6. Firmware will reboot (~2–3 seconds)
+7. Verify: Reconnect and read K-value to confirm persistence
+
+**BLE Register Write Method (Not Recommended)**
+- Command: `FF AA 27 25 C8 00` (where 0xC8 0x00 = 200 in little-endian)
+- Requires UNLOCK command first: `FF AA 69 88 B5`
+- Persist with SAVE command: `FF AA 00 00 00`
+- **Challenge:** Requires precise timing and ACK verification
+- **Midnight Rider:** Use official WitMotion app (more reliable)
 
 ---
 
-## MOUNTING — MIDNIGHT RIDER
+## BLUETOOTH LOW ENERGY (BLE) INTERFACE
 
-### Physical Installation
+### GATT Services & Characteristics
+
+| Service UUID | Characteristic | UUID | Type | Notes |
+|---|---|---|---|---|
+| 0000fff0 | — | — | Service | Private service 1 |
+| 0000fff1 | — | — | Service | Private service 2 |
+| 0000fff2 | — | — | Service | Private service 3 |
+| 0000fff3 | — | — | Service | Private service 4 |
+
+### Key UUIDs (Midnight Rider Implementation)
+
+| UUID | Function | Direction | Purpose |
+|------|----------|-----------|---------|
+| `0000ffe4-0000-1000-8000-00805f9a34fb` | **Notify** | Device → RPi | Receive sensor data packets |
+| `0000ffe9-0000-1000-8000-00805f9a34fb` | **Write** | RPi → Device | Send commands (ENABLE_QUAT, CMD_MAG, CMD_PRES) |
+
+### Connection Parameters (Typical)
 
 | Parameter | Value |
 |-----------|-------|
-| **Location** | Center of gravity (CG) of boat hull |
-| **Connection** | BLE wireless (no wiring needed) |
-| **BLE reach** | ~15m to RPi (well within 50m spec) |
-
-### Coordinate System (Physical Axes)
-
-The WT901BLECL uses a **Northeast-Sky** frame:
-
-```
-X-axis → Forward (BOW direction)
-Y-axis → Left (PORT side) ← per WitMotion official spec
-Z-axis → Up (vertical)
-```
-
-> ⚠️ **Midnight Rider mounting note:** Verify Y-axis orientation during calibration.
-> If Y is mounted toward starboard, roll sign will be inverted from default.
-> The integration guide assumes X=bow, Y=starboard, Z=up — check against
-> actual live output with boat heeled to port.
-
-### Calibration Procedure
-
-```bash
-# 1. Static calibration (boat level at dock)
-# Hold boat level — expected readings:
-#   accel_x ≈ 0 g, accel_y ≈ 0 g, accel_z ≈ 1 g (9.81 m/s²)
-#   roll ≈ 0°, pitch ≈ 0°
-
-# 2. Magnetic calibration (required for 9-axis mode)
-# Send: FF AA 01 07 00
-# Slowly rotate sensor 360° around X, Y, Z axes (3 full rotations each)
-# Send: FF AA 01 00 00 (quit calibration)
-
-# 3. Save calibration
-# Send: FF AA 00 00 00 (SAVE)
-
-# 4. Verify via Signal K
-curl http://localhost:3000/signalk/v1/api/vessels/self/navigation/attitude | jq .value
-# Expected at dock (level): roll=0.0, pitch=0.0
-```
+| Connection Interval | 7.5 ms (min) – 4000 ms (max) |
+| Supervision Timeout | 32 s |
+| MTU Size | 20 bytes (standard BLE) |
+| Packet Loss Threshold | ~5% before reconnection |
 
 ---
 
-## SIGNAL K INTEGRATION — MIDNIGHT RIDER
+## PACKET FORMATS (FIRMWARE PROTOCOL)
 
-### Architecture
+### Packet Structure
 
-```
-WIT WT901BLECL (BLE 5.0)
-     ↓ Bluetooth LE (~15m range, ~30 Hz polling)
-RPi 4 (192.168.1.167) — hci0 BLE adapter
-     ↓ bleak_wit.py (Python BLE driver)
-     ↓ signalk-wit-imu-ble plugin (v2.2)
-Signal K (port 3000, systemctl)
-     ↓
-navigation.attitude.{roll, pitch, yaw}    ← HIGHEST PRIORITY source
-navigation.acceleration.{x, y, z}         ← Wave Analyzer input
-navigation.rateOfTurn                      ← from gyro_z
-     ↓
-InfluxDB (port 8086) → Grafana (port 3001)
-Signal K → signalk-to-nmea2000 → PGN 127257 → YDNU-02 → Vulcan 7 FS
-```
-
-### Signal K Paths Published
-
-| SK Path | Unit | Source | Notes |
-|---------|------|--------|-------|
-| `navigation.attitude.roll` | radians | signalk-wit-imu-ble.XX | ± π |
-| `navigation.attitude.pitch` | radians | signalk-wit-imu-ble.XX | ± π |
-| `navigation.attitude.yaw` | radians | signalk-wit-imu-ble.XX | 0 – 2π |
-| `navigation.rateOfTurn` | rad/s | signalk-wit-imu-ble.XX | from gyro_z |
-| `navigation.acceleration.x` | m/s² | signalk-wit-imu-ble.XX | Wave Analyzer input |
-| `navigation.acceleration.y` | m/s² | signalk-wit-imu-ble.XX | Wave Analyzer input |
-| `navigation.acceleration.z` | m/s² | signalk-wit-imu-ble.XX | Wave Analyzer input |
-
-### Signal K Source Reference
-
-| Parameter | Value |
-|-----------|-------|
-| **SK source name** | `signalk-wit-imu-ble.XX` |
-| **Plugin** | `signalk-wit-imu-ble` (v2.2) |
-| **Python driver** | `/home/aneto/bleak_wit.py` |
-| **Physical connection** | Bluetooth LE (hci0) |
-| **Update rate in SK** | 30+ Hz |
-| **Data priority** | **HIGHEST** for `navigation.attitude.*` |
-
-### Data Source Priority
-
-| Priority | Source | Paths |
-|----------|--------|-------|
-| 1 (highest) | `signalk-wit-imu-ble.XX` (WIT IMU) | `navigation.attitude.*` |
-| 2 | `calypso-up10` | `environment.wind.*` |
-| 3 (lowest) | UDP injection (debug) | Any path |
-
-> The WIT IMU is the **sole source of real-time attitude** for the entire navigation stack.
-> It feeds both Grafana (via InfluxDB) and the Vulcan 7 (via N2K PGN 127257).
-
-### N2K Output — PGN 127257 (Attitude)
-
-The WIT attitude data reaches the Vulcan 7 FS chartplotter via:
+All packets follow standard WitMotion frame format:
 
 ```
-navigation.attitude.roll/pitch/yaw (individual scalars, WIT IMU)
-     ↓
-signalk-to-nmea2000 plugin
-     ↓ (attitude.js — patched 2026-05-17 for Signal K 2.x compatibility)
-PGN 127257 (Attitude: Roll/Pitch/Yaw)
-     ↓
-YDNU-02 (N2K gateway)
-     ↓
-Vulcan 7 FS (heel angle display)
+0x55 [Flag] [REG_L] [REG_H] [Data0] [Data1] ... [Checksum]
 ```
 
-> ⚠️ **Critical patch (2026-05-17):** `attitude.js` was patched to listen to
-> individual scalar paths (`navigation.attitude.roll/pitch/yaw`) instead of
-> the composite `navigation.attitude` object, which does NOT trigger callbacks
-> in Signal K 2.x. PGN 127257 now fires correctly.
+- **Byte 0:** `0x55` (frame start)
+- **Byte 1:** `Flag` (0x71 for sensor data, 0x5F for register read response, etc.)
+- **Byte 2:** `REG_L` (low byte of register address, 0x51 for quaternion)
+- **Byte 3:** `REG_H` (high byte, typically 0x00)
+- **Bytes 4+:** Sensor data or register values
+- **Last:** Checksum (sum of all bytes mod 256)
+
+### Quaternion Packet (0x55 0x71 0x51 ...)
+
+**Command to enable:** `FF AA 27 51 00` (ENABLE_QUAT_CMD)
+
+**Response format:**
+```
+0x55 0x71 0x51 0x00 [Q0_L] [Q0_H] [Q1_L] [Q1_H] [Q2_L] [Q2_H] [Q3_L] [Q3_H] [Checksum]
+```
+
+| Field | Offset | Type | Range | Notes |
+|-------|--------|------|-------|-------|
+| Q0 | 4–5 | int16 LE | ±32768 | X-component / 32768.0 |
+| Q1 | 6–7 | int16 LE | ±32768 | Y-component / 32768.0 |
+| Q2 | 8–9 | int16 LE | ±32768 | Z-component / 32768.0 |
+| Q3 | 10–11 | int16 LE | ±32768 | W-component (real part) / 32768.0 |
+
+**WitMotion Quaternion Convention:** `(Q0, Q1, Q2, Q3) = (x, y, z, w)`
+
+> **Critical:** W-component (Q3) is always last in the frame; not first as in typical graphics libraries.
+
+### Magnetic Field Packet (0x55 0x71 0x3A ... — CMD_MAG Response)
+
+**Command to poll:** `FF AA 27 3A 00` (CMD_MAG)
+
+**Response format:**
+```
+0x55 0x71 0x3A 0x00 [HX_L] [HX_H] [HY_L] [HY_H] [HZ_L] [HZ_H] [Checksum]
+```
+
+| Field | Offset | Type | Range | Conversion |
+|-------|--------|------|-------|------------|
+| HX | 4–5 | int16 LE | ±32768 | HX / 10.0 → μT |
+| HY | 6–7 | int16 LE | ±32768 | HY / 10.0 → μT |
+| HZ | 8–9 | int16 LE | ±32768 | HZ / 10.0 → μT |
+
+**Polling Rate:** ~1 Hz (every 10 quaternion packets at 10 Hz output rate)
+
+### Pressure Packet (0x55 0x71 0x45 ... — CMD_PRES Response)
+
+**Command to poll:** `FF AA 27 45 00` (CMD_PRES)
+
+**Response format:**
+```
+0x55 0x71 0x45 0x00 [PRES_LL] [PRES_LH] [PRES_HL] [PRES_HH] [Checksum]
+```
+
+| Field | Offset | Type | Range | Conversion |
+|-------|--------|------|-------|------------|
+| Pressure | 4–7 | uint32 LE | 50000–110000 | Pa (direct) or / 1000 → kPa |
+
+**Valid Range:** 500–1100 hPa (5 km altitude to sea level)  
+**Polling Rate:** ~0.3 Hz (every 30 quaternion packets)
+
+### Temperature Packet (0x55 0x54 ... — Auto-Stream)
+
+**Auto-stream (no polling required)** — sent every 100 ms with quaternion
+
+**Response format:**
+```
+0x55 0x54 [HX_L] [HX_H] [HY_L] [HY_H] [HZ_L] [HZ_H] [T_L] [T_H] [Checksum]
+```
+
+| Field | Offset | Type | Range | Conversion |
+|-------|--------|------|-------|------------|
+| HX | 2–3 | int16 LE | ±32768 | Raw magnetic (internal cal) |
+| HY | 4–5 | int16 LE | ±32768 | — |
+| HZ | 6–7 | int16 LE | ±32768 | — |
+| Temperature | 8–9 | int16 LE | -4000 to 8500 | / 100.0 → °C |
+
+**Temperature Accuracy:** ±1°C typical  
+**Update Rate:** 10 Hz (same as primary output rate)
 
 ---
 
-## WAVE ANALYZER v1.1 INTEGRATION
+## CALIBRATION PROCEDURES
 
-The WIT acceleration data is the **sole input** for the Wave Analyzer plugin:
+### Magnetic Calibration (9-Axis Mode)
 
-```
-navigation.acceleration.{x, y, z} (from WIT)
-     ↓
-Wave Analyzer v1.1
-     ├─ Heel correction formula:
-     │  a_vertical = -ax·sin(pitch) + ay·sin(roll)·cos(pitch) + az·cos(roll)·cos(pitch)
-     │
-     └─ Outputs:
-          environment.water.waves.significantWaveHeight (m)
-          environment.water.waves.period (s)
-          environment.water.waves.seaState (0-8, Douglas scale)
-```
+**Factory Default:** Pre-calibrated for Earth's magnetic field at specific location
 
-### Why the Heel Correction Matters
+**Re-calibration (if heading drifts in local environment):**
 
-| Condition | Without Correction | With v1.1 Correction |
-|-----------|-------------------|---------------------|
-| 0° heel | Hs = X m | Hs = X m (no difference) |
-| 30° heel | Hs = **14% too low** ❌ | Hs = **correct** ✅ |
+1. **Figure-8 Motion (Recommended for maritime):**
+   - Hold WIT level
+   - Rotate 360° around vertical Z-axis (2–3 full rotations)
+   - Rotate 360° around forward X-axis (2–3 full rotations)
+   - Rotate 360° around starboard Y-axis (2–3 full rotations)
+   - Takes ~1–2 minutes total
 
-> The raw Z-axis acceleration projects less vertical component when the boat
-> heels. Without correction, the wave height would be systematically
-> underestimated at racing heel angles (15–35°).
+2. **Verification:**
+   - Heading should stabilize to ±1° within 30 s
+   - Check against compass app on phone (must account for magnetic declination)
 
----
+3. **Save to NVRAM:**
+   - WitMotion app → Settings → Calibration → Magnetic → Save
+   - Firmware reboots (~3 s)
 
-## PLUGIN CONFIGURATION
+### Gyroscope Zero-Offset Calibration
 
-```json
-{
-  "plugins": {
-    "signalk-wit-imu-ble": {
-      "enabled": true,
-      "macAddress": "XX:XX:XX:XX:XX:XX",
-      "updateRate": 30,
-      "calibration": {
-        "roll_offset": 0.0,
-        "pitch_offset": 0.0,
-        "yaw_offset": 0.0
-      }
-    }
-  }
-}
-```
+**Factory Default:** Pre-calibrated to ±0.5°/s
 
-Config file location: `/home/aneto/.signalk/plugin-config-data/signalk-wit-imu-ble.json`
+**Re-calibration (if gyro bias drifts):**
+
+1. **Static Placement:**
+   - Place WIT on perfectly level surface
+   - Do not move for 10 seconds
+   - App will auto-detect and calibrate
+
+2. **Save to NVRAM:**
+   - Settings → Calibration → Gyroscope → Save
 
 ---
 
-## FIELD VERIFICATION
+## INTEGRATION WITH SIGNAL K (Midnight Rider)
 
-```bash
-# 1. Check BLE connection
-bluetoothctl info XX:XX:XX:XX:XX:XX
-# Expected: "Connected: yes"
+### Primary Data Paths
 
-# 2. Check Signal K attitude data
-curl -s http://localhost:3000/signalk/v1/api/vessels/self/navigation/attitude | jq .value
-# Expected at dock (level):
-#   roll:  ~0.0 rad
-#   pitch: ~0.0 rad
-#   yaw:   any value (heading)
+| Signal K Path | Data Type | Rate | Source Register | Notes |
+|---|---|---|---|---|
+| `navigation.attitude.roll` | rad | 10 Hz | 0x71 (q_raw) | ±π radians |
+| `navigation.attitude.pitch` | rad | 10 Hz | 0x71 | ±π/2 radians |
+| `navigation.attitude.yaw` | rad | 10 Hz | 0x71 | ±π radians |
+| `navigation.headingMagnetic` | rad | 10 Hz | 0x71 | 0–2π (compass) |
+| `sensors.wit.quaternion.w` | unitless | 10 Hz | 0x71 reg 0x51 | W component (real) |
+| `sensors.wit.quaternion.x` | unitless | 10 Hz | 0x71 reg 0x51 | X component |
+| `sensors.wit.quaternion.y` | unitless | 10 Hz | 0x71 reg 0x51 | Y component |
+| `sensors.wit.quaternion.z` | unitless | 10 Hz | 0x71 reg 0x51 | Z component |
+| `sensors.wit.magneticField.x` | μT | ~1 Hz | 0x71 reg 0x3A | CMD_MAG polling |
+| `sensors.wit.magneticField.y` | μT | ~1 Hz | 0x71 reg 0x3A | — |
+| `sensors.wit.magneticField.z` | μT | ~1 Hz | 0x71 reg 0x3A | — |
+| `environment.inside.temperature` | K | ~10 Hz | 0x54 | From auto-stream |
+| `environment.outside.pressure` | Pa | ~0.3 Hz | 0x71 reg 0x45 | CMD_PRES polling |
 
-# 3. Check acceleration data
-curl -s http://localhost:3000/signalk/v1/api/vessels/self/navigation | jq '{
-  attitude: .attitude.value,
-  rateOfTurn: .rateOfTurn.value
-}'
+### Attitude Transform (Boat Frame)
 
-# 4. Check Wave Analyzer output
-curl -s http://localhost:3000/signalk/v1/api/vessels/self/environment/water/waves | jq .value
-# Expected: significantWaveHeight, period, seaState
+WIT outputs Euler angles in sensor-native frame. Midnight Rider applies mounting correction:
 
-# 5. Heel test validation (30° heel)
-# Expected: roll ≈ 0.524 rad (30°), accel_z ≈ 8.5 m/s²
-# Wave Analyzer Hs should be CORRECTED (not 14% low)
+**Mount Orientation:** Z-axis vertical (accelerometer Y points forward along boat centerline)
 
-# 6. Verify PGN 127257 on Vulcan 7
-# Physically heel boat → observe real-time heel angle on Vulcan 7 display
-# Should track WIT IMU within 1-2 seconds lag
+**Transform:** 90° rotation around Z-axis (starboard = +X)
+
 ```
+Roll_boat = -Pitch_sensor
+Pitch_boat = Roll_sensor
+Yaw_boat = Yaw_sensor (unchanged)
+```
+
+**Result:** Roll/Pitch/Yaw now match boat-frame convention (ISO 11783)
 
 ---
 
-## BATTERY MANAGEMENT
+## RECOVERY & RELIABILITY
 
-| Status | Indicator |
-|--------|-----------|
-| Charging | 🔴 Red LED steady |
-| Full / Standby | 🔵 Blue LED (single flash) |
-| Connected via BLE | 🔵 Blue LED flashing |
-| Depleted | No LED |
+### Bluetooth Connection Stability
 
-**Pre-Race Checklist:**
-- [ ] Fully charge via USB-C (≥ 1 hour before race, ideally overnight)
-- [ ] Verify Blue LED flashing → BLE connected
-- [ ] Verify `navigation.attitude` live in Signal K
-- [ ] Verify roll/pitch ≈ 0 when boat level
-- [ ] Verify Vulcan 7 shows heel angle
+| Issue | Root Cause | Mitigation |
+|-------|-----------|-----------|
+| Frequent disconnects | BlueZ cache corruption | Clear cache: `bluetoothctl remove [MAC]` |
+| No data after connect | GATT discovery timeout | Hardcode notify/write UUIDs |
+| Slow reconnection | Device in advertising state | Poll ENABLE_QUAT after reconnect |
+| Data loss during reconfig | WIT firmware busy | Add 5s delay after ENABLE_QUAT write |
+
+### Recovery Layers (Midnight Rider Driver)
+
+| Layer | Trigger | Action | Timeout |
+|-------|---------|--------|---------|
+| **L0** | Data missing < 2 packets | None (expected gaps) | — |
+| **L1** | No data > 200 ms | Backoff reconnection (5–60 s) | 10× retry |
+| **L2** | No data > 10 s | Clean disconnect + systemd restart | Infinite |
+| **BT_RECOVERY** | hci0 adapter hang | `bluetoothctl remove MAC` + reconnect | On-demand |
+
+---
+
+## POWER BUDGET (Battery Life Estimation)
+
+### Continuous Operation
+
+| Scenario | Current Draw | Battery Life |
+|----------|--------------|--------------|
+| 10 Hz BLE only | 12 mA | ~20 hours |
+| 10 Hz BLE + USB powered | 30 mA | ∞ (external power) |
+| Active calibration (mag figure-8) | 35 mA | ~7 hours |
+| Idle (BLE advertising) | 5 mA | ~50 hours |
+
+> **Midnight Rider Deployment:** Always power-coupled to 12V yacht electrical system via USB power bank (no battery degradation)
+
+---
+
+## FIRMWARE UPGRADE
+
+### Current Version
+
+**Firmware:** 13115 (confirmed stable 2026-05-30)
+
+**Source:** WitMotion official tools (Windows/Mac application)
+
+**Procedure:**
+1. Connect WT901BLECL via USB Type-C to laptop
+2. Run WitMotion firmware updater
+3. Select latest .bin file from WitMotion website
+4. Press **Update** and wait ~30 s
+5. Device reboots automatically
 
 ---
 
 ## TROUBLESHOOTING
 
-| Issue | Cause | Fix |
-|-------|-------|-----|
-| No BLE connection | Battery depleted or out of range | Charge WIT, confirm Blue LED, reduce distance |
-| BLE connects but no SK data | Plugin not running | `sudo systemctl restart signalk` |
-| Roll/pitch drifting at rest | Accelerometer needs calibration | Run accel calibration (hold level, send `FF AA 01 01 00`) |
-| Heading drifting (Z-axis) | Magnetic interference or no calibration | Run magnetic calibration or switch to 6-axis mode |
-| Acceleration noisy | Normal at 30 Hz | Wave Analyzer filters this → not a problem |
-| Wrong roll direction | Y-axis inverted vs mounting | Check physical mounting, adjust `roll_offset` in plugin config |
-| PGN 127257 not on Vulcan 7 | SK 2.x composite path issue | ✅ FIXED in attitude.js patch (2026-05-17) |
-| Data stops after 10+ hours | Battery depleted | Recharge between long sessions |
+### "No quaternion data flowing"
+
+**Check:**
+- BLE connected via `bluetoothctl info [MAC]`
+- Notify UUID subscribed: `gatttool -b [MAC] --characteristics | grep ffe4`
+- Send ENABLE_QUAT: `gatttool -b [MAC] --char-write-req -a 0x[HANDLE] -n FFAA275100`
+- Wait 5 seconds
+- Check for incoming notifications: `gatttool -b [MAC] --listen`
+
+### "Heading stuck / not updating"
+
+**Check:**
+- 9-axis mode enabled (Settings → Algorithm → 9-axis)
+- Magnetic calibration recent (< 1 month)
+- No ferrous objects within 30 cm of device
+- Magnetic declination configured (if using compass navigation)
+
+### "Temperature reading -40°C or +85°C"
+
+**Check:**
+- BLE packet 0x54 being received
+- Offset 8–9 bytes parsed correctly
+- Sanity check: -40 < temp_c < 85 (WIT spec limits)
+- Device mounted away from heat sources (engine, cabin roof)
+
+### "Pressure always 50 kPa (min value)"
+
+**Check:**
+- CMD_PRES being sent: `FF AA 27 45 00`
+- Response packet flag 0x71 and register 0x45
+- Barometric sensor not blocked (small vent hole on device)
+- Altitude < 5000 m above sea level
 
 ---
 
-## KNOWN LIMITATIONS
+## REFERENCES
 
-⚠️ **Battery life:** ~10 hours. For all-day racing, charge overnight.
-
-⚠️ **Magnetic heading:** 9-axis mode requires calibration away from magnetic sources (motors, alternators, steel). In the cockpit, proximity to the engine may affect heading accuracy.
-
-⚠️ **Euler angle singularity:** Pitch angle has a ±90° singularity. Values beyond ±90° cause cross-coupling with roll and yaw — normal for Euler angles, not a bug.
-
-⚠️ **6-axis dynamic drift:** If switched to 6-axis mode (no magnetometer), yaw will drift during long passages. Acceptable for short races.
+- **Official Datasheet:** WitMotion WT901BLECL v1.4 (Chinese + English)
+- **BLE GATT:** https://www.bluetooth.com/xml-resources/documents/
 
 ---
 
-## RACING ADVANTAGES
-
-✅ **9-axis full motion:** Roll, pitch, yaw + acceleration all in one wireless sensor  
-✅ **200 Hz capable, 30 Hz in Signal K:** Sufficient for wave analysis (Nyquist > 2× wave frequency)  
-✅ **0.2° roll/pitch accuracy:** Better than most marine inclinometers  
-✅ **Heel correction v1.1:** Eliminates 14% wave height error at racing heel angles  
-✅ **N2K output:** Feeds Vulcan 7 FS heel display via PGN 127257  
-✅ **Wireless:** No cable runs, easy seasonal installation/removal  
-✅ **Compact & light:** 51.3×36×15 mm, 20g  
-
----
-
-## CHANGE LOG
-
-| Date | Change | Author |
-|------|--------|--------|
-| 2026-04-25 | Initial documentation (multiple spec errors) | OC |
-| 2026-05-17 | attitude.js patched for SK 2.x (individual scalar paths → PGN 127257 now fires) | OC |
-| 2026-05-19 | Full datasheet revision: corrected BLE version (5.0), dimensions (51.3×36×15mm), weight (20g), range (50m), accuracy (0.2°/1°), max rate (200Hz), added BLE protocol, register map, N2K integration, Wave Analyzer context | Denis / Dust |
-
----
-
-**Last Updated:** 2026-05-19  
-**Status:** ✅ Operational — Critical component (Wave Analyzer + Vulcan 7 heel)  
-**Next Action:** Validate heel angle on Vulcan 7 during field test + confirm Wave Analyzer Hs correction
+**Last Updated:** 2026-05-31  
+**Maintained By:** Midnight Rider Navigation Project  
+**Operational Since:** 2026-05-19 (field test)  
+**Production Deployment:** 2026-05-22 (Block Island Race)
