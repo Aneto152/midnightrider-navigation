@@ -63,7 +63,7 @@ Imported by all drivers. Provides:
 |---|---|
 | **Device** | Calypso UP10 anemometer |
 | **MAC** | F8:5F:12:9D:D2:EE (env: `CALYPSO_BLE_ADDRESS`) |
-| **BLE Protocol** | Auto-notify (no commands) @ 8 Hz |
+| **BLE Protocol** | Auto-notify (no commands) @ 4 Hz |
 | **Notify UUID** | 00002a39-0000-1000-8000-00805f9b34fb |
 | **Service** | calypso_direct.service |
 | **SK Output** | environment.wind.*, electrical.batteries.calypso.*, environment.outside.temperature |
@@ -238,7 +238,7 @@ All drivers respect `.env` configuration:
 | Variable | Driver | Default | Purpose |
 |---|---|---|---|
 | `CALYPSO_BLE_ADDRESS` | calypso | F8:5F:12:9D:D2:EE | Device MAC |
-| `CALYPSO_RATE_HZ` | calypso | 8 | Data rate Hz (valid: 1/4/8) |
+| `CALYPSO_RATE_HZ` | calypso | 4 | Data rate Hz (valid: 1/4/8 — 8Hz oversaturates BLE CI) |
 | `CALYPSO_DATA_TIMEOUT_S` | calypso | 60 | Staleness threshold |
 | `CALYPSO_L2_THRESHOLD` | calypso | 10 | L1 failures before L2 |
 | `WIT_BLE_ADDRESS` | wit | E9:10:DB:8B:CE:C7 | Device MAC |
@@ -309,6 +309,7 @@ grep -E "L1|L2|BT_RECOVERY" logs/services/*.log
 | 2026-05-31 | Calypso BlueZ fix | sleep 2 after remove, startup-only remove (bond stability) |
 | 2026-05-31 | Calypso L2=10 | Faster systemd restart cycle (was 20) |
 | 2026-05-31 | Calypso watchdog fix | _stats[last_data_ts] reset after start_notify (no false-positive) |
+| 2026-05-31 | Calypso rate 4Hz default | 8Hz oversaturates BLE connection interval — reverted to proven 4Hz stable |
 
 ---
 

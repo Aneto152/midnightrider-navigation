@@ -1,10 +1,12 @@
 {
-  "task": "calypso-bt-recovery-startup",
-  "date": "2026-05-31T14:40:07.697282",
+  "task": "calypso-rate-4hz-stable",
+  "date": "2026-05-31T15:06:14.870667",
   "status": "SUCCESS",
-  "bug": "BT_RECOVERY required _was_connected=True but after service restart _was_connected=False \u2192 le-connection-abort never triggered recovery",
-  "fix": "le-connection-abort now triggers BT_RECOVERY regardless of _was_connected. not-found still requires _was_connected.",
+  "reason": "8Hz oversaturates BLE Connection Interval \u2014 Calypso stops sending after ~20s, watchdog fires at +60s. 4Hz was stable for hours before today.",
+  "change": "CALYPSO_RATE_HZ default: 8 \u2192 4",
   "files_modified": [
-    "ble/calypso_direct.py"
+    "ble/calypso_direct.py",
+    "ble/README.md",
+    "docs/HARDWARE/CALYPSO-UP10-DATASHEET.md"
   ]
 }

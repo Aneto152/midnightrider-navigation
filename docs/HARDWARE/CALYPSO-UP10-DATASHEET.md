@@ -17,7 +17,7 @@
 | **Wind Speed Accuracy** | ±3% or ±0.5 knot (whichever is greater) |
 | **Wind Direction Range** | 0 – 360° |
 | **Wind Direction Accuracy** | ±5° |
-| **Update Rate** | Configurable: **1 Hz / 4 Hz / 8 Hz (default)** — 10Hz NOT supported (0x0A ignored) |
+| **Update Rate** | Configurable: **1 Hz / 4 Hz / 8 Hz** — 4 Hz default (stable). 8Hz oversaturates BLE CI. 10Hz NOT supported (0x0A ignored) |
 | **Power** | Solar panel (built-in, self-charging) |
 | **Battery Backup** | Lithium, ~48h autonomy |
 | **BLE Range** | ~30 m line-of-sight |
@@ -154,7 +154,7 @@ sudo systemctl restart calypso_anemometer
 | **Driver** | `calypso-anemometer` (Python, maritime-labs) |
 | **Injection method** | UDP Signal K Delta → port 4123 |
 | **Physical connection** | Bluetooth LE (BLE adapter `hci0` on RPi) |
-| **Data rate** | 8 Hz (configured via `CALYPSO_RATE_HZ=8`) |
+| **Data rate** | 4 Hz (configured via `CALYPSO_RATE_HZ=4`). 8Hz oversaturates BLE CI. |
 
 ### UDP Receiver in Signal K
 

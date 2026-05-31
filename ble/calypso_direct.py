@@ -94,7 +94,7 @@ except ImportError:
 # ══════════════════════════════════════════════════════════════════════════════
 
 CALYPSO_MAC = os.environ.get('CALYPSO_BLE_ADDRESS', 'F8:5F:12:9D:D2:EE')
-RATE_HZ = int(os.environ.get('CALYPSO_RATE_HZ', '8'))  # 8Hz = max confirmed rate
+RATE_HZ = int(os.environ.get('CALYPSO_RATE_HZ', '4'))  # 4Hz confirmed stable — 8Hz oversaturates BLE CI
 DATA_TIMEOUT_S = int(os.environ.get('CALYPSO_DATA_TIMEOUT_S', '60'))
 HEARTBEAT_S = int(os.environ.get('CALYPSO_HEARTBEAT_S', '300'))
 RECONNECT_MAX_S = int(os.environ.get('CALYPSO_RECONNECT_MAX_S', '60'))
