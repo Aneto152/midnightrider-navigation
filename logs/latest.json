@@ -1,29 +1,29 @@
 {
-  "task": "full-documentation-audit",
-  "date": "2026-05-31T10:31:02.617946",
+  "task": "wit-mount-correction-update",
+  "date": "2026-05-31T10:49:32.434334",
   "status": "SUCCESS",
   "steps_completed": [
-    "Deleted ble/calypso_direct.py.bak, ble/wit-ble-direct.py.bak",
-    "Deleted docs/reference/witmotion-ble-sdk/WT901BLECL/__pycache__/ (5 files)",
-    "Deleted ble/__pycache__/ (5 bytecode files)",
-    "Truncated logs/services/wit-ble-direct.log (8.56MB \u2192 54KB)",
-    "Rewrote docs/SYSTEM-SUMMARY.md (v2.0 \u2014 13 dashboards, BLE arch, services)",
-    "Updated docs/DASHBOARDS-README.md (9\u219213 dashboard count)",
-    "Updated docs/ARCHITECTURE-REFERENCE-2026-05-20.md (30Hz\u219210Hz, date)",
-    "Updated README.md (dashboard/IMU rate fixes, dead refs removed)"
+    "Added WIT_MOUNT_Q env var support to wit-ble-direct.py",
+    "New default MOUNT_Q=(0.5,-0.5,0.5,-0.5) for X=port/Y=masthead(up)/Z=bow",
+    "Verified quaternion math: q_wit_ideal \u00d7 MOUNT_Q = (1,0,0,0) identity",
+    "Updated SYSTEM-SUMMARY.md mounting description",
+    "Service restarted and confirmed active"
   ],
   "files_modified": [
-    "ble/calypso_direct.py.bak (DELETED)",
-    "ble/wit-ble-direct.py.bak (DELETED)",
-    "docs/reference/witmotion-ble-sdk/WT901BLECL/__pycache__/ (DELETED)",
-    "ble/__pycache__/ (DELETED)",
-    "logs/services/wit-ble-direct.log (TRUNCATED)",
-    "docs/SYSTEM-SUMMARY.md",
-    "docs/DASHBOARDS-README.md",
-    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md",
-    "README.md"
+    "ble/wit-ble-direct.py",
+    "docs/SYSTEM-SUMMARY.md"
   ],
-  "errors": [],
-  "summary": "Full documentation audit complete \u2014 cleanup + update to reflect 2026-05-31 system state",
-  "next_recommended": "Verify SOK BMS MAC address; set FILTK=200 via WitMotion app before next race"
+  "mounting_correction": {
+    "old_mount_q": "(0.707, 0, 0, 0.707) = 90deg around Z axis",
+    "new_mount_q": "(0.5, -0.5, 0.5, -0.5) = 120deg around (-1,1,-1)/sqrt(3)",
+    "physical_mounting": "WIT-X=port(babord), WIT-Y=masthead(up toward mast), WIT-Z=bow",
+    "heading_after_update": "-90\u00b0 (uncalibrated, before WIT heading reset)",
+    "heading_after_recalibration": "0\u00b0 when bow points North (after WIT calibration)"
+  },
+  "verification": {
+    "syntax_check": "OK",
+    "service_status": "active",
+    "data_flowing": true
+  },
+  "next_recommended": "Denis must redo WIT heading reference calibration: 1) Bow toward magnetic North 2) WitMotion app \u2192 Calibrate \u2192 Reset Z-axis Angle \u2192 Save"
 }

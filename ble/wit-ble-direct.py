@@ -192,7 +192,24 @@ def make_mount_quaternion(axis: str, degrees: float) -> tuple:
     return mapping.get(axis, mapping['z'])
 
 # Pre-compute mounting correction at module load time
-MOUNT_Q = make_mount_quaternion(MOUNT_AXIS, MOUNT_DEG)
+# Full quaternion override (w,x,y,z) — takes precedence over MOUNT_AXIS/DEG
+# New physical mounting: WIT-X=port, WIT-Y=masthead(up), WIT-Z=bow
+# Quaternion (0.5,-0.5,0.5,-0.5) = 120° around (-1,1,-1)/√3 axis
+# Verified by Dust 2026-05-31 via rotation matrix: WIT frame → boat frame
+# Transform: WIT-Z(bow)→X_boat, -WIT-X(port)→Y_boat(starboard), -WIT-Y(up)→Z_boat(down)
+_WIT_MOUNT_Q_STR = os.environ.get('WIT_MOUNT_Q', '0.5,-0.5,0.5,-0.5')
+try:
+    _mq = [float(v.strip()) for v in _WIT_MOUNT_Q_STR.split(',')]
+    if len(_mq) != 4:
+        raise ValueError(f'WIT_MOUNT_Q must have 4 values, got {len(_mq)}')
+    _norm = sum(v*v for v in _mq) ** 0.5
+    if abs(_norm - 1.0) > 0.01:
+        raise ValueError(f'WIT_MOUNT_Q norm={_norm:.4f}, must be ~1.0')
+    MOUNT_Q = tuple(_mq)  # (w, x, y, z)
+except Exception as _e:
+    import logging as _lg
+    _lg.warning(f'[CONFIG] WIT_MOUNT_Q parse error: {_e} — falling back to axis/angle')
+    MOUNT_Q = make_mount_quaternion(MOUNT_AXIS, MOUNT_DEG)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 4 — PACKET DECODERS

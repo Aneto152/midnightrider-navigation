@@ -113,3 +113,9 @@
 [2026-05-31T10:31:12.645127] [FILE_MODIFY] [DOCS] ARCHITECTURE-REFERENCE: fixed IMU rate (30→10Hz), updated date
 [2026-05-31T10:31:12.645127] [FILE_MODIFY] [DOCS] README.md: fixed dashboard count and IMU rate
 [2026-05-31T10:31:12.645127] [RESULT] [DOCS] Full documentation audit: SUCCESS — cleanup + update complete
+[2026-05-31T10:49:37.806658] [FILE_MODIFY] [BLE] wit-ble-direct.py: added WIT_MOUNT_Q env var (4-component quaternion override)
+[2026-05-31T10:49:37.806658] [CONFIG_CHANGE] [BLE] New default MOUNT_Q=(0.5,-0.5,0.5,-0.5) for X=port/Y=masthead(up)/Z=bow
+[2026-05-31T10:49:37.806658] [VERIFICATION] [BLE] Quaternion math verified: q_wit_ideal × MOUNT_Q = identity (1,0,0,0)
+[2026-05-31T10:49:37.806658] [SERVICE_RESTART] [BLE] wit-ble-direct service restarted with new mounting correction
+[2026-05-31T10:49:37.806658] [FILE_MODIFY] [DOCS] SYSTEM-SUMMARY.md: mounting axes corrected (X=port, Y=masthead)
+[2026-05-31T10:49:37.806658] [RESULT] [BLE] Mount correction update: SUCCESS — service active, data flowing

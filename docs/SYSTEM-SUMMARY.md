@@ -121,7 +121,8 @@ SIGNAL K HUB (localhost:3000)
 
 **9-Axis IMU (Quaternion-Based)**
 - WIT WT901BLECL — 10 Hz, no gimbal lock
-- Vertical companionway mounting (Z=bow, Y=keel, X=starboard)
+- Companionway mounting: WIT-X=port, WIT-Y=masthead(up), WIT-Z=bow
+- Mount correction: MOUNT_Q=(0.5,-0.5,0.5,-0.5) verified 2026-05-31
 - FILTK=200 required (set via WitMotion app, NOT via BLE)
 
 **Complete Data Recording**
