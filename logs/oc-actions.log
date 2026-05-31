@@ -99,3 +99,8 @@
 [2026-05-29T13:12:51.411123] [CONFIG_CHANGE] [SK] signalk-um982-custom disabled
 [2026-05-29T13:12:51.411123] [DEPLOY] [SK] midnightrider-portal.service deployed
 [2026-05-29T13:12:51.411123] [RESULT] [PI-CLEANUP] COMPLETE — system ready for race
+[2026-05-31T10:21:10.252494] [FILE_MODIFY] [DOCS] WIT-WT901BLECL-DATASHEET.md: comprehensive rewrite — quaternion format, FILTK=200, 13 SK paths, calibration procedures, troubleshooting
+[2026-05-31T10:21:10.252494] [RESULT] [DOCS] Result: SUCCESS — datasheet committed as 5f3c6ce
+[2026-05-31T10:21:10.252494] [FILE_MODIFY] [DOCS] CORRECTION: removed incorrect IP67 claim (WT901BLECL has no IP rating)
+[2026-05-31T10:21:10.252494] [VERIFICATION] [DOCS] CONFIRMED: mounting axes already correct in 5f3c6ce — WIT-X=starboard, WIT-Y=keel(down), WIT-Z=bow
+[2026-05-31T10:21:10.252494] [RESULT] [DOCS] All corrections verified — logs updated

@@ -1,15 +1,28 @@
 {
-  "task": "rpi-cleanup-full",
-  "timestamp": "2026-05-29T13:12:51.411123",
+  "task": "wit-datasheet-corrections",
+  "date": "2026-05-31T10:21:04.804306",
   "status": "SUCCESS",
-  "services_removed": 6,
-  "scripts_archived": 71,
-  "services_enabled": [
-    "calypso_direct",
-    "wit-ble-direct",
-    "monitor-resources",
-    "midnightrider-portal"
+  "steps_completed": [
+    "WIT-WT901BLECL-DATASHEET.md comprehensive rewrite (5f3c6ce)",
+    "Sensor specs: accel/gyro/mag/pressure/temp complete",
+    "BLE interface: GATT UUIDs, packet formats, register offsets",
+    "FILTK parameter: register 0x25, tuning table, app method",
+    "Quaternion format: Q3=w, data offset=4 (not 2)",
+    "All 13 Signal K paths documented with rates",
+    "Recovery layers L0/L1/L2/BT_RECOVERY architecture documented",
+    "Calibration procedures: Install Direction=Vertical (CRITICAL)",
+    "Troubleshooting guide: 10+ scenarios with fixes",
+    "CORRECTION: IP67 claim removed (WT901BLECL has NO IP rating)",
+    "VERIFICATION: Mounting axes already correct (WIT-X=starboard, WIT-Y=keel, WIT-Z=bow)"
   ],
-  "cleanup_log": "logs/debug/cleanup-1312.log",
-  "next_step": "sudo reboot"
+  "files_modified": [
+    "docs/HARDWARE/WIT-WT901BLECL-DATASHEET.md"
+  ],
+  "corrections_applied": [
+    "Removed: IP67 (tested, conformal coating)",
+    "Confirmed: Mounting axes correct in 5f3c6ce version",
+    "Verified: All critical sections present and accurate"
+  ],
+  "commit_sha_previous": "5f3c6ce938f68d713cdfabb1ebbebf61d83123f1",
+  "next_recommended": "Verify FILTK=200 set via WitMotion app on physical device before race"
 }

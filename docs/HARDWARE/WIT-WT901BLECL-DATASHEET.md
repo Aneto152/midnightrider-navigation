@@ -23,7 +23,7 @@
 | Shock Resistance | 20,000 g peak |
 | Operating Temperature | -20°C to +60°C |
 | Storage Temperature | -40°C to +85°C |
-| Water Resistance | IP67 (tested, conformal coating) |
+| Water Resistance | None (no IP rating — protect from spray) |
 
 ### Electrical
 
