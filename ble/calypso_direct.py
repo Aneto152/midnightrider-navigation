@@ -288,16 +288,10 @@ async def main() -> None:
 
         while _running:
             try:
-                # Clear BlueZ GATT cache before each attempt — prevents zombie sessions
-                try:
-                    import subprocess as _sp_cal
-                    import time as _t_cal
-                    _sp_cal.run(f'bluetoothctl remove {CALYPSO_MAC}',
-                                shell=True, capture_output=True, timeout=5)
-                    logger.info(f'[BLE_CLEANUP] BlueZ cache cleared for {CALYPSO_MAC}')
-                    _t_cal.sleep(2)  # Wait for bluetoothd async cleanup
-                except Exception:
-                    pass
+                # NOTE: bluetoothctl remove intentionally NOT called per-connection.
+                # Calling before every retry destroys the BLE bond, causing progressive
+                # instability (18min→12min→6min→1.6min). Bond cleanup happens ONCE
+                # at startup (above), and is maintained across retries via BT_RECOVERY.
 
                 logger.info(f'[BLE_SCAN] Connecting to Calypso {CALYPSO_MAC}...')
                 async with BleakClient(CALYPSO_MAC, timeout=20.0) as client:

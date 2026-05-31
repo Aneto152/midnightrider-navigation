@@ -20719,3 +20719,148 @@
 [2026-05-31T13:25:01] [INFO] [calypso-direct] [main] [BLE_SCAN] Reconnecting in 10s...
 [2026-05-31T13:25:11] [INFO] [calypso-direct] [main] [BLE_CLEANUP] BlueZ cache cleared for F8:5F:12:9D:D2:EE
 [2026-05-31T13:25:13] [INFO] [calypso-direct] [main] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...
+[2026-05-31T13:26:14] [INFO] [calypso-direct] [main] [BLE_CONNECT] Connected ✅
+[2026-05-31T13:26:14] [WARNING] [calypso-direct] [configure_device] [CONFIG_WRITE] NORMAL mode failed: Characteristic 0000a001-0000-1000-8000-00805f9b34fb does not support write operations!
+[2026-05-31T13:26:24] [INFO] [calypso-direct] [configure_device] [CONFIG_WRITE] 8 Hz ✅
+[2026-05-31T13:26:27] [INFO] [calypso-direct] [configure_device] [CONFIG_WRITE] compass OFF (prevents sentinel -90/-90/360) ✅
+[2026-05-31T13:26:27] [INFO] [calypso-direct] [main] [DATA_IN] Receiving Calypso wind data...
+[2026-05-31T13:26:28] [WARNING] [calypso-direct] [main] [WATCHDOG] No data for 112s — reconnecting
+[2026-05-31T13:26:28] [WARNING] [calypso-direct] [main] [BLE_DISCONNECT] Disconnected or data timeout
+[2026-05-31T13:26:29] [INFO] [calypso-direct] [on_notify] [DATA_FIRST] First packet: [174, 1, 35, 0, 10, 100, 0, 0, 0, 0] (10 bytes)
+[2026-05-31T13:26:29] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=8.4kt AWA=35° Batt=100% Temp=0°C
+[2026-05-31T13:26:29] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=8.4kt AWA=34° Batt=100% Temp=0°C
+[2026-05-31T13:26:30] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=8.4kt AWA=34° Batt=100% Temp=0°C
+[2026-05-31T13:26:30] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=8.4kt AWA=34° Batt=100% Temp=0°C
+[2026-05-31T13:26:30] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=8.4kt AWA=34° Batt=100% Temp=0°C
+[2026-05-31T13:26:31] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=8.0kt AWA=34° Batt=100% Temp=0°C
+[2026-05-31T13:26:31] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=7.8kt AWA=34° Batt=100% Temp=0°C
+[2026-05-31T13:26:31] [ERROR] [calypso-direct] [main] [ERROR] L1 #1: EOFError: 
+[2026-05-31T13:26:31] [INFO] [calypso-direct] [main] [BLE_SCAN] Reconnecting in 5s...
+[2026-05-31T13:26:36] [INFO] [calypso-direct] [main] [BLE_CLEANUP] BlueZ cache cleared for F8:5F:12:9D:D2:EE
+[2026-05-31T13:26:38] [INFO] [calypso-direct] [main] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...
+[2026-05-31T13:27:18] [INFO] [calypso-direct] [main] [BLE_CONNECT] Connected ✅
+[2026-05-31T13:27:18] [WARNING] [calypso-direct] [configure_device] [CONFIG_WRITE] NORMAL mode failed: Characteristic 0000a001-0000-1000-8000-00805f9b34fb does not support write operations!
+[2026-05-31T13:27:23] [INFO] [calypso-direct] [configure_device] [CONFIG_WRITE] 8 Hz ✅
+[2026-05-31T13:27:25] [INFO] [calypso-direct] [configure_device] [CONFIG_WRITE] compass OFF (prevents sentinel -90/-90/360) ✅
+[2026-05-31T13:27:25] [INFO] [calypso-direct] [main] [DATA_IN] Receiving Calypso wind data...
+[2026-05-31T13:27:25] [INFO] [calypso-direct] [on_notify] [DATA_FIRST] First packet: [104, 1, 31, 0, 10, 100, 0, 0, 0, 0] (10 bytes)
+[2026-05-31T13:27:25] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=7.0kt AWA=31° Batt=100% Temp=0°C
+[2026-05-31T13:27:27] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=7.0kt AWA=30° Batt=100% Temp=0°C
+[2026-05-31T13:27:29] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=7.0kt AWA=28° Batt=100% Temp=0°C
+[2026-05-31T13:27:29] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.8kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:29] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.8kt AWA=24° Batt=100% Temp=0°C
+[2026-05-31T13:27:29] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.8kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:27:29] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.8kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:27:31] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.6kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:27:31] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.6kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:27:31] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:31] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:31] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:32] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=27° Batt=100% Temp=0°C
+[2026-05-31T13:27:32] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=27° Batt=100% Temp=0°C
+[2026-05-31T13:27:32] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:32] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:32] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:34] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:36] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:36] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:36] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:36] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:36] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:37] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=27° Batt=100% Temp=0°C
+[2026-05-31T13:27:37] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=27° Batt=100% Temp=0°C
+[2026-05-31T13:27:37] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=30° Batt=100% Temp=0°C
+[2026-05-31T13:27:37] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=30° Batt=100% Temp=0°C
+[2026-05-31T13:27:39] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=29° Batt=100% Temp=0°C
+[2026-05-31T13:27:39] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=26° Batt=100% Temp=0°C
+[2026-05-31T13:27:39] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:39] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=18° Batt=100% Temp=0°C
+[2026-05-31T13:27:39] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=18° Batt=100% Temp=0°C
+[2026-05-31T13:27:39] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=18° Batt=100% Temp=0°C
+[2026-05-31T13:27:40] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=20° Batt=100% Temp=0°C
+[2026-05-31T13:27:40] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=29° Batt=100% Temp=0°C
+[2026-05-31T13:27:40] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.0kt AWA=28° Batt=100% Temp=0°C
+[2026-05-31T13:27:40] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.0kt AWA=26° Batt=100% Temp=0°C
+[2026-05-31T13:27:40] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.0kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:43] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.0kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:43] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:27:43] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.2kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:43] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.2kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:43] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.2kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:44] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.0kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:44] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:44] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:27:44] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=22° Batt=100% Temp=0°C
+[2026-05-31T13:27:44] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:27:45] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:45] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=31° Batt=100% Temp=0°C
+[2026-05-31T13:27:45] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=31° Batt=100% Temp=0°C
+[2026-05-31T13:27:45] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=28° Batt=100% Temp=0°C
+[2026-05-31T13:27:45] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=27° Batt=100% Temp=0°C
+[2026-05-31T13:27:46] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=24° Batt=100% Temp=0°C
+[2026-05-31T13:27:47] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=22° Batt=100% Temp=0°C
+[2026-05-31T13:27:47] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:47] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=15° Batt=100% Temp=0°C
+[2026-05-31T13:27:47] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=16° Batt=100% Temp=0°C
+[2026-05-31T13:27:47] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=18° Batt=100% Temp=0°C
+[2026-05-31T13:27:48] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:49] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=14° Batt=100% Temp=0°C
+[2026-05-31T13:27:49] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=14° Batt=100% Temp=0°C
+[2026-05-31T13:27:49] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=14° Batt=100% Temp=0°C
+[2026-05-31T13:27:49] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.5kt AWA=14° Batt=100% Temp=0°C
+[2026-05-31T13:27:49] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.5kt AWA=14° Batt=100% Temp=0°C
+[2026-05-31T13:27:51] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=19° Batt=100% Temp=0°C
+[2026-05-31T13:27:51] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=18° Batt=100% Temp=0°C
+[2026-05-31T13:27:51] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=19° Batt=100% Temp=0°C
+[2026-05-31T13:27:51] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=19° Batt=100% Temp=0°C
+[2026-05-31T13:27:51] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:27:51] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=24° Batt=100% Temp=0°C
+[2026-05-31T13:27:51] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=24° Batt=100% Temp=0°C
+[2026-05-31T13:27:51] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=19° Batt=100% Temp=0°C
+[2026-05-31T13:27:52] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=16° Batt=100% Temp=0°C
+[2026-05-31T13:27:52] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=16° Batt=100% Temp=0°C
+[2026-05-31T13:27:52] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.9kt AWA=9° Batt=100% Temp=0°C
+[2026-05-31T13:27:52] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=8° Batt=100% Temp=0°C
+[2026-05-31T13:27:52] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.4kt AWA=13° Batt=100% Temp=0°C
+[2026-05-31T13:27:54] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=15° Batt=100% Temp=0°C
+[2026-05-31T13:27:54] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=17° Batt=100% Temp=0°C
+[2026-05-31T13:27:54] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=22° Batt=100% Temp=0°C
+[2026-05-31T13:27:54] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:55] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:55] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=4° Batt=100% Temp=0°C
+[2026-05-31T13:27:56] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=4° Batt=100% Temp=0°C
+[2026-05-31T13:27:56] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=4° Batt=100% Temp=0°C
+[2026-05-31T13:27:56] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=4° Batt=100% Temp=0°C
+[2026-05-31T13:27:56] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.5kt AWA=6° Batt=100% Temp=0°C
+[2026-05-31T13:27:56] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:57] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:27:57] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=16° Batt=100% Temp=0°C
+[2026-05-31T13:27:57] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.0kt AWA=16° Batt=100% Temp=0°C
+[2026-05-31T13:27:57] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=6.0kt AWA=17° Batt=100% Temp=0°C
+[2026-05-31T13:27:57] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.8kt AWA=19° Batt=100% Temp=0°C
+[2026-05-31T13:27:58] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.6kt AWA=19° Batt=100% Temp=0°C
+[2026-05-31T13:27:59] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.5kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:59] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.5kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:59] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.5kt AWA=25° Batt=100% Temp=0°C
+[2026-05-31T13:27:59] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.3kt AWA=16° Batt=100% Temp=0°C
+[2026-05-31T13:27:59] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.5kt AWA=13° Batt=100% Temp=0°C
+[2026-05-31T13:28:00] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=15° Batt=100% Temp=0°C
+[2026-05-31T13:28:00] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:28:00] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:28:00] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=21° Batt=100% Temp=0°C
+[2026-05-31T13:28:00] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:28:00] [INFO] [calypso-direct] [_stop] Signal 15 — stopping cleanly (BLE disconnect will follow)
+[2026-05-31T13:28:01] [WARNING] [calypso-direct] [main] [BLE_DISCONNECT] Disconnected or data timeout
+[2026-05-31T13:28:02] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=4.7kt AWA=23° Batt=100% Temp=0°C
+[2026-05-31T13:28:03] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.1kt AWA=13° Batt=100% Temp=0°C
+[2026-05-31T13:28:03] [DEBUG] [calypso-direct] [on_notify] [DATA_IN] AWS=5.2kt AWA=12° Batt=100% Temp=0°C
+[2026-05-31T13:28:03] [INFO] [calypso-direct] [release_singleton] Singleton released
+[2026-05-31T13:28:03] [INFO] [calypso-direct] [main] [SHUTDOWN] calypso_direct stopped — PID released
+[2026-05-31T13:28:16] [INFO] [calypso-direct] [acquire_singleton] Singleton acquired (PID 23900)
+[2026-05-31T13:28:16] [INFO] [calypso-direct] [main] [STARTUP] ==========================================================
+[2026-05-31T13:28:16] [INFO] [calypso-direct] [main] [STARTUP] calypso_direct — Calypso UP10 BLE Driver
+[2026-05-31T13:28:16] [INFO] [calypso-direct] [main] [STARTUP] MAC=F8:5F:12:9D:D2:EE Rate=8Hz SK=UDP:4123
+[2026-05-31T13:28:16] [INFO] [calypso-direct] [main] [STARTUP] Timeout=60s L2_threshold=10
+[2026-05-31T13:28:16] [INFO] [calypso-direct] [main] [STARTUP] ==========================================================
+[2026-05-31T13:28:16] [INFO] [calypso-direct] [main] [STARTUP] BlueZ GATT cache cleared for F8:5F:12:9D:D2:EE
+[2026-05-31T13:28:18] [INFO] [calypso-direct] [main] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...

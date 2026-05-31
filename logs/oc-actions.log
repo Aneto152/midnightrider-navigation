@@ -149,3 +149,6 @@
 [2026-05-31T13:09:05.820536] [CONFIG_CHANGE] [CALYPSO] Rate: 0x0A(invalid→1Hz) → 0x08(8Hz confirmed)
 [2026-05-31T13:09:05.820536] [FILE_MODIFY] [CALYPSO] calypso_direct.py: removed invalid 0x0A, default=8Hz
 [2026-05-31T13:09:05.820536] [RESULT] [CALYPSO] Rate correction: SUCCESS
+[2026-05-31T13:28:46.642589] [FILE_MODIFY] [CALYPSO] Removed per-connection bluetoothctl remove (was destroying bond)
+[2026-05-31T13:28:46.642589] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted with bond-stable code
+[2026-05-31T13:28:46.642589] [RESULT] [CALYPSO] Bond stability fix applied
