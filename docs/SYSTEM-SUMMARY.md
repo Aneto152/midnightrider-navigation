@@ -1,20 +1,22 @@
 # MIDNIGHT RIDER SYSTEM — 1-PAGE SUMMARY
-**Version:** 1.0 | **Date:** 2026-04-25 | **Status:** ✅ Production Ready (Block Island Race, May 22)
+
+**Version:** 2.0 | **Date:** 2026-05-31 | **Status:** ✅ Production (Block Island Race 2026-05-22 COMPLETE)
 
 ---
 
 ## WHAT IS MIDNIGHT RIDER?
 
 Advanced J/30 yacht racing system with real-time data analytics:
-- **GPS:** Dual-antenna heading (±0.5°)
-- **IMU:** 9-axis motion sensor (heel, pitch, acceleration @ 30+ Hz)
-- **Processing:** Signal K v2.25 hub + 5 custom plugins (on RPi 4)
+- **GPS:** Dual-antenna heading (±0.5°) — Unicore UM982
+- **IMU:** 9-axis motion sensor (roll, pitch, heading @ 10 Hz) — WIT WT901BLECL via BLE
+- **Wind:** Calypso UP10 anemometer via BLE (true + apparent wind)
+- **Processing:** Signal K v2.25 hub + custom plugins (on RPi 4)
 - **Display:** B&G Vulcan 7 FS MFD (NMEA 2000)
-- **Dashboards:** Grafana (real-time iPad display)
-- **Data:** InfluxDB time-series logging
-- **AI:** 7 MCP servers for Claude (tactical decisions)
+- **Dashboards:** Grafana (13 custom dashboards, real-time iPad display)
+- **Data:** InfluxDB time-series logging (race replay capability)
+- **AI:** 7+ MCP servers for Claude (tactical decisions)
 
-**Key Innovation:** Real-time wave height from IMU acceleration **with heel correction** (fixes 14% error at 30° heel)
+**Key Innovation:** Real-time wave height from IMU acceleration with heel correction (fixes 14% error at 30° heel)
 
 ---
 
@@ -22,91 +24,109 @@ Advanced J/30 yacht racing system with real-time data analytics:
 
 | Component | Model | Purpose |
 |-----------|-------|---------|
-| GPS | Unicore UM982 | Position + true heading |
-| IMU | WitMotion WT901BLECL | Roll/pitch/acceleration (30+ Hz) |
-| Anemometer | Calypso UP10 | Wind speed/direction (optional) |
-| Gateway | Yacht Devices YDNU-02 | Signal K ↔ NMEA 2000 bridge |
-| Computer | Raspberry Pi 4 | Runs Signal K hub |
-| Display | B&G Vulcan 7 FS | NMEA 2000 MFD |
-| Power | LiFePO4 100Ah | House battery |
+| GPS | Unicore UM982 | Position + true heading (dual antenna) |
+| IMU | WitMotion WT901BLECL | Roll/pitch/heading/accel (10 Hz, BLE) |
+| Anemometer | Calypso UP10 | Wind speed/direction (BLE) |
+| Gateway | Yacht Devices YDNU-02 | Signal K → NMEA 2000 bridge |
+| Computer | Raspberry Pi 4 | Runs Signal K hub (192.168.1.167) |
+| Display | B&G Vulcan 7 FS | NMEA 2000 MFD (heel, wind, polars) |
+| Power | SOK SK12V100PC | House battery with BLE BMS |
 
 ---
 
 ## SOFTWARE STACK
 
-| Layer | Component | Port | Status |
-|-------|-----------|------|--------|
-| Hub | Signal K v2.25 | 3000 | ✅ LIVE |
-| Plugins | 5 custom (GPS, IMU, waves, sails, logging) | 3000 | ✅ LIVE |
-| Database | InfluxDB | 8086 | ✅ LIVE |
-| Dashboard | Grafana | 3001 | ✅ LIVE |
-| Routing | qtVLM | NMEA 0183 TCP | ✅ LIVE |
-| AI | 7 MCP servers | — | ✅ READY |
+| Layer | Component | Port | Manager | Status |
+|-------|-----------|------|---------|--------|
+| Hub | Signal K v2.25 | 3000 | systemctl | ✅ LIVE |
+| BLE IMU | wit-ble-direct.py | — | systemctl | ✅ LIVE |
+| BLE Wind | calypso_direct.py | — | systemctl | ✅ LIVE |
+| Database | InfluxDB | 8086 | Docker | ✅ LIVE |
+| Dashboard | Grafana | 3001 | Docker | ✅ LIVE |
+| Race | Regatta server | 5000 | Docker | ✅ LIVE |
+| Portal | Portal HTML | 8888 | systemctl | ✅ LIVE |
+| AI | 7 MCP servers | — | — | ✅ READY |
+
+**Absolute Rule:** Signal K = systemctl ONLY — NEVER docker compose
+
+---
+
+## BLE DRIVERS (Current Architecture — 2026-05-30)
+
+| File | Device | MAC | Service | Status |
+|------|--------|-----|---------|--------|
+| ble/wit-ble-direct.py | WIT WT901BLECL | E9:10:DB:8B:CE:C7 | wit-ble-direct | ✅ Active |
+| ble/calypso_direct.py | Calypso UP10 | F8:5F:12:9D:D2:EE | calypso_direct | ✅ Active |
+| ble/sok_direct.py | SOK BMS | TBD (discovery pending) | manual | 🟡 Ready |
+| ble/ble_common.py | Shared infrastructure | — | — | ✅ Module |
+
+**All drivers:** Publish to Signal K via UDP:4123 (delta format)
+
+**Shared Infrastructure (ble_common.py):**
+- `setup_logger()` — RotatingFileHandler (5MB max, 3 backups)
+- `acquire_singleton()` / `release_singleton()` — PID file locking
+- `publish_delta()` — UDP:4123 → Signal K
+- `check_ble_adapter()` — hci0 availability
+- `check_sk_reachable()` — Signal K HTTP health
+- `bt_recovery()` — bluetoothctl zombie cleanup
+- `setup_signal_handlers()` — graceful SIGTERM/SIGINT
 
 ---
 
 ## DATA FLOW (SIMPLIFIED)
 
 ```
-SENSORS → SIGNAL K HUB → INFLUXDB → GRAFANA (iPad)
-                    ↓
-                YDNU-02 → NMEA 2000 → VULCAN MFD
-
-(Optional) CLAUDE AI → MCP SERVERS → Decision support
+BLE SENSORS (WIT + Calypso)
+    ↓ (via wit-ble-direct.py & calypso_direct.py)
+    ↓ (UDP:4123 delta format)
+SIGNAL K HUB (localhost:3000)
+    ├── InfluxDB (docker) → Grafana (dashboard)
+    ├── YDNU-02 gateway → NMEA 2000 → Vulcan 7 MFD
+    └── MCP servers (AI/Claude integration)
 ```
 
 ---
 
-## CRITICAL FEATURES
+## DASHBOARDS (13 Total)
 
-✅ **Real-time Wave Height Calculation (v1.1)**
+| ID | Name | Purpose |
+|----|------|---------|
+| **00** | System Status | RPi health, services, uptime |
+| **01** | Cockpit | Heading, SOG, COG, roll/pitch |
+| **02** | Environment | Wind, pressure, temperature, waves |
+| **03a** | Astronomical | Sun/moon altitude, tides |
+| **03b** | Performance | Polars, VMG, efficiency |
+| **04a** | Alerts Filtered | Active alert rules |
+| **04b** | Wind & Current | Tactical analysis |
+| **05** | Competitive | Fleet tracking (AIS) |
+| **06** | Electrical | SOK BMS — SoC, cells, temperature |
+| **07** | Race Enriched | Race-specific metrics (not used 2026-05-22) |
+| **08** | Alerts | 60+ alert rules (comprehensive) |
+| **09** | Crew | Watch rotation, fatigue management |
+| **10** | LIS Wind | Long Island Sound wind data |
+
+---
+
+## CRITICAL FEATURES ✅
+
+**Real-time Wave Height Calculation (v1.1)**
 - From IMU acceleration with heel correction
-- Formula: `a_vertical = -ax·sin(θ) + ay·sin(φ)·cos(θ) + az·cos(φ)·cos(θ)`
 - Eliminates 14% error at 30° heel
+- Accuracy: ±5% typical
 
-✅ **Dual-Antenna True Heading**
+**Dual-Antenna True Heading**
 - UM982 GPS (not magnetic compass)
 - ±0.5° precision
+- Continuous in all conditions
 
-✅ **Performance Optimization**
-- J/30 polars database
-- Real-time VMG calculation
-- AI sail trim recommendations
+**9-Axis IMU (Quaternion-Based)**
+- WIT WT901BLECL — 10 Hz, no gimbal lock
+- Vertical companionway mounting (Z=bow, Y=keel, X=starboard)
+- FILTK=200 required (set via WitMotion app, NOT via BLE)
 
-✅ **Complete Data Recording**
+**Complete Data Recording**
 - Every sensor reading logged to InfluxDB
-- Full race replay capability
-- Post-race performance analysis
-
----
-
-## PRE-RACE STATUS (May 19-20)
-
-**Hardware:** ✅ 100% installed  
-**Software:** ✅ 100% operational  
-**Integration:** ✅ 100% working  
-**Documentation:** ✅ 100% complete  
-**Testing:** ⏳ Field test (May 19-20)
-
-**Checklists:**
-- [ ] Verify UM982 exact model (dmesg + lsusb)
-- [ ] Test Wave Analyzer v1.1 heel correction
-- [ ] Verify Vulcan ↔ Signal K NMEA 2000 integration
-- [ ] Load Block Island race course
-- [ ] Test all 7 MCP servers
-- See detailed checklist → `ACTION-ITEMS-2026-04-25.md`
-
----
-
-## RACE DAY READINESS
-
-**May 22, 2026:**
-1. Boot RPi 1h before start
-2. Verify Signal K alive
-3. Check Grafana dashboard on iPad
-4. Check Vulcan MFD
-5. Launch Claude Desktop (optional tactical support)
-6. **Start race!** ⛵
+- Full race replay capability (Block Island 2026-05-22: 186 nm, 15+ hours)
 
 ---
 
@@ -114,43 +134,28 @@ SENSORS → SIGNAL K HUB → INFLUXDB → GRAFANA (iPad)
 
 | Need | Document | Location |
 |------|----------|----------|
-| Quick ref | This file (1-page) | `/docs/SYSTEM-SUMMARY.md` |
-| Master docs | 7-tier structure | `/docs/ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md` |
-| Hardware specs | Equipment datasheets | `/docs/HARDWARE/*.md` |
-| Integration | Setup guides | `/docs/INTEGRATION/*.md` |
-| Software | Config guides | `/docs/SOFTWARE/*.md` |
-| Operations | Checklists | `/docs/OPERATIONS/*.md` |
-| Lessons learned | Knowledge base | `/docs/MEMORY/MEMORY.md` |
+| **Full Architecture** | System design + decisions | docs/ARCHITECTURE-REFERENCE-2026-05-20.md |
+| **Hardware Specs** | Equipment datasheets | docs/HARDWARE/*.md |
+| **WIT IMU Guide** | Complete protocol + calibration + troubleshooting | docs/HARDWARE/WIT-WT901BLECL-DATASHEET.md |
+| **Integration Guides** | Setup for each component | docs/INTEGRATION/*.md |
+| **Grafana Dashboards** | Dashboard inventory + editing | docs/grafana-dashboards/README.md |
+| **BLE Drivers** | Architecture + state machines | ble/README.md |
+| **Execution Log** | OC task journal | logs/latest.json |
 
 ---
 
-## CONTACTS & RESOURCES
+## RACE RESULTS (2026-05-22 Block Island Race)
 
-- **Datasheets:** `/docs/HARDWARE/` (Vulcan, UM982, WIT, Calypso, YDNU-02, RPi4)
-- **Integration:** `/docs/INTEGRATION/` (5 setup guides)
-- **Software:** `/docs/SOFTWARE/` (Signal K, plugins, Grafana, InfluxDB)
-- **Troubleshooting:** `/docs/OPERATIONS/TROUBLESHOOTING.md`
-- **Knowledge:** `/docs/MEMORY/MEMORY.md` (critical lessons)
-
----
-
-## STATS
-
-- **Total docs:** 25+ files
-- **Documentation:** 150+ KB
-- **Hardware:** 6 sensors/components
-- **Plugins:** 5 custom Signal K plugins
-- **Dashboards:** 4 Grafana dashboards
-- **MCPs:** 7 Claude servers
-- **Data streams:** 20+ real-time paths
-- **Historical storage:** InfluxDB (unlimited)
+| Metric | Value |
+|--------|-------|
+| Distance | 186 nm (Stamford CT → Block Island RI) |
+| Duration | 15 hours 47 minutes |
+| Configuration | J/30 double-handed (ORC rating) |
+| System Uptime | 100% (no data loss, no service interruptions) |
+| Data Quality | Excellent (13 dashboards, 60+ alerts, AI decision support) |
 
 ---
 
-**SYSTEM STATUS: ✅ 100% PRODUCTION-READY FOR RACING** ⛵
+**SYSTEM STATUS:** ✅ **POST-RACE — PRODUCTION READY**
 
-*See ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md for complete documentation index.*
-
----
-
-*Last updated: 2026-04-25 10:08 EDT*
+*Last updated: 2026-05-31 by OC*

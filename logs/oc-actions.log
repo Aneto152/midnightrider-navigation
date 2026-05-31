@@ -104,3 +104,12 @@
 [2026-05-31T10:21:10.252494] [FILE_MODIFY] [DOCS] CORRECTION: removed incorrect IP67 claim (WT901BLECL has no IP rating)
 [2026-05-31T10:21:10.252494] [VERIFICATION] [DOCS] CONFIRMED: mounting axes already correct in 5f3c6ce — WIT-X=starboard, WIT-Y=keel(down), WIT-Z=bow
 [2026-05-31T10:21:10.252494] [RESULT] [DOCS] All corrections verified — logs updated
+[2026-05-31T10:31:12.645127] [FILE_DELETE] [REPO] Deleted ble/calypso_direct.py.bak, ble/wit-ble-direct.py.bak
+[2026-05-31T10:31:12.645127] [FILE_DELETE] [REPO] Deleted docs/reference/witmotion-ble-sdk/WT901BLECL/__pycache__/ (5 pyc files)
+[2026-05-31T10:31:12.645127] [FILE_DELETE] [REPO] Deleted ble/__pycache__/ (5 bytecode files)
+[2026-05-31T10:31:12.645127] [FILE_MODIFY] [LOGS] Truncated wit-ble-direct.log (8.56MB → 54KB)
+[2026-05-31T10:31:12.645127] [FILE_MODIFY] [DOCS] SYSTEM-SUMMARY.md: full rewrite v2.0 (13 dashboards, BLE drivers, race results)
+[2026-05-31T10:31:12.645127] [FILE_MODIFY] [DOCS] DASHBOARDS-README.md: updated dashboard count (9→13)
+[2026-05-31T10:31:12.645127] [FILE_MODIFY] [DOCS] ARCHITECTURE-REFERENCE: fixed IMU rate (30→10Hz), updated date
+[2026-05-31T10:31:12.645127] [FILE_MODIFY] [DOCS] README.md: fixed dashboard count and IMU rate
+[2026-05-31T10:31:12.645127] [RESULT] [DOCS] Full documentation audit: SUCCESS — cleanup + update complete

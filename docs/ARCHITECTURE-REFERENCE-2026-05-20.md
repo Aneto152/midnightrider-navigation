@@ -2,7 +2,7 @@
 
 **Voilier :** J/30 hull 511 — Midnight Rider  
 **Skipper :** Denis LAFARGE  
-**Date :** 2026-05-20  
+**Date :** 2026-05-31  
 **Version :** 4.0 — Canonical Reference  
 **Statut :** ✅ Production — Block Island Race 2026-05-22
 
@@ -549,7 +549,7 @@ curl -s http://localhost:3000/signalk/v1/api/vessels/self/environment/outside/pr
 
 ```
 midnightrider-navigation/
-├── grafana-dashboards/          # Active Grafana dashboard JSONs (9 dashboards)
+├── grafana-dashboards/          # Active Grafana dashboard JSONs (13 dashboards)
 ├── docs/                        # Documentation (architecture, integration, hardware)
 │   ├── OPERATIONS/              # Field test, race day checklists
 │   ├── HARDWARE/                # Datasheets (Calypso, UM982, WIT, Vulcan, etc.)

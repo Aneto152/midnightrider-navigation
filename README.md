@@ -284,7 +284,7 @@ Free to use, modify, and distribute.
 | Component | Status | Notes |
 |-----------|--------|-------|
 | Core system | ✅ Production | Ready for racing |
-| Dashboards | ✅ Complete | 16 dashboards + 65 alerts |
+| Dashboards | ✅ Complete | 13 dashboards + 65 alerts |
 | iPad portal | ✅ Ready | Offline mode + auto-reconnect |
 | Battery monitor | ✅ Ready | SOK BMS via BLE |
 | Media Man | ✅ Ready | WhatsApp reporting |
@@ -337,5 +337,5 @@ Access the race management interface at http://192.168.1.167:8888/regatta/
 | Crew | /regatta/crew.html | Helmsman, crew roster |
 | Sails | /regatta/voiles.html | Sail selection, mode |
 
-See docs/INTERFACES.md for complete API documentation.
+See docs/INTEGRATION/ for integration guides.
 
