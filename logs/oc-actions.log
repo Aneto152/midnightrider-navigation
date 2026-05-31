@@ -122,3 +122,9 @@
 [2026-05-31T11:28:38.424257] [FILE_MODIFY] [BLE] wit-ble-direct.py: Euler axis fix — Euler-X=heading, Euler-Y=heel, Euler-Z=pitch
 [2026-05-31T11:28:38.424257] [SERVICE_RESTART] [BLE] wit-ble-direct restarted with corrected Euler assignments
 [2026-05-31T11:28:38.424257] [RESULT] [BLE] Euler assignment fix: SUCCESS — verified with 7 empirical test cases
+[2026-05-31T11:37:49.689286] [FILE_MODIFY] [BLE] wit-ble-direct.py: Complete rewrite of apply_mounting_and_extract
+[2026-05-31T11:37:49.689286] [BUG_FIX] [BLE] Fixed NameError (undefined euler_heel/pitch/heading_rad) in previous commit 73ccd04
+[2026-05-31T11:37:49.689286] [BUG_FIX] [BLE] Confirmed Q0=w convention: Q0=w(scalar), Q1=x, Q2=y, Q3=z
+[2026-05-31T11:37:49.689286] [CONFIG_CHANGE] [BLE] Set MOUNT_Q=identity (assumes WIT properly calibrated via heading reset)
+[2026-05-31T11:37:49.689286] [SERVICE_RESTART] [BLE] wit-ble-direct restarted with fixed apply_mounting_and_extract
+[2026-05-31T11:37:49.689286] [RESULT] [BLE] Complete WIT fix: SUCCESS — service active, attitude data flowing

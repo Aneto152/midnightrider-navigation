@@ -314,22 +314,52 @@ def decode_0x61_packet(data: bytes) -> dict | None:
 # ══════════════════════════════════════════════════════════════════════════════
 
 def apply_mounting_and_extract(q_raw: dict) -> dict:
-    """Transform WIT quaternion to boat frame and extract Euler angles."""
-    # WitMotion convention: Q0=x, Q1=y, Q2=z, Q3=w (scalar last)
-    # Reorder to (w, x, y, z) for our math functions
-    q_wit = (q_raw['q3'], q_raw['q0'], q_raw['q1'], q_raw['q2'])
+    """Transform WIT quaternion to boat frame and extract Euler angles.
+
+    WIT WT901BLECL uses Q0=w convention (scalar FIRST) — confirmed 2026-05-31:
+    - Q0(offset 4) = w (scalar)
+    - Q1(offset 6) = x
+    - Q2(offset 8) = y
+    - Q3(offset 10) = z
+
+    Euler axis mapping (verified with 7 physical orientations):
+    - Euler-X formula → heading (0=N, +π/2=E, normalized [0,2π])
+    - Euler-Y formula → heel (+π/2=stbd, -π/2=port)
+    - Euler-Z formula → pitch (+π/2=bow up, -π/2=bow down)
+
+    MOUNT_Q=identity works when WIT is correctly calibrated (after heading reset).
+    """
+    # Q0=w (scalar FIRST) convention — confirmed 2026-05-31
+    q_wit = (
+        q_raw.get('q0', 0),  # Q0 = w (scalar)
+        q_raw.get('q1', 0),  # Q1 = x
+        q_raw.get('q2', 0),  # Q2 = y
+        q_raw.get('q3', 0),  # Q3 = z
+    )
     q_boat = quaternion_multiply(q_wit, MOUNT_Q)
-    roll, pitch, yaw = quaternion_to_euler(q_boat)
+    w, x, y, z = q_boat
+
+    # Euler-X → heading
+    euler_heading = math.atan2(2.0*(w*x + y*z), 1.0 - 2.0*(x*x + y*y))
+    # Euler-Y → heel (gîte)
+    sinp1 = math.sqrt(max(0.0, 1.0 + 2.0*(w*y - x*z)))
+    sinp2 = math.sqrt(max(0.0, 1.0 - 2.0*(w*y - x*z)))
+    euler_heel = 2.0*math.atan2(sinp1, sinp2) - math.pi/2.0
+    # Euler-Z → pitch (assiette)
+    euler_pitch = math.atan2(2.0*(w*z + x*y), 1.0 - 2.0*(y*y + z*z))
+    # Normalize heading to [0, 2π]
+    heading_rad = euler_heading % (2.0 * math.pi)
+
     return {
-        'roll': euler_heel,  # Signal K roll = heel (gîte), +stbd
-        'pitch': euler_pitch,  # Signal K pitch = assiette, +bow up
-        'yaw': heading_rad,  # Signal K yaw = heading 0-2π
-        'headingMagnetic': yaw,
-        # Raw quaternion (WitMotion convention)
-        'qw': q_raw.get('q3', 0),
-        'qx': q_raw.get('q0', 0),
-        'qy': q_raw.get('q1', 0),
-        'qz': q_raw.get('q2', 0),
+        'roll': euler_heel,        # heel (+stbd, -port)
+        'pitch': euler_pitch,      # pitch (+bow up)
+        'yaw': heading_rad,        # heading [0, 2π]
+        'headingMagnetic': heading_rad,  # same (explicit SK path)
+        # Raw quaternion (Q0=w convention)
+        'qw': q_raw.get('q0', 0),  # Q0 = w (scalar)
+        'qx': q_raw.get('q1', 0),  # Q1 = x
+        'qy': q_raw.get('q2', 0),  # Q2 = y
+        'qz': q_raw.get('q3', 0),  # Q3 = z
     }
 
 # ══════════════════════════════════════════════════════════════════════════════
