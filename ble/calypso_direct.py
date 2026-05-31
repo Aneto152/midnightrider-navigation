@@ -127,6 +127,12 @@ _stats = {
     'last_heartbeat': time.time(),
     'first_logged': False,
     'l1_fails': 0,
+    # Fine-grained timing for observability
+    'last_packet_ts': 0.0,  # timestamp of previous packet (for gap detection)
+    'max_gap_ms': 0.0,  # max inter-packet gap since last heartbeat
+    'gap_count_250ms': 0,  # gaps > 250ms (2x expected 8Hz interval)
+    'packets_this_min': 0,  # packets in current minute window
+    'min_window_start': 0.0,  # start of current minute window
 }
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -210,8 +216,40 @@ def make_notify_handler(logger):
         reading = decode_packet(bytes(data))
         if reading:
             publish(reading, logger)
+            now = time.time()
             _stats['packets'] += 1
-            _stats['last_data_ts'] = time.time()
+            _stats['packets_this_min'] += 1
+            _stats['last_data_ts'] = now
+
+            # Inter-packet gap tracking (expected: ~125ms at 8Hz)
+            if _stats['last_packet_ts'] > 0:
+                gap_ms = (now - _stats['last_packet_ts']) * 1000.0
+                if gap_ms > _stats['max_gap_ms']:
+                    _stats['max_gap_ms'] = gap_ms
+                if gap_ms > 250:  # 2x expected interval
+                    _stats['gap_count_250ms'] += 1
+                    logger.warning(
+                        f'[TIMING] Large gap: {gap_ms:.0f}ms '
+                        f'(expected ~125ms at 8Hz) '
+                        f'AWS={reading["_knots"]:.1f}kt'
+                    )
+            _stats['last_packet_ts'] = now
+
+            # Per-minute packet count window
+            if _stats['min_window_start'] == 0:
+                _stats['min_window_start'] = now
+            elif now - _stats['min_window_start'] >= 60:
+                logger.info(
+                    f'[RATE_1MIN] {_stats["packets_this_min"]} pkts/min '
+                    f'(expected 480 at 8Hz) '
+                    f'max_gap={_stats["max_gap_ms"]:.0f}ms '
+                    f'gaps_>250ms={_stats["gap_count_250ms"]}'
+                )
+                _stats['packets_this_min'] = 0
+                _stats['min_window_start'] = now
+                _stats['max_gap_ms'] = 0.0
+                _stats['gap_count_250ms'] = 0
+
             logger.debug(
                 f'[DATA_IN] AWS={reading["_knots"]:.1f}kt '
                 f'AWA={reading["_dir_deg"]}° '

@@ -162,3 +162,6 @@
 [2026-05-31T14:25:50.048317] [FILE_MODIFY] [CALYPSO] BT_RECOVERY: added le-connection-abort trigger (8min→30s recovery)
 [2026-05-31T14:25:50.048317] [FILE_MODIFY] [CALYPSO] configure_device: removed UUID_MODE write (always failed)
 [2026-05-31T14:25:50.048317] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted with hardened recovery
+[2026-05-31T14:33:14.144851] [FILE_MODIFY] [CALYPSO] Added ms-precision timestamps + RATE_1MIN + TIMING warnings
+[2026-05-31T14:33:14.144851] [FILE_MODIFY] [COMMON] ble_common.py: log format -> millisecond precision
+[2026-05-31T14:33:14.144851] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted with fine observability

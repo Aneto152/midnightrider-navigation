@@ -1,13 +1,19 @@
 {
-  "task": "calypso-bt-recovery-hardening",
-  "date": "2026-05-31T14:25:45.963169",
+  "task": "calypso-observability",
+  "date": "2026-05-31T14:33:09.060738",
   "status": "SUCCESS",
   "changes": [
-    "BT_RECOVERY extended: now triggers on le-connection-abort-by-local (not only not-found)",
-    "UUID_MODE write removed: firmware always in NORMAL mode, write always failed",
-    "Expected recovery time: 8 min \u2192 15-30 sec after natural disconnect"
+    "Log timestamps: ms precision (was 1s)",
+    "RATE_1MIN: per-minute packet count (expected 480 at 8Hz)",
+    "TIMING warning: inter-packet gaps >250ms (2x expected 125ms interval)",
+    "Max gap + gap count tracked per minute window"
+  ],
+  "how_to_read_logs": [
+    "RATE_1MIN X pkts/min: X~480=OK, X<<480=packet loss",
+    "TIMING Large gap Xms: BLE firmware irregularity if frequent"
   ],
   "files_modified": [
-    "ble/calypso_direct.py"
+    "ble/calypso_direct.py",
+    "ble/ble_common.py"
   ]
 }

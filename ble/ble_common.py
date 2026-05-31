@@ -49,7 +49,7 @@ def setup_logger(service_name: str) -> logging.Logger:
             backupCount=3
         )
         handler.setFormatter(logging.Formatter(
-            '[%(asctime)s] [%(levelname)s] [%(name)s] [%(funcName)s] %(message)s',
+            '[%(asctime)s.%(msecs)03d] [%(levelname)s] [%(name)s] %(message)s',
             datefmt='%Y-%m-%dT%H:%M:%S'
         ))
         logger.addHandler(handler)
