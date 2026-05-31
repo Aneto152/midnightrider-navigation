@@ -316,11 +316,16 @@ def decode_0x61_packet(data: bytes) -> dict | None:
 def apply_mounting_and_extract(q_raw: dict) -> dict:
     """Transform WIT quaternion to boat frame and extract Euler angles.
 
-    WIT WT901BLECL uses Q0=w convention (scalar FIRST) — confirmed 2026-05-31:
-    - Q0(offset 4) = w (scalar)
-    - Q1(offset 6) = x
-    - Q2(offset 8) = y
-    - Q3(offset 10) = z
+    WIT WT901BLECL uses Q3=w convention (scalar LAST) — confirmed 2026-05-31:
+    - Q0(offset 4) = x
+    - Q1(offset 6) = y
+    - Q2(offset 8) = z
+    - Q3(offset 10) = w (scalar)
+
+    Unit test proof (2026-05-31, Denis pointing North 0° heel 0° pitch):
+    WIT packet: Q0=0, Q1=0, Q2=0, Q3=-1
+    Q3=w → q_wit=(-1,0,0,0) → Hdg=0°, Heel=0°, Pitch=0° ✅ CORRECT
+    Q0=w → q_wit=(0,0,0,-1) → Hdg=0°, Heel=0°, Pitch=180° ❌ WRONG
 
     Euler axis mapping (verified with 7 physical orientations):
     - Euler-X formula → heading (0=N, +π/2=E, normalized [0,2π])

@@ -8,6 +8,15 @@ Each driver is a standalone Python service managed by systemd.
 
 ---
 
+### WIT Physical Mounting (Midnight Rider — confirmed 2026-05-31)
+
+- **WIT-X axis** → PORT (babord)
+- **WIT-Y axis** → MASTHEAD (upward, toward mast)
+- **WIT-Z axis** → BOW (forward along centerline)
+- **Installation Direction:** Vertical (Y=vertical/up axis)
+- **MOUNT_Q:** identity (1.0, 0.0, 0.0, 0.0) — no rotation correction when WIT calibrated
+
+
 ## Architecture
 
 ```

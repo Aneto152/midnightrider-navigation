@@ -1,12 +1,20 @@
 {
-  "task": "wit-revert-q3w",
-  "date": "2026-05-31T11:56:04.059976",
+  "task": "wit-documentation-update",
+  "date": "2026-05-31T12:01:14.810762",
   "status": "SUCCESS",
-  "bug_fixed": "Q0=w convention was wrong. WIT WT901BLECL uses Q3=w (scalar LAST at offset 10). Reverted quaternion tuple ordering and MOUNT_Q to identity.",
-  "unit_test_result": "Q3=w (convention A): Hdg=0\u00b0, Heel=0\u00b0, Pitch=0\u00b0 \u2705 CORRECT vs Q0=w (convention B): Hdg=0\u00b0, Heel=0\u00b0, Pitch=180\u00b0 \u274c WRONG",
-  "files_modified": [
-    "ble/wit-ble-direct.py"
+  "summary": "Documentation updated to reflect WIT driver fixes from 2026-05-31 debugging session",
+  "key_facts_documented": [
+    "Q3=w convention (scalar LAST at offset 10) \u2014 confirmed by unit test",
+    "Mounting: WIT-X=port, WIT-Y=masthead(up), WIT-Z=bow",
+    "Euler axis mapping: X=heading, Y=heel, Z=pitch (empirically verified 7 orientations)",
+    "MOUNT_Q = identity when WIT properly calibrated",
+    "Debug history table with SHA references and unit test proof"
   ],
-  "latest_readings": "Roll\u22480\u00b0, Pitch\u224878\u00b0, Hdg\u2248272\u00b0 (boat facing W-NW)",
-  "errors": []
+  "files_modified": [
+    "ble/wit-ble-direct.py (docstring fix)",
+    "docs/HARDWARE/WIT-WT901BLECL-DATASHEET.md (mounting, Euler mapping, debug history)",
+    "ble/README.md (quaternion convention, mounting section)"
+  ],
+  "errors": [],
+  "next_recommended": "Verify heading, heel, pitch in Signal K with boat on the water"
 }

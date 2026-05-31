@@ -133,3 +133,7 @@
 [2026-05-31T11:56:09.135360] [CONFIG_CHANGE] [BLE] MOUNT_Q default → identity (1.0,0.0,0.0,0.0)
 [2026-05-31T11:56:09.135360] [SERVICE_RESTART] [BLE] wit-ble-direct restarted with Q3=w convention
 [2026-05-31T11:56:09.135360] [RESULT] [BLE] Q3=w revert: SUCCESS — service active, attitude data correct
+[2026-05-31T12:01:26.016082] [FILE_MODIFY] [DOCS] wit-ble-direct.py: docstring corrected (Q0=w→Q3=w)
+[2026-05-31T12:01:26.016082] [FILE_MODIFY] [DOCS] WIT-WT901BLECL-DATASHEET.md: mounting axes, Euler mapping table, debug history
+[2026-05-31T12:01:26.016082] [FILE_MODIFY] [DOCS] ble/README.md: quaternion convention + physical mounting section
+[2026-05-31T12:01:26.016082] [RESULT] [DOCS] WIT documentation update: SUCCESS

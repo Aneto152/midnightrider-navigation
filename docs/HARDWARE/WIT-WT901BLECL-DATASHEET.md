@@ -429,8 +429,8 @@ pressure_pa = (pressure_h << 16) | pressure_l
 ### Attitude Transform (Boat Frame — Midnight Rider J/30)
 
 WIT physical mounting (inside companionway bulkhead):
-- **WIT-X axis** → STARBOARD (tribord, rightward)
-- **WIT-Y axis** → toward KEEL (downward, -masthead, vertical in boat)
+- **WIT-X axis** → PORT (babord, leftward)
+- **WIT-Y axis** → MASTHEAD (upward, toward mast, -masthead, vertical in boat)
 - **WIT-Z axis** → BOW (forward, longitudinal along boat centerline)
 
 **Boat attitude mapping:**
@@ -983,3 +983,34 @@ grep -i "127257\|Attitude" /var/log/kplex.log | tail -5
 **Maintained By:** Midnight Rider Navigation Project  
 **Operational Since:** 2026-05-19 (field test) → 2026-05-22 (Block Island Race — 186 nm)  
 **Next Action:** Post-race system debrief; long-term reliability analysis
+
+## DEBUG HISTORY — 2026-05-31 Intensive Session
+
+### Critical Bugs Found and Fixed
+
+| Bug | Root Cause | Fix Applied | SHA |
+|-----|------------|-------------|-----|
+| NameError: euler_heel undefined | OC renamed dict vars without creating them | Rewrote apply_mounting_and_extract | a09e7b8 |
+| Wrong quaternion convention Q0=w | Assumed scalar FIRST, but WIT uses scalar LAST | Reverted to Q3=w ordering | 565ce43 |
+| Wrong Euler axis assignments | Standard roll/pitch/yaw ≠ boat heading/heel/pitch | Euler-X=heading, Y=heel, Z=pitch | 565ce43 |
+| MOUNT_Q wrong value | Was (0.5,-0.5,0.5,-0.5), caused 90° offset | Changed to identity (1,0,0,0) | 565ce43 |
+
+### Unit Test Proof (2026-05-31)
+
+**Setup:** Denis pointed bow toward magnetic North, device level, 0° heel  
+**WIT BLE packet:** Q0=0, Q1=0, Q2=0, Q3=-1 (identity quaternion)
+
+**With Q3=w (scalar LAST):**
+```
+q_wit = (Q3, Q0, Q1, Q2) = (-1, 0, 0, 0)
+→ Heading = 0°, Heel = 0°, Pitch = 0° ✅ CORRECT
+```
+
+**With Q0=w (scalar FIRST) — WRONG:**
+```
+q_wit = (Q0, Q1, Q2, Q3) = (0, 0, 0, -1)
+→ Heading = 0°, Heel = 0°, Pitch = 180° ❌ INCORRECT (inverted)
+```
+
+**Conclusion:** Q3=w (scalar LAST) is the correct WIT WT901BLECL convention.
+
