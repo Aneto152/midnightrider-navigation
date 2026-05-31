@@ -98,7 +98,7 @@ RATE_HZ = int(os.environ.get('CALYPSO_RATE_HZ', '4'))
 DATA_TIMEOUT_S = int(os.environ.get('CALYPSO_DATA_TIMEOUT_S', '60'))
 HEARTBEAT_S = int(os.environ.get('CALYPSO_HEARTBEAT_S', '300'))
 RECONNECT_MAX_S = int(os.environ.get('CALYPSO_RECONNECT_MAX_S', '60'))
-L2_THRESHOLD = int(os.environ.get('CALYPSO_L2_THRESHOLD', '20'))
+L2_THRESHOLD = int(os.environ.get('CALYPSO_L2_THRESHOLD', '10'))  # Lowered: 20→10 for faster recovery
 
 SERVICE_NAME = 'calypso-direct'
 PID_FILE = '/tmp/calypso_direct.pid'
@@ -271,12 +271,30 @@ async def main() -> None:
             logger.error('[STARTUP] BLE adapter (hci0) not available — exiting')
             sys.exit(1)
 
+        # Initial BlueZ cache clear — prevents stale session from previous run
+        try:
+            import subprocess as _sp_init
+            _sp_init.run(f'bluetoothctl remove {CALYPSO_MAC}',
+                         shell=True, capture_output=True, timeout=5)
+            logger.info(f'[STARTUP] BlueZ GATT cache cleared for {CALYPSO_MAC}')
+        except Exception:
+            pass
+
         delay = RECONNECT_BASE_S
         l1_fails = 0
         on_notify = make_notify_handler(logger)
 
         while _running:
             try:
+                # Clear BlueZ GATT cache before each attempt — prevents zombie sessions
+                try:
+                    import subprocess as _sp_cal
+                    _sp_cal.run(f'bluetoothctl remove {CALYPSO_MAC}',
+                                shell=True, capture_output=True, timeout=5)
+                    logger.info(f'[BLE_CLEANUP] BlueZ cache cleared for {CALYPSO_MAC}')
+                except Exception:
+                    pass
+
                 logger.info(f'[BLE_SCAN] Connecting to Calypso {CALYPSO_MAC}...')
                 async with BleakClient(CALYPSO_MAC, timeout=20.0) as client:
                     logger.info('[BLE_CONNECT] Connected ✅')
