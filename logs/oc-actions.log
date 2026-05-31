@@ -152,3 +152,6 @@
 [2026-05-31T13:28:46.642589] [FILE_MODIFY] [CALYPSO] Removed per-connection bluetoothctl remove (was destroying bond)
 [2026-05-31T13:28:46.642589] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted with bond-stable code
 [2026-05-31T13:28:46.642589] [RESULT] [CALYPSO] Bond stability fix applied
+[2026-05-31T13:33:32.022712] [FILE_MODIFY] [CALYPSO] _stats[last_data_ts] reset after start_notify (watchdog false-positive fix)
+[2026-05-31T13:33:32.022712] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted
+[2026-05-31T13:33:32.022712] [RESULT] [CALYPSO] Watchdog reset fix applied — no false-positives in logs

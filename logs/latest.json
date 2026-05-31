@@ -1,9 +1,9 @@
 {
-  "task": "calypso-bond-stability-fix",
-  "date": "2026-05-31T13:28:42.369305",
+  "task": "calypso-watchdog-reset-fix",
+  "date": "2026-05-31T13:33:27.911554",
   "status": "SUCCESS",
-  "root_cause": "bluetoothctl remove before each connection attempt destroys BLE bond repeatedly. Calypso firmware confused \u2192 connections get shorter: 18min\u219212min\u21926min\u21921.6min.",
-  "fix": "Removed per-connection bluetoothctl remove from retry loop. Kept startup remove (once). Bond maintained across retries via BT_RECOVERY.",
+  "bug": "_stats[last_data_ts] not reset on reconnect \u2192 watchdog fires immediately after start_notify, before first packet arrives",
+  "fix": "_stats[last_data_ts] = time.time() added right after start_notify, before watchdog loop",
   "files_modified": [
     "ble/calypso_direct.py"
   ]

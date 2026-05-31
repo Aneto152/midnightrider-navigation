@@ -303,6 +303,7 @@ async def main() -> None:
 
                     await configure_device(client, logger)
                     await client.start_notify(UUID_DATA, on_notify)
+                    _stats['last_data_ts'] = time.time()  # RESET watchdog — prevents false-positive from stale timestamp
                     logger.info('[DATA_IN] Receiving Calypso wind data...')
 
                     while client.is_connected and _running:
