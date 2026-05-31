@@ -132,6 +132,7 @@ WRITE_UUID = '0000ffe9-0000-1000-8000-00805f9a34fb'
 # WIT responds with ONE 0x71 packet per request.
 ENABLE_QUAT_CMD = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])  # quaternion
 CMD_MAG = bytes([0xFF, 0xAA, 0x27, 0x3A, 0x00])  # mag+temp at 1Hz
+CMD_PRES = bytes([0xFF, 0xAA, 0x27, 0x45, 0x00])  # pressure at 0.3Hz  # mag+temp at 1Hz
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 2 — PROCESS STATE
@@ -205,7 +206,7 @@ def decode_0x71_packet(data: bytes) -> dict | None:
     Each component: int16 / 32768.0
     Returns None if packet is invalid.
     """
-    if len(data) < 12 or data[0] != 0x55 or data[1] != 0x71:
+    if len(data) < 12 or data[0] != 0x55 or data[1] != 0x71 or data[2] != 0x51:
         return None
     try:
         def s16(off): return struct.unpack_from('<h', data, off)[0]
@@ -219,9 +220,45 @@ def decode_0x71_packet(data: bytes) -> dict | None:
         return None
 
 
+
+
+def decode_0x54_packet(data: bytes) -> dict | None:
+    """Decode WIT auto-stream magnetic field packet (0x54) for temperature.
+    Layout: 0x55 0x54 HxL HxH HyL HyH HzL HzH TL TH SUM
+    Temperature at offset 8: s16(8) / 100.0 °C
+    """
+    if len(data) < 10 or data[0] != 0x55 or data[1] != 0x54:
+        return None
+    try:
+        def s16(o): return struct.unpack_from('<h', data, o)[0]
+        temp_c = s16(8) / 100.0
+        if temp_c < -40 or temp_c > 85:
+            return None  # sanity check
+        return {'temp_c': temp_c}
+    except Exception:
+        return None
+
+def decode_0x71_pres_packet(data: bytes) -> dict | None:
+    """Decode CMD_PRES response (FF AA 27 45 00) — register 0x45.
+    Registers 0x45-0x48: PressureL, PressureH (Pa as u32LE)
+    Pressure = (PressureH<<16 | PressureL) Pa (sanity: 50000-110000 Pa)
+    """
+    if len(data) < 12 or data[0] != 0x55 or data[1] != 0x71 or data[2] != 0x45:
+        return None
+    try:
+        def u16(o): return struct.unpack_from('<H', data, o)[0]
+        pres_l = u16(4)
+        pres_h = u16(6)
+        pressure_pa = float((pres_h << 16) | pres_l)
+        if pressure_pa < 50000 or pressure_pa > 110000:
+            return None  # sanity check
+        return {'pressure_pa': pressure_pa}
+    except Exception:
+        return None
+
 def decode_0x71_mag_packet(data: bytes) -> dict | None:
     """Decode 0x71 response to CMD_MAG — magnetic field + temperature."""
-    if len(data) < 10 or data[0] != 0x55 or data[1] != 0x71:
+    if len(data) < 10 or data[0] != 0x55 or data[1] != 0x71 or data[2] != 0x3A:
         return None
     try:
         def s16(off): return struct.unpack_from('<h', data, off)[0]
@@ -307,6 +344,23 @@ def send_attitude(data: dict, logger) -> None:
     )
 
 
+
+def send_temperature(temp_c: float, logger) -> None:
+    """Publish boat interior temperature (WIT mounted inside cabin).
+    Uses environment.inside.temperature (Kelvin per Signal K spec).
+    """
+    publish_delta(source_label='WIT',
+        values=[{'path': 'environment.inside.temperature', 'value': temp_c + 273.15}],
+        logger=logger)
+
+def send_pressure(pressure_pa: float, logger) -> None:
+    """Publish barometric pressure from WIT BMP280.
+    Uses environment.outside.pressure (Pa per Signal K spec).
+    """
+    publish_delta(source_label='WIT',
+        values=[{'path': 'environment.outside.pressure', 'value': pressure_pa}],
+        logger=logger)
+
 def send_mag(data: dict, logger) -> None:
     """Publish magnetic field + temperature to SK."""
     values = [
@@ -373,6 +427,16 @@ def make_data_handler(logger):
         if mag and (mag.get('hx_ut', 0) != 0.0 or 'temp_c' in mag):
             send_mag(mag, logger)
             _stats['sk_posts'] += 1
+
+        # Pressure from CMD_PRES
+        pres = decode_0x71_pres_packet(bytes(data))
+        if pres:
+            send_pressure(pres['pressure_pa'], logger)
+
+        # Temperature from 0x54 auto-stream
+        t54 = decode_0x54_packet(bytes(data))
+        if t54:
+            send_temperature(t54['temp_c'], logger)
 
         pkt_0x61 = decode_0x61_packet(bytes(data))
         if pkt_0x61:
@@ -486,10 +550,14 @@ async def run_ble_client(logger) -> None:
                         try:
                             await client.write_gatt_char(
                                 WRITE_UUID, ENABLE_QUAT_CMD, response=False)
-                            if poll_cycle % 10 == 0 and 'CMD_MAG' in dir():  # ~1Hz
+                            if poll_cycle % 10 == 0:  # CMD_MAG ~1Hz
                                 await asyncio.sleep(0.015)
                                 await client.write_gatt_char(
                                     WRITE_UUID, CMD_MAG, response=False)
+                            if poll_cycle % 30 == 0:  # CMD_PRES ~0.3Hz
+                                await asyncio.sleep(0.015)
+                                await client.write_gatt_char(
+                                    WRITE_UUID, CMD_PRES, response=False)
                             poll_cycle += 1
                             poll_errors = 0
                         except Exception as poll_e:
