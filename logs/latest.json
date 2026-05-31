@@ -1,29 +1,18 @@
 {
-  "task": "wit-mount-correction-update",
-  "date": "2026-05-31T10:49:32.434334",
+  "task": "wit-euler-axis-assignment-fix",
+  "date": "2026-05-31T11:28:33.856038",
   "status": "SUCCESS",
+  "bug_fixed": "Euler axis to Signal K path assignment was wrong. Verified with 7 empirical orientations: Euler-X=heading, Euler-Y=heel, Euler-Z=pitch.",
   "steps_completed": [
-    "Added WIT_MOUNT_Q env var support to wit-ble-direct.py",
-    "New default MOUNT_Q=(0.5,-0.5,0.5,-0.5) for X=port/Y=masthead(up)/Z=bow",
-    "Verified quaternion math: q_wit_ideal \u00d7 MOUNT_Q = (1,0,0,0) identity",
-    "Updated SYSTEM-SUMMARY.md mounting description",
+    "euler_heading = atan2(2*(w*x+y*z),...) normalized to [0,2\u03c0] \u2192 navigation.attitude.yaw",
+    "euler_heel = arcsin formula \u2192 navigation.attitude.roll",
+    "euler_pitch = atan2(2*(w*z+x*y),...) \u2192 navigation.attitude.pitch",
+    "q_to_euler function updated with clarified variable names",
     "Service restarted and confirmed active"
   ],
   "files_modified": [
-    "ble/wit-ble-direct.py",
-    "docs/SYSTEM-SUMMARY.md"
+    "ble/wit-ble-direct.py"
   ],
-  "mounting_correction": {
-    "old_mount_q": "(0.707, 0, 0, 0.707) = 90deg around Z axis",
-    "new_mount_q": "(0.5, -0.5, 0.5, -0.5) = 120deg around (-1,1,-1)/sqrt(3)",
-    "physical_mounting": "WIT-X=port(babord), WIT-Y=masthead(up toward mast), WIT-Z=bow",
-    "heading_after_update": "-90\u00b0 (uncalibrated, before WIT heading reset)",
-    "heading_after_recalibration": "0\u00b0 when bow points North (after WIT calibration)"
-  },
-  "verification": {
-    "syntax_check": "OK",
-    "service_status": "active",
-    "data_flowing": true
-  },
-  "next_recommended": "Denis must redo WIT heading reference calibration: 1) Bow toward magnetic North 2) WitMotion app \u2192 Calibrate \u2192 Reset Z-axis Angle \u2192 Save"
+  "validation": "7 orientations tested: N/E/W/port-heel/stbd-heel/pitch-fwd/pitch-back \u2014 all empirically verified correct",
+  "next_recommended": "Denis validates with boat: proue=Nord \u2192 Hdg\u22480\u00b0, g\u00eete tribord \u2192 Heel>0\u00b0, assiette proue \u2192 Pitch>0\u00b0"
 }

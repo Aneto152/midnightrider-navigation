@@ -119,3 +119,6 @@
 [2026-05-31T10:49:37.806658] [SERVICE_RESTART] [BLE] wit-ble-direct service restarted with new mounting correction
 [2026-05-31T10:49:37.806658] [FILE_MODIFY] [DOCS] SYSTEM-SUMMARY.md: mounting axes corrected (X=port, Y=masthead)
 [2026-05-31T10:49:37.806658] [RESULT] [BLE] Mount correction update: SUCCESS — service active, data flowing
+[2026-05-31T11:28:38.424257] [FILE_MODIFY] [BLE] wit-ble-direct.py: Euler axis fix — Euler-X=heading, Euler-Y=heel, Euler-Z=pitch
+[2026-05-31T11:28:38.424257] [SERVICE_RESTART] [BLE] wit-ble-direct restarted with corrected Euler assignments
+[2026-05-31T11:28:38.424257] [RESULT] [BLE] Euler assignment fix: SUCCESS — verified with 7 empirical test cases

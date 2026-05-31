@@ -321,9 +321,9 @@ def apply_mounting_and_extract(q_raw: dict) -> dict:
     q_boat = quaternion_multiply(q_wit, MOUNT_Q)
     roll, pitch, yaw = quaternion_to_euler(q_boat)
     return {
-        'roll': roll,
-        'pitch': pitch,
-        'yaw': yaw,
+        'roll': euler_heel,  # Signal K roll = heel (gîte), +stbd
+        'pitch': euler_pitch,  # Signal K pitch = assiette, +bow up
+        'yaw': heading_rad,  # Signal K yaw = heading 0-2π
         'headingMagnetic': yaw,
         # Raw quaternion (WitMotion convention)
         'qw': q_raw.get('q3', 0),
