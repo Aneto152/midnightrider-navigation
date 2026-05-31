@@ -143,3 +143,6 @@
 [2026-05-31T12:25:53.587200] [RESULT] [CALYPSO] Calypso reconnect hardening: SUCCESS — service active
 [2026-05-31T12:49:14.307283] [FILE_MODIFY] [CALYPSO] calypso_direct.py: sleep 2 after bluetoothctl remove (startup + per-connection)
 [2026-05-31T12:49:14.307283] [RESULT] [CALYPSO] Connection recovery: 4+ min (6 retries) → 36 sec (1 attempt) ✅
+[2026-05-31T13:03:00.769998] [CONFIG_CHANGE] [CALYPSO] Rate: 4Hz → 10Hz (GATT byte 0x04 → 0x0A)
+[2026-05-31T13:03:00.769998] [SERVICE_RESTART] [CALYPSO] calypso_direct restarted at 10Hz
+[2026-05-31T13:03:00.769998] [RESULT] [CALYPSO] Rate change: SUCCESS

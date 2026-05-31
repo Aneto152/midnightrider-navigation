@@ -1,15 +1,13 @@
 {
-  "task": "calypso-sleep2-after-remove",
-  "date": "2026-05-31T12:49:09.825586",
+  "task": "calypso-rate-10hz",
+  "date": "2026-05-31T13:02:55.516492",
   "status": "SUCCESS",
-  "root_cause": "bluetoothctl remove is async \u2014 bluetoothd needs ~2s to finish internal cleanup before a new BLE connection. Without sleep, BleakClient connects to partially-purged state \u2192 le-connection-abort-by-local x6.",
-  "fix": "Added sleep 2 after each bluetoothctl remove (startup + per-connection). Recovery time: ~4 min \u2192 ~30 sec.",
-  "timing": {
-    "startup_clear": "12:48:21",
-    "sleep_before_connect": "12:48:23 (2 sec)",
-    "ble_scan_start": "12:48:25",
-    "ble_connect_success": "12:48:57",
-    "total_recovery_time": "36 seconds (was 4+ minutes with 6 retries)"
+  "change": "Calypso UP10 rate: 4Hz \u2192 10Hz",
+  "details": {
+    "gatt_rate_byte": "0x04 \u2192 0x0A",
+    "rate_map": "{1: 0x01, 4: 0x04, 8: 0x08, 10: 0x0A}",
+    "default_rate": "4 \u2192 10 Hz",
+    "startup_verification": "Rate=10Hz confirmed in logs"
   },
   "files_modified": [
     "ble/calypso_direct.py"

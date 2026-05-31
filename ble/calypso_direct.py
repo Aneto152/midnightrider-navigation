@@ -52,7 +52,7 @@ RECOVERY:
 
 ENVIRONMENT (.env):
  CALYPSO_BLE_ADDRESS MAC address (default: F8:5F:12:9D:D2:EE)
- CALYPSO_RATE_HZ Data rate 1|4|8 (default: 4)
+ CALYPSO_RATE_HZ Data rate 1|4|8|10 (default: 10)
  CALYPSO_DATA_TIMEOUT_S Staleness threshold (default: 60)
  CALYPSO_HEARTBEAT_S Heartbeat interval (default: 300)
  CALYPSO_RECONNECT_MAX_S Max backoff (default: 60)
@@ -94,7 +94,7 @@ except ImportError:
 # ══════════════════════════════════════════════════════════════════════════════
 
 CALYPSO_MAC = os.environ.get('CALYPSO_BLE_ADDRESS', 'F8:5F:12:9D:D2:EE')
-RATE_HZ = int(os.environ.get('CALYPSO_RATE_HZ', '4'))
+RATE_HZ = int(os.environ.get('CALYPSO_RATE_HZ', '10'))
 DATA_TIMEOUT_S = int(os.environ.get('CALYPSO_DATA_TIMEOUT_S', '60'))
 HEARTBEAT_S = int(os.environ.get('CALYPSO_HEARTBEAT_S', '300'))
 RECONNECT_MAX_S = int(os.environ.get('CALYPSO_RECONNECT_MAX_S', '60'))
@@ -110,7 +110,7 @@ UUID_MODE = '0000a001-0000-1000-8000-00805f9b34fb'
 UUID_RATE = '0000a002-0000-1000-8000-00805f9b34fb'
 UUID_COMPASS = '0000a003-0000-1000-8000-00805f9b34fb'
 
-RATE_MAP = {1: 0x01, 4: 0x04, 8: 0x08}
+RATE_MAP = {1: 0x01, 4: 0x04, 8: 0x08, 10: 0x0A}
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 2 — PROCESS STATE
