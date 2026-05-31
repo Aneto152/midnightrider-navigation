@@ -1,16 +1,14 @@
 {
-  "task": "calypso-rate-10hz",
-  "date": "2026-05-31T13:02:55.516492",
+  "task": "calypso-rate-8hz",
+  "date": "2026-05-31T13:09:01.492503",
   "status": "SUCCESS",
-  "change": "Calypso UP10 rate: 4Hz \u2192 10Hz",
-  "details": {
-    "gatt_rate_byte": "0x04 \u2192 0x0A",
-    "rate_map": "{1: 0x01, 4: 0x04, 8: 0x08, 10: 0x0A}",
-    "default_rate": "4 \u2192 10 Hz",
-    "startup_verification": "Rate=10Hz confirmed in logs"
+  "root_cause": "0x0A is not a valid Calypso UP10 rate byte \u2014 firmware silently falls back to 1Hz. Confirmed valid rates: 0x01/0x04/0x08 (1/4/8Hz). 8Hz is the maximum.",
+  "fix": "Removed 10Hz from RATE_MAP, set default to 8Hz (0x08)",
+  "measured_rate": {
+    "before_fix": "~1Hz (broken \u2014 0x0A ignored by firmware)",
+    "after_fix": "~8Hz (confirmed in startup log)"
   },
   "files_modified": [
     "ble/calypso_direct.py"
-  ],
-  "errors": []
+  ]
 }
