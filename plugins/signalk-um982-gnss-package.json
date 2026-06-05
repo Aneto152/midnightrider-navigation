@@ -1,0 +1,14 @@
+{
+  "name": "signalk-um982-gnss",
+  "version": "1.0.0",
+  "description": "UM982 dual-antenna GNSS: position, headingTrue, attitude",
+  "main": "index.js",
+  "keywords": [
+    "signalk-node-server-plugin"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "serialport": "^13.0.0",
+    "@serialport/parser-readline": "^13.0.0"
+  }
+}
