@@ -62505,3 +62505,18 @@
 [2026-06-05T22:05:34.648] [WARNING] [wit-ble-direct] [L2] hci0 NOT reset: would disrupt Calypso BLE
 [2026-06-05T22:05:34.648] [INFO] [wit-ble-direct] Singleton released
 [2026-06-05T22:05:34.649] [INFO] [wit-ble-direct] [SHUTDOWN] wit-ble-direct stopped — PID released
+[2026-06-05T22:51:38.876] [INFO] [wit-ble-direct] Singleton acquired (PID 5291)
+[2026-06-05T22:51:38.876] [INFO] [wit-ble-direct] [STARTUP] ==========================================================
+[2026-06-05T22:51:38.876] [INFO] [wit-ble-direct] [STARTUP] wit-ble-direct — WIT WT901BLECL IMU Driver
+[2026-06-05T22:51:38.876] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-06-05T22:51:38.876] [INFO] [wit-ble-direct] [STARTUP] L2_threshold=30
+[2026-06-05T22:51:38.876] [INFO] [wit-ble-direct] [STARTUP] ==========================================================
+[2026-06-05T22:51:38.936] [INFO] [wit-ble-direct] [STARTUP] BlueZ GATT cache cleared for E9:10:DB:8B:CE:C7
+[2026-06-05T22:51:38.936] [DEBUG] [wit-ble-direct] [BLE_SCAN] Scanning for WIT E9:10:DB:8B:CE:C7...
+[2026-06-05T22:51:44.085] [INFO] [wit-ble-direct] [BLE_SCAN] WIT advertising — connecting
+[2026-06-05T22:51:46.253] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-06-05T22:51:46.254] [DEBUG] [wit-ble-direct] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-06-05T22:51:46.254] [INFO] [wit-ble-direct] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-06-05T22:51:46.258] [INFO] [wit-ble-direct] [BLE_SETUP] ENABLE_QUAT sent — WIT will reset
+[2026-06-05T22:51:57.261] [INFO] [wit-ble-direct] [BLE_SETUP] State→WAIT_RECONNECT — reconnecting
+[2026-06-05T22:52:00.238] [DEBUG] [wit-ble-direct] [BLE_SCAN] Scanning for WIT E9:10:DB:8B:CE:C7...

@@ -1,12 +1,16 @@
 {
-  "task": "calypso-rate-4hz-stable",
-  "date": "2026-05-31T15:06:14.870667",
+  "task": "wit-reconnect-robustness",
+  "date": "2026-06-05T22:51:52.449157",
   "status": "SUCCESS",
-  "reason": "8Hz oversaturates BLE Connection Interval \u2014 Calypso stops sending after ~20s, watchdog fires at +60s. 4Hz was stable for hours before today.",
-  "change": "CALYPSO_RATE_HZ default: 8 \u2192 4",
+  "root_cause": "L2=5 + no StartLimitBurst=0 \u2192 systemd start-limit-hit when WIT powered on after RPi",
+  "changes": [
+    "L2_FAIL_THRESHOLD 5\u219230",
+    "systemd StartLimitBurst=0",
+    "BleakScanner passive pre-scan"
+  ],
+  "calypso_impact": "None \u2014 separate process, passive scan does not disrupt connections",
   "files_modified": [
-    "ble/calypso_direct.py",
-    "ble/README.md",
-    "docs/HARDWARE/CALYPSO-UP10-DATASHEET.md"
+    "ble/wit-ble-direct.py",
+    "etc/systemd/system/wit-ble-direct.service"
   ]
 }

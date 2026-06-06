@@ -102,7 +102,7 @@ from ble_common import (
 )
 
 try:
-    from bleak import BleakClient
+    from bleak import BleakClient, BleakScanner
 except ImportError:
     print('[FATAL] bleak not installed. Run: pip install bleak', flush=True)
     sys.exit(1)
@@ -117,7 +117,7 @@ MOUNT_DEG = float(os.environ.get('WIT_MOUNT_ROTATION_DEG', '90'))
 OUTPUT_RATE_HZ = int(os.environ.get('WIT_OUTPUT_RATE_HZ', '10'))
 HEARTBEAT_S = int(os.environ.get('WIT_HEARTBEAT_S', '300'))
 RECONNECT_MAX_S = int(os.environ.get('WIT_RECONNECT_MAX_S', '60'))
-L2_FAIL_THRESHOLD = int(os.environ.get('WIT_L2_FAIL_THRESHOLD', '5'))
+L2_FAIL_THRESHOLD = int(os.environ.get('WIT_L2_FAIL_THRESHOLD', '30')) # Was 5: caused systemd start-limit-hit when WIT off at boot
 SK_URL = os.environ.get('SK_URL', 'http://localhost:3000')
 
 SERVICE_NAME = 'wit-ble-direct'
@@ -546,6 +546,23 @@ async def run_ble_client(logger) -> None:
 
         while _running:
             try:
+                # Passive BLE scan before connect: wait for WIT to advertise
+                # BleakScanner.discover() is READ-ONLY — does NOT disrupt
+                # existing BLE connections (Calypso runs in separate process)
+                try:
+                    logger.debug(f'[BLE_SCAN] Scanning for WIT {WIT_MAC}...')
+                    scan = await BleakScanner.discover(timeout=5.0)
+                    wit_visible = any(
+                        d.address.upper() == WIT_MAC.upper() for d in scan)
+                    if not wit_visible:
+                        logger.debug(
+                            f'[BLE_SCAN] WIT not advertising (powered off?) — retry in {reconnect_delay}s')
+                        await asyncio.sleep(reconnect_delay)
+                        continue  # No L1 failure counted
+                    logger.info(f'[BLE_SCAN] WIT advertising — connecting')
+                except Exception as _se:
+                    logger.debug(f'[BLE_SCAN] Scan failed: {_se} — trying direct connect')
+
                 async with BleakClient(WIT_MAC) as client:
                     logger.info(f'[BLE_CONNECT] Connected to {WIT_MAC}')
                     l1_fail_count = 0

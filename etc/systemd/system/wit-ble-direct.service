@@ -9,6 +9,9 @@ Type=simple
 User=aneto
 WorkingDirectory=/home/aneto/midnightrider-navigation
 EnvironmentFile=-/home/aneto/midnightrider-navigation/.env
+StartLimitBurst=0
+StartLimitIntervalSec=0
+# Service always restarts — no start-limit-hit when WIT is off at boot
 
 # Prevent BLE conflicts: kill any zombie instances before start
 ExecStartPre=-/bin/bash -c 'pkill -SIGKILL -f wit-ble-direct.py 2>/dev/null; sleep 1; true'
@@ -22,8 +25,7 @@ ExecStopPost=-/bin/bash -c 'pkill -SIGKILL -f wit-ble-direct.py 2>/dev/null; tru
 
 # systemd handles L3 recovery (script exits after repeated BLE failures)
 Restart=on-failure
-RestartSec=20
-StartLimitBurst=5
+RestartSec=10
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=wit-ble-direct
