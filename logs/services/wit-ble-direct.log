@@ -62485,3 +62485,23 @@
 [2026-06-01T21:21:01.839] [WARNING] [wit-ble-direct] [L2] hci0 NOT reset: would disrupt Calypso BLE
 [2026-06-01T21:21:01.840] [INFO] [wit-ble-direct] Singleton released
 [2026-06-01T21:21:01.840] [INFO] [wit-ble-direct] [SHUTDOWN] wit-ble-direct stopped — PID released
+[2026-06-05T19:56:23.189] [INFO] [wit-ble-direct] Singleton acquired (PID 1213)
+[2026-06-05T19:56:23.212] [INFO] [wit-ble-direct] [STARTUP] ==========================================================
+[2026-06-05T19:56:23.212] [INFO] [wit-ble-direct] [STARTUP] wit-ble-direct — WIT WT901BLECL IMU Driver
+[2026-06-05T19:56:23.212] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-06-05T19:56:23.212] [INFO] [wit-ble-direct] [STARTUP] L2_threshold=5
+[2026-06-05T19:56:23.212] [INFO] [wit-ble-direct] [STARTUP] ==========================================================
+[2026-06-05T19:56:23.400] [INFO] [wit-ble-direct] [STARTUP] BlueZ GATT cache cleared for E9:10:DB:8B:CE:C7
+[2026-06-05T19:56:34.064] [WARNING] [wit-ble-direct] [L1] Connection failed (1): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-06-05T19:56:34.065] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-06-05T19:56:54.096] [WARNING] [wit-ble-direct] [L1] Connection failed (2): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-06-05T19:56:54.097] [INFO] [wit-ble-direct] [L1] Reconnecting in 20s...
+[2026-06-05T19:57:24.132] [WARNING] [wit-ble-direct] [L1] Connection failed (3): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-06-05T19:57:24.133] [INFO] [wit-ble-direct] [L1] Reconnecting in 40s...
+[2026-06-05T22:04:24.621] [WARNING] [wit-ble-direct] [L1] Connection failed (4): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-06-05T22:04:24.621] [INFO] [wit-ble-direct] [L1] Reconnecting in 60s...
+[2026-06-05T22:05:34.647] [WARNING] [wit-ble-direct] [L1] Connection failed (5): Device with address E9:10:DB:8B:CE:C7 was not found.
+[2026-06-05T22:05:34.648] [WARNING] [wit-ble-direct] [L2] 5 failures — clean exit for systemd restart
+[2026-06-05T22:05:34.648] [WARNING] [wit-ble-direct] [L2] hci0 NOT reset: would disrupt Calypso BLE
+[2026-06-05T22:05:34.648] [INFO] [wit-ble-direct] Singleton released
+[2026-06-05T22:05:34.649] [INFO] [wit-ble-direct] [SHUTDOWN] wit-ble-direct stopped — PID released
