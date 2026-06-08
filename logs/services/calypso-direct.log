@@ -44125,3 +44125,1215 @@
 [2026-06-07T14:57:28.503] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=266° Batt=100% Temp=0°C
 [2026-06-07T14:57:28.893] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.9kt
 [2026-06-07T14:57:28.893] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=266° Batt=100% Temp=0°C
+[2026-06-07T14:57:29.088] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=273° Batt=100% Temp=0°C
+[2026-06-07T14:57:29.284] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=273° Batt=100% Temp=0°C
+[2026-06-07T14:57:29.478] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=273° Batt=100% Temp=0°C
+[2026-06-07T14:57:29.868] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:57:29.872] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=273° Batt=100% Temp=0°C
+[2026-06-07T14:57:30.063] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=273° Batt=100% Temp=0°C
+[2026-06-07T14:57:30.258] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=270° Batt=100% Temp=0°C
+[2026-06-07T14:57:30.648] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:57:30.649] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=270° Batt=100% Temp=0°C
+[2026-06-07T14:57:30.843] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=270° Batt=100% Temp=0°C
+[2026-06-07T14:57:31.039] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=270° Batt=100% Temp=0°C
+[2026-06-07T14:57:31.428] [WARNING] [calypso-direct] [TIMING] Large gap: 388ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:57:31.428] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=274° Batt=100% Temp=0°C
+[2026-06-07T14:57:31.623] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=274° Batt=100% Temp=0°C
+[2026-06-07T14:57:31.818] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=274° Batt=100% Temp=0°C
+[2026-06-07T14:57:32.013] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=267° Batt=100% Temp=0°C
+[2026-06-07T14:57:32.209] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=267° Batt=100% Temp=0°C
+[2026-06-07T14:57:32.598] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:57:32.599] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=267° Batt=100% Temp=0°C
+[2026-06-07T14:57:32.793] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=255° Batt=100% Temp=0°C
+[2026-06-07T14:57:32.990] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=255° Batt=100% Temp=0°C
+[2026-06-07T14:57:33.378] [WARNING] [calypso-direct] [TIMING] Large gap: 387ms (expected ~125ms at 8Hz) AWS=8.9kt
+[2026-06-07T14:57:33.378] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=255° Batt=100% Temp=0°C
+[2026-06-07T14:57:33.573] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=255° Batt=100% Temp=0°C
+[2026-06-07T14:57:33.768] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=255° Batt=100% Temp=0°C
+[2026-06-07T14:57:33.963] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=262° Batt=100% Temp=0°C
+[2026-06-07T14:57:34.353] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.9kt
+[2026-06-07T14:57:34.353] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=262° Batt=100% Temp=0°C
+[2026-06-07T14:57:34.548] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=262° Batt=100% Temp=0°C
+[2026-06-07T14:57:34.743] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:35.133] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:57:35.133] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:35.328] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:35.523] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:35.718] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:36.108] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:57:36.109] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:36.303] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:36.498] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:36.888] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:57:36.888] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=273° Batt=100% Temp=0°C
+[2026-06-07T14:57:37.083] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=273° Batt=100% Temp=0°C
+[2026-06-07T14:57:37.278] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=272° Batt=100% Temp=0°C
+[2026-06-07T14:57:37.473] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=274° Batt=100% Temp=0°C
+[2026-06-07T14:57:37.863] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.9kt
+[2026-06-07T14:57:37.863] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=253° Batt=100% Temp=0°C
+[2026-06-07T14:57:38.058] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=253° Batt=100% Temp=0°C
+[2026-06-07T14:57:38.255] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=253° Batt=100% Temp=0°C
+[2026-06-07T14:57:38.644] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.0kt
+[2026-06-07T14:57:38.645] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=270° Batt=100% Temp=0°C
+[2026-06-07T14:57:38.838] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=274° Batt=100% Temp=0°C
+[2026-06-07T14:57:39.033] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=273° Batt=100% Temp=0°C
+[2026-06-07T14:57:39.228] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=274° Batt=100% Temp=0°C
+[2026-06-07T14:57:39.618] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.2kt
+[2026-06-07T14:57:39.618] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=274° Batt=100% Temp=0°C
+[2026-06-07T14:57:39.813] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=275° Batt=100% Temp=0°C
+[2026-06-07T14:57:40.008] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=275° Batt=100% Temp=0°C
+[2026-06-07T14:57:40.593] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=8.7kt
+[2026-06-07T14:57:40.593] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=275° Batt=100% Temp=0°C
+[2026-06-07T14:57:40.595] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=275° Batt=100% Temp=0°C
+[2026-06-07T14:57:40.788] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=276° Batt=100% Temp=0°C
+[2026-06-07T14:57:40.983] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=276° Batt=100% Temp=0°C
+[2026-06-07T14:57:41.373] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.9kt
+[2026-06-07T14:57:41.373] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=278° Batt=100% Temp=0°C
+[2026-06-07T14:57:41.568] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=279° Batt=100% Temp=0°C
+[2026-06-07T14:57:41.763] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=280° Batt=100% Temp=0°C
+[2026-06-07T14:57:41.958] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=283° Batt=100% Temp=0°C
+[2026-06-07T14:57:42.348] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.7kt
+[2026-06-07T14:57:42.348] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=283° Batt=100% Temp=0°C
+[2026-06-07T14:57:42.543] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:57:42.738] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:57:43.128] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.9kt
+[2026-06-07T14:57:43.129] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:57:43.323] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=284° Batt=100% Temp=0°C
+[2026-06-07T14:57:43.519] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=284° Batt=100% Temp=0°C
+[2026-06-07T14:57:43.713] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=284° Batt=100% Temp=0°C
+[2026-06-07T14:57:44.103] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T14:57:44.103] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:57:44.298] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:44.493] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:44.883] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:57:44.883] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:45.078] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:45.273] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:45.468] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:45.858] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:57:45.859] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:46.053] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:46.250] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=291° Batt=100% Temp=0°C
+[2026-06-07T14:57:46.638] [WARNING] [calypso-direct] [TIMING] Large gap: 388ms (expected ~125ms at 8Hz) AWS=11.3kt
+[2026-06-07T14:57:46.638] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:46.833] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=290° Batt=100% Temp=0°C
+[2026-06-07T14:57:47.029] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=289° Batt=100% Temp=0°C
+[2026-06-07T14:57:47.223] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=289° Batt=100% Temp=0°C
+[2026-06-07T14:57:47.613] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.5kt
+[2026-06-07T14:57:47.613] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:57:47.808] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=289° Batt=100% Temp=0°C
+[2026-06-07T14:57:48.004] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=289° Batt=100% Temp=0°C
+[2026-06-07T14:57:48.393] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=11.3kt
+[2026-06-07T14:57:48.394] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:57:48.589] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:57:48.784] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:48.978] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:49.368] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.3kt
+[2026-06-07T14:57:49.368] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=291° Batt=100% Temp=0°C
+[2026-06-07T14:57:49.563] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:57:49.953] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=11.9kt
+[2026-06-07T14:57:49.953] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:57:50.148] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:57:50.343] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:57:50.538] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=289° Batt=100% Temp=0°C
+[2026-06-07T14:57:50.733] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:57:51.124] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T14:57:51.124] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:57:51.318] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:51.513] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:51.708] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:57:52.293] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T14:57:52.293] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:57:52.295] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:52.488] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:52.879] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.3kt
+[2026-06-07T14:57:52.879] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:53.073] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:53.268] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:53.463] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:53.853] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.9kt
+[2026-06-07T14:57:53.854] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:54.052] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:54.243] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:54.634] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:57:54.634] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:54.828] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:55.024] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:57:55.218] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:57:55.609] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.7kt
+[2026-06-07T14:57:55.609] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:57:55.803] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:57:55.998] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:57:56.388] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.7kt
+[2026-06-07T14:57:56.388] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:57:56.583] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:57:56.779] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:57:56.974] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:57:57.363] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=9.7kt
+[2026-06-07T14:57:57.363] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:57.558] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:57:57.754] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:57:58.143] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T14:57:58.144] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:57:58.338] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:57:58.533] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:57:58.728] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:57:59.118] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=11.1kt
+[2026-06-07T14:57:59.119] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:59.313] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:57:59.508] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:57:59.898] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.5kt
+[2026-06-07T14:57:59.898] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:58:00.289] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=11.5kt
+[2026-06-07T14:58:00.289] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:58:00.292] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:58:00.485] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=298° Batt=100% Temp=0°C
+[2026-06-07T14:58:00.873] [WARNING] [calypso-direct] [TIMING] Large gap: 388ms (expected ~125ms at 8Hz) AWS=11.1kt
+[2026-06-07T14:58:00.873] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=298° Batt=100% Temp=0°C
+[2026-06-07T14:58:01.068] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=298° Batt=100% Temp=0°C
+[2026-06-07T14:58:01.263] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:58:01.458] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:58:01.848] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.1kt
+[2026-06-07T14:58:01.848] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:58:02.043] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:58:02.238] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:58:02.628] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.5kt
+[2026-06-07T14:58:02.628] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:58:02.823] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=298° Batt=100% Temp=0°C
+[2026-06-07T14:58:03.018] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=300° Batt=100% Temp=0°C
+[2026-06-07T14:58:03.213] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=300° Batt=100% Temp=0°C
+[2026-06-07T14:58:03.603] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.7kt
+[2026-06-07T14:58:03.603] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=300° Batt=100% Temp=0°C
+[2026-06-07T14:58:03.798] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=300° Batt=100% Temp=0°C
+[2026-06-07T14:58:03.995] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=298° Batt=100% Temp=0°C
+[2026-06-07T14:58:04.383] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=11.1kt
+[2026-06-07T14:58:04.384] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=298° Batt=100% Temp=0°C
+[2026-06-07T14:58:04.579] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:58:04.774] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:58:04.968] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:58:05.359] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.5kt
+[2026-06-07T14:58:05.359] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:58:05.555] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=302° Batt=100% Temp=0°C
+[2026-06-07T14:58:05.748] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=302° Batt=100% Temp=0°C
+[2026-06-07T14:58:06.138] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:58:06.138] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=302° Batt=100% Temp=0°C
+[2026-06-07T14:58:06.333] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=302° Batt=100% Temp=0°C
+[2026-06-07T14:58:06.529] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=303° Batt=100% Temp=0°C
+[2026-06-07T14:58:06.723] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=303° Batt=100% Temp=0°C
+[2026-06-07T14:58:07.114] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.7kt
+[2026-06-07T14:58:07.114] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=306° Batt=100% Temp=0°C
+[2026-06-07T14:58:07.308] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=306° Batt=100% Temp=0°C
+[2026-06-07T14:58:07.503] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=306° Batt=100% Temp=0°C
+[2026-06-07T14:58:07.893] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T14:58:07.893] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=304° Batt=100% Temp=0°C
+[2026-06-07T14:58:08.284] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T14:58:08.285] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=304° Batt=100% Temp=0°C
+[2026-06-07T14:58:08.286] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=300° Batt=100% Temp=0°C
+[2026-06-07T14:58:08.479] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=300° Batt=100% Temp=0°C
+[2026-06-07T14:58:08.871] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=11.1kt
+[2026-06-07T14:58:08.871] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:58:09.064] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=298° Batt=100% Temp=0°C
+[2026-06-07T14:58:09.259] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:58:09.648] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:58:09.649] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:58:09.843] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=300° Batt=100% Temp=0°C
+[2026-06-07T14:58:10.038] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=300° Batt=100% Temp=0°C
+[2026-06-07T14:58:10.428] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.5kt
+[2026-06-07T14:58:10.428] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:58:10.623] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:58:10.822] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=296° Batt=100% Temp=0°C
+[2026-06-07T14:58:11.013] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:58:11.208] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:58:11.599] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.3kt
+[2026-06-07T14:58:11.600] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:58:11.794] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:58:11.988] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:58:12.574] [WARNING] [calypso-direct] [TIMING] Large gap: 586ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T14:58:12.574] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:58:12.575] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=295° Batt=100% Temp=0°C
+[2026-06-07T14:58:12.769] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:58:12.964] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=291° Batt=100% Temp=0°C
+[2026-06-07T14:58:13.355] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:58:13.355] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=289° Batt=100% Temp=0°C
+[2026-06-07T14:58:13.549] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:58:13.743] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:58:14.133] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T14:58:14.134] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:58:14.328] [INFO] [calypso-direct] [RATE_1MIN] 240 pkts/min (expected 480 at 8Hz) max_gap=586ms gaps_>250ms=72
+[2026-06-07T14:58:14.329] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:58:14.718] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.7kt
+[2026-06-07T14:58:14.720] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:58:14.721] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:58:15.108] [WARNING] [calypso-direct] [TIMING] Large gap: 387ms (expected ~125ms at 8Hz) AWS=10.7kt
+[2026-06-07T14:58:15.109] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:58:15.303] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:58:15.498] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:58:15.891] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T14:58:15.891] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:58:16.085] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=289° Batt=100% Temp=0°C
+[2026-06-07T14:58:16.280] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=289° Batt=100% Temp=0°C
+[2026-06-07T14:58:16.474] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:16.866] [WARNING] [calypso-direct] [TIMING] Large gap: 393ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:58:16.867] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:17.059] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:17.254] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:17.644] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.1kt
+[2026-06-07T14:58:17.645] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=284° Batt=100% Temp=0°C
+[2026-06-07T14:58:17.839] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=284° Batt=100% Temp=0°C
+[2026-06-07T14:58:18.034] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:18.229] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.7kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:18.618] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=11.5kt
+[2026-06-07T14:58:18.619] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:18.813] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:19.009] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.7kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:19.398] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=12.1kt
+[2026-06-07T14:58:19.398] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.1kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:19.593] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.1kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:58:19.788] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.1kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:58:19.983] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.1kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:58:20.374] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=12.2kt
+[2026-06-07T14:58:20.375] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.2kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:58:20.568] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.4kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:20.763] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.4kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:20.958] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.4kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:21.349] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=12.4kt
+[2026-06-07T14:58:21.350] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.4kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:21.544] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.2kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:21.738] [DEBUG] [calypso-direct] [DATA_IN] AWS=12.2kt AWA=285° Batt=100% Temp=0°C
+[2026-06-07T14:58:22.130] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=11.3kt
+[2026-06-07T14:58:22.130] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.3kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:22.324] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:22.713] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=10.7kt
+[2026-06-07T14:58:22.714] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:22.715] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=286° Batt=100% Temp=0°C
+[2026-06-07T14:58:23.104] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=10.5kt
+[2026-06-07T14:58:23.104] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:58:23.299] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=287° Batt=100% Temp=0°C
+[2026-06-07T14:58:23.494] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:58:23.884] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:58:23.885] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=288° Batt=100% Temp=0°C
+[2026-06-07T14:58:24.080] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=291° Batt=100% Temp=0°C
+[2026-06-07T14:58:24.275] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=292° Batt=100% Temp=0°C
+[2026-06-07T14:58:24.469] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:58:24.859] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.1kt
+[2026-06-07T14:58:24.859] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:58:25.053] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=293° Batt=100% Temp=0°C
+[2026-06-07T14:58:25.248] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:58:25.638] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.7kt
+[2026-06-07T14:58:25.639] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:58:25.833] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:58:26.029] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:58:26.228] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=294° Batt=100% Temp=0°C
+[2026-06-07T14:58:26.613] [WARNING] [calypso-direct] [TIMING] Large gap: 386ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:58:26.615] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:58:27.004] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.7kt
+[2026-06-07T14:58:27.004] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=297° Batt=100% Temp=0°C
+[2026-06-07T14:58:27.005] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=298° Batt=100% Temp=0°C
+[2026-06-07T14:58:27.393] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=11.1kt
+[2026-06-07T14:58:27.394] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:58:27.589] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.1kt AWA=299° Batt=100% Temp=0°C
+[2026-06-07T14:58:27.783] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:27.978] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=314° Batt=100% Temp=0°C
+[2026-06-07T14:58:28.368] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:58:28.369] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T14:58:28.563] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T14:58:28.758] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T14:58:29.149] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.8kt
+[2026-06-07T14:58:29.150] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=315° Batt=100% Temp=0°C
+[2026-06-07T14:58:29.343] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=315° Batt=100% Temp=0°C
+[2026-06-07T14:58:29.539] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=313° Batt=100% Temp=0°C
+[2026-06-07T14:58:29.733] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=313° Batt=100% Temp=0°C
+[2026-06-07T14:58:30.123] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.5kt
+[2026-06-07T14:58:30.124] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=313° Batt=100% Temp=0°C
+[2026-06-07T14:58:30.318] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=314° Batt=100% Temp=0°C
+[2026-06-07T14:58:30.513] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=315° Batt=100% Temp=0°C
+[2026-06-07T14:58:30.710] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=315° Batt=100% Temp=0°C
+[2026-06-07T14:58:31.098] [WARNING] [calypso-direct] [TIMING] Large gap: 388ms (expected ~125ms at 8Hz) AWS=8.9kt
+[2026-06-07T14:58:31.099] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=315° Batt=100% Temp=0°C
+[2026-06-07T14:58:31.293] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=315° Batt=100% Temp=0°C
+[2026-06-07T14:58:31.488] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=314° Batt=100% Temp=0°C
+[2026-06-07T14:58:31.879] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.7kt
+[2026-06-07T14:58:31.879] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=312° Batt=100% Temp=0°C
+[2026-06-07T14:58:32.073] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:32.268] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:32.463] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:32.857] [WARNING] [calypso-direct] [TIMING] Large gap: 393ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T14:58:32.860] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=309° Batt=100% Temp=0°C
+[2026-06-07T14:58:33.048] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=310° Batt=100% Temp=0°C
+[2026-06-07T14:58:33.244] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:33.634] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=6.6kt
+[2026-06-07T14:58:33.634] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=313° Batt=100% Temp=0°C
+[2026-06-07T14:58:33.828] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T14:58:34.024] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T14:58:34.219] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T14:58:34.609] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.2kt
+[2026-06-07T14:58:34.609] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:58:34.804] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:58:34.999] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:58:35.389] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.1kt
+[2026-06-07T14:58:35.389] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:35.583] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:35.778] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=310° Batt=100% Temp=0°C
+[2026-06-07T14:58:35.974] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=310° Batt=100% Temp=0°C
+[2026-06-07T14:58:36.364] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T14:58:36.364] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:36.559] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:36.753] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=310° Batt=100% Temp=0°C
+[2026-06-07T14:58:37.143] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T14:58:37.145] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:37.339] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=312° Batt=100% Temp=0°C
+[2026-06-07T14:58:37.534] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=315° Batt=100% Temp=0°C
+[2026-06-07T14:58:37.729] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T14:58:38.118] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T14:58:38.119] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T14:58:38.314] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=314° Batt=100% Temp=0°C
+[2026-06-07T14:58:38.508] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=314° Batt=100% Temp=0°C
+[2026-06-07T14:58:38.898] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T14:58:38.899] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=313° Batt=100% Temp=0°C
+[2026-06-07T14:58:39.288] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T14:58:39.289] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=309° Batt=100% Temp=0°C
+[2026-06-07T14:58:39.290] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=309° Batt=100% Temp=0°C
+[2026-06-07T14:58:39.484] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=309° Batt=100% Temp=0°C
+[2026-06-07T14:58:39.874] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T14:58:39.874] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=311° Batt=100% Temp=0°C
+[2026-06-07T14:58:40.070] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=312° Batt=100% Temp=0°C
+[2026-06-07T14:58:40.263] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T14:58:40.458] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:40.849] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T14:58:40.849] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:41.044] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:41.434] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.0kt
+[2026-06-07T14:58:41.435] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T14:58:41.632] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T14:58:41.824] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T14:58:42.019] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=314° Batt=100% Temp=0°C
+[2026-06-07T14:58:42.220] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=313° Batt=100% Temp=0°C
+[2026-06-07T14:58:42.603] [WARNING] [calypso-direct] [TIMING] Large gap: 384ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:58:42.604] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=313° Batt=100% Temp=0°C
+[2026-06-07T14:58:42.798] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=313° Batt=100% Temp=0°C
+[2026-06-07T14:58:42.994] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=314° Batt=100% Temp=0°C
+[2026-06-07T14:58:43.383] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T14:58:43.384] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:43.579] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:43.774] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:43.969] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=335° Batt=100% Temp=0°C
+[2026-06-07T14:58:44.358] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T14:58:44.359] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=335° Batt=100% Temp=0°C
+[2026-06-07T14:58:44.553] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=335° Batt=100% Temp=0°C
+[2026-06-07T14:58:44.748] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T14:58:45.140] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=6.0kt
+[2026-06-07T14:58:45.140] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T14:58:45.334] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=328° Batt=100% Temp=0°C
+[2026-06-07T14:58:45.530] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=328° Batt=100% Temp=0°C
+[2026-06-07T14:58:45.725] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=328° Batt=100% Temp=0°C
+[2026-06-07T14:58:46.116] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.0kt
+[2026-06-07T14:58:46.116] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T14:58:46.308] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T14:58:46.504] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T14:58:46.893] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T14:58:46.894] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T14:58:47.284] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T14:58:47.284] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T14:58:47.286] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T14:58:47.478] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T14:58:47.869] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=6.0kt
+[2026-06-07T14:58:47.870] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T14:58:48.063] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T14:58:48.064] [INFO] [calypso-direct] [HEARTBEAT] packets=1200 last_data=0s ago l1_fails=0
+[2026-06-07T14:58:48.259] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=333° Batt=100% Temp=0°C
+[2026-06-07T14:58:48.648] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.6kt
+[2026-06-07T14:58:48.650] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=333° Batt=100% Temp=0°C
+[2026-06-07T14:58:48.844] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=333° Batt=100% Temp=0°C
+[2026-06-07T14:58:49.038] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T14:58:49.429] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.2kt
+[2026-06-07T14:58:49.429] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T14:58:49.624] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T14:58:49.818] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:50.014] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:50.208] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T14:58:50.598] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:58:50.600] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T14:58:50.794] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T14:58:50.989] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T14:58:51.382] [WARNING] [calypso-direct] [TIMING] Large gap: 394ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:58:51.383] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T14:58:51.575] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=323° Batt=100% Temp=0°C
+[2026-06-07T14:58:51.770] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T14:58:51.964] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T14:58:52.355] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T14:58:52.355] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T14:58:52.550] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T14:58:52.744] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T14:58:53.133] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.6kt
+[2026-06-07T14:58:53.134] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T14:58:53.328] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T14:58:53.523] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:53.719] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:54.109] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=9.1kt
+[2026-06-07T14:58:54.110] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T14:58:54.303] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T14:58:54.499] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T14:58:54.888] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.7kt
+[2026-06-07T14:58:54.889] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T14:58:55.083] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=327° Batt=100% Temp=0°C
+[2026-06-07T14:58:55.279] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:58:55.474] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:58:55.866] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:58:55.866] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:58:56.058] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:58:56.254] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=335° Batt=100% Temp=0°C
+[2026-06-07T14:58:56.644] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:58:56.644] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T14:58:56.839] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T14:58:57.034] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T14:58:57.228] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T14:58:57.619] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.2kt
+[2026-06-07T14:58:57.619] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T14:58:57.815] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.7kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T14:58:58.010] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.7kt AWA=344° Batt=100% Temp=0°C
+[2026-06-07T14:58:58.402] [WARNING] [calypso-direct] [TIMING] Large gap: 393ms (expected ~125ms at 8Hz) AWS=6.2kt
+[2026-06-07T14:58:58.403] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=344° Batt=100% Temp=0°C
+[2026-06-07T14:58:58.593] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=344° Batt=100% Temp=0°C
+[2026-06-07T14:58:58.788] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=345° Batt=100% Temp=0°C
+[2026-06-07T14:58:58.984] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=345° Batt=100% Temp=0°C
+[2026-06-07T14:58:59.374] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T14:58:59.375] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=345° Batt=100% Temp=0°C
+[2026-06-07T14:58:59.569] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=344° Batt=100% Temp=0°C
+[2026-06-07T14:58:59.764] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=344° Batt=100% Temp=0°C
+[2026-06-07T14:59:00.153] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T14:59:00.154] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=343° Batt=100% Temp=0°C
+[2026-06-07T14:59:00.349] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=341° Batt=100% Temp=0°C
+[2026-06-07T14:59:00.543] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=341° Batt=100% Temp=0°C
+[2026-06-07T14:59:00.739] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=341° Batt=100% Temp=0°C
+[2026-06-07T14:59:01.129] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:59:01.129] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=341° Batt=100% Temp=0°C
+[2026-06-07T14:59:01.324] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T14:59:01.519] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:59:01.713] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:59:02.104] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T14:59:02.104] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:59:02.299] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T14:59:02.494] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T14:59:02.883] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.6kt
+[2026-06-07T14:59:02.886] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T14:59:03.081] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T14:59:03.274] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T14:59:03.470] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T14:59:03.859] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=7.6kt
+[2026-06-07T14:59:03.859] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T14:59:04.054] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T14:59:04.248] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T14:59:04.638] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.6kt
+[2026-06-07T14:59:04.640] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T14:59:04.834] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=339° Batt=100% Temp=0°C
+[2026-06-07T14:59:05.224] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.0kt
+[2026-06-07T14:59:05.225] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=339° Batt=100% Temp=0°C
+[2026-06-07T14:59:05.226] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=357° Batt=100% Temp=0°C
+[2026-06-07T14:59:05.614] [WARNING] [calypso-direct] [TIMING] Large gap: 387ms (expected ~125ms at 8Hz) AWS=7.0kt
+[2026-06-07T14:59:05.614] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=357° Batt=100% Temp=0°C
+[2026-06-07T14:59:05.809] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=357° Batt=100% Temp=0°C
+[2026-06-07T14:59:06.003] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=357° Batt=100% Temp=0°C
+[2026-06-07T14:59:06.394] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T14:59:06.394] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=357° Batt=100% Temp=0°C
+[2026-06-07T14:59:06.590] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T14:59:06.784] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T14:59:06.979] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T14:59:07.369] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T14:59:07.369] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T14:59:07.564] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T14:59:07.759] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=353° Batt=100% Temp=0°C
+[2026-06-07T14:59:08.149] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T14:59:08.149] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=353° Batt=100% Temp=0°C
+[2026-06-07T14:59:08.344] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=353° Batt=100% Temp=0°C
+[2026-06-07T14:59:08.539] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=353° Batt=100% Temp=0°C
+[2026-06-07T14:59:08.735] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=353° Batt=100% Temp=0°C
+[2026-06-07T14:59:09.319] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T14:59:09.320] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T14:59:09.326] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T14:59:09.516] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T14:59:09.906] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.7kt
+[2026-06-07T14:59:09.907] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T14:59:10.099] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T14:59:10.294] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:10.489] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:10.879] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T14:59:10.879] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T14:59:11.074] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T14:59:11.464] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T14:59:11.464] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T14:59:11.467] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T14:59:11.855] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=9.7kt
+[2026-06-07T14:59:11.856] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T14:59:12.049] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:12.244] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:12.635] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=9.1kt
+[2026-06-07T14:59:12.636] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:12.830] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:13.024] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:13.219] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.7kt AWA=7° Batt=100% Temp=0°C
+[2026-06-07T14:59:13.611] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=3.5kt
+[2026-06-07T14:59:13.611] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.5kt AWA=12° Batt=100% Temp=0°C
+[2026-06-07T14:59:13.804] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.1kt AWA=26° Batt=100% Temp=0°C
+[2026-06-07T14:59:13.999] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.1kt AWA=20° Batt=100% Temp=0°C
+[2026-06-07T14:59:14.389] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=3.1kt
+[2026-06-07T14:59:14.389] [INFO] [calypso-direct] [RATE_1MIN] 240 pkts/min (expected 480 at 8Hz) max_gap=585ms gaps_>250ms=75
+[2026-06-07T14:59:14.390] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.1kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:14.584] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.7kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:14.779] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.9kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:14.975] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=14° Batt=100% Temp=0°C
+[2026-06-07T14:59:15.364] [WARNING] [calypso-direct] [TIMING] Large gap: 388ms (expected ~125ms at 8Hz) AWS=6.4kt
+[2026-06-07T14:59:15.364] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:15.559] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T14:59:15.754] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=4° Batt=100% Temp=0°C
+[2026-06-07T14:59:16.150] [WARNING] [calypso-direct] [TIMING] Large gap: 397ms (expected ~125ms at 8Hz) AWS=7.6kt
+[2026-06-07T14:59:16.151] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=3° Batt=100% Temp=0°C
+[2026-06-07T14:59:16.339] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=3° Batt=100% Temp=0°C
+[2026-06-07T14:59:16.535] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=4° Batt=100% Temp=0°C
+[2026-06-07T14:59:16.729] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T14:59:17.314] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=7.2kt
+[2026-06-07T14:59:17.315] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T14:59:17.317] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:17.509] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:17.899] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.0kt
+[2026-06-07T14:59:17.899] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:18.094] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:18.289] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:18.484] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:18.874] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.0kt
+[2026-06-07T14:59:18.875] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:19.069] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:19.264] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:19.654] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.0kt
+[2026-06-07T14:59:19.654] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:19.849] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:20.044] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:20.241] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=11° Batt=100% Temp=0°C
+[2026-06-07T14:59:20.630] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.4kt
+[2026-06-07T14:59:20.631] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=11° Batt=100% Temp=0°C
+[2026-06-07T14:59:20.825] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=12° Batt=100% Temp=0°C
+[2026-06-07T14:59:21.023] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=12° Batt=100% Temp=0°C
+[2026-06-07T14:59:21.216] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:21.604] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T14:59:21.605] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=17° Batt=100% Temp=0°C
+[2026-06-07T14:59:21.799] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:21.994] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:22.384] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=7.0kt
+[2026-06-07T14:59:22.385] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:22.579] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:22.774] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:22.969] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:23.359] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.2kt
+[2026-06-07T14:59:23.360] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:23.554] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=17° Batt=100% Temp=0°C
+[2026-06-07T14:59:23.750] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:24.139] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=7.0kt
+[2026-06-07T14:59:24.139] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:24.334] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:24.529] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=17° Batt=100% Temp=0°C
+[2026-06-07T14:59:24.724] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:25.116] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=7.8kt
+[2026-06-07T14:59:25.116] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:25.309] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:25.504] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:26.098] [WARNING] [calypso-direct] [TIMING] Large gap: 589ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T14:59:26.098] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:26.100] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:26.284] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=21° Batt=100% Temp=0°C
+[2026-06-07T14:59:26.479] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:26.869] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.4kt
+[2026-06-07T14:59:26.869] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:27.064] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=14° Batt=100% Temp=0°C
+[2026-06-07T14:59:27.259] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:27.649] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:59:27.649] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=12° Batt=100% Temp=0°C
+[2026-06-07T14:59:27.844] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=11° Batt=100% Temp=0°C
+[2026-06-07T14:59:28.039] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:28.234] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:28.625] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T14:59:28.625] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T14:59:28.819] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:29.014] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:29.404] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:59:29.405] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:29.599] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:29.794] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:29.989] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:30.379] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T14:59:30.379] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:30.771] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T14:59:30.772] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:30.772] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=14° Batt=100% Temp=0°C
+[2026-06-07T14:59:30.964] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=14° Batt=100% Temp=0°C
+[2026-06-07T14:59:31.354] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.9kt
+[2026-06-07T14:59:31.355] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=14° Batt=100% Temp=0°C
+[2026-06-07T14:59:31.549] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=14° Batt=100% Temp=0°C
+[2026-06-07T14:59:31.745] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=13° Batt=100% Temp=0°C
+[2026-06-07T14:59:32.135] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:59:32.136] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=13° Batt=100% Temp=0°C
+[2026-06-07T14:59:32.329] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=6° Batt=100% Temp=0°C
+[2026-06-07T14:59:32.524] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=6° Batt=100% Temp=0°C
+[2026-06-07T14:59:32.720] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=6° Batt=100% Temp=0°C
+[2026-06-07T14:59:33.109] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.7kt
+[2026-06-07T14:59:33.110] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:33.305] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=11° Batt=100% Temp=0°C
+[2026-06-07T14:59:33.499] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=17° Batt=100% Temp=0°C
+[2026-06-07T14:59:34.084] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:59:34.084] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:34.085] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:34.279] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:34.474] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:34.864] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:59:34.866] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=13° Batt=100% Temp=0°C
+[2026-06-07T14:59:35.059] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=13° Batt=100% Temp=0°C
+[2026-06-07T14:59:35.254] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=13° Batt=100% Temp=0°C
+[2026-06-07T14:59:35.644] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T14:59:35.644] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:35.840] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:36.229] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.7kt
+[2026-06-07T14:59:36.230] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:36.231] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:36.619] [WARNING] [calypso-direct] [TIMING] Large gap: 388ms (expected ~125ms at 8Hz) AWS=9.9kt
+[2026-06-07T14:59:36.620] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=14° Batt=100% Temp=0°C
+[2026-06-07T14:59:36.814] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=12° Batt=100% Temp=0°C
+[2026-06-07T14:59:37.010] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=12° Batt=100% Temp=0°C
+[2026-06-07T14:59:37.399] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=9.9kt
+[2026-06-07T14:59:37.400] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=14° Batt=100% Temp=0°C
+[2026-06-07T14:59:37.595] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:37.790] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:37.985] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:38.374] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=8.9kt
+[2026-06-07T14:59:38.374] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:38.569] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:38.764] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:39.154] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:59:39.155] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:39.349] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:39.544] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:39.739] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=26° Batt=100% Temp=0°C
+[2026-06-07T14:59:40.129] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.3kt
+[2026-06-07T14:59:40.130] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=28° Batt=100% Temp=0°C
+[2026-06-07T14:59:40.327] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=28° Batt=100% Temp=0°C
+[2026-06-07T14:59:40.519] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=29° Batt=100% Temp=0°C
+[2026-06-07T14:59:40.714] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=29° Batt=100% Temp=0°C
+[2026-06-07T14:59:41.105] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=9.9kt
+[2026-06-07T14:59:41.105] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=29° Batt=100% Temp=0°C
+[2026-06-07T14:59:41.300] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=22° Batt=100% Temp=0°C
+[2026-06-07T14:59:41.494] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=22° Batt=100% Temp=0°C
+[2026-06-07T14:59:41.884] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:59:41.885] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=20° Batt=100% Temp=0°C
+[2026-06-07T14:59:42.079] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=22° Batt=100% Temp=0°C
+[2026-06-07T14:59:42.275] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=28° Batt=100% Temp=0°C
+[2026-06-07T14:59:42.469] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=28° Batt=100% Temp=0°C
+[2026-06-07T14:59:42.859] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.9kt
+[2026-06-07T14:59:42.859] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=28° Batt=100% Temp=0°C
+[2026-06-07T14:59:43.054] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=28° Batt=100% Temp=0°C
+[2026-06-07T14:59:43.250] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:43.640] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=11.7kt
+[2026-06-07T14:59:43.640] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.7kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:43.834] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.7kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:44.030] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.7kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:44.225] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:44.614] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=11.9kt
+[2026-06-07T14:59:44.614] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.9kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:44.809] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:45.004] [DEBUG] [calypso-direct] [DATA_IN] AWS=11.5kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:45.394] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.9kt
+[2026-06-07T14:59:45.394] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:45.590] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=21° Batt=100% Temp=0°C
+[2026-06-07T14:59:45.784] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:45.979] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:46.369] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:59:46.370] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=15° Batt=100% Temp=0°C
+[2026-06-07T14:59:46.564] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:46.759] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.7kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:47.149] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.3kt
+[2026-06-07T14:59:47.149] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:47.344] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:47.539] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:47.734] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:48.124] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T14:59:48.125] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:48.515] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:59:48.515] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:48.518] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=26° Batt=100% Temp=0°C
+[2026-06-07T14:59:48.904] [WARNING] [calypso-direct] [TIMING] Large gap: 387ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:59:48.905] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:49.294] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.9kt
+[2026-06-07T14:59:49.296] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:49.490] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:49.685] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:49.880] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:50.075] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.9kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:50.270] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:50.659] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=10.3kt
+[2026-06-07T14:59:50.659] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:50.854] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.3kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:51.049] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:51.244] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:51.634] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.5kt
+[2026-06-07T14:59:51.634] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:51.830] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:52.025] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.9kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:52.219] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=23° Batt=100% Temp=0°C
+[2026-06-07T14:59:52.804] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=9.7kt
+[2026-06-07T14:59:52.804] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=22° Batt=100% Temp=0°C
+[2026-06-07T14:59:52.807] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=22° Batt=100% Temp=0°C
+[2026-06-07T14:59:52.999] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=21° Batt=100% Temp=0°C
+[2026-06-07T14:59:53.584] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=9.5kt
+[2026-06-07T14:59:53.588] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.5kt AWA=21° Batt=100% Temp=0°C
+[2026-06-07T14:59:53.589] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=21° Batt=100% Temp=0°C
+[2026-06-07T14:59:53.779] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=22° Batt=100% Temp=0°C
+[2026-06-07T14:59:53.974] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:54.364] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T14:59:54.365] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=24° Batt=100% Temp=0°C
+[2026-06-07T14:59:54.559] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:54.754] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:55.145] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=7.8kt
+[2026-06-07T14:59:55.147] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=25° Batt=100% Temp=0°C
+[2026-06-07T14:59:55.340] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:55.536] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:55.731] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=27° Batt=100% Temp=0°C
+[2026-06-07T14:59:56.509] [WARNING] [calypso-direct] [TIMING] Large gap: 778ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T14:59:56.510] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=20° Batt=100% Temp=0°C
+[2026-06-07T14:59:56.513] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=20° Batt=100% Temp=0°C
+[2026-06-07T14:59:56.514] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=20° Batt=100% Temp=0°C
+[2026-06-07T14:59:56.899] [WARNING] [calypso-direct] [TIMING] Large gap: 385ms (expected ~125ms at 8Hz) AWS=7.0kt
+[2026-06-07T14:59:56.900] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=18° Batt=100% Temp=0°C
+[2026-06-07T14:59:57.098] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=17° Batt=100% Temp=0°C
+[2026-06-07T14:59:57.289] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=20° Batt=100% Temp=0°C
+[2026-06-07T14:59:57.484] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:57.874] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T14:59:57.876] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:58.069] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=16° Batt=100% Temp=0°C
+[2026-06-07T14:59:58.264] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:58.655] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T14:59:58.655] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:58.849] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=19° Batt=100% Temp=0°C
+[2026-06-07T14:59:59.044] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T14:59:59.239] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=17° Batt=100% Temp=0°C
+[2026-06-07T14:59:59.629] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.6kt
+[2026-06-07T14:59:59.630] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=7° Batt=100% Temp=0°C
+[2026-06-07T15:00:00.019] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.6kt
+[2026-06-07T15:00:00.019] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=7° Batt=100% Temp=0°C
+[2026-06-07T15:00:00.020] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=7° Batt=100% Temp=0°C
+[2026-06-07T15:00:00.214] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=17° Batt=100% Temp=0°C
+[2026-06-07T15:00:00.799] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T15:00:00.799] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=7° Batt=100% Temp=0°C
+[2026-06-07T15:00:00.800] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=4° Batt=100% Temp=0°C
+[2026-06-07T15:00:00.994] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=2° Batt=100% Temp=0°C
+[2026-06-07T15:00:01.385] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T15:00:01.387] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=4° Batt=100% Temp=0°C
+[2026-06-07T15:00:01.580] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=4° Batt=100% Temp=0°C
+[2026-06-07T15:00:02.363] [WARNING] [calypso-direct] [TIMING] Large gap: 782ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T15:00:02.363] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T15:00:02.364] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=6° Batt=100% Temp=0°C
+[2026-06-07T15:00:02.367] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=6° Batt=100% Temp=0°C
+[2026-06-07T15:00:02.556] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T15:00:02.751] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=2° Batt=100% Temp=0°C
+[2026-06-07T15:00:03.142] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T15:00:03.144] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=2° Batt=100% Temp=0°C
+[2026-06-07T15:00:03.336] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=2° Batt=100% Temp=0°C
+[2026-06-07T15:00:03.529] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=4° Batt=100% Temp=0°C
+[2026-06-07T15:00:03.724] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=4° Batt=100% Temp=0°C
+[2026-06-07T15:00:04.114] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.6kt
+[2026-06-07T15:00:04.115] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=4° Batt=100% Temp=0°C
+[2026-06-07T15:00:04.309] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=3° Batt=100% Temp=0°C
+[2026-06-07T15:00:04.504] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T15:00:04.894] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.6kt
+[2026-06-07T15:00:04.895] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T15:00:05.089] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T15:00:05.284] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=355° Batt=100% Temp=0°C
+[2026-06-07T15:00:05.480] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=355° Batt=100% Temp=0°C
+[2026-06-07T15:00:05.869] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=5.6kt
+[2026-06-07T15:00:05.870] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=355° Batt=100% Temp=0°C
+[2026-06-07T15:00:06.064] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=355° Batt=100% Temp=0°C
+[2026-06-07T15:00:06.259] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=355° Batt=100% Temp=0°C
+[2026-06-07T15:00:06.649] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:06.650] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:06.845] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:07.040] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:07.234] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:07.624] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.0kt
+[2026-06-07T15:00:07.625] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=335° Batt=100% Temp=0°C
+[2026-06-07T15:00:08.014] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.6kt
+[2026-06-07T15:00:08.015] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:00:08.017] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:00:08.404] [WARNING] [calypso-direct] [TIMING] Large gap: 388ms (expected ~125ms at 8Hz) AWS=5.6kt
+[2026-06-07T15:00:08.405] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:00:08.600] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:00:08.796] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:00:08.989] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=344° Batt=100% Temp=0°C
+[2026-06-07T15:00:09.379] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.0kt
+[2026-06-07T15:00:09.380] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=343° Batt=100% Temp=0°C
+[2026-06-07T15:00:09.574] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=343° Batt=100% Temp=0°C
+[2026-06-07T15:00:09.770] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=343° Batt=100% Temp=0°C
+[2026-06-07T15:00:09.964] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=344° Batt=100% Temp=0°C
+[2026-06-07T15:00:10.355] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.8kt
+[2026-06-07T15:00:10.355] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=0° Batt=100% Temp=0°C
+[2026-06-07T15:00:10.549] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=1° Batt=100% Temp=0°C
+[2026-06-07T15:00:10.940] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T15:00:10.940] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T15:00:11.134] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T15:00:11.329] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T15:00:11.524] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T15:00:11.719] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=8° Batt=100% Temp=0°C
+[2026-06-07T15:00:12.109] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.6kt
+[2026-06-07T15:00:12.110] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=10° Batt=100% Temp=0°C
+[2026-06-07T15:00:12.304] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=12° Batt=100% Temp=0°C
+[2026-06-07T15:00:12.499] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=12° Batt=100% Temp=0°C
+[2026-06-07T15:00:12.889] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:12.890] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=7° Batt=100% Temp=0°C
+[2026-06-07T15:00:13.084] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=6° Batt=100% Temp=0°C
+[2026-06-07T15:00:13.279] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.7kt AWA=5° Batt=100% Temp=0°C
+[2026-06-07T15:00:13.474] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=351° Batt=100% Temp=0°C
+[2026-06-07T15:00:13.865] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=2.3kt
+[2026-06-07T15:00:13.866] [DEBUG] [calypso-direct] [DATA_IN] AWS=2.3kt AWA=351° Batt=100% Temp=0°C
+[2026-06-07T15:00:14.060] [DEBUG] [calypso-direct] [DATA_IN] AWS=2.3kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T15:00:14.255] [DEBUG] [calypso-direct] [DATA_IN] AWS=2.1kt AWA=338° Batt=100% Temp=0°C
+[2026-06-07T15:00:14.645] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=2.3kt
+[2026-06-07T15:00:14.645] [INFO] [calypso-direct] [RATE_1MIN] 241 pkts/min (expected 480 at 8Hz) max_gap=782ms gaps_>250ms=73
+[2026-06-07T15:00:14.645] [DEBUG] [calypso-direct] [DATA_IN] AWS=2.3kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T15:00:14.840] [DEBUG] [calypso-direct] [DATA_IN] AWS=2.3kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T15:00:15.035] [DEBUG] [calypso-direct] [DATA_IN] AWS=2.3kt AWA=339° Batt=100% Temp=0°C
+[2026-06-07T15:00:15.229] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.1kt AWA=331° Batt=100% Temp=0°C
+[2026-06-07T15:00:15.619] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=3.1kt
+[2026-06-07T15:00:15.619] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.1kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:15.814] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.5kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:16.009] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.5kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:16.399] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=4.9kt
+[2026-06-07T15:00:16.400] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.9kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:16.594] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.9kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:16.790] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=323° Batt=100% Temp=0°C
+[2026-06-07T15:00:16.986] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:17.374] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.1kt
+[2026-06-07T15:00:17.375] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:17.569] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:17.765] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T15:00:18.155] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=4.3kt
+[2026-06-07T15:00:18.156] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.3kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T15:00:18.349] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=349° Batt=100% Temp=0°C
+[2026-06-07T15:00:18.545] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=349° Batt=100% Temp=0°C
+[2026-06-07T15:00:18.739] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.7kt AWA=349° Batt=100% Temp=0°C
+[2026-06-07T15:00:19.129] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=3.9kt
+[2026-06-07T15:00:19.129] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=343° Batt=100% Temp=0°C
+[2026-06-07T15:00:19.324] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.7kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T15:00:19.519] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.7kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T15:00:19.714] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T15:00:20.105] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T15:00:20.106] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T15:00:20.299] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:20.494] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:20.885] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.2kt
+[2026-06-07T15:00:20.885] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:21.080] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:21.275] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:00:21.469] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:21.859] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:21.860] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:22.055] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:22.250] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:22.640] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:22.641] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:22.834] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.2kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:23.030] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.2kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:23.224] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:23.614] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.4kt
+[2026-06-07T15:00:23.615] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:23.809] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=314° Batt=100% Temp=0°C
+[2026-06-07T15:00:24.004] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:24.394] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.4kt
+[2026-06-07T15:00:24.395] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:24.589] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:24.784] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:24.980] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:00:25.370] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=6.6kt
+[2026-06-07T15:00:25.371] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=331° Batt=100% Temp=0°C
+[2026-06-07T15:00:25.564] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:25.759] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.0kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:26.150] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T15:00:26.150] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:26.344] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:26.540] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=327° Batt=100% Temp=0°C
+[2026-06-07T15:00:26.734] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=327° Batt=100% Temp=0°C
+[2026-06-07T15:00:27.125] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.8kt
+[2026-06-07T15:00:27.125] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:27.319] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:27.514] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:27.905] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:27.906] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:28.099] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:28.294] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:28.489] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:28.880] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=6.2kt
+[2026-06-07T15:00:28.880] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:29.074] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=329° Batt=100% Temp=0°C
+[2026-06-07T15:00:29.270] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:29.661] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:29.662] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:29.856] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:30.049] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:30.245] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:30.637] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=5.6kt
+[2026-06-07T15:00:30.638] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:30.830] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=333° Batt=100% Temp=0°C
+[2026-06-07T15:00:31.026] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=333° Batt=100% Temp=0°C
+[2026-06-07T15:00:31.220] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:31.610] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:31.611] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=1° Batt=100% Temp=0°C
+[2026-06-07T15:00:31.805] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=1° Batt=100% Temp=0°C
+[2026-06-07T15:00:32.001] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=1° Batt=100% Temp=0°C
+[2026-06-07T15:00:32.391] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=5.6kt
+[2026-06-07T15:00:32.391] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=1° Batt=100% Temp=0°C
+[2026-06-07T15:00:32.585] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=1° Batt=100% Temp=0°C
+[2026-06-07T15:00:32.780] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=333° Batt=100% Temp=0°C
+[2026-06-07T15:00:32.975] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=333° Batt=100% Temp=0°C
+[2026-06-07T15:00:33.366] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=5.4kt
+[2026-06-07T15:00:33.366] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:33.559] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=334° Batt=100% Temp=0°C
+[2026-06-07T15:00:33.755] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=332° Batt=100% Temp=0°C
+[2026-06-07T15:00:34.144] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=6.4kt
+[2026-06-07T15:00:34.145] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=347° Batt=100% Temp=0°C
+[2026-06-07T15:00:34.339] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=346° Batt=100% Temp=0°C
+[2026-06-07T15:00:34.534] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=346° Batt=100% Temp=0°C
+[2026-06-07T15:00:34.729] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=346° Batt=100% Temp=0°C
+[2026-06-07T15:00:35.119] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.2kt
+[2026-06-07T15:00:35.120] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=346° Batt=100% Temp=0°C
+[2026-06-07T15:00:35.314] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=347° Batt=100% Temp=0°C
+[2026-06-07T15:00:35.509] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=347° Batt=100% Temp=0°C
+[2026-06-07T15:00:35.900] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:35.900] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=347° Batt=100% Temp=0°C
+[2026-06-07T15:00:36.094] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=347° Batt=100% Temp=0°C
+[2026-06-07T15:00:36.290] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=347° Batt=100% Temp=0°C
+[2026-06-07T15:00:36.485] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:00:36.874] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.2kt
+[2026-06-07T15:00:36.876] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=328° Batt=100% Temp=0°C
+[2026-06-07T15:00:37.069] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=328° Batt=100% Temp=0°C
+[2026-06-07T15:00:37.264] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:37.654] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T15:00:37.655] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:37.850] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:38.045] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:38.239] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T15:00:38.629] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T15:00:38.630] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T15:00:39.019] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.2kt
+[2026-06-07T15:00:39.020] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T15:00:39.022] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:00:39.214] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:39.604] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:39.605] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:00:39.799] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:00:39.994] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:40.385] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:40.386] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T15:00:40.579] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:40.775] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:41.165] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.6kt
+[2026-06-07T15:00:41.166] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=328° Batt=100% Temp=0°C
+[2026-06-07T15:00:41.360] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=328° Batt=100% Temp=0°C
+[2026-06-07T15:00:41.556] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:41.749] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:42.140] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=4.7kt
+[2026-06-07T15:00:42.140] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.7kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T15:00:42.337] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T15:00:42.530] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T15:00:42.724] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=331° Batt=100% Temp=0°C
+[2026-06-07T15:00:43.116] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=4.5kt
+[2026-06-07T15:00:43.116] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.5kt AWA=331° Batt=100% Temp=0°C
+[2026-06-07T15:00:43.310] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.3kt AWA=331° Batt=100% Temp=0°C
+[2026-06-07T15:00:43.504] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=331° Batt=100% Temp=0°C
+[2026-06-07T15:00:43.894] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=4.3kt
+[2026-06-07T15:00:43.895] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.3kt AWA=331° Batt=100% Temp=0°C
+[2026-06-07T15:00:44.089] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:44.285] [DEBUG] [calypso-direct] [DATA_IN] AWS=3.9kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:44.479] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:44.869] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.4kt
+[2026-06-07T15:00:44.870] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T15:00:45.064] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=323° Batt=100% Temp=0°C
+[2026-06-07T15:00:45.259] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:45.650] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.6kt
+[2026-06-07T15:00:45.650] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:45.844] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:46.040] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:46.234] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:46.624] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.1kt
+[2026-06-07T15:00:46.625] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:46.819] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:47.015] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T15:00:47.599] [WARNING] [calypso-direct] [TIMING] Large gap: 585ms (expected ~125ms at 8Hz) AWS=5.1kt
+[2026-06-07T15:00:47.600] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T15:00:47.601] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.1kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T15:00:47.794] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.2kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:47.990] [DEBUG] [calypso-direct] [DATA_IN] AWS=4.7kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:48.381] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=5.2kt
+[2026-06-07T15:00:48.382] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.2kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:48.574] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.2kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T15:00:48.770] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.2kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:49.160] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.6kt
+[2026-06-07T15:00:49.160] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:49.355] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:49.550] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:49.744] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:50.134] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:50.135] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:50.329] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T15:00:50.524] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:50.719] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:51.110] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=5.4kt
+[2026-06-07T15:00:51.110] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=326° Batt=100% Temp=0°C
+[2026-06-07T15:00:51.305] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T15:00:51.500] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:51.889] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.4kt
+[2026-06-07T15:00:51.890] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:52.084] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:52.280] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:52.475] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:52.864] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T15:00:52.865] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:53.059] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.6kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:53.449] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.4kt
+[2026-06-07T15:00:53.450] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:53.645] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:53.839] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:54.034] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.6kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:00:54.424] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=5.8kt
+[2026-06-07T15:00:54.425] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.8kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:00:54.620] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=320° Batt=100% Temp=0°C
+[2026-06-07T15:00:54.817] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:55.010] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:00:55.399] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.1kt
+[2026-06-07T15:00:55.400] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:55.594] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:55.789] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T15:00:55.985] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T15:00:56.375] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T15:00:56.375] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T15:00:56.570] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:56.765] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:57.154] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T15:00:57.155] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:57.349] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:57.544] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:00:57.739] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=318° Batt=100% Temp=0°C
+[2026-06-07T15:00:58.129] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=10.5kt
+[2026-06-07T15:00:58.130] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:58.324] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:58.519] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:58.715] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.5kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:59.105] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=10.1kt
+[2026-06-07T15:00:59.107] [DEBUG] [calypso-direct] [DATA_IN] AWS=10.1kt AWA=316° Batt=100% Temp=0°C
+[2026-06-07T15:00:59.301] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.7kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:59.495] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=317° Batt=100% Temp=0°C
+[2026-06-07T15:00:59.886] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T15:00:59.887] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:01:00.081] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=319° Batt=100% Temp=0°C
+[2026-06-07T15:01:00.274] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=323° Batt=100% Temp=0°C
+[2026-06-07T15:01:00.469] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=323° Batt=100% Temp=0°C
+[2026-06-07T15:01:00.860] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=8.4kt
+[2026-06-07T15:01:00.861] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:01:01.055] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:01:01.249] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:01:01.640] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.7kt
+[2026-06-07T15:01:01.640] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:01:01.834] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:01:02.029] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=321° Batt=100% Temp=0°C
+[2026-06-07T15:01:02.230] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:01:02.615] [WARNING] [calypso-direct] [TIMING] Large gap: 385ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T15:01:02.615] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=322° Batt=100% Temp=0°C
+[2026-06-07T15:01:02.809] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T15:01:03.004] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T15:01:03.590] [WARNING] [calypso-direct] [TIMING] Large gap: 586ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T15:01:03.590] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T15:01:03.593] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T15:01:03.784] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T15:01:03.980] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.6kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T15:01:04.370] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.0kt
+[2026-06-07T15:01:04.371] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=324° Batt=100% Temp=0°C
+[2026-06-07T15:01:04.565] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=323° Batt=100% Temp=0°C
+[2026-06-07T15:01:04.760] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.0kt AWA=323° Batt=100% Temp=0°C
+[2026-06-07T15:01:05.150] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T15:01:05.150] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=325° Batt=100% Temp=0°C
+[2026-06-07T15:01:05.345] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T15:01:05.734] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=9.1kt
+[2026-06-07T15:01:05.735] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.1kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T15:01:05.738] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T15:01:06.124] [WARNING] [calypso-direct] [TIMING] Large gap: 386ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T15:01:06.125] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T15:01:06.319] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=342° Batt=100% Temp=0°C
+[2026-06-07T15:01:06.514] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.9kt AWA=327° Batt=100% Temp=0°C
+[2026-06-07T15:01:06.904] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T15:01:06.905] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=327° Batt=100% Temp=0°C
+[2026-06-07T15:01:07.100] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=327° Batt=100% Temp=0°C
+[2026-06-07T15:01:07.294] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:01:07.490] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:01:07.880] [WARNING] [calypso-direct] [TIMING] Large gap: 389ms (expected ~125ms at 8Hz) AWS=7.2kt
+[2026-06-07T15:01:07.880] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T15:01:08.074] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T15:01:08.269] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.2kt AWA=340° Batt=100% Temp=0°C
+[2026-06-07T15:01:08.464] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=339° Batt=100% Temp=0°C
+[2026-06-07T15:01:08.855] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T15:01:08.855] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=339° Batt=100% Temp=0°C
+[2026-06-07T15:01:09.050] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=329° Batt=100% Temp=0°C
+[2026-06-07T15:01:09.244] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:01:09.635] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=7.8kt
+[2026-06-07T15:01:09.635] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.8kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:01:09.829] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:01:10.024] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=330° Batt=100% Temp=0°C
+[2026-06-07T15:01:10.220] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T15:01:10.612] [WARNING] [calypso-direct] [TIMING] Large gap: 392ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T15:01:10.613] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=336° Batt=100% Temp=0°C
+[2026-06-07T15:01:10.805] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T15:01:11.001] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T15:01:11.393] [WARNING] [calypso-direct] [TIMING] Large gap: 393ms (expected ~125ms at 8Hz) AWS=8.7kt
+[2026-06-07T15:01:11.394] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=337° Batt=100% Temp=0°C
+[2026-06-07T15:01:11.586] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T15:01:11.780] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T15:01:11.974] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=347° Batt=100% Temp=0°C
+[2026-06-07T15:01:12.364] [WARNING] [calypso-direct] [TIMING] Large gap: 390ms (expected ~125ms at 8Hz) AWS=9.3kt
+[2026-06-07T15:01:12.365] [DEBUG] [calypso-direct] [DATA_IN] AWS=9.3kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T15:01:12.559] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.7kt AWA=348° Batt=100% Temp=0°C
+[2026-06-07T15:01:12.760] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=351° Batt=100% Temp=0°C
+[2026-06-07T15:01:13.090] [INFO] [calypso-direct] Signal 15 — stopping cleanly (BLE disconnect will follow)
+[2026-06-07T15:01:13.176] [WARNING] [calypso-direct] [TIMING] Large gap: 416ms (expected ~125ms at 8Hz) AWS=8.6kt
+[2026-06-07T15:01:13.176] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=351° Batt=100% Temp=0°C
+[2026-06-07T15:01:13.341] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.6kt AWA=351° Batt=100% Temp=0°C
+[2026-06-07T15:01:13.361] [WARNING] [calypso-direct] [BLE_DISCONNECT] Disconnected or data timeout
+[2026-06-07T15:01:13.535] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=351° Batt=100% Temp=0°C
+[2026-06-07T15:01:13.731] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.4kt AWA=351° Batt=100% Temp=0°C
+[2026-06-07T15:01:14.314] [WARNING] [calypso-direct] [TIMING] Large gap: 584ms (expected ~125ms at 8Hz) AWS=8.2kt
+[2026-06-07T15:01:14.315] [DEBUG] [calypso-direct] [DATA_IN] AWS=8.2kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:01:14.317] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:01:14.512] [DEBUG] [calypso-direct] [DATA_IN] AWS=7.4kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:01:14.903] [WARNING] [calypso-direct] [TIMING] Large gap: 391ms (expected ~125ms at 8Hz) AWS=6.8kt
+[2026-06-07T15:01:14.903] [INFO] [calypso-direct] [RATE_1MIN] 241 pkts/min (expected 480 at 8Hz) max_gap=586ms gaps_>250ms=70
+[2026-06-07T15:01:14.903] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.8kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:01:15.094] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.2kt AWA=352° Batt=100% Temp=0°C
+[2026-06-07T15:01:15.289] [DEBUG] [calypso-direct] [DATA_IN] AWS=6.0kt AWA=341° Batt=100% Temp=0°C
+[2026-06-07T15:01:15.484] [DEBUG] [calypso-direct] [DATA_IN] AWS=5.4kt AWA=341° Batt=100% Temp=0°C
+[2026-06-07T15:01:15.880] [INFO] [calypso-direct] Singleton released
+[2026-06-07T15:01:15.880] [INFO] [calypso-direct] [SHUTDOWN] calypso_direct stopped — PID released
+[2026-06-07T15:01:38.822] [INFO] [calypso-direct] Singleton acquired (PID 1222)
+[2026-06-07T15:01:38.861] [INFO] [calypso-direct] [STARTUP] ==========================================================
+[2026-06-07T15:01:38.862] [INFO] [calypso-direct] [STARTUP] calypso_direct — Calypso UP10 BLE Driver
+[2026-06-07T15:01:38.862] [INFO] [calypso-direct] [STARTUP] MAC=F8:5F:12:9D:D2:EE Rate=4Hz SK=UDP:4123
+[2026-06-07T15:01:38.862] [INFO] [calypso-direct] [STARTUP] Timeout=60s L2_threshold=10
+[2026-06-07T15:01:38.862] [INFO] [calypso-direct] [STARTUP] ==========================================================
+[2026-06-07T15:01:39.083] [INFO] [calypso-direct] [STARTUP] BlueZ GATT cache cleared for F8:5F:12:9D:D2:EE
+[2026-06-07T15:01:41.084] [INFO] [calypso-direct] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...
+[2026-06-07T22:44:12.318] [ERROR] [calypso-direct] [ERROR] BLE error (L1 #1): Device with address F8:5F:12:9D:D2:EE was not found.
+[2026-06-07T22:44:12.320] [INFO] [calypso-direct] [BLE_SCAN] Reconnecting in 5s...
+[2026-06-07T22:44:17.323] [INFO] [calypso-direct] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...
+[2026-06-07T22:44:37.440] [ERROR] [calypso-direct] [ERROR] BLE error (L1 #2): Device with address F8:5F:12:9D:D2:EE was not found.
+[2026-06-07T22:44:37.441] [INFO] [calypso-direct] [BLE_SCAN] Reconnecting in 10s...
+[2026-06-07T22:44:47.445] [INFO] [calypso-direct] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...
+[2026-06-07T22:45:07.574] [ERROR] [calypso-direct] [ERROR] BLE error (L1 #3): Device with address F8:5F:12:9D:D2:EE was not found.
+[2026-06-07T22:45:07.575] [INFO] [calypso-direct] [BLE_SCAN] Reconnecting in 20s...
+[2026-06-07T22:45:27.577] [INFO] [calypso-direct] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...
+[2026-06-07T22:45:47.676] [ERROR] [calypso-direct] [ERROR] BLE error (L1 #4): Device with address F8:5F:12:9D:D2:EE was not found.
+[2026-06-07T22:45:47.676] [INFO] [calypso-direct] [BLE_SCAN] Reconnecting in 40s...
+[2026-06-07T22:46:27.678] [INFO] [calypso-direct] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...
+[2026-06-07T22:46:47.786] [ERROR] [calypso-direct] [ERROR] BLE error (L1 #5): Device with address F8:5F:12:9D:D2:EE was not found.
+[2026-06-07T22:46:47.786] [INFO] [calypso-direct] [BLE_SCAN] Reconnecting in 60s...
+[2026-06-07T22:47:47.787] [INFO] [calypso-direct] [BLE_SCAN] Connecting to Calypso F8:5F:12:9D:D2:EE...
+[2026-06-07T22:48:07.868] [ERROR] [calypso-direct] [ERROR] BLE error (L1 #6): Device with address F8:5F:12:9D:D2:EE was not found.
+[2026-06-07T22:48:07.869] [INFO] [calypso-direct] [BLE_SCAN] Reconnecting in 60s...
