@@ -1,25 +1,23 @@
 {
-  "task": "plugins-1-2-fully-operational",
-  "date": "2026-06-13T17:23:44.024764",
+  "task": "plugin-3-current-calculator-v1.0.0",
+  "date": "2026-06-13T17:36:57.297919",
   "status": "SUCCESS",
-  "root_causes_fixed": [
-    "1. plugin.stop must be OUTSIDE plugin.start (SK 2.25.0 load-time validation)",
-    "2. Deploy to /usr/lib/node_modules/signalk-server/node_modules/ (appPath)",
-    "   ~/.signalk/node_modules/ fails silently if SK service user != config owner"
+  "steps_completed": [
+    "Plugin 3 written per PLUGIN-DEVELOPMENT-GUIDE.md",
+    "node --check OK",
+    "plugin.stop OUTSIDE plugin.start verified",
+    "keyword signalk-node-server-plugin present",
+    "Deployed to appPath/node_modules",
+    "settings.json enabled=True",
+    "SK restarted \u2014 plugin visible in UI"
   ],
-  "deployment_path": "/usr/lib/node_modules/signalk-server/node_modules/",
-  "plugins_active": [
-    "signalk-heading-true-calculator v1.0.2 \u2014 navigation.headingTrue",
-    "signalk-j30-leeway v1.0.1 \u2014 performance.leewayAngle (SOG fallback when no STW)"
-  ],
-  "sk_version": "2.25.0",
-  "files_modified": [
-    "plugins/README.md",
-    "logs/latest.json"
-  ],
+  "sk_paths": {
+    "environment.current.setTrue": "radians TO",
+    "environment.current.drift": "m/s"
+  },
   "errors": [],
   "services_status": {
     "signalk": "running"
   },
-  "next_recommended": "Plugin 3: signalk-current-calculator"
+  "next_recommended": "Plugin 4 or Grafana current dashboard"
 }

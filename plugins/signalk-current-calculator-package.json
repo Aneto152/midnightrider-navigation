@@ -1,0 +1,13 @@
+{
+  "name": "signalk-current-calculator",
+  "version": "1.0.0",
+  "main": "signalk-current-calculator.js",
+  "license": "MIT",
+  "keywords": [
+    "signalk",
+    "signalk-node-server-plugin",
+    "current",
+    "set",
+    "drift"
+  ]
+}
