@@ -1,23 +1,18 @@
 {
-  "task": "plugin-3-current-calculator-v1.0.0",
-  "date": "2026-06-13T17:36:57.297919",
-  "status": "SUCCESS",
+  "task": "sok-ble-service-started",
+  "date": "2026-06-13T18:05:18.359721",
+  "status": "IN_PROGRESS",
   "steps_completed": [
-    "Plugin 3 written per PLUGIN-DEVELOPMENT-GUIDE.md",
-    "node --check OK",
-    "plugin.stop OUTSIDE plugin.start verified",
-    "keyword signalk-node-server-plugin present",
-    "Deployed to appPath/node_modules",
-    "settings.json enabled=True",
-    "SK restarted \u2014 plugin visible in UI"
+    "SOK BMS MAC found via bleak: A9:9A:16:28:50:DD (SOK-AA55091)",
+    ".env created with SOK_BLE_ADDRESS + SOK_POLL_S=300",
+    "sok_direct.service created and started \u2705",
+    "Service connecting to BLE device but needs characteristic mapping"
   ],
-  "sk_paths": {
-    "environment.current.setTrue": "radians TO",
-    "environment.current.drift": "m/s"
-  },
+  "current_issue": "BLE characteristic 0000FFF1... not found \u2014 requires protocol implementation",
   "errors": [],
   "services_status": {
-    "signalk": "running"
+    "signalk": "running",
+    "sok_direct": "running"
   },
-  "next_recommended": "Plugin 4 or Grafana current dashboard"
+  "next_step": "Update sok_direct.py with correct BLE characteristics for SOK SK12V100PC"
 }
