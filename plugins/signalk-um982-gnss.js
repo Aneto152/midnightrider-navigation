@@ -151,7 +151,7 @@ module.exports = function(app) {
         // <0.5°=excellent, 0.5-2°=good, 2-5°=marginal(multipath), >5°=poor
         const hdgStd = parseFloat(data[6]); // data[5]=RESERVED=0, data[6]=real hdg_std_dev
         if (!isNaN(hdgStd) && hdgStd > 0) { // only publish if non-zero (not RESERVED)
-          vals.push({ path: 'navigation.gnss.headingStdDev', value: hdgStd });
+          vals.push({ path: 'navigation.gnss.headingStdDev', value: hdgStd * Math.PI / 180 });
         }
 
         // Number of satellites used in heading solution (dual-antenna RTK)
