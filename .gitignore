@@ -107,7 +107,10 @@ docker-compose.override.yml
 # Python bytecode
 *.pyc
 
-# Structured service logs — tracked for Dust (MidnightRider Coordinator) visibility
-!logs/services/*.log
-!logs/oc-actions.log
-!logs/debug/*.log
+
+# Service runtime logs — NOT tracked in git (RotatingFileHandler on RPi)
+# Added 2026-06-13: logs were accumulating ~1000 lines/commit
+# logs/latest.json and logs/oc-actions.log kept for Dust coordination
+logs/services/*.log
+logs/services/*.log.*
+logs/debug/*.log

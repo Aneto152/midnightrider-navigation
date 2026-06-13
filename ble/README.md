@@ -1,6 +1,6 @@
 # ble/ — BLE Drivers for Midnight Rider
 
-> Last updated: 2026-05-31  
+> Last updated: 2026-06-13  
 > Architecture: unified drivers with shared ble_common.py infrastructure
 
 Direct BLE daemon drivers for Midnight Rider sensors.  
@@ -95,10 +95,24 @@ Imported by all drivers. Provides:
 
 **UUID Note:** WIT WT901BLECL uses `9a34fb` base (NOT standard Bluetooth SIG `9b34fb`).
 
-**Protocol:**
-- Command: `FF AA 27 51 00` = one-shot quaternion request
-- WIT responds with one 0x71 packet per request
-- State machine prevents reset loop (command sent only once on first connection)
+**Protocol — One-Shot GATT Polling (confirmed 2026-06-13):**
+
+| Command | Bytes | Response | Rate | SK Output |
+|---|---|---|---|---|
+| ENABLE_QUAT_CMD | FF AA 27 51 00 | 0x55 0x71 0x51 [Q0..Q3] | 10 Hz | attitude.*, headingMagnetic |
+| CMD_ACCEL | FF AA 27 34 00 | 0x55 0x71 0x34 [AX AY AZ GX GY GZ] | 10 Hz | acceleration.*, rateOfTurn |
+| CMD_MAG | FF AA 27 3A 00 | 0x55 0x71 0x3A [HX HY HZ T] | 1 Hz | (internal) |
+| CMD_PRES | FF AA 27 45 00 | 0x55 0x71 0x45 [P] | 0.3 Hz | (internal) |
+
+**WIT Register Map (confirmed 2026-06-13):**
+- Accel: `0x34`=AX `0x35`=AY `0x36`=AZ · int16, ±16g · formula: /32768×16×9.81 m/s²
+- Gyro: `0x37`=GX `0x38`=GY `0x39`=GZ · int16, ±2000°/s · formula: /32768×2000×π/180 rad/s
+- Mag: 0x3A–0x3C · Quaternion: 0x3D–0x40 Q0 Q1 Q2 Q3
+
+**Confirmed values at dock (2026-06-13 12:02 EDT):**
+- |acceleration| = 10.005 m/s² ≈ g ✅ (WIT leveled on companionway)
+- rateOfTurn = -0.02 rad/s ≈ 0 ✅ (vessel at rest)
+- Register fix: CMD_ACCEL 0x61→0x34 eliminates garbage data
 
 **Coordinate Transform:**
 - Mounted vertically on companionway bulkhead

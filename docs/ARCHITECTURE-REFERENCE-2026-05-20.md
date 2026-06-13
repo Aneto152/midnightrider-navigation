@@ -2,7 +2,7 @@
 
 **Voilier :** J/30 hull 511 — Midnight Rider  
 **Skipper :** Denis LAFARGE  
-**Date :** 2026-05-31  
+**Date :** 2026-06-13  
 **Version :** 4.0 — Canonical Reference  
 **Statut :** ✅ Production — Block Island Race 2026-05-22
 
@@ -593,3 +593,26 @@ midnightrider-navigation/
 ---
 **Cleaned on:** 2026-05-29 22:35 UTC
 **Cleaned by:** OC Agent (automated)
+
+
+---
+
+## Changelog — 2026-06-13 — WIT Acceleration Corrected
+
+**Commits:** 039581b + e052630 + 9fe25f2d
+
+| Bug | Cause | Fix | Result |
+|---|---|---|---|
+| rateOfTurn = -769°/s (physically impossible) | CMD_ACCEL read register 0x61 (unknown/garbage data) | CMD_ACCEL → register 0x34 (standard WIT AX register) | rateOfTurn = -0.02 rad/s ✅ |
+| acceleration x=0, y=0, z=4.79 (wrong orientation) | Register 0x61 does NOT contain acceleration | Same fix as above | \|A\| = 10.0 m/s² ≈ g ✅ |
+
+**WIT Register Map Verified:**
+- AX=0x34, AY=0x35, AZ=0x36 (acceleration)
+- GX=0x37, GY=0x38, GZ=0x39 (gyro rate)
+
+**Confirmed Values at Dock (2026-06-13 12:02 EDT):**
+- Acceleration magnitude: 10.005 m/s² (expected gravity ≈ 9.81 m/s²) ✅
+- Rate of turn: -0.02 rad/s (vessel at rest) ✅
+- WIT mounted level on companionway ✅
+
+**Logging:** WIT + Calypso raised to INFO level (2026-06-13) — was DEBUG @ 8 msg/sec, now <2 msg/sec production logging.

@@ -1,20 +1,33 @@
 {
-  "task": "um982-doc-rename",
-  "date": "2026-06-13T12:32:47.721774",
+  "task": "wit-cleanup-doc-gitignore-final",
+  "date": "2026-06-13T12:51:35.251601",
   "status": "SUCCESS",
   "steps_completed": [
-    "ARCHITECTURE-SYSTEM-2026-06-13.md renamed to ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md"
+    "Task 1 (prev commit 9fe25f2d): HEX_DUMP + PACKET_TYPE + PACKET_MATCH removed, log level INFO",
+    "Task 2A: .gitignore force-tracking rules removed (no more !logs/services/*.log)",
+    "Task 2B: calypso-direct.py raised to INFO level (code update only)",
+    "Task 2C: git rm --cached service log files (untracked)",
+    "Task 3: ble/README.md updated with WIT protocol table + register map + confirmed values",
+    "Task 3: docs/ARCHITECTURE-REFERENCE-2026-05-20.md updated with WIT changelog"
   ],
   "files_modified": [
-    "ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md (renamed)",
-    "logs/oc-actions.log",
-    "logs/latest.json"
+    ".gitignore (force-tracking rules removed)",
+    "ble/calypso_direct.py (INFO level)",
+    "ble/README.md (WIT protocol + registers)",
+    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md (WIT changelog)",
+    "logs/latest.json",
+    "logs/oc-actions.log"
   ],
+  "service_logs_status": {
+    "git_tracked": false,
+    "action": "git rm --cached",
+    "future": "Service logs will accumulate on RPi only (not in git)"
+  },
   "errors": [],
   "services_status": {
-    "signalk": "running",
-    "influxdb": "running",
-    "grafana": "running"
+    "wit-ble-direct": "active (INFO level)",
+    "calypso-direct": "code updated (INFO level)",
+    "signalk": "running"
   },
-  "next_recommended": "Field test headingTrue on water \u2014 Block Island Race (2026-05-22)"
+  "next_recommended": "Final commit \u2014 system ready for Block Island Race field test"
 }
