@@ -46,16 +46,24 @@ Three main BLE/GNSS sensor streams → Signal K → InfluxDB → Grafana dashboa
 
 **Source label**: `um982-gnss`
 
-### Signal K Data Published
+### Signal K Data Published (V2.1 — 2026-06-13)
 
-| Path | Rate | Value | Source | Units |
-|------|------|-------|--------|-------|
-| `navigation.position` | 1 Hz | {lat, lon, alt} | um982-gnss | deg, m |
-| `navigation.speedOverGround` | 1 Hz | 0.0-20.0 | um982-gnss | m/s |
-| `navigation.courseOverGroundTrue` | 1 Hz | 0-2π | um982-gnss | rad |
-| `navigation.headingTrue` | 5 Hz | 0-2π | um982-gnss | rad |
-| `navigation.attitude.roll` | 5 Hz | -π to +π | um982-gnss | rad |
-| `navigation.attitude.pitch` | 5 Hz | -π to +π | um982-gnss | rad |
+| Path | Rate | Value | Source | Units | Notes |
+|------|------|-------|--------|-------|-------|
+| `navigation.position` | 1 Hz | {lat, lon, alt} | um982-gnss | deg, m | From $GNGGA |
+| `navigation.speedOverGround` | 1 Hz | 0.0-20.0 | um982-gnss | m/s | From $GNRMC |
+| `navigation.courseOverGroundTrue` | 1 Hz | 0-2π | um982-gnss | rad | From $GNRMC |
+| `navigation.headingTrue` | 5 Hz | 0-2π | um982-gnss | rad | From #HEADINGA data[4] |
+| `navigation.attitude.roll` | 5 Hz | -π to +π | um982-gnss | rad | Heel (from #HEADINGA data[2]) |
+| ~~`navigation.attitude.pitch`~~ | — | — | — | — | **REMOVED V2.1** (athwartships geometry artifact) |
+| `navigation.gnss.satellites` | 1 Hz | integer | um982-gnss | count | From $GNGGA f[7] |
+| `navigation.gnss.horizontalDilution` | 1 Hz | float | um982-gnss | — | HDOP from $GNGGA f[8] |
+| `navigation.gnss.methodQuality` | 1 Hz | string | um982-gnss | — | Fix type from $GNGGA f[6] |
+| `navigation.gnss.antennaAltitude` | 1 Hz | float | um982-gnss | m | MSL altitude from $GNGGA f[9] |
+| `navigation.gnss.geoidalSeparation` | 1 Hz | float | um982-gnss | m | From $GNGGA f[11] |
+| `navigation.gnss.antennaBaseline` | 5 Hz | float | um982-gnss | m | Antenna distance, ~2.8m nominal |
+| `navigation.magneticVariation` | 1 Hz | float | um982-gnss | rad | From $GNRMC f[10/11] |
+| `navigation.datetime` | 1 Hz | ISO 8601 | um982-gnss | string | UTC from $GNRMC f[1]+f[9] |
 
 ### Signal K Providers (pipedProviders)
 
