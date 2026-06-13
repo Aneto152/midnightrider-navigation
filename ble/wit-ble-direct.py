@@ -133,7 +133,7 @@ WRITE_UUID = '0000ffe9-0000-1000-8000-00805f9a34fb'
 ENABLE_QUAT_CMD = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])  # quaternion
 CMD_MAG = bytes([0xFF, 0xAA, 0x27, 0x3A, 0x00])  # mag+temp at 1Hz
 CMD_PRES = bytes([0xFF, 0xAA, 0x27, 0x45, 0x00])  # pressure at 0.3Hz  # mag+temp at 1Hz
-CMD_ACCEL = bytes([0xFF, 0xAA, 0x27, 0x61, 0x00])  # accel+gyro at 10Hz — added 2026-06-13
+CMD_ACCEL = bytes([0xFF, 0xAA, 0x27, 0x34, 0x00])  # accel+gyro at 10Hz — reg 0x34=AX (fixed 2026-06-13: was wrong 0x61)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 2 — PROCESS STATE
@@ -289,16 +289,17 @@ def decode_0x71_mag_packet(data: bytes) -> dict | None:
 
 def decode_0x71_accel_packet(data: bytes) -> dict | None:
     """
-    Decode WIT accel+gyro response to CMD_ACCEL (FF AA 27 61 00).
+    Decode WIT accel+gyro response to CMD_ACCEL (FF AA 27 34 00).
+    Register 0x34 = AX (standard WIT accel register, NOT 0x61 which had wrong content).
 
-    Layout: 0x55 0x71 0x61 0x00 [ax int16] [ay int16] [az int16] [gx int16] [gy int16] [gz int16]
+    Layout: 0x55 0x71 0x34 0x00 [ax int16] [ay int16] [az int16] [gx int16] [gy int16] [gz int16]
     Same register-read response format as decode_0x71_mag_packet (data at offset 4).
     Accel: int16/32768 × 16g × 9.81 m/s²
     Gyro: int16/32768 × 2000°/s → rad/s
     Returns None if packet is invalid.
-    Added 2026-06-13: handles case where WIT responds 0x71 format to CMD_ACCEL.
+    Fixed 2026-06-13: register changed from 0x61 to 0x34 (standard WIT AX register).
     """
-    if len(data) < 16 or data[0] != 0x55 or data[1] != 0x71 or data[2] != 0x61:
+    if len(data) < 16 or data[0] != 0x55 or data[1] != 0x71 or data[2] != 0x34: # reg 0x34 fixed 2026-06-13
         return None
     try:
         def s16(off): return struct.unpack_from('<h', data, off)[0]
@@ -527,12 +528,16 @@ def make_data_handler(logger):
             send_motion(pkt_0x61, logger)
             _stats['sk_posts'] += 1
 
-        # Also try 0x71-format accel response (FF AA 27 61 00 → 0x55 0x71 0x61 [data])
-        # Added 2026-06-13: covers case where WIT returns register-read format
+        # Also try 0x71-format accel response (FF AA 27 34 00 → 0x55 0x71 0x34 [data])
+        # Fixed 2026-06-13: register changed from 0x61 to 0x34 (standard WIT AX register)
         pkt_0x71_accel = decode_0x71_accel_packet(bytes(data))
+        # DIAGNOSTIC: hex dump first 20 bytes for every motion packet (debug level)
+        if len(data) >= 2 and data[0] == 0x55 and data[1] in (0x61, 0x71):
+            hex_str = ' '.join(f'{b:02X}' for b in data[:min(20, len(data))])
+            logger.debug(f'[HEX_DUMP] raw={hex_str}')
         if pkt_0x71_accel:
             _stats['packets_0x61'] += 1
-            logger.debug('[PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion')
+            logger.debug('[PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion')
             send_motion(pkt_0x71_accel, logger)
             _stats['sk_posts'] += 1
 

@@ -1,17 +1,18 @@
 {
-  "task": "wit-acceleration-fix",
-  "date": "2026-06-13T11:32:01.755716",
+  "task": "wit-accel-register-fix",
+  "date": "2026-06-13T11:52:47.978187",
   "status": "SUCCESS",
-  "root_cause": "No CMD_ACCEL command in polling loop + possible 0x61 format mismatch",
+  "root_cause": "CMD_ACCEL was pointing to register 0x61 (unknown content) instead of 0x34 (AX standard register)",
+  "bugs_fixed": [
+    "rateOfTurn=-769deg/s: gyro_z was reading garbage from wrong register offset",
+    "acceleration x=0,y=0,z=4.79: register 0x61 does not contain accel data"
+  ],
   "steps_completed": [
-    "Step 1: Service stopped \u2705",
-    "Step 2: Added CMD_ACCEL constant \u2705",
-    "Step 3: Added decode_0x71_accel_packet() function \u2705",
-    "Step 4: Added diagnostic PACKET_TYPE logging \u2705",
-    "Step 5: Added decode_0x71_accel_packet call in handler \u2705",
-    "Step 6: Added CMD_ACCEL to polling loop \u2705",
-    "Step 7: Verified syntax \u2705",
-    "Step 8: Restarted wit-ble-direct.service \u2705"
+    "CMD_ACCEL changed: 0xFF 0xAA 0x27 0x61 0x00 \u2192 0xFF 0xAA 0x27 0x34 0x00 \u2705",
+    "decode_0x71_accel_packet: data[2] check updated 0x61\u21920x34 \u2705",
+    "Hex dump diagnostic added for motion packets \u2705",
+    "Syntax verified \u2705",
+    "Service restarted and connected \u2705"
   ],
   "files_modified": [
     "ble/wit-ble-direct.py"
@@ -19,14 +20,17 @@
   "logging_instrumentation": {
     "new_log_files": [],
     "probes_added": [
-      "PACKET_TYPE",
-      "PACKET_MATCH"
+      "HEX_DUMP"
     ],
     "tested": true
   },
   "errors": [],
   "services_status": {
-    "wit-ble-direct": "active (running)"
+    "wit-ble-direct": "active (running, connecting)"
   },
-  "next_step": "Verify Signal K has acceleration data via curl. Commit if confirmed."
+  "verification_expected": {
+    "acceleration_y": "~+9.81 m/s\u00b2 (masthead/up, gravity)",
+    "rateOfTurn": "~0 rad/s at dock"
+  },
+  "next_steps": "Monitor logs for HEX_DUMP entries to confirm 0x55 0x71 0x34 packet format"
 }
