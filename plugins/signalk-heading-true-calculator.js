@@ -1,201 +1,331 @@
 'use strict';
 
 /**
- * signalk-heading-true-calculator v1.0.0
- * 
- * Derives navigation.headingTrue from headingMagnetic + magneticVariation.
- * 
- * GUARD CONDITION:
- *   Skips silently if another source provides fresh headingTrue (within staleSecs).
- *   This allows other instruments (GPS, UM982) to take priority without conflict.
- * 
- * INPUTS:
- *   - navigation.headingMagnetic (degrees or radians)
- *   - navigation.magneticVariation (radians, ±π)
- * 
- * OUTPUT:
- *   - navigation.headingTrue = headingMagnetic + magneticVariation (in radians)
- * 
- * CONFIGURATION:
- *   - debug (boolean): Enable debug-level logging
- *   - staleSecs (number): Consider headingTrue stale if older than this (default 10)
- *   - maxHMAgeSecs (number): Skip if headingMagnetic older than this (default 5)
- * 
- * LOGGING:
- *   - logs/services/heading-true-calc.log (RotatingFileHandler, 5MB/3 backups)
- *   - [STARTUP], [HEARTBEAT], [DATA_IN], [DATA_OUT], [WARN], [ERROR]
+ * @file signalk-heading-true-calculator.js
+ * @version 1.0.1
+ * @author MidnightRider J/30 — OpenClaw
+ * @license MIT
+ * @since 2026-06-13
+ *
+ * PURPOSE
+ * Derives navigation.headingTrue from navigation.headingMagnetic +
+ * navigation.magneticVariation. Activates ONLY when headingTrue is
+ * not already provided by a live, non-stale sensor source.
+ *
+ * FORMULA
+ * headingTrue (rad) = headingMagnetic (rad) + magneticVariation (rad)
+ * Signal K convention: radians, 0=North, clockwise positive.
+ * magneticVariation: East positive (SK specification).
+ *
+ * INPUTS (Signal K paths consumed)
+ * navigation.headingMagnetic [rad] Required — from compass/NMEA
+ * navigation.magneticVariation [rad] Optional — defaults to 0 with WARN log
+ *
+ * OUTPUT (Signal K path produced)
+ * navigation.headingTrue [rad] Only when no live external source present
+ *
+ * GUARD CONDITIONS
+ * G1: Skip if headingMagnetic is stale (older than maxHMAgeSecs)
+ * G2: Skip if headingMagnetic is invalid (NaN, infinite, implausible)
+ * G3: Use variation=0 with warning if magneticVariation unavailable
+ * G4: Skip if another source provides fresh headingTrue (< staleSecs old)
+ * Uses app.getSelfPath() public API for reliable cross-version detection
+ *
+ * CHANGELOG
+ * v1.0.1 (2026-06-13) — Fix: subscriptionManager typo (was lowercase 'm')
+ * Fix: removeAllListeners → removeListener with saved ref
+ * Fix: guard condition now allows mv=null (defaults to 0)
+ * Fix: G4 uses app.getSelfPath() instead of internal API
+ * Add: data-flow.log boundary crossing entries
+ * v1.0.0 (2026-06-13) — Initial release
+ *
+ * LOGGING
+ * Service log : ~/midnightrider-navigation/logs/services/heading-true-calc.log
+ * Data-flow : ~/midnightrider-navigation/logs/debug/data-flow.log
+ * Rotation : 5 MB max, keeps .1 backup
  */
 
 const fs = require('fs');
 const path = require('path');
 
-module.exports = function(app) {
-  let lastPublished = 0;
-  let stats = { derived: 0, skipped: 0, errors: 0, heartbeats: 0 };
-  let logFile = '/home/aneto/midnightrider-navigation/logs/services/heading-true-calc.log';
-  const MAX_BYTES = 5 * 1024 * 1024;
+const PLUGIN_ID = 'signalk-heading-true-calculator';
+const LOG_BASE = '/home/aneto/midnightrider-navigation/logs';
+const LOG_SVC = LOG_BASE + '/services/heading-true-calc.log';
+const LOG_FLOW = LOG_BASE + '/debug/data-flow.log';
+const MAX_BYTES = 5 * 1024 * 1024;
+const TWO_PI = 2 * Math.PI;
 
-  function ensureDir(d) {
-    if (!fs.existsSync(d)) fs.mkdirSync(d, { recursive: true });
+module.exports = function(app) {
+
+  // ── Logging ──────────────────────────────────────────────────────────────
+
+  function ensureDirs() {
+    try {
+      fs.mkdirSync(LOG_BASE + '/services', { recursive: true });
+      fs.mkdirSync(LOG_BASE + '/debug', { recursive: true });
+    } catch (_) {}
+  }
+
+  function rotateIfNeeded(file) {
+    try {
+      if (fs.existsSync(file) && fs.statSync(file).size > MAX_BYTES) {
+        fs.renameSync(file, file + '.1');
+      }
+    } catch (_) {}
   }
 
   function svcLog(level, msg) {
     try {
-      ensureDir(path.dirname(logFile));
-      try {
-        if (fs.statSync(logFile).size > MAX_BYTES) {
-          fs.renameSync(logFile, logFile + '.1');
-        }
-      } catch(e) {}
-      fs.appendFileSync(logFile, `[${new Date().toISOString()}] [${level}] [heading-true-calc] ${msg}\n`);
-    } catch(e) {}
+      ensureDirs();
+      rotateIfNeeded(LOG_SVC);
+      fs.appendFileSync(LOG_SVC,
+        '[' + new Date().toISOString() + '] [' + level + '] [heading-true-calc] ' + msg + '\n');
+    } catch (_) {}
   }
 
+  function flowLog(msg) {
+    try {
+      rotateIfNeeded(LOG_FLOW);
+      fs.appendFileSync(LOG_FLOW,
+        '[' + new Date().toISOString() + '] [FLOW] ' + msg + '\n');
+    } catch (_) {}
+  }
+
+  // ── Runtime state ─────────────────────────────────────────────────────────
+
+  let stats = { derived: 0, skipped: 0, errors: 0, heartbeats: 0 };
+  let heartbeatTimer = null;
+  let hm = null; // latest headingMagnetic (radians)
+  let mv = null; // latest magneticVariation (radians), null if absent
+  let hmTs = 0; // epoch-seconds of last headingMagnetic update
+  let mvTs = 0; // epoch-seconds of last magneticVariation update
+
+  // ── Plugin definition ─────────────────────────────────────────────────────
+
   const plugin = {
-    id: 'signalk-heading-true-calculator',
-    name: 'True Heading Calculator',
-    description: 'Derives navigation.headingTrue from headingMagnetic + magneticVariation.',
+    id: PLUGIN_ID,
+    name: 'True Heading Calculator (Magnetic + Variation)',
+    description: 'Derives navigation.headingTrue from headingMagnetic + magneticVariation. ' +
+      'Activates ONLY when headingTrue is not provided by another live source.',
+    version: '1.0.1',
     schema: {
       type: 'object',
+      title: 'True Heading Calculator — Configuration',
       properties: {
-        debug: { type: 'boolean', title: 'Debug logging', default: false },
-        staleSecs: { type: 'number', title: 'Stale threshold (seconds)', default: 10 },
-        maxHMAgeSecs: { type: 'number', title: 'Max headingMagnetic age (seconds)', default: 5 }
+        debug: {
+          type: 'boolean',
+          title: 'Enable debug logging',
+          description: 'Log every computation to SK debug stream and service log.',
+          default: false
+        },
+        staleSecs: {
+          type: 'number',
+          title: 'External headingTrue stale threshold (seconds)',
+          description: 'If another source provides headingTrue fresher than this, skip computation.',
+          default: 10,
+          minimum: 1,
+          maximum: 300
+        },
+        maxHMAgeSecs: {
+          type: 'number',
+          title: 'Max acceptable headingMagnetic age (seconds)',
+          description: 'Reject headingMagnetic values older than this.',
+          default: 5,
+          minimum: 1,
+          maximum: 60
+        }
       }
     }
   };
 
+  // ── Plugin start ──────────────────────────────────────────────────────────
+
   plugin.start = function(options) {
-    const config = Object.assign({ debug: false, staleSecs: 10, maxHMAgeSecs: 5 }, options || {});
+    const config = Object.assign(
+      { debug: false, staleSecs: 10, maxHMAgeSecs: 5 },
+      options || {}
+    );
+    // Clamp config to safe ranges
+    config.staleSecs = Math.max(1, Math.min(300, Number(config.staleSecs) || 10));
+    config.maxHMAgeSecs = Math.max(1, Math.min(60, Number(config.maxHMAgeSecs) || 5));
 
-    svcLog('INFO', `STARTUP: signalk-heading-true-calculator v1.0.0 starting`);
-    svcLog('INFO', `CONFIG: debug=${config.debug} staleSecs=${config.staleSecs} maxHMAgeSecs=${config.maxHMAgeSecs}`);
-    svcLog('INFO', `DEPENDENCY_CHECK: subscribed to navigation.headingMagnetic + navigation.magneticVariation`);
+    // Reset state
+    hm = null; mv = null; hmTs = 0; mvTs = 0;
+    stats = { derived: 0, skipped: 0, errors: 0, heartbeats: 0 };
 
-    app.setPluginStatus('Initialized');
+    svcLog('INFO', 'STARTUP: ' + PLUGIN_ID + ' v1.0.1 starting');
+    svcLog('INFO', 'CONFIG: debug=' + config.debug
+      + ' staleSecs=' + config.staleSecs
+      + ' maxHMAgeSecs=' + config.maxHMAgeSecs);
 
-    // Subscribe to headingMagnetic and magneticVariation
-    let hm = null, mv = null, hmTs = 0, mvTs = 0;
-
-    app.subscriptionmanager.subscribe(
+    // Subscribe to paths via subscriptionManager (FIX #1: capital M)
+    app.subscriptionManager.subscribe(
       [
-        { path: 'navigation.headingMagnetic', period: 1000 },
-        { path: 'navigation.magneticVariation', period: 1000 }
+        { path: 'navigation.headingMagnetic', period: 500 },
+        { path: 'navigation.magneticVariation', period: 5000 }
       ],
       (err, res) => {
         if (err) {
-          svcLog('ERROR', `Subscription error: ${err.message}`);
-          return;
+          svcLog('ERROR', 'Subscription error: ' + err.message);
+          app.error('[' + PLUGIN_ID + '] ' + err.message);
         }
       }
     );
 
-    // Listen to delta events
-    app.on('delta:processed', (delta) => {
+    svcLog('INFO', 'DEPENDENCY_CHECK: subscribed to navigation.headingMagnetic + navigation.magneticVariation');
+    app.setPluginStatus('Waiting for navigation.headingMagnetic');
+
+    // Heartbeat: log statistics every 5 minutes
+    heartbeatTimer = setInterval(function() {
+      stats.heartbeats++;
+      svcLog('DEBUG', 'HEARTBEAT #' + stats.heartbeats
+        + ': derived=' + stats.derived
+        + ' skipped=' + stats.skipped
+        + ' errors=' + stats.errors);
+    }, 5 * 60 * 1000);
+
+    // Listen to delta stream
+    const deltaListener = (delta) => {
       try {
         const now = Date.now() / 1000;
 
-        // Extract values from delta
+        // Extract headingMagnetic and magneticVariation from delta
         if (delta.updates) {
-          delta.updates.forEach(update => {
-            if (update.values) {
-              update.values.forEach(val => {
-                if (val.path === 'navigation.headingMagnetic') {
-                  hm = val.value;
-                  hmTs = now;
-                }
-                if (val.path === 'navigation.magneticVariation') {
-                  mv = val.value;
-                  mvTs = now;
-                }
-              });
-            }
-          });
-        }
-
-        // Check if we should derive headingTrue
-        if (hm !== null && mv !== null) {
-          const hmAge = now - hmTs;
-          const mvAge = now - mvTs;
-
-          // Guard 1: Check if headingMagnetic is fresh enough
-          if (hmAge > config.maxHMAgeSecs) {
-            stats.skipped++;
-            if (config.debug) {
-              svcLog('DEBUG', `SKIP: headingMagnetic stale (${hmAge.toFixed(1)}s > ${config.maxHMAgeSecs}s)`);
-            }
-            return;
-          }
-
-          // Guard 2: Check if magneticVariation is available and fresh
-          if (mv === null || mvAge > 60) {
-            svcLog('WARN', `SKIP: magneticVariation unavailable or stale — using variation=0`);
-            mv = 0;
-          }
-
-          // Guard 3: Validate data
-          if (typeof hm !== 'number' || typeof mv !== 'number' || !isFinite(hm) || !isFinite(mv)) {
-            svcLog('WARN', `SKIP: invalid data — hm=${hm} mv=${mv}`);
-            stats.skipped++;
-            return;
-          }
-
-          // Guard 4: Check if another source already provides fresh headingTrue
-          const skSelf = app.signalk.getSelf();
-          if (skSelf && skSelf.navigation && skSelf.navigation.headingTrue) {
-            const htVal = skSelf.navigation.headingTrue;
-            const htTs = htVal._timestamp ? (Date.now() - new Date(htVal._timestamp).getTime()) / 1000 : 999;
-            if (htTs < config.staleSecs) {
-              stats.skipped++;
-              if (config.debug) {
-                svcLog('DEBUG', `SKIP: headingTrue already provided fresh (${htTs.toFixed(1)}s old)`);
+          delta.updates.forEach(function(update) {
+            if (!update.values) return;
+            update.values.forEach(function(pv) {
+              if (pv.path === 'navigation.headingMagnetic' && pv.value !== null) {
+                hm = pv.value;
+                hmTs = now;
               }
-              return;
-            }
-          }
-
-          // Derive headingTrue (in radians)
-          let ht = hm + mv;
-          while (ht > Math.PI) ht -= 2 * Math.PI;
-          while (ht < -Math.PI) ht += 2 * Math.PI;
-
-          // Publish delta
-          app.handleMessage(plugin.id, {
-            updates: [{
-              source: { label: 'heading-true-calculator', type: 'computed' },
-              timestamp: new Date().toISOString(),
-              values: [{ path: 'navigation.headingTrue', value: ht }]
-            }]
+              if (pv.path === 'navigation.magneticVariation' && pv.value !== null) {
+                mv = pv.value;
+                mvTs = now;
+              }
+            });
           });
-
-          stats.derived++;
-          lastPublished = now;
-
-          if (config.debug) {
-            svcLog('DEBUG', `DATA_OUT: headingTrue=${ht.toFixed(4)}rad (hm=${hm.toFixed(4)} + mv=${mv.toFixed(4)})`);
-          }
         }
 
-        // Heartbeat every 60 seconds
-        if (now - lastPublished > 60) {
-          stats.heartbeats++;
-          svcLog('INFO', `HEARTBEAT: derived=${stats.derived} skipped=${stats.skipped} errors=${stats.errors}`);
-          stats = { derived: 0, skipped: 0, errors: 0, heartbeats: stats.heartbeats };
-          lastPublished = now;
-        }
+        // FIX #3: Compute as long as hm is available (mv defaults to 0)
+        if (hm === null) return;
 
-      } catch(e) {
+        computeAndPublish(now, config);
+
+      } catch (err) {
         stats.errors++;
-        svcLog('ERROR', `Exception: ${e.message}`);
+        svcLog('ERROR', 'Delta processing exception: ' + err.message);
       }
+    };
+
+    app.on('delta:processed', deltaListener);
+
+    plugin.stop = function() {
+      svcLog('INFO', 'SHUTDOWN: stopping — stats=' + JSON.stringify(stats));
+      if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer = null; }
+      app.removeListener('delta:processed', deltaListener); // FIX #2: use removeListener
+      svcLog('INFO', 'SHUTDOWN: complete');
+    };
+  };
+
+  // ── Core computation ──────────────────────────────────────────────────────
+
+  /**
+   * Runs all guard conditions and publishes headingTrue if guards pass.
+   */
+  function computeAndPublish(nowSec, config) {
+
+    // Guard 1: headingMagnetic must be fresh
+    const hmAge = nowSec - hmTs;
+    if (hmAge > config.maxHMAgeSecs) {
+      stats.skipped++;
+      if (config.debug) {
+        svcLog('DEBUG', 'SKIP G1: headingMagnetic stale ('
+          + hmAge.toFixed(1) + 's > ' + config.maxHMAgeSecs + 's)');
+      }
+      return;
+    }
+
+    // Guard 2: headingMagnetic must be a valid finite number
+    if (typeof hm !== 'number' || !isFinite(hm) || Math.abs(hm) > 4 * Math.PI) {
+      stats.errors++;
+      svcLog('ERROR', 'ERROR G2: headingMagnetic invalid (' + hm + ')');
+      return;
+    }
+
+    // Guard 3: magneticVariation — use 0 if absent or stale
+    let variation = 0;
+    if (mv !== null) {
+      const mvAge = nowSec - mvTs;
+      if (!isFinite(mv)) {
+        svcLog('WARN', 'WARN G3: magneticVariation not finite — using 0');
+      } else if (mvAge > 60) {
+        svcLog('WARN', 'WARN G3: magneticVariation stale (' + mvAge.toFixed(0) + 's) — using 0');
+      } else {
+        variation = Math.max(-Math.PI, Math.min(Math.PI, mv));
+      }
+    }
+
+    // Guard 4: Skip if another LIVE source already provides fresh headingTrue
+    // FIX #4: Use app.getSelfPath() (public API)
+    const htObj = app.getSelfPath('navigation.headingTrue');
+    if (htObj && htObj.value !== null && htObj.value !== undefined) {
+      const srcLabel = (htObj.source && htObj.source.label) ? htObj.source.label : '';
+      if (srcLabel !== PLUGIN_ID) {
+        const htAge = htObj.timestamp
+          ? (Date.now() - new Date(htObj.timestamp).getTime()) / 1000
+          : Infinity;
+        if (htAge < config.staleSecs) {
+          stats.skipped++;
+          if (config.debug) {
+            svcLog('DEBUG', 'SKIP G4: headingTrue from \'' + srcLabel
+              + '\' is ' + htAge.toFixed(1) + 's old');
+          }
+          return;
+        }
+      }
+    }
+
+    // Compute: headingTrue = headingMagnetic + variation
+    // Normalize result to [0, 2π)
+    let ht = (((hm + variation) % TWO_PI) + TWO_PI) % TWO_PI;
+
+    // Sanity check result
+    if (!isFinite(ht) || isNaN(ht)) {
+      stats.errors++;
+      svcLog('ERROR', 'ERROR: computed headingTrue is not finite (hm=' + hm + ' var=' + variation + ')');
+      return;
+    }
+
+    // Publish to Signal K
+    app.handleMessage(PLUGIN_ID, {
+      updates: [{
+        source: { label: PLUGIN_ID, type: 'derived' },
+        timestamp: new Date().toISOString(),
+        values: [{ path: 'navigation.headingTrue', value: ht }]
+      }]
     });
 
-    app.setPluginStatus('Running');
-  };
+    stats.derived++;
 
-  plugin.stop = function() {
-    svcLog('INFO', 'SHUTDOWN: signalk-heading-true-calculator stopped');
-  };
+    // Logging
+    const htDeg = (ht * 180 / Math.PI).toFixed(1);
+    const hmDeg = (hm * 180 / Math.PI).toFixed(1);
+    const varDeg = (variation * 180 / Math.PI).toFixed(2);
+
+    if (config.debug) {
+      app.debug('[' + PLUGIN_ID + '] HM=' + hmDeg + 'deg + Var=' + varDeg + 'deg → HT=' + htDeg + 'degT');
+      svcLog('DEBUG', 'DATA_OUT: headingTrue=' + htDeg + 'degT'
+        + ' (HM=' + hmDeg + 'deg + Var=' + varDeg + 'deg)');
+    }
+
+    // Data-flow log: boundary crossing event
+    flowLog('Compass→SignalK: headingTrue=' + htDeg + 'degT'
+      + ' [' + PLUGIN_ID + ']');
+
+    app.setPluginStatus('HT=' + htDeg + 'degT'
+      + ' | derived=' + stats.derived
+      + ' skipped=' + stats.skipped);
+  }
 
   return plugin;
 };
