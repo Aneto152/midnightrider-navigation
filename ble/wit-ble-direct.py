@@ -83,6 +83,7 @@ PID: /tmp/wit-ble-direct.pid
 """
 
 import asyncio
+import logging
 import math
 import os
 import struct
@@ -493,11 +494,6 @@ def make_data_handler(logger):
     """Factory: returns a BLE notification callback bound to logger."""
     def handle_data(sender, data):
         """BLE notification callback — synchronous, no async issues."""
-        # DIAGNOSTIC 2026-06-13: log packet type header for debugging
-        if len(data) >= 2:
-            b2_str = f'0x{data[2]:02X}' if len(data) > 2 else '0x??'
-            logger.debug(f'[PACKET_TYPE] header=0x{data[0]:02X} 0x{data[1]:02X} len={len(data)} '
-            f'b2={b2_str}')
         pkt_0x71 = decode_0x71_packet(bytes(data))
         if pkt_0x71:
             _stats['packets_0x71'] += 1
@@ -524,20 +520,14 @@ def make_data_handler(logger):
         pkt_0x61 = decode_0x61_packet(bytes(data))
         if pkt_0x61:
             _stats['packets_0x61'] += 1
-            logger.debug('[PACKET_MATCH] 0x61 native format decoded → sending motion')
             send_motion(pkt_0x61, logger)
             _stats['sk_posts'] += 1
 
         # Also try 0x71-format accel response (FF AA 27 34 00 → 0x55 0x71 0x34 [data])
         # Fixed 2026-06-13: register changed from 0x61 to 0x34 (standard WIT AX register)
         pkt_0x71_accel = decode_0x71_accel_packet(bytes(data))
-        # DIAGNOSTIC: hex dump first 20 bytes for every motion packet (debug level)
-        if len(data) >= 2 and data[0] == 0x55 and data[1] in (0x61, 0x71):
-            hex_str = ' '.join(f'{b:02X}' for b in data[:min(20, len(data))])
-            logger.debug(f'[HEX_DUMP] raw={hex_str}')
         if pkt_0x71_accel:
             _stats['packets_0x61'] += 1
-            logger.debug('[PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion')
             send_motion(pkt_0x71_accel, logger)
             _stats['sk_posts'] += 1
 
@@ -729,6 +719,7 @@ async def run_ble_client(logger) -> None:
 
 if __name__ == '__main__':
     _logger = setup_logger(SERVICE_NAME)
+    _logger.setLevel(logging.INFO)
 
     def _set_stop():
         global _running
