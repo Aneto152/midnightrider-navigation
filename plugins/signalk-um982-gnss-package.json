@@ -1,7 +1,7 @@
 {
   "name": "signalk-um982-gnss",
-  "version": "2.1.0",
-  "description": "UM982 V2.1: direct serial, headingTrue+roll+GPS data (no pitch \u2014 athwartships)",
+  "version": "2.2.0",
+  "description": "UM982 V2.2: corrected field mapping (data[2]=baseline, data[3]=heading, data[4]=roll)",
   "main": "index.js",
   "keywords": [
     "signalk-node-server-plugin"

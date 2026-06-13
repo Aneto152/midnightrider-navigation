@@ -1,18 +1,21 @@
 'use strict';
 
 /**
- * signalk-um982-gnss V2.1 — Unified UM982 Direct Serial Plugin
- * 
- * Antenna config: TRANSVERSAL (port ↔ starboard)
- * Publishes: headingTrue, roll (no pitch — athwartships), GPS quality, baseline
- * 
- * V2.1 changes:
- * - Remove navigation.attitude.pitch (meaningless for athwartships mount)
- * - Add GPS quality data: satellites, HDOP, fix quality, altitude
- * - Add magnetic variation + datetime from RMC
- * - Add baseline distance monitoring (antenna separation health check)
- * 
- * @version 2.1.0
+ * signalk-um982-gnss V2.2 — CRITICAL FIELD MAPPING CORRECTION
+ *
+ * VERIFIED by Dust analysis 2026-06-13:
+ * WRONG (V2.0/V2.1) → CORRECT (V2.2):
+ * data[2] = roll° → data[2] = antennaBaseline meters (~2.85m)
+ * data[3] = ignored → data[3] = heading baseline azimuth
+ * data[4] = headingTrue → data[4] = roll (elevation angle)
+ * data[6] = antennaBaseline → data[6] = NOT published (std_dev)
+ *
+ * Physical basis: athwartships mount
+ * baseline_azimuth = boat_heading + 90° (port=primary, starboard=secondary)
+ * boat_heading = baseline_azimuth - 90°
+ * elevation ≈ 0° for horizontal baseline = heel angle
+ *
+ * @version 2.2.0
  */
 
 const { SerialPort } = require('serialport');
@@ -40,7 +43,7 @@ module.exports = function(app) {
     try {
       const ts = new Date().toISOString();
       fs.appendFileSync(LOG_FILE, `[${ts}] [${level}] [um982-gnss] ${msg}\n`);
-    } catch(e) { app.debug('[um982-gnss] log error: ' + e.message); }
+    } catch(e) { app.debug('[um982-gnss] log: ' + e.message); }
   }
 
   function toRad(deg) { return deg * Math.PI / 180; }
@@ -59,10 +62,8 @@ module.exports = function(app) {
     if (!val || val.length < 4) return NaN;
     const raw = parseFloat(val);
     const deg = Math.floor(raw / 100);
-    const min = raw - deg * 100;
-    let r = deg + min / 60;
-    if (dir === 'S' || dir === 'W') r = -r;
-    return r;
+    const r = deg + (raw - deg * 100) / 60;
+    return (dir === 'S' || dir === 'W') ? -r : r;
   }
 
   function handleLine(line) {
@@ -74,22 +75,15 @@ module.exports = function(app) {
           const lon = parseLatLon(f[4], f[5]);
           if (!isNaN(lat) && !isNaN(lon)) {
             const vals = [{ path: 'navigation.position', value: { latitude: lat, longitude: lon } }];
-            
             const alt = parseFloat(f[9]);
             if (!isNaN(alt)) vals[0].value.altitude = alt;
-            
             const sats = parseInt(f[7], 10);
             if (!isNaN(sats) && sats > 0) vals.push({ path: 'navigation.gnss.satellites', value: sats });
-            
             const hdop = parseFloat(f[8]);
             if (!isNaN(hdop)) vals.push({ path: 'navigation.gnss.horizontalDilution', value: hdop });
-            
-            const qual = GGA_QUALITY[f[6]] || 'GNSS Fix';
-            vals.push({ path: 'navigation.gnss.methodQuality', value: qual });
-            
+            vals.push({ path: 'navigation.gnss.methodQuality', value: GGA_QUALITY[f[6]] || 'GNSS Fix' });
             const geoid = parseFloat(f[11]);
             if (!isNaN(geoid)) vals.push({ path: 'navigation.gnss.geoidalSeparation', value: geoid });
-
             send(vals);
             stats.gga++;
           }
@@ -102,63 +96,62 @@ module.exports = function(app) {
           const lon = parseLatLon(f[5], f[6]);
           if (!isNaN(lat) && !isNaN(lon))
             vals.push({ path: 'navigation.position', value: { latitude: lat, longitude: lon } });
-          
           const sog = parseFloat(f[7]);
           if (!isNaN(sog)) vals.push({ path: 'navigation.speedOverGround', value: sog * 0.514444 });
-          
           const cog = parseFloat(f[8]);
           if (!isNaN(cog)) vals.push({ path: 'navigation.courseOverGroundTrue', value: toRad(cog) });
-          
-          // Magnetic variation
           const magVar = parseFloat(f[10]);
-          if (!isNaN(magVar) && f[10] !== '') {
-            const magVarRad = toRad(f[11] === 'W' ? -magVar : magVar);
-            vals.push({ path: 'navigation.magneticVariation', value: magVarRad });
-          }
-          
-          // Datetime from RMC
+          if (!isNaN(magVar) && f[10] !== '')
+            vals.push({ path: 'navigation.magneticVariation', value: toRad(f[11] === 'W' ? -magVar : magVar) });
           if (f[1] && f[9] && f[1].length >= 6 && f[9].length === 6) {
             try {
-              const hh = f[1].substring(0,2), mm = f[1].substring(2,4), ss = f[1].substring(4,6);
-              const dd = f[9].substring(0,2), mo = f[9].substring(2,4), yy = f[9].substring(4,6);
-              const iso = `20${yy}-${mo}-${dd}T${hh}:${mm}:${ss}Z`;
+              const iso = `20${f[9].substring(4,6)}-${f[9].substring(2,4)}-${f[9].substring(0,2)}T${f[1].substring(0,2)}:${f[1].substring(2,4)}:${f[1].substring(4,6)}Z`;
               vals.push({ path: 'navigation.datetime', value: iso });
-            } catch(e) { /* ignore date errors */ }
+            } catch(e) {}
           }
-
-          if (vals.length) {
-            send(vals);
-            stats.rmc++;
-          }
+          if (vals.length) { send(vals); stats.rmc++; }
         }
       } else if (line.startsWith('#HEADINGA')) {
         const si = line.indexOf(';');
         if (si < 0) return;
         const data = line.substring(si + 1).split('*')[0].split(',');
-        if (data.length >= 7 && data[0] === 'SOL_COMPUTED') {
-          const roll = parseFloat(data[2]);
-          const hdg = parseFloat(data[4]);
-          const baseline = parseFloat(data[6]);
-          
-          if (!isNaN(hdg) && !isNaN(roll)) {
-            const hdgFinal = cfg.reverseHeading ? (hdg + 180) % 360 : hdg;
-            const rollFinal = cfg.reverseRoll ? -roll : roll;
-            
-            const vals = [
-              { path: 'navigation.headingTrue', value: toRad(hdgFinal) },
-              { path: 'navigation.attitude.roll', value: toRad(rollFinal) }
-              // NOTE: navigation.attitude.pitch intentionally omitted (athwartships antennas)
-            ];
-            
-            // Baseline health check
-            if (!isNaN(baseline) && baseline > 0.1) {
-              vals.push({ path: 'navigation.gnss.antennaBaseline', value: baseline });
-            }
-            
-            send(vals);
-            stats.headinga++;
-            lastHdg = hdgFinal.toFixed(1) + '°T';
-          }
+        if (data.length < 7) return;
+
+        const solStatus = data[0];
+        if (solStatus === 'INSUFFICIENT_OBS' || solStatus === 'NONE' || 
+            solStatus === 'COLD_START' || solStatus === 'NO_CONVERGENCE') return;
+
+        // V2.2 CORRECTED FIELD MAPPING:
+        const baseline = parseFloat(data[2]); // meters — antenna separation (was wrongly roll)
+        const baselineAz = parseFloat(data[3]); // degrees — heading of baseline (was suppressed)
+        const baselineElev = parseFloat(data[4]); // degrees — elevation = roll (was published as headingTrue)
+
+        if (isNaN(baselineAz) || isNaN(baselineElev)) return;
+
+        // Boat heading = baseline azimuth - antenna offset
+        // Default offset=90° for port-primary athwartships mount
+        let hdg = ((baselineAz - cfg.antennaOffset) + 360) % 360;
+        if (cfg.reverseHeading) hdg = (hdg + 180) % 360;
+
+        // Roll = elevation of baseline (= heel for athwartships)
+        let roll = cfg.reverseRoll ? -baselineElev : baselineElev;
+        roll += (cfg.rollOffset || 0);
+
+        const vals = [
+          { path: 'navigation.headingTrue', value: toRad(hdg) },
+          { path: 'navigation.attitude.roll', value: toRad(roll) }
+        ];
+
+        if (!isNaN(baseline) && baseline > 0.5) {
+          vals.push({ path: 'navigation.gnss.antennaBaseline', value: baseline });
+        }
+
+        send(vals);
+        stats.headinga++;
+        lastHdg = hdg.toFixed(1) + '°T';
+
+        if (stats.headinga % 25 === 1) {
+          log('INFO', `DATA_IN: HEADINGA — baselineAz=${baselineAz.toFixed(2)}° → hdg=${hdg.toFixed(2)}° elev=${baselineElev.toFixed(2)}° → roll=${roll.toFixed(2)}° baseline=${baseline.toFixed(3)}m sol=${solStatus}`);
         }
       }
     } catch(e) {
@@ -174,8 +167,8 @@ module.exports = function(app) {
       parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
       
       serialPort.on('open', () => {
-        log('INFO', `STARTUP: Serial OPEN — ${cfg.device} @ ${cfg.baudrate} baud`);
-        app.setPluginStatus('UM982 V2.1 connected (athwartships: no pitch)');
+        log('INFO', `STARTUP: Port OPEN — ${cfg.device} @ ${cfg.baudrate}`);
+        app.setPluginStatus('UM982 V2.2 connected');
       });
 
       serialPort.on('error', (err) => {
@@ -191,7 +184,6 @@ module.exports = function(app) {
         }
       });
 
-      // Heartbeat every 5min
       if (heartbeatTimer) clearInterval(heartbeatTimer);
       heartbeatTimer = setInterval(() => {
         log('DEBUG', `HEARTBEAT: GGA=${stats.gga} RMC=${stats.rmc} HEADINGA=${stats.headinga} errors=${stats.errors}`);
@@ -206,29 +198,30 @@ module.exports = function(app) {
 
   const plugin = {
     id: 'signalk-um982-gnss',
-    name: 'UM982 Dual-Antenna GNSS (V2.1 — athwartships)',
-    description: 'Direct serial for UM982 transversal mount. Publishes: headingTrue + roll (no pitch), GPS quality, baseline, magVar, datetime.',
+    name: 'UM982 V2.2 (corrected field mapping)',
+    description: 'V2.2: data[2]=baseline(m), data[3]=heading, data[4]=roll(elevation). Athwartships antennas.',
     schema: {
       type: 'object',
       properties: {
         device: { type: 'string', default: '/dev/ttyUM982' },
         baudrate: { type: 'number', default: 115200 },
+        antennaOffset: { type: 'number', title: 'Antenna offset degrees (default 90)', default: 90 },
         reverseHeading: { type: 'boolean', default: false },
-        reverseRoll: { type: 'boolean', default: true },
+        reverseRoll: { type: 'boolean', default: false },
         rollOffset: { type: 'number', default: 0 }
       }
     }
   };
 
   plugin.start = function(options) {
-    cfg = Object.assign({ device: '/dev/ttyUM982', baudrate: 115200, reverseHeading: false, reverseRoll: true, rollOffset: 0 }, options || {});
-    log('INFO', `STARTUP: V2.1 — antenna=TRANSVERSAL (port-starboard), pitch=REMOVED`);
+    cfg = Object.assign({ device: '/dev/ttyUM982', baudrate: 115200, antennaOffset: 90, reverseHeading: false, reverseRoll: false, rollOffset: 0 }, options || {});
+    log('INFO', `STARTUP V2.2: antennaOffset=${cfg.antennaOffset}° reverseHdg=${cfg.reverseHeading} reverseRoll=${cfg.reverseRoll}`);
     app.setPluginStatus('Initializing...');
     openPort();
   };
 
   plugin.stop = function() {
-    log('INFO', 'SHUTDOWN: Closing');
+    log('INFO', 'SHUTDOWN');
     if (heartbeatTimer) clearInterval(heartbeatTimer);
     if (reconnectTimer) clearTimeout(reconnectTimer);
     if (serialPort && serialPort.isOpen) serialPort.close();
