@@ -1,25 +1,12 @@
 {
-  "task": "um982-cleanup-and-full-doc-update",
-  "date": "2026-06-13T12:28:44.182147",
+  "task": "um982-doc-rename",
+  "date": "2026-06-13T12:32:47.721774",
   "status": "SUCCESS",
   "steps_completed": [
-    "signalk-um982-proprietary: disabled in settings + removed from node_modules",
-    "All zombie UM982 plugins confirmed disabled",
-    "plugins/signalk-um982-proprietary.js: deleted from repo",
-    "plugins/signalk-um982-package.json: deleted from repo",
-    "plugins/signalk-um982-gnss-v2.js: deleted from repo (cleanup)",
-    "config/signalk-settings.json: synced with enabled state corrections",
-    "Signal K restarted \u2014 headingTrue confirmed at -7.0\u00b0T",
-    "ARCHITECTURE-SYSTEM-2026-06-13.md: comprehensive architecture created",
-    "SYSTEM-SUMMARY.md: system status summary created"
+    "ARCHITECTURE-SYSTEM-2026-06-13.md renamed to ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md"
   ],
   "files_modified": [
-    "plugins/signalk-um982-proprietary.js (DELETED)",
-    "plugins/signalk-um982-package.json (DELETED)",
-    "plugins/signalk-um982-gnss-v2.js (DELETED)",
-    "config/signalk-settings.json",
-    "ARCHITECTURE-SYSTEM-2026-06-13.md (NEW)",
-    "SYSTEM-SUMMARY.md (NEW)",
+    "ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md (renamed)",
     "logs/oc-actions.log",
     "logs/latest.json"
   ],
@@ -29,23 +16,5 @@
     "influxdb": "running",
     "grafana": "running"
   },
-  "system_health": {
-    "cpu": "<3%",
-    "memory": "43%",
-    "disk": "22%",
-    "temperature": "47\u00b0C"
-  },
-  "um982_final_state": {
-    "active_plugin": "signalk-um982-gnss V2",
-    "proprietary_plugin": "DELETED",
-    "headingTrue": "-7.0\u00b0T",
-    "position": "40.8343, -73.7133",
-    "source": "um982-gnss",
-    "single_source": true
-  },
-  "next_steps": [
-    "Field test headingTrue on water (Block Island Race 2026-05-22)",
-    "Monitor InfluxDB archival (post-race analysis)",
-    "Dashboard refinement based on crew feedback"
-  ]
+  "next_recommended": "Field test headingTrue on water \u2014 Block Island Race (2026-05-22)"
 }
