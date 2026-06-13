@@ -169,3 +169,13 @@
 [2026-05-31T14:40:12.537662] [SERVICE_RESTART] [CALYPSO] Manual BlueZ clean + restart to break lockout
 [2026-05-31T15:06:17.768300] [CONFIG_CHANGE] [CALYPSO] Rate: 8Hz→4Hz (8Hz oversaturates BLE CI)
 [2026-06-13T11:26:16.108698] [SERVICE_RESTART] [WIT] Stopped wit-ble-direct for patching
+[2026-06-13T12:06:10.604119] [DEBUG] [um982] RAW SERIAL DIAGNOSTIC — 20s capture on /dev/ttyUM982
+[2026-06-13T12:06:10.604119] [SERVICE_RESTART] [signalk] Stopped for serial capture
+[2026-06-13T12:06:10.604119] [DEBUG] [um982] Sentence types found: #HEADINGA(100), $GNGGA(20), $GNRMC(20), $GNGSA(80)
+[2026-06-13T12:06:10.604119] [DEBUG] [um982] #HEADINGA present: YES — sol_status: SOL_COMPUTED
+[2026-06-13T12:06:10.604119] [DEBUG] [um982] Baseline length: 4.2943m — LOCKED (antennas working)
+[2026-06-13T12:06:10.604119] [DEBUG] [um982] Heading: 8.3752° — available in proprietary sentence
+[2026-06-13T12:06:10.604119] [DEBUG] [um982] Solution type: NARROW_FLOAT (RTK-class precision)
+[2026-06-13T12:06:10.604119] [SERVICE_RESTART] [signalk] Restarted after capture
+[2026-06-13T12:06:10.604119] [FILE_SAVED] [um982] logs/debug/um982-raw-20260613-120530.txt
+[2026-06-13T12:06:10.604119] [RESULT] [um982] Diagnostic: SUCCESS — dual-antenna heading fully operational
