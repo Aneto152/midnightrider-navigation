@@ -1,16 +1,16 @@
 {
-  "task": "plugins-subscriptionmanager-fix",
-  "date": "2026-06-13T19:05:33.282329",
+  "task": "plugins-event-driven-all3",
+  "date": "2026-06-13T19:43:31.811357",
   "status": "SUCCESS",
-  "root_cause": "app.subscriptionManager undefined in SK 2.25.0 \u2014 replaced with setInterval+getSelfPath",
+  "pattern": "streambundle.getSelfBus \u2014 event-driven at natural instrument cadence",
   "versions": {
-    "P1": "v1.0.3",
-    "P2": "v1.0.2",
-    "P3": "v1.0.1"
+    "P1": "v1.0.6",
+    "P2": "v1.0.3",
+    "P3": "v1.0.2"
   },
   "errors": [],
   "services_status": {
     "signalk": "running"
   },
-  "next_recommended": "Verify all 3 plugins show Running status in SK UI"
+  "next_recommended": "Grafana dashboards or field test"
 }
