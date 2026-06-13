@@ -64,6 +64,7 @@ systemd: etc/systemd/system/calypso_direct.service
 PID: /tmp/calypso_direct.pid
 """
 
+import logging
 import asyncio
 import math
 import os
@@ -296,6 +297,7 @@ async def main() -> None:
     global _running, _was_connected, _last_err
 
     logger = setup_logger(SERVICE_NAME)
+    logger.setLevel(logging.INFO)  # INFO production — 2026-06-13
     acquire_singleton(PID_FILE, logger)
 
     try:
