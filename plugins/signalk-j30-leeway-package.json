@@ -1,0 +1,38 @@
+{
+  "name": "signalk-j30-leeway",
+  "version": "1.0.0",
+  "description": "Computes performance.leewayAngle for J/30 using empirical formula: Leeway(°) = K × |Heel(°)| / STW(kts)²",
+  "main": "signalk-j30-leeway.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Midnight Rider Navigation",
+  "license": "MIT",
+  "signalkPlugin": {
+    "id": "signalk-j30-leeway",
+    "name": "J/30 Leeway Calculator",
+    "description": "Computes performance.leewayAngle for J/30 using empirical leeway formula",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "leewayFactor": { "type": "number", "title": "Leeway Factor K (default: 12)", "default": 12, "minimum": 5, "maximum": 25 },
+        "minSTW": { "type": "number", "title": "Min STW knots", "default": 0.5, "minimum": 0.1, "maximum": 2.0 },
+        "maxLeeway": { "type": "number", "title": "Max leeway degrees", "default": 15, "minimum": 5, "maximum": 30 },
+        "minHeel": { "type": "number", "title": "Min heel degrees", "default": 1.0, "minimum": 0.5, "maximum": 5.0 },
+        "leewaySign": { "type": "number", "title": "Sign: -1 (standard) or +1 (reversed)", "default": -1, "enum": [-1, 1] },
+        "maxRollAgeSecs": { "type": "number", "title": "Max roll age seconds", "default": 5, "minimum": 1, "maximum": 30 },
+        "maxSTWAgeSecs": { "type": "number", "title": "Max STW age seconds", "default": 5, "minimum": 1, "maximum": 30 },
+        "debug": { "type": "boolean", "title": "Debug logging", "default": false }
+      }
+    }
+  },
+  "keywords": [
+    "signalk",
+    "plugin",
+    "leeway",
+    "performance",
+    "j30",
+    "sailing",
+    "polar"
+  ]
+}

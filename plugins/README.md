@@ -259,3 +259,64 @@ Logs: logs/services/heading-true-calc.log + logs/debug/data-flow.log
 
 Changelog: v1.0.1 fixed subscriptionManager typo, removeAllListeners danger,
 guard logic, internal API usage. v1.0.0 initial.
+
+---
+
+### 5. signalk-j30-leeway.js — J/30 Leeway Calculator
+
+Version: 1.0.0 | Phase: 2 post-race | Dependencies: none (pure Node.js)
+
+Computes performance.leewayAngle for the J/30 using the standard empirical
+leeway formula: Leeway(°) = K × |Heel(°)| / STW(kts)²
+
+**Rationale:** IOR-design J/30 with fin keel has predictable leeway based on
+heel and speed. Default K=12 derived from typical upwind conditions (20° heel
+at 6 kts ≈ 6.7° leeway). Field-tunable via SK Admin UI.
+
+Signal K paths:
+
+| Path | Unit | Description |
+|------|------|-------------|
+| performance.leewayAngle | radians | Signed leeway angle — CTW = headingTrue + leewayAngle |
+
+**Sign convention** (critical for Plugin 3: current calculator):
+- Starboard heel (roll > 0) → leeward = PORT → leewayAngle NEGATIVE
+- Port heel (roll < 0) → leeward = STBD → leewayAngle POSITIVE
+- Formula: leewayAngle = leewaySign × sign(roll) × magnitude_rad
+- Default leewaySign = -1 (standard). Set to +1 only if field validation shows opposite.
+
+**Guard conditions** (in order):
+1. G1: Roll and STW must be fresh (< maxRollAgeSecs/maxSTWAgeSecs = 5s)
+2. G2: Roll and STW must be finite, in plausible ranges (|roll|<π, 0<STW<30 m/s)
+3. G3: STW ≥ minSTW (default 0.5 kts) — prevents divide-by-near-zero; publish leeway=0 below threshold
+4. G4: |Heel| ≥ minHeel (default 1.0°) — boat upright → publish leeway=0
+
+**Inputs:**
+- navigation.attitude.roll [rad] — from UM982 or WIT
+- navigation.speedThroughWater [m/s] — from paddlewheel or sonic log
+
+**Configuration** (SK Admin → Plugins → J/30 Leeway Calculator):
+```json
+{
+  "leewayFactor": 12,
+  "minSTW": 0.5,
+  "maxLeeway": 15,
+  "minHeel": 1.0,
+  "leewaySign": -1,
+  "maxRollAgeSecs": 5,
+  "maxSTWAgeSecs": 5,
+  "debug": false
+}
+```
+
+**Logs:** logs/services/j30-leeway-calc.log + logs/debug/data-flow.log
+
+**Typical output (upwind, 20° heel, 6 kts):**
+```
+leeway = 12 × 20 / 36 ≈ 6.7°
+Applied with sign: -6.7° (if heel is starboard)
+CTW = headingTrue - 6.7° (boat drifts toward port)
+```
+
+**Field tuning:** If COG vs. CTW comparison shows different leeway than K=12 predicts,
+adjust K in SK Admin UI without restarting SK. Changes take effect immediately.

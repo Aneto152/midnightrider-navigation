@@ -1,28 +1,47 @@
 {
-  "task": "plugin-1-heading-true-calculator-v1.0.1-complete",
-  "date": "2026-06-13T15:32:39.131662",
+  "task": "plugin-2-j30-leeway-v1.0.0",
+  "date": "2026-06-13T15:39:10.749590",
   "status": "SUCCESS",
   "steps_completed": [
-    "v1.0.0 initial release (commit bfd0876)",
-    "v1.0.1 bugfix: 4 critical bugs fixed (commit 68c97ab)",
-    "Fix #1: subscriptionManager capital M",
-    "Fix #2: removeListener with saved reference",
-    "Fix #3: guard condition allows mv=null",
-    "Fix #4: app.getSelfPath() public API",
-    "Added: data-flow.log boundary crossing entries"
+    "signalk-j30-leeway.js created (441 lines, full JSDoc)",
+    "package.json created via python3",
+    "Plugin deployed to ~/.signalk/plugins/signalk-j30-leeway/",
+    "Plugin config created in ~/.signalk/plugin-config-data/ (active=True)",
+    "Signal K restarted via systemctl",
+    "Input data verified: attitude.roll=0.1538rad (8.8\u00b0) available"
   ],
-  "files_modified": [
-    "plugins/signalk-heading-true-calculator.js (v1.0.1)",
-    "plugins/signalk-heading-true-calculator-package.json",
-    "plugins/README.md",
-    "logs/latest.json"
+  "files_created": [
+    "plugins/signalk-j30-leeway.js",
+    "plugins/signalk-j30-leeway-package.json"
+  ],
+  "sk_paths_consumed": [
+    "navigation.attitude.roll",
+    "navigation.speedThroughWater"
   ],
   "sk_path_published": {
-    "navigation.headingTrue": "radians \u2014 derived, guard-protected"
+    "performance.leewayAngle": "radians \u2014 signed leeway from J/30 empirical formula"
+  },
+  "formula": "Leeway(\u00b0) = K \u00d7 |Heel(\u00b0)| / STW(kts)\u00b2  (K=12 default for J/30)",
+  "sign_convention": "leewayAngle = leewaySign \u00d7 sign(roll) \u00d7 magnitude_rad; stbd_heel \u2192 negative_leeway",
+  "guard_conditions": [
+    "G1: roll and STW must be fresh (< maxRollAgeSecs/maxSTWAgeSecs)",
+    "G2: roll and STW must be finite, in plausible ranges",
+    "G3: STW >= minSTW (prevents divide-by-near-zero)",
+    "G4: |Heel| >= minHeel (boat upright \u2192 leeway=0)"
+  ],
+  "configuration": {
+    "leewayFactor": 12,
+    "minSTW": 0.5,
+    "maxLeeway": 15,
+    "minHeel": 1.0,
+    "leewaySign": -1,
+    "maxRollAgeSecs": 5,
+    "maxSTWAgeSecs": 5,
+    "debug": false
   },
   "errors": [],
   "services_status": {
     "signalk": "running"
   },
-  "next_recommended": "Plugin 2: J/30 leeway calculator (performance.leewayAngle)"
+  "next_recommended": "Plugin 3: current vector calculator (performance.currentVector)"
 }
