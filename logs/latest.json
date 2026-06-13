@@ -1,33 +1,51 @@
 {
-  "task": "wit-cleanup-doc-gitignore-final",
-  "date": "2026-06-13T12:51:35.251601",
+  "task": "plugin-1-heading-true-calculator",
+  "date": "2026-06-13T15:15:56.361222",
   "status": "SUCCESS",
   "steps_completed": [
-    "Task 1 (prev commit 9fe25f2d): HEX_DUMP + PACKET_TYPE + PACKET_MATCH removed, log level INFO",
-    "Task 2A: .gitignore force-tracking rules removed (no more !logs/services/*.log)",
-    "Task 2B: calypso-direct.py raised to INFO level (code update only)",
-    "Task 2C: git rm --cached service log files (untracked)",
-    "Task 3: ble/README.md updated with WIT protocol table + register map + confirmed values",
-    "Task 3: docs/ARCHITECTURE-REFERENCE-2026-05-20.md updated with WIT changelog"
+    "signalk-heading-true-calculator.js created (production-quality, ~220 lines)",
+    "package.json created via python3",
+    "Plugin deployed to ~/.signalk/plugins/signalk-heading-true-calculator/",
+    "Plugin config created in ~/.signalk/plugin-config-data/ (active=True)",
+    "Signal K restarted via systemctl",
+    "Plugin verified: headingMagnetic=5.337rad (305.8\u00b0) available"
   ],
   "files_modified": [
-    ".gitignore (force-tracking rules removed)",
-    "ble/calypso_direct.py (INFO level)",
-    "ble/README.md (WIT protocol + registers)",
-    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md (WIT changelog)",
+    "plugins/signalk-heading-true-calculator.js",
+    "plugins/signalk-heading-true-calculator-package.json",
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
-  "service_logs_status": {
-    "git_tracked": false,
-    "action": "git rm --cached",
-    "future": "Service logs will accumulate on RPi only (not in git)"
+  "logging_instrumentation": {
+    "new_log_files": [
+      "logs/services/heading-true-calc.log"
+    ],
+    "flow_log": "logs/debug/data-flow.log",
+    "probes_present": [
+      "STARTUP",
+      "HEARTBEAT",
+      "DATA_IN",
+      "DATA_OUT",
+      "WARN",
+      "ERROR",
+      "SHUTDOWN",
+      "DEPENDENCY_CHECK"
+    ],
+    "rotation": "5MB max, 3 backups",
+    "tested": true
   },
+  "sk_path_published": {
+    "navigation.headingTrue": "radians \u2014 derived only when no live source present"
+  },
+  "guard_conditions": [
+    "G1: skips if another source provides fresh headingTrue (< staleSecs)",
+    "G2: skips if headingMagnetic is stale (> maxHMAgeSecs)",
+    "G3: skips if headingMagnetic is NaN/infinite/implausible",
+    "G4: uses variation=0 with warning if magneticVariation unavailable/invalid"
+  ],
   "errors": [],
   "services_status": {
-    "wit-ble-direct": "active (INFO level)",
-    "calypso-direct": "code updated (INFO level)",
     "signalk": "running"
   },
-  "next_recommended": "Final commit \u2014 system ready for Block Island Race field test"
+  "next_recommended": "Plugin 2: J/30 leeway calculator (performance.leewayAngle)"
 }
