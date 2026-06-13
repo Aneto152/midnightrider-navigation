@@ -5,6 +5,7 @@
  * @license MIT
  * CHANGELOG
  * v1.0.6 — Fix: own-output source check. SK 2.x uses $source (string).
+ * v1.0.6 — Fix source check: handle $source (SK 2.x). Own output never treated as external.
  * v1.0.5 — Event-driven: fires on every headingMagnetic update.
  * Primary: app.streambundle.getSelfBus() (SK 2.x Bacon.js stream).
  * Fallback: app.registerDeltaInputHandler() (delta middleware).
@@ -66,7 +67,7 @@ module.exports = function(app) {
     name: 'True Heading Calculator (Magnetic + Variation)',
     description: 'Event-driven: fires on every headingMagnetic update. ' +
       'Defers to external instrument when active (checked every 10s).',
-    version: '1.0.5',
+    version: '1.0.6',
     schema: { type:'object', title:'True Heading Calculator', properties: {
       debug: { type:'boolean', title:'Debug logging', default:false },
       checkIntervalS: { type:'number', title:'External HT check interval (s)', default:10, minimum:5, maximum:60 },
@@ -87,7 +88,7 @@ module.exports = function(app) {
     stats = { derived:0, skipped:0, errors:0 };
     externalHTActive = false;
 
-    svcLog('INFO','STARTUP: '+PLUGIN_ID+' v1.0.5');
+    svcLog('INFO','STARTUP: '+PLUGIN_ID+' v1.0.6');
     svcLog('INFO','CONFIG: checkInterval='+cfg.checkIntervalS+'s externalStale='+cfg.externalStaleS+'s');
     if (app.setPluginStatus) app.setPluginStatus('Initialising...');
 
@@ -96,22 +97,27 @@ module.exports = function(app) {
       try {
         var htObj = app.getSelfPath('navigation.headingTrue');
         if (htObj && htObj.value != null) {
-          // SK 2.x stores source in $source (string) or source.label (object)
+          // Extract source — SK 2.x uses $source (string)
           var src = '';
           if (htObj.$source && typeof htObj.$source === 'string') {
             src = htObj.$source;
           } else if (htObj.source && htObj.source.label) {
             src = htObj.source.label;
           }
-          // Own output or unknown source → not external
-          if (src === PLUGIN_ID || src === '' || src.indexOf('signalk-') >= 0) {
-            externalHTActive = false;
-          } else {
+          // Check if this value is OUR OWN output
+          var isOurOutput = (src.indexOf(PLUGIN_ID) >= 0);
+          
+          if (!isOurOutput && src !== '') {
+            // Genuine external source
             var age = htObj.timestamp ? (Date.now()-new Date(htObj.timestamp).getTime())/1000 : Infinity;
             var prev = externalHTActive;
             externalHTActive = (age < cfg.externalStaleS);
             if (prev !== externalHTActive)
               svcLog('INFO','external HT: active='+externalHTActive+' src='+src+' age='+age.toFixed(1)+'s');
+          } else {
+            // Our own output or unknown source — never treat as external
+            if (externalHTActive) svcLog('INFO','external HT cleared: src='+src+' (our output or unknown)');
+            externalHTActive = false;
           }
         } else { externalHTActive = false; }
       } catch(e) { svcLog('ERROR','checkExternal: '+e.message); }
