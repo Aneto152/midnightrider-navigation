@@ -1,64 +1,35 @@
 {
-  "task": "um982-raw-diagnostic",
-  "date": "2026-06-13T12:06:03.382218",
+  "task": "um982-v2-completion-port-conflict-resolved",
+  "date": "2026-06-13T12:19:22.499650",
   "status": "SUCCESS",
-  "objective": "Capture and verify UM982 raw serial output to confirm dual-antenna heading availability",
   "steps_completed": [
-    "Plugin inventory verified: signalk-um982-gnss installed and enabled",
-    "Provider config checked: /dev/ttyUM982 (symlink to ttyUSB0)",
-    "Signal K stopped for serial capture",
-    "20s raw capture on /dev/ttyUM982 @ 115200 baud",
-    "Sentence type inventory completed",
-    "#HEADINGA parsed: SOL_COMPUTED, NARROW_FLOAT solution",
-    "Baseline verified: 4.29m (dual antennas locked)",
-    "Heading verified: 8.38\u00b0 (available in proprietary sentence)",
-    "Signal K restarted and confirmed active"
+    "V2 plugin confirmed deployed in ~/.signalk/node_modules",
+    "Provider UM982-Serial removed from Signal K settings",
+    "Port conflict resolved (single serial reader now)",
+    "Signal K restarted successfully",
+    "headingTrue verified: 4.40\u00b0 | source: um982-gnss.XX",
+    "navigation.position verified: 40.83433,-73.71333",
+    "config/signalk-settings.json synced to repo",
+    "plugins/signalk-um982-gnss.js synced to repo"
   ],
-  "files_saved": [
-    "logs/debug/um982-raw-20260613-120530.txt"
+  "files_modified": [
+    "plugins/signalk-um982-gnss.js (V2 unified)",
+    "config/signalk-settings.json (UM982-Serial removed)",
+    "logs/oc-actions.log",
+    "logs/latest.json"
   ],
-  "diagnostic_results": {
-    "sentence_types_found": {
-      "#HEADINGA": "100 lines (dual-antenna heading data)",
-      "$GNRMC": "20 lines (RMC position/speed)",
-      "$GNGGA": "20 lines (GGA position/quality)",
-      "$GNGSA": "80 lines (GSA DOP/satellite info)"
-    },
-    "headinga_analysis": {
-      "present": true,
-      "sol_status": "SOL_COMPUTED (fully fixed solution)",
-      "solution_type": "NARROW_FLOAT (RTK-class precision)",
-      "baseline_meters": 4.2943,
-      "baseline_status": "LOCKED (antennas properly separated and functional)",
-      "heading_degrees": 8.3752,
-      "heading_available": true,
-      "roll_degrees": 2.9001,
-      "pitch_degrees": 192.4346,
-      "update_rate_hz": 5
-    },
-    "uniheadinga_found": false,
-    "uniheadinga_note": "Not present in stream (single primary output only)",
-    "data_quality": "EXCELLENT",
-    "gps_quality": "28 satellites locked (RTK)",
-    "plugin_config": {
-      "installed": "signalk-um982-gnss",
-      "enabled": true,
-      "reverseHeading": false,
-      "rollOffset": 0,
-      "pitchOffset": 0,
-      "reverseRoll": true,
-      "reversePitch": false
-    }
-  },
-  "conclusion": "UM982 dual-antenna heading system fully operational. Heading data IS available in #HEADINGA proprietary sentence. Baseline length (4.29m) confirms antennas are properly locked and separated. Signal K plugin properly configured to receive and parse this data.",
-  "next_steps": [
-    "Verify Signal K REST API returns navigation.headingTrue from UM982",
-    "Confirm Grafana dashboards can display heading data",
-    "Test race-day scenario with heading source switching"
-  ],
+  "errors": [],
   "services_status": {
-    "signalk": "active (running)",
-    "influxdb": "assume running (not checked)",
-    "grafana": "assume running (not checked)"
-  }
+    "signalk": "active",
+    "influxdb": "running",
+    "grafana": "running"
+  },
+  "heading_result": {
+    "headingTrue_degrees": 4.4,
+    "source": "um982-gnss.XX",
+    "position_ok": true,
+    "position_lat": 40.83433,
+    "position_lon": -73.71333
+  },
+  "next_recommended": "Remove signalk-um982-proprietary.js (now redundant) + full doc update"
 }

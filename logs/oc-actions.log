@@ -179,3 +179,9 @@
 [2026-06-13T12:06:10.604119] [SERVICE_RESTART] [signalk] Restarted after capture
 [2026-06-13T12:06:10.604119] [FILE_SAVED] [um982] logs/debug/um982-raw-20260613-120530.txt
 [2026-06-13T12:06:10.604119] [RESULT] [um982] Diagnostic: SUCCESS — dual-antenna heading fully operational
+[2026-06-13T12:19:22.499650] [CONFIG_CHANGE] [signalk] Provider UM982-Serial removed — port conflict resolved
+[2026-06-13T12:19:22.499650] [SERVICE_RESTART] [signalk] Restarted — V2 plugin now sole reader on /dev/ttyUM982
+[2026-06-13T12:19:22.499650] [RESULT] [um982-gnss] headingTrue: 4.40° — source: um982-gnss.XX ✅
+[2026-06-13T12:19:22.499650] [RESULT] [um982-gnss] navigation.position: 40.83433,-73.71333 ✅
+[2026-06-13T12:19:22.499650] [FILE_MODIFY] [signalk] config/signalk-settings.json synced to repo
+[2026-06-13T12:19:22.499650] [FILE_MODIFY] [um982-gnss] plugins/signalk-um982-gnss.js synced to repo

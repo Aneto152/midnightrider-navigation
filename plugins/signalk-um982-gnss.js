@@ -1,61 +1,61 @@
 'use strict';
 
-module.exports = function(app) {
+/**
+ * signalk-um982-gnss V2 — Unified UM982 Direct Serial Plugin
+ * Opens /dev/ttyUM982 directly, parses $GNGGA, $GNRMC, #HEADINGA
+ * Single source: um982-gnss
+ * @version 2.0.0
+ */
 
-  let listener = null;
+const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
+const fs = require('fs');
+const path = require('path');
+
+module.exports = function(app) {
+  let serialPort = null;
+  let parser = null;
+  let heartbeatTimer = null;
+  let reconnectTimer = null;
+  let cfg = {};
+  let stats = { gga: 0, rmc: 0, headinga: 0, errors: 0 };
+  const LOG_FILE = '/home/pi/midnightrider-navigation/logs/services/um982-gnss.log';
 
   const plugin = {
     id: 'signalk-um982-gnss',
-    name: 'UM982 Dual-Antenna GNSS',
-    description: 'Position, SOG, COG, true heading and attitude from Unicore UM982',
+    name: 'UM982 Unified GNSS V2',
+    description: 'Direct serial reader for UM982 — position, headingTrue, attitude',
     schema: {
       type: 'object',
       properties: {
-        reverseHeading: { type: 'boolean', title: 'Reverse heading', default: false },
-        rollOffset: { type: 'number', title: 'Roll offset (deg)', default: 0 },
-        pitchOffset: { type: 'number', title: 'Pitch offset (deg)', default: 0 },
-        reverseRoll: { type: 'boolean', title: 'Reverse roll', default: true },
-        reversePitch: { type: 'boolean', title: 'Reverse pitch', default: false }
+        device: { type: 'string', default: '/dev/ttyUM982' },
+        baudrate: { type: 'number', default: 115200 },
+        reverseHeading: { type: 'boolean', default: false },
+        reverseRoll: { type: 'boolean', default: true },
+        reversePitch: { type: 'boolean', default: false },
+        rollOffset: { type: 'number', default: 0 },
+        pitchOffset: { type: 'number', default: 0 }
       }
     }
   };
 
-  plugin.start = function(options) {
-    const cfg = Object.assign({
-      reverseHeading: false, rollOffset: 0, pitchOffset: 0,
-      reverseRoll: true, reversePitch: false
-    }, options || {});
-
-    app.setPluginStatus('Listening for UM982 NMEA sentences...');
-
-    listener = function(sentence) {
-      if (!sentence) return;
-      try {
-        const L = sentence.trim();
-        if (L.startsWith('$GNGGA') || L.startsWith('$GPGGA')) handleGGA(L);
-        else if (L.startsWith('$GNRMC') || L.startsWith('$GPRMC')) handleRMC(L);
-        else if (L.startsWith('#UNIHEADINGA')) handleUNIHEADING(L, cfg);
-        else if (L.startsWith('#HEADINGA')) handleHEADINGA(L, cfg);
-      } catch(e) {
-        app.debug('UM982 parse error: ' + e.message);
-      }
-    };
-
-    app.on('nmea0183out', listener);
-  };
-
-  plugin.stop = function() {
-    if (listener) { app.removeListener('nmea0183out', listener); listener = null; }
-  };
+  function log(level, msg) {
+    try {
+      const ts = new Date().toISOString();
+      fs.appendFileSync(LOG_FILE, `[${ts}] [${level}] [um982-gnss] ${msg}\n`);
+    } catch(e) { app.debug('[um982-gnss] log error: ' + e.message); }
+  }
 
   function toRad(deg) { return deg * Math.PI / 180; }
 
-  function fields(line) { return line.split('*')[0].split(','); }
-
-  function postSemi(line) {
-    const si = line.indexOf(';');
-    if (si < 0) return null;
-    return line.substring(si + 1).split('*')[0].split(',');
+  function send(values) {
+    app.handleMessage(plugin.id, {
+      updates: [{
+        source: { label: 'um982-gnss', type: 'GNSS' },
+        timestamp: new Date().toISOString(),
+        values
+      }]
+    });
   }
 
   function parseLatLon(val, dir) {
@@ -68,66 +68,111 @@ module.exports = function(app) {
     return r;
   }
 
-  function send(values) {
-    app.handleMessage(plugin.id, {
-      updates: [{ source: { label: 'um982-gnss', type: 'GNSS' }, timestamp: new Date().toISOString(), values }]
-    });
+  function handleLine(line) {
+    try {
+      if (line.startsWith('$GNGGA') || line.startsWith('$GAGGA') || line.startsWith('$GPGGA')) {
+        const f = line.split('*')[0].split(',');
+        if (f.length >= 10 && f[6] && f[6] !== '0') {
+          const lat = parseLatLon(f[2], f[3]);
+          const lon = parseLatLon(f[4], f[5]);
+          if (!isNaN(lat) && !isNaN(lon)) {
+            send([{ path: 'navigation.position', value: { latitude: lat, longitude: lon } }]);
+            stats.gga++;
+          }
+        }
+      } else if (line.startsWith('$GNRMC') || line.startsWith('$GPRMC')) {
+        const f = line.split('*')[0].split(',');
+        if (f.length >= 9 && f[2] === 'A') {
+          const vals = [];
+          const lat = parseLatLon(f[3], f[4]);
+          const lon = parseLatLon(f[5], f[6]);
+          if (!isNaN(lat) && !isNaN(lon))
+            vals.push({ path: 'navigation.position', value: { latitude: lat, longitude: lon } });
+          const sog = parseFloat(f[7]);
+          if (!isNaN(sog)) vals.push({ path: 'navigation.speedOverGround', value: sog * 0.514444 });
+          if (vals.length) {
+            send(vals);
+            stats.rmc++;
+          }
+        }
+      } else if (line.startsWith('#HEADINGA')) {
+        const si = line.indexOf(';');
+        if (si < 0) return;
+        const data = line.substring(si + 1).split('*')[0].split(',');
+        if (data.length >= 7 && data[0] === 'SOL_COMPUTED') {
+          const roll = parseFloat(data[2]);
+          const pitch = parseFloat(data[3]);
+          const hdg = parseFloat(data[4]);
+          if (!isNaN(hdg) && !isNaN(roll) && !isNaN(pitch)) {
+            const hdgFinal = cfg.reverseHeading ? (hdg + 180) % 360 : hdg;
+            const rollFinal = cfg.reverseRoll ? -roll : roll;
+            const pitchNorm = pitch > 180 ? pitch - 360 : pitch;
+            const pitchFinal = cfg.reversePitch ? -pitchNorm : pitchNorm;
+            send([
+              { path: 'navigation.headingTrue', value: toRad(hdgFinal) },
+              { path: 'navigation.attitude.roll', value: toRad(rollFinal) },
+              { path: 'navigation.attitude.pitch', value: toRad(pitchFinal) }
+            ]);
+            stats.headinga++;
+          }
+        }
+      }
+    } catch(e) {
+      stats.errors++;
+      log('ERROR', `Parse: "${line.substring(0,40)}" — ${e.message}`);
+    }
   }
 
-  function handleGGA(line) {
-    const f = fields(line);
-    if (f.length < 10 || f[6] === '0' || !f[6]) return;
-    const lat = parseLatLon(f[2], f[3]);
-    const lon = parseLatLon(f[4], f[5]);
-    if (isNaN(lat) || isNaN(lon)) return;
-    const pos = { latitude: lat, longitude: lon };
-    const alt = parseFloat(f[9]);
-    if (!isNaN(alt)) pos.altitude = alt;
-    send([{ path: 'navigation.position', value: pos }]);
-    app.setPluginStatus('Pos: ' + lat.toFixed(4) + ' ' + lon.toFixed(4));
+  function openPort() {
+    if (reconnectTimer) clearTimeout(reconnectTimer);
+    try {
+      serialPort = new SerialPort({ path: cfg.device, baudRate: cfg.baudrate, autoOpen: false });
+      parser = serialPort.pipe(new ReadlineParser({ delimiter: '\r\n' }));
+      
+      serialPort.on('open', () => {
+        log('INFO', `OPEN: ${cfg.device} @ ${cfg.baudrate} baud`);
+        app.setPluginStatus('UM982 connected');
+      });
+
+      serialPort.on('error', (err) => {
+        log('ERROR', `${err.message}`);
+        reconnectTimer = setTimeout(openPort, 10000);
+      });
+
+      parser.on('data', handleLine);
+      serialPort.open((err) => {
+        if (err) {
+          log('ERROR', `Cannot open: ${err.message}`);
+          reconnectTimer = setTimeout(openPort, 10000);
+        }
+      });
+
+      // Heartbeat every 5min
+      if (heartbeatTimer) clearInterval(heartbeatTimer);
+      heartbeatTimer = setInterval(() => {
+        log('DEBUG', `HEARTBEAT: GGA=${stats.gga} RMC=${stats.rmc} HEADINGA=${stats.headinga} errors=${stats.errors}`);
+        stats = { gga: 0, rmc: 0, headinga: 0, errors: 0 };
+      }, 5 * 60 * 1000);
+
+    } catch(e) {
+      log('ERROR', `Init: ${e.message}`);
+      reconnectTimer = setTimeout(openPort, 10000);
+    }
   }
 
-  function handleRMC(line) {
-    const f = fields(line);
-    if (f.length < 9 || f[2] !== 'A') return;
-    const vals = [];
-    const lat = parseLatLon(f[3], f[4]);
-    const lon = parseLatLon(f[5], f[6]);
-    if (!isNaN(lat) && !isNaN(lon))
-      vals.push({ path: 'navigation.position', value: { latitude: lat, longitude: lon } });
-    const sog = parseFloat(f[7]);
-    if (!isNaN(sog)) vals.push({ path: 'navigation.speedOverGround', value: sog * 0.514444 });
-    const cog = parseFloat(f[8]);
-    if (!isNaN(cog)) vals.push({ path: 'navigation.courseOverGroundTrue', value: toRad(cog) });
-    if (vals.length) send(vals);
-  }
+  plugin.start = function(options) {
+    cfg = Object.assign({ device: '/dev/ttyUM982', baudrate: 115200, reverseHeading: false, reverseRoll: true, reversePitch: false, rollOffset: 0, pitchOffset: 0 }, options || {});
+    log('INFO', `STARTUP: V2 plugin — device=${cfg.device} baud=${cfg.baudrate}`);
+    app.setPluginStatus('Initializing...');
+    openPort();
+  };
 
-  function handleUNIHEADING(line, cfg) {
-    const data = postSemi(line);
-    if (!data || data.length < 4) return;
-    const hdgRaw = parseFloat(data[3]);
-    if (isNaN(hdgRaw)) return;
-    let hdg = hdgRaw;
-    if (cfg.reverseHeading) hdg = (hdg + 180) % 360;
-    app.setPluginStatus('Hdg: ' + hdg.toFixed(1) + 'T [' + (data[0] || '?') + ']');
-    send([{ path: 'navigation.headingTrue', value: toRad(hdg) }]);
-  }
-
-  function handleHEADINGA(line, cfg) {
-    const data = postSemi(line);
-    if (!data || data.length < 5) return;
-    let roll = parseFloat(data[2]);
-    let pitch = parseFloat(data[3]);
-    if (isNaN(roll) || isNaN(pitch)) return;
-    if (cfg.reverseRoll) roll = -roll;
-    if (cfg.reversePitch) pitch = -pitch;
-    roll += cfg.rollOffset || 0;
-    pitch += cfg.pitchOffset || 0;
-    send([
-      { path: 'navigation.attitude.roll', value: toRad(roll) },
-      { path: 'navigation.attitude.pitch', value: toRad(pitch) }
-    ]);
-  }
+  plugin.stop = function() {
+    log('INFO', 'SHUTDOWN: Closing port');
+    if (heartbeatTimer) clearInterval(heartbeatTimer);
+    if (reconnectTimer) clearTimeout(reconnectTimer);
+    if (serialPort && serialPort.isOpen) serialPort.close();
+  };
 
   return plugin;
 };

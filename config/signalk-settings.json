@@ -1,44 +1,103 @@
 {
+  "plugins": {
+    "@tkurki/um982": {
+      "enabled": false,
+      "serialconnection": "/dev/ttyUSB0",
+      "ntripEnabled": false
+    },
+    "signalk-um982-proprietary": {
+      "enabled": true
+    },
+    "signalk-gps-um982-nmea-parser": {
+      "enabled": false
+    },
+    "signalk-wit-imu-ble": {
+      "enabled": false,
+      "bleAddress": "E9:10:DB:8B:CE:C7",
+      "bleName": "WT901BLE68",
+      "autoReconnect": true,
+      "enableAcceleration": true,
+      "enableRateOfTurn": true
+    },
+    "signalk-um982-custom": {
+      "enabled": false,
+      "serialPort": "/dev/ttyUSB0",
+      "baudRate": 115200
+    },
+    "signalk-to-nmea0183": {
+      "enabled": true
+    },
+    "position-combiner": {
+      "enabled": true
+    },
+    "signalk-wave-analyzer": {
+      "enabled": true,
+      "accelPath": "navigation.acceleration.z",
+      "sampleRateHz": 30,
+      "windowMinutes": 10,
+      "outputIntervalSeconds": 5,
+      "hpCutoffHz": 0.05
+    },
+    "signalk-um982-gnss": {
+      "configuration": {
+        "port": "/dev/ttyUSB0",
+        "baudRate": 115200,
+        "freqAttitude": 5,
+        "freqPosition": 1,
+        "antennaAxis": "port-starboard",
+        "reverseHeading": false,
+        "rollOffset": 0,
+        "pitchOffset": 0,
+        "reverseRoll": true,
+        "reversePitch": false
+      },
+      "enabled": false
+    }
+  },
   "pipedProviders": [
     {
+      "id": "Calypso",
+      "enabled": true,
       "pipeElements": [
         {
           "type": "providers/simple",
           "options": {
             "logging": false,
-            "type": "NMEA0183",
+            "type": "SignalK",
             "subOptions": {
-              "validateChecksum": true,
-              "type": "serial",
-              "device": "/dev/ttyUSB0",
-              "baudrate": 115200
+              "type": "udp",
+              "port": "4123",
+              "selfHandling": "noSelf"
             }
           }
         }
-      ],
-      "id": "um982-gps",
-      "enabled": true
+      ]
     },
     {
+      "id": "qtVLM-NMEA-Input",
+      "enabled": true,
       "pipeElements": [
         {
-          "type": "providers/simple",
+          "type": "providers/tcp",
           "options": {
-            "logging": false,
-            "type": "NMEA0183",
-            "subOptions": {
-              "validateChecksum": true,
-              "type": "tcp",
-              "host": "localhost",
-              "port": "10110"
-            }
+            "host": "127.0.0.1",
+            "port": "10111"
           }
+        },
+        {
+          "type": "providers/nmea0183-signalk",
+          "optionMappings": [
+            {
+              "fromAppProperty": "selfId",
+              "toOption": "selfId"
+            }
+          ]
         }
-      ],
-      "id": "kflex",
-      "enabled": true
+      ]
     },
     {
+      "id": "N2K",
+      "enabled": true,
       "pipeElements": [
         {
           "type": "providers/simple",
@@ -47,30 +106,34 @@
             "type": "NMEA2000",
             "subOptions": {
               "type": "ydwg02-usb-canboatjs",
-              "baudrate": 115200,
-              "device": "/dev/ttyACM1"
+              "device": "/dev/ttyACM0"
             }
           }
         }
-      ],
-      "id": "NMEA2000",
-      "enabled": true
+      ]
     }
   ],
   "interfaces": {
-    "applicationData": true,
-    "appstore": true,
-    "logfiles": true,
-    "mfd_webapp": true,
-    "nmea-tcp": false,
-    "playground": true,
-    "plugins": true,
-    "providers": true,
-    "rest": true,
-    "tcp": true,
-    "wasm": true,
-    "webapps": true,
-    "ws": true
+    "udp": {
+      "4123": {
+        "type": "signalk-udp-input",
+        "enabled": true,
+        "class": "SignalK"
+      }
+    },
+    "tcp": {
+      "10111": {
+        "type": "signalk-nmea-0183-input",
+        "enabled": true,
+        "class": "NMEA0183"
+      }
+    },
+    "nmea-tcp": {
+      "10110": {
+        "enabled": true,
+        "port": 10110
+      }
+    }
   },
   "resourcesApi": {
     "defaultProviders": {
@@ -83,16 +146,5 @@
   },
   "courseApi": {
     "apiOnly": false
-  },
-  "mdns": false,
-  "ssl": false,
-  "wsCompression": false,
-  "accessLogging": true,
-  "enablePluginLogging": true,
-  "trustProxy": false,
-  "port": 3000,
-  "sslport": 3443,
-  "pruneContextsMinutes": 60,
-  "keepMostRecentLogsOnly": true,
-  "logCountToKeep": 24
+  }
 }
