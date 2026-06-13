@@ -288,3 +288,26 @@ Working plugins on this vessel (SK 2.25.0):
 - signalk-heading-true-calculator v1.0.2 — navigation.headingTrue
 - signalk-j30-leeway v1.0.1 — performance.leewayAngle
 - signalk-current-calculator v1.0.0 — environment.current.setTrue + drift
+
+---
+
+## 9. COLD-START / subscriptionManager ISSUE
+
+### Problem
+`app.subscriptionManager` is undefined in SK 2.25.0 when plugin.start() is called.
+Error: *Cannot read properties of undefined (reading 'subscribe')*
+
+### Fix — use setInterval + getSelfPath
+
+```javascript
+// ❌ BROKEN in SK 2.25.0:
+app.subscriptionManager.subscribe({ context: 'vessels.self', subscribe: [...] }, ...);
+
+// ✅ CORRECT:
+pollTimer = setInterval(function() {
+  var obj = app.getSelfPath('navigation.headingMagnetic');
+  if (!obj || obj.value == null) return;
+  if (obj.timestamp && Date.now()-new Date(obj.timestamp).getTime() > maxAgeMs) return;
+  // use obj.value
+}, 500);
+```

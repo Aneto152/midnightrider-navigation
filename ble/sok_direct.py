@@ -77,7 +77,7 @@ NOTES:
 
 ENVIRONMENT (.env):
  SOK_BLE_ADDRESS MAC address of SOK battery (REQUIRED: XX:XX:XX:XX:XX:XX)
- SOK_POLL_S Poll interval in seconds (default: 5)
+ SOK_POLL_S Poll interval in seconds (default: 30 — stay-connected, publishes every poll)
  SOK_DATA_TIMEOUT_S Staleness threshold (default: 120)
  SOK_HEARTBEAT_S Heartbeat interval (default: 300)
  SOK_L2_THRESHOLD L1 fails before L2 exit (default: 10)
@@ -334,6 +334,9 @@ def publish(status: dict, cells: dict, prot: dict | None, logger) -> None:
 def make_notify_handler():
     """Factory: returns BLE notification callback."""
     def on_notify(sender, data: bytearray) -> None:
+        # TEMP DEBUG: log raw frame
+        import sys
+        print(f"RAW_FRAME ({len(data)}b): {data.hex()}", file=sys.stderr, flush=True)
         """Store response in pending buffer and signal the polling loop."""
         if len(data) < 2:
             return

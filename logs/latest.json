@@ -1,21 +1,16 @@
 {
-  "task": "sok-uuid-fix",
-  "date": "2026-06-13T18:14:03.495817",
-  "status": "IN_PROGRESS",
-  "root_cause": "SOK-AA55091 uses BEKEN BK-BLE-1.0 chip (not JBD Xiaoxiang). UUIDs are FFE0/FFE1/FFE2 not FFF0/FFF1/FFF2.",
-  "steps_completed": [
-    "GATT discovery: service=FFE0, read/notify=FFE1, write=FFE2",
-    "Chip: BEKEN BK-BLE-1.0 FW:6.1.2",
-    "Fixed 3 UUID constants in sok_direct.py",
-    "Service connecting and subscribing to notifications \u2705",
-    "Decode issue: status=True cells=False \u2014 protocol parsing"
-  ],
-  "errors": [
-    "Decode parsing issue \u2014 needs protocol frame analysis"
-  ],
-  "services_status": {
-    "signalk": "running",
-    "sok_direct": "running"
+  "task": "plugins-subscriptionmanager-fix",
+  "date": "2026-06-13T19:05:33.282329",
+  "status": "SUCCESS",
+  "root_cause": "app.subscriptionManager undefined in SK 2.25.0 \u2014 replaced with setInterval+getSelfPath",
+  "versions": {
+    "P1": "v1.0.3",
+    "P2": "v1.0.2",
+    "P3": "v1.0.1"
   },
-  "next_step": "Analyze BLE notification frames to fix decode logic"
+  "errors": [],
+  "services_status": {
+    "signalk": "running"
+  },
+  "next_recommended": "Verify all 3 plugins show Running status in SK UI"
 }
