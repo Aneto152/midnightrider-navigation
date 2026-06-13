@@ -1,37 +1,25 @@
 {
-  "task": "plugins-1-2-v1.0.2-stopfix-deployed",
-  "date": "2026-06-13T16:48:16.885889",
-  "status": "CODE_FIXED_DEPLOYED",
-  "root_cause": "plugin.stop defined INSIDE plugin.start \u2192 SK 2.25.0 rejects at load",
-  "fix_applied": "plugin.stop and unsubscribes[] moved to module scope outside plugin.start",
-  "steps_completed": [
-    "Plugin 1 heading-true-calculator v1.0.2 \u2014 plugin.stop outside plugin.start",
-    "Plugin 2 j30-leeway v1.0.1 \u2014 plugin.stop outside plugin.start",
-    "Both plugins verify: typeof plugin.stop === \"function\" \u2705",
-    "Deployed to ~/.signalk/node_modules/ as real directories (not symlinks)",
-    "Deployed to ~/.signalk/plugins/ for SK scanner",
-    "Plugin structure verified and loadable"
+  "task": "plugins-1-2-fully-operational",
+  "date": "2026-06-13T17:23:44.024764",
+  "status": "SUCCESS",
+  "root_causes_fixed": [
+    "1. plugin.stop must be OUTSIDE plugin.start (SK 2.25.0 load-time validation)",
+    "2. Deploy to /usr/lib/node_modules/signalk-server/node_modules/ (appPath)",
+    "   ~/.signalk/node_modules/ fails silently if SK service user != config owner"
   ],
+  "deployment_path": "/usr/lib/node_modules/signalk-server/node_modules/",
+  "plugins_active": [
+    "signalk-heading-true-calculator v1.0.2 \u2014 navigation.headingTrue",
+    "signalk-j30-leeway v1.0.1 \u2014 performance.leewayAngle (SOG fallback when no STW)"
+  ],
+  "sk_version": "2.25.0",
   "files_modified": [
-    "plugins/signalk-heading-true-calculator.js (v1.0.2)",
-    "plugins/signalk-j30-leeway.js (v1.0.1)",
+    "plugins/README.md",
     "logs/latest.json"
   ],
-  "deployment_paths": [
-    "~/.signalk/node_modules/signalk-heading-true-calculator/",
-    "~/.signalk/node_modules/signalk-j30-leeway/",
-    "~/.signalk/plugins/signalk-heading-true-calculator/",
-    "~/.signalk/plugins/signalk-j30-leeway/"
-  ],
-  "verification": {
-    "syntax": "OK (node --check passed)",
-    "exports": "OK (module.exports = function)",
-    "plugin.stop": "OK (defined outside plugin.start)",
-    "sk_discovery": "PENDING (SK 2.25.0 scanner limitation)"
-  },
-  "notes": "Root cause fix deployed. SK 2.25.0 plugin discovery issue requires alternative deployment method or SK upgrade.",
+  "errors": [],
   "services_status": {
     "signalk": "running"
   },
-  "next_action": "Denis decision on SK plugin activation"
+  "next_recommended": "Plugin 3: signalk-current-calculator"
 }

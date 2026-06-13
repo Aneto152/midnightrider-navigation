@@ -320,3 +320,37 @@ CTW = headingTrue - 6.7° (boat drifts toward port)
 
 **Field tuning:** If COG vs. CTW comparison shows different leeway than K=12 predicts,
 adjust K in SK Admin UI without restarting SK. Changes take effect immediately.
+
+---
+
+## ⚠️ DEPLOYMENT NOTES — SK 2.25.0
+
+### Correct deployment path (CONFIRMED 2026-06-13)
+
+SK 2.25.0 discovers plugins by scanning TWO directories (from `src/modules.ts`):
+1. {configPath}/node_modules/ = ~/.signalk/node_modules/ ← MAY FAIL if service user ≠ config owner
+2. {appPath}/node_modules/ = /usr/lib/node_modules/signalk-server/node_modules/ ← ALWAYS WORKS
+
+Required for discovery (package.json must have):
+- "keywords": ["signalk-node-server-plugin"] ← mandatory for scanner
+- "main" pointing to JS file
+
+Required for loading (SK 2.25.0 validation):
+- plugin.stop must be defined OUTSIDE plugin.start at factory return time
+- unsubscribes[] must be at module scope so plugin.stop can access it
+
+### Correct deploy commands
+
+SK_NM=/usr/lib/node_modules/signalk-server/node_modules
+REPO=/home/aneto/midnightrider-navigation
+
+# For each plugin:
+sudo mkdir -p $SK_NM/<plugin-name>
+sudo cp $REPO/plugins/<plugin-name>.js $SK_NM/<plugin-name>/<plugin-name>.js
+sudo cp $REPO/plugins/<plugin-name>-package.json $SK_NM/<plugin-name>/package.json
+sudo systemctl restart signalk
+
+### Log permissions
+
+SK service may run as a different user. Fix log write permissions:
+sudo chmod -R 777 /home/aneto/midnightrider-navigation/logs/
