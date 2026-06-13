@@ -1,7 +1,7 @@
 {
   "name": "signalk-um982-gnss",
-  "version": "1.0.0",
-  "description": "UM982 dual-antenna GNSS: position, headingTrue, attitude",
+  "version": "2.1.0",
+  "description": "UM982 V2.1: direct serial, headingTrue+roll+GPS data (no pitch \u2014 athwartships)",
   "main": "index.js",
   "keywords": [
     "signalk-node-server-plugin"

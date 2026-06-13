@@ -216,3 +216,49 @@ Current active providers in `config/signalk-settings.json`:
 **Last Updated**: 2026-06-13 12:25 EDT  
 **Author**: OC + Denis Lafarge  
 **Version**: v2.0 (UM982 V2 direct serial, production ready)
+
+---
+
+## Update — V2.1 (2026-06-13) — Athwartships Antenna Configuration
+
+**Critical discovery**: UM982 antennas are mounted TRANSVERSELY (port ↔ starboard), NOT longitudinally (bow ↔ stern).
+
+### Consequences
+
+With transversal antennas:
+- ✅ **Heading (azimuth)** — fully determined from antenna baseline angle (corrected by UM982)
+- ✅ **Roll (heel)** — vessel heel angle from antenna tilt
+- ❌ **Pitch** — CANNOT be determined from transversal baseline geometry (antenna separation is E-W only)
+
+### Changes in V2.1
+
+| Removed | Reason |
+|---------|--------|
+| `navigation.attitude.pitch` | Athwartships geometry artifact: field data[3] varies with heading, not pitch. Publishing meaningless data removed. |
+
+| Added | Source | Details |
+|-------|--------|---------|
+| `navigation.gnss.satellites` | $GNGGA f[7] | Number of satellites used for fix |
+| `navigation.gnss.horizontalDilution` | $GNGGA f[8] | HDOP (horizontal dilution of precision) |
+| `navigation.gnss.methodQuality` | $GNGGA f[6] | Fix type string (e.g., "RTK fixed integer") |
+| `navigation.gnss.antennaAltitude` | $GNGGA f[9] | MSL altitude (meters) |
+| `navigation.gnss.geoidalSeparation` | $GNGGA f[11] | Geoidal separation (meters) |
+| `navigation.gnss.antennaBaseline` | #HEADINGA f[6] | Distance between antennas (m), health check (~2.8m nominal) |
+| `navigation.magneticVariation` | $GNRMC f[10/11] | Magnetic variation (radians), E/W direction |
+| `navigation.datetime` | $GNRMC f[1]+f[9] | UTC datetime (ISO 8601 format) |
+
+### Verification (2026-06-13)
+
+✅ **Pitch is correctly ABSENT** from Signal K navigation.attitude
+✅ **headingTrue: 8.20°T** (from #HEADINGA data[4])
+✅ **magneticVariation: -12.80°W** (from $GNRMC)
+✅ **datetime: 2026-06-13T16:57:57Z** (from $GNRMC)
+
+### Physical Configuration (to verify)
+
+- **Antenna 1**: Port side, higher position
+- **Antenna 2**: Starboard side, lower position
+- **Baseline**: ~2.8 meters (expected ~4.29m from May diagnostic, need re-check)
+
+Next: Denis to confirm actual antenna separation and orientation on vessel.
+
