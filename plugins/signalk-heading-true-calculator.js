@@ -1,12 +1,16 @@
 'use strict';
 /**
  * @file signalk-heading-true-calculator.js
- * @version 1.0.3
+ * @version 1.0.5
  * @license MIT
  * CHANGELOG
- * v1.0.3 — Fix: app.subscriptionManager undefined in SK 2.25.0.
- * Replaced with setInterval + app.getSelfPath() — robust pattern.
- * v1.0.2 — plugin.stop outside plugin.start
+ * v1.0.5 — Event-driven: fires on every headingMagnetic update.
+ * Primary: app.streambundle.getSelfBus() (SK 2.x Bacon.js stream).
+ * Fallback: app.registerDeltaInputHandler() (delta middleware).
+ * checkTimer (10s): detects if external instrument provides headingTrue.
+ * Computes at natural instrument cadence — no fixed poll rate.
+ * v1.0.4 — Two-timer architecture (still polling-based)
+ * v1.0.3 — Replace subscriptionManager with setInterval+getSelfPath
  */
 const fs = require('fs');
 const PLUGIN_ID = 'signalk-heading-true-calculator';
@@ -22,84 +26,165 @@ module.exports = function(app) {
   function svcLog(level,msg){try{ensureDirs();rotateIfNeeded(LOG_SVC);fs.appendFileSync(LOG_SVC,'['+new Date().toISOString()+'] ['+level+'] [heading-true-calc] '+msg+'\n');}catch(_){}}
   function flowLog(msg){try{rotateIfNeeded(LOG_FLOW);fs.appendFileSync(LOG_FLOW,'['+new Date().toISOString()+'] [FLOW] '+msg+'\n');}catch(_){}}
 
-  let pollTimer=null, heartbeatTimer=null;
-  let stats={derived:0,skipped:0,errors:0};
+  // Module-scope state
+  let unsubscribes = [];
+  let checkTimer = null;
+  let heartbeatTimer = null;
+  let stats = { derived:0, skipped:0, errors:0 };
+  let externalHTActive = false;
 
-  const plugin={
-    id:PLUGIN_ID,
-    name:'True Heading Calculator (Magnetic + Variation)',
-    description:'Derives navigation.headingTrue from headingMagnetic + magneticVariation.',
-    version:'1.0.3',
-    schema:{type:'object',title:'True Heading Calculator',properties:{
-      debug: {type:'boolean',title:'Debug logging', default:false},
-      staleSecs: {type:'number', title:'External headingTrue stale(s)', default:10, minimum:1, maximum:300},
-      maxHMAgeSecs:{type:'number', title:'Max headingMagnetic age(s)', default:5, minimum:1, maximum:60 },
-      pollMs: {type:'number', title:'Poll interval ms', default:500,minimum:100,maximum:2000}
+  // ── Core compute function — called on every headingMagnetic event ─────────
+  function computeAndPublish(hmValue, cfg) {
+    try {
+      if (externalHTActive) { stats.skipped++; return; }
+      if (hmValue == null || !isFinite(hmValue) || isNaN(hmValue) || Math.abs(hmValue) > 4*Math.PI) {
+        stats.errors++; return;
+      }
+      var variation = 0;
+      var mvObj = app.getSelfPath('navigation.magneticVariation');
+      if (mvObj && mvObj.value != null && isFinite(mvObj.value) && !isNaN(mvObj.value))
+        variation = Math.max(-Math.PI, Math.min(Math.PI, mvObj.value));
+
+      var ht = (((hmValue + variation) % TWO_PI) + TWO_PI) % TWO_PI;
+      if (!isFinite(ht)) { stats.errors++; return; }
+
+      app.handleMessage(PLUGIN_ID, { updates: [{ source: { label:PLUGIN_ID, type:'derived' },
+        timestamp: new Date().toISOString(),
+        values: [{ path:'navigation.headingTrue', value:ht }] }]
+      });
+      stats.derived++;
+      var htD=(ht*180/Math.PI).toFixed(1), hmD=(hmValue*180/Math.PI).toFixed(1), vD=(variation*180/Math.PI).toFixed(2);
+      if (cfg.debug) svcLog('DEBUG','HT='+htD+'deg HM='+hmD+'deg Var='+vD+'deg n='+stats.derived);
+      flowLog('Compass→SK: headingTrue='+htD+'deg ['+PLUGIN_ID+']');
+      if (app.setPluginStatus) app.setPluginStatus('HT='+htD+'deg | pub='+stats.derived+' ext='+externalHTActive);
+    } catch(e) { stats.errors++; svcLog('ERROR','compute: '+e.message); }
+  }
+
+  const plugin = {
+    id: PLUGIN_ID,
+    name: 'True Heading Calculator (Magnetic + Variation)',
+    description: 'Event-driven: fires on every headingMagnetic update. ' +
+      'Defers to external instrument when active (checked every 10s).',
+    version: '1.0.5',
+    schema: { type:'object', title:'True Heading Calculator', properties: {
+      debug: { type:'boolean', title:'Debug logging', default:false },
+      checkIntervalS: { type:'number', title:'External HT check interval (s)', default:10, minimum:5, maximum:60 },
+      maxHMAgeSecs: { type:'number', title:'Max headingMagnetic age (s)', default:5, minimum:1, maximum:30 },
+      externalStaleS: { type:'number', title:'External HT stale threshold (s)', default:12, minimum:5, maximum:60 }
     }}
   };
 
-  plugin.start=function(options){
-    var cfg=Object.assign({debug:false,staleSecs:10,maxHMAgeSecs:5,pollMs:500},options||{});
-    cfg.staleSecs =Math.max(1, Math.min(300, Number(cfg.staleSecs) ||10));
-    cfg.maxHMAgeSecs=Math.max(1, Math.min(60, Number(cfg.maxHMAgeSecs)||5));
-    cfg.pollMs =Math.max(100,Math.min(2000,Number(cfg.pollMs) ||500));
-    stats={derived:0,skipped:0,errors:0};
+  plugin.start = function(options) {
+    var cfg = Object.assign(
+      { debug:false, checkIntervalS:10, maxHMAgeSecs:5, externalStaleS:12 },
+      options || {}
+    );
+    cfg.checkIntervalS = Math.max(5, Math.min(60, Number(cfg.checkIntervalS) || 10));
+    cfg.maxHMAgeSecs = Math.max(1, Math.min(30, Number(cfg.maxHMAgeSecs) || 5));
+    cfg.externalStaleS = Math.max(5, Math.min(60, Number(cfg.externalStaleS) || 12));
+    unsubscribes = [];
+    stats = { derived:0, skipped:0, errors:0 };
+    externalHTActive = false;
 
-    svcLog('INFO','STARTUP: '+PLUGIN_ID+' v1.0.3');
-    svcLog('INFO','CONFIG: pollMs='+cfg.pollMs+' staleSecs='+cfg.staleSecs);
-    svcLog('INFO','PATTERN: setInterval+getSelfPath (subscriptionManager removed)');
-    if(app.setPluginStatus) app.setPluginStatus('Polling headingMagnetic @ '+cfg.pollMs+'ms');
+    svcLog('INFO','STARTUP: '+PLUGIN_ID+' v1.0.5');
+    svcLog('INFO','CONFIG: checkInterval='+cfg.checkIntervalS+'s externalStale='+cfg.externalStaleS+'s');
+    if (app.setPluginStatus) app.setPluginStatus('Initialising...');
 
-    pollTimer=setInterval(function(){
-      try{
-        var now=Date.now();
-        var hmObj=app.getSelfPath('navigation.headingMagnetic');
-        if(!hmObj||hmObj.value==null){stats.skipped++;return;}
-        var hm=hmObj.value;
-        var hmAge=hmObj.timestamp?(now-new Date(hmObj.timestamp).getTime())/1000:0;
-        if(hmAge>cfg.maxHMAgeSecs){stats.skipped++;return;}
-        if(!isFinite(hm)||isNaN(hm)||Math.abs(hm)>4*Math.PI){stats.errors++;return;}
+    // ── TIMER: every 10s — check if external instrument provides headingTrue ─
+    function checkExternalHT() {
+      try {
+        var htObj = app.getSelfPath('navigation.headingTrue');
+        if (htObj && htObj.value != null) {
+          var src = (htObj.source && htObj.source.label) ? htObj.source.label : '';
+          if (src !== PLUGIN_ID) {
+            var age = htObj.timestamp ? (Date.now()-new Date(htObj.timestamp).getTime())/1000 : Infinity;
+            var prev = externalHTActive;
+            externalHTActive = (age < cfg.externalStaleS);
+            if (prev !== externalHTActive)
+              svcLog('INFO','external HT: active='+externalHTActive+' src='+src+' age='+age.toFixed(1)+'s');
+          } else { externalHTActive = false; }
+        } else { externalHTActive = false; }
+      } catch(e) { svcLog('ERROR','checkExternal: '+e.message); }
+    }
+    checkExternalHT();
+    checkTimer = setInterval(checkExternalHT, cfg.checkIntervalS * 1000);
 
-        var variation=0;
-        var mvObj=app.getSelfPath('navigation.magneticVariation');
-        if(mvObj&&mvObj.value!=null&&isFinite(mvObj.value)&&!isNaN(mvObj.value))
-          variation=Math.max(-Math.PI,Math.min(Math.PI,mvObj.value));
+    // ── EVENT-DRIVEN: fire on every headingMagnetic update ───────────────────
+    var subscribed = false;
 
-        var htObj=app.getSelfPath('navigation.headingTrue');
-        if(htObj&&htObj.value!=null){
-          var src=(htObj.source&&htObj.source.label)?htObj.source.label:'';
-          if(src!==PLUGIN_ID){
-            var age=htObj.timestamp?(now-new Date(htObj.timestamp).getTime())/1000:Infinity;
-            if(age<cfg.staleSecs){stats.skipped++;return;}
-          }
+    // Method 1: app.streambundle.getSelfBus() — fires on every SK value update
+    try {
+      if (app.streambundle && typeof app.streambundle.getSelfBus === 'function') {
+        var bus = app.streambundle.getSelfBus('navigation.headingMagnetic');
+        if (bus && typeof bus.onValue === 'function') {
+          var unsub = bus.onValue(function(val) {
+            // getSelfBus returns SKValue object {value, source, timestamp} or raw value
+            var hmValue = (val !== null && typeof val === 'object' && 'value' in val)
+              ? val.value : val;
+            computeAndPublish(hmValue, cfg);
+          });
+          unsubscribes.push(unsub);
+          subscribed = true;
+          svcLog('INFO','SUBSCRIPTION: streambundle.getSelfBus — event-driven ✅');
         }
+      }
+    } catch(e) { svcLog('WARN','streambundle failed: '+e.message); }
 
-        var ht=(((hm+variation)%TWO_PI)+TWO_PI)%TWO_PI;
-        if(!isFinite(ht)){stats.errors++;return;}
+    // Method 2: registerDeltaInputHandler — fallback if streambundle unavailable
+    if (!subscribed) {
+      try {
+        if (typeof app.registerDeltaInputHandler === 'function') {
+          app.registerDeltaInputHandler(function(delta, next) {
+            try {
+              if (delta && delta.updates) {
+                delta.updates.forEach(function(u) {
+                  if (u && u.values) {
+                    u.values.forEach(function(pv) {
+                      if (pv && pv.path === 'navigation.headingMagnetic' && pv.value != null) {
+                        computeAndPublish(pv.value, cfg);
+                      }
+                    });
+                  }
+                });
+              }
+            } catch(e) { svcLog('ERROR','deltaHandler: '+e.message); }
+            next(delta);
+          });
+          subscribed = true;
+          svcLog('INFO','SUBSCRIPTION: registerDeltaInputHandler — event-driven ✅');
+        }
+      } catch(e) { svcLog('WARN','registerDeltaInputHandler failed: '+e.message); }
+    }
 
-        app.handleMessage(PLUGIN_ID,{updates:[{
-          source:{label:PLUGIN_ID,type:'derived'},
-          timestamp:new Date().toISOString(),
-          values:[{path:'navigation.headingTrue',value:ht}]
-        }]});
-        stats.derived++;
-        var htD=(ht*180/Math.PI).toFixed(1),hmD=(hm*180/Math.PI).toFixed(1),vD=(variation*180/Math.PI).toFixed(2);
-        if(cfg.debug) svcLog('DEBUG','HT='+htD+'deg HM='+hmD+'deg Var='+vD+'deg n='+stats.derived);
-        flowLog('Compass→SK: headingTrue='+htD+'deg ['+PLUGIN_ID+']');
-        if(app.setPluginStatus) app.setPluginStatus('HT='+htD+'deg pub='+stats.derived+' skip='+stats.skipped);
-      }catch(e){stats.errors++;svcLog('ERROR','poll: '+e.message);}
-    },cfg.pollMs);
+    // Method 3: Final fallback — fast polling if both event methods unavailable
+    if (!subscribed) {
+      svcLog('WARN','Event-driven unavailable — polling fallback @ 200ms');
+      var fallbackTimer = setInterval(function() {
+        var hmObj = app.getSelfPath('navigation.headingMagnetic');
+        if (!hmObj || hmObj.value == null) return;
+        var age = hmObj.timestamp ? (Date.now()-new Date(hmObj.timestamp).getTime())/1000 : 0;
+        if (age > cfg.maxHMAgeSecs) return;
+        computeAndPublish(hmObj.value, cfg);
+      }, 200);
+      unsubscribes.push(function(){ clearInterval(fallbackTimer); });
+      svcLog('INFO','SUBSCRIPTION: polling fallback 200ms');
+    }
 
-    heartbeatTimer=setInterval(function(){
-      svcLog('DEBUG','HEARTBEAT: derived='+stats.derived+' skip='+stats.skipped+' err='+stats.errors);
-    },5*60*1000);
+    heartbeatTimer = setInterval(function(){
+      svcLog('DEBUG','HEARTBEAT: derived='+stats.derived+' skip='+stats.skipped
+        +' err='+stats.errors+' extActive='+externalHTActive);
+    }, 5*60*1000);
+
     svcLog('INFO','STARTUP: complete');
   };
 
-  plugin.stop=function(){
+  // plugin.stop OUTSIDE plugin.start — SK 2.25.0 requirement
+  plugin.stop = function() {
     svcLog('INFO','SHUTDOWN: '+JSON.stringify(stats));
-    if(pollTimer){clearInterval(pollTimer);pollTimer=null;}
-    if(heartbeatTimer){clearInterval(heartbeatTimer);heartbeatTimer=null;}
+    if (checkTimer) { clearInterval(checkTimer); checkTimer=null; }
+    if (heartbeatTimer) { clearInterval(heartbeatTimer); heartbeatTimer=null; }
+    unsubscribes.forEach(function(u){ try{ if(typeof u==='function') u(); }catch(_){} });
+    unsubscribes = [];
     svcLog('INFO','SHUTDOWN: complete');
   };
 
