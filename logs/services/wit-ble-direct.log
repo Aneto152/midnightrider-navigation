@@ -39685,3 +39685,1856 @@
 [2026-06-13T11:23:31.294] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=196.7°
 [2026-06-13T11:23:31.383] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=196.7°
 [2026-06-13T11:23:31.504] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=196.7°
+[2026-06-13T11:23:31.593] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=196.7°
+[2026-06-13T11:23:31.714] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=196.6°
+[2026-06-13T11:23:31.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=196.9°
+[2026-06-13T11:23:32.015] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=196.8°
+[2026-06-13T11:23:32.110] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=196.9°
+[2026-06-13T11:23:32.313] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=196.9°
+[2026-06-13T11:23:32.524] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=197.0°
+[2026-06-13T11:23:32.705] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=197.1°
+[2026-06-13T11:23:32.765] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=197.1°
+[2026-06-13T11:23:32.824] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=196.7°
+[2026-06-13T11:23:33.003] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=196.6°
+[2026-06-13T11:23:33.215] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=197.2°
+[2026-06-13T11:23:33.396] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.0°
+[2026-06-13T11:23:33.515] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=196.7°
+[2026-06-13T11:23:33.604] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=196.6°
+[2026-06-13T11:23:33.723] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=196.6°
+[2026-06-13T11:23:33.783] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=196.6°
+[2026-06-13T11:23:34.054] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=196.8°
+[2026-06-13T11:23:34.114] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=196.9°
+[2026-06-13T11:23:34.234] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=197.1°
+[2026-06-13T11:23:34.354] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.3°
+[2026-06-13T11:23:34.414] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.3°
+[2026-06-13T11:23:34.533] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.4°
+[2026-06-13T11:23:34.654] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.3°
+[2026-06-13T11:23:34.774] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.1°
+[2026-06-13T11:23:34.836] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.4°
+[2026-06-13T11:23:34.923] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=197.5°
+[2026-06-13T11:23:35.133] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=197.1°
+[2026-06-13T11:23:35.164] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=197.0°
+[2026-06-13T11:23:35.313] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=197.1°
+[2026-06-13T11:23:35.524] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=197.0°
+[2026-06-13T11:23:35.733] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=196.7°
+[2026-06-13T11:23:35.764] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=196.7°
+[2026-06-13T11:23:35.943] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=196.8°
+[2026-06-13T11:23:35.973] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.0°
+[2026-06-13T11:23:36.123] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.0°
+[2026-06-13T11:23:36.214] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=197.0°
+[2026-06-13T11:23:36.334] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=197.0°
+[2026-06-13T11:23:36.424] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=197.0°
+[2026-06-13T11:23:36.544] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=197.1°
+[2026-06-13T11:23:36.664] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=197.3°
+[2026-06-13T11:23:36.724] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=197.3°
+[2026-06-13T11:23:36.873] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=197.5°
+[2026-06-13T11:23:36.933] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=197.6°
+[2026-06-13T11:23:37.023] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=198.1°
+[2026-06-13T11:23:37.144] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=197.2°
+[2026-06-13T11:23:37.354] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=197.1°
+[2026-06-13T11:23:37.534] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=197.3°
+[2026-06-13T11:23:37.594] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=197.3°
+[2026-06-13T11:23:37.654] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=197.2°
+[2026-06-13T11:23:37.774] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=197.3°
+[2026-06-13T11:23:37.954] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=197.1°
+[2026-06-13T11:23:37.984] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=197.0°
+[2026-06-13T11:23:38.224] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=197.1°
+[2026-06-13T11:23:38.284] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=197.3°
+[2026-06-13T11:23:38.585] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.9°
+[2026-06-13T11:23:38.645] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=198.1°
+[2026-06-13T11:23:38.824] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=198.9°
+[2026-06-13T11:23:38.943] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.8° Hdg=198.8°
+[2026-06-13T11:23:39.244] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.8° Hdg=198.7°
+[2026-06-13T11:23:39.366] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=198.4°
+[2026-06-13T11:23:39.484] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=198.0°
+[2026-06-13T11:23:39.614] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=197.7°
+[2026-06-13T11:23:39.694] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=197.8°
+[2026-06-13T11:23:39.814] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=197.5°
+[2026-06-13T11:23:39.873] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.3° Hdg=197.5°
+[2026-06-13T11:23:39.963] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.3° Hdg=197.4°
+[2026-06-13T11:23:40.174] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.3° Hdg=197.2°
+[2026-06-13T11:23:40.353] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=197.4°
+[2026-06-13T11:23:40.564] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=198.3°
+[2026-06-13T11:23:40.594] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=198.4°
+[2026-06-13T11:23:40.774] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-5.9° Hdg=199.1°
+[2026-06-13T11:23:40.804] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.0° Pitch=-5.9° Hdg=199.3°
+[2026-06-13T11:23:40.954] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.0° Pitch=-5.8° Hdg=199.8°
+[2026-06-13T11:23:41.163] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-5.8° Hdg=199.6°
+[2026-06-13T11:23:41.374] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.8° Hdg=199.3°
+[2026-06-13T11:23:41.464] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.8° Hdg=199.1°
+[2026-06-13T11:23:41.584] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=198.4°
+[2026-06-13T11:23:41.644] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=198.2°
+[2026-06-13T11:23:41.764] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=197.6°
+[2026-06-13T11:23:41.854] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=197.3°
+[2026-06-13T11:23:41.974] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.1° Hdg=197.0°
+[2026-06-13T11:23:42.064] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.1° Hdg=196.9°
+[2026-06-13T11:23:42.184] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.1° Hdg=196.8°
+[2026-06-13T11:23:42.424] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=197.3°
+[2026-06-13T11:23:42.573] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=197.7°
+[2026-06-13T11:23:42.634] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=197.9°
+[2026-06-13T11:23:42.694] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=198.3°
+[2026-06-13T11:23:42.814] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=198.5°
+[2026-06-13T11:23:42.994] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=198.8°
+[2026-06-13T11:23:43.024] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:43.174] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:43.234] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:43.384] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=198.4°
+[2026-06-13T11:23:43.474] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=198.3°
+[2026-06-13T11:23:43.656] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=198.3°
+[2026-06-13T11:23:43.778] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=198.2°
+[2026-06-13T11:23:43.984] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=198.4°
+[2026-06-13T11:23:44.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:44.285] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:44.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=198.8°
+[2026-06-13T11:23:44.585] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=198.8°
+[2026-06-13T11:23:44.677] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=198.8°
+[2026-06-13T11:23:44.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=198.6°
+[2026-06-13T11:23:44.884] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=198.6°
+[2026-06-13T11:23:45.004] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:45.125] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:45.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=199.0°
+[2026-06-13T11:23:45.337] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=198.9°
+[2026-06-13T11:23:45.575] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=198.7°
+[2026-06-13T11:23:45.695] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=198.5°
+[2026-06-13T11:23:45.880] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=198.5°
+[2026-06-13T11:23:45.998] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=198.4°
+[2026-06-13T11:23:46.084] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=198.3°
+[2026-06-13T11:23:46.204] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=198.5°
+[2026-06-13T11:23:46.295] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=198.4°
+[2026-06-13T11:23:46.415] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=198.2°
+[2026-06-13T11:23:46.475] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=198.1°
+[2026-06-13T11:23:46.595] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=198.0°
+[2026-06-13T11:23:46.747] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=197.8°
+[2026-06-13T11:23:46.806] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.8°
+[2026-06-13T11:23:46.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=198.4°
+[2026-06-13T11:23:47.016] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=198.5°
+[2026-06-13T11:23:47.135] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.1° Hdg=199.0°
+[2026-06-13T11:23:47.224] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.1° Hdg=199.3°
+[2026-06-13T11:23:47.254] [INFO] [wit-ble-direct] [HEARTBEAT] state=STREAMING 0x71=2426 0x61=0 SK=2616 l1_fails=1
+[2026-06-13T11:23:47.346] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.1° Hdg=199.3°
+[2026-06-13T11:23:47.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.1° Hdg=199.4°
+[2026-06-13T11:23:47.525] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.1° Hdg=199.3°
+[2026-06-13T11:23:47.645] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=199.4°
+[2026-06-13T11:23:47.825] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=199.4°
+[2026-06-13T11:23:47.855] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=199.4°
+[2026-06-13T11:23:48.005] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=198.6°
+[2026-06-13T11:23:48.214] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=197.8°
+[2026-06-13T11:23:48.305] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=197.9°
+[2026-06-13T11:23:48.397] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=198.0°
+[2026-06-13T11:23:48.515] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=198.3°
+[2026-06-13T11:23:48.755] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=198.8°
+[2026-06-13T11:23:48.816] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=199.0°
+[2026-06-13T11:23:48.935] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=199.4°
+[2026-06-13T11:23:49.025] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=199.3°
+[2026-06-13T11:23:49.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=199.2°
+[2026-06-13T11:23:49.417] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=198.8°
+[2026-06-13T11:23:49.478] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=198.8°
+[2026-06-13T11:23:49.565] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=198.8°
+[2026-06-13T11:23:49.836] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=198.6°
+[2026-06-13T11:23:49.866] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=198.6°
+[2026-06-13T11:23:50.046] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=198.5°
+[2026-06-13T11:23:50.076] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=198.4°
+[2026-06-13T11:23:50.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=198.6°
+[2026-06-13T11:23:50.435] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=199.0°
+[2026-06-13T11:23:50.525] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=199.1°
+[2026-06-13T11:23:50.825] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=199.0°
+[2026-06-13T11:23:50.915] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=199.1°
+[2026-06-13T11:23:51.035] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=198.9°
+[2026-06-13T11:23:51.125] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=199.1°
+[2026-06-13T11:23:51.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=199.2°
+[2026-06-13T11:23:51.335] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=199.2°
+[2026-06-13T11:23:51.454] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=199.4°
+[2026-06-13T11:23:51.574] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=199.6°
+[2026-06-13T11:23:51.634] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=199.8°
+[2026-06-13T11:23:51.874] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=199.2°
+[2026-06-13T11:23:52.054] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:52.084] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=198.7°
+[2026-06-13T11:23:52.234] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.1° Hdg=198.3°
+[2026-06-13T11:23:52.444] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.2° Hdg=198.3°
+[2026-06-13T11:23:52.534] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.2° Hdg=198.3°
+[2026-06-13T11:23:52.744] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=198.9°
+[2026-06-13T11:23:52.924] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=199.4°
+[2026-06-13T11:23:53.044] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=199.7°
+[2026-06-13T11:23:53.134] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-5.9° Hdg=200.0°
+[2026-06-13T11:23:53.254] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.0° Pitch=-5.9° Hdg=200.2°
+[2026-06-13T11:23:53.344] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.1° Pitch=-5.9° Hdg=200.3°
+[2026-06-13T11:23:53.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.0° Pitch=-5.9° Hdg=200.3°
+[2026-06-13T11:23:53.524] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.0° Pitch=-5.9° Hdg=200.2°
+[2026-06-13T11:23:53.644] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-5.9° Hdg=200.2°
+[2026-06-13T11:23:53.734] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.9° Hdg=200.1°
+[2026-06-13T11:23:53.974] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=200.0°
+[2026-06-13T11:23:54.064] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=199.8°
+[2026-06-13T11:23:54.154] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=199.6°
+[2026-06-13T11:23:54.274] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=199.4°
+[2026-06-13T11:23:54.394] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=199.1°
+[2026-06-13T11:23:54.514] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=198.9°
+[2026-06-13T11:23:54.574] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=198.9°
+[2026-06-13T11:23:54.664] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=198.9°
+[2026-06-13T11:23:54.875] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=198.9°
+[2026-06-13T11:23:55.054] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=199.0°
+[2026-06-13T11:23:55.144] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=199.2°
+[2026-06-13T11:23:55.264] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=199.8°
+[2026-06-13T11:23:55.354] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=200.1°
+[2026-06-13T11:23:55.503] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=200.3°
+[2026-06-13T11:23:55.567] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=200.3°
+[2026-06-13T11:23:55.684] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.8° Hdg=200.3°
+[2026-06-13T11:23:55.744] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.8° Hdg=200.4°
+[2026-06-13T11:23:55.864] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.8° Hdg=200.7°
+[2026-06-13T11:23:55.954] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.8° Hdg=200.5°
+[2026-06-13T11:23:56.074] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=200.4°
+[2026-06-13T11:23:56.164] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=200.2°
+[2026-06-13T11:23:56.284] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=199.9°
+[2026-06-13T11:23:56.404] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=199.6°
+[2026-06-13T11:23:56.525] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=199.4°
+[2026-06-13T11:23:56.585] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=199.2°
+[2026-06-13T11:23:56.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=199.1°
+[2026-06-13T11:23:56.794] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=199.4°
+[2026-06-13T11:23:56.914] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=199.5°
+[2026-06-13T11:23:57.125] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=200.0°
+[2026-06-13T11:23:57.274] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=200.1°
+[2026-06-13T11:23:57.485] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=200.3°
+[2026-06-13T11:23:57.574] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.8° Hdg=200.4°
+[2026-06-13T11:23:57.754] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.8° Hdg=200.5°
+[2026-06-13T11:23:57.875] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=200.4°
+[2026-06-13T11:23:57.964] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=200.3°
+[2026-06-13T11:23:58.174] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=200.3°
+[2026-06-13T11:23:58.294] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=200.4°
+[2026-06-13T11:23:58.414] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=200.4°
+[2026-06-13T11:23:58.505] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=200.4°
+[2026-06-13T11:23:58.624] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=200.4°
+[2026-06-13T11:23:58.684] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=200.6°
+[2026-06-13T11:23:58.804] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=200.7°
+[2026-06-13T11:23:58.894] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=200.6°
+[2026-06-13T11:23:59.104] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=200.0°
+[2026-06-13T11:23:59.284] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=199.8°
+[2026-06-13T11:23:59.374] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=199.9°
+[2026-06-13T11:23:59.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=200.5°
+[2026-06-13T11:23:59.555] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=200.9°
+[2026-06-13T11:23:59.704] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=201.1°
+[2026-06-13T11:23:59.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=201.1°
+[2026-06-13T11:23:59.914] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=200.7°
+[2026-06-13T11:23:59.944] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=200.6°
+[2026-06-13T11:24:00.094] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=200.3°
+[2026-06-13T11:24:00.304] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.2° Hdg=200.3°
+[2026-06-13T11:24:00.394] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.2° Hdg=200.3°
+[2026-06-13T11:24:00.576] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.2° Hdg=200.2°
+[2026-06-13T11:24:00.694] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=200.2°
+[2026-06-13T11:24:00.788] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=200.3°
+[2026-06-13T11:24:00.904] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=200.7°
+[2026-06-13T11:24:00.994] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=200.8°
+[2026-06-13T11:24:01.114] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.8° Hdg=201.2°
+[2026-06-13T11:24:01.174] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.8° Hdg=201.2°
+[2026-06-13T11:24:01.324] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.8° Hdg=201.1°
+[2026-06-13T11:24:01.444] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.8° Hdg=200.9°
+[2026-06-13T11:24:01.564] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.9° Hdg=201.2°
+[2026-06-13T11:24:01.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.9° Hdg=201.3°
+[2026-06-13T11:24:01.717] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=201.3°
+[2026-06-13T11:24:01.924] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=201.5°
+[2026-06-13T11:24:02.104] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=201.5°
+[2026-06-13T11:24:02.164] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=201.5°
+[2026-06-13T11:24:02.344] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=201.9°
+[2026-06-13T11:24:02.524] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=201.9°
+[2026-06-13T11:24:02.555] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=201.8°
+[2026-06-13T11:24:02.734] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=201.6°
+[2026-06-13T11:24:02.764] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=201.5°
+[2026-06-13T11:24:02.914] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=201.3°
+[2026-06-13T11:24:03.126] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.1° Hdg=201.1°
+[2026-06-13T11:24:03.214] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.1° Hdg=201.2°
+[2026-06-13T11:24:03.396] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=201.4°
+[2026-06-13T11:24:03.514] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=201.3°
+[2026-06-13T11:24:03.604] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=201.2°
+[2026-06-13T11:24:03.724] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=201.0°
+[2026-06-13T11:24:03.814] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=201.0°
+[2026-06-13T11:24:03.936] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=200.8°
+[2026-06-13T11:24:04.054] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=200.6°
+[2026-06-13T11:24:04.144] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=200.5°
+[2026-06-13T11:24:04.264] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=200.4°
+[2026-06-13T11:24:04.444] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=200.9°
+[2026-06-13T11:24:04.594] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.1° Hdg=201.4°
+[2026-06-13T11:24:04.654] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.1° Pitch=-6.1° Hdg=201.6°
+[2026-06-13T11:24:04.804] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.4° Pitch=-6.0° Hdg=202.2°
+[2026-06-13T11:24:04.864] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.4° Pitch=-6.0° Hdg=202.5°
+[2026-06-13T11:24:04.984] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.4° Pitch=-6.0° Hdg=202.8°
+[2026-06-13T11:24:05.134] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.3° Pitch=-6.0° Hdg=202.9°
+[2026-06-13T11:24:05.224] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.2° Pitch=-6.0° Hdg=202.9°
+[2026-06-13T11:24:05.374] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=202.8°
+[2026-06-13T11:24:05.614] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=202.6°
+[2026-06-13T11:24:05.734] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=202.4°
+[2026-06-13T11:24:05.944] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=202.2°
+[2026-06-13T11:24:06.034] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.1° Hdg=202.2°
+[2026-06-13T11:24:06.214] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.1° Hdg=202.5°
+[2026-06-13T11:24:06.334] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.8° Pitch=-6.0° Hdg=202.5°
+[2026-06-13T11:24:06.544] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.8° Pitch=-5.9° Hdg=202.2°
+[2026-06-13T11:24:06.634] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.8° Pitch=-5.9° Hdg=201.9°
+[2026-06-13T11:24:06.754] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-5.9° Hdg=201.7°
+[2026-06-13T11:24:06.874] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-5.9° Hdg=201.6°
+[2026-06-13T11:24:06.935] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=202.0°
+[2026-06-13T11:24:07.087] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=202.2°
+[2026-06-13T11:24:07.147] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=202.3°
+[2026-06-13T11:24:07.265] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=202.4°
+[2026-06-13T11:24:07.355] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=202.5°
+[2026-06-13T11:24:07.596] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.2° Pitch=-6.1° Hdg=203.2°
+[2026-06-13T11:24:07.747] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.3° Pitch=-6.1° Hdg=203.5°
+[2026-06-13T11:24:07.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.3° Pitch=-6.1° Hdg=203.7°
+[2026-06-13T11:24:08.045] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.2° Pitch=-6.1° Hdg=204.0°
+[2026-06-13T11:24:08.224] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=203.9°
+[2026-06-13T11:24:08.436] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=203.9°
+[2026-06-13T11:24:08.645] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=203.9°
+[2026-06-13T11:24:08.765] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=203.6°
+[2026-06-13T11:24:08.855] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=203.3°
+[2026-06-13T11:24:08.975] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.0° Hdg=203.1°
+[2026-06-13T11:24:09.098] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.1° Hdg=202.9°
+[2026-06-13T11:24:09.155] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.8° Pitch=-6.1° Hdg=202.6°
+[2026-06-13T11:24:09.304] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.8° Pitch=-6.1° Hdg=202.1°
+[2026-06-13T11:24:09.364] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.2° Hdg=202.2°
+[2026-06-13T11:24:09.574] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=202.8°
+[2026-06-13T11:24:09.754] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=203.7°
+[2026-06-13T11:24:09.814] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=203.8°
+[2026-06-13T11:24:09.964] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=204.4°
+[2026-06-13T11:24:10.024] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=204.5°
+[2026-06-13T11:24:10.174] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.8° Hdg=205.0°
+[2026-06-13T11:24:10.205] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.8° Hdg=205.0°
+[2026-06-13T11:24:10.384] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.8° Hdg=205.1°
+[2026-06-13T11:24:10.414] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.8° Hdg=205.2°
+[2026-06-13T11:24:10.564] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=204.6°
+[2026-06-13T11:24:10.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=204.5°
+[2026-06-13T11:24:10.774] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=204.4°
+[2026-06-13T11:24:10.864] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=204.5°
+[2026-06-13T11:24:10.984] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=204.5°
+[2026-06-13T11:24:11.044] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=204.7°
+[2026-06-13T11:24:11.164] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=205.0°
+[2026-06-13T11:24:11.254] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.2° Hdg=205.2°
+[2026-06-13T11:24:11.374] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=205.3°
+[2026-06-13T11:24:11.464] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=205.3°
+[2026-06-13T11:24:11.584] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=205.1°
+[2026-06-13T11:24:11.794] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=204.4°
+[2026-06-13T11:24:11.914] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=204.3°
+[2026-06-13T11:24:12.034] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=204.2°
+[2026-06-13T11:24:12.098] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=204.5°
+[2026-06-13T11:24:12.186] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=204.8°
+[2026-06-13T11:24:12.394] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=205.5°
+[2026-06-13T11:24:12.574] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=206.5°
+[2026-06-13T11:24:12.635] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.9° Hdg=206.7°
+[2026-06-13T11:24:12.724] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=206.8°
+[2026-06-13T11:24:12.845] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=206.6°
+[2026-06-13T11:24:12.994] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=206.7°
+[2026-06-13T11:24:13.025] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=206.6°
+[2026-06-13T11:24:13.204] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=206.2°
+[2026-06-13T11:24:13.234] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=206.1°
+[2026-06-13T11:24:13.385] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=205.8°
+[2026-06-13T11:24:13.594] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.2° Hdg=205.6°
+[2026-06-13T11:24:13.684] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.2° Hdg=205.6°
+[2026-06-13T11:24:13.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=205.9°
+[2026-06-13T11:24:13.984] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=206.2°
+[2026-06-13T11:24:14.074] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=206.5°
+[2026-06-13T11:24:14.194] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=207.0°
+[2026-06-13T11:24:14.286] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=206.9°
+[2026-06-13T11:24:14.405] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=206.9°
+[2026-06-13T11:24:14.494] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=206.8°
+[2026-06-13T11:24:14.614] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=206.5°
+[2026-06-13T11:24:14.734] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=206.4°
+[2026-06-13T11:24:14.796] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=206.4°
+[2026-06-13T11:24:14.914] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=206.4°
+[2026-06-13T11:24:15.034] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=206.8°
+[2026-06-13T11:24:15.214] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=207.2°
+[2026-06-13T11:24:15.244] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=207.2°
+[2026-06-13T11:24:15.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=207.3°
+[2026-06-13T11:24:15.454] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=207.3°
+[2026-06-13T11:24:15.604] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=207.3°
+[2026-06-13T11:24:15.814] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=207.2°
+[2026-06-13T11:24:15.845] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=207.2°
+[2026-06-13T11:24:16.085] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=207.0°
+[2026-06-13T11:24:16.204] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=207.0°
+[2026-06-13T11:24:16.294] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=206.9°
+[2026-06-13T11:24:16.414] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=206.8°
+[2026-06-13T11:24:16.504] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=206.8°
+[2026-06-13T11:24:16.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=206.7°
+[2026-06-13T11:24:16.684] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=206.6°
+[2026-06-13T11:24:16.804] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=206.5°
+[2026-06-13T11:24:16.924] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=206.4°
+[2026-06-13T11:24:17.074] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=206.3°
+[2026-06-13T11:24:17.134] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=206.2°
+[2026-06-13T11:24:17.224] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=206.1°
+[2026-06-13T11:24:17.434] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=207.2°
+[2026-06-13T11:24:17.614] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=208.0°
+[2026-06-13T11:24:17.674] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=208.0°
+[2026-06-13T11:24:17.824] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=208.7°
+[2026-06-13T11:24:17.854] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=208.8°
+[2026-06-13T11:24:18.065] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=209.0°
+[2026-06-13T11:24:18.214] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=208.8°
+[2026-06-13T11:24:18.424] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=209.1°
+[2026-06-13T11:24:18.514] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=209.2°
+[2026-06-13T11:24:18.605] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=209.6°
+[2026-06-13T11:24:18.724] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=209.7°
+[2026-06-13T11:24:18.904] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=210.4°
+[2026-06-13T11:24:19.114] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=210.4°
+[2026-06-13T11:24:19.234] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=210.3°
+[2026-06-13T11:24:19.324] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=210.3°
+[2026-06-13T11:24:19.444] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=210.3°
+[2026-06-13T11:24:19.565] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=210.7°
+[2026-06-13T11:24:19.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=210.7°
+[2026-06-13T11:24:19.775] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=210.7°
+[2026-06-13T11:24:19.835] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.2° Hdg=210.7°
+[2026-06-13T11:24:19.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=211.5°
+[2026-06-13T11:24:20.256] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.0° Hdg=212.2°
+[2026-06-13T11:24:20.286] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.0° Hdg=211.8°
+[2026-06-13T11:24:20.435] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.0° Hdg=211.0°
+[2026-06-13T11:24:20.646] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-5.9° Hdg=210.8°
+[2026-06-13T11:24:20.737] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-5.9° Hdg=210.8°
+[2026-06-13T11:24:20.915] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=211.1°
+[2026-06-13T11:24:21.036] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=211.7°
+[2026-06-13T11:24:21.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=212.5°
+[2026-06-13T11:24:21.337] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=212.7°
+[2026-06-13T11:24:21.459] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.0° Pitch=-6.0° Hdg=213.0°
+[2026-06-13T11:24:21.545] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.1° Pitch=-6.0° Hdg=213.0°
+[2026-06-13T11:24:21.665] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.1° Pitch=-6.0° Hdg=213.0°
+[2026-06-13T11:24:21.785] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.1° Pitch=-6.0° Hdg=212.9°
+[2026-06-13T11:24:21.845] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.1° Pitch=-6.0° Hdg=213.1°
+[2026-06-13T11:24:21.965] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=213.0°
+[2026-06-13T11:24:22.055] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=213.2°
+[2026-06-13T11:24:22.385] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=212.8°
+[2026-06-13T11:24:22.537] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=212.8°
+[2026-06-13T11:24:22.626] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=213.0°
+[2026-06-13T11:24:22.748] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=213.4°
+[2026-06-13T11:24:22.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=213.2°
+[2026-06-13T11:24:23.136] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=213.7°
+[2026-06-13T11:24:23.346] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=214.0°
+[2026-06-13T11:24:23.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=214.0°
+[2026-06-13T11:24:23.555] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=213.9°
+[2026-06-13T11:24:23.675] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=214.0°
+[2026-06-13T11:24:23.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=214.0°
+[2026-06-13T11:24:23.947] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=214.0°
+[2026-06-13T11:24:24.006] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=214.2°
+[2026-06-13T11:24:24.124] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=214.4°
+[2026-06-13T11:24:24.184] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=214.5°
+[2026-06-13T11:24:24.274] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=214.3°
+[2026-06-13T11:24:24.487] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=214.6°
+[2026-06-13T11:24:24.514] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=214.7°
+[2026-06-13T11:24:24.665] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=214.9°
+[2026-06-13T11:24:24.874] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=215.0°
+[2026-06-13T11:24:24.964] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=215.2°
+[2026-06-13T11:24:25.144] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=215.7°
+[2026-06-13T11:24:25.264] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=216.0°
+[2026-06-13T11:24:25.565] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=215.9°
+[2026-06-13T11:24:25.685] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=215.8°
+[2026-06-13T11:24:25.774] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=215.7°
+[2026-06-13T11:24:25.895] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=215.6°
+[2026-06-13T11:24:25.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=215.5°
+[2026-06-13T11:24:26.074] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=215.4°
+[2026-06-13T11:24:26.165] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=215.4°
+[2026-06-13T11:24:26.285] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=215.3°
+[2026-06-13T11:24:26.374] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=215.2°
+[2026-06-13T11:24:26.554] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=215.1°
+[2026-06-13T11:24:26.615] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=215.1°
+[2026-06-13T11:24:26.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=215.0°
+[2026-06-13T11:24:26.884] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=214.9°
+[2026-06-13T11:24:26.915] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=214.9°
+[2026-06-13T11:24:27.098] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=214.8°
+[2026-06-13T11:24:27.126] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=214.8°
+[2026-06-13T11:24:27.304] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=215.1°
+[2026-06-13T11:24:27.335] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=215.6°
+[2026-06-13T11:24:27.695] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.2° Hdg=216.7°
+[2026-06-13T11:24:27.786] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.2° Hdg=216.8°
+[2026-06-13T11:24:27.964] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=216.6°
+[2026-06-13T11:24:28.084] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=216.6°
+[2026-06-13T11:24:28.174] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=216.6°
+[2026-06-13T11:24:28.294] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=217.1°
+[2026-06-13T11:24:28.385] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=217.3°
+[2026-06-13T11:24:28.594] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=217.8°
+[2026-06-13T11:24:28.714] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=217.8°
+[2026-06-13T11:24:28.834] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=217.7°
+[2026-06-13T11:24:28.894] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-5.9° Hdg=217.8°
+[2026-06-13T11:24:28.984] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-5.9° Hdg=218.4°
+[2026-06-13T11:24:29.106] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=218.6°
+[2026-06-13T11:24:29.198] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=218.6°
+[2026-06-13T11:24:29.314] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=218.5°
+[2026-06-13T11:24:29.434] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=218.8°
+[2026-06-13T11:24:29.676] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=219.3°
+[2026-06-13T11:24:29.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=219.2°
+[2026-06-13T11:24:29.944] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=219.4°
+[2026-06-13T11:24:30.124] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=219.4°
+[2026-06-13T11:24:30.185] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=219.4°
+[2026-06-13T11:24:30.304] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=219.7°
+[2026-06-13T11:24:30.514] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=219.4°
+[2026-06-13T11:24:30.725] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.0° Hdg=219.2°
+[2026-06-13T11:24:30.784] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.0° Hdg=218.9°
+[2026-06-13T11:24:30.905] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.0° Hdg=219.3°
+[2026-06-13T11:24:30.994] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.0° Hdg=219.7°
+[2026-06-13T11:24:31.114] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=219.8°
+[2026-06-13T11:24:31.204] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=219.9°
+[2026-06-13T11:24:31.326] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=220.2°
+[2026-06-13T11:24:31.414] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=220.3°
+[2026-06-13T11:24:31.542] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=221.6°
+[2026-06-13T11:24:31.595] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=223.4°
+[2026-06-13T11:24:31.774] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=223.1°
+[2026-06-13T11:24:31.834] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=222.6°
+[2026-06-13T11:24:31.924] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=222.2°
+[2026-06-13T11:24:32.135] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=221.7°
+[2026-06-13T11:24:32.254] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=221.9°
+[2026-06-13T11:24:32.375] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=222.2°
+[2026-06-13T11:24:32.434] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=222.4°
+[2026-06-13T11:24:32.585] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=222.7°
+[2026-06-13T11:24:32.644] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=222.7°
+[2026-06-13T11:24:32.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=222.9°
+[2026-06-13T11:24:33.005] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=222.4°
+[2026-06-13T11:24:33.125] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=222.6°
+[2026-06-13T11:24:33.335] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=222.5°
+[2026-06-13T11:24:33.424] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=222.5°
+[2026-06-13T11:24:33.604] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.1° Hdg=222.6°
+[2026-06-13T11:24:33.814] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.8° Pitch=-6.1° Hdg=222.3°
+[2026-06-13T11:24:33.934] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.8° Pitch=-6.0° Hdg=222.3°
+[2026-06-13T11:24:34.025] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.8° Pitch=-6.0° Hdg=222.4°
+[2026-06-13T11:24:34.144] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.0° Hdg=222.5°
+[2026-06-13T11:24:34.266] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.6° Pitch=-6.0° Hdg=222.3°
+[2026-06-13T11:24:34.356] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=222.8°
+[2026-06-13T11:24:34.474] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=222.8°
+[2026-06-13T11:24:34.535] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=222.8°
+[2026-06-13T11:24:34.624] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=223.2°
+[2026-06-13T11:24:34.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=224.3°
+[2026-06-13T11:24:35.135] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=225.1°
+[2026-06-13T11:24:35.195] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=225.2°
+[2026-06-13T11:24:35.255] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=225.2°
+[2026-06-13T11:24:35.375] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=225.2°
+[2026-06-13T11:24:35.555] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=225.3°
+[2026-06-13T11:24:35.585] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=225.3°
+[2026-06-13T11:24:35.764] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.1° Hdg=225.4°
+[2026-06-13T11:24:35.945] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=225.2°
+[2026-06-13T11:24:36.155] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=225.6°
+[2026-06-13T11:24:36.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=225.6°
+[2026-06-13T11:24:36.365] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=225.4°
+[2026-06-13T11:24:36.427] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=225.4°
+[2026-06-13T11:24:36.545] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=225.5°
+[2026-06-13T11:24:36.635] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=225.3°
+[2026-06-13T11:24:36.755] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.0° Hdg=225.0°
+[2026-06-13T11:24:36.965] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.0° Hdg=225.0°
+[2026-06-13T11:24:37.084] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.7° Pitch=-6.0° Hdg=225.2°
+[2026-06-13T11:24:37.174] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=225.5°
+[2026-06-13T11:24:37.294] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=226.1°
+[2026-06-13T11:24:37.354] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=226.3°
+[2026-06-13T11:24:37.474] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=226.7°
+[2026-06-13T11:24:37.564] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=226.9°
+[2026-06-13T11:24:37.654] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=227.1°
+[2026-06-13T11:24:37.774] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=227.3°
+[2026-06-13T11:24:37.894] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=227.5°
+[2026-06-13T11:24:38.015] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=227.7°
+[2026-06-13T11:24:38.194] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=227.1°
+[2026-06-13T11:24:38.255] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=227.2°
+[2026-06-13T11:24:38.284] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=227.2°
+[2026-06-13T11:24:38.405] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=227.2°
+[2026-06-13T11:24:38.554] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=227.4°
+[2026-06-13T11:24:38.615] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=227.6°
+[2026-06-13T11:24:38.764] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=227.8°
+[2026-06-13T11:24:39.065] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=227.7°
+[2026-06-13T11:24:39.185] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=227.7°
+[2026-06-13T11:24:39.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=227.7°
+[2026-06-13T11:24:39.365] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=227.6°
+[2026-06-13T11:24:39.454] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=227.6°
+[2026-06-13T11:24:39.575] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=227.5°
+[2026-06-13T11:24:39.665] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=227.4°
+[2026-06-13T11:24:39.784] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=227.4°
+[2026-06-13T11:24:39.904] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=227.3°
+[2026-06-13T11:24:39.965] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=227.3°
+[2026-06-13T11:24:40.115] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=227.2°
+[2026-06-13T11:24:40.174] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=227.2°
+[2026-06-13T11:24:40.295] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=227.2°
+[2026-06-13T11:24:40.385] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=227.1°
+[2026-06-13T11:24:40.595] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=227.1°
+[2026-06-13T11:24:40.715] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=227.0°
+[2026-06-13T11:24:40.835] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=227.0°
+[2026-06-13T11:24:40.895] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=226.9°
+[2026-06-13T11:24:41.195] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=227.2°
+[2026-06-13T11:24:41.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=227.7°
+[2026-06-13T11:24:41.375] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=228.4°
+[2026-06-13T11:24:41.584] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=228.8°
+[2026-06-13T11:24:41.825] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=228.9°
+[2026-06-13T11:24:41.884] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=229.1°
+[2026-06-13T11:24:42.185] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=230.9°
+[2026-06-13T11:24:42.274] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=231.3°
+[2026-06-13T11:24:42.397] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=231.6°
+[2026-06-13T11:24:42.485] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-5.9° Hdg=231.7°
+[2026-06-13T11:24:42.605] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-5.9° Hdg=232.2°
+[2026-06-13T11:24:42.725] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-5.9° Hdg=232.2°
+[2026-06-13T11:24:42.785] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.9° Hdg=232.2°
+[2026-06-13T11:24:42.935] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.9° Hdg=232.4°
+[2026-06-13T11:24:43.024] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=232.5°
+[2026-06-13T11:24:43.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=232.6°
+[2026-06-13T11:24:43.415] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=232.2°
+[2026-06-13T11:24:43.595] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=231.8°
+[2026-06-13T11:24:43.655] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=231.9°
+[2026-06-13T11:24:43.834] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=231.7°
+[2026-06-13T11:24:43.836] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=231.9°
+[2026-06-13T11:24:44.044] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=231.6°
+[2026-06-13T11:24:44.046] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=231.4°
+[2026-06-13T11:24:44.405] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=231.7°
+[2026-06-13T11:24:44.615] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=232.3°
+[2026-06-13T11:24:44.707] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=232.3°
+[2026-06-13T11:24:44.888] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=232.0°
+[2026-06-13T11:24:45.005] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.3°
+[2026-06-13T11:24:45.095] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.6°
+[2026-06-13T11:24:45.458] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=233.3°
+[2026-06-13T11:24:45.608] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=233.5°
+[2026-06-13T11:24:45.666] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=233.6°
+[2026-06-13T11:24:45.876] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=233.5°
+[2026-06-13T11:24:45.882] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=233.5°
+[2026-06-13T11:24:46.025] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=233.8°
+[2026-06-13T11:24:46.056] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=233.8°
+[2026-06-13T11:24:46.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=233.3°
+[2026-06-13T11:24:46.416] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=233.8°
+[2026-06-13T11:24:46.626] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=233.5°
+[2026-06-13T11:24:46.716] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=233.3°
+[2026-06-13T11:24:46.836] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=233.1°
+[2026-06-13T11:24:46.896] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=233.2°
+[2026-06-13T11:24:47.016] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=233.5°
+[2026-06-13T11:24:47.106] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=233.7°
+[2026-06-13T11:24:47.226] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=233.8°
+[2026-06-13T11:24:47.315] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=233.8°
+[2026-06-13T11:24:47.436] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=233.8°
+[2026-06-13T11:24:47.527] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=233.9°
+[2026-06-13T11:24:47.645] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=234.0°
+[2026-06-13T11:24:47.766] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=233.9°
+[2026-06-13T11:24:47.826] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=233.8°
+[2026-06-13T11:24:47.945] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=234.2°
+[2026-06-13T11:24:48.036] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=234.4°
+[2026-06-13T11:24:48.246] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=234.3°
+[2026-06-13T11:24:48.637] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=233.5°
+[2026-06-13T11:24:48.845] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=233.9°
+[2026-06-13T11:24:48.934] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=233.8°
+[2026-06-13T11:24:49.115] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=233.5°
+[2026-06-13T11:24:49.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=233.4°
+[2026-06-13T11:24:49.325] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=234.1°
+[2026-06-13T11:24:49.445] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=234.4°
+[2026-06-13T11:24:49.535] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=234.4°
+[2026-06-13T11:24:49.655] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=234.3°
+[2026-06-13T11:24:49.775] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=234.2°
+[2026-06-13T11:24:49.834] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.3° Hdg=233.9°
+[2026-06-13T11:24:49.985] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.2° Hdg=233.7°
+[2026-06-13T11:24:50.044] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=233.9°
+[2026-06-13T11:24:50.134] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.2° Hdg=233.6°
+[2026-06-13T11:24:50.255] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=233.4°
+[2026-06-13T11:24:50.344] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=233.4°
+[2026-06-13T11:24:50.674] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.8° Hdg=234.2°
+[2026-06-13T11:24:50.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.8° Hdg=234.2°
+[2026-06-13T11:24:50.825] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.7° Hdg=234.5°
+[2026-06-13T11:24:50.885] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.7° Hdg=234.3°
+[2026-06-13T11:24:51.064] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.8° Hdg=234.5°
+[2026-06-13T11:24:51.095] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.8° Hdg=234.8°
+[2026-06-13T11:24:51.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=234.6°
+[2026-06-13T11:24:51.305] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=234.6°
+[2026-06-13T11:24:51.455] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.2° Hdg=234.4°
+[2026-06-13T11:24:51.485] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.2° Hdg=234.4°
+[2026-06-13T11:24:51.665] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.4° Hdg=234.0°
+[2026-06-13T11:24:51.755] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.4° Hdg=233.8°
+[2026-06-13T11:24:51.875] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.4° Hdg=233.4°
+[2026-06-13T11:24:51.935] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.4° Hdg=233.2°
+[2026-06-13T11:24:52.055] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.3° Hdg=232.9°
+[2026-06-13T11:24:52.145] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=232.9°
+[2026-06-13T11:24:52.265] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=233.1°
+[2026-06-13T11:24:52.354] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=233.4°
+[2026-06-13T11:24:52.475] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=233.3°
+[2026-06-13T11:24:52.535] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=233.3°
+[2026-06-13T11:24:52.654] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.8° Hdg=233.3°
+[2026-06-13T11:24:52.805] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.7° Hdg=233.3°
+[2026-06-13T11:24:52.865] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.7° Hdg=233.3°
+[2026-06-13T11:24:52.985] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.8° Hdg=233.4°
+[2026-06-13T11:24:53.075] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.8° Hdg=233.7°
+[2026-06-13T11:24:53.285] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=234.2°
+[2026-06-13T11:24:53.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=233.4°
+[2026-06-13T11:24:53.528] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=233.3°
+[2026-06-13T11:24:53.588] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=233.2°
+[2026-06-13T11:24:53.706] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=233.3°
+[2026-06-13T11:24:53.888] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=233.0°
+[2026-06-13T11:24:53.917] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=233.0°
+[2026-06-13T11:24:54.066] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=232.6°
+[2026-06-13T11:24:54.275] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=232.6°
+[2026-06-13T11:24:54.365] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=232.5°
+[2026-06-13T11:24:54.455] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=232.2°
+[2026-06-13T11:24:54.575] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=232.1°
+[2026-06-13T11:24:54.815] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.5°
+[2026-06-13T11:24:54.875] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.4°
+[2026-06-13T11:24:54.995] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.6°
+[2026-06-13T11:24:55.085] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.5°
+[2026-06-13T11:24:55.175] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.6°
+[2026-06-13T11:24:55.295] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=232.6°
+[2026-06-13T11:24:55.415] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=232.7°
+[2026-06-13T11:24:55.537] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.7°
+[2026-06-13T11:24:55.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.8°
+[2026-06-13T11:24:55.685] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=232.6°
+[2026-06-13T11:24:55.805] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=232.4°
+[2026-06-13T11:24:55.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=232.5°
+[2026-06-13T11:24:56.105] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=232.5°
+[2026-06-13T11:24:56.135] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=232.4°
+[2026-06-13T11:24:56.285] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=232.4°
+[2026-06-13T11:24:56.345] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=232.4°
+[2026-06-13T11:24:56.494] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=232.9°
+[2026-06-13T11:24:56.525] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=232.9°
+[2026-06-13T11:24:56.708] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=232.8°
+[2026-06-13T11:24:56.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=232.7°
+[2026-06-13T11:24:56.885] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=231.9°
+[2026-06-13T11:24:57.095] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.2° Hdg=233.4°
+[2026-06-13T11:24:57.185] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=233.7°
+[2026-06-13T11:24:57.305] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=233.8°
+[2026-06-13T11:24:57.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=233.3°
+[2026-06-13T11:24:57.575] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=232.2°
+[2026-06-13T11:24:57.695] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=231.6°
+[2026-06-13T11:24:57.934] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=231.2°
+[2026-06-13T11:24:58.115] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.8° Hdg=231.5°
+[2026-06-13T11:24:58.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.8° Hdg=231.5°
+[2026-06-13T11:24:58.355] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.8° Hdg=231.5°
+[2026-06-13T11:24:58.445] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=231.6°
+[2026-06-13T11:24:58.565] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=231.6°
+[2026-06-13T11:24:58.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=231.6°
+[2026-06-13T11:24:58.715] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=231.7°
+[2026-06-13T11:24:58.957] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=231.4°
+[2026-06-13T11:24:59.108] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=231.1°
+[2026-06-13T11:24:59.288] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=230.7°
+[2026-06-13T11:24:59.407] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=230.3°
+[2026-06-13T11:24:59.586] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.2° Hdg=230.0°
+[2026-06-13T11:24:59.706] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.2° Hdg=229.3°
+[2026-06-13T11:25:00.006] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=229.3°
+[2026-06-13T11:25:00.126] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=229.3°
+[2026-06-13T11:25:00.215] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=229.6°
+[2026-06-13T11:25:00.336] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=230.1°
+[2026-06-13T11:25:00.397] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.8° Hdg=229.9°
+[2026-06-13T11:25:00.517] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.8° Hdg=229.8°
+[2026-06-13T11:25:00.607] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=229.9°
+[2026-06-13T11:25:00.725] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=229.6°
+[2026-06-13T11:25:00.816] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=229.5°
+[2026-06-13T11:25:01.116] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=229.6°
+[2026-06-13T11:25:01.326] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=229.9°
+[2026-06-13T11:25:01.417] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=230.1°
+[2026-06-13T11:25:01.626] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=229.2°
+[2026-06-13T11:25:01.805] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=229.1°
+[2026-06-13T11:25:01.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=229.0°
+[2026-06-13T11:25:02.135] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=228.3°
+[2026-06-13T11:25:02.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=227.9°
+[2026-06-13T11:25:02.345] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=227.7°
+[2026-06-13T11:25:02.405] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=227.7°
+[2026-06-13T11:25:02.525] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=227.9°
+[2026-06-13T11:25:02.615] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=228.1°
+[2026-06-13T11:25:02.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=228.3°
+[2026-06-13T11:25:02.825] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=228.3°
+[2026-06-13T11:25:02.945] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=228.4°
+[2026-06-13T11:25:03.155] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=228.2°
+[2026-06-13T11:25:03.275] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=228.0°
+[2026-06-13T11:25:03.425] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=227.9°
+[2026-06-13T11:25:03.455] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=227.9°
+[2026-06-13T11:25:03.575] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=227.8°
+[2026-06-13T11:25:03.757] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=227.4°
+[2026-06-13T11:25:03.875] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=227.4°
+[2026-06-13T11:25:03.995] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=227.5°
+[2026-06-13T11:25:04.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=227.4°
+[2026-06-13T11:25:04.355] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=226.9°
+[2026-06-13T11:25:04.415] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=226.7°
+[2026-06-13T11:25:04.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=226.9°
+[2026-06-13T11:25:04.745] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=227.2°
+[2026-06-13T11:25:04.837] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=227.3°
+[2026-06-13T11:25:04.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=227.0°
+[2026-06-13T11:25:05.045] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=227.0°
+[2026-06-13T11:25:05.285] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=226.7°
+[2026-06-13T11:25:05.345] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=226.8°
+[2026-06-13T11:25:05.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=226.5°
+[2026-06-13T11:25:05.555] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=226.4°
+[2026-06-13T11:25:05.645] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=226.5°
+[2026-06-13T11:25:05.765] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=226.3°
+[2026-06-13T11:25:05.885] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.8° Hdg=225.9°
+[2026-06-13T11:25:05.975] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.8° Hdg=225.7°
+[2026-06-13T11:25:06.095] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.8° Hdg=225.6°
+[2026-06-13T11:25:06.155] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.8° Hdg=225.7°
+[2026-06-13T11:25:06.275] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.8° Hdg=225.8°
+[2026-06-13T11:25:06.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=225.7°
+[2026-06-13T11:25:06.575] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=225.6°
+[2026-06-13T11:25:06.605] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=225.6°
+[2026-06-13T11:25:06.757] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=225.5°
+[2026-06-13T11:25:06.965] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.3° Hdg=225.0°
+[2026-06-13T11:25:06.997] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.3° Hdg=225.0°
+[2026-06-13T11:25:07.176] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.3° Hdg=224.5°
+[2026-06-13T11:25:07.206] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.3° Hdg=224.4°
+[2026-06-13T11:25:07.386] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.3° Hdg=224.4°
+[2026-06-13T11:25:07.448] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.3° Hdg=224.4°
+[2026-06-13T11:25:07.565] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=224.4°
+[2026-06-13T11:25:07.655] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=224.5°
+[2026-06-13T11:25:07.776] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=224.3°
+[2026-06-13T11:25:07.865] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.8° Hdg=224.3°
+[2026-06-13T11:25:07.988] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.7° Hdg=224.4°
+[2026-06-13T11:25:08.105] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.6° Hdg=224.8°
+[2026-06-13T11:25:08.195] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.6° Hdg=224.8°
+[2026-06-13T11:25:08.405] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.7° Hdg=224.9°
+[2026-06-13T11:25:08.585] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=225.4°
+[2026-06-13T11:25:08.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=225.2°
+[2026-06-13T11:25:08.979] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.3° Hdg=224.9°
+[2026-06-13T11:25:09.036] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.3° Hdg=224.6°
+[2026-06-13T11:25:09.095] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.3° Hdg=223.8°
+[2026-06-13T11:25:09.215] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.3° Hdg=223.0°
+[2026-06-13T11:25:09.426] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.2° Hdg=222.4°
+[2026-06-13T11:25:09.576] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=222.6°
+[2026-06-13T11:25:09.785] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=223.3°
+[2026-06-13T11:25:09.875] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=223.4°
+[2026-06-13T11:25:10.056] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.8° Hdg=223.7°
+[2026-06-13T11:25:10.265] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.8° Hdg=224.3°
+[2026-06-13T11:25:10.475] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.8° Hdg=223.8°
+[2026-06-13T11:25:10.595] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=223.8°
+[2026-06-13T11:25:10.685] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=223.8°
+[2026-06-13T11:25:10.805] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=223.5°
+[2026-06-13T11:25:10.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=223.6°
+[2026-06-13T11:25:10.985] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=223.7°
+[2026-06-13T11:25:11.105] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=223.3°
+[2026-06-13T11:25:11.195] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=223.2°
+[2026-06-13T11:25:11.525] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=223.0°
+[2026-06-13T11:25:11.645] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=222.7°
+[2026-06-13T11:25:11.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=221.7°
+[2026-06-13T11:25:11.855] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=221.7°
+[2026-06-13T11:25:11.915] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=221.8°
+[2026-06-13T11:25:12.035] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=221.5°
+[2026-06-13T11:25:12.215] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=221.2°
+[2026-06-13T11:25:12.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=221.1°
+[2026-06-13T11:25:12.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=221.3°
+[2026-06-13T11:25:12.455] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=221.3°
+[2026-06-13T11:25:12.606] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=221.5°
+[2026-06-13T11:25:12.699] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=221.8°
+[2026-06-13T11:25:12.877] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=221.8°
+[2026-06-13T11:25:13.086] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=222.0°
+[2026-06-13T11:25:13.210] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.2° Hdg=221.6°
+[2026-06-13T11:25:13.295] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.2° Hdg=221.2°
+[2026-06-13T11:25:13.415] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=221.0°
+[2026-06-13T11:25:13.505] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=220.8°
+[2026-06-13T11:25:13.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=220.6°
+[2026-06-13T11:25:13.745] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=220.7°
+[2026-06-13T11:25:13.865] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=220.7°
+[2026-06-13T11:25:13.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=220.7°
+[2026-06-13T11:25:14.015] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=220.8°
+[2026-06-13T11:25:14.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=220.2°
+[2026-06-13T11:25:14.435] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=219.4°
+[2026-06-13T11:25:14.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=219.3°
+[2026-06-13T11:25:14.675] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=219.3°
+[2026-06-13T11:25:14.827] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=219.4°
+[2026-06-13T11:25:14.855] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=219.4°
+[2026-06-13T11:25:15.035] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=219.5°
+[2026-06-13T11:25:15.065] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=219.6°
+[2026-06-13T11:25:15.215] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=219.6°
+[2026-06-13T11:25:15.425] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=219.6°
+[2026-06-13T11:25:15.515] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=219.6°
+[2026-06-13T11:25:15.695] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=220.0°
+[2026-06-13T11:25:15.907] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=219.9°
+[2026-06-13T11:25:16.025] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=219.9°
+[2026-06-13T11:25:16.115] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=220.1°
+[2026-06-13T11:25:16.236] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=219.9°
+[2026-06-13T11:25:16.325] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=219.9°
+[2026-06-13T11:25:16.445] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=219.4°
+[2026-06-13T11:25:16.505] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=218.8°
+[2026-06-13T11:25:16.745] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=217.8°
+[2026-06-13T11:25:16.866] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=217.7°
+[2026-06-13T11:25:17.045] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=217.6°
+[2026-06-13T11:25:17.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=217.7°
+[2026-06-13T11:25:17.285] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=217.7°
+[2026-06-13T11:25:17.435] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=217.8°
+[2026-06-13T11:25:17.495] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=217.9°
+[2026-06-13T11:25:17.555] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=217.9°
+[2026-06-13T11:25:17.855] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=218.4°
+[2026-06-13T11:25:17.886] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=218.5°
+[2026-06-13T11:25:18.035] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=218.2°
+[2026-06-13T11:25:18.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=217.6°
+[2026-06-13T11:25:18.337] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=217.6°
+[2026-06-13T11:25:18.515] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=217.7°
+[2026-06-13T11:25:18.635] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=217.8°
+[2026-06-13T11:25:18.845] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=217.4°
+[2026-06-13T11:25:18.935] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=217.3°
+[2026-06-13T11:25:19.055] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=217.2°
+[2026-06-13T11:25:19.145] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=217.1°
+[2026-06-13T11:25:19.265] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=217.0°
+[2026-06-13T11:25:19.385] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=216.4°
+[2026-06-13T11:25:19.445] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=216.1°
+[2026-06-13T11:25:19.535] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=215.9°
+[2026-06-13T11:25:19.655] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=215.8°
+[2026-06-13T11:25:19.745] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=215.5°
+[2026-06-13T11:25:19.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=215.2°
+[2026-06-13T11:25:19.986] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=215.1°
+[2026-06-13T11:25:20.135] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=215.0°
+[2026-06-13T11:25:20.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=215.0°
+[2026-06-13T11:25:20.315] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=215.1°
+[2026-06-13T11:25:20.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=215.3°
+[2026-06-13T11:25:20.495] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=215.3°
+[2026-06-13T11:25:20.675] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=215.7°
+[2026-06-13T11:25:20.705] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.9° Hdg=215.8°
+[2026-06-13T11:25:21.066] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-5.9° Hdg=215.8°
+[2026-06-13T11:25:21.185] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=216.0°
+[2026-06-13T11:25:21.275] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-6.0° Hdg=216.3°
+[2026-06-13T11:25:21.335] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=216.2°
+[2026-06-13T11:25:21.455] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=215.8°
+[2026-06-13T11:25:21.547] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=215.9°
+[2026-06-13T11:25:21.665] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=215.5°
+[2026-06-13T11:25:21.755] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=215.6°
+[2026-06-13T11:25:21.965] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.2° Hdg=215.5°
+[2026-06-13T11:25:22.092] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=215.1°
+[2026-06-13T11:25:22.205] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.1° Hdg=214.5°
+[2026-06-13T11:25:22.265] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.1° Hdg=214.0°
+[2026-06-13T11:25:22.385] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=213.6°
+[2026-06-13T11:25:22.475] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.0° Hdg=213.3°
+[2026-06-13T11:25:22.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=213.3°
+[2026-06-13T11:25:22.685] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=213.3°
+[2026-06-13T11:25:22.805] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=213.6°
+[2026-06-13T11:25:23.045] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=213.6°
+[2026-06-13T11:25:23.194] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=214.1°
+[2026-06-13T11:25:23.316] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=214.1°
+[2026-06-13T11:25:23.496] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=213.9°
+[2026-06-13T11:25:23.526] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.0° Hdg=213.9°
+[2026-06-13T11:25:23.678] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.1° Hdg=213.7°
+[2026-06-13T11:25:23.886] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=213.4°
+[2026-06-13T11:25:23.976] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=213.4°
+[2026-06-13T11:25:24.096] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=213.3°
+[2026-06-13T11:25:24.156] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=212.7°
+[2026-06-13T11:25:24.276] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=212.6°
+[2026-06-13T11:25:24.366] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=212.8°
+[2026-06-13T11:25:24.486] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=212.9°
+[2026-06-13T11:25:24.616] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=212.5°
+[2026-06-13T11:25:24.697] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=212.4°
+[2026-06-13T11:25:24.785] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=212.1°
+[2026-06-13T11:25:24.905] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=211.9°
+[2026-06-13T11:25:25.145] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=212.3°
+[2026-06-13T11:25:25.206] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=212.4°
+[2026-06-13T11:25:25.326] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=212.2°
+[2026-06-13T11:25:25.509] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=212.0°
+[2026-06-13T11:25:25.535] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=212.1°
+[2026-06-13T11:25:25.686] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=211.9°
+[2026-06-13T11:25:25.746] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=211.9°
+[2026-06-13T11:25:25.895] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=212.1°
+[2026-06-13T11:25:25.926] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=212.0°
+[2026-06-13T11:25:26.109] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=211.8°
+[2026-06-13T11:25:26.195] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=211.8°
+[2026-06-13T11:25:26.315] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=211.7°
+[2026-06-13T11:25:26.375] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=211.6°
+[2026-06-13T11:25:26.495] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=211.5°
+[2026-06-13T11:25:26.585] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=211.5°
+[2026-06-13T11:25:26.705] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=211.2°
+[2026-06-13T11:25:26.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=211.2°
+[2026-06-13T11:25:26.919] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=211.1°
+[2026-06-13T11:25:27.035] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=211.0°
+[2026-06-13T11:25:27.095] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=211.0°
+[2026-06-13T11:25:27.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=210.7°
+[2026-06-13T11:25:27.369] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=210.6°
+[2026-06-13T11:25:27.429] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=210.9°
+[2026-06-13T11:25:27.546] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=211.0°
+[2026-06-13T11:25:27.725] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=211.0°
+[2026-06-13T11:25:27.758] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=210.9°
+[2026-06-13T11:25:27.905] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=210.6°
+[2026-06-13T11:25:27.966] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=210.6°
+[2026-06-13T11:25:28.115] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=210.1°
+[2026-06-13T11:25:28.146] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=210.1°
+[2026-06-13T11:25:28.385] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=210.1°
+[2026-06-13T11:25:28.508] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=210.0°
+[2026-06-13T11:25:28.715] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=209.7°
+[2026-06-13T11:25:28.805] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=209.9°
+[2026-06-13T11:25:28.925] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=209.9°
+[2026-06-13T11:25:29.015] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=209.8°
+[2026-06-13T11:25:29.315] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=209.1°
+[2026-06-13T11:25:29.437] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=208.9°
+[2026-06-13T11:25:29.525] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=208.6°
+[2026-06-13T11:25:29.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=208.2°
+[2026-06-13T11:25:29.856] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=208.0°
+[2026-06-13T11:25:29.976] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=208.2°
+[2026-06-13T11:25:30.066] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=208.5°
+[2026-06-13T11:25:30.186] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=208.4°
+[2026-06-13T11:25:30.247] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=208.3°
+[2026-06-13T11:25:30.366] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=208.3°
+[2026-06-13T11:25:30.545] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=208.4°
+[2026-06-13T11:25:30.576] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=208.4°
+[2026-06-13T11:25:30.725] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=208.0°
+[2026-06-13T11:25:30.905] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=208.3°
+[2026-06-13T11:25:31.025] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=208.5°
+[2026-06-13T11:25:31.205] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=208.6°
+[2026-06-13T11:25:31.445] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=208.2°
+[2026-06-13T11:25:31.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=207.2°
+[2026-06-13T11:25:31.745] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=206.9°
+[2026-06-13T11:25:31.835] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=206.8°
+[2026-06-13T11:25:31.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=206.6°
+[2026-06-13T11:25:32.015] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=206.5°
+[2026-06-13T11:25:32.135] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=206.7°
+[2026-06-13T11:25:32.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=206.7°
+[2026-06-13T11:25:32.556] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=207.0°
+[2026-06-13T11:25:32.736] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=207.3°
+[2026-06-13T11:25:32.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=207.2°
+[2026-06-13T11:25:32.945] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.8° Hdg=207.3°
+[2026-06-13T11:25:32.975] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.8° Hdg=207.4°
+[2026-06-13T11:25:33.065] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.8° Hdg=207.2°
+[2026-06-13T11:25:33.185] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.8° Hdg=207.1°
+[2026-06-13T11:25:33.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=207.2°
+[2026-06-13T11:25:33.545] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=207.5°
+[2026-06-13T11:25:33.755] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=207.5°
+[2026-06-13T11:25:33.845] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=207.3°
+[2026-06-13T11:25:34.025] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=206.4°
+[2026-06-13T11:25:34.145] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=206.1°
+[2026-06-13T11:25:34.355] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.2° Hdg=205.4°
+[2026-06-13T11:25:34.445] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.2° Hdg=205.3°
+[2026-06-13T11:25:34.565] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=205.3°
+[2026-06-13T11:25:34.656] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=205.2°
+[2026-06-13T11:25:34.775] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=205.1°
+[2026-06-13T11:25:34.835] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=205.3°
+[2026-06-13T11:25:34.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=205.0°
+[2026-06-13T11:25:35.045] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=205.2°
+[2026-06-13T11:25:35.165] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.9° Hdg=205.4°
+[2026-06-13T11:25:35.255] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.9° Hdg=205.3°
+[2026-06-13T11:25:35.375] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-5.8° Hdg=205.4°
+[2026-06-13T11:25:35.646] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.8° Hdg=204.8°
+[2026-06-13T11:25:35.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.8° Hdg=204.8°
+[2026-06-13T11:25:35.825] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=204.7°
+[2026-06-13T11:25:36.005] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=204.4°
+[2026-06-13T11:25:36.007] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=204.4°
+[2026-06-13T11:25:36.186] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=204.4°
+[2026-06-13T11:25:36.216] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=204.4°
+[2026-06-13T11:25:36.366] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=204.1°
+[2026-06-13T11:25:36.666] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=203.7°
+[2026-06-13T11:25:36.786] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=203.2°
+[2026-06-13T11:25:36.847] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=203.1°
+[2026-06-13T11:25:36.966] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=203.2°
+[2026-06-13T11:25:37.057] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=203.2°
+[2026-06-13T11:25:37.176] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=203.1°
+[2026-06-13T11:25:37.266] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=203.3°
+[2026-06-13T11:25:37.386] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=203.5°
+[2026-06-13T11:25:37.505] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=203.4°
+[2026-06-13T11:25:37.596] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=203.3°
+[2026-06-13T11:25:37.717] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=203.2°
+[2026-06-13T11:25:37.835] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=203.0°
+[2026-06-13T11:25:37.896] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=202.9°
+[2026-06-13T11:25:38.015] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=203.0°
+[2026-06-13T11:25:38.196] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=202.9°
+[2026-06-13T11:25:38.226] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=203.1°
+[2026-06-13T11:25:38.376] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=203.1°
+[2026-06-13T11:25:38.436] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=203.0°
+[2026-06-13T11:25:38.795] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=201.9°
+[2026-06-13T11:25:38.855] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=201.8°
+[2026-06-13T11:25:39.066] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=201.4°
+[2026-06-13T11:25:39.215] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=201.4°
+[2026-06-13T11:25:39.275] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=201.4°
+[2026-06-13T11:25:39.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=201.4°
+[2026-06-13T11:25:39.485] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=201.2°
+[2026-06-13T11:25:39.605] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=201.0°
+[2026-06-13T11:25:39.726] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=201.0°
+[2026-06-13T11:25:39.785] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=201.0°
+[2026-06-13T11:25:39.906] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=201.1°
+[2026-06-13T11:25:39.995] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=200.9°
+[2026-06-13T11:25:40.205] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=200.8°
+[2026-06-13T11:25:40.326] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=200.7°
+[2026-06-13T11:25:40.416] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=200.6°
+[2026-06-13T11:25:40.536] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=200.8°
+[2026-06-13T11:25:40.656] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=200.9°
+[2026-06-13T11:25:40.716] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=200.9°
+[2026-06-13T11:25:40.836] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=200.8°
+[2026-06-13T11:25:41.016] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=200.7°
+[2026-06-13T11:25:41.045] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=200.5°
+[2026-06-13T11:25:41.196] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=200.4°
+[2026-06-13T11:25:41.406] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=200.2°
+[2026-06-13T11:25:41.495] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=200.2°
+[2026-06-13T11:25:41.675] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=199.8°
+[2026-06-13T11:25:41.885] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=199.5°
+[2026-06-13T11:25:42.005] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=199.4°
+[2026-06-13T11:25:42.096] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=199.2°
+[2026-06-13T11:25:42.215] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=199.1°
+[2026-06-13T11:25:42.306] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=198.9°
+[2026-06-13T11:25:42.428] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=198.8°
+[2026-06-13T11:25:42.545] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=198.6°
+[2026-06-13T11:25:42.605] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=198.5°
+[2026-06-13T11:25:42.725] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=198.2°
+[2026-06-13T11:25:42.817] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=198.2°
+[2026-06-13T11:25:43.026] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=198.1°
+[2026-06-13T11:25:43.056] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=198.2°
+[2026-06-13T11:25:43.205] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=198.5°
+[2026-06-13T11:25:43.266] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=198.5°
+[2026-06-13T11:25:43.415] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=198.8°
+[2026-06-13T11:25:43.476] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=198.7°
+[2026-06-13T11:25:43.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=198.4°
+[2026-06-13T11:25:43.656] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=198.5°
+[2026-06-13T11:25:43.835] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=198.5°
+[2026-06-13T11:25:44.017] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=198.3°
+[2026-06-13T11:25:44.256] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.7°
+[2026-06-13T11:25:44.316] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=197.8°
+[2026-06-13T11:25:44.436] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=197.6°
+[2026-06-13T11:25:44.496] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=197.5°
+[2026-06-13T11:25:44.705] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=197.1°
+[2026-06-13T11:25:44.828] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=196.8°
+[2026-06-13T11:25:45.035] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.1° Hdg=196.1°
+[2026-06-13T11:25:45.246] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=195.7°
+[2026-06-13T11:25:45.426] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=196.5°
+[2026-06-13T11:25:45.486] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=196.5°
+[2026-06-13T11:25:45.546] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=196.7°
+[2026-06-13T11:25:45.667] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.1° Hdg=197.1°
+[2026-06-13T11:25:45.851] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.0° Pitch=-6.0° Hdg=197.5°
+[2026-06-13T11:25:45.875] [INFO] [wit-ble-direct] [DATA_OUT] Roll=-0.1° Pitch=-6.0° Hdg=197.7°
+[2026-06-13T11:25:46.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.1° Pitch=-5.9° Hdg=197.6°
+[2026-06-13T11:25:46.446] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=197.3°
+[2026-06-13T11:25:46.536] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=197.2°
+[2026-06-13T11:25:46.716] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=196.4°
+[2026-06-13T11:25:46.836] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=196.0°
+[2026-06-13T11:25:46.926] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=195.8°
+[2026-06-13T11:25:47.135] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=195.2°
+[2026-06-13T11:25:47.255] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=195.0°
+[2026-06-13T11:25:47.405] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.1° Hdg=194.7°
+[2026-06-13T11:25:47.436] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.0° Hdg=194.9°
+[2026-06-13T11:25:47.586] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=195.1°
+[2026-06-13T11:25:47.646] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=195.4°
+[2026-06-13T11:25:47.735] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=195.4°
+[2026-06-13T11:25:47.855] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=195.7°
+[2026-06-13T11:25:47.945] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=196.1°
+[2026-06-13T11:25:48.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=196.0°
+[2026-06-13T11:25:48.455] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=195.9°
+[2026-06-13T11:25:48.486] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=195.9°
+[2026-06-13T11:25:48.665] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=195.8°
+[2026-06-13T11:25:48.696] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=195.6°
+[2026-06-13T11:25:48.846] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=195.4°
+[2026-06-13T11:25:49.058] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=195.2°
+[2026-06-13T11:25:49.272] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=195.3°
+[2026-06-13T11:25:49.355] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=195.4°
+[2026-06-13T11:25:49.475] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=195.2°
+[2026-06-13T11:25:49.535] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=195.1°
+[2026-06-13T11:25:49.655] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.8° Hdg=195.1°
+[2026-06-13T11:25:49.745] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.8° Hdg=195.0°
+[2026-06-13T11:25:49.866] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.8° Hdg=194.8°
+[2026-06-13T11:25:49.958] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.8° Hdg=194.7°
+[2026-06-13T11:25:50.075] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=194.5°
+[2026-06-13T11:25:50.317] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=194.2°
+[2026-06-13T11:25:50.406] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=194.1°
+[2026-06-13T11:25:50.526] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=194.0°
+[2026-06-13T11:25:50.590] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=194.0°
+[2026-06-13T11:25:50.705] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.2° Hdg=193.7°
+[2026-06-13T11:25:50.890] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=193.8°
+[2026-06-13T11:25:50.918] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.2° Hdg=194.1°
+[2026-06-13T11:25:51.066] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=194.3°
+[2026-06-13T11:25:51.126] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=194.4°
+[2026-06-13T11:25:51.276] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=194.5°
+[2026-06-13T11:25:51.366] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=194.6°
+[2026-06-13T11:25:51.486] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=194.8°
+[2026-06-13T11:25:51.550] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=194.8°
+[2026-06-13T11:25:51.666] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=194.9°
+[2026-06-13T11:25:51.756] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=194.8°
+[2026-06-13T11:25:51.878] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=194.6°
+[2026-06-13T11:25:51.967] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=194.3°
+[2026-06-13T11:25:52.116] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=194.2°
+[2026-06-13T11:25:52.176] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=194.1°
+[2026-06-13T11:25:52.296] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=194.0°
+[2026-06-13T11:25:52.434] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=193.7°
+[2026-06-13T11:25:52.541] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=193.6°
+[2026-06-13T11:25:52.596] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=193.4°
+[2026-06-13T11:25:52.716] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.9° Hdg=193.3°
+[2026-06-13T11:25:52.896] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=193.3°
+[2026-06-13T11:25:52.927] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=193.5°
+[2026-06-13T11:25:53.075] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=193.5°
+[2026-06-13T11:25:53.285] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=194.0°
+[2026-06-13T11:25:53.355] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=194.1°
+[2026-06-13T11:25:53.496] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.2° Hdg=194.1°
+[2026-06-13T11:25:53.586] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.2° Hdg=194.1°
+[2026-06-13T11:25:53.768] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.3° Hdg=193.6°
+[2026-06-13T11:25:53.885] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.3° Hdg=193.6°
+[2026-06-13T11:25:53.977] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=193.7°
+[2026-06-13T11:25:54.096] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=193.8°
+[2026-06-13T11:25:54.193] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=193.9°
+[2026-06-13T11:25:54.307] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=194.0°
+[2026-06-13T11:25:54.546] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.8° Hdg=193.9°
+[2026-06-13T11:25:54.696] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.7° Hdg=193.7°
+[2026-06-13T11:25:54.757] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.7° Hdg=193.7°
+[2026-06-13T11:25:54.905] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-5.8° Hdg=193.0°
+[2026-06-13T11:25:54.943] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.8° Hdg=192.9°
+[2026-06-13T11:25:55.115] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=192.7°
+[2026-06-13T11:25:55.175] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=192.7°
+[2026-06-13T11:25:55.295] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=193.0°
+[2026-06-13T11:25:55.505] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=193.7°
+[2026-06-13T11:25:55.596] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.2° Hdg=194.1°
+[2026-06-13T11:25:55.715] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=194.7°
+[2026-06-13T11:25:55.778] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.2° Hdg=194.4°
+[2026-06-13T11:25:55.895] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.2° Hdg=194.1°
+[2026-06-13T11:25:55.985] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.2° Hdg=193.9°
+[2026-06-13T11:25:56.106] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.2° Hdg=193.6°
+[2026-06-13T11:25:56.196] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=193.7°
+[2026-06-13T11:25:56.316] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=193.4°
+[2026-06-13T11:25:56.409] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=193.2°
+[2026-06-13T11:25:56.526] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=193.2°
+[2026-06-13T11:25:56.648] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=193.4°
+[2026-06-13T11:25:56.766] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=193.6°
+[2026-06-13T11:25:56.826] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=193.5°
+[2026-06-13T11:25:56.916] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=193.4°
+[2026-06-13T11:25:57.126] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=193.4°
+[2026-06-13T11:25:57.306] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=193.2°
+[2026-06-13T11:25:57.366] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=193.2°
+[2026-06-13T11:25:57.516] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=193.1°
+[2026-06-13T11:25:57.546] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=193.1°
+[2026-06-13T11:25:57.726] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=192.7°
+[2026-06-13T11:25:57.815] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=192.8°
+[2026-06-13T11:25:57.995] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=192.7°
+[2026-06-13T11:25:58.115] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=192.7°
+[2026-06-13T11:25:58.205] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=193.0°
+[2026-06-13T11:25:58.325] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=193.2°
+[2026-06-13T11:25:58.415] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=193.2°
+[2026-06-13T11:25:58.535] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=193.1°
+[2026-06-13T11:25:58.595] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=193.1°
+[2026-06-13T11:25:58.717] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=193.2°
+[2026-06-13T11:25:58.866] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=193.2°
+[2026-06-13T11:25:58.926] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=193.5°
+[2026-06-13T11:25:59.016] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=193.5°
+[2026-06-13T11:25:59.136] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=193.5°
+[2026-06-13T11:25:59.226] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.1° Hdg=193.4°
+[2026-06-13T11:25:59.345] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=193.3°
+[2026-06-13T11:25:59.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=193.1°
+[2026-06-13T11:25:59.585] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=193.0°
+[2026-06-13T11:25:59.796] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=193.4°
+[2026-06-13T11:25:59.856] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=193.5°
+[2026-06-13T11:26:00.005] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=193.7°
+[2026-06-13T11:26:00.065] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=193.7°
+[2026-06-13T11:26:00.215] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=193.8°
+[2026-06-13T11:26:00.308] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=193.9°
+[2026-06-13T11:26:00.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=193.8°
+[2026-06-13T11:26:00.546] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=193.5°
+[2026-06-13T11:26:00.575] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=193.5°
+[2026-06-13T11:26:00.815] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=192.9°
+[2026-06-13T11:26:00.935] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=192.8°
+[2026-06-13T11:26:01.025] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=192.8°
+[2026-06-13T11:26:01.145] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=193.0°
+[2026-06-13T11:26:01.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=193.1°
+[2026-06-13T11:26:01.355] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=193.3°
+[2026-06-13T11:26:01.475] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=193.6°
+[2026-06-13T11:26:01.535] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=193.6°
+[2026-06-13T11:26:01.625] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=193.6°
+[2026-06-13T11:26:01.865] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=193.6°
+[2026-06-13T11:26:01.955] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=193.6°
+[2026-06-13T11:26:02.165] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=193.6°
+[2026-06-13T11:26:02.345] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=193.8°
+[2026-06-13T11:26:02.435] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=193.8°
+[2026-06-13T11:26:02.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=193.7°
+[2026-06-13T11:26:02.586] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=194.1°
+[2026-06-13T11:26:02.765] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=194.1°
+[2026-06-13T11:26:02.946] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=194.0°
+[2026-06-13T11:26:03.186] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=193.6°
+[2026-06-13T11:26:03.245] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=193.6°
+[2026-06-13T11:26:03.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=193.2°
+[2026-06-13T11:26:03.575] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=193.4°
+[2026-06-13T11:26:03.606] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=193.4°
+[2026-06-13T11:26:03.755] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=193.9°
+[2026-06-13T11:26:03.966] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=194.3°
+[2026-06-13T11:26:04.056] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=194.4°
+[2026-06-13T11:26:04.205] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=194.3°
+[2026-06-13T11:26:04.295] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=194.0°
+[2026-06-13T11:26:04.356] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=193.9°
+[2026-06-13T11:26:04.475] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=193.6°
+[2026-06-13T11:26:04.565] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=193.5°
+[2026-06-13T11:26:04.655] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=193.5°
+[2026-06-13T11:26:04.776] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=193.5°
+[2026-06-13T11:26:04.865] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=193.5°
+[2026-06-13T11:26:04.986] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=193.7°
+[2026-06-13T11:26:05.165] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=194.2°
+[2026-06-13T11:26:05.225] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=194.3°
+[2026-06-13T11:26:05.375] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=194.8°
+[2026-06-13T11:26:05.406] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=194.7°
+[2026-06-13T11:26:05.586] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=194.9°
+[2026-06-13T11:26:05.646] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=195.0°
+[2026-06-13T11:26:05.706] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=194.9°
+[2026-06-13T11:26:05.857] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=194.5°
+[2026-06-13T11:26:05.977] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=194.5°
+[2026-06-13T11:26:06.068] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=194.3°
+[2026-06-13T11:26:06.276] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=194.3°
+[2026-06-13T11:26:06.463] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=193.7°
+[2026-06-13T11:26:06.576] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=193.7°
+[2026-06-13T11:26:06.666] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=193.9°
+[2026-06-13T11:26:06.786] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=194.0°
+[2026-06-13T11:26:06.875] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=194.0°
+[2026-06-13T11:26:07.116] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=193.8°
+[2026-06-13T11:26:07.236] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=194.3°
+[2026-06-13T11:26:07.295] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=194.6°
+[2026-06-13T11:26:07.386] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=194.6°
+[2026-06-13T11:26:07.506] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=194.8°
+[2026-06-13T11:26:07.595] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=194.8°
+[2026-06-13T11:26:07.807] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=194.8°
+[2026-06-13T11:26:07.985] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=194.7°
+[2026-06-13T11:26:08.046] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=194.6°
+[2026-06-13T11:26:08.227] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=194.2°
+[2026-06-13T11:26:08.286] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=194.2°
+[2026-06-13T11:26:08.466] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=194.1°
+[2026-06-13T11:26:08.586] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=194.3°
+[2026-06-13T11:26:08.796] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=194.3°
+[2026-06-13T11:26:08.885] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=194.2°
+[2026-06-13T11:26:09.216] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=193.9°
+[2026-06-13T11:26:09.276] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=193.9°
+[2026-06-13T11:26:09.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=194.0°
+[2026-06-13T11:26:09.486] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=194.2°
+[2026-06-13T11:26:09.606] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=194.7°
+[2026-06-13T11:26:09.695] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=194.8°
+[2026-06-13T11:26:09.815] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=195.0°
+[2026-06-13T11:26:09.935] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=195.3°
+[2026-06-13T11:26:09.995] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=195.3°
+[2026-06-13T11:26:10.086] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=195.1°
+[2026-06-13T11:26:10.236] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=195.0°
+[2026-06-13T11:26:10.416] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=195.3°
+[2026-06-13T11:26:10.447] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=195.4°
+[2026-06-13T11:26:10.626] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=195.8°
+[2026-06-13T11:26:10.656] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=195.8°
+[2026-06-13T11:26:10.805] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=195.4°
+[2026-06-13T11:26:10.866] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=195.4°
+[2026-06-13T11:26:11.015] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=195.1°
+[2026-06-13T11:26:11.046] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=195.1°
+[2026-06-13T11:26:11.286] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.0° Hdg=194.7°
+[2026-06-13T11:26:11.406] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=194.6°
+[2026-06-13T11:26:11.525] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.2° Pitch=-6.1° Hdg=194.4°
+[2026-06-13T11:26:11.707] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=194.5°
+[2026-06-13T11:26:11.756] [INFO] [wit-ble-direct] Signal 15 — stopping cleanly (BLE disconnect will follow)
+[2026-06-13T11:26:11.825] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=194.9°
+[2026-06-13T11:26:11.843] [WARNING] [wit-ble-direct] [BLE_DISCONNECT] WIT disconnected — will reconnect
+[2026-06-13T11:26:13.807] [INFO] [wit-ble-direct] Singleton released
+[2026-06-13T11:26:13.808] [INFO] [wit-ble-direct] [SHUTDOWN] wit-ble-direct stopped — PID released
+[2026-06-13T11:30:18.843] [INFO] [wit-ble-direct] Singleton acquired (PID 5990)
+[2026-06-13T11:30:18.844] [INFO] [wit-ble-direct] [STARTUP] ==========================================================
+[2026-06-13T11:30:18.844] [INFO] [wit-ble-direct] [STARTUP] wit-ble-direct — WIT WT901BLECL IMU Driver
+[2026-06-13T11:30:18.844] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-06-13T11:30:18.844] [INFO] [wit-ble-direct] [STARTUP] L2_threshold=30
+[2026-06-13T11:30:18.844] [INFO] [wit-ble-direct] [STARTUP] ==========================================================
+[2026-06-13T11:30:18.906] [INFO] [wit-ble-direct] [STARTUP] BlueZ GATT cache cleared for E9:10:DB:8B:CE:C7
+[2026-06-13T11:30:18.907] [DEBUG] [wit-ble-direct] [BLE_SCAN] Scanning for WIT E9:10:DB:8B:CE:C7...
+[2026-06-13T11:30:24.041] [INFO] [wit-ble-direct] [BLE_SCAN] WIT advertising — connecting
+[2026-06-13T11:30:25.808] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-06-13T11:30:25.808] [DEBUG] [wit-ble-direct] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-06-13T11:30:25.808] [INFO] [wit-ble-direct] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-06-13T11:30:25.814] [INFO] [wit-ble-direct] [BLE_SETUP] ENABLE_QUAT sent — WIT will reset
+[2026-06-13T11:30:36.816] [INFO] [wit-ble-direct] [BLE_SETUP] State→WAIT_RECONNECT — reconnecting
+[2026-06-13T11:30:38.896] [DEBUG] [wit-ble-direct] [BLE_SCAN] Scanning for WIT E9:10:DB:8B:CE:C7...
+[2026-06-13T11:30:43.976] [INFO] [wit-ble-direct] [BLE_SCAN] WIT advertising — connecting
+[2026-06-13T11:30:45.190] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-06-13T11:30:45.190] [DEBUG] [wit-ble-direct] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-06-13T11:30:45.190] [INFO] [wit-ble-direct] [BLE_SETUP] State=WAIT_RECONNECT: subscribing without commands
+[2026-06-13T11:30:45.235] [INFO] [wit-ble-direct] [BLE_NOTIFY] Subscribed — waiting for WIT data
+[2026-06-13T11:31:04.281] [INFO] [wit-ble-direct] Signal 15 — stopping cleanly (BLE disconnect will follow)
+[2026-06-13T11:31:04.310] [WARNING] [wit-ble-direct] [BLE_DISCONNECT] WIT disconnected — will reconnect
+[2026-06-13T11:31:06.807] [INFO] [wit-ble-direct] Singleton released
+[2026-06-13T11:31:06.808] [INFO] [wit-ble-direct] [SHUTDOWN] wit-ble-direct stopped — PID released
+[2026-06-13T11:31:22.716] [INFO] [wit-ble-direct] Singleton acquired (PID 6314)
+[2026-06-13T11:31:22.717] [INFO] [wit-ble-direct] [STARTUP] ==========================================================
+[2026-06-13T11:31:22.717] [INFO] [wit-ble-direct] [STARTUP] wit-ble-direct — WIT WT901BLECL IMU Driver
+[2026-06-13T11:31:22.717] [INFO] [wit-ble-direct] [STARTUP] MAC=E9:10:DB:8B:CE:C7 Rate=10Hz Mount=z/90.0°
+[2026-06-13T11:31:22.717] [INFO] [wit-ble-direct] [STARTUP] L2_threshold=30
+[2026-06-13T11:31:22.717] [INFO] [wit-ble-direct] [STARTUP] ==========================================================
+[2026-06-13T11:31:22.836] [INFO] [wit-ble-direct] [STARTUP] BlueZ GATT cache cleared for E9:10:DB:8B:CE:C7
+[2026-06-13T11:31:22.837] [DEBUG] [wit-ble-direct] [BLE_SCAN] Scanning for WIT E9:10:DB:8B:CE:C7...
+[2026-06-13T11:31:28.017] [INFO] [wit-ble-direct] [BLE_SCAN] WIT advertising — connecting
+[2026-06-13T11:31:29.960] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-06-13T11:31:29.961] [DEBUG] [wit-ble-direct] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-06-13T11:31:29.961] [INFO] [wit-ble-direct] [BLE_SETUP] State=UNINITIALIZED: sending ENABLE_QUAT to 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-06-13T11:31:29.964] [INFO] [wit-ble-direct] [BLE_SETUP] ENABLE_QUAT sent — WIT will reset
+[2026-06-13T11:31:40.967] [INFO] [wit-ble-direct] [BLE_SETUP] State→WAIT_RECONNECT — reconnecting
+[2026-06-13T11:31:44.008] [WARNING] [wit-ble-direct] [L1] Connection failed (1): 
+[2026-06-13T11:31:44.008] [INFO] [wit-ble-direct] [L1] Reconnecting in 10s...
+[2026-06-13T11:31:54.009] [DEBUG] [wit-ble-direct] [BLE_SCAN] Scanning for WIT E9:10:DB:8B:CE:C7...
+[2026-06-13T11:31:59.031] [INFO] [wit-ble-direct] [BLE_SCAN] WIT advertising — connecting
+[2026-06-13T11:32:00.568] [INFO] [wit-ble-direct] [BLE_CONNECT] Connected to E9:10:DB:8B:CE:C7
+[2026-06-13T11:32:00.569] [DEBUG] [wit-ble-direct] [BLE_SETUP] Using hardcoded write char: 0000ffe9-0000-1000-8000-00805f9a34fb
+[2026-06-13T11:32:00.569] [INFO] [wit-ble-direct] [BLE_SETUP] State=WAIT_RECONNECT: subscribing without commands
+[2026-06-13T11:32:00.612] [INFO] [wit-ble-direct] [BLE_NOTIFY] Subscribed — waiting for WIT data
+[2026-06-13T11:32:00.642] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:32:00.673] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:00.703] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:32:00.763] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:32:00.792] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:00.793] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.2° Hdg=184.7°
+[2026-06-13T11:32:00.823] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:00.823] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:00.948] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x32
+[2026-06-13T11:32:01.003] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:01.003] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:01.034] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:01.035] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:01.153] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2F
+[2026-06-13T11:32:01.183] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:01.183] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:01.243] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x2C
+[2026-06-13T11:32:01.363] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2F
+[2026-06-13T11:32:01.392] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:01.393] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:01.422] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2C
+[2026-06-13T11:32:01.482] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:01.483] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:01.572] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:32:01.602] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:01.604] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=182.6°
+[2026-06-13T11:32:01.633] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:32:01.693] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:01.693] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=182.6°
+[2026-06-13T11:32:01.752] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:32:01.813] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x61
+[2026-06-13T11:32:01.814] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:01.843] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:32:01.933] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:01.933] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=182.8°
+[2026-06-13T11:32:01.963] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x17
+[2026-06-13T11:32:02.052] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:02.053] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:02.174] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:32:02.204] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:02.205] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:02.234] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:32:02.235] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-5.9° Hdg=182.9°
+[2026-06-13T11:32:02.293] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:02.294] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:02.353] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x19
+[2026-06-13T11:32:02.443] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:32:02.475] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:02.475] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:02.563] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:32:02.594] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:02.594] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:02.653] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x0F
+[2026-06-13T11:32:02.683] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:02.683] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:02.772] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x0A
+[2026-06-13T11:32:02.803] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:02.804] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:02.834] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x05
+[2026-06-13T11:32:02.893] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:02.894] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.2° Hdg=182.7°
+[2026-06-13T11:32:02.924] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:02.983] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x02
+[2026-06-13T11:32:03.043] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:03.045] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:03.164] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x08
+[2026-06-13T11:32:03.224] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:03.226] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:03.254] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:32:03.256] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.2° Pitch=-6.1° Hdg=183.7°
+[2026-06-13T11:32:03.284] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:03.285] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:03.373] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x14
+[2026-06-13T11:32:03.403] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:03.404] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:03.463] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1D
+[2026-06-13T11:32:03.523] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:03.524] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:03.583] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x21
+[2026-06-13T11:32:03.643] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:32:03.706] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:03.707] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:03.763] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:32:03.823] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:03.824] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=183.2°
+[2026-06-13T11:32:03.852] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:32:03.943] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:03.943] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:03.973] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:32:04.063] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x3A
+[2026-06-13T11:32:04.092] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:32:04.183] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:32:04.183] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=182.9°
+[2026-06-13T11:32:04.273] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:04.273] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:04.302] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:04.303] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:04.394] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x3B
+[2026-06-13T11:32:04.422] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:04.423] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=182.4°
+[2026-06-13T11:32:04.452] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x3A
+[2026-06-13T11:32:04.512] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:04.513] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:04.572] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x36
+[2026-06-13T11:32:04.632] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:04.633] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:04.663] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2E
+[2026-06-13T11:32:04.692] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:04.693] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=182.2°
+[2026-06-13T11:32:04.753] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:04.753] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:04.782] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:32:04.813] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:04.813] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:04.872] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:32:04.932] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:04.933] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:04.992] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x14
+[2026-06-13T11:32:05.022] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:05.023] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=182.9°
+[2026-06-13T11:32:05.052] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:05.053] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:05.172] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x0E
+[2026-06-13T11:32:05.262] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x61
+[2026-06-13T11:32:05.263] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:05.264] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:32:05.265] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=183.8°
+[2026-06-13T11:32:05.292] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:05.293] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:05.382] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x15
+[2026-06-13T11:32:05.416] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:05.417] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:05.472] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x18
+[2026-06-13T11:32:05.503] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:05.503] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:05.592] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:32:05.622] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:05.623] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:05.653] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:32:05.712] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:05.713] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:05.803] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:32:05.862] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:05.863] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=183.0°
+[2026-06-13T11:32:05.864] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x18
+[2026-06-13T11:32:05.922] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:05.923] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:05.983] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:32:06.042] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:06.043] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:06.073] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x13
+[2026-06-13T11:32:06.162] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:06.163] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=183.1°
+[2026-06-13T11:32:06.193] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x12
+[2026-06-13T11:32:06.283] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:06.283] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:06.313] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:06.403] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:06.403] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:06.465] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x11
+[2026-06-13T11:32:06.522] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:06.523] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:06.583] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x14
+[2026-06-13T11:32:06.642] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:06.643] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:06.672] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x18
+[2026-06-13T11:32:06.702] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:06.703] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:06.792] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:32:06.825] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:06.826] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:06.882] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:32:06.913] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:06.913] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.002] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:32:07.033] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:07.033] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.063] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x29
+[2026-06-13T11:32:07.122] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:07.123] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=183.3°
+[2026-06-13T11:32:07.153] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:07.153] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.183] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2C
+[2026-06-13T11:32:07.242] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:07.243] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.273] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2A
+[2026-06-13T11:32:07.393] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:32:07.452] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x3A
+[2026-06-13T11:32:07.483] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:32:07.484] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=183.3°
+[2026-06-13T11:32:07.512] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:07.513] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.602] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:32:07.632] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:07.633] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.693] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:32:07.722] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:07.723] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.812] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:32:07.843] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:07.843] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.873] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:32:07.962] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:07.963] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:07.993] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:32:08.082] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:08.083] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:08.084] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:32:08.172] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:08.173] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=184.1°
+[2026-06-13T11:32:08.232] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x23
+[2026-06-13T11:32:08.292] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:08.293] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:08.412] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x29
+[2026-06-13T11:32:08.442] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:08.442] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:08.473] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:08.473] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:08.532] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:08.623] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x25
+[2026-06-13T11:32:08.652] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:08.653] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:08.683] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:32:08.743] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:08.745] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=183.4°
+[2026-06-13T11:32:08.803] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:32:08.863] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:08.864] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:08.895] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:32:08.925] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:08.926] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=183.5°
+[2026-06-13T11:32:08.983] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:08.984] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:09.013] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1A
+[2026-06-13T11:32:09.043] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:09.044] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:09.104] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x15
+[2026-06-13T11:32:09.163] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:09.164] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:09.223] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x12
+[2026-06-13T11:32:09.284] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:09.285] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:09.434] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x13
+[2026-06-13T11:32:09.464] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:09.465] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=184.5°
+[2026-06-13T11:32:09.494] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:32:09.495] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.4° Pitch=-6.0° Hdg=184.5°
+[2026-06-13T11:32:09.614] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x17
+[2026-06-13T11:32:09.643] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:09.702] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:32:09.733] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:09.733] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:09.823] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:32:09.854] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:09.854] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:09.883] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x17
+[2026-06-13T11:32:09.943] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:09.944] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:10.034] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:32:10.063] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:10.064] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=184.2°
+[2026-06-13T11:32:10.093] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:10.093] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:10.212] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x15
+[2026-06-13T11:32:10.272] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x61
+[2026-06-13T11:32:10.273] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:10.302] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:10.303] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:10.422] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:32:10.453] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:10.453] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:10.512] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x20
+[2026-06-13T11:32:10.632] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:32:10.693] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:10.694] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:10.695] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:32:10.752] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x61
+[2026-06-13T11:32:10.753] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:10.812] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:32:10.872] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:10.873] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=184.3°
+[2026-06-13T11:32:10.903] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:32:10.992] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:10.993] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=184.4°
+[2026-06-13T11:32:11.023] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1D
+[2026-06-13T11:32:11.112] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:11.113] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:11.232] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:32:11.262] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:11.262] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:11.292] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:11.293] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:11.442] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2A
+[2026-06-13T11:32:11.472] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:11.473] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:11.503] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:32:11.503] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=185.2°
+[2026-06-13T11:32:11.562] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:11.563] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:11.622] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x2F
+[2026-06-13T11:32:11.712] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x30
+[2026-06-13T11:32:11.746] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:11.748] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:11.832] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x30
+[2026-06-13T11:32:11.862] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:11.923] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2D
+[2026-06-13T11:32:11.952] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:11.953] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.1° Hdg=184.5°
+[2026-06-13T11:32:11.982] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:11.984] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:12.042] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2D
+[2026-06-13T11:32:12.073] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:12.073] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:12.103] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2A
+[2026-06-13T11:32:12.222] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:32:12.282] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:12.283] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=184.4°
+[2026-06-13T11:32:12.313] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x61
+[2026-06-13T11:32:12.314] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:12.433] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:32:12.462] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:12.463] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:12.522] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x18
+[2026-06-13T11:32:12.642] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x10
+[2026-06-13T11:32:12.672] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:12.673] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:12.702] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x0A
+[2026-06-13T11:32:12.763] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:12.763] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:12.853] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x09
+[2026-06-13T11:32:12.882] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:12.883] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:12.942] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x08
+[2026-06-13T11:32:12.944] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:12.945] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.0° Hdg=185.0°
+[2026-06-13T11:32:13.002] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:13.033] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x08
+[2026-06-13T11:32:13.093] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:13.094] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-5.9° Hdg=185.3°
+[2026-06-13T11:32:13.122] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x0B
+[2026-06-13T11:32:13.212] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:13.213] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:13.242] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x10
+[2026-06-13T11:32:13.332] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:13.333] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:13.393] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:13.393] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:13.452] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:32:13.512] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:13.513] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:13.632] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:32:13.692] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:13.692] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:13.723] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:32:13.724] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=185.3°
+[2026-06-13T11:32:13.842] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:32:13.872] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:13.873] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:13.933] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x18
+[2026-06-13T11:32:13.963] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:13.963] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:14.052] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x18
+[2026-06-13T11:32:14.082] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:32:14.112] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:32:14.262] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:32:14.292] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:14.293] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:14.323] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:32:14.442] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:32:14.502] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:14.503] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=185.8°
+[2026-06-13T11:32:14.532] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:14.533] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:14.653] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2A
+[2026-06-13T11:32:14.682] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:14.683] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:14.743] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x2B
+[2026-06-13T11:32:14.865] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2A
+[2026-06-13T11:32:14.894] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:14.895] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:14.922] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2A
+[2026-06-13T11:32:14.983] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:14.983] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:15.042] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2C
+[2026-06-13T11:32:15.104] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:15.105] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:15.134] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2C
+[2026-06-13T11:32:15.163] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:15.164] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=186.1°
+[2026-06-13T11:32:15.254] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x61
+[2026-06-13T11:32:15.255] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:15.256] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2E
+[2026-06-13T11:32:15.342] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:15.343] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:15.402] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:15.403] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=185.9°
+[2026-06-13T11:32:15.462] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:15.463] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:15.523] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:15.523] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:15.672] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:32:15.702] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:15.703] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:15.733] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:32:15.733] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=185.9°
+[2026-06-13T11:32:15.762] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:15.763] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:15.852] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1F
+[2026-06-13T11:32:15.943] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:32:16.032] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:16.032] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:16.093] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x17
+[2026-06-13T11:32:16.152] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x13
+[2026-06-13T11:32:16.183] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:16.184] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:16.272] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x0E
+[2026-06-13T11:32:16.303] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:16.333] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x09
+[2026-06-13T11:32:16.452] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x06
+[2026-06-13T11:32:16.512] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x61
+[2026-06-13T11:32:16.513] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:16.542] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x05
+[2026-06-13T11:32:16.662] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x08
+[2026-06-13T11:32:16.692] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:16.693] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=186.8°
+[2026-06-13T11:32:16.753] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:32:16.753] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.3° Pitch=-6.1° Hdg=186.9°
+[2026-06-13T11:32:16.875] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x14
+[2026-06-13T11:32:16.902] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:16.903] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:16.933] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x18
+[2026-06-13T11:32:16.992] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:16.993] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:17.083] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1C
+[2026-06-13T11:32:17.112] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:17.113] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:17.142] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:32:17.203] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:17.203] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:17.263] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:32:17.324] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:17.325] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:17.352] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:32:17.382] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:32:17.383] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=186.8°
+[2026-06-13T11:32:17.442] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:32:17.473] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:32:17.562] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:17.563] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:17.622] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:17.623] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=186.5°
+[2026-06-13T11:32:17.683] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:17.683] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:17.743] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:17.743] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:17.862] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:32:17.922] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:17.923] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:17.953] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:32:17.954] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=186.8°
+[2026-06-13T11:32:17.982] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:17.983] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:18.102] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:32:18.104] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:18.104] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=187.4°
+[2026-06-13T11:32:18.163] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:18.163] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:18.193] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:18.193] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:18.283] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:32:18.312] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:18.313] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:18.342] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:32:18.402] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:18.403] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:18.492] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2D
+[2026-06-13T11:32:18.522] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:18.553] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x32
+[2026-06-13T11:32:18.672] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x35
+[2026-06-13T11:32:18.703] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:18.703] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:18.763] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:18.763] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:18.883] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x30
+[2026-06-13T11:32:18.913] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:18.914] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:18.973] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:32:18.973] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=186.4°
+[2026-06-13T11:32:19.092] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2B
+[2026-06-13T11:32:19.122] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:19.123] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:19.152] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:32:19.212] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:19.213] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:19.273] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x25
+[2026-06-13T11:32:19.333] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:19.333] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:19.363] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:32:19.393] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:19.393] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:19.482] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:32:19.512] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:19.513] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:19.573] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x11
+[2026-06-13T11:32:19.602] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:19.603] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:19.632] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:32:19.692] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x10
+[2026-06-13T11:32:19.722] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:32:19.723] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.1° Hdg=187.0°
+[2026-06-13T11:32:19.753] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:19.753] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:19.903] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x08
+[2026-06-13T11:32:19.932] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x61
+[2026-06-13T11:32:19.932] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion
+[2026-06-13T11:32:19.963] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x61
+[2026-06-13T11:32:19.963] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion

@@ -133,6 +133,7 @@ WRITE_UUID = '0000ffe9-0000-1000-8000-00805f9a34fb'
 ENABLE_QUAT_CMD = bytes([0xFF, 0xAA, 0x27, 0x51, 0x00])  # quaternion
 CMD_MAG = bytes([0xFF, 0xAA, 0x27, 0x3A, 0x00])  # mag+temp at 1Hz
 CMD_PRES = bytes([0xFF, 0xAA, 0x27, 0x45, 0x00])  # pressure at 0.3Hz  # mag+temp at 1Hz
+CMD_ACCEL = bytes([0xFF, 0xAA, 0x27, 0x61, 0x00])  # accel+gyro at 10Hz — added 2026-06-13
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 2 — PROCESS STATE
@@ -283,6 +284,30 @@ def decode_0x71_mag_packet(data: bytes) -> dict | None:
         if len(data) >= 18:
             result['temp_c'] = s16(16) / 100.0
         return result
+    except Exception:
+        return None
+
+def decode_0x71_accel_packet(data: bytes) -> dict | None:
+    """
+    Decode WIT accel+gyro response to CMD_ACCEL (FF AA 27 61 00).
+
+    Layout: 0x55 0x71 0x61 0x00 [ax int16] [ay int16] [az int16] [gx int16] [gy int16] [gz int16]
+    Same register-read response format as decode_0x71_mag_packet (data at offset 4).
+    Accel: int16/32768 × 16g × 9.81 m/s²
+    Gyro: int16/32768 × 2000°/s → rad/s
+    Returns None if packet is invalid.
+    Added 2026-06-13: handles case where WIT responds 0x71 format to CMD_ACCEL.
+    """
+    if len(data) < 16 or data[0] != 0x55 or data[1] != 0x71 or data[2] != 0x61:
+        return None
+    try:
+        def s16(off): return struct.unpack_from('<h', data, off)[0]
+        return {
+            'accel_x': (s16(4) / 32768.0) * 16.0 * 9.81,
+            'accel_y': (s16(6) / 32768.0) * 16.0 * 9.81,
+            'accel_z': (s16(8) / 32768.0) * 16.0 * 9.81,
+            'gyro_z': (s16(14) / 32768.0) * 2000.0 * math.pi / 180.0,
+        }
     except Exception:
         return None
 
@@ -467,6 +492,11 @@ def make_data_handler(logger):
     """Factory: returns a BLE notification callback bound to logger."""
     def handle_data(sender, data):
         """BLE notification callback — synchronous, no async issues."""
+        # DIAGNOSTIC 2026-06-13: log packet type header for debugging
+        if len(data) >= 2:
+            b2_str = f'0x{data[2]:02X}' if len(data) > 2 else '0x??'
+            logger.debug(f'[PACKET_TYPE] header=0x{data[0]:02X} 0x{data[1]:02X} len={len(data)} '
+            f'b2={b2_str}')
         pkt_0x71 = decode_0x71_packet(bytes(data))
         if pkt_0x71:
             _stats['packets_0x71'] += 1
@@ -493,7 +523,17 @@ def make_data_handler(logger):
         pkt_0x61 = decode_0x61_packet(bytes(data))
         if pkt_0x61:
             _stats['packets_0x61'] += 1
+            logger.debug('[PACKET_MATCH] 0x61 native format decoded → sending motion')
             send_motion(pkt_0x61, logger)
+            _stats['sk_posts'] += 1
+
+        # Also try 0x71-format accel response (FF AA 27 61 00 → 0x55 0x71 0x61 [data])
+        # Added 2026-06-13: covers case where WIT returns register-read format
+        pkt_0x71_accel = decode_0x71_accel_packet(bytes(data))
+        if pkt_0x71_accel:
+            _stats['packets_0x61'] += 1
+            logger.debug('[PACKET_MATCH] 0x71/0x61 register-read format decoded → sending motion')
+            send_motion(pkt_0x71_accel, logger)
             _stats['sk_posts'] += 1
 
         log_heartbeat(logger)
@@ -619,6 +659,11 @@ async def run_ble_client(logger) -> None:
                         try:
                             await client.write_gatt_char(
                                 WRITE_UUID, ENABLE_QUAT_CMD, response=False)
+                            # CMD_ACCEL: request accel+gyro at same rate as quaternion
+                            # Added 2026-06-13: WIT requires explicit command for 0x61 data
+                            await asyncio.sleep(0.005)
+                            await client.write_gatt_char(
+                                WRITE_UUID, CMD_ACCEL, response=False)
                             if poll_cycle % 10 == 0:  # CMD_MAG ~1Hz
                                 await asyncio.sleep(0.015)
                                 await client.write_gatt_char(

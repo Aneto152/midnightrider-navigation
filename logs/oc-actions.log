@@ -168,3 +168,4 @@
 [2026-05-31T14:40:12.537662] [FILE_MODIFY] [CALYPSO] BT_RECOVERY: le-connection-abort triggers regardless of _was_connected
 [2026-05-31T14:40:12.537662] [SERVICE_RESTART] [CALYPSO] Manual BlueZ clean + restart to break lockout
 [2026-05-31T15:06:17.768300] [CONFIG_CHANGE] [CALYPSO] Rate: 8Hz→4Hz (8Hz oversaturates BLE CI)
+[2026-06-13T11:26:16.108698] [SERVICE_RESTART] [WIT] Stopped wit-ble-direct for patching

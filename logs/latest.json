@@ -1,16 +1,32 @@
 {
-  "task": "wit-reconnect-robustness",
-  "date": "2026-06-05T22:51:52.449157",
+  "task": "wit-acceleration-fix",
+  "date": "2026-06-13T11:32:01.755716",
   "status": "SUCCESS",
-  "root_cause": "L2=5 + no StartLimitBurst=0 \u2192 systemd start-limit-hit when WIT powered on after RPi",
-  "changes": [
-    "L2_FAIL_THRESHOLD 5\u219230",
-    "systemd StartLimitBurst=0",
-    "BleakScanner passive pre-scan"
+  "root_cause": "No CMD_ACCEL command in polling loop + possible 0x61 format mismatch",
+  "steps_completed": [
+    "Step 1: Service stopped \u2705",
+    "Step 2: Added CMD_ACCEL constant \u2705",
+    "Step 3: Added decode_0x71_accel_packet() function \u2705",
+    "Step 4: Added diagnostic PACKET_TYPE logging \u2705",
+    "Step 5: Added decode_0x71_accel_packet call in handler \u2705",
+    "Step 6: Added CMD_ACCEL to polling loop \u2705",
+    "Step 7: Verified syntax \u2705",
+    "Step 8: Restarted wit-ble-direct.service \u2705"
   ],
-  "calypso_impact": "None \u2014 separate process, passive scan does not disrupt connections",
   "files_modified": [
-    "ble/wit-ble-direct.py",
-    "etc/systemd/system/wit-ble-direct.service"
-  ]
+    "ble/wit-ble-direct.py"
+  ],
+  "logging_instrumentation": {
+    "new_log_files": [],
+    "probes_added": [
+      "PACKET_TYPE",
+      "PACKET_MATCH"
+    ],
+    "tested": true
+  },
+  "errors": [],
+  "services_status": {
+    "wit-ble-direct": "active (running)"
+  },
+  "next_step": "Verify Signal K has acceleration data via curl. Commit if confirmed."
 }
