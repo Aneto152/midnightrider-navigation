@@ -70008,3 +70008,1246 @@
 [2026-06-13T11:52:57.815] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
 [2026-06-13T11:52:57.817] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 16 00 26 FF E7 07 00 00 F8 FF 17 00 D7 F2 E3 09
 [2026-06-13T11:52:57.817] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:57.905] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:52:57.935] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:57.936] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 27 FF E5 07 06 00 F8 FF 16 00 A1 F2 AB 09
+[2026-06-13T11:52:57.937] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:57.965] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1A
+[2026-06-13T11:52:58.028] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:58.029] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 26 FF E9 07 0A 00 F7 FF 16 00 D3 F2 D0 09
+[2026-06-13T11:52:58.029] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:58.115] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:52:58.146] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:58.147] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 28 FF F1 07 0D 00 F8 FF 16 00 92 F2 9A 09
+[2026-06-13T11:52:58.147] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:58.176] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x3A
+[2026-06-13T11:52:58.177] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 77 F2 89 09 47 DD D5 FB 3A FF 09 D2 09 0A 00 00
+[2026-06-13T11:52:58.296] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:52:58.355] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:58.355] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 27 00 29 FF 05 08 0F 00 F9 FF 16 00 AF F2 E7 09
+[2026-06-13T11:52:58.355] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:58.386] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:52:58.386] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.9° Hdg=245.1°
+[2026-06-13T11:52:58.387] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 BE 6B DB F9 B4 02 3C BB 00 00 00 00 00 00 00 00
+[2026-06-13T11:52:58.536] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:52:58.538] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:52:58.539] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=245.4°
+[2026-06-13T11:52:58.540] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 8C 6B DB F9 9E 02 ED BA 00 00 00 00 00 00 00 00
+[2026-06-13T11:52:58.596] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x34
+[2026-06-13T11:52:58.596] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2A 00 28 FF 1C 08 08 00 FF FF 15 00 75 F2 01 09
+[2026-06-13T11:52:58.596] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:58.715] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x29
+[2026-06-13T11:52:58.745] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:58.746] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 29 FF 21 08 00 00 02 00 14 00 73 F2 22 09
+[2026-06-13T11:52:58.747] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:58.775] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x29
+[2026-06-13T11:52:58.835] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:52:58.836] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=245.9°
+[2026-06-13T11:52:58.836] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 3E 6B D6 F9 9A 02 74 BA 00 00 00 00 00 00 00 00
+[2026-06-13T11:52:58.895] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:52:58.956] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:58.956] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 29 FF 1B 08 FC FF 05 00 14 00 98 F2 4B 09
+[2026-06-13T11:52:58.956] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:58.985] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:52:59.075] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:59.076] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 26 00 28 FF 10 08 F9 FF 06 00 14 00 88 F2 60 09
+[2026-06-13T11:52:59.077] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:59.106] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:52:59.140] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:52:59.141] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=245.4°
+[2026-06-13T11:52:59.141] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 8D 6B C2 F9 B1 02 F2 BA 00 00 00 00 00 00 00 00
+[2026-06-13T11:52:59.195] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:52:59.256] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:59.257] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 26 00 27 FF 03 08 F9 FF 07 00 17 00 A7 F2 78 09
+[2026-06-13T11:52:59.257] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:59.315] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x45
+[2026-06-13T11:52:59.317] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A2 8B 01 00 6E 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:52:59.377] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:52:59.435] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:59.436] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 28 FF FF 07 F9 FF 08 00 17 00 98 F2 17 08
+[2026-06-13T11:52:59.436] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:59.526] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x22
+[2026-06-13T11:52:59.555] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:59.557] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 28 FF FD 07 FC FF 0A 00 17 00 85 F2 53 09
+[2026-06-13T11:52:59.557] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:59.585] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:52:59.649] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:59.650] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 28 FF FD 07 FE FF 0B 00 16 00 A1 F2 65 09
+[2026-06-13T11:52:59.650] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:59.709] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:52:59.735] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:59.737] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1D 00 26 FF FE 07 00 00 0C 00 15 00 8E F2 7F 09
+[2026-06-13T11:52:59.737] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:52:59.796] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:52:59.826] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:52:59.827] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=246.1°
+[2026-06-13T11:52:59.827] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 1F 6B D4 F9 FE 02 49 BA 00 00 00 00 00 00 00 00
+[2026-06-13T11:52:59.915] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x18
+[2026-06-13T11:52:59.946] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:52:59.946] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 15 00 26 FF F8 07 03 00 0C 00 14 00 CD F2 A3 09
+[2026-06-13T11:52:59.946] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:00.006] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x13
+[2026-06-13T11:53:00.036] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:00.037] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=245.6°
+[2026-06-13T11:53:00.037] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 73 6B F4 F9 16 03 C8 BA 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:00.070] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:00.070] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 10 00 26 FF F9 07 05 00 0B 00 13 00 A5 F2 16 09
+[2026-06-13T11:53:00.070] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:00.126] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x10
+[2026-06-13T11:53:00.155] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:00.156] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 0F 00 27 FF FC 07 06 00 08 00 13 00 B4 F2 4E 09
+[2026-06-13T11:53:00.156] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:00.185] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x10
+[2026-06-13T11:53:00.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x10
+[2026-06-13T11:53:00.365] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x34
+[2026-06-13T11:53:00.365] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 11 00 29 FF 0A 08 04 00 03 00 12 00 BF F2 49 09
+[2026-06-13T11:53:00.366] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:00.395] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x3A
+[2026-06-13T11:53:00.396] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 B6 F2 FB 08 7E DD DE FB 7B FF A2 D0 0A 0A 00 00
+[2026-06-13T11:53:00.515] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x13
+[2026-06-13T11:53:00.545] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:00.545] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 18 00 28 FF 13 08 FD FF 00 00 12 00 64 F2 88 09
+[2026-06-13T11:53:00.546] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:00.605] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1A
+[2026-06-13T11:53:00.635] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:00.635] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 28 FF 11 08 F9 FF FF FF 12 00 9C F2 42 09
+[2026-06-13T11:53:00.636] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:00.726] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:00.755] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:00.756] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 28 FF 0A 08 F7 FF FE FF 12 00 96 F2 2D 09
+[2026-06-13T11:53:00.756] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:00.785] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:00.845] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:00.846] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 28 FF 04 08 F7 FF FD FF 14 00 8D F2 8D 09
+[2026-06-13T11:53:00.846] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:00.905] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:00.965] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:00.966] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=246.1°
+[2026-06-13T11:53:00.966] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 23 6B DB F9 06 03 4F BA 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:00.995] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:01.085] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:01.086] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 27 FF F4 07 FE FF FE FF 16 00 74 F2 7F 09
+[2026-06-13T11:53:01.086] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:01.115] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:01.206] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:01.207] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 27 FF F0 07 02 00 FE FF 17 00 7A F2 9E 09
+[2026-06-13T11:53:01.207] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:01.296] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:01.297] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 26 FF EF 07 07 00 FF FF 17 00 87 F2 90 09
+[2026-06-13T11:53:01.297] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:01.364] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:01.417] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:01.418] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1D 00 26 FF F4 07 0D 00 FF FF 16 00 6D F2 23 09
+[2026-06-13T11:53:01.419] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:01.535] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:01.565] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:01.566] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 72 F2 15 09 34 DD E6 FB 30 FF BD D0 09 0A 00 00
+[2026-06-13T11:53:01.595] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:01.655] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:01.656] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 27 FF 0B 08 11 00 00 00 14 00 81 F2 28 09
+[2026-06-13T11:53:01.656] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:01.716] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1B
+[2026-06-13T11:53:01.777] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:01.777] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 29 FF 13 08 0F 00 00 00 13 00 5C F2 09 09
+[2026-06-13T11:53:01.778] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:01.805] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:01.835] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:01.836] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 28 FF 19 08 0A 00 00 00 13 00 92 F2 04 09
+[2026-06-13T11:53:01.837] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:01.925] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1A
+[2026-06-13T11:53:01.955] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:01.955] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 29 FF 1C 08 04 00 00 00 12 00 76 F2 FD 08
+[2026-06-13T11:53:01.956] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:02.015] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1A
+[2026-06-13T11:53:02.045] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:02.046] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=247.4°
+[2026-06-13T11:53:02.046] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 51 6A 17 FA F2 02 0B B9 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:02.136] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:02.165] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:02.166] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 28 FF 17 08 F9 FF FF FF 11 00 55 F2 E9 08
+[2026-06-13T11:53:02.166] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:02.196] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:02.317] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:02.375] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x34
+[2026-06-13T11:53:02.376] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 28 FF 0D 08 F1 FF FE FF 13 00 8B F2 E4 07
+[2026-06-13T11:53:02.376] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:02.405] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:53:02.525] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2B
+[2026-06-13T11:53:02.555] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:02.556] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2D 00 29 FF 07 08 EE FF 00 00 14 00 63 F2 9B 09
+[2026-06-13T11:53:02.556] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:02.646] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:53:02.647] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=248.0°
+[2026-06-13T11:53:02.648] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 F2 69 B0 F9 F7 02 85 B8 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:02.705] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:53:02.706] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A2 8B 01 00 6E 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:02.736] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=86 b2=0x2F
+[2026-06-13T11:53:02.825] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x31
+[2026-06-13T11:53:02.855] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:02.856] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 30 00 27 FF 05 08 F3 FF 07 00 18 00 1F F2 08 09
+[2026-06-13T11:53:02.856] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:02.945] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2F
+[2026-06-13T11:53:02.975] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:02.976] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2B 00 27 FF 00 08 F8 FF 0A 00 18 00 5C F2 88 09
+[2026-06-13T11:53:02.976] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:03.005] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2A
+[2026-06-13T11:53:03.065] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:03.066] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 26 FF FA 07 FC FF 0D 00 18 00 62 F2 18 09
+[2026-06-13T11:53:03.066] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:03.125] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:03.185] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:03.186] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 26 FF F3 07 01 00 0E 00 17 00 60 F2 C6 08
+[2026-06-13T11:53:03.186] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:03.216] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:03.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:03.307] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=246.9°
+[2026-06-13T11:53:03.308] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 A0 6A B9 F9 E7 02 89 B9 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:03.335] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x15
+[2026-06-13T11:53:03.425] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:53:03.426] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=246.3°
+[2026-06-13T11:53:03.427] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 FC 6A D8 F9 FD 02 13 BA 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:03.545] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x0E
+[2026-06-13T11:53:03.605] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:03.605] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 0F 00 27 FF ED 07 12 00 09 00 12 00 9C F2 59 09
+[2026-06-13T11:53:03.605] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:03.607] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:03.608] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.5° Pitch=-6.0° Hdg=246.8°
+[2026-06-13T11:53:03.609] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 AD 6A 1E FA 30 03 96 B9 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:03.665] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:03.666] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 0D 00 27 FF F1 07 14 00 07 00 11 00 B4 F2 3E 09
+[2026-06-13T11:53:03.666] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:03.755] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x0F
+[2026-06-13T11:53:03.785] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:03.786] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 7A F2 6A 09 71 DD F0 FB 7B FF 4D D0 0C 0A 00 00
+[2026-06-13T11:53:03.815] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x13
+[2026-06-13T11:53:03.845] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:03.846] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 13 00 27 FF 07 08 12 00 01 00 11 00 B0 F2 2E 09
+[2026-06-13T11:53:03.846] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:03.935] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x15
+[2026-06-13T11:53:03.965] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:03.966] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 17 00 29 FF 13 08 0E 00 00 00 11 00 AB F2 9E 08
+[2026-06-13T11:53:03.966] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:04.025] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x18
+[2026-06-13T11:53:04.055] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:04.056] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 28 FF 1A 08 0A 00 FF FF 11 00 96 F2 8D 08
+[2026-06-13T11:53:04.056] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:04.145] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:04.175] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:04.176] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1D 00 29 FF 20 08 02 00 FF FF 10 00 8B F2 BA 08
+[2026-06-13T11:53:04.176] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:04.265] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:04.266] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:04.267] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=248.2°
+[2026-06-13T11:53:04.267] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 D6 69 31 FA 1E 03 52 B8 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:04.295] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:04.296] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 29 FF 22 08 FC FF 00 00 10 00 B1 F2 93 08
+[2026-06-13T11:53:04.297] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:04.355] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:04.385] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:04.386] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 28 FF 22 08 F7 FF 00 00 10 00 A5 F2 A8 08
+[2026-06-13T11:53:04.386] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:04.415] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:04.535] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:04.595] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x34
+[2026-06-13T11:53:04.596] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 29 FF 19 08 F0 FF 00 00 13 00 6E F2 A3 08
+[2026-06-13T11:53:04.596] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:04.625] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:04.626] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 24 00 27 FF 15 08 EF FF FF FF 14 00 7E F2 4C 08
+[2026-06-13T11:53:04.626] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:04.745] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:04.775] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:04.776] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 27 FF 0A 08 EF FF FE FF 16 00 7D F2 9D 08
+[2026-06-13T11:53:04.776] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:04.836] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=86 b2=0x1E
+[2026-06-13T11:53:04.955] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:04.986] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:04.986] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 25 FF FE 07 F3 FF FC FF 16 00 59 F2 E3 08
+[2026-06-13T11:53:04.986] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.015] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:05.076] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:05.077] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 27 FF F8 07 F7 FF FC FF 16 00 4B F2 D3 08
+[2026-06-13T11:53:05.077] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.135] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:05.195] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:05.196] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 27 FF F2 07 FB FF FC FF 15 00 50 F2 DD 08
+[2026-06-13T11:53:05.196] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.225] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:05.315] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:05.316] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 26 FF EA 07 00 00 FD FF 13 00 55 F2 56 09
+[2026-06-13T11:53:05.316] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.345] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:53:05.375] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:05.376] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=248.0°
+[2026-06-13T11:53:05.376] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 E8 69 BF F9 03 03 76 B8 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:05.435] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:05.436] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 24 00 26 FF E5 07 07 00 FF FF 12 00 3E F2 F4 08
+[2026-06-13T11:53:05.436] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.525] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:05.526] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 26 00 26 FF E2 07 0C 00 00 00 12 00 34 F2 A6 08
+[2026-06-13T11:53:05.526] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.555] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:05.645] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:05.646] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 26 FF E6 07 12 00 01 00 10 00 38 F2 E6 08
+[2026-06-13T11:53:05.646] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.705] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:05.706] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 24 00 27 FF EA 07 15 00 02 00 10 00 48 F2 FC 08
+[2026-06-13T11:53:05.706] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.765] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:05.825] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:05.826] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 29 FF F5 07 18 00 04 00 11 00 2F F2 8D 08
+[2026-06-13T11:53:05.826] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:05.945] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:53:06.005] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:53:06.006] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A2 8B 01 00 6E 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:06.035] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:06.065] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:06.066] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 24 00 2A FF 11 08 13 00 06 00 10 00 1D F2 69 08
+[2026-06-13T11:53:06.066] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:06.155] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:06.185] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:06.186] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 29 FF 1F 08 0B 00 07 00 10 00 08 F2 17 08
+[2026-06-13T11:53:06.186] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:06.246] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:53:06.275] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:06.276] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-5.8° Hdg=249.7°
+[2026-06-13T11:53:06.276] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 DA 68 21 FA E3 02 E3 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:06.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:06.306] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 2A FF 28 08 02 00 07 00 12 00 31 F2 A9 08
+[2026-06-13T11:53:06.306] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:06.365] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:53:06.395] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:06.396] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 24 00 2B FF 2D 08 FB FF 08 00 12 00 35 F2 B6 08
+[2026-06-13T11:53:06.396] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:06.425] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:06.546] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:06.607] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x34
+[2026-06-13T11:53:06.607] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 29 FF 27 08 ED FF 06 00 13 00 E6 F1 7F 08
+[2026-06-13T11:53:06.608] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:06.637] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:06.637] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 28 FF 23 08 EB FF 06 00 13 00 03 F2 65 08
+[2026-06-13T11:53:06.638] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:06.755] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:06.785] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:06.786] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 28 FF 16 08 E5 FF 05 00 13 00 35 F2 46 08
+[2026-06-13T11:53:06.786] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:06.846] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1F
+[2026-06-13T11:53:06.966] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:06.996] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:06.997] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.3° Hdg=249.6°
+[2026-06-13T11:53:06.997] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 E9 68 BE F9 4A 03 04 B7 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:07.056] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x20
+[2026-06-13T11:53:07.085] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:07.086] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 51 F2 58 08 80 DD A3 FB 3B FF 8C CE 0C 0A 00 00
+[2026-06-13T11:53:07.175] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:07.205] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:07.206] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 26 FF F0 07 F0 FF 06 00 12 00 59 F2 15 09
+[2026-06-13T11:53:07.206] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:07.235] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:07.295] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:07.296] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 26 FF ED 07 F5 FF 06 00 12 00 52 F2 F6 08
+[2026-06-13T11:53:07.296] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:07.355] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:07.415] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:07.416] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 25 FF E7 07 FF FF 06 00 12 00 4D F2 17 09
+[2026-06-13T11:53:07.416] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:07.445] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:53:07.535] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:07.535] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 26 FF E6 07 07 00 05 00 12 00 45 F2 8C 08
+[2026-06-13T11:53:07.536] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:07.565] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:07.655] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:07.656] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 27 FF E6 07 12 00 04 00 13 00 46 F2 9E 08
+[2026-06-13T11:53:07.656] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:07.715] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:07.716] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=249.3°
+[2026-06-13T11:53:07.716] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 23 69 00 FA 2E 03 52 B7 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:07.775] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:07.776] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 28 FF EC 07 19 00 02 00 13 00 6D F2 4B 08
+[2026-06-13T11:53:07.776] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:07.835] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:07.836] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 27 FF F4 07 1E 00 00 00 13 00 4F F2 40 08
+[2026-06-13T11:53:07.836] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:07.955] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:08.015] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:08.015] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 28 FF 08 08 1E 00 FF FF 13 00 6E F2 DD 07
+[2026-06-13T11:53:08.016] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:08.046] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:08.046] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 28 FF 12 08 1C 00 FE FF 14 00 36 F2 40 08
+[2026-06-13T11:53:08.046] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:08.165] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:53:08.196] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:08.196] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 DE F1 B9 08 7E DD 13 FC 43 FF FF CD 0C 0A 00 00
+[2026-06-13T11:53:08.255] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:08.285] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:08.286] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 29 FF 25 08 09 00 FC FF 14 00 6C F2 2E 08
+[2026-06-13T11:53:08.286] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:08.375] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:08.405] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:08.406] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 28 FF 26 08 FE FF FC FF 14 00 58 F2 CF 07
+[2026-06-13T11:53:08.406] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:08.465] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:08.495] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:08.496] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.8° Hdg=250.6°
+[2026-06-13T11:53:08.496] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 4E 68 26 FA FB 02 1D B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:08.585] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:08.615] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:08.616] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 29 FF 19 08 EF FF FE FF 13 00 17 F2 F9 07
+[2026-06-13T11:53:08.616] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:08.645] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:53:08.705] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:08.706] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=250.7°
+[2026-06-13T11:53:08.706] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 3A 68 F5 F9 16 03 05 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:08.735] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:08.736] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 28 FF 0C 08 E9 FF FF FF 13 00 1A F2 52 08
+[2026-06-13T11:53:08.736] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:08.765] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:08.825] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:08.826] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 28 FF 04 08 E9 FF 00 00 12 00 DF F1 1C 08
+[2026-06-13T11:53:08.826] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:08.856] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:08.975] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:09.005] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:09.006] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 27 FF F6 07 EE FF 00 00 11 00 F6 F1 77 08
+[2026-06-13T11:53:09.006] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:09.066] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:53:09.067] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=250.8°
+[2026-06-13T11:53:09.067] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 22 68 BF F9 3F 03 EA B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:09.185] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:09.215] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:09.216] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.3° Hdg=250.5°
+[2026-06-13T11:53:09.216] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 5C 68 B7 F9 35 03 3B B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:09.246] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:09.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:09.306] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 EF F1 4C 08 E2 DD B2 FB 22 FF C9 CD 0F 0A 00 00
+[2026-06-13T11:53:09.335] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:53:09.337] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A1 8B 01 00 76 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:09.366] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:09.425] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:09.427] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.2° Hdg=250.6°
+[2026-06-13T11:53:09.427] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 4F 68 C6 F9 25 03 27 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:09.457] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:09.549] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:09.552] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 24 00 27 FF EE 07 0D 00 02 00 10 00 E8 F1 29 08
+[2026-06-13T11:53:09.552] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:09.576] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:09.666] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:09.666] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 28 FF F9 07 11 00 03 00 11 00 F2 F1 5D 08
+[2026-06-13T11:53:09.666] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:09.785] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:53:09.815] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:09.815] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 26 00 27 FF 07 08 11 00 03 00 11 00 09 F2 93 08
+[2026-06-13T11:53:09.816] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:09.876] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:09.877] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 28 FF 0A 08 11 00 03 00 10 00 15 F2 BF 08
+[2026-06-13T11:53:09.877] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:09.996] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:53:10.029] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:10.030] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2B 00 28 FF 12 08 0A 00 06 00 10 00 0E F2 F6 07
+[2026-06-13T11:53:10.030] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:10.055] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2D
+[2026-06-13T11:53:10.117] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:10.118] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2B 00 27 FF 14 08 06 00 06 00 11 00 04 F2 E8 07
+[2026-06-13T11:53:10.118] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:10.176] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x2D
+[2026-06-13T11:53:10.265] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:53:10.295] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:10.296] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2B 00 28 FF 0E 08 FE FF 0A 00 12 00 F1 F1 E3 07
+[2026-06-13T11:53:10.296] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:10.385] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:10.415] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:10.416] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 E3 F1 D7 07 79 DD E5 FB 17 FF CC CC 0E 0A 00 00
+[2026-06-13T11:53:10.475] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:10.541] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:10.541] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 27 FF 0A 08 F9 FF 0C 00 12 00 1E F2 DA 07
+[2026-06-13T11:53:10.542] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:10.595] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:10.625] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:10.626] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=252.2°
+[2026-06-13T11:53:10.626] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 38 67 FF F9 36 03 9F B4 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:10.655] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:53:10.775] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:53:10.836] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x34
+[2026-06-13T11:53:10.837] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 15 00 26 FF 0D 08 F9 FF 08 00 11 00 5C F2 1B 08
+[2026-06-13T11:53:10.837] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:10.866] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:10.867] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 16 00 27 FF 0E 08 F9 FF 07 00 11 00 3A F2 3E 08
+[2026-06-13T11:53:10.867] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:10.985] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:53:11.016] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:11.016] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 14 00 26 FF 11 08 FB FF 03 00 11 00 17 F2 20 08
+[2026-06-13T11:53:11.016] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:11.076] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x19
+[2026-06-13T11:53:11.197] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:53:11.226] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:11.226] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 28 FF 0D 08 FB FF 00 00 12 00 11 F2 09 08
+[2026-06-13T11:53:11.226] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:11.257] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:53:11.345] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:11.347] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 26 FF 0A 08 FA FF 00 00 12 00 5F F2 05 08
+[2026-06-13T11:53:11.347] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:11.406] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1D
+[2026-06-13T11:53:11.466] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:11.525] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:11.527] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=251.6°
+[2026-06-13T11:53:11.528] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 A8 67 05 FA 59 03 3B B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:11.588] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:11.645] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:11.647] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 27 FF FB 07 FB FF FE FF 10 00 33 F2 CE 07
+[2026-06-13T11:53:11.647] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:11.675] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:11.766] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:11.767] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=251.4°
+[2026-06-13T11:53:11.767] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 C6 67 F3 F9 47 03 65 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:11.796] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1C
+[2026-06-13T11:53:11.885] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:11.886] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 28 FF F7 07 FE FF FD FF 0F 00 0E F2 F9 07
+[2026-06-13T11:53:11.887] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:12.006] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:12.035] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:12.036] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=251.1°
+[2026-06-13T11:53:12.036] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 EE 67 F1 F9 36 03 9D B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:12.066] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:12.066] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=251.1°
+[2026-06-13T11:53:12.067] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 F3 67 F2 F9 34 03 A3 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:12.128] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:12.128] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 28 FF F4 07 04 00 FD FF 0F 00 F6 F1 C5 07
+[2026-06-13T11:53:12.128] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:12.188] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x20
+[2026-06-13T11:53:12.275] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:12.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:12.306] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 27 FF F8 07 09 00 FD FF 0F 00 06 F2 A9 07
+[2026-06-13T11:53:12.306] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:12.396] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:53:12.425] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:12.426] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 29 00 27 FF FD 07 0B 00 FF FF 0F 00 38 F2 F8 07
+[2026-06-13T11:53:12.427] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:12.485] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2D
+[2026-06-13T11:53:12.515] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:12.516] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2D 00 27 FF 02 08 0C 00 00 00 10 00 08 F2 E8 07
+[2026-06-13T11:53:12.517] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:12.605] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2D
+[2026-06-13T11:53:12.636] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:12.637] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 F5 F1 87 07 6C DD ED FB 08 FF D0 CD 0C 0A 00 00
+[2026-06-13T11:53:12.666] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x45
+[2026-06-13T11:53:12.667] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A2 8B 01 00 6E 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:12.755] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:12.756] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=250.5°
+[2026-06-13T11:53:12.757] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 5F 68 ED F9 C5 02 37 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:12.815] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:12.816] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2B 00 27 FF 17 08 0C 00 03 00 12 00 DC F1 78 07
+[2026-06-13T11:53:12.817] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:12.876] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:12.876] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2C 00 27 FF 1D 08 0A 00 04 00 13 00 21 F2 06 07
+[2026-06-13T11:53:12.877] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:12.995] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:53:13.055] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:13.056] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 29 FF 23 08 02 00 04 00 13 00 D6 F1 80 07
+[2026-06-13T11:53:13.056] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:13.085] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:13.116] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:13.116] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 27 FF 21 08 00 00 04 00 13 00 04 F2 28 07
+[2026-06-13T11:53:13.116] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:13.205] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:13.236] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:13.236] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 29 FF 19 08 FA FF 05 00 11 00 FB F1 33 07
+[2026-06-13T11:53:13.236] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:13.296] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:53:13.326] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:13.326] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 28 FF 0F 08 F6 FF 04 00 10 00 12 F2 68 07
+[2026-06-13T11:53:13.326] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:13.415] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1A
+[2026-06-13T11:53:13.449] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:13.450] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 28 FF 03 08 F4 FF 05 00 0F 00 1A F2 0B 07
+[2026-06-13T11:53:13.450] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:13.476] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:13.536] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:13.536] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 29 FF F9 07 F3 FF 05 00 0E 00 2E F2 5B 07
+[2026-06-13T11:53:13.536] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:13.596] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:13.656] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:13.656] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 26 FF EE 07 F3 FF 05 00 0D 00 F7 F1 8D 07
+[2026-06-13T11:53:13.656] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:13.688] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:13.775] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:13.777] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.2° Hdg=254.2°
+[2026-06-13T11:53:13.778] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 EF 65 FF F9 7E 03 E8 B2 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:13.805] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x23
+[2026-06-13T11:53:13.896] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:53:13.930] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:13.930] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 28 FF E4 07 FA FF 06 00 0D 00 E5 F1 3F 07
+[2026-06-13T11:53:13.930] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:14.016] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:14.017] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.2° Hdg=254.1°
+[2026-06-13T11:53:14.019] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 01 66 E7 F9 6B 03 00 B3 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:14.047] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:14.048] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 27 00 27 FF EA 07 FF FF 07 00 0F 00 1E F2 15 08
+[2026-06-13T11:53:14.050] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:14.075] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:53:14.136] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:14.137] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 27 FF EC 07 01 00 07 00 0F 00 0B F2 B0 07
+[2026-06-13T11:53:14.137] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:14.225] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:53:14.255] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:14.256] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=253.8°
+[2026-06-13T11:53:14.256] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 28 66 E7 F9 47 03 33 B3 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:14.288] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:14.345] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:14.346] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.1° Hdg=253.9°
+[2026-06-13T11:53:14.346] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 19 66 EE F9 44 03 1E B3 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:14.405] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:14.465] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:14.466] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 27 FF 05 08 0A 00 06 00 10 00 26 F2 73 07
+[2026-06-13T11:53:14.466] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:14.495] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:14.585] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:14.586] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 27 FF 0F 08 0C 00 06 00 10 00 19 F2 12 07
+[2026-06-13T11:53:14.586] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:14.615] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:14.645] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:14.646] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 28 FF 13 08 0B 00 07 00 10 00 25 F2 64 07
+[2026-06-13T11:53:14.646] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:14.705] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:14.765] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:14.766] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 29 FF 17 08 0B 00 06 00 11 00 2D F2 0B 07
+[2026-06-13T11:53:14.766] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:14.826] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:14.886] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x3A
+[2026-06-13T11:53:14.886] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 3D F2 45 07 70 DD F5 FB 3A FF 7E CB 0E 0A 00 00
+[2026-06-13T11:53:15.005] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x11
+[2026-06-13T11:53:15.065] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:15.066] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=253.7°
+[2026-06-13T11:53:15.066] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 3E 66 4D FA 4C 03 48 B3 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:15.096] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:15.096] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=253.7°
+[2026-06-13T11:53:15.097] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 46 66 52 FA 55 03 54 B3 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:15.125] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:15.126] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 10 00 28 FF 19 08 03 00 00 00 0E 00 F9 F1 49 07
+[2026-06-13T11:53:15.126] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:15.215] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x0F
+[2026-06-13T11:53:15.245] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:15.246] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 0E 00 29 FF 18 08 FF FF FE FF 0C 00 E3 F1 C2 06
+[2026-06-13T11:53:15.246] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:15.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x10
+[2026-06-13T11:53:15.335] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:15.335] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 13 00 28 FF 17 08 FB FF FB FF 0B 00 01 F2 2D 07
+[2026-06-13T11:53:15.336] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:15.425] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x15
+[2026-06-13T11:53:15.455] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:15.456] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 29 FF 13 08 F6 FF F9 FF 0A 00 0F F2 F4 06
+[2026-06-13T11:53:15.456] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:15.485] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:53:15.545] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:15.545] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1D 00 28 FF 0E 08 F4 FF F7 FF 0A 00 29 F2 45 07
+[2026-06-13T11:53:15.546] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:15.635] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:15.665] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:15.666] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 26 FF 05 08 F3 FF F6 FF 0C 00 09 F2 A4 06
+[2026-06-13T11:53:15.666] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:15.695] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:53:15.755] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:15.756] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=253.2°
+[2026-06-13T11:53:15.757] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 92 66 F7 F9 54 03 C0 B3 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:15.785] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:15.786] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2A 00 28 FF FB 07 F3 FF F6 FF 0E 00 10 F2 B8 06
+[2026-06-13T11:53:15.786] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:15.815] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2B
+[2026-06-13T11:53:15.875] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:15.876] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2F 00 27 FF F3 07 F5 FF F7 FF 0F 00 C4 F1 D2 06
+[2026-06-13T11:53:15.876] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:15.905] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2F
+[2026-06-13T11:53:16.025] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x31
+[2026-06-13T11:53:16.055] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:16.055] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 33 00 27 FF EC 07 FB FF FC FF 10 00 B3 F1 CC 06
+[2026-06-13T11:53:16.056] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:16.116] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x45
+[2026-06-13T11:53:16.117] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A1 8B 01 00 76 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:16.145] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:16.146] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 34 00 27 FF EC 07 FE FF FF FF 10 00 CE F1 BB 06
+[2026-06-13T11:53:16.146] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:16.235] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x33
+[2026-06-13T11:53:16.265] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:16.266] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 33 00 27 FF F0 07 00 00 02 00 0F 00 BB F1 99 06
+[2026-06-13T11:53:16.266] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:16.295] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x31
+[2026-06-13T11:53:16.355] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:16.356] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-6.1° Hdg=252.6°
+[2026-06-13T11:53:16.357] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 EE 66 9B F9 DE 02 3F B4 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:16.415] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x31
+[2026-06-13T11:53:16.475] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:16.476] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2F 00 29 FF FF 07 04 00 08 00 0F 00 BE F1 C3 06
+[2026-06-13T11:53:16.476] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:16.505] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x30
+[2026-06-13T11:53:16.595] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:16.596] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2D 00 28 FF 07 08 05 00 0B 00 0F 00 C8 F1 35 07
+[2026-06-13T11:53:16.597] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:16.627] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2B
+[2026-06-13T11:53:16.716] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:16.716] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2A 00 27 FF 0C 08 05 00 0E 00 0E 00 C9 F1 B0 06
+[2026-06-13T11:53:16.716] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:16.809] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:16.810] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=252.3°
+[2026-06-13T11:53:16.810] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 2D 67 E0 F9 F1 02 90 B4 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:16.840] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x24
+[2026-06-13T11:53:16.926] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:16.927] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 27 FF 0E 08 07 00 0F 00 0E 00 E9 F1 79 06
+[2026-06-13T11:53:16.927] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:17.045] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:17.075] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:17.076] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=252.1°
+[2026-06-13T11:53:17.077] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 57 67 18 FA 26 03 C7 B4 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:17.106] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:17.106] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=252.0°
+[2026-06-13T11:53:17.107] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 5B 67 1D FA 2B 03 CC B4 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:17.165] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x34
+[2026-06-13T11:53:17.166] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 27 FF 0C 08 07 00 0C 00 0D 00 ED F1 D0 06
+[2026-06-13T11:53:17.166] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:17.225] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1A
+[2026-06-13T11:53:17.285] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:17.286] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 28 FF 0B 08 06 00 0B 00 0C 00 E4 F1 91 06
+[2026-06-13T11:53:17.286] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:17.315] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:53:17.357] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:17.357] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 18 00 29 FF 0D 08 04 00 08 00 0C 00 EA F1 D8 06
+[2026-06-13T11:53:17.357] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:17.435] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x13
+[2026-06-13T11:53:17.465] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:17.466] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 16 00 28 FF 0E 08 02 00 05 00 0C 00 E0 F1 93 06
+[2026-06-13T11:53:17.466] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:17.525] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:53:17.555] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:17.556] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-5.9° Hdg=251.7°
+[2026-06-13T11:53:17.556] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 92 67 3D FA 5D 03 17 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:17.585] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:17.586] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 15 00 29 FF 0C 08 00 00 03 00 0D 00 11 F2 95 06
+[2026-06-13T11:53:17.586] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:17.645] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x17
+[2026-06-13T11:53:17.675] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:17.676] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 2A FF 0A 08 FE FF 01 00 0D 00 F2 F1 84 06
+[2026-06-13T11:53:17.676] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:17.705] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:53:17.827] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:17.885] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:17.886] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=251.5°
+[2026-06-13T11:53:17.886] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 B9 67 26 FA 59 03 4F B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:17.915] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:17.916] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 28 FF FE 07 FB FF FF FF 0E 00 09 F2 EB 05
+[2026-06-13T11:53:17.916] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:18.035] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:53:18.065] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:18.066] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 28 FF F6 07 FD FF FF FF 0E 00 F2 F1 58 06
+[2026-06-13T11:53:18.066] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:18.125] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x25
+[2026-06-13T11:53:18.245] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:18.275] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:18.276] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 05 F2 9D 06 7F DD CD FB 27 FF 6B CD 0E 0A 00 00
+[2026-06-13T11:53:18.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:18.365] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:18.366] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 24 00 26 FF F9 07 00 00 00 00 0C 00 E6 F1 21 06
+[2026-06-13T11:53:18.366] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:18.455] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:18.485] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:18.486] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 28 FF FF 07 00 00 01 00 0C 00 B5 F1 62 06
+[2026-06-13T11:53:18.486] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:18.515] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:18.575] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:18.576] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 27 FF 05 08 01 00 01 00 0C 00 DA F1 0E 06
+[2026-06-13T11:53:18.576] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:18.635] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:18.695] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:18.696] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 28 FF 0B 08 01 00 00 00 0C 00 D0 F1 2A 06
+[2026-06-13T11:53:18.696] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:18.725] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:18.816] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:18.816] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 28 FF 0D 08 01 00 00 00 0D 00 C4 F1 08 06
+[2026-06-13T11:53:18.817] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:18.845] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:18.935] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:18.936] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 29 FF 10 08 00 00 FF FF 0D 00 D7 F1 79 06
+[2026-06-13T11:53:18.936] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:18.997] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:18.998] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=250.6°
+[2026-06-13T11:53:18.998] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 4C 68 F8 F9 15 03 1E B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:19.055] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:19.056] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 28 FF 0F 08 00 00 FF FF 0D 00 CA F1 49 06
+[2026-06-13T11:53:19.056] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:19.115] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:19.116] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 28 FF 0C 08 00 00 FE FF 0E 00 D2 F1 1B 06
+[2026-06-13T11:53:19.116] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:19.235] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:19.295] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:19.296] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 26 00 27 FF 05 08 00 00 00 00 00 00 D3 F1 41 06
+[2026-06-13T11:53:19.296] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:19.325] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:19.326] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=250.4°
+[2026-06-13T11:53:19.327] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 62 68 EA F9 01 03 3E B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:19.355] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:19.356] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 C4 F1 4E 06 A1 DD DB FB 1B FF E9 CD 0C 0A 00 00
+[2026-06-13T11:53:19.415] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:53:19.416] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A2 8B 01 00 6E 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:19.445] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:19.475] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:19.476] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=250.5°
+[2026-06-13T11:53:19.477] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 61 68 E1 F9 FB 02 3D B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:19.535] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:19.536] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 26 00 26 FF 01 08 00 00 00 00 00 00 BC F1 16 06
+[2026-06-13T11:53:19.536] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:19.595] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:19.596] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 27 00 27 FF 02 08 00 00 00 00 00 00 73 F2 50 06
+[2026-06-13T11:53:19.596] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:19.655] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x26
+[2026-06-13T11:53:19.745] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:19.746] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 27 00 27 FF 05 08 00 00 00 00 00 00 B4 F1 FE 05
+[2026-06-13T11:53:19.746] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:19.806] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:19.807] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 28 FF 07 08 00 00 00 00 00 00 B0 F1 32 06
+[2026-06-13T11:53:19.807] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:19.835] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:53:19.925] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:19.926] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 27 00 28 FF 0A 08 00 00 05 00 00 00 B6 F1 08 06
+[2026-06-13T11:53:19.926] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:20.045] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:53:20.105] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:20.105] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 29 00 28 FF 0F 08 FF FF 07 00 00 00 BF F1 02 06
+[2026-06-13T11:53:20.105] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:20.135] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:20.136] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 27 FF 0F 08 FF FF 08 00 00 00 BA F1 CD 05
+[2026-06-13T11:53:20.136] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:20.255] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:53:20.286] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:20.286] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 27 00 27 FF 0D 08 FF FF 08 00 00 00 D1 F1 D2 05
+[2026-06-13T11:53:20.286] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:20.345] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x26
+[2026-06-13T11:53:20.375] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:20.376] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 28 FF 09 08 FF FF 09 00 00 00 DA F1 38 06
+[2026-06-13T11:53:20.376] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:20.465] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:20.495] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:20.496] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 A2 F1 F5 05 69 DD DB FB 1B FF E3 CD 0E 0A 00 00
+[2026-06-13T11:53:20.525] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:20.586] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:20.586] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 28 FF FE 07 00 00 09 00 00 00 BB F1 F2 05
+[2026-06-13T11:53:20.586] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:20.645] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:20.705] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:20.706] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 28 FF F8 07 00 00 09 00 00 00 BA F1 DC 05
+[2026-06-13T11:53:20.706] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:20.736] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:20.825] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:20.826] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=250.5°
+[2026-06-13T11:53:20.826] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 5A 68 EB F9 0F 03 33 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:20.855] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x24
+[2026-06-13T11:53:20.945] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:20.946] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 28 FF F3 07 02 00 07 00 00 00 BD F1 5C 05
+[2026-06-13T11:53:20.946] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.065] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:21.095] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:21.096] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1D 00 27 FF FA 07 05 00 05 00 00 00 B5 F1 91 05
+[2026-06-13T11:53:21.096] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.125] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x21
+[2026-06-13T11:53:21.185] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:21.186] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 27 FF FF 07 06 00 04 00 00 00 C4 F1 DF 05
+[2026-06-13T11:53:21.186] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.276] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1F
+[2026-06-13T11:53:21.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:21.306] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 26 FF 08 08 05 00 03 00 00 00 AF F1 A5 05
+[2026-06-13T11:53:21.306] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.335] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:21.395] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:21.396] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 28 FF 0C 08 05 00 03 00 00 00 D2 F1 96 05
+[2026-06-13T11:53:21.396] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.455] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:21.515] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:21.516] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 28 FF 10 08 03 00 04 00 00 00 9A F1 AF 05
+[2026-06-13T11:53:21.516] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.545] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:21.575] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:21.576] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 29 FF 13 08 01 00 04 00 00 00 CD F1 F5 04
+[2026-06-13T11:53:21.576] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.635] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:21.636] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 0B F2 7C 05 70 DD E1 FB 33 FF DC CD 11 0A 00 00
+[2026-06-13T11:53:21.665] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:21.695] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:21.696] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=250.5°
+[2026-06-13T11:53:21.697] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 58 68 08 FA 1E 03 2E B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:21.755] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:21.756] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 28 FF 0F 08 FF FF 06 00 00 00 C4 F1 6A 05
+[2026-06-13T11:53:21.756] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.816] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:21.817] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 27 FF 0D 08 FE FF 06 00 00 00 CB F1 90 05
+[2026-06-13T11:53:21.817] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:21.876] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:21.936] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:21.937] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 28 FF 06 08 FB FF 07 00 00 00 EC F1 71 05
+[2026-06-13T11:53:21.937] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:22.057] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:22.115] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:22.115] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1D 00 27 FF FF 07 FB FF 06 00 FB FF E3 F1 7A 05
+[2026-06-13T11:53:22.115] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:22.146] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:53:22.147] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=250.6°
+[2026-06-13T11:53:22.147] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 4E 68 02 FA 3B 03 21 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:22.265] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:22.298] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:22.298] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 27 FF F9 07 FE FF 04 00 FC FF BA F1 72 05
+[2026-06-13T11:53:22.298] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:22.355] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:22.385] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:22.386] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1D 00 28 FF F9 07 00 00 03 00 FE FF 9D F1 8A 05
+[2026-06-13T11:53:22.386] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:22.478] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:22.508] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:22.509] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 26 FF FB 07 01 00 00 00 FF FF B3 F1 83 05
+[2026-06-13T11:53:22.509] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:22.536] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:22.601] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:22.601] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 27 FF FD 07 03 00 FF FF 00 00 DC F1 20 05
+[2026-06-13T11:53:22.602] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:22.686] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:53:22.715] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:22.716] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 C7 F1 45 05 5A DD D6 FB 2F FF C3 CD 0F 0A 00 00
+[2026-06-13T11:53:22.745] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x45
+[2026-06-13T11:53:22.746] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A1 8B 01 00 76 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:22.865] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:22.926] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:22.927] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=250.6°
+[2026-06-13T11:53:22.927] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 42 68 F5 F9 10 03 10 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:22.956] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:22.958] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=250.6°
+[2026-06-13T11:53:22.958] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 43 68 F5 F9 09 03 11 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:22.990] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:22.990] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 23 00 27 FF 0F 08 06 00 F7 FF 00 00 B7 F1 EA 04
+[2026-06-13T11:53:22.991] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:23.079] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:23.105] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:23.106] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 26 00 28 FF 16 08 04 00 F8 FF 00 00 90 F1 93 04
+[2026-06-13T11:53:23.107] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:23.168] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:53:23.197] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:23.199] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=250.6°
+[2026-06-13T11:53:23.205] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 44 68 EC F9 EA 02 12 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:23.230] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:23.231] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 29 00 28 FF 1A 08 01 00 FB FF 00 00 97 F1 1A 05
+[2026-06-13T11:53:23.232] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:23.285] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x28
+[2026-06-13T11:53:23.315] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:23.320] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2C 00 29 FF 19 08 FF FF FD FF 00 00 A9 F1 34 05
+[2026-06-13T11:53:23.320] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:23.346] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2B
+[2026-06-13T11:53:23.468] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2F
+[2026-06-13T11:53:23.528] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:23.528] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2C 00 29 FF 14 08 F9 FF 02 00 00 00 90 F1 1A 05
+[2026-06-13T11:53:23.529] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:23.556] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:53:23.557] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-6.0° Hdg=250.6°
+[2026-06-13T11:53:23.557] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 43 68 CE F9 D7 02 12 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:23.676] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2E
+[2026-06-13T11:53:23.706] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:23.706] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 30 00 28 FF 04 08 F6 FF 08 00 00 00 84 F1 3A 05
+[2026-06-13T11:53:23.706] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:23.766] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x2E
+[2026-06-13T11:53:23.886] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2F
+[2026-06-13T11:53:23.916] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:23.916] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 96 F1 DE 04 70 DD C8 FB F6 FE C5 CD 11 0A 00 00
+[2026-06-13T11:53:23.949] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2D
+[2026-06-13T11:53:24.010] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:24.014] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 2B 00 27 FF ED 07 FD FF 0C 00 00 00 9C F1 28 05
+[2026-06-13T11:53:24.019] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:24.096] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2C
+[2026-06-13T11:53:24.126] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:24.126] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 26 FF ED 07 00 00 0C 00 00 00 8E F1 13 05
+[2026-06-13T11:53:24.126] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:24.157] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:53:24.246] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:24.246] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 27 FF F1 07 03 00 0D 00 00 00 CC F1 20 05
+[2026-06-13T11:53:24.247] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:24.276] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:53:24.337] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:24.337] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 24 00 27 FF FA 07 06 00 0D 00 00 00 BD F1 19 05
+[2026-06-13T11:53:24.337] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:24.366] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x23
+[2026-06-13T11:53:24.457] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:24.458] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.1° Hdg=250.7°
+[2026-06-13T11:53:24.459] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 39 68 DC F9 06 03 06 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:24.487] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x20
+[2026-06-13T11:53:24.579] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:24.579] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 28 FF 0B 08 07 00 0E 00 00 00 BC F1 E1 04
+[2026-06-13T11:53:24.580] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:24.701] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:24.732] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:24.732] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 27 FF 14 08 06 00 0D 00 00 00 CE F1 6C 04
+[2026-06-13T11:53:24.732] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:24.756] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:24.758] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.0° Hdg=250.7°
+[2026-06-13T11:53:24.759] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 38 68 17 FA 29 03 01 B6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:24.816] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:24.817] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 29 FF 17 08 05 00 0D 00 00 00 BF F1 C4 04
+[2026-06-13T11:53:24.818] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:24.881] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x19
+[2026-06-13T11:53:24.967] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:24.997] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:24.999] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 18 00 28 FF 15 08 00 00 0B 00 00 00 E3 F1 B4 04
+[2026-06-13T11:53:25.003] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:25.056] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:25.056] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 EA F1 A9 04 3F DD E6 FB 58 FF B4 CD 0E 0A 00 00
+[2026-06-13T11:53:25.085] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x18
+[2026-06-13T11:53:25.116] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:25.116] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 18 00 28 FF 0F 08 FD FF 0A 00 FC FF 20 F2 EC 04
+[2026-06-13T11:53:25.116] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:25.176] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x17
+[2026-06-13T11:53:25.238] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:25.239] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.0° Hdg=250.8°
+[2026-06-13T11:53:25.239] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 2C 68 2A FA 5A 03 F0 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:25.297] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:25.298] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 16 00 29 FF 08 08 F8 FF 07 00 FB FF F9 F1 D9 04
+[2026-06-13T11:53:25.298] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:25.387] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:25.388] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 15 00 28 FF 02 08 F7 FF 05 00 FB FF DA F1 B0 04
+[2026-06-13T11:53:25.389] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:25.446] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:25.447] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.6° Pitch=-6.1° Hdg=250.9°
+[2026-06-13T11:53:25.447] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 20 68 1B FA 67 03 E1 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:25.476] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x15
+[2026-06-13T11:53:25.566] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:25.567] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 15 00 28 FF F7 07 F9 FF FE FF FE FF B8 F1 B2 04
+[2026-06-13T11:53:25.568] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:25.685] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:53:25.745] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:25.746] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 17 00 26 FF F5 07 FC FF F9 FF 00 00 D0 F1 71 04
+[2026-06-13T11:53:25.746] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:25.776] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:25.776] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=250.9°
+[2026-06-13T11:53:25.777] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 1B 68 01 FA 5D 03 DC B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:25.805] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:25.806] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 27 FF F8 07 FF FF F7 FF 01 00 F5 F1 3D 04
+[2026-06-13T11:53:25.807] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:25.895] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:25.926] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:25.926] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 26 FF FD 07 01 00 F4 FF 01 00 C9 F1 A6 04
+[2026-06-13T11:53:25.927] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:25.985] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:53:26.016] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:26.016] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-6.1° Hdg=250.9°
+[2026-06-13T11:53:26.017] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 1E 68 F1 F9 33 03 E0 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:26.046] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:26.046] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 27 FF 01 08 04 00 F2 FF 00 00 BC F1 5B 04
+[2026-06-13T11:53:26.047] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:26.106] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:26.135] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:26.140] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.9° Pitch=-6.0° Hdg=250.8°
+[2026-06-13T11:53:26.141] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 20 68 EF F9 1D 03 E1 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:26.166] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x3A
+[2026-06-13T11:53:26.166] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 D7 F1 BD 04 57 DD D6 FB 26 FF A0 CD 11 0A 00 00
+[2026-06-13T11:53:26.226] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x45
+[2026-06-13T11:53:26.226] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A1 8B 01 00 76 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:26.290] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x22
+[2026-06-13T11:53:26.346] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:26.346] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 21 00 25 FF 0A 08 08 00 F3 FF 00 00 A1 F1 3E 04
+[2026-06-13T11:53:26.346] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:26.376] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x25
+[2026-06-13T11:53:26.406] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:26.407] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.0° Hdg=250.8°
+[2026-06-13T11:53:26.407] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 23 68 E9 F9 F8 02 E5 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:26.495] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2B
+[2026-06-13T11:53:26.526] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:26.530] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.1° Pitch=-5.9° Hdg=250.8°
+[2026-06-13T11:53:26.531] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 22 68 E6 F9 DF 02 E2 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:26.585] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x33
+[2026-06-13T11:53:26.616] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:26.616] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 34 00 28 FF 08 08 09 00 FA FF FC FF 52 F1 57 04
+[2026-06-13T11:53:26.617] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:26.712] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x39
+[2026-06-13T11:53:26.741] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:26.748] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.3° Pitch=-5.9° Hdg=250.9°
+[2026-06-13T11:53:26.748] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 19 68 CE F9 A9 02 D5 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:26.766] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:26.766] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 3B 00 28 FF 04 08 07 00 00 00 FE FF 74 F1 18 04
+[2026-06-13T11:53:26.768] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:26.916] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x3F
+[2026-06-13T11:53:26.945] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:26.946] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 40 00 28 FF 04 08 03 00 08 00 FF FF 64 F1 0A 04
+[2026-06-13T11:53:26.946] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:26.976] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:26.976] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 3F 00 28 FF 05 08 03 00 08 00 00 00 62 F1 01 04
+[2026-06-13T11:53:26.977] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:27.095] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x38
+[2026-06-13T11:53:27.155] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:27.155] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 36 00 28 FF 07 08 FF FF 10 00 00 00 67 F1 50 04
+[2026-06-13T11:53:27.156] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:27.186] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:53:27.186] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.5° Pitch=-6.0° Hdg=250.9°
+[2026-06-13T11:53:27.187] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 0E 68 A0 F9 86 02 C8 B5 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:27.305] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2B
+[2026-06-13T11:53:27.335] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:27.336] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 81 F1 6D 04 88 DD DC FB D9 FE F6 C9 0F 0A 00 00
+[2026-06-13T11:53:27.400] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x24
+[2026-06-13T11:53:27.427] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:27.432] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 20 00 28 FF 09 08 F9 FF 14 00 00 00 73 F1 33 04
+[2026-06-13T11:53:27.432] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:27.516] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x20
+[2026-06-13T11:53:27.546] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:27.547] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 27 FF 08 08 F7 FF 14 00 00 00 77 F1 D3 03
+[2026-06-13T11:53:27.548] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:27.577] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:53:27.698] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:27.758] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x34
+[2026-06-13T11:53:27.759] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 28 FF 07 08 F5 FF 10 00 00 00 B8 F1 2C 04
+[2026-06-13T11:53:27.759] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:27.786] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1A
+[2026-06-13T11:53:27.906] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1C
+[2026-06-13T11:53:27.936] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:27.937] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 27 FF 03 08 F5 FF 0D 00 00 00 78 F1 16 04
+[2026-06-13T11:53:27.938] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:27.996] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1C
+[2026-06-13T11:53:28.116] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1A
+[2026-06-13T11:53:28.146] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:28.147] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 27 FF 01 08 FA FF 0A 00 00 00 F4 F1 0D 04
+[2026-06-13T11:53:28.148] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:28.175] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x17
+[2026-06-13T11:53:28.236] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:28.237] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 18 00 27 FF 01 08 FC FF 0A 00 00 00 BA F1 FD 03
+[2026-06-13T11:53:28.238] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:28.326] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x18
+[2026-06-13T11:53:28.386] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:28.392] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 28 FF 00 08 01 00 08 00 00 00 DD F1 29 04
+[2026-06-13T11:53:28.392] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:28.393] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:28.416] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:28.416] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 26 FF 00 08 03 00 07 00 00 00 EA F1 B2 03
+[2026-06-13T11:53:28.417] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:28.476] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:28.477] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 F3 F1 E9 03 6D DD CB FB 58 FF 35 C1 12 0A 00 00
+[2026-06-13T11:53:28.506] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:28.570] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:28.571] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=268.6°
+[2026-06-13T11:53:28.573] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 7D 5B A6 FA 34 04 BF A6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:28.597] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:28.685] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:28.688] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.0° Hdg=268.5°
+[2026-06-13T11:53:28.688] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 84 5B A5 FA 1E 04 C6 A6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:28.715] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x21
+[2026-06-13T11:53:28.805] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:28.806] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 26 FF FF 07 0D 00 03 00 00 00 E1 F1 AB 03
+[2026-06-13T11:53:28.806] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:28.926] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1F
+[2026-06-13T11:53:28.955] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:28.956] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 27 FF 02 08 0E 00 02 00 00 00 E2 F1 7C 03
+[2026-06-13T11:53:28.956] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:28.986] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:28.987] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 26 FF 02 08 0D 00 01 00 00 00 BD F1 81 03
+[2026-06-13T11:53:28.987] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:29.106] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x16
+[2026-06-13T11:53:29.166] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:29.166] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 15 00 28 FF 07 08 0D 00 FF FF 00 00 E1 F1 84 03
+[2026-06-13T11:53:29.166] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:29.196] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:29.197] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.8° Pitch=-5.9° Hdg=268.2°
+[2026-06-13T11:53:29.197] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 BB 5B B3 FA F2 03 FB A6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:29.225] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:29.226] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 12 00 28 FF 0A 08 0B 00 FD FF 00 00 00 F2 84 03
+[2026-06-13T11:53:29.226] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:29.316] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x11
+[2026-06-13T11:53:29.346] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:29.347] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-5.9° Hdg=268.2°
+[2026-06-13T11:53:29.347] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 BF 5B BD FA FF 03 00 A7 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:29.405] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x15
+[2026-06-13T11:53:29.435] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:29.436] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 12 00 28 FF 15 08 01 00 F8 FF 00 00 B3 F1 9B 03
+[2026-06-13T11:53:29.436] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:29.525] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x13
+[2026-06-13T11:53:29.555] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:29.557] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 9B F1 87 03 80 DD EA FB 4D FF 48 C1 0E 0A 00 00
+[2026-06-13T11:53:29.615] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x45
+[2026-06-13T11:53:29.616] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 45 00 A1 8B 01 00 76 01 00 00 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:29.736] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1C
+[2026-06-13T11:53:29.795] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:29.796] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 22 00 28 FF 13 08 F0 FF F3 FF 00 00 D8 F1 5B 03
+[2026-06-13T11:53:29.796] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:29.915] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x27
+[2026-06-13T11:53:29.975] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:29.976] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 28 00 27 FF 08 08 EE FF F5 FF 00 00 87 F1 9E 03
+[2026-06-13T11:53:29.976] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:30.006] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=86 b2=0x51
+[2026-06-13T11:53:30.006] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-6.2° Hdg=268.2°
+[2026-06-13T11:53:30.007] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 C5 5B 49 FA FF 03 0D A7 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:30.125] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x30
+[2026-06-13T11:53:30.155] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:30.156] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 34 00 26 FF F4 07 F4 FF FA FF 00 00 85 F1 5C 03
+[2026-06-13T11:53:30.156] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:30.216] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x36
+[2026-06-13T11:53:30.335] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x3B
+[2026-06-13T11:53:30.395] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x51
+[2026-06-13T11:53:30.395] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.2° Hdg=268.1°
+[2026-06-13T11:53:30.396] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 C3 5B FB F9 BB 03 0D A7 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:30.397] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x3C
+[2026-06-13T11:53:30.455] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:30.456] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.4° Pitch=-6.2° Hdg=268.2°
+[2026-06-13T11:53:30.456] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 C2 5B F4 F9 AC 03 0C A7 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:30.515] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x3D
+[2026-06-13T11:53:30.575] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:30.576] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 3F 00 28 FF F0 07 0A 00 07 00 00 00 54 F1 3D 03
+[2026-06-13T11:53:30.576] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:30.605] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x3D
+[2026-06-13T11:53:30.695] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:30.696] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 5E F1 75 03 98 DD D6 FB B4 FE 50 C1 12 0A 00 00
+[2026-06-13T11:53:30.726] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x39
+[2026-06-13T11:53:30.815] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:30.816] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 35 00 27 FF 07 08 11 00 0E 00 00 00 7B F1 C1 03
+[2026-06-13T11:53:30.816] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:30.935] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x2B
+[2026-06-13T11:53:30.965] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:30.965] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 27 00 28 FF 15 08 0E 00 11 00 00 00 A9 F1 20 03
+[2026-06-13T11:53:30.966] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:30.996] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:30.997] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 25 00 29 FF 15 08 0D 00 11 00 00 00 C2 F1 64 03
+[2026-06-13T11:53:30.997] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:31.145] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1D
+[2026-06-13T11:53:31.175] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:31.176] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1C 00 29 FF 1B 08 04 00 12 00 00 00 AE F1 25 03
+[2026-06-13T11:53:31.176] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:31.206] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x51
+[2026-06-13T11:53:31.206] [INFO] [wit-ble-direct] [DATA_OUT] Roll=1.0° Pitch=-5.9° Hdg=268.2°
+[2026-06-13T11:53:31.207] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 BF 5B 8E FA C8 03 00 A7 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:31.295] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:31.295] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 18 00 28 FF 19 08 00 00 11 00 00 00 6A F1 25 03
+[2026-06-13T11:53:31.295] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:31.325] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x18
+[2026-06-13T11:53:31.415] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:53:31.445] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:31.446] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 28 FF 11 08 F7 FF 10 00 00 00 BA F1 FC 02
+[2026-06-13T11:53:31.446] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:31.535] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:31.565] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:31.566] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1D 00 27 FF 06 08 F4 FF 0E 00 00 00 D6 F1 63 03
+[2026-06-13T11:53:31.566] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:31.625] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:31.655] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:31.656] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1E 00 27 FF 02 08 F4 FF 0E 00 00 00 00 F2 17 03
+[2026-06-13T11:53:31.656] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:31.745] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:31.775] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x3A
+[2026-06-13T11:53:31.776] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 3A 00 DE F1 F8 02 F7 DC C6 FB 5A FF 3C C1 11 0A 00 00
+[2026-06-13T11:53:31.805] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x22
+[2026-06-13T11:53:31.925] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1E
+[2026-06-13T11:53:31.986] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x34
+[2026-06-13T11:53:31.986] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 25 FF F6 07 FC FF 09 00 00 00 09 F2 25 03
+[2026-06-13T11:53:31.987] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:32.016] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=66 b2=0x34
+[2026-06-13T11:53:32.016] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1F 00 26 FF F5 07 FF FF 08 00 00 00 CE F1 3B 03
+[2026-06-13T11:53:32.017] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:32.137] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:32.167] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=40 b2=0x51
+[2026-06-13T11:53:32.168] [INFO] [wit-ble-direct] [DATA_OUT] Roll=0.7° Pitch=-6.1° Hdg=268.3°
+[2026-06-13T11:53:32.168] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 51 00 B0 5B 8B FA 31 04 F5 A6 00 00 00 00 00 00 00 00
+[2026-06-13T11:53:32.227] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=66 b2=0x1C
+[2026-06-13T11:53:32.348] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:53:32.376] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:32.377] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1B 00 27 FF 00 08 04 00 01 00 00 00 E7 F1 C9 02
+[2026-06-13T11:53:32.377] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:32.406] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x19
+[2026-06-13T11:53:32.466] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:32.466] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 19 00 28 FF 03 08 04 00 00 00 00 00 01 F2 F1 02
+[2026-06-13T11:53:32.466] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
+[2026-06-13T11:53:32.531] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x6F len=46 b2=0x1B
+[2026-06-13T11:53:32.585] [DEBUG] [wit-ble-direct] [PACKET_TYPE] header=0x55 0x71 len=20 b2=0x34
+[2026-06-13T11:53:32.586] [DEBUG] [wit-ble-direct] [HEX_DUMP] raw=55 71 34 00 1A 00 26 FF 07 08 02 00 00 00 00 00 D2 F1 CA 02
+[2026-06-13T11:53:32.586] [DEBUG] [wit-ble-direct] [PACKET_MATCH] 0x71/0x34 register-read format decoded → sending motion
