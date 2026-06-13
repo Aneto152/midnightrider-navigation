@@ -1,9 +1,10 @@
 'use strict';
 /**
  * @file signalk-heading-true-calculator.js
- * @version 1.0.5
+ * @version 1.0.6
  * @license MIT
  * CHANGELOG
+ * v1.0.6 — Fix: own-output source check. SK 2.x uses $source (string).
  * v1.0.5 — Event-driven: fires on every headingMagnetic update.
  * Primary: app.streambundle.getSelfBus() (SK 2.x Bacon.js stream).
  * Fallback: app.registerDeltaInputHandler() (delta middleware).
@@ -95,14 +96,23 @@ module.exports = function(app) {
       try {
         var htObj = app.getSelfPath('navigation.headingTrue');
         if (htObj && htObj.value != null) {
-          var src = (htObj.source && htObj.source.label) ? htObj.source.label : '';
-          if (src !== PLUGIN_ID) {
+          // SK 2.x stores source in $source (string) or source.label (object)
+          var src = '';
+          if (htObj.$source && typeof htObj.$source === 'string') {
+            src = htObj.$source;
+          } else if (htObj.source && htObj.source.label) {
+            src = htObj.source.label;
+          }
+          // Own output or unknown source → not external
+          if (src === PLUGIN_ID || src === '' || src.indexOf('signalk-') >= 0) {
+            externalHTActive = false;
+          } else {
             var age = htObj.timestamp ? (Date.now()-new Date(htObj.timestamp).getTime())/1000 : Infinity;
             var prev = externalHTActive;
             externalHTActive = (age < cfg.externalStaleS);
             if (prev !== externalHTActive)
               svcLog('INFO','external HT: active='+externalHTActive+' src='+src+' age='+age.toFixed(1)+'s');
-          } else { externalHTActive = false; }
+          }
         } else { externalHTActive = false; }
       } catch(e) { svcLog('ERROR','checkExternal: '+e.message); }
     }
