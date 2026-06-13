@@ -229,3 +229,33 @@ systemctl restart signalk
 **Status:** Production (post-audit 2026-05-29)  
 **Last bugfix:** UM982 pitch normalization (2026-05-29)  
 **Deployment required:** Copy `signalk-um982-proprietary.js` to Pi and restart Signal K
+
+---
+
+### 4. signalk-heading-true-calculator.js — True Heading Calculator
+
+Version: 1.0.1 | Phase: 2 post-race | Dependencies: none (pure Node.js)
+
+Derives navigation.headingTrue from headingMagnetic + magneticVariation.
+Activates ONLY when no other live source provides headingTrue — will not
+override GPS or UM982 if they are already publishing a fresh heading.
+
+Signal K paths:
+
+| Path | Unit | Description |
+|------|------|-------------|
+| navigation.headingTrue | radians | Derived — guard-protected, never overrides a live sensor |
+
+Guard conditions (in order):
+1. G1: Skip if headingMagnetic stale (> maxHMAgeSecs = 5s)
+2. G2: Skip if headingMagnetic invalid (NaN, infinite, |val|>4π)
+3. G3: Use variation=0 if magneticVariation absent (logs WARN)
+4. G4: Skip if another source provides fresh headingTrue (< staleSecs = 10s)
+
+Configuration (SK Admin → Plugins → True Heading Calculator):
+{ "debug": false, "staleSecs": 10, "maxHMAgeSecs": 5 }
+
+Logs: logs/services/heading-true-calc.log + logs/debug/data-flow.log
+
+Changelog: v1.0.1 fixed subscriptionManager typo, removeAllListeners danger,
+guard logic, internal API usage. v1.0.0 initial.
