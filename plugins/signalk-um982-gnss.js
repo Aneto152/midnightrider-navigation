@@ -146,6 +146,19 @@ module.exports = function(app) {
           vals.push({ path: 'navigation.gnss.antennaBaseline', value: baseline });
         }
 
+        // Heading standard deviation — primary quality indicator for dual-antenna heading
+        // <0.5°=excellent, 0.5-2°=good, 2-5°=marginal, >5°=poor (antenna problem)
+        const hdgStd = parseFloat(data[5]);
+        if (!isNaN(hdgStd) && hdgStd >= 0) {
+          vals.push({ path: 'navigation.gnss.headingStdDev', value: hdgStd });
+        }
+
+        // Number of satellites used in heading solution (dual-antenna RTK)
+        const numSVs = parseInt(data[8], 10);
+        if (!isNaN(numSVs) && numSVs > 0) {
+          vals.push({ path: 'navigation.gnss.headingSatellites', value: numSVs });
+        }
+
         send(vals);
         stats.headinga++;
         lastHdg = hdg.toFixed(1) + '°T';
