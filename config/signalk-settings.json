@@ -6,7 +6,7 @@
       "ntripEnabled": false
     },
     "signalk-um982-proprietary": {
-      "enabled": true
+      "enabled": false
     },
     "signalk-gps-um982-nmea-parser": {
       "enabled": false
@@ -51,7 +51,7 @@
         "reverseRoll": true,
         "reversePitch": false
       },
-      "enabled": false
+      "enabled": true
     }
   },
   "pipedProviders": [

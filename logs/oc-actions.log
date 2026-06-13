@@ -185,3 +185,13 @@
 [2026-06-13T12:19:22.499650] [RESULT] [um982-gnss] navigation.position: 40.83433,-73.71333 ✅
 [2026-06-13T12:19:22.499650] [FILE_MODIFY] [signalk] config/signalk-settings.json synced to repo
 [2026-06-13T12:19:22.499650] [FILE_MODIFY] [um982-gnss] plugins/signalk-um982-gnss.js synced to repo
+[2026-06-13T12:28:37.322129] [FILE_DELETE] [signalk] signalk-um982-proprietary removed from node_modules
+[2026-06-13T12:28:37.322129] [CONFIG_CHANGE] [signalk] signalk-um982-proprietary disabled in settings.json
+[2026-06-13T12:28:37.322129] [CONFIG_CHANGE] [signalk] signalk-um982-gnss enabled=True (it's the active V2)
+[2026-06-13T12:28:37.322129] [FILE_DELETE] [REPO] plugins/signalk-um982-proprietary.js deleted
+[2026-06-13T12:28:37.322129] [FILE_DELETE] [REPO] plugins/signalk-um982-package.json deleted
+[2026-06-13T12:28:37.322129] [FILE_DELETE] [REPO] plugins/signalk-um982-gnss-v2.js (cleanup)
+[2026-06-13T12:28:37.322129] [SERVICE_RESTART] [signalk] Restart to unload proprietary plugin
+[2026-06-13T12:28:37.322129] [RESULT] [um982-gnss] headingTrue confirmed: -7.0°T
+[2026-06-13T12:28:37.322129] [FILE_CREATE] [DOCS] ARCHITECTURE-SYSTEM-2026-06-13.md written
+[2026-06-13T12:28:37.322129] [FILE_CREATE] [DOCS] SYSTEM-SUMMARY.md written

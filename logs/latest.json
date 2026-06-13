@@ -1,35 +1,51 @@
 {
-  "task": "um982-v2-completion-port-conflict-resolved",
-  "date": "2026-06-13T12:19:22.499650",
+  "task": "um982-cleanup-and-full-doc-update",
+  "date": "2026-06-13T12:28:44.182147",
   "status": "SUCCESS",
   "steps_completed": [
-    "V2 plugin confirmed deployed in ~/.signalk/node_modules",
-    "Provider UM982-Serial removed from Signal K settings",
-    "Port conflict resolved (single serial reader now)",
-    "Signal K restarted successfully",
-    "headingTrue verified: 4.40\u00b0 | source: um982-gnss.XX",
-    "navigation.position verified: 40.83433,-73.71333",
-    "config/signalk-settings.json synced to repo",
-    "plugins/signalk-um982-gnss.js synced to repo"
+    "signalk-um982-proprietary: disabled in settings + removed from node_modules",
+    "All zombie UM982 plugins confirmed disabled",
+    "plugins/signalk-um982-proprietary.js: deleted from repo",
+    "plugins/signalk-um982-package.json: deleted from repo",
+    "plugins/signalk-um982-gnss-v2.js: deleted from repo (cleanup)",
+    "config/signalk-settings.json: synced with enabled state corrections",
+    "Signal K restarted \u2014 headingTrue confirmed at -7.0\u00b0T",
+    "ARCHITECTURE-SYSTEM-2026-06-13.md: comprehensive architecture created",
+    "SYSTEM-SUMMARY.md: system status summary created"
   ],
   "files_modified": [
-    "plugins/signalk-um982-gnss.js (V2 unified)",
-    "config/signalk-settings.json (UM982-Serial removed)",
+    "plugins/signalk-um982-proprietary.js (DELETED)",
+    "plugins/signalk-um982-package.json (DELETED)",
+    "plugins/signalk-um982-gnss-v2.js (DELETED)",
+    "config/signalk-settings.json",
+    "ARCHITECTURE-SYSTEM-2026-06-13.md (NEW)",
+    "SYSTEM-SUMMARY.md (NEW)",
     "logs/oc-actions.log",
     "logs/latest.json"
   ],
   "errors": [],
   "services_status": {
-    "signalk": "active",
+    "signalk": "running",
     "influxdb": "running",
     "grafana": "running"
   },
-  "heading_result": {
-    "headingTrue_degrees": 4.4,
-    "source": "um982-gnss.XX",
-    "position_ok": true,
-    "position_lat": 40.83433,
-    "position_lon": -73.71333
+  "system_health": {
+    "cpu": "<3%",
+    "memory": "43%",
+    "disk": "22%",
+    "temperature": "47\u00b0C"
   },
-  "next_recommended": "Remove signalk-um982-proprietary.js (now redundant) + full doc update"
+  "um982_final_state": {
+    "active_plugin": "signalk-um982-gnss V2",
+    "proprietary_plugin": "DELETED",
+    "headingTrue": "-7.0\u00b0T",
+    "position": "40.8343, -73.7133",
+    "source": "um982-gnss",
+    "single_source": true
+  },
+  "next_steps": [
+    "Field test headingTrue on water (Block Island Race 2026-05-22)",
+    "Monitor InfluxDB archival (post-race analysis)",
+    "Dashboard refinement based on crew feedback"
+  ]
 }
