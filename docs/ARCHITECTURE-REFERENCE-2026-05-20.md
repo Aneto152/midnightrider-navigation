@@ -620,3 +620,23 @@ midnightrider-navigation/
 - WIT mounted level on companionway ✅
 
 **Logging:** WIT + Calypso raised to INFO level (2026-06-13) — was DEBUG @ 8 msg/sec, now <2 msg/sec production logging.
+
+
+## ⚠️ NOTE ARCHITECTURALE — 2026-06-14 AUDIT
+
+### Corrections apportées
+
+| Composant | État documentation | État réel | Action |
+|---|---|---|---|
+| signalk-performance-polars | "Actif" | Config orpheline, jamais installé | ✅ SUPPRIMÉ |
+| signalk-sails-management-v2 | "Actif" | Config orpheline, jamais installé | ✅ SUPPRIMÉ |
+| signalk-to-nmea2000 | "Émet PGNs N2K" | 0 mappings configurés | ⚠️ Conservé comme backup |
+| Output N2K (SK → Vulcan) | "Actif" | INACTIF — aucun PGN transmis | 🔧 P5 planifié |
+
+### P5 — Plugin N2K Bridge (conception en cours)
+
+Remplacera `signalk-to-nmea2000` pour l'output N2K avec:
+- Conversions standard (leeway PGN 128000, courant PGN 129291)
+- Conversions B&G propriétaires (PGN 130824)
+- Architecture extensible et modulaire
+- `signalk-to-nmea2000` maintenu comme backup jusqu'à validation P5
