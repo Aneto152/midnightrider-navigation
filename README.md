@@ -313,7 +313,7 @@ sudo systemctl enable midnightrider-portal
 sudo systemctl status midnightrider-portal
 ```
 
-Access: http://midnightrider.local:8888 or http://192.168.1.167:8888
+Access: http://midnightrider.local:8888 or http://192.168.1.131:8888
 
 ## Services Summary
 
@@ -329,7 +329,7 @@ Access: http://midnightrider.local:8888 or http://192.168.1.167:8888
 
 ## Regatta Interface
 
-Access the race management interface at http://192.168.1.167:8888/regatta/
+Access the race management interface at http://192.168.1.131:8888/regatta/
 
 | Page | URL | Features |
 |------|-----|----------|

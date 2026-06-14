@@ -55,11 +55,11 @@ InfluxDB et les visualisant dans Grafana.
 | Composant | Détail |
 |-----------|--------|
 | **Raspberry Pi 4 Model B** | 4 Go RAM, microSD 64 Go |
-| **IP locale fixe** | 192.168.1.167 |
+| **IP locale fixe** | 192.168.1.131 |
 | **OS** | Raspberry Pi OS (Debian 12 Bookworm) |
 | **Rôle** | Signal K server, Docker host (InfluxDB, Grafana), gateway BLE, scripts Python |
 | **Alimentation** | 12V → 5V USB-C via convertisseur DC/DC |
-| **Accès local** | SSH (`aneto@192.168.1.167`) |
+| **Accès local** | SSH (`aneto@192.168.1.131`) |
 | **Accès distant** | Cloudflare Tunnel (voir `CLOUDFLARE-TUNNEL-URL.md`) |
 
 ### 2.2 Instruments actifs
@@ -141,7 +141,7 @@ YDNU-02 ──T── Vulcan 7 FS
 ### 3.4 Réseau IP (WiFi)
 
 ```
-RPi 4 (192.168.1.167)
+RPi 4 (192.168.1.131)
   ├── Point d'accès WiFi (hostapd)
   │     SSID: MidnightRider / password: voir wifi-ap.txt
   │     Connecté: téléphones équipage, tablettes

@@ -80,7 +80,7 @@ Legend: LOAD   → Reflects whether the unit definition was properly loaded.
 WorkingDirectory=/home/aneto/.openclaw/workspace/regatta
 EnvironmentFile=/home/aneto/.openclaw/workspace/.env
 ExecStart=/usr/bin/python3 /home/aneto/.openclaw/workspace/regatta/ais_watch.py
-ExecStart=/usr/bin/avahi-publish-address -R MidnightRider.local 192.168.1.167
+ExecStart=/usr/bin/avahi-publish-address -R MidnightRider.local 192.168.1.131
 WorkingDirectory=/home/aneto/midnightrider-navigation
 EnvironmentFile=/home/aneto/midnightrider-navigation/.env
 ExecStartPre=/bin/bash -c 'pkill -SIGTERM -f calypso-anemometer 2>/dev/null; sleep 3; pkill -SIGKILL -f calypso-anemometer 2>/dev/null; sleep 1; true'

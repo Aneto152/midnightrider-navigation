@@ -257,7 +257,7 @@ docker exec influxdb influx query \
 # Expected: recent timestamp, value ~101000-102000 (Pa)
 
 # 5. Cross-check with Grafana Dashboard 02: ENVIRONMENT
-# http://192.168.1.167:3001/d/environment
+# http://192.168.1.131:3001/d/environment
 # Expected: pressure ~1010-1020 hPa at dock
 ```
 

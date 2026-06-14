@@ -261,7 +261,7 @@ command_with_crc = data + [crc]
 ```
 SOK Battery (BLE BMS)
      ↓ Bluetooth LE
-RPi 4 (192.168.1.167) — hci0 BLE adapter
+RPi 4 (192.168.1.131) — hci0 BLE adapter
      ↓ sok_bms_reader.py (Python + bleak)
      ↓ DIRECT write (bypasses Signal K)
 InfluxDB (port 8086, Docker)
@@ -323,7 +323,7 @@ class SOK_BMS:
 
 ### Grafana Dashboard — 06: ELECTRICAL
 
-Access: `http://192.168.1.167:3001/d/electrical-power`
+Access: `http://192.168.1.131:3001/d/electrical-power`
 
 | Panel | Data | Alert Threshold |
 |-------|------|----------------|
@@ -390,7 +390,7 @@ docker exec influxdb influx query \
    |> limit(n: 5)'
 
 # 4. Check Grafana dashboard 06
-# http://192.168.1.167:3001/d/electrical-power
+# http://192.168.1.131:3001/d/electrical-power
 # Expected: SoC gauge, cell voltages, all panels populated
 
 # 5. Quick health check

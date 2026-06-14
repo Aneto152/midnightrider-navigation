@@ -105,7 +105,7 @@ docker exec influxdb influx query \
 
 ## Grafana Dashboard (06 — ELECTRICAL)
 
-Access: http://192.168.1.167:3001/d/electrical-power
+Access: http://192.168.1.131:3001/d/electrical-power
 
 ### Panels
 
@@ -158,7 +158,7 @@ docker exec influxdb influx query \
 
 ### 4. Verify Grafana dashboard
 
-Open http://192.168.1.167:3001/d/electrical-power
+Open http://192.168.1.131:3001/d/electrical-power
 
 → Expected: SOC gauge, cell voltages, current, temp graphs populated
 
@@ -194,7 +194,7 @@ Open http://192.168.1.167:3001/d/electrical-power
 - [ ] InfluxDB bucket `midnight_rider` receiving electrical measurements
 - [ ] Grafana 06 — ELECTRICAL dashboard populated
 - [ ] All 5 alert rules tested and armed
-- [ ] iPad can view dashboard over WiFi (192.168.1.167:3001)
+- [ ] iPad can view dashboard over WiFi (192.168.1.131:3001)
 
 ---
 

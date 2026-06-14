@@ -290,7 +290,7 @@ $CONFIG,COM3,CONFIG COM3 115200
 ```
 UM982 (ANT1 + ANT2)
      ↓ USB-Serial (/dev/ttyUSB0)
-RPi 4 (192.168.1.167)
+RPi 4 (192.168.1.131)
      ↓ signalk-um982-gnss plugin (115200 baud)
 Signal K (port 3000, systemctl)
      ↓

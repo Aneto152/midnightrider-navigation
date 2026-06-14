@@ -240,7 +240,7 @@ async function getNetworkStatus() {
       }
     }
 
-    const primaryIpStr = primaryIp || '192.168.1.167';
+    const primaryIpStr = primaryIp || '192.168.1.131';
 
     return {
       hostname,

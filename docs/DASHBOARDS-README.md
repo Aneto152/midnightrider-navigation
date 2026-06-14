@@ -41,7 +41,7 @@ Refresh rates vary by use case (5s–30s).
 |--------|-----|
 | RPi local | http://localhost:3001 |
 | iPad (mDNS) | http://midnightrider.local:3001 |
-| iPad (IP) | http://192.168.1.167:3001 |
+| iPad (IP) | http://192.168.1.131:3001 |
 
 ---
 
@@ -150,7 +150,7 @@ Alert on exceeding watch limits. Shift recommendations.
 - **Signal K → InfluxDB** plugin writes to bucket `midnight_rider`
 - **Grafana** (port 3001) runs in Docker — managed via `docker compose`
 - **Flux queries** read from InfluxDB via datasource UID `efifgp8jvgj5sf`
-- **iPad access** via mDNS `midnightrider.local` or IP `192.168.1.167`
+- **iPad access** via mDNS `midnightrider.local` or IP `192.168.1.131`
 - **Workaround active:** `avahi-mdns-fix.service` since 2026-05-11
 
 ---
