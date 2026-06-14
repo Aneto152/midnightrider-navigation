@@ -1,7 +1,7 @@
 'use strict';
 /**
  * @file signalk-current-calculator.js
- * @version 1.0.2
+ * @version 1.0.3
  * @license MIT
  * CHANGELOG
  * v1.0.2 — Event-driven: fires on every SOG update (GPS cadence).
@@ -39,7 +39,7 @@ module.exports = function(app) {
       function getVal(path) {
         var o = app.getSelfPath(path);
         if (!o || o.value == null) return null;
-        if (o.timestamp && (now - new Date(o.timestamp).getTime()) > maxAgeMs) return null;
+        // staleness filter removed — use any available value
         return o.value;
       }
       var sog = sogValue;
@@ -50,7 +50,7 @@ module.exports = function(app) {
 
       if (ht==null||stw==null||cog==null||sog==null) { stats.skipped++; return; }
       if (!isFinite(ht)||!isFinite(stw)||!isFinite(cog)||!isFinite(sog)) { stats.errors++; return; }
-      if (sog < cfg.minSOG || stw < cfg.minSTW) { stats.skipped++; return; }
+      // minSOG/minSTW guards removed — publish if data present
 
       var leeway = (lwy != null && isFinite(lwy) && Math.abs(lwy) < Math.PI/4) ? lwy : 0;
       var ctw = ht + leeway;
@@ -83,7 +83,7 @@ module.exports = function(app) {
     id: PLUGIN_ID,
     name: 'Water Current Calculator (Set & Drift)',
     description: 'Event-driven on SOG updates. CTW=HT+leeway. EMA smoothed.',
-    version: '1.0.2',
+    version: '1.0.3',
     schema: { type:'object', title:'Water Current Calculator', properties: {
       minSOG: { type:'number', title:'Min SOG m/s', default:0.3, minimum:0, maximum:2.0 },
       minSTW: { type:'number', title:'Min STW m/s', default:0.3, minimum:0, maximum:2.0 },
