@@ -2,7 +2,7 @@
 
 **Voilier :** J/30 hull 511 — Midnight Rider  
 **Skipper :** Denis LAFARGE  
-**Date :** 2026-06-13  
+**Date :** 2026-06-14  
 **Version :** 4.1 — Canonical Reference  
 **Statut :** ✅ Production — Block Island Race 2026-05-22
 

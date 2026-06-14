@@ -1,20 +1,43 @@
 {
-  "task": "phase5-documentation-canonical",
-  "date": "2026-06-13T23:01:45.096471",
+  "task": "session-2026-06-14-full-system",
+  "date": "2026-06-14T04:59:00Z",
   "status": "SUCCESS",
-  "fixes": [
-    "avahi-daemon.conf: allow-interfaces=eth0 only (wlan0 removed)",
-    "config/wifi-ap.txt: marked HISTORICAL/DISABLED (2026-06-13)",
-    "ARCHITECTURE v4.1: IP 192.168.1.167 \u2192 192.168.1.131 (all refs)",
-    "ARCHITECTURE v4.1: Section 3.4 WiFi AP \u2192 Ethernet + rfkill note",
-    "ARCHITECTURE v4.1: Phase 2 plugins added to table",
-    "ARCHITECTURE v4.1: Service names corrected (calypso_direct, sok_direct)"
+  "steps_completed": [
+    "mDNS conflict fixed: avahi-mdns-fix.service deleted",
+    "IP address: 192.168.1.131 (stable, single, static)",
+    "WiFi AP permanently disabled: rfkill-wifi-block.service",
+    "avahi-daemon.conf: allow-interfaces=eth0 only",
+    "Architecture doc v4.2: IPs corrected, plugins added",
+    "Portal: mDNS links, popup blocker fix",
+    "N2K: PGN 65280/65312 decoded (Navico timer)",
+    "current-calculator v1.0.3: staleness + speed guards removed",
+    "environment.current: ready for field test"
   ],
-  "docs_aligned": [
-    "config/system/ (git)",
-    "services/ (git)",
-    "docs/ARCHITECTURE-REFERENCE v4.1",
-    "Reality: avahi eth0, 192.168.1.131 static, WiFi disabled"
+  "files_modified": [
+    "config/system/avahi-daemon.conf",
+    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md (v4.2)",
+    "docs/N2K-TIMER-RESEARCH.md",
+    "portal/index.html",
+    "plugins/signalk-current-calculator.js (v1.0.3)"
   ],
-  "errors": []
+  "network": {
+    "ip": "192.168.1.131",
+    "hostname": "MidnightRider",
+    "mdns": "MidnightRider.local",
+    "wifi": "DISABLED (rfkill-wifi-block.service)"
+  },
+  "plugins_verified": {
+    "P1_headingTrue": "v1.0.6 \u2705",
+    "P2_leeway": "v1.0.3 \u2705",
+    "P3_current": "v1.0.3 \u2705 (staleness removed)",
+    "P4_truewind": "v1.0.0 \u2705"
+  },
+  "n2k_research": {
+    "pgn_65280": "Navico timer heartbeat (1 Hz)",
+    "pgn_65312": "Timer auxiliary",
+    "payload_hypothesis": "bytes 4-5 = countdown seconds (uint16 LE)",
+    "status": "documented in docs/N2K-TIMER-RESEARCH.md"
+  },
+  "git_commits_today": 9,
+  "next_phase": "Field test 2026-05-19 with engine running"
 }
