@@ -1,16 +1,17 @@
 {
-  "task": "plugins-event-driven-all3",
-  "date": "2026-06-13T19:43:31.811357",
+  "task": "plugin4-truewind-v1.0.0",
+  "date": "2026-06-13T20:48:13.580700",
   "status": "SUCCESS",
-  "pattern": "streambundle.getSelfBus \u2014 event-driven at natural instrument cadence",
-  "versions": {
-    "P1": "v1.0.6",
-    "P2": "v1.0.3",
-    "P3": "v1.0.2"
+  "paths": {
+    "environment.wind.directionTrue": "radians TWD",
+    "environment.wind.speedTrue": "m/s TWS",
+    "environment.wind.angleTrueGround": "radians TWA +/-pi"
   },
+  "trigger": "streambundle.getSelfBus(windAngleApparent) \u2014 Calypso cadence",
+  "formula": "v_true = v_apparent + v_boat (Earth N/E frame vectors)",
   "errors": [],
   "services_status": {
     "signalk": "running"
   },
-  "next_recommended": "Grafana dashboards or field test"
+  "next_recommended": "Fix SK autostart + Grafana wind dashboard"
 }
