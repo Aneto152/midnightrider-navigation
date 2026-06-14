@@ -1,0 +1,12 @@
+[Unit]
+Description=Block WiFi to protect BLE (RPi4 shared 2.4GHz radio)
+After=network.target bluetooth.target
+Before=signalk.service wit-ble-direct.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/rfkill block wifi
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

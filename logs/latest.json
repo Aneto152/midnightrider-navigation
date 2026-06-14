@@ -1,17 +1,27 @@
 {
-  "task": "plugin4-truewind-v1.0.0",
-  "date": "2026-06-13T20:48:13.580700",
+  "task": "system-audit-cleanup-phases-2-3-4",
+  "date": "2026-06-13T22:39:49.596486",
   "status": "SUCCESS",
-  "paths": {
-    "environment.wind.directionTrue": "radians TWD",
-    "environment.wind.speedTrue": "m/s TWS",
-    "environment.wind.angleTrueGround": "radians TWA +/-pi"
-  },
-  "trigger": "streambundle.getSelfBus(windAngleApparent) \u2014 Calypso cadence",
-  "formula": "v_true = v_apparent + v_boat (Earth N/E frame vectors)",
-  "errors": [],
-  "services_status": {
-    "signalk": "running"
-  },
-  "next_recommended": "Fix SK autostart + Grafana wind dashboard"
+  "phases_completed": [
+    "PHASE 1: Full system audit completed",
+    "PHASE 2: mDNS conflict fixed (MidnightRider \u2192 midnightrider-nav.local)",
+    "PHASE 3: WiFi AP disabled (hostapd masked, rfkill blocks wifi)",
+    "PHASE 4: System configs added to git"
+  ],
+  "root_cause_mdns": "Another device claimed MidnightRider.local \u2192 Avahi renamed to midnightrider-2",
+  "fix_applied": "Hostname changed to midnightrider-nav \u2192 resolves as midnightrider-nav.local",
+  "wifi_ap_status": "hostapd masked, NM autoconnect disabled, rfkill-wifi-block.service at boot",
+  "configs_added": [
+    "config/system/avahi-daemon.conf",
+    "config/system/hostname",
+    "config/system/hosts",
+    "config/system/rfkill-wifi-block.sh",
+    "services/rfkill-wifi-block.service",
+    "services/signalk.service",
+    "services/wit-ble-direct.service",
+    "services/sok_direct.service",
+    "config/signalk/settings-sanitized.json (tokens redacted)"
+  ],
+  "ble_protected": true,
+  "next_test": "ping midnightrider-nav.local from client device"
 }
