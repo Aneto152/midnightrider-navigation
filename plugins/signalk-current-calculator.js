@@ -108,7 +108,7 @@ module.exports = function(app) {
     unsubscribes = [];
     stats = { derived:0, skipped:0, errors:0 };
 
-    svcLog('INFO','STARTUP: '+PLUGIN_ID+' v1.0.2');
+    svcLog('INFO','STARTUP: '+PLUGIN_ID+' v1.0.3');
     svcLog('INFO','CONFIG: alpha='+cfg.smoothingAlpha+' maxCurrent='+cfg.maxCurrentKts+'kts');
     if (app.setPluginStatus) app.setPluginStatus('Initialising...');
 
