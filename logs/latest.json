@@ -1,34 +1,21 @@
 {
-  "task": "phase2-polar-and-p5-build",
-  "date": "2026-06-14T16:35:03.489982",
+  "task": "fix-p5-critical-bugs",
+  "date": "2026-06-14T16:45:46.056496",
   "status": "SUCCESS",
-  "steps_completed": [
-    "Fixed npm package.json (removed broken file: references)",
-    "Installed signalk-polar-performance-plugin via npm",
-    "Created J/30 ORC polar CSV at data/polars/j30_orc.csv",
-    "Configured polar plugin (enabled, beatAngle, VMG, etc.)",
-    "Built P5 plugin signalk-n2k-bridge.js v1.0.0",
-    "Created 5 conversion modules (leeway, current, heading, attitude, bandg)",
-    "Verified all syntax (P5 + 5 conversions)",
-    "Verified signalk-to-nmea2000 UNTOUCHED and ENABLED"
+  "bugs_fixed": [
+    "BUG #1: signalk-n2k-bridge.js now dual-path: nmea2000JsonOut (standard PGNs), nmea2000out (B&G proprietary)",
+    "BUG #2: bandg-performance.js rewritten with correct raw Actisense hex encoding for PGN 130824",
+    "BUG #3: bandg-performance.js now includes performance.targetAngle and performance.beatAngle (7 keys total)"
   ],
-  "files_created": [
-    "plugins/signalk-n2k-bridge.js",
-    "plugins/signalk-n2k-bridge-package.json",
-    "plugins/n2k-conversions/leeway.js",
-    "plugins/n2k-conversions/current.js",
-    "plugins/n2k-conversions/heading.js",
-    "plugins/n2k-conversions/attitude.js",
-    "plugins/n2k-conversions/bandg-performance.js",
-    "data/polars/j30_orc.csv",
-    "~/.signalk/plugin-config-data/signalk-polar-performance-plugin.json"
+  "enhancements": [
+    "n2kReady guard added: waits for nmea2000OutAvailable event (8s timeout fallback)",
+    "n2kReady checks in sendValues: drops messages if bus not ready",
+    "Dual-path emit logic: handles both standard and proprietary PGNs correctly"
   ],
-  "system_status": {
-    "signalk": "running (not restarted)",
-    "signalk_to_nmea2000": "enabled \u2014 remains as backup",
-    "p5_plugin": "built \u2014 not yet activated (disabled by default)",
-    "polar_plugin": "installed + configured"
-  },
-  "next_phase": "Phase 3 \u2014 Activate P5, deactivate signalk-to-nmea2000, test N2K output",
-  "errors": []
+  "files_modified": [
+    "plugins/signalk-n2k-bridge.js (emit logic + n2kReady guard)",
+    "plugins/n2k-conversions/bandg-performance.js (full rewrite)"
+  ],
+  "syntax_verified": true,
+  "next_phase": "Phase 3 \u2014 activate P5, deactivate signalk-to-nmea2000, restart SK, test N2K output"
 }

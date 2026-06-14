@@ -62,6 +62,22 @@ module.exports = function(app) {
   let unsubscribes = []
   let heartbeatTimer = null
   let stats = {}
+  let n2kReady = false
+
+  // Wait for N2K bus to be ready
+  app.on('nmea2000OutAvailable', () => {
+    if (!n2kReady) {
+      n2kReady = true
+      log('INFO', 'STARTUP: N2K bus ready')
+    }
+  })
+  // Fallback timeout
+  setTimeout(() => {
+    if (!n2kReady) {
+      n2kReady = true
+      log('WARN', 'STARTUP: nmea2000OutAvailable timeout — assuming ready')
+    }
+  }, 8000)
 
   const conversions = loadConversions()
 
@@ -137,9 +153,25 @@ module.exports = function(app) {
 
         for (const item of result) {
           if (!item) continue
-          log('DEBUG', `DATA_OUT: PGN ${item.pgn} — ${conv.optionKey}`)
           stats[conv.optionKey] = (stats[conv.optionKey] || 0) + 1
-          app.emit('nmea2000out', item)
+          
+          if (item.__bandg_raw) {
+            // B&G proprietary PGN 130824 — raw Actisense format
+            if (!n2kReady) {
+              log('WARN', 'N2K not ready — dropping PGN 130824')
+              continue
+            }
+            app.emit('nmea2000out', item.__bandg_raw)
+            log('DEBUG', `DATA_OUT: PGN 130824 (B&G) — ${conv.optionKey}`)
+          } else {
+            // Standard NMEA 2000 PGN — JSON canboatjs format
+            if (!n2kReady) {
+              log('WARN', `N2K not ready — dropping PGN ${item.pgn}`)
+              continue
+            }
+            app.emit('nmea2000JsonOut', item)
+            log('DEBUG', `DATA_OUT: PGN ${item.pgn} (standard) — ${conv.optionKey}`)
+          }
         }
       } catch (e) {
         log('ERROR', `Conversion error: ${e.message}`)
