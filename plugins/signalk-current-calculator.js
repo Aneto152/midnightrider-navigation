@@ -1,7 +1,7 @@
 'use strict';
 /**
  * @file signalk-current-calculator.js
- * @version 1.0.3
+ * @version 1.0.4
  * @license MIT
  * CHANGELOG
  * v1.0.2 — Event-driven: fires on every SOG update (GPS cadence).
@@ -83,7 +83,7 @@ module.exports = function(app) {
     id: PLUGIN_ID,
     name: 'Water Current Calculator (Set & Drift)',
     description: 'Event-driven on SOG updates. CTW=HT+leeway. EMA smoothed.',
-    version: '1.0.3',
+    version: '1.0.4',
     schema: { type:'object', title:'Water Current Calculator', properties: {
       minSOG: { type:'number', title:'Min SOG m/s', default:0.3, minimum:0, maximum:2.0 },
       minSTW: { type:'number', title:'Min STW m/s', default:0.3, minimum:0, maximum:2.0 },
@@ -164,6 +164,40 @@ module.exports = function(app) {
       unsubscribes.push(function(){ clearInterval(fb); });
       svcLog('WARN','SUBSCRIPTION: polling fallback 1000ms');
     }
+
+    // Status timer: show plugin status every 5s (GPS waiting indicator)
+
+
+    var statusTimer = setInterval(function() {
+
+
+      var sog = app.getSelfPath('navigation.speedOverGround');
+
+
+      var stw = app.getSelfPath('navigation.speedThroughWater');
+
+
+      if (!sog || sog.value == null) {
+
+
+        app.setPluginStatus('⏳ Waiting for GPS (SOG unavailable)');
+
+
+      } else if (!stw || stw.value == null) {
+
+
+        app.setPluginStatus('⏳ Waiting for STW sensor');
+
+
+      }
+
+
+    }, 5000);
+
+
+    unsubscribes.push(function(){ clearInterval(statusTimer); });
+
+
 
     heartbeatTimer = setInterval(function() {
       var dk = smoothN!=null ?(Math.sqrt(smoothN*smoothN+smoothE*smoothE)*MS_TO_KTS).toFixed(2)+'kts' : 'N/A';
