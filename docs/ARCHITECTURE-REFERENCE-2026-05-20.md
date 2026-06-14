@@ -2,8 +2,8 @@
 
 **Voilier :** J/30 hull 511 — Midnight Rider  
 **Skipper :** Denis LAFARGE  
-**Date :** 2026-06-14  
-**Version :** 4.1 — Canonical Reference  
+**Date :** 2026-06-14 (Phase 1 cleanup)  
+**Version :** 4.3 (Phase 1 cleanup) — Canonical Reference  
 **Statut :** ✅ Production — Block Island Race 2026-05-22
 
 > Ce document est la **référence canonique** de l'architecture système.  

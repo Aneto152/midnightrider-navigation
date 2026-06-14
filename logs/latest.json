@@ -1,37 +1,32 @@
 {
-  "task": "polar-plugin-audit",
-  "date": "2026-06-14T15:55:22.921038",
+  "task": "phase-1-cleanup",
+  "date": "2026-06-14T16:23:06.572395",
   "status": "SUCCESS",
-  "findings": {
-    "polar_plugins_status": "NOT INSTALLED / NON-FUNCTIONAL",
-    "signalk_performance_polars": "config exists, plugin missing from node_modules",
-    "signalk_sails_management_v2": "config exists, plugin missing from node_modules",
-    "signalk_bandg_performance_plugin": "NOT INSTALLED",
-    "n2k_mappings": "0 (EMPTY) \u2014 no performance data to Vulcan",
-    "performance_sk_paths": "NONE available"
-  },
-  "data_flow": {
-    "gps_heading_sog": "UM982 \u2192 SK \u2705",
-    "imu_heel_pitch": "WIT IMU \u2192 SK \u2705",
-    "wind_apparent_true": "Calypso/WS320 \u2192 SK \u2705",
-    "current_set_drift": "current-calculator v1.0.3 \u2192 SK \u2705",
-    "performance_polar": "OFFLINE"
-  },
-  "recommendation": "Skip polar for field test 2026-05-19. Core navigation (P1-P4) complete.",
   "steps_completed": [
-    "Identified polar plugin package names",
-    "Checked SK node_modules for polar plugins",
-    "Verified signalk-to-nmea2000 configuration",
-    "Confirmed N2K mappings are empty",
-    "Checked InfluxDB for performance fields",
-    "Verified bandg plugin NOT installed"
+    "Backed up orphaned plugin configs to archive",
+    "Removed signalk-performance-polars.json",
+    "Removed signalk-sails-management-v2.json",
+    "Verified signalk-to-nmea2000 intact",
+    "Verified SK running, P1-P4 active",
+    "Updated ARCHITECTURE-REFERENCE to v4.3",
+    "Documented cleanup in git"
   ],
-  "files_modified": [],
-  "services_checked": {
-    "signalk": "running",
-    "influxdb": "running",
-    "grafana": "running"
+  "files_modified": [
+    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md (v4.3)",
+    "archive/plugin-configs-backup-2026-06-14/ (backup)"
+  ],
+  "files_deleted": [
+    "~/.signalk/plugin-config-data/signalk-performance-polars.json",
+    "~/.signalk/plugin-config-data/signalk-sails-management-v2.json"
+  ],
+  "system_status": {
+    "signalk": "active (running)",
+    "P1_headingTrue": "active",
+    "P2_leeway": "available",
+    "P3_current": "available",
+    "P4_truewind": "active",
+    "signalk_to_nmea2000": "enabled, intact"
   },
   "errors": [],
-  "next_phase": "Field test 2026-05-19 with core navigation only"
+  "next_phase": "Field test 2026-05-19"
 }
