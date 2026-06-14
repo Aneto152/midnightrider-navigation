@@ -1,32 +1,34 @@
 {
-  "task": "phase-1-cleanup",
-  "date": "2026-06-14T16:23:06.572395",
+  "task": "phase2-polar-and-p5-build",
+  "date": "2026-06-14T16:35:03.489982",
   "status": "SUCCESS",
   "steps_completed": [
-    "Backed up orphaned plugin configs to archive",
-    "Removed signalk-performance-polars.json",
-    "Removed signalk-sails-management-v2.json",
-    "Verified signalk-to-nmea2000 intact",
-    "Verified SK running, P1-P4 active",
-    "Updated ARCHITECTURE-REFERENCE to v4.3",
-    "Documented cleanup in git"
+    "Fixed npm package.json (removed broken file: references)",
+    "Installed signalk-polar-performance-plugin via npm",
+    "Created J/30 ORC polar CSV at data/polars/j30_orc.csv",
+    "Configured polar plugin (enabled, beatAngle, VMG, etc.)",
+    "Built P5 plugin signalk-n2k-bridge.js v1.0.0",
+    "Created 5 conversion modules (leeway, current, heading, attitude, bandg)",
+    "Verified all syntax (P5 + 5 conversions)",
+    "Verified signalk-to-nmea2000 UNTOUCHED and ENABLED"
   ],
-  "files_modified": [
-    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md (v4.3)",
-    "archive/plugin-configs-backup-2026-06-14/ (backup)"
-  ],
-  "files_deleted": [
-    "~/.signalk/plugin-config-data/signalk-performance-polars.json",
-    "~/.signalk/plugin-config-data/signalk-sails-management-v2.json"
+  "files_created": [
+    "plugins/signalk-n2k-bridge.js",
+    "plugins/signalk-n2k-bridge-package.json",
+    "plugins/n2k-conversions/leeway.js",
+    "plugins/n2k-conversions/current.js",
+    "plugins/n2k-conversions/heading.js",
+    "plugins/n2k-conversions/attitude.js",
+    "plugins/n2k-conversions/bandg-performance.js",
+    "data/polars/j30_orc.csv",
+    "~/.signalk/plugin-config-data/signalk-polar-performance-plugin.json"
   ],
   "system_status": {
-    "signalk": "active (running)",
-    "P1_headingTrue": "active",
-    "P2_leeway": "available",
-    "P3_current": "available",
-    "P4_truewind": "active",
-    "signalk_to_nmea2000": "enabled, intact"
+    "signalk": "running (not restarted)",
+    "signalk_to_nmea2000": "enabled \u2014 remains as backup",
+    "p5_plugin": "built \u2014 not yet activated (disabled by default)",
+    "polar_plugin": "installed + configured"
   },
-  "errors": [],
-  "next_phase": "Field test 2026-05-19"
+  "next_phase": "Phase 3 \u2014 Activate P5, deactivate signalk-to-nmea2000, test N2K output",
+  "errors": []
 }
