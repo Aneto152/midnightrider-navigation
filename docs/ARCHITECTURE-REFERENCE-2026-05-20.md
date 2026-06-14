@@ -3,7 +3,7 @@
 **Voilier :** J/30 hull 511 — Midnight Rider  
 **Skipper :** Denis LAFARGE  
 **Date :** 2026-06-13  
-**Version :** 4.0 — Canonical Reference  
+**Version :** 4.1 — Canonical Reference  
 **Statut :** ✅ Production — Block Island Race 2026-05-22
 
 > Ce document est la **référence canonique** de l'architecture système.  
@@ -120,9 +120,9 @@ RPi 4 BLE adapter (hci0)
 | Service | Instrument | Rôle |
 |---------|-----------|------|
 | `signalk.service` | WIT (via plugin) | Lecture IMU, injection SK |
-| `calypso_anemometer` | Calypso UP10 | Lecture vent BLE → UDP 4123 |
-| `calypso_watchdog` | Calypso UP10 | Redémarrage auto si déconnexion |
-| `sok_bms_reader` | SOK BMS | Lecture BMS → direct InfluxDB |
+| `calypso_direct` | Calypso UP10 | Lecture vent BLE → UDP 4123 |
+| `calypso_watchdog` (obsolète) | Calypso UP10 | Redémarrage auto si déconnexion |
+| `sok_direct` | SOK BMS | Lecture BMS → direct InfluxDB |
 
 ### 3.3 NMEA 2000 (backbone bateau)
 
@@ -178,6 +178,10 @@ RPi 4 (192.168.1.131)
 | `signalk-to-nmea2000` | Émission PGNs → YDNU-02 → N2K | — |
 | `signalk-to-influxdb2` | Persistence SK → InfluxDB | — |
 | `signalk-performance-polars` | Calcul VMG, efficacité polaire | `performance.*` |
+| signalk-heading-true-calculator | Cap vrai (HM + variation mag.) | navigation.headingTrue |
+| signalk-j30-leeway | Dérive J/30 = K×|gîte|/STW² | performance.leewayAngle |
+| signalk-current-calculator | Courant (set + drift) | environment.current.* |
+| signalk-truewind-calculator | Vent vrai (TWD/TWS/TWA) | environment.wind.* |
 | `signalk-astronomical` | Données soleil/lune | `environment.sun.*` |
 | `signalk-rpi-cpu-temp` | Temp CPU RPi | `environment.rpi.*` |
 | `signalk-sails-management-v2` | Gestion voiles | `sails.*` |

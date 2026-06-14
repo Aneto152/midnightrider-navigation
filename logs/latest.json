@@ -1,23 +1,20 @@
 {
-  "task": "fix-ip-single-192.168.1.131",
-  "date": "2026-06-13T22:53:19.272827",
+  "task": "phase5-documentation-canonical",
+  "date": "2026-06-13T23:01:45.096471",
   "status": "SUCCESS",
-  "root_cause": "avahi-mdns-fix.service hardcoded IP 192.168.1.167 \u2192 caused avahi to rename host to midnightrider-2.local. Secondary DHCP IP 192.168.1.132 conflicted with NM static IP.",
   "fixes": [
-    "Deleted avahi-mdns-fix.service (stale workaround)",
-    "Set netplan eth0 dhcp4=False (disable DHCP)",
-    "Set dhcpcd eth0 static IP 192.168.1.131",
-    "Removed secondary DHCP IP 192.168.1.132",
-    "Updated docs: all 192.168.1.167 \u2192 192.168.1.131"
+    "avahi-daemon.conf: allow-interfaces=eth0 only (wlan0 removed)",
+    "config/wifi-ap.txt: marked HISTORICAL/DISABLED (2026-06-13)",
+    "ARCHITECTURE v4.1: IP 192.168.1.167 \u2192 192.168.1.131 (all refs)",
+    "ARCHITECTURE v4.1: Section 3.4 WiFi AP \u2192 Ethernet + rfkill note",
+    "ARCHITECTURE v4.1: Phase 2 plugins added to table",
+    "ARCHITECTURE v4.1: Service names corrected (calypso_direct, sok_direct)"
   ],
-  "network_final": {
-    "ip": "192.168.1.131",
-    "gateway": "192.168.1.1",
-    "dns": "8.8.8.8, 1.1.1.1",
-    "hostname": "MidnightRider",
-    "mdns": "MidnightRider.local \u2192 192.168.1.131",
-    "wifi": "DISABLED (rfkill-wifi-block.service)",
-    "ble": "PROTECTED (hci0)"
-  },
-  "docs_updated": 12
+  "docs_aligned": [
+    "config/system/ (git)",
+    "services/ (git)",
+    "docs/ARCHITECTURE-REFERENCE v4.1",
+    "Reality: avahi eth0, 192.168.1.131 static, WiFi disabled"
+  ],
+  "errors": []
 }

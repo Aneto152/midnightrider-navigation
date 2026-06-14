@@ -1,3 +1,12 @@
+# ⚠️ HISTORIQUE — DÉSACTIVÉ DÉFINITIVEMENT (2026-06-13)
+# Ce fichier documente l'ancienne configuration du point d'accès WiFi.
+# L'AP WiFi est désactivée définitivement pour protéger le BLE (hci0).
+# - hostapd: masked (sudo systemctl is-enabled hostapd → masked)
+# - rfkill-wifi-block.service: bloque wlan0 à chaque boot
+# - Raison: WiFi et BLE partagent la radio 2.4GHz du RPi4
+# Ne PAS réactiver sans d'abord désactiver tous les services BLE.
+# ---
+
 connection.id:                          MidnightRider-AP
 connection.uuid:                        c547d5b1-1cdb-4851-8e0d-46ead360592a
 connection.stable-id:                   --
