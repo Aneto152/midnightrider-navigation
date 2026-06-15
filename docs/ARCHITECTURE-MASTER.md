@@ -336,6 +336,28 @@ AIS700 Class B (N2K PGNs 129038–129810)
 
 ---
 
+### 5.6 AIS Competitor Tracker (`ais/`)
+
+Added Phase J-1 (2026-06-15). Real-time competitor tracking via Signal K AIS.
+
+| File | Role |
+|------|------|
+| `ais/__init__.py` | Package marker |
+| `ais/ais_lib.py` | Math library: haversine, bearing, TWA, VMG wind/mark, delta, color logic |
+| `ais/competitors_db.py` | CompetitorDB: load/enrich/search from regatta/competitors.json, TTL 5min |
+| `ais/ais_watch.py` | Optional daemon: polls Signal K every 30s, writes to InfluxDB measurement `competitor_tracking` |
+| `ais/server_handlers.py` | API handlers: `api_competitors()` + `api_fleet_db()` (imported via /repo/ais in Docker) |
+
+**API Endpoints** (regatta port 5000):
+- `GET /api/competitors?radius_nm=10&min_sog_kts=0&vmg_mode=wind|mark&include_unknown=false`
+  Returns competitors within radius with TWA, VMG wind/mark, color (GREEN/RED/NEUTRAL)
+- `GET /api/fleet_db`
+  Returns all 68 boats with AIS status (live/stale/old/absent)
+
+**Color Logic**: GREEN = VMG_MR > VMG_comp (gaining ground) | RED = VMG_comp > VMG_MR (losing ground) | NEUTRAL = equal or unknown
+
+**Database**: 68 total boats, 56 active, 56 with MMSI (from `regatta/competitors.json`)
+
 ## 6. PRIORITÉS DES SOURCES SIGNAL K
 
 | Path Signal K | Priorité 1 (haute) | Priorité 2 | Priorité 3 |

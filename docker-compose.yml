@@ -37,7 +37,7 @@ services:
     working_dir: /app
     volumes:
     - ./regatta:/app
-    - /home/aneto/midnightrider-navigation:/repo
+    - /home/aneto/midnightrider-navigation:/repo # absolute: OC CWD differs from repo
     command: python server.py
     env_file:
     - .env
