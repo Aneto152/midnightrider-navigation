@@ -20,8 +20,9 @@ const path = require('path')
 const fs = require('fs')
 
 const PLUGIN_ID = 'signalk-n2k-bridge'
+const PROJECT_ROOT = '/home/aneto/midnightrider-navigation'
 const CONVERSION_DIR = path.join(__dirname, 'n2k-conversions')
-const LOG_FILE = path.join(__dirname, '../logs/services/signalk-n2k-bridge.log')
+const LOG_FILE = path.join(PROJECT_ROOT, 'logs/services/signalk-n2k-bridge.log')
 
 // --- Logger ---
 function log(level, message) {

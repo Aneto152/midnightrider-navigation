@@ -1,18 +1,28 @@
 {
-  "task": "phase3-p5-activation",
-  "date": "2026-06-14T20:03:27.575012",
+  "task": "fix-p5-log-path",
+  "date": "2026-06-14T20:20:57.528574",
   "status": "SUCCESS",
   "steps_completed": [
-    "P5 installed to ~/.signalk/node_modules/signalk-n2k-bridge/",
-    "P5 config created: bandgPerformance=ENABLED, others=disabled",
-    "signalk-to-nmea2000 DISABLED (remains as backup)",
+    "signalk-n2k-bridge.js: LOG_FILE now uses absolute PROJECT_ROOT path",
+    "P5 reinstalled as v1.0.1 in ~/.signalk/node_modules/",
     "SK restarted via systemctl",
-    "P5 plugin active (no log yet \u2014 may need performance.* data)"
+    "Log file confirmed at midnightrider-navigation/logs/services/signalk-n2k-bridge.log",
+    "All 5 conversions loaded successfully"
+  ],
+  "files_modified": [
+    "plugins/signalk-n2k-bridge.js (PROJECT_ROOT + LOG_FILE paths)"
+  ],
+  "log_sample": [
+    "Loaded conversion: Vessel Attitude (PGN 127257)",
+    "Loaded conversion: B&G Performance Data (PGN 130824)",
+    "Loaded conversion: Current Set & Drift (PGN 129291)",
+    "Loaded conversion: True Heading (PGN 127250)",
+    "Loaded conversion: Leeway Angle (PGN 128000)"
   ],
   "n2k_status": {
-    "signalk-to-nmea2000": "DISABLED (backup)",
-    "signalk-n2k-bridge-P5": "ACTIVE",
-    "bandgPerformance": "ENABLED \u2014 PGN 130824 active"
-  },
-  "next_step": "Check Vulcan 7 for Polar Speed + % Performance display"
+    "signalk-to-nmea2000": "DISABLED",
+    "signalk-n2k-bridge-P5": "ACTIVE v1.0.1",
+    "bandgPerformance": "ENABLED \u2014 PGN 130824",
+    "logging": "FIXED \u2014 correct path confirmed"
+  }
 }
