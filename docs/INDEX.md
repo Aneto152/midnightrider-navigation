@@ -235,3 +235,17 @@ docs/
 
 **Last updated:** 2026-06-15  
 **Status:** ✅ Production v1.0 — All phases A-E complete, SSOT enforced
+
+---
+
+## 🧭 AIS Competitor Tracker
+
+| File | Role |
+|------|------|
+| **[ais/README.md](../ais/README.md)** | Module documentation |
+| `ais/ais_lib.py` | Math: haversine, bearing, TWA, VMG, delta, color |
+| `ais/competitors_db.py` | CompetitorDB: load/enrich/search, TTL 5min |
+| `ais/ais_watch.py` | Daemon: SK → InfluxDB every 30s |
+| `ais/server_handlers.py` | API: `/api/competitors` + `/api/fleet_db` |
+
+**Unit tests:** `tests/test_ais_lib.py` (24) · `tests/test_competitors_db.py` (9) · `tests/test_server_handlers.py` (6) — 39 total

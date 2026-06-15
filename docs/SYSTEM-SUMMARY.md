@@ -160,3 +160,13 @@ SIGNAL K HUB (localhost:3000)
 **SYSTEM STATUS:** ✅ **POST-RACE — PRODUCTION READY**
 
 *Last updated: 2026-05-31 by OC*
+
+---
+
+## AIS Competitor Tracker (Phase J-1/J-2 — 2026-06-15)
+
+```bash
+curl "http://localhost:5000/api/fleet_db" # 68 boats, 56 active
+curl "http://localhost:5000/api/competitors?radius_nm=15" # needs GPS
+```
+Color: GREEN=VMG_MR>VMG_comp | RED=VMG_comp>VMG_MR | Tests: 39/39 PASS
