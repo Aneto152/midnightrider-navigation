@@ -96,3 +96,4 @@ USER.md
 venv/
 .vscode/
 yarn-error.log
+logs/calypso-*.log

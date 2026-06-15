@@ -16,7 +16,7 @@ services:
     volumes:
     - grafana-data:/var/lib/grafana
     - grafana-config:/etc/grafana
-    - ./grafana-custom.ini:/etc/grafana/provisioning/grafana.ini
+    - ./config/grafana-custom.ini:/etc/grafana/provisioning/grafana.ini
     - ./grafana-provisioning/dashboards:/etc/grafana/provisioning/dashboards
     - ./grafana-provisioning/datasources:/etc/grafana/provisioning/datasources
     - ./grafana-provisioning/alerting:/etc/grafana/provisioning/alerting:ro
