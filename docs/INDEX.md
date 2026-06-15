@@ -11,7 +11,7 @@ Complete reference guide for the Midnight Rider navigation system.
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** — How to contribute
 
 ### System Architecture
-- **[ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md](ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md)** — Full system design
+- **[docs/ARCHITECTURE-MASTER.md](docs/ARCHITECTURE-MASTER.md)** — Full system design
 - **[System Summary](SYSTEM-SUMMARY.md)** — High-level overview
 
 ---
@@ -168,7 +168,7 @@ Alert categories:
 ```
 docs/
 ├── INDEX.md (this file)
-├── ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md
+├── docs/ARCHITECTURE-MASTER.md
 ├── SYSTEM-SUMMARY.md
 ├── SYSTEM-CHECKLIST.md
 ├── WHATSAPP_REPORTER.md
@@ -208,7 +208,7 @@ docs/
 1. **New to the project?** Start with [README.md](../README.md)
 2. **Setting up hardware?** Go to [INTEGRATION/](INTEGRATION/)
 3. **Running the system?** Check [OPERATIONS/](OPERATIONS/)
-4. **Understanding architecture?** Read [ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md](ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md)
+4. **Understanding architecture?** Read [docs/ARCHITECTURE-MASTER.md](docs/ARCHITECTURE-MASTER.md)
 5. **Need help?** See [OPERATIONS/TROUBLESHOOTING.md](OPERATIONS/TROUBLESHOOTING.md)
 
 ---

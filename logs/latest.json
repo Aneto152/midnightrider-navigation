@@ -1,24 +1,36 @@
 {
-  "task": "fix-log-structure-missing",
-  "date": "2026-06-14T23:23:55.887168",
+  "task": "repo-cleanup-phase-C",
+  "date": "2026-06-14T23:32:11.213303",
   "status": "SUCCESS",
   "steps_completed": [
-    "STEP 1: Diagnosed .gitignore blocking logs/ commit",
-    "STEP 2: .gitignore fixed \u2014 broad logs/* rule replaced with specific exclusions",
-    "STEP 3: 4 mandatory log files created (oc-actions, data-flow, aggregate-errors, .gitkeep)",
-    "STEP 4: git add -f forced staging of all log files"
-  ],
-  "files_modified": [
-    ".gitignore"
+    "STEP1: logs/ble_diagnostic.txt removed, logs/*.txt added to .gitignore",
+    "STEP2: Both architecture docs read (ref doc was most complete)",
+    "STEP3: docs/ARCHITECTURE-MASTER.md created (v5.0 consolidated)",
+    "STEP4: docs/ARCHITECTURE-REFERENCE-2026-05-20.md deleted",
+    "STEP5: docs/INDEX.md references updated to ARCHITECTURE-MASTER",
+    "STEP6: SIGNALK-PLUGINS-INVENTORY.md audited + dead plugins marked DELETED"
   ],
   "files_created": [
-    "logs/oc-actions.log",
-    "logs/debug/data-flow.log",
-    "logs/debug/aggregate-errors.sh",
-    "logs/services/.gitkeep"
+    "docs/ARCHITECTURE-MASTER.md"
   ],
-  "root_cause": ".gitignore had \"logs/*\" on line 50 \u2014 too broad, blocked all log commits",
-  "solution": "Replaced with specific exclusions: calypso-*.log, services/*.log, debug/*.log (with ! exceptions)",
-  "errors": [],
-  "next_phase": "Phase C: merge ARCHITECTURE docs + update SIGNALK-PLUGINS-INVENTORY"
+  "files_deleted": [
+    "logs/ble_diagnostic.txt",
+    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md"
+  ],
+  "files_modified": [
+    "docs/INDEX.md",
+    "docs/SIGNALK-PLUGINS-INVENTORY.md",
+    ".gitignore"
+  ],
+  "architecture_status": {
+    "canonical_doc": "docs/ARCHITECTURE-MASTER.md v5.0",
+    "previous_docs": "DELETED (cleanup complete)",
+    "sections_covered": "All (1. Overview, 2. Hardware, 3. Networks, 4. Software Stack, 5. Data Flow, 6. Custom Plugins)"
+  },
+  "plugin_status": {
+    "enabled_total": 9,
+    "disabled_total": 5,
+    "deleted_and_marked": 3
+  },
+  "next_recommended": "Full repo cleanup COMPLETE \u2014 ready for production deployment"
 }

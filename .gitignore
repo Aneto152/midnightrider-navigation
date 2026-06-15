@@ -101,3 +101,4 @@ venv/
 .vscode/
 yarn-error.log
 logs/calypso-*.log
+logs/*.txt

@@ -1,14 +1,11 @@
-# MIDNIGHT RIDER — ARCHITECTURE SYSTÈME DE RÉFÉRENCE
+# Midnight Rider Navigation System — Architecture Master Reference
+Version: 5.0 (consolidated from previous v4.x documents)
+Last Updated: 2026-06-14
+Status: ✅ PRODUCTION — Canonical architecture reference
+Source: Merged from ARCHITECTURE-REFERENCE-2026-05-20.md
 
-**Voilier :** J/30 hull 511 — Midnight Rider  
-**Skipper :** Denis LAFARGE  
-**Date :** 2026-06-15 (Phase 1 cleanup)  
-**Version :** 4.3 (Phase 1 cleanup) — Canonical Reference  
-**Statut :** ✅ Production — Block Island Race 2026-05-22
-
-> Ce document est la **référence canonique** de l'architecture système.  
-> En cas de divergence avec un autre fichier, ce document fait foi.  
-> Mettre à jour après chaque modification structurelle significative.
+> Note: This document is now the single canonical architecture reference.
+> All future updates MUST be made to this file only.
 
 ---
 
