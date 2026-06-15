@@ -37,7 +37,7 @@ services:
     working_dir: /app
     volumes:
     - ./regatta:/app
-    - ./:/repo
+    - /home/aneto/midnightrider-navigation:/repo
     command: python server.py
     env_file:
     - .env
