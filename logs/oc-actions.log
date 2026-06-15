@@ -20,3 +20,8 @@
 [2026-06-14T23:42:06.712799] [RESULT] SUCCESS — micro-fix complete
 [2026-06-15T12:30:26.066835] [FILE_MODIFY] README.md fully rewritten — tiered structure, 13 dashboards, P1-P5 plugins
 [2026-06-15T12:30:26.066835] [RESULT] SUCCESS — README now accurate and agent-friendly
+[2026-06-15T12:57:05.634711] [PHASE_E] Step 1: Renamed 3 HARDWARE files (spaces → hyphens)
+[2026-06-15T12:57:05.634711] [PHASE_E] Step 2: Created N2K-NETWORK-ARCHITECTURE.md (v1.0 SSOT)
+[2026-06-15T12:57:05.634711] [PHASE_E] Step 3: Updated ARCHITECTURE-MASTER.md v5.1 → v5.2
+[2026-06-15T12:57:05.634711] [PHASE_E] Added Section 8: Signal K Sources & Priorities
+[2026-06-15T12:57:05.634711] [PHASE_E] Updated Section 2.3: N2K Bus now references SSOT

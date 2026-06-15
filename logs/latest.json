@@ -1,32 +1,25 @@
 {
-  "task": "readme-rewrite",
-  "date": "2026-06-15T12:30:26.066835",
-  "status": "SUCCESS",
+  "task": "phase-E-ssot-n2k-instruments",
+  "date": "2026-06-15T12:57:05.634711",
+  "status": "IN_PROGRESS",
   "steps_completed": [
-    "STEP 1: current facts gathered",
-    "STEP 2: README.md fully rewritten with tiered structure",
-    "STEP 3: verified structure, links, dashboard count"
+    "STEP 1: Renamed 3 HARDWARE files (BG WS320, AIS700, YDBC-05)",
+    "STEP 2: Created N2K-NETWORK-ARCHITECTURE.md (v1.0 SSOT)",
+    "STEP 3: Updated ARCHITECTURE-MASTER.md v5.2",
+    "STEP 4: Added Section 8 (Signal K Sources)",
+    "STEP 5: Redirected Section 2.3 to SSOT"
   ],
   "files_modified": [
-    "README.md"
+    "docs/HARDWARE/BG-WS320-DATASHEET.md (renamed)",
+    "docs/HARDWARE/AIS700-DATASHEET.md (renamed)",
+    "docs/HARDWARE/YDBC-05-DATASHEET.md (renamed)",
+    "docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md (NEW)",
+    "docs/ARCHITECTURE-MASTER.md (updated to v5.2)"
   ],
-  "sections_added": [
-    "How to Read This Repo",
-    "What It Does",
-    "Data Pipeline",
-    "Repository Structure",
-    "Stack at a Glance",
-    "Instruments (details drawer)",
-    "Plugins P1-P5 (details drawer)",
-    "Grafana Dashboards (details drawer)",
-    "AI Integration (details drawer)",
-    "Quick Start",
-    "Configuration",
-    "Production Status"
-  ],
-  "verification": {
-    "ARCHITECTURE-MASTER_links": "present",
-    "dashboard_count": 13,
-    "no_sensitive_IPs": true
-  }
+  "ssot_established": [
+    "N2K-NETWORK-ARCHITECTURE.md: bus topology, LEN budget, PGN flows",
+    "HARDWARE/*.md: device specs remain canonical",
+    "INTEGRATION/*.md: per-device setup remains canonical",
+    "ARCHITECTURE-MASTER.md: now references SSOT"
+  ]
 }
