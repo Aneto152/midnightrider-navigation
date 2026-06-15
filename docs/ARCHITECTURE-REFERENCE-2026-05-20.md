@@ -2,7 +2,7 @@
 
 **Voilier :** J/30 hull 511 — Midnight Rider  
 **Skipper :** Denis LAFARGE  
-**Date :** 2026-06-14 (Phase 1 cleanup)  
+**Date :** 2026-06-15 (Phase 1 cleanup)  
 **Version :** 4.3 (Phase 1 cleanup) — Canonical Reference  
 **Statut :** ✅ Production — Block Island Race 2026-05-22
 
@@ -35,7 +35,7 @@ InfluxDB et les visualisant dans Grafana.
 │  SOK BMS (BLE) ─────────────────────────────────────► InfluxDB │
 │                                                      │          │
 │                                           │         ▼          │
-│  Signal K ──► signalk-to-nmea2000 ──────────────► Grafana :3001│
+│  Signal K ──► signalk-n2k-bridge (P5) ──────────────► Grafana :3001│
 │                    │                                            │
 │                    ▼                                            │
 │               YDNU-02 (USB/N2K) ──► N2K backbone               │
@@ -175,7 +175,7 @@ RPi 4 (192.168.1.131)
 |--------|------|-----------|
 | `signalk-um982-gnss` | Lecture UM982 (NMEA+proprietary) | `signalk-um982-gnss.UM982-HDG` |
 | `signalk-wit-imu-ble` | Lecture WIT IMU BLE | `signalk-wit-imu-ble.XX` |
-| `signalk-to-nmea2000` | Émission PGNs → YDNU-02 → N2K | — |
+| `signalk-n2k-bridge (P5)` | Émission PGNs → YDNU-02 → N2K | — |
 | `signalk-to-influxdb2` | Persistence SK → InfluxDB | — |
 | `signalk-performance-polars` | Calcul VMG, efficacité polaire | `performance.*` |
 | signalk-heading-true-calculator | Cap vrai (HM + variation mag.) | navigation.headingTrue |
@@ -259,7 +259,7 @@ UM982 GNSS (ANT1 + ANT2)
 signalk-um982-gnss plugin
   ↓ Signal K — navigation.headingTrue (radians)
   ├──► InfluxDB → Grafana 01-Cockpit
-  └──► signalk-to-nmea2000
+  └──► signalk-n2k-bridge (P5)
          ↓ PGN 127250 (Vessel Heading)
          YDNU-02 → N2K bus
          └── Vulcan 7 FS (affichage helm)
@@ -276,7 +276,7 @@ WIT WT901BLECL (BLE 5.0, 30 Hz)
   ├──► InfluxDB → Grafana 01-Cockpit
   ├──► Wave Analyzer v1.1 (heel correction)
   │       ↓ environment.water.waves.*
-  └──► signalk-to-nmea2000
+  └──► signalk-n2k-bridge (P5)
          ↓ PGN 127257 (Attitude)    ← attitude.js patché 2026-05-17
          YDNU-02 → N2K bus
          └── Vulcan 7 FS (affichage gîte en temps réel)
@@ -290,7 +290,7 @@ Calypso UP10 (BLE → UDP 4123) — PRIORITÉ 1 pour Signal K
   ↓ Signal K Delta UDP port 4123
   ↓ environment.wind.{speedApparent, angleApparent, speedTrue, directionTrue}
   ├──► InfluxDB → Grafana 02-Environment
-  └──► signalk-to-nmea2000 → PGN 130306 → Vulcan 7
+  └──► signalk-n2k-bridge (P5) → PGN 130306 → Vulcan 7
 
 B&G WS320 (BLE → base station → N2K) — PRIORITÉ 2 pour Signal K
   ↓ NMEA 2000 PGN 130306 (5 Hz) — DIRECT vers Vulcan 7 FS
@@ -601,7 +601,7 @@ midnightrider-navigation/
 
 ---
 
-## Changelog — 2026-06-13 — WIT Acceleration Corrected
+## Changelog — 2026-06-15 — WIT Acceleration Corrected
 
 **Commits:** 039581b + e052630 + 9fe25f2d
 
@@ -614,15 +614,15 @@ midnightrider-navigation/
 - AX=0x34, AY=0x35, AZ=0x36 (acceleration)
 - GX=0x37, GY=0x38, GZ=0x39 (gyro rate)
 
-**Confirmed Values at Dock (2026-06-13 12:02 EDT):**
+**Confirmed Values at Dock (2026-06-15 12:02 EDT):**
 - Acceleration magnitude: 10.005 m/s² (expected gravity ≈ 9.81 m/s²) ✅
 - Rate of turn: -0.02 rad/s (vessel at rest) ✅
 - WIT mounted level on companionway ✅
 
-**Logging:** WIT + Calypso raised to INFO level (2026-06-13) — was DEBUG @ 8 msg/sec, now <2 msg/sec production logging.
+**Logging:** WIT + Calypso raised to INFO level (2026-06-15) — was DEBUG @ 8 msg/sec, now <2 msg/sec production logging.
 
 
-## ⚠️ NOTE ARCHITECTURALE — 2026-06-14 AUDIT
+## ⚠️ NOTE ARCHITECTURALE — 2026-06-15 AUDIT
 
 ### Corrections apportées
 
@@ -630,13 +630,13 @@ midnightrider-navigation/
 |---|---|---|---|
 | signalk-performance-polars | "Actif" | Config orpheline, jamais installé | ✅ SUPPRIMÉ |
 | signalk-sails-management-v2 | "Actif" | Config orpheline, jamais installé | ✅ SUPPRIMÉ |
-| signalk-to-nmea2000 | "Émet PGNs N2K" | 0 mappings configurés | ⚠️ Conservé comme backup |
+| signalk-n2k-bridge (P5) | "Émet PGNs N2K" | 0 mappings configurés | ⚠️ Conservé comme backup |
 | Output N2K (SK → Vulcan) | "Actif" | INACTIF — aucun PGN transmis | 🔧 P5 planifié |
 
 ### P5 — Plugin N2K Bridge (conception en cours)
 
-Remplacera `signalk-to-nmea2000` pour l'output N2K avec:
+Remplacera `signalk-n2k-bridge (P5)` pour l'output N2K avec:
 - Conversions standard (leeway PGN 128000, courant PGN 129291)
 - Conversions B&G propriétaires (PGN 130824)
 - Architecture extensible et modulaire
-- `signalk-to-nmea2000` maintenu comme backup jusqu'à validation P5
+- `signalk-n2k-bridge (P5)` maintenu comme backup jusqu'à validation P5

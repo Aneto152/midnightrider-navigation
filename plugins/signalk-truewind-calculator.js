@@ -1,7 +1,7 @@
 'use strict';
 /**
  * @file signalk-truewind-calculator.js
- * @version 1.0.0
+ * @version 1.0.1
  * @license MIT
  *
  * PURPOSE
@@ -117,7 +117,7 @@ module.exports = function(app) {
     id: PLUGIN_ID,
     name: 'True Wind Calculator (TWD / TWS / TWA)',
     description: 'Event-driven on AWA. TWD/TWS/TWA from apparent wind + SOG/COG vector math.',
-    version: '1.0.0',
+    version: '1.0.1',
     schema: { type:'object', title:'True Wind Calculator', properties: {
       maxDataAgeSecs:{ type:'number', title:'Max input age (s)', default:10, minimum:2, maximum:60 },
       maxWindKts: { type:'number', title:'Max TWS cap (kts)', default:70, minimum:5, maximum:120 },
@@ -179,6 +179,18 @@ module.exports = function(app) {
       unsubscribes.push(function(){ clearInterval(fb); });
       svcLog('WARN','SUBSCRIPTION: polling fallback 1000ms');
     }
+
+    // Degraded mode: monitor Calypso anemometer absence
+    var instrumentMonitor = setInterval(function() {
+      var awa = app.getSelfPath('environment.wind.angleApparent');
+      var ageMs = awa && awa.timestamp ? Date.now() - new Date(awa.timestamp).getTime() : Infinity;
+      if (ageMs > 30000) {
+        var ageSec = Math.round(ageMs / 1000);
+        svcLog('WARN', 'DEGRADED: Calypso anemometer absent for ' + ageSec + 's — TWD/TWS stale');
+        if (app.setPluginStatus) app.setPluginStatus('⚠️ Calypso absent (' + ageSec + 's)');
+      }
+    }, 30000);
+    unsubscribes.push(function() { clearInterval(instrumentMonitor); });
 
     heartbeatTimer = setInterval(function(){
       svcLog('DEBUG','HEARTBEAT: derived='+stats.derived+' skip='+stats.skipped+' err='+stats.errors);

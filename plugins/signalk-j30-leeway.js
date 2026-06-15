@@ -1,7 +1,7 @@
 'use strict';
 /**
  * @file signalk-j30-leeway.js
- * @version 1.0.3
+ * @version 1.0.4
  * @license MIT
  * CHANGELOG
  * v1.0.3 — Event-driven: fires on every attitude.roll update (IMU cadence).
@@ -69,7 +69,7 @@ module.exports = function(app) {
     id: PLUGIN_ID,
     name: 'J/30 Leeway Calculator',
     description: 'Event-driven on attitude.roll. Leeway(deg)=K×|Heel|/STW². SOG fallback.',
-    version: '1.0.3',
+    version: '1.0.4',
     schema: { type:'object', title:'J/30 Leeway Calculator', properties: {
       leewayFactor: { type:'number', title:'K (J/30: 10-14)', default:12, minimum:5, maximum:25 },
       minSpeed: { type:'number', title:'Min speed kts', default:0.5, minimum:0.1, maximum:3.0 },
@@ -149,6 +149,18 @@ module.exports = function(app) {
       unsubscribes.push(function(){ clearInterval(fb); });
       svcLog('WARN','SUBSCRIPTION: polling fallback 200ms');
     }
+
+    // Degraded mode: monitor WIT IMU absence
+    var instrumentMonitor = setInterval(function() {
+      var roll = app.getSelfPath('navigation.attitude.roll');
+      var ageMs = roll && roll.timestamp ? Date.now() - new Date(roll.timestamp).getTime() : Infinity;
+      if (ageMs > 30000) {
+        var ageSec = Math.round(ageMs / 1000);
+        svcLog('WARN', 'DEGRADED: WIT IMU absent for ' + ageSec + 's — leeway=0');
+        if (app.setPluginStatus) app.setPluginStatus('⚠️ WIT IMU absent (' + ageSec + 's)');
+      }
+    }, 30000);
+    unsubscribes.push(function() { clearInterval(instrumentMonitor); });
 
     heartbeatTimer = setInterval(function() {
       svcLog('DEBUG','HEARTBEAT: derived='+stats.derived+' skip='+stats.skipped+' err='+stats.errors);

@@ -1,4 +1,16 @@
-# Midnight Rider Navigation System — Summary (2026-06-13)
+
+## Navigation Plugins (Updated 2026-06-15)
+- P1 signalk-heading-true-calculator v1.0.6 — navigation.headingTrue ✅
+- P2 signalk-j30-leeway v1.0.4 — performance.leewayAngle ✅
+- P3 signalk-current-calculator v1.0.4 — environment.current.* ✅
+- P4 signalk-truewind-calculator v1.0.1 — environment.wind.TWD/TWS/TWA ✅
+- P5 signalk-n2k-bridge v1.0.1 — SK → N2K bus (Vulcan 7, PGN 130824 B&G) ✅
+
+> signalk-to-nmea2000 DISABLED — replaced by P5
+
+---
+
+# Midnight Rider Navigation System — Summary (2026-06-15)
 
 **Status**: ✅ **PRODUCTION READY** — All critical systems operational
 
@@ -17,9 +29,9 @@
 
 ---
 
-## Sensor Status (2026-06-13 16:19 UTC)
+## Sensor Status (2026-06-15 16:19 UTC)
 
-### UM982 GPS/Heading (Updated 2026-06-13)
+### UM982 GPS/Heading (Updated 2026-06-15)
 - **Plugin**: `signalk-um982-gnss` V2 (direct serial, serialport npm)
 - **Device**: `/dev/ttyUM982` @ 115200 baud
 - **Data published**:
@@ -28,7 +40,7 @@
   - `navigation.attitude.roll` (5Hz) — from dual-antenna
   - `navigation.attitude.pitch` (5Hz) — from dual-antenna
 - **Baseline**: 4.29m dual-antenna locked — SOL_COMPUTED NARROW_FLOAT
-- **First operational**: 2026-06-13 (previously blocked by validateChecksum bug)
+- **First operational**: 2026-06-15 (previously blocked by validateChecksum bug)
 - **Source label**: `um982-gnss`
 - **Log file**: `logs/services/um982-gnss.log`
 
@@ -50,7 +62,7 @@
 
 ---
 
-## System Health (2026-06-13 16:19 UTC)
+## System Health (2026-06-15 16:19 UTC)
 
 | Metric | Value | Threshold | Status |
 |--------|-------|-----------|--------|
@@ -99,7 +111,7 @@
 | `ble/calypso_direct.py` | Calypso anemometer BLE reader (systemd service) |
 | `config/signalk-settings.json` | Signal K providers + plugins config |
 | `logs/services/um982-gnss.log` | UM982 plugin runtime log |
-| `ARCHITECTURE-SYSTEM-2026-06-13.md` | Full system architecture (this version) |
+| `ARCHITECTURE-SYSTEM-2026-06-15.md` | Full system architecture (this version) |
 
 ---
 
@@ -151,6 +163,6 @@ wscat -c "ws://localhost:3000/signalk/v1/stream?subscribe=navigation.*"
 
 ---
 
-**Last Updated**: 2026-06-13 12:25 EDT  
+**Last Updated**: 2026-06-15 12:25 EDT  
 **Compiled by**: OC + Denis Lafarge  
 **Version**: v1.0 (Production ready for field test)
