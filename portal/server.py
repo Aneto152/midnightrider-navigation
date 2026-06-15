@@ -52,6 +52,13 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
             self._serve_file(REGATTA / "index.html")
 
         # /regatta/* → regatta/
+        
+        elif path in ('/ais', '/ais/'):
+            self._serve_file(AIS / 'tracker.html')
+        elif path in ('/ais/fleet_db', '/ais/fleet_db/'):
+            self._serve_file(AIS / 'fleet_db.html')
+        elif path.startswith('/ais/'):
+            self._serve_file(AIS / (path[5:] or 'tracker.html'))
         elif path.startswith("/regatta/"):
             rel = path[len("/regatta/"):]
             # If no extension, try .html

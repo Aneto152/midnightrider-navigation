@@ -40,3 +40,12 @@
 [2026-06-15T14:51:13.098049] [FILE_CREATE] [tests] tests/plugins.test.js: 27 unit tests
 [2026-06-15T14:51:13.098049] [FILE_MODIFY] [root] package.json + .gitignore
 [2026-06-15T14:51:13.098049] [RESULT] Phase I: 27/27 PASS
+[2026-06-15T17:26:32.116150] [FILE_CREATE] [ais/__init__.py] Package marker
+[2026-06-15T17:26:32.123898] [FILE_CREATE] [ais/ais_lib.py] 8 functions + smoke tests PASS
+[2026-06-15T17:26:32.131186] [FILE_CREATE] [ais/competitors_db.py] 68 boats loaded OK
+[2026-06-15T17:26:32.131685] [FILE_CREATE] [ais/ais_watch.py] Daemon: TWA, VMG wind+mark, delta, InfluxDB
+[2026-06-15T17:26:32.131925] [FILE_CREATE] [ais/server_handlers.py] api_competitors + api_fleet_db
+[2026-06-15T17:26:53.452085] [SETUP_COMPLETE] [Phase-J1] All files created: ais_lib.py, competitors_db.py, ais_watch.py, server_handlers.py
+[2026-06-15T17:26:53.452085] [CONFIG_CHANGE] [regatta/server.py] Added /api/competitors + /api/fleet_db routes
+[2026-06-15T17:26:53.452085] [CONFIG_CHANGE] [portal/server.py] Added /ais/* routing
+[2026-06-15T17:26:53.452085] [FILE_DEPRECATE] [regatta/ais_watch.py] Superseded by ais/ais_watch.py

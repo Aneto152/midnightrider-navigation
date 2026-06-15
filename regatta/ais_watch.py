@@ -1,3 +1,5 @@
+# DEPRECATED 2026-06-15 — superseded by ais/ais_watch.py
+# This file is kept for reference only. Do not run.
 #!/usr/bin/env python3
 """ais_watch.py — AIS Competitor Monitor | Midnight Rider Navigation
 Polls Signal K for AIS vessels, matches competitors.json MMSIs,

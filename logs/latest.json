@@ -1,27 +1,37 @@
 {
-  "task": "phase-I-unit-tests",
-  "date": "2026-06-15T14:51:13.098049",
-  "status": "SUCCESS",
-  "test_results": {
-    "total": 27,
-    "passed": 27,
-    "failed": 0,
-    "duration_ms": 2056
-  },
-  "breakdown": {
-    "P1_computeHeadingTrue": 8,
-    "P2_computeLeeway_J30": 10,
-    "P4_computeTrueWind_vector": 9
-  },
-  "files_modified": [
-    "plugins/signalk-heading-true-calculator.js",
-    "plugins/signalk-j30-leeway.js",
-    "plugins/signalk-truewind-calculator.js",
-    "package.json",
-    ".gitignore"
+  "task": "ais-competitor-backend-phase-j1",
+  "date": "2026-06-15T21:26:53Z",
+  "status": "SETUP_COMPLETE_RESTART_NEEDED",
+  "steps_completed": [
+    "ais/__init__.py created",
+    "ais/ais_lib.py: 8 functions (haversine, bearing, TWA, VMG), smoke tests ALL PASS",
+    "ais/competitors_db.py: 68 boats loaded, 56 active, 56 with MMSI",
+    "ais/ais_watch.py: daemon with TWA/VMG wind+mark/delta/InfluxDB logging",
+    "ais/server_handlers.py: api_competitors + api_fleet_db handlers",
+    "regatta/server.py: /api/competitors + /api/fleet_db routes + _json_resp helper",
+    "portal/server.py: /ais/* routing to tracker.html, fleet_db.html",
+    "regatta/ais_watch.py: deprecated (reference only)"
   ],
-  "files_created": [
-    "tests/plugins.test.js"
+  "new_api_endpoints": [
+    "GET /api/competitors?radius_nm=10&min_sog_kts=0&vmg_mode=wind|mark",
+    "GET /api/fleet_db"
   ],
-  "jest_version": "^29.0.0"
+  "new_modules": [
+    "ais/ais_lib.py: pure math (haversine, bearing, TWA, VMG, delta, gaining_ground)",
+    "ais/competitors_db.py: competitor database manager (load, search, enrich)",
+    "ais/server_handlers.py: regatta container request handlers",
+    "ais/ais_watch.py: optional standalone daemon (logs to ais-watch.log, InfluxDB)"
+  ],
+  "color_logic": {
+    "GREEN": "VMG_MR > VMG_comp (MidnightRider gaining ground on competitor)",
+    "RED": "VMG_MR < VMG_comp (competitor gaining ground on MidnightRider)",
+    "NEUTRAL": "VMG unavailable or equal (within 0.05kt threshold)"
+  },
+  "next_steps": [
+    "Restart regatta Docker: docker restart regatta && sleep 8",
+    "Test /api/competitors: curl -s 'http://localhost:5000/api/competitors?radius_nm=15'",
+    "Test /api/fleet_db: curl -s 'http://localhost:5000/api/fleet_db'",
+    "Restart portal: systemctl restart midnightrider-portal",
+    "Security check + git commit + push"
+  ]
 }

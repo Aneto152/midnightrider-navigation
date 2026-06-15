@@ -4,6 +4,15 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json, time, urllib.parse, urllib.request, os, math
 import weather_collector
+import sys as _s
+_s.path.insert(0, '/repo/ais')
+try:
+    from server_handlers import api_competitors as _AC, api_fleet_db as _AF
+    _AIS = True
+except Exception as _e:
+    print(f"[AIS] {_e}")
+    _AIS = False
+
 
 INFLUX_URL = "http://localhost:8086"
 INFLUX_TOKEN = os.getenv('INFLUX_TOKEN') or os.getenv('INFLUXDB_TOKEN', '')
@@ -378,6 +387,18 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(pos)
         elif self.path == "/api/navigation":
             self.send_json(get_navigation())
+        elif self.path.startswith("/api/competitors"):
+            import urllib.parse as _u
+            p = _u.parse_qs(_u.urlparse(self.path).query)
+            r  = float(p.get('radius_nm',   ['10'])[0])
+            ms = float(p.get('min_sog_kts', ['0' ])[0])
+            iu = p.get('include_unknown', ['false'])[0].lower() == 'true'
+            vm = p.get('vmg_mode', ['wind'])[0]
+            data = _AC(get_signalk, get_gps_position, r, ms, iu, vm) if _AIS else {'error': 'unavailable'}
+            self.send_json(data)
+        elif self.path.startswith("/api/fleet_db"):
+            data = _AF(get_signalk) if _AIS else {'error': 'unavailable'}
+            self.send_json(data)
         elif self.path.startswith("/api/ais"):
             params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             radius = float(params.get('radius', ['10'])[0])
@@ -399,6 +420,16 @@ class Handler(BaseHTTPRequestHandler):
         else:
             self.send_response(404)
             self.end_headers()
+
+    def _json_resp(self, d):
+        import json as _j
+        b = _j.dumps(d).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(b)))
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(b)
 
     def do_POST(self):
         length = int(self.headers.get("Content-Length", 0))
