@@ -1,26 +1,27 @@
 {
-  "task": "phase-H-ip-fix-zombie-cleanup",
-  "date": "2026-06-15T14:34:48.785698",
+  "task": "phase-I-unit-tests",
+  "date": "2026-06-15T14:51:13.098049",
   "status": "SUCCESS",
-  "steps_completed": [
-    "Zombie ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md already deleted (Phase B)",
-    "docs/ARCHITECTURE-MASTER.md v5.2: IP\u2192midnightrider.local, LEN 7/50, Vulcan \u00d72",
-    "docs/SYSTEM-SUMMARY.md: IP\u2192midnightrider.local, date 2026-06-15",
-    "All 8 HARDWARE/DASHBOARDS docs: IPs \u2192 midnightrider.local"
-  ],
-  "ip_canonical": "midnightrider.local (mDNS/Avahi)",
+  "test_results": {
+    "total": 27,
+    "passed": 27,
+    "failed": 0,
+    "duration_ms": 2056
+  },
+  "breakdown": {
+    "P1_computeHeadingTrue": 8,
+    "P2_computeLeeway_J30": 10,
+    "P4_computeTrueWind_vector": 9
+  },
   "files_modified": [
-    "docs/ARCHITECTURE-MASTER.md",
-    "docs/SYSTEM-SUMMARY.md",
-    "docs/HARDWARE/UM982-GNSS-DATASHEET.md",
-    "docs/HARDWARE/WIT-WT901BLECL-DATASHEET.md",
-    "docs/HARDWARE/CALYPSO-UP10-DATASHEET.md",
-    "docs/HARDWARE/SOK-BMS-BLE-PROTOCOL.md",
-    "docs/DASHBOARDS-README.md",
-    "docs/INTEGRATION/SOK-BMS-INTEGRATION.md",
-    "docs/setup/GRAFANA-DEPLOYMENT.md"
+    "plugins/signalk-heading-true-calculator.js",
+    "plugins/signalk-j30-leeway.js",
+    "plugins/signalk-truewind-calculator.js",
+    "package.json",
+    ".gitignore"
   ],
-  "hardcoded_ips_before": 14,
-  "hardcoded_ips_after": 0,
-  "mdns_references": 10
+  "files_created": [
+    "tests/plugins.test.js"
+  ],
+  "jest_version": "^29.0.0"
 }

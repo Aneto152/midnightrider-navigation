@@ -1,0 +1,14 @@
+{
+  "name": "midnightrider-navigation",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "jest tests/ --verbose"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

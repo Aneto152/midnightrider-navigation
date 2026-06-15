@@ -178,3 +178,23 @@ module.exports = function(app) {
 
   return plugin;
 };
+
+// ── Pure math export for unit testing (do not call from plugin code) ──
+function _computeLeeway(rollRad, speedKts, cfg) {
+  if (rollRad == null || !isFinite(rollRad) || isNaN(rollRad)) return null;
+  if (speedKts == null || !isFinite(speedKts) || speedKts < 0) return null;
+  cfg = cfg || {};
+  var K = Number(cfg.leewayFactor) || 12;
+  var minSpeed = Number(cfg.minSpeed) || 0.5;
+  var maxLeeway = Number(cfg.maxLeeway) || 15;
+  var minHeel = Number(cfg.minHeel) || 1.0;
+  var sign = (cfg.leewaySign === 1) ? 1 : -1;
+  var heelDeg = rollRad * 180 / Math.PI;
+  if (speedKts < minSpeed || Math.abs(heelDeg) < minHeel) return 0;
+  var lwDeg = Math.min(K * Math.abs(heelDeg) / (speedKts * speedKts), maxLeeway);
+  var lwRad = sign * (rollRad >= 0 ? 1 : -1) * lwDeg * (Math.PI / 180);
+  return isFinite(lwRad) ? lwRad : null;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports._computeLeeway = _computeLeeway;
+}

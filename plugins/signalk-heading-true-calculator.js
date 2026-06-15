@@ -206,3 +206,15 @@ module.exports = function(app) {
 
   return plugin;
 };
+
+// ── Pure math export for unit testing (do not call from plugin code) ──
+function _computeHeadingTrue(hmRad, variationRad) {
+  if (hmRad == null || !isFinite(hmRad) || isNaN(hmRad)) return null;
+  var v = (variationRad != null && isFinite(variationRad) && !isNaN(variationRad)) ? variationRad : 0;
+  v = Math.max(-Math.PI, Math.min(Math.PI, v));
+  var ht = (((hmRad + v) % (2 * Math.PI)) + 2 * Math.PI) % (2 * Math.PI);
+  return isFinite(ht) ? ht : null;
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports._computeHeadingTrue = _computeHeadingTrue;
+}

@@ -208,3 +208,30 @@ module.exports = function(app) {
 
   return plugin;
 };
+
+// ── Pure math export for unit testing (do not call from plugin code) ──
+function _computeTrueWind(awa, aws, ht, sog, cog) {
+  if ([awa, aws, ht, sog, cog].some(function(v) {
+    return v == null || !isFinite(v) || isNaN(v);
+  })) return null;
+  if (aws < 0 || aws > 60 || sog < 0 || sog > 30) return null;
+  var TWO_PI = 2 * Math.PI;
+  var awd_abs = ht + awa;
+  var v_aw_N = -aws * Math.cos(awd_abs);
+  var v_aw_E = -aws * Math.sin(awd_abs);
+  var v_boat_N = sog * Math.cos(cog);
+  var v_boat_E = sog * Math.sin(cog);
+  var v_tw_N = v_aw_N + v_boat_N;
+  var v_tw_E = v_aw_E + v_boat_E;
+  var tws = Math.sqrt(v_tw_N * v_tw_N + v_tw_E * v_tw_E);
+  if (!isFinite(tws)) return null;
+  var twd = ((Math.atan2(v_tw_E, v_tw_N) + Math.PI) % TWO_PI + TWO_PI) % TWO_PI;
+  var twa = twd - ht;
+  while (twa > Math.PI) twa -= TWO_PI;
+  while (twa < -Math.PI) twa += TWO_PI;
+  if (!isFinite(twd) || !isFinite(twa)) return null;
+  return { twd: twd, tws: tws, twa: twa };
+}
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports._computeTrueWind = _computeTrueWind;
+}
