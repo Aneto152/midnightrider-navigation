@@ -94,10 +94,10 @@ SIGNAL K HUB (localhost:3000)
 | **00** | System Status | RPi health, services, uptime |
 | **01** | Cockpit | Heading, SOG, COG, roll/pitch |
 | **02** | Environment | Wind, pressure, temperature, waves |
-| **03a** | Astronomical | Sun/moon altitude, tides |
-| **03b** | Performance | Polars, VMG, efficiency |
-| **04a** | Alerts Filtered | Active alert rules |
-| **04b** | Wind & Current | Tactical analysis |
+| **11** | Astronomical | Sun/moon altitude, tides |
+| **03** | Performance | Polars, VMG, efficiency |
+| **12** | Alerts Filtered | Active alert rules |
+| **04** | Wind & Current | Tactical analysis |
 | **05** | Competitive | Fleet tracking (AIS) |
 | **06** | Electrical | SOK BMS — SoC, cells, temperature |
 | **07** | Race Enriched | Race-specific metrics (not used 2026-05-22) |

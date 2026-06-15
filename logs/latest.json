@@ -1,36 +1,24 @@
 {
-  "task": "architecture-docs-update-phase-D",
-  "date": "2026-06-14T23:38:45.808405",
+  "task": "microfix-system-summary-dashboard-table",
+  "date": "2026-06-14T23:42:06.787052",
   "status": "SUCCESS",
   "steps_completed": [
-    "STEP 1: outdated references audited",
-    "STEP 2: ARCHITECTURE-MASTER.md v5.1 \u2014 9 fixes (avahi, wit-nmea, services/, dashboards, paths, logs)",
-    "STEP 3: verified no stale references remain",
-    "STEP 4: SYSTEM-SUMMARY.md v2.1 \u2014 broken ARCHITECTURE ref + dashboard table fixed"
+    "STEP 1: old dashboard notation identified (03a/03b/04a/04b)",
+    "STEP 2: replaced with correct IDs (11=Astronomical, 12=Alerts, 03=Performance, 04=Wind)",
+    "STEP 3: verified no old notation remains (4 replacements)"
   ],
   "files_modified": [
-    "docs/ARCHITECTURE-MASTER.md (v5.0 \u2192 v5.1)",
-    "docs/SYSTEM-SUMMARY.md (v2.0 \u2192 v2.1)",
-    "logs/oc-actions.log",
-    "logs/latest.json"
+    "docs/SYSTEM-SUMMARY.md"
   ],
-  "corrections_applied": [
-    "Version header updated to v5.1",
-    "Last Updated date refreshed",
-    "Avahi references removed",
-    "WIT NMEA service references removed",
-    "signalk-wit-nmea marked DELETED",
-    "services/ \u2192 etc/systemd/system/",
-    "Dashboard renaming: 03\u219211, 04\u219212",
-    "grafana-custom.ini \u2192 config/",
-    "deploy-dashboards.sh \u2192 scripts/",
-    "Log structure section added"
+  "fixes_applied": [
+    "03a (Astronomical) \u2192 11",
+    "03b (Performance) \u2192 03",
+    "04a (Alerts) \u2192 12",
+    "04b (Wind & Current) \u2192 04"
   ],
   "verification": {
-    "avahi_references": 0,
-    "wit_nmea_server_references": 0,
-    "architecture_doc_links": "Updated to ARCHITECTURE-MASTER.md",
-    "log_section_present": true
+    "old_notation_remaining": 0,
+    "clean": true
   },
-  "next_phase": "Repo cleanup complete \u2014 ready for production deployment"
+  "next_recommended": "Update Dust: reference docs/ARCHITECTURE-MASTER.md (not old deleted files)"
 }

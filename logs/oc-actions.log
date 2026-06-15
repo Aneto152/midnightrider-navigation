@@ -16,3 +16,5 @@
 [2026-06-14T23:38:45.714515] [FILE_MODIFY] ARCHITECTURE-MASTER.md updated to v5.1 — 9 corrections applied
 [2026-06-14T23:38:45.714515] [FILE_MODIFY] SYSTEM-SUMMARY.md updated to v2.1 — broken ref fixed
 [2026-06-14T23:38:45.714515] [RESULT] Phase D: SUCCESS — architecture docs reflect Phase B cleanup
+[2026-06-14T23:42:06.712799] [FILE_MODIFY] SYSTEM-SUMMARY.md dashboard table fixed (03a/04a/03b/04b → 11/12/03/04)
+[2026-06-14T23:42:06.712799] [RESULT] SUCCESS — micro-fix complete
