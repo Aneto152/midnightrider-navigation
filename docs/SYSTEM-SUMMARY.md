@@ -1,6 +1,6 @@
 # MIDNIGHT RIDER SYSTEM — 1-PAGE SUMMARY
 
-**Version:** 2.0 | **Date:** 2026-05-31 | **Status:** ✅ Production (Block Island Race 2026-05-22 COMPLETE)
+**Version:** 2.1 | **Date:** 2026-06-14 | **Status:** ✅ Production (Block Island Race 2026-05-22 COMPLETE)
 
 ---
 
@@ -135,7 +135,7 @@ SIGNAL K HUB (localhost:3000)
 
 | Need | Document | Location |
 |------|----------|----------|
-| **Full Architecture** | System design + decisions | docs/ARCHITECTURE-REFERENCE-2026-05-20.md |
+| **Full Architecture** | System design + decisions | docs/ARCHITECTURE-MASTER.md |
 | **Hardware Specs** | Equipment datasheets | docs/HARDWARE/*.md |
 | **WIT IMU Guide** | Complete protocol + calibration + troubleshooting | docs/HARDWARE/WIT-WT901BLECL-DATASHEET.md |
 | **Integration Guides** | Setup for each component | docs/INTEGRATION/*.md |

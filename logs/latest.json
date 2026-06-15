@@ -1,36 +1,36 @@
 {
-  "task": "repo-cleanup-phase-C",
-  "date": "2026-06-14T23:32:11.213303",
+  "task": "architecture-docs-update-phase-D",
+  "date": "2026-06-14T23:38:45.808405",
   "status": "SUCCESS",
   "steps_completed": [
-    "STEP1: logs/ble_diagnostic.txt removed, logs/*.txt added to .gitignore",
-    "STEP2: Both architecture docs read (ref doc was most complete)",
-    "STEP3: docs/ARCHITECTURE-MASTER.md created (v5.0 consolidated)",
-    "STEP4: docs/ARCHITECTURE-REFERENCE-2026-05-20.md deleted",
-    "STEP5: docs/INDEX.md references updated to ARCHITECTURE-MASTER",
-    "STEP6: SIGNALK-PLUGINS-INVENTORY.md audited + dead plugins marked DELETED"
-  ],
-  "files_created": [
-    "docs/ARCHITECTURE-MASTER.md"
-  ],
-  "files_deleted": [
-    "logs/ble_diagnostic.txt",
-    "docs/ARCHITECTURE-REFERENCE-2026-05-20.md"
+    "STEP 1: outdated references audited",
+    "STEP 2: ARCHITECTURE-MASTER.md v5.1 \u2014 9 fixes (avahi, wit-nmea, services/, dashboards, paths, logs)",
+    "STEP 3: verified no stale references remain",
+    "STEP 4: SYSTEM-SUMMARY.md v2.1 \u2014 broken ARCHITECTURE ref + dashboard table fixed"
   ],
   "files_modified": [
-    "docs/INDEX.md",
-    "docs/SIGNALK-PLUGINS-INVENTORY.md",
-    ".gitignore"
+    "docs/ARCHITECTURE-MASTER.md (v5.0 \u2192 v5.1)",
+    "docs/SYSTEM-SUMMARY.md (v2.0 \u2192 v2.1)",
+    "logs/oc-actions.log",
+    "logs/latest.json"
   ],
-  "architecture_status": {
-    "canonical_doc": "docs/ARCHITECTURE-MASTER.md v5.0",
-    "previous_docs": "DELETED (cleanup complete)",
-    "sections_covered": "All (1. Overview, 2. Hardware, 3. Networks, 4. Software Stack, 5. Data Flow, 6. Custom Plugins)"
+  "corrections_applied": [
+    "Version header updated to v5.1",
+    "Last Updated date refreshed",
+    "Avahi references removed",
+    "WIT NMEA service references removed",
+    "signalk-wit-nmea marked DELETED",
+    "services/ \u2192 etc/systemd/system/",
+    "Dashboard renaming: 03\u219211, 04\u219212",
+    "grafana-custom.ini \u2192 config/",
+    "deploy-dashboards.sh \u2192 scripts/",
+    "Log structure section added"
+  ],
+  "verification": {
+    "avahi_references": 0,
+    "wit_nmea_server_references": 0,
+    "architecture_doc_links": "Updated to ARCHITECTURE-MASTER.md",
+    "log_section_present": true
   },
-  "plugin_status": {
-    "enabled_total": 9,
-    "disabled_total": 5,
-    "deleted_and_marked": 3
-  },
-  "next_recommended": "Full repo cleanup COMPLETE \u2014 ready for production deployment"
+  "next_phase": "Repo cleanup complete \u2014 ready for production deployment"
 }

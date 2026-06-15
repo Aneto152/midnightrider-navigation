@@ -1,5 +1,5 @@
 # Midnight Rider Navigation System — Architecture Master Reference
-Version: 5.0 (consolidated from previous v4.x documents)
+Version: 5.1 (post-cleanup, 2026-06-14)
 Last Updated: 2026-06-14
 Status: ✅ PRODUCTION — Canonical architecture reference
 Source: Merged from ARCHITECTURE-REFERENCE-2026-05-20.md
@@ -637,3 +637,21 @@ Remplacera `signalk-n2k-bridge (P5)` pour l'output N2K avec:
 - Conversions B&G propriétaires (PGN 130824)
 - Architecture extensible et modulaire
 - `signalk-n2k-bridge (P5)` maintenu comme backup jusqu'à validation P5
+
+
+---
+
+## 7. STRUCTURE DES LOGS (depuis 2026-06-15)
+
+| Fichier | Type | Rôle |
+|---------|------|------|
+| logs/latest.json | JSON | Journal d'exécution OC (Dust coordination) |
+| logs/oc-actions.log | Texte | Journal détaillé de toutes les actions OC |
+| logs/debug/data-flow.log | Texte | Traçage end-to-end du pipeline |
+| logs/debug/aggregate-errors.sh | Script | Agrégation des erreurs |
+| logs/debug/error-summary.log | Texte | Résumé des erreurs |
+| logs/services/.gitkeep | Marqueur | Maintient le répertoire dans git |
+
+Règles .gitignore:
+- Exclus: logs/calypso-*.log, logs/services/*.log, logs/debug/*.log, logs/*.txt
+- Gardés: logs/latest.json, logs/oc-actions.log, logs/debug/aggregate-errors.sh

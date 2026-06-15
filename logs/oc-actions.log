@@ -13,3 +13,6 @@
 [2026-06-14T23:32:11.139224] [FILE_MODIFY] STEP5: docs/INDEX.md references updated
 [2026-06-14T23:32:11.139224] [FILE_MODIFY] STEP6: docs/SIGNALK-PLUGINS-INVENTORY.md audited + deletion markers added
 [2026-06-14T23:32:11.139224] [RESULT] SUCCESS — Phase C complete
+[2026-06-14T23:38:45.714515] [FILE_MODIFY] ARCHITECTURE-MASTER.md updated to v5.1 — 9 corrections applied
+[2026-06-14T23:38:45.714515] [FILE_MODIFY] SYSTEM-SUMMARY.md updated to v2.1 — broken ref fixed
+[2026-06-14T23:38:45.714515] [RESULT] Phase D: SUCCESS — architecture docs reflect Phase B cleanup
