@@ -1,54 +1,24 @@
 {
-  "task": "repo-cleanup-phase-B",
-  "date": "2026-06-14T23:18:29.469514",
+  "task": "fix-log-structure-missing",
+  "date": "2026-06-14T23:23:55.887168",
   "status": "SUCCESS",
   "steps_completed": [
-    "STEP1: udev UM982 duplicate resolved (kept 00-, deleted 99-)",
-    "STEP2: services/ unified into etc/systemd/system/",
-    "STEP3: orphan systemd services deleted",
-    "STEP4: dead WIT NMEA plugin deleted",
-    "STEP5: duplicate config files deleted",
-    "STEP6: docs/reference/ deleted (~7.3MB)",
-    "STEP7: 15 stale debug logs deleted",
-    "STEP8: calypso-analysis.log removed from git + .gitignore updated",
-    "STEP9: deploy-dashboards.sh + grafana-custom.ini moved + docker-compose.yml path fixed",
-    "STEP10: dashboard numbering conflict resolved (03\u219211, 04\u219212)",
-    "STEP11: logs structure created (oc-actions, debug/*, services/*)"
+    "STEP 1: Diagnosed .gitignore blocking logs/ commit",
+    "STEP 2: .gitignore fixed \u2014 broad logs/* rule replaced with specific exclusions",
+    "STEP 3: 4 mandatory log files created (oc-actions, data-flow, aggregate-errors, .gitkeep)",
+    "STEP 4: git add -f forced staging of all log files"
   ],
-  "total_files_deleted": 53,
-  "files_deleted_sample": [
-    "SYSTEM-SUMMARY.md",
-    "archive/plugin-configs-backup-2026-06-14/signalk-performance-polars.json",
-    "archive/plugin-configs-backup-2026-06-14/signalk-sails-management-v2.json",
-    "config/signalk-settings.json",
-    "config/wifi-ap.txt",
-    "data/polars/j30_orc.csv",
-    "docs/reference/wit-imu-ble-production/home/aneto/.signalk/node_modules/signalk-wit-imu-ble/CHANGELOG.md",
-    "docs/reference/wit-imu-ble-production/home/aneto/.signalk/node_modules/signalk-wit-imu-ble/README.md",
-    "docs/reference/wit-imu-ble-production/home/aneto/.signalk/node_modules/signalk-wit-imu-ble/index.js",
-    "docs/reference/wit-imu-ble-production/home/aneto/.signalk/node_modules/signalk-wit-imu-ble/package.json",
-    "docs/reference/witmotion-ble-sdk/LICENSE",
-    "docs/reference/witmotion-ble-sdk/README.md",
-    "docs/reference/witmotion-ble-sdk/WT901BLECL/message.py",
-    "docs/reference/witmotion-ble-sdk/WT901BLECL/protocol.py",
-    "docs/reference/witmotion-ble-sdk/WT901BLECL/registers.py",
-    "docs/reference/witmotion-ble-sdk/WT901BLECL/time_handler.py",
-    "docs/reference/witmotion-ble-sdk/WT901BLECL/wit_client.py",
-    "docs/reference/witmotion-ble-sdk/acceleration_layout.xml",
-    "docs/reference/witmotion-ble-sdk/requirements.txt",
-    "docs/reference/witmotion-ble-sdk/resources/WT901BLECL_data_sheet.pdf"
+  "files_modified": [
+    ".gitignore"
   ],
-  "files_moved": [
-    "deploy-dashboards-to-grafana.sh \u2192 scripts/",
-    "grafana-custom.ini \u2192 config/",
-    "services/* \u2192 etc/systemd/system/",
-    "03-astronomical-dashboard.json \u2192 11-astronomical.json",
-    "04-alerts-filtered.json \u2192 12-alerts-filtered.json"
+  "files_created": [
+    "logs/oc-actions.log",
+    "logs/debug/data-flow.log",
+    "logs/debug/aggregate-errors.sh",
+    "logs/services/.gitkeep"
   ],
-  "services_status": {
-    "signalk": "not touched",
-    "influxdb": "not touched",
-    "grafana": "not touched"
-  },
+  "root_cause": ".gitignore had \"logs/*\" on line 50 \u2014 too broad, blocked all log commits",
+  "solution": "Replaced with specific exclusions: calypso-*.log, services/*.log, debug/*.log (with ! exceptions)",
+  "errors": [],
   "next_phase": "Phase C: merge ARCHITECTURE docs + update SIGNALK-PLUGINS-INVENTORY"
 }

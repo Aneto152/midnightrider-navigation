@@ -1,0 +1,3 @@
+# Midnight Rider — End-to-End Data Flow Trace Log
+# Format: [TIMESTAMP] [FLOW] SOURCE→DEST: description
+[2026-06-14T23:23:45.117233] [INIT] data-flow.log initialized

@@ -1,0 +1,64 @@
+=== CALYPSO 15-MIN DIAGNOSTIC === Start: Fri 22 May 00:46:19 EDT 2026
+
+=== INITIAL STATE ===
+hci0:	Type: Primary  Bus: UART
+	BD Address: D8:3A:DD:F1:26:B7  ACL MTU: 1021:8  SCO MTU: 64:1
+	UP RUNNING 
+	RX bytes:1583251 acl:25293 sco:0 events:29610 errors:0
+	TX bytes:249170 acl:2636 sco:0 commands:8359 errors:0
+
+Controller D8:3A:DD:F1:26:B7 (public)
+	Manufacturer: 0x0131 (305)
+	Version: 0x09 (9)
+	Name: MidnightRider
+	Alias: MidnightRider
+
+=== STARTING CALYPSO ===
+Calypso PID: 79538
+
+=== MONITORING (every 30s for 15min) ===
+[00:46:24 +30s] alive=YES | wind=2.3 | hci=UP | bt=
+2026-05-22 00:46:25,150 [calypso_anemometer.core  ] INFO    : Initializing client with Settings(ble_adapter='hci0', ble_address='F8:5F:12:9D:D2:EE', ble_discovery_timeout=10.0, ble_connect_timeout=10.0)
+2026-05-22 00:46:25,279 [calypso_anemometer.core  ] INFO    : Connecting to device at 'F8:5F:12:9D:D2:EE' with adapter 'None'
+2026-05-22 00:47:04,171 [calypso_anemometer.core  ] INFO    : Requesting reading
+2026-05-22 00:47:11,603 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+{"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.4609142453120043}, {"path": "environment.wind.speedApparent", "value": 2.0}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+2026-05-22 00:47:11,604 [calypso_anemometer.core  ] INFO    : Disconnecting
+2026-05-22 00:47:15,493 [calypso_anemometer.core  ] ERROR   : Disconnect failed
+Traceback (most recent call last):
+  File "/home/aneto/.local/lib/python3.13/site-packages/calypso_anemometer/core.py", line 140, in disconnect
+    await self.client.disconnect()
+  File "/home/aneto/.local/lib/python3.13/site-packages/bleak/__init__.py", line 480, in disconnect
+    return await self._backend.disconnect()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/aneto/.local/lib/python3.13/site-packages/bleak/backends/bluezdbus/client.py", line 338, in disconnect
+    reply = await self._bus.call(
+            ^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "/home/aneto/.local/lib/python3.13/site-packages/dbus_fast/aio/message_bus.py", line 390, in call
+    await future
+  File "/home/aneto/.local/lib/python3.13/site-packages/dbus_fast/aio/message_reader.py", line 22, in _message_reader
+    message = unmarshaller._unmarshall()
+  File "/home/aneto/.local/lib/python3.13/site-packages/dbus_fast/_private/unmarshaller.py", line 744, in _unmarshall
+    self._read_header()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/home/aneto/.local/lib/python3.13/site-packages/dbus_fast/_private/unmarshaller.py", line 610, in _read_header
+    self._read_to_pos(HEADER_SIGNATURE_SIZE)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/aneto/.local/lib/python3.13/site-packages/dbus_fast/_private/unmarshaller.py", line 366, in _read_to_pos
+    self._read_sock_with_fds(pos, missing_bytes)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/aneto/.local/lib/python3.13/site-packages/dbus_fast/_private/unmarshaller.py", line 309, in _read_sock_with_fds
+    raise EOFError()
+EOFError
+{
+  "wind_speed": 2.0,
+  "wind_direction": 141,
+  "battery_level": 100,
+  "temperature": 0,
+  "roll": -90,
+  "pitch": -90,
+  "heading": 360
+}

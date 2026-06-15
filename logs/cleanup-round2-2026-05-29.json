@@ -1,0 +1,63 @@
+{
+  "task": "repo-cleanup-round2",
+  "date": "2026-05-28T22:29:35.059902",
+  "status": "SUCCESS",
+  "diagnostic": {
+    "timestamp": "2026-05-28T22:29:39.657892",
+    "ble_diagnostic_at_root": "ble_diagnostic.txt\nEXISTS",
+    "diagnostic_raw_at_root": "diagnostic_raw.txt\nEXISTS",
+    "grafana_03_astro": "YES"
+  },
+  "deleted": [
+    {
+      "file": "ble_diagnostic.txt",
+      "reason": "BLE diagnostic \u2014 debug artifact"
+    },
+    {
+      "file": "diagnostic_raw.txt",
+      "reason": "System diagnostic 175KB \u2014 debug artifact"
+    },
+    {
+      "file": "mcp/racing-server.js",
+      "reason": "race is active"
+    },
+    {
+      "file": "mcp/racing-package.json",
+      "reason": "unused"
+    }
+  ],
+  "moved": [
+    {
+      "from": "INTERFACE-REFERENCE.md",
+      "to": "docs/INTERFACE-REFERENCE.md",
+      "reason": "belongs in docs/"
+    },
+    {
+      "from": "GRAFANA-COMPETITION-DEPLOY.md",
+      "to": "docs/GRAFANA-COMPETITION-DEPLOY.md",
+      "reason": "belongs in docs/"
+    },
+    {
+      "from": "CLOUDFLARE-TUNNEL-URL.md",
+      "to": "docs/CLOUDFLARE-TUNNEL-URL.md",
+      "reason": "belongs in docs/"
+    }
+  ],
+  "skipped": [
+    {
+      "file": "grafana-dashboards/03-astronomical-dashboard.json",
+      "reason": "Deployed in Grafana \u2014 keep"
+    },
+    {
+      "file": "plugins/signalk-astronomical*",
+      "reason": "Cannot determine installed version"
+    }
+  ],
+  "errors": [],
+  "completed_at": "2026-05-28T22:30:04.369829",
+  "summary": {
+    "total_deleted": 4,
+    "total_moved": 3,
+    "total_skipped": 2
+  }
+}

@@ -47,14 +47,18 @@ influxdb-data/
 # Local credentials override — never commit
 *.log
 *.log.*
-logs/*
-logs/calypso-analysis.log
-logs/calypso-summary.log
-logs/debug/*.log
-!logs/latest.json
-# logs/latest.json and logs/oc-actions.log kept for Dust coordination
+# Logs — specific runtime logs excluded, structure files kept
+logs/calypso-*.log
 logs/services/*.log
 logs/services/*.log.*
+logs/debug/*.log
+logs/debug/*.txt
+!logs/latest.json
+!logs/oc-actions.log
+!logs/debug/aggregate-errors.sh
+!logs/debug/error-summary.log
+!logs/debug/data-flow.log
+!logs/services/.gitkeep
 MEMORY.md
 .mypy_cache/
 # 📦 Node.js

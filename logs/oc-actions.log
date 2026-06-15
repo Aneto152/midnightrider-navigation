@@ -1,0 +1,9 @@
+[2026-06-14T23:23:45.117233] [FILE_CREATE] oc-actions.log initialized — mandatory OC action journal
+[2026-06-14T23:23:45.117233] [INFO] Phase A: repo-cleanup verification (read-only)
+[2026-06-14T23:23:45.117233] [INFO] Phase B: 53 files deleted, 4 renamed, services/ unified
+[2026-06-14T23:23:45.117233] [CONFIG_CHANGE] .gitignore fixed — broad logs/* rule replaced with specific exclusions
+[2026-06-14T23:23:55.887168] [FILE_CREATE] logs/debug/data-flow.log created
+[2026-06-14T23:23:55.887168] [FILE_CREATE] logs/debug/aggregate-errors.sh created
+[2026-06-14T23:23:55.887168] [FILE_CREATE] logs/services/.gitkeep created
+[2026-06-14T23:23:55.887168] [CONFIG_CHANGE] .gitignore fixed: removed broad logs/* rule
+[2026-06-14T23:23:55.887168] [RESULT] SUCCESS — log structure forced into git

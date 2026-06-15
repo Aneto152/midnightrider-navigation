@@ -1,0 +1,1967 @@
+==========================================
+MIDNIGHT RIDER — FULL DIAGNOSTIC
+Timestamp: Thu 21 May 22:34:24 EDT 2026
+==========================================
+
+=== A. SIGNALK JOURNAL LAST 300 LINES ===
+May 21 22:04:17 MidnightRider signalk-server[22983]: GET /signalk/v1/api/vessels/self/navigation 200 14.861 ms - 5956
+May 21 22:04:17 MidnightRider signalk-server[22983]: GET /signalk/v1/api/vessels 200 104.136 ms - 57328
+May 21 22:04:47 MidnightRider signalk-server[22983]: GET /signalk/v1/api/vessels/self/navigation 200 17.282 ms - 5938
+May 21 22:04:47 MidnightRider signalk-server[22983]: GET /signalk/v1/api/vessels 200 117.343 ms - 58591
+May 21 22:04:49 MidnightRider signalk-server[22983]: GET /signalk/v1/api/vessels/self/environment/wind 404 6.566 ms - 183
+May 21 22:05:17 MidnightRider signalk-server[22983]: GET /signalk/v1/api/vessels/self/navigation 200 14.824 ms - 5938
+May 21 22:05:17 MidnightRider signalk-server[22983]: GET /signalk/v1/api/vessels 200 108.268 ms - 63683
+May 21 22:05:20 MidnightRider systemd[1]: Stopping signalk.service - Signal K Server...
+May 21 22:05:20 MidnightRider systemd[1]: signalk.service: Deactivated successfully.
+May 21 22:05:20 MidnightRider systemd[1]: Stopped signalk.service - Signal K Server.
+May 21 22:05:20 MidnightRider systemd[1]: signalk.service: Consumed 51.617s CPU time.
+May 21 22:05:20 MidnightRider systemd[1]: Started signalk.service - Signal K Server.
+May 21 22:05:24 MidnightRider signalk-server[24645]: Could not parse security config at /home/aneto/.signalk/security.json: ENOENT: no such file or directory, open '/home/aneto/.signalk/security.json'
+May 21 22:05:28 MidnightRider signalk-server[24645]: (node:24645) ExperimentalWarning: WASI is an experimental feature and might change at any time
+May 21 22:05:28 MidnightRider signalk-server[24645]: (Use `node --trace-warnings ...` to show where the warning was created)
+May 21 22:05:30 MidnightRider signalk-server[24645]: (node:24645) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+May 21 22:05:30 MidnightRider signalk-server[24645]: OUCH! - could not add membership to interface 192.168.1.131 Error: addMembership EADDRINUSE
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at Socket.addMembership (node:dgram:907:11)
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at /usr/lib/node_modules/signalk-server/node_modules/dnssd2/lib/NetworkInterface.js:249:18
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at Array.forEach (<anonymous>)
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at Socket.<anonymous> (/usr/lib/node_modules/signalk-server/node_modules/dnssd2/lib/NetworkInterface.js:247:57)
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at Socket.emit (node:events:508:28)
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at startListening (node:dgram:211:10)
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at node:dgram:406:7
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at process.processTicksAndRejections (node:internal/process/task_queues:91:21) {
+May 21 22:05:30 MidnightRider signalk-server[24645]:   errno: -98,
+May 21 22:05:30 MidnightRider signalk-server[24645]:   code: 'EADDRINUSE',
+May 21 22:05:30 MidnightRider signalk-server[24645]:   syscall: 'addMembership'
+May 21 22:05:30 MidnightRider signalk-server[24645]: }
+May 21 22:05:30 MidnightRider signalk-server[24645]: signalk-server running at 0.0.0.0:3000
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 15.252 ms - 105
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 6.174 ms - 29
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 28.059 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /signalk 304 62.867 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 1.253 ms - 80
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/addons 304 21.193 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 1.138 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 63.216 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 1.047 ms - 29
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 2.650 ms - 105
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 8.376 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 31.127 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/addons 304 31.332 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 0.742 ms - 80
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 0.907 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /signalk 304 17.432 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: A new version (2.27.0) of the server is available
+May 21 22:05:33 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 304 1643.732 ms - -
+May 21 22:05:33 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 304 2376.182 ms - -
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 9.858 ms - -
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 4.530 ms - 105
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 0.779 ms - 80
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /signalk 304 4.449 ms - -
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 8.347 ms - -
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/addons 304 3.889 ms - -
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 0.712 ms - 29
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 0.997 ms - -
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 304 413.166 ms - -
+May 21 22:05:45 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 15.373 ms - 183
+May 21 22:05:46 MidnightRider signalk-server[24645]: GET /skServer/availablePaths 200 0.910 ms - -
+May 21 22:05:46 MidnightRider signalk-server[24645]: GET /skServer/providers 200 1.598 ms - 815
+May 21 22:05:46 MidnightRider signalk-server[24645]: PUT /skServer/runDiscovery 200 8.806 ms - 19
+May 21 22:05:47 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 15.759 ms - 5941
+May 21 22:05:47 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 23.634 ms - 11180
+May 21 22:05:50 MidnightRider signalk-server[24645]: GET /signalk/v1/api/sources 200 4.154 ms - -
+May 21 22:06:00 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation/position 200 3.127 ms - 475
+May 21 22:06:00 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 5.904 ms - 183
+May 21 22:06:12 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation/position 200 1.933 ms - 475
+May 21 22:06:12 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.502 ms - 183
+May 21 22:06:17 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.634 ms - 5935
+May 21 22:06:17 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 39.107 ms - 22047
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 2.059 ms - 105
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 0.871 ms - 29
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /signalk 304 6.984 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 0.643 ms - 80
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 6.463 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 2.650 ms - 105
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 0.559 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 4.373 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 7.117 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 0.501 ms - 29
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /signalk 304 44.018 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/addons 304 46.783 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 46.141 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/addons 304 45.645 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 0.599 ms - 80
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 0.564 ms - -
+May 21 22:06:47 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 15.624 ms - 5946
+May 21 22:06:47 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 47.484 ms - 29575
+May 21 22:06:49 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 200 2248.476 ms - -
+May 21 22:06:49 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 200 2385.192 ms - -
+May 21 22:07:16 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 8.094 ms - 183
+May 21 22:07:18 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 21.829 ms - 5942
+May 21 22:07:18 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 109.285 ms - 36150
+May 21 22:07:48 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 13.931 ms - 5955
+May 21 22:07:48 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 90.440 ms - 43630
+May 21 22:08:18 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.198 ms - 5943
+May 21 22:08:18 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 82.333 ms - 46969
+May 21 22:08:48 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.720 ms - 5941
+May 21 22:08:48 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 81.280 ms - 47220
+May 21 22:08:54 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 7.089 ms - 183
+May 21 22:09:18 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 19.165 ms - 5950
+May 21 22:09:18 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 115.202 ms - 50610
+May 21 22:09:48 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 18.632 ms - 5943
+May 21 22:09:48 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 110.637 ms - 61372
+May 21 22:10:18 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 21.097 ms - 5941
+May 21 22:10:19 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 159.071 ms - 66174
+May 21 22:10:49 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 19.318 ms - 5940
+May 21 22:10:49 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 144.953 ms - 66189
+May 21 22:11:19 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 20.415 ms - 5940
+May 21 22:11:19 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 153.217 ms - 69927
+May 21 22:11:34 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.746 ms - 183
+May 21 22:11:49 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 15.474 ms - 5938
+May 21 22:11:49 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 116.702 ms - 71244
+May 21 22:12:19 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 17.503 ms - 5943
+May 21 22:12:19 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 152.384 ms - 71263
+May 21 22:12:49 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.576 ms - 5938
+May 21 22:12:49 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 172.251 ms - 71283
+May 21 22:13:04 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 3.773 ms - 183
+May 21 22:13:19 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 13.459 ms - 5944
+May 21 22:13:20 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 176.625 ms - 73433
+May 21 22:13:29 MidnightRider signalk-server[24645]: GET /skServer/plugins 200 10.882 ms - 67550
+May 21 22:13:50 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.440 ms - 5943
+May 21 22:13:50 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 118.985 ms - 74591
+May 21 22:14:20 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 28.238 ms - 5942
+May 21 22:14:20 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 153.378 ms - 74590
+May 21 22:14:43 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.823 ms - 183
+May 21 22:14:50 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.009 ms - 5942
+May 21 22:14:50 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 128.511 ms - 76970
+May 21 22:15:20 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.377 ms - 5953
+May 21 22:15:20 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 129.003 ms - 78736
+May 21 22:15:50 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.291 ms - 5936
+May 21 22:15:51 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 131.496 ms - 79949
+May 21 22:16:21 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 13.578 ms - 5944
+May 21 22:16:21 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 139.415 ms - 79957
+May 21 22:16:51 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 16.968 ms - 5939
+May 21 22:16:51 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 162.715 ms - 83253
+May 21 22:16:56 MidnightRider signalk-server[24645]: GET /admin/ 200 3.793 ms - -
+May 21 22:16:56 MidnightRider signalk-server[24645]: GET /admin/assets/hostInit-BOrvlrtn.js 304 4.939 ms - -
+May 21 22:16:56 MidnightRider signalk-server[24645]: GET /@signalk/app-dock/remoteEntry.js 304 3.660 ms - -
+May 21 22:16:56 MidnightRider signalk-server[24645]: GET /@signalk/calibration/remoteEntry.js 304 2.757 ms - -
+May 21 22:16:56 MidnightRider signalk-server[24645]: GET /admin/assets/index-DbcCYLtL.js 304 0.770 ms - -
+May 21 22:16:56 MidnightRider signalk-server[24645]: GET /admin/assets/style-DKgi9hUa.css 304 1.199 ms - -
+May 21 22:16:56 MidnightRider signalk-server[24645]: GET /admin/remoteEntry.js 304 0.748 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /admin/assets/react-BCcsldiz.js 304 0.864 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /admin/assets/react-dom-CUQW5SeI.js 304 0.932 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 1.866 ms - 105
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 0.669 ms - 29
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 10.635 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 0.476 ms - 80
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /skServer/addons 304 14.382 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /signalk 304 12.647 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 11.601 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /admin/assets/Simple-Line-Icons-D0KobG-u.woff2?v=2.4.0 304 5.287 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 0.568 ms - -
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /admin/assets/public_src/img/signal-k-logo-image-text.svg 404 4.381 ms - 195
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 2.203 ms - 105
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 0.637 ms - 29
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 6.935 ms - -
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/addons 304 48.814 ms - -
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 8.861 ms - -
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 0.785 ms - 80
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 0.865 ms - -
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /signalk 304 11.904 ms - -
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 200 3082.719 ms - -
+May 21 22:17:01 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 200 500.559 ms - -
+May 21 22:17:21 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 21.884 ms - 5937
+May 21 22:17:21 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 181.865 ms - 84760
+May 21 22:17:23 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.789 ms - 183
+May 21 22:17:51 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 20.918 ms - 5943
+May 21 22:17:51 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 140.819 ms - 84764
+May 21 22:18:21 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 17.375 ms - 5936
+May 21 22:18:22 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 165.222 ms - 84760
+May 21 22:18:52 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 26.357 ms - 5941
+May 21 22:18:52 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 212.756 ms - 84760
+May 21 22:18:53 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 2.950 ms - 183
+May 21 22:19:22 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.915 ms - 5944
+May 21 22:19:22 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 146.922 ms - 84764
+May 21 22:19:52 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.375 ms - 5942
+May 21 22:19:52 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 135.032 ms - 84784
+May 21 22:20:22 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.445 ms - 5940
+May 21 22:20:22 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 136.660 ms - 84783
+May 21 22:20:29 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 2.528 ms - 183
+May 21 22:20:52 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 10.593 ms - 5942
+May 21 22:20:53 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 151.598 ms - 85169
+May 21 22:21:23 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.233 ms - 5939
+May 21 22:21:23 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 158.523 ms - 87477
+May 21 22:21:53 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.029 ms - 5943
+May 21 22:21:53 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 143.155 ms - 87477
+May 21 22:22:23 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.210 ms - 5936
+May 21 22:22:23 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 142.311 ms - 87468
+May 21 22:22:53 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.182 ms - 5938
+May 21 22:22:53 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 202.937 ms - 88985
+May 21 22:23:09 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.333 ms - 183
+May 21 22:23:23 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.422 ms - 5936
+May 21 22:23:24 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 145.660 ms - 89011
+May 21 22:23:54 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 17.160 ms - 5939
+May 21 22:23:54 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 159.435 ms - 89016
+May 21 22:24:24 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 16.086 ms - 5936
+May 21 22:24:24 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 200.999 ms - 89014
+May 21 22:24:39 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.879 ms - 183
+May 21 22:24:54 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 15.447 ms - 5943
+May 21 22:24:54 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 187.214 ms - 89023
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/ 200 5.543 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/assets/hostInit-BOrvlrtn.js 304 1.788 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /@signalk/calibration/remoteEntry.js 304 8.631 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /@signalk/app-dock/remoteEntry.js 304 9.658 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/assets/index-DbcCYLtL.js 304 6.244 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/assets/style-DKgi9hUa.css 304 4.443 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/remoteEntry.js 304 1.088 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/assets/react-BCcsldiz.js 304 0.691 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/assets/react-dom-CUQW5SeI.js 304 1.226 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 1.505 ms - 105
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 0.536 ms - 29
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 2.715 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/assets/public_src/img/signal-k-logo-image-text.svg 404 8.402 ms - 195
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 8.089 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 0.845 ms - 80
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /signalk 304 8.138 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 1.089 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /admin/assets/Simple-Line-Icons-D0KobG-u.woff2?v=2.4.0 304 2.327 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /skServer/addons 304 2.095 ms - -
+May 21 22:25:14 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 304 2347.833 ms - -
+May 21 22:25:24 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 14.592 ms - 5936
+May 21 22:25:24 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 163.296 ms - 90280
+May 21 22:25:27 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation/position 200 2.927 ms - 474
+May 21 22:25:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 3.321 ms - 183
+May 21 22:25:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation/attitude 404 3.605 ms - 186
+May 21 22:25:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation/headingTrue 404 2.256 ms - 189
+May 21 22:25:55 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 20.067 ms - 5953
+May 21 22:25:55 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 175.707 ms - 90286
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/ 200 7.346 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/assets/hostInit-BOrvlrtn.js 304 3.195 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /@signalk/calibration/remoteEntry.js 304 16.433 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /@signalk/app-dock/remoteEntry.js 304 18.315 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/assets/index-DbcCYLtL.js 304 7.364 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/assets/style-DKgi9hUa.css 304 6.330 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/remoteEntry.js 304 7.381 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/assets/react-BCcsldiz.js 304 1.412 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/assets/react-dom-CUQW5SeI.js 304 1.343 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /skServer/loginStatus 200 1.903 ms - 105
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /skServer/security/devices 401 0.653 ms - 29
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 8.611 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /skServer/webapps 304 4.076 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /signalk 304 8.688 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/assets/public_src/img/signal-k-logo-image-text.svg 404 24.602 ms - 195
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /skServer/security/access/requests 404 0.717 ms - 80
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /skServer/addons 304 1.140 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /skServer/nodeInfo 304 0.526 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /admin/assets/Simple-Line-Icons-D0KobG-u.woff2?v=2.4.0 304 0.762 ms - -
+May 21 22:26:04 MidnightRider signalk-server[24645]: GET /skServer/appstore/available 304 898.395 ms - -
+May 21 22:26:10 MidnightRider signalk-server[24645]: GET /signalk/v1/applicationData/user/unitpreferences/1.0.0 404 45.281 ms - 192
+May 21 22:26:10 MidnightRider signalk-server[24645]: GET /signalk/v1/unitpreferences/config 304 9.952 ms - -
+May 21 22:26:11 MidnightRider signalk-server[24645]: GET /signalk/v1/unitpreferences/presets 304 6.265 ms - -
+May 21 22:26:11 MidnightRider signalk-server[24645]: GET /signalk/v1/api/sources 200 2.836 ms - -
+May 21 22:26:11 MidnightRider signalk-server[24645]: GET /signalk/v1/unitpreferences/config 304 1.388 ms - -
+May 21 22:26:11 MidnightRider signalk-server[24645]: GET /signalk/v1/unitpreferences/categories 304 5.354 ms - -
+May 21 22:26:11 MidnightRider signalk-server[24645]: GET /signalk/v1/unitpreferences/default-categories 304 7.002 ms - -
+May 21 22:26:11 MidnightRider signalk-server[24645]: GET /signalk/v1/unitpreferences/definitions 304 7.938 ms - -
+May 21 22:26:11 MidnightRider signalk-server[24645]: GET /signalk/v1/unitpreferences/presets/nautical-metric 304 3.236 ms - -
+May 21 22:26:11 MidnightRider signalk-server[24645]: GET /signalk/v1/api/sources 200 1.532 ms - -
+May 21 22:26:15 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.191 ms - 183
+May 21 22:26:25 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 14.079 ms - 5941
+May 21 22:26:25 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 168.334 ms - 91908
+May 21 22:26:55 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 25.233 ms - 5942
+May 21 22:26:55 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 173.175 ms - 91899
+May 21 22:27:25 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.962 ms - 5941
+May 21 22:27:25 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 161.393 ms - 91895
+May 21 22:27:55 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.084 ms - 5945
+May 21 22:27:56 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 161.810 ms - 94003
+May 21 22:28:26 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 13.871 ms - 5945
+May 21 22:28:26 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 157.534 ms - 94005
+May 21 22:28:55 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.527 ms - 183
+May 21 22:28:56 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 21.863 ms - 5945
+May 21 22:28:56 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 171.275 ms - 94000
+May 21 22:29:00 MidnightRider signalk-server[24645]: GET /skServer/plugins 200 12.673 ms - 67550
+May 21 22:29:00 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.720 ms - 183
+May 21 22:29:04 MidnightRider signalk-server[24645]: GET /skServer/plugins 200 7.675 ms - 67550
+May 21 22:29:26 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 15.111 ms - 5944
+May 21 22:29:26 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 232.264 ms - 94000
+May 21 22:29:56 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.735 ms - 5944
+May 21 22:29:56 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 172.393 ms - 93998
+May 21 22:30:25 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.136 ms - 183
+May 21 22:30:26 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 13.319 ms - 5944
+May 21 22:30:27 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 159.280 ms - 94002
+May 21 22:30:57 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 16.901 ms - 5941
+May 21 22:30:57 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 201.762 ms - 93990
+May 21 22:31:27 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 13.107 ms - 5940
+May 21 22:31:27 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 148.883 ms - 93990
+May 21 22:31:57 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 14.182 ms - 5940
+May 21 22:31:57 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 159.622 ms - 93992
+May 21 22:32:02 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/environment/wind 404 1.511 ms - 183
+May 21 22:32:27 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 13.162 ms - 5938
+May 21 22:32:27 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 156.442 ms - 93987
+May 21 22:32:57 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.771 ms - 5938
+May 21 22:32:58 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 172.032 ms - 93985
+May 21 22:33:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.837 ms - 5944
+May 21 22:33:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 172.610 ms - 93991
+May 21 22:33:58 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.407 ms - 5945
+May 21 22:33:58 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 155.265 ms - 94000
+
+=== B. SIGNALK ERRORS ONLY (last 500) ===
+May 21 21:55:53 MidnightRider signalk-server[20831]: Could not parse security config at /home/aneto/.signalk/security.json: ENOENT: no such file or directory, open '/home/aneto/.signalk/security.json'
+May 21 21:55:57 MidnightRider signalk-server[20831]: (node:20831) ExperimentalWarning: WASI is an experimental feature and might change at any time
+May 21 21:55:57 MidnightRider signalk-server[20831]: (Use `node --trace-warnings ...` to show where the warning was created)
+May 21 21:55:59 MidnightRider signalk-server[20831]: (node:20831) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+May 21 21:55:59 MidnightRider signalk-server[20831]: OUCH! - could not add membership to interface 192.168.1.131 Error: addMembership EADDRINUSE
+May 21 21:55:59 MidnightRider signalk-server[20831]:     at /usr/lib/node_modules/signalk-server/node_modules/dnssd2/lib/NetworkInterface.js:249:18
+May 21 21:55:59 MidnightRider signalk-server[20831]:     at Socket.<anonymous> (/usr/lib/node_modules/signalk-server/node_modules/dnssd2/lib/NetworkInterface.js:247:57)
+May 21 21:56:01 MidnightRider signalk-server[20831]: GET /skServer/plugins 200 37.370 ms - -
+May 21 21:56:41 MidnightRider signalk-server[20831]: GET /skServer/plugins 200 9.858 ms - 67550
+May 21 21:58:42 MidnightRider signalk-server[20831]: GET /skServer/plugins 200 10.521 ms - -
+May 21 21:58:43 MidnightRider signalk-server[20831]: GET /skServer/plugins 200 7.669 ms - -
+May 21 22:01:22 MidnightRider signalk-server[22983]: Could not parse security config at /home/aneto/.signalk/security.json: ENOENT: no such file or directory, open '/home/aneto/.signalk/security.json'
+May 21 22:01:26 MidnightRider signalk-server[22983]: (node:22983) ExperimentalWarning: WASI is an experimental feature and might change at any time
+May 21 22:01:26 MidnightRider signalk-server[22983]: (Use `node --trace-warnings ...` to show where the warning was created)
+May 21 22:01:28 MidnightRider signalk-server[22983]: (node:22983) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+May 21 22:01:28 MidnightRider signalk-server[22983]: OUCH! - could not add membership to interface 192.168.1.131 Error: addMembership EADDRINUSE
+May 21 22:01:28 MidnightRider signalk-server[22983]:     at /usr/lib/node_modules/signalk-server/node_modules/dnssd2/lib/NetworkInterface.js:249:18
+May 21 22:01:28 MidnightRider signalk-server[22983]:     at Socket.<anonymous> (/usr/lib/node_modules/signalk-server/node_modules/dnssd2/lib/NetworkInterface.js:247:57)
+May 21 22:01:29 MidnightRider signalk-server[22983]: GET /skServer/plugins 304 27.539 ms - -
+May 21 22:01:29 MidnightRider signalk-server[22983]: GET /skServer/plugins 304 7.170 ms - -
+May 21 22:01:32 MidnightRider signalk-server[22983]: GET /skServer/plugins 304 9.589 ms - -
+May 21 22:02:17 MidnightRider signalk-server[22983]: GET /skServer/plugins 200 9.408 ms - 67550
+May 21 22:02:43 MidnightRider signalk-server[22983]: GET /skServer/plugins 304 11.510 ms - -
+May 21 22:05:24 MidnightRider signalk-server[24645]: Could not parse security config at /home/aneto/.signalk/security.json: ENOENT: no such file or directory, open '/home/aneto/.signalk/security.json'
+May 21 22:05:28 MidnightRider signalk-server[24645]: (node:24645) ExperimentalWarning: WASI is an experimental feature and might change at any time
+May 21 22:05:28 MidnightRider signalk-server[24645]: (Use `node --trace-warnings ...` to show where the warning was created)
+May 21 22:05:30 MidnightRider signalk-server[24645]: (node:24645) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+May 21 22:05:30 MidnightRider signalk-server[24645]: OUCH! - could not add membership to interface 192.168.1.131 Error: addMembership EADDRINUSE
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at /usr/lib/node_modules/signalk-server/node_modules/dnssd2/lib/NetworkInterface.js:249:18
+May 21 22:05:30 MidnightRider signalk-server[24645]:     at Socket.<anonymous> (/usr/lib/node_modules/signalk-server/node_modules/dnssd2/lib/NetworkInterface.js:247:57)
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 28.059 ms - -
+May 21 22:05:31 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 8.376 ms - -
+May 21 22:05:35 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 9.858 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 6.463 ms - -
+May 21 22:06:46 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 7.117 ms - -
+May 21 22:13:29 MidnightRider signalk-server[24645]: GET /skServer/plugins 200 10.882 ms - 67550
+May 21 22:16:57 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 10.635 ms - -
+May 21 22:17:00 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 8.861 ms - -
+May 21 22:25:11 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 8.089 ms - -
+May 21 22:26:03 MidnightRider signalk-server[24645]: GET /skServer/plugins 304 8.611 ms - -
+May 21 22:29:00 MidnightRider signalk-server[24645]: GET /skServer/plugins 200 12.673 ms - 67550
+May 21 22:29:04 MidnightRider signalk-server[24645]: GET /skServer/plugins 200 7.675 ms - 67550
+
+=== C. SETTINGS.JSON FULL ===
+{
+  "plugins": {
+    "@tkurki/um982": {
+      "enabled": false,
+      "serialconnection": "/dev/ttyUSB0",
+      "ntripEnabled": false
+    },
+    "signalk-um982-proprietary": {
+      "enabled": false
+    },
+    "signalk-gps-um982-nmea-parser": {
+      "enabled": false
+    },
+    "signalk-wit-imu-ble": {
+      "enabled": true,
+      "bleAddress": "E9:10:DB:8B:CE:C7",
+      "bleName": "WT901BLE68",
+      "autoReconnect": true,
+      "enableAcceleration": true,
+      "enableRateOfTurn": true
+    },
+    "signalk-um982-custom": {
+      "enabled": true,
+      "serialPort": "/dev/ttyUSB0",
+      "baudRate": 115200
+    },
+    "signalk-to-nmea0183": {
+      "enabled": true
+    },
+    "position-combiner": {
+      "enabled": true
+    },
+    "signalk-wave-analyzer": {
+      "enabled": true,
+      "accelPath": "navigation.acceleration.z",
+      "sampleRateHz": 30,
+      "windowMinutes": 10,
+      "outputIntervalSeconds": 5,
+      "hpCutoffHz": 0.05
+    },
+    "signalk-um982-gnss": {
+      "configuration": {
+        "port": "/dev/ttyUSB0",
+        "baudRate": 115200,
+        "freqAttitude": 5,
+        "freqPosition": 1,
+        "antennaAxis": "port-starboard",
+        "reverseHeading": false,
+        "rollOffset": 0,
+        "pitchOffset": 0,
+        "reverseRoll": true,
+        "reversePitch": false
+      },
+      "enabled": true
+    }
+  },
+  "pipedProviders": [
+    {
+      "id": "Calypso",
+      "enabled": true,
+      "pipeElements": [
+        {
+          "type": "providers/simple",
+          "options": {
+            "logging": false,
+            "type": "SignalK",
+            "subOptions": {
+              "type": "udp",
+              "port": "4123",
+              "selfHandling": "noSelf"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "qtVLM-NMEA-Input",
+      "enabled": true,
+      "pipeElements": [
+        {
+          "type": "providers/tcp",
+          "options": {
+            "host": "127.0.0.1",
+            "port": "10111"
+          }
+        },
+        {
+          "type": "providers/nmea0183-signalk",
+          "optionMappings": [
+            {
+              "fromAppProperty": "selfId",
+              "toOption": "selfId"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "N2K",
+      "enabled": true,
+      "pipeElements": [
+        {
+          "type": "providers/simple",
+          "options": {
+            "logging": false,
+            "type": "NMEA2000",
+            "subOptions": {
+              "type": "ydwg02-usb-canboatjs",
+              "device": "/dev/ttyACM0"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "interfaces": {
+    "udp": {
+      "4123": {
+        "type": "signalk-udp-input",
+        "enabled": true,
+        "class": "SignalK"
+      }
+    },
+    "tcp": {
+      "10111": {
+        "type": "signalk-nmea-0183-input",
+        "enabled": true,
+        "class": "NMEA0183"
+      }
+    },
+    "nmea-tcp": {
+      "10110": {
+        "enabled": true,
+        "port": 10110
+      }
+    }
+  },
+  "resourcesApi": {
+    "defaultProviders": {
+      "routes": "resources-provider",
+      "waypoints": "resources-provider",
+      "regions": "resources-provider",
+      "notes": "resources-provider",
+      "charts": "resources-provider"
+    }
+  },
+  "courseApi": {
+    "apiOnly": false
+  }
+}
+=== D. PACKAGE.JSON FULL ===
+{
+  "name": "signalk-server-config",
+  "version": "0.0.1",
+  "description": "This file is here to track your plugin and webapp installs.",
+  "repository": {},
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@serialport/parser-readline": "^13.0.0",
+    "@signalk/calibration": "^1.3.3",
+    "@signalk/signalk-to-nmea0183": "^1.16.1",
+    "axios": "^1.15.1",
+    "serialport": "^13.0.0",
+    "signalk-server": "^2.21.0",
+    "signalk-to-influxdb2": "^1.12.0",
+    "signalk-wit-nmea": "file:../../../tmp/signalk-wit-nmea",
+    "suncalc": "^1.9.0"
+  }
+}
+
+=== E. NODE_MODULES LIST ===
+total 2176
+drwxrwxr-x 495 aneto aneto  20480 May 21 22:00 .
+drwxrwxr-x  11 aneto aneto   4096 May 21 22:05 ..
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 abort-controller
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 accepts
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 access-control
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 ajv
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 ansi-regex
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 ansi-styles
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 any-shell-escape
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 @apidevtools
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 api-schema-builder
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 archiver
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 argparse
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 array-buffer-byte-length
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 arraybuffer.prototype.slice
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 array-flatten
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 as-fetch
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 @assemblyscript
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 as-string-sink
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 as-variant
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 as-virtual
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 async
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 asyncemit
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 async-function
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 asynckit
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 async-limiter
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 available-typed-arrays
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 axios
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 b4a
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 @babel
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 backoff
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 baconjs
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 balanced-match
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 bare-events
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 bare-fs
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 bare-os
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 bare-path
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 bare-stream
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 bare-url
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 base64-js
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 basic-auth
+drwxrwxr-x   9 aneto aneto   4096 Apr 22 17:44 bcryptjs
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 .bin
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 bit-buffer
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 bl
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 bluebird
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 body-parser
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 bonjour-service
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 brace-expansion
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 buffer
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 buffer-equal-constant-time
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 buffer-from
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 busboy
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 bytes
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 callback-stream
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 call-bind
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 call-bind-apply-helpers
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 call-bound
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 call-me-maybe
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 camelcase
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 @canboat
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 @chacal
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 chalk
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 charenc
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 clear
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 cli-cursor
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 cli-spinners
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 clone
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 clone-deep
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 color
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 color-convert
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 color-name
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 colornames
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 colorspace
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 color-string
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 combined-stream
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 command-exists
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 commist
+drwxrwxr-x   6 aneto aneto   4096 Apr 24 18:27 complex.js
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 compressible
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 compression
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 concat-map
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 concat-stream
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 connected
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 content-disposition
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 content-type
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 cookie
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 cookie-parser
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 cookie-signature
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 core-util-is
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 cors
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 crc-32
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 create-server
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 cross-fetch
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 cross-spawn
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 crypt
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 d
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 dag-map
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 data-view-buffer
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 data-view-byte-length
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 data-view-byte-offset
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 debug
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 decimal.js
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 defaults
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 define-data-property
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 define-properties
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 delayed-stream
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 depd
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 destroy
+drwxrwxr-x   8 aneto aneto   4096 Apr 22 17:44 diagnostics
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 dns-js
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 dns-packet
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 dnssd
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 dnssd2
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 dunder-proto
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 duplexer2
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 duplexify
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 eastasianwidth
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 ecdsa-sig-formatter
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 ee-first
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 emits
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 emoji-regex
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 enabled
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 encodeurl
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 end-of-stream
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 env-variable
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 errorhandler
+drwxrwxr-x  15 aneto aneto   4096 Apr 22 17:44 es5-ext
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 es6-iterator
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 es6-map
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 es6-set
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 es6-symbol
+drwxrwxr-x  16 aneto aneto   4096 Apr 22 17:44 es-abstract
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 escape-html
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 escape-latex
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 es-define-property
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 es-errors
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 esm-resolve
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 esniff
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 es-object-atoms
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 esprima
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 es-set-tostringtag
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 es-to-primitive
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 etag
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 event-emitter
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 eventemitter3
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 events
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 events-universal
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 event-target-shim
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 express
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 express-rate-limit
+drwxrwxr-x  12 aneto aneto   4096 Apr 22 17:44 ext
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 extend
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 extendible
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 fast-deep-equal
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 fast-fifo
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 fast-json-stable-stringify
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 file-timestamp-stream
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 finalhandler
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 follow-redirects
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 for-each
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 foreground-child
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 form-data
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 forwarded
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 forwarded-for
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 fraction.js
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 fresh
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 fs-extra
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 fs.realpath
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 function-bind
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 function.prototype.name
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 functions-have-names
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 fusing
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 generator-function
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 geojson-validation
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 geolib
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 get-folder-size
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 get-intrinsic
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 get-proto
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 get-symbol-description
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 ggencoder
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 glob
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 globalthis
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 glob-parent
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 glob-stream
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 google-protobuf
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 gopd
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 graceful-fs
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 @hapi
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 has-bigints
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 has-flag
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 hasown
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 has-property-descriptors
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 has-proto
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 has-symbols
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 has-tostringtag
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 helmet
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 help-me
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 http-errors
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 iconv-lite
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 ieee754
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 inflight
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 influx
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 @influxdata
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 inherits
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 int64-buffer
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 internal-slot
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 ip-address
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 ipaddr.js
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 @isaacs
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-absolute
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 isarray
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-array-buffer
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-arrayish
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 is-async-function
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-bigint
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-boolean-object
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 is-buffer
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-callable
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-data-view
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-date-object
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 isexe
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-extglob
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-finalizationregistry
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-fullwidth-code-point
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 is-generator-function
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-glob
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 is-interactive
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-invalid-path
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-map
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-negated-glob
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-negative-zero
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-number-object
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 isobject
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 isomorphic-ws
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-plain-object
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 is-regex
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-relative
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-set
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-shared-array-buffer
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-string
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-symbol
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-typed-array
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-unc-path
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 is-unicode-supported
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-valid-path
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-weakmap
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-weakref
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 is-weakset
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 is-windows
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 jackspeak
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 javascript-natural-sort
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 joi
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 jose
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 jsbi
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 @jsdevtools
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 @js-joda
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 json-as
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 jsonfile
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 jsonparse
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 json-patch
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 json-schema-deref-sync
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 json-schema-traverse
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 json-stable-stringify-without-jsonify
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 JSONStream
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 jsonwebtoken
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 @js-temporal
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 js-yaml
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 jwa
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 jws
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 kind-of
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 kleur
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 kuler
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 lazystream
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 @leichtgewicht
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 leven
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 limiter
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 linear-interpolator
+drwxrwxr-x   3 aneto aneto  20480 Apr 22 17:44 lodash
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.get
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.includes
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.isboolean
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.isequal
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.isinteger
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.isnumber
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.isplainobject
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.isstring
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.merge
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 lodash.once
+drwxrwxr-x   8 aneto aneto   4096 Apr 22 17:44 long
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 lru-cache
+drwxrwxr-x   5 aneto aneto   4096 Apr 24 18:27 marked
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 math-intrinsics
+drwxrwxr-x   7 aneto aneto   4096 Apr 24 18:27 mathjs
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 md5
+drwxrwxr-x   7 aneto aneto   4096 Apr 22 17:44 mdns-js
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 media-typer
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 memory-cache
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 merge-descriptors
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 methods
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 millisecond
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 mime
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 mime-db
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 mime-types
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 mimic-fn
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 minimatch
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 minimist
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 minipass
+drwxrwxr-x   7 aneto aneto   4096 Apr 22 17:44 moment
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 morgan
+drwxrwxr-x   9 aneto aneto   4096 Apr 22 17:44 mqtt
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 mqtt-packet
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 ms
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 multicast-dns
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 @mxtommy
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 nanoid
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 ncp
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 negotiator
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 netmask
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 next-tick
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 ngeohash
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 node-addon-api
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 node-fetch
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 node-forge
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 node-gyp-build
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 node-int64
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 oauth4webapi
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 object-assign
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 object.assign
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 object-inspect
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 object-keys
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 once
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 onetime
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 on-finished
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 on-headers
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 openapi-schema-validator
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 openapi-types
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 openid-client
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 ora
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 ordered-read-streams
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 own-keys
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 package-json-from-dist
+-rw-rw-r--   1 aneto aneto 164350 May 21 22:00 .package-lock.json
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 parseurl
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 path-dirname
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 path-is-absolute
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 path-key
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 path-scurry
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 path-to-regexp
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 @pkgjs
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 possible-typed-array-names
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 precond
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 predefine
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 primus
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 process
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 process-nextick-args
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 prompts
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 proxy-addr
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 proxy-from-env
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 pump
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 pumpify
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 punycode
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 qap
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 qs
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 range-parser
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 raw-body
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 readable-stream
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 readdir-glob
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 reconnect-core
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 reflect.getprototypeof
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 regexp.prototype.flags
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 reinterval
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 remove-trailing-separator
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 restore-cursor
+drwxrwxr-x   9 aneto aneto   4096 Apr 22 17:44 rxjs
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 s2-geometry
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 safe-array-concat
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 safe-buffer
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 safe-push-apply
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 safer-buffer
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 safe-regex-test
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 @samverschueren
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 @scarf
+drwxrwxr-x   5 aneto aneto   4096 Apr 24 18:27 seedrandom
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 selfsigned
+drwxrwxr-x   7 aneto aneto   4096 Apr 22 17:44 semver
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 send
+drwxrwxr-x  16 aneto aneto   4096 Apr 22 17:44 @serialport
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 serialport
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 serve-static
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 set-function-length
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 set-function-name
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 setheader
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 set-proto
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 setprototypeof
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 shallow-clone
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 shebang-command
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 shebang-regex
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 side-channel
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 side-channel-list
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 side-channel-map
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 side-channel-weakmap
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 @sideway
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 signal-exit
+drwxrwxr-x  19 aneto aneto   4096 Apr 24 18:27 @signalk
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 signalk-n2kais-to-nmea0183
+drwxrwxr-x  16 aneto aneto   4096 Apr 24 18:27 signalk-server
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 signalk-to-influxdb2
+drwxrwxr-x   6 aneto aneto   4096 Apr 24 18:27 signalk-to-nmea2000
+lrwxrwxrwx   1 aneto aneto     32 May 21 22:00 signalk-wit-nmea -> ../../../../tmp/signalk-wit-nmea
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 simple-swizzle
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 @sinclair
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 sisteransi
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 split
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 split2
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 sprintf-js
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 stat-mode
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 statuses
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 stop-iteration-iterator
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 storage-engine
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 stream.finished
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 streamsearch
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 stream-shift
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 stream-throttle
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 streamx
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 string_decoder
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 string.prototype.trim
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 string.prototype.trimend
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 string.prototype.trimstart
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 string-width
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 string-width-cjs
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 strip-ansi
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 strip-ansi-cjs
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 suncalc
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 supports-color
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 swagger-parser
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 swagger-schema-official
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 swagger-ui-dist
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 swagger-ui-express
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 tar-stream
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 teex
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 text-decoder
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 text-hex
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 through
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 through2
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 through2-filter
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 thunky
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 tiny-emitter
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 @tkurki
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 to-absolute-glob
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 toidentifier
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 tr46
+drwxrwxr-x   5 aneto aneto   4096 Apr 22 17:44 traverse
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 tslib
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 tv4
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 tv4-formats
+drwxrwxr-x  31 aneto aneto   4096 Apr 22 17:44 type
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 typedarray
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 typed-array-buffer
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 typed-array-byte-length
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 typed-array-byte-offset
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 typed-array-length
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 typedarray.prototype.slice
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 typed-function
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 type-is
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 @types
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 ultra-strftime
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 ultron
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 unbox-primitive
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 unc-path-regex
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 undici-types
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 unique-stream
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 universalify
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 unpipe
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 unzipper
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 uri-js
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 util-deprecate
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 utils-merge
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 uuid
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 validator
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 valid-url
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 vary
+drwxrwxr-x   4 aneto aneto   4096 Apr 24 18:27 wcwidth
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 webidl-conversions
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 websocket-stream
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 whatwg-url
+drwxrwxr-x   3 aneto aneto   4096 Apr 24 18:27 which
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 which-boxed-primitive
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 which-builtin-type
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 which-collection
+drwxrwxr-x   4 aneto aneto   4096 Apr 22 17:44 which-typed-array
+drwxrwxr-x   2 aneto aneto   4096 Apr 24 18:27 wrap-ansi-cjs
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 wrappy
+drwxrwxr-x   3 aneto aneto   4096 Apr 22 17:44 ws
+drwxrwxr-x   2 aneto aneto   4096 Apr 22 17:44 xtend
+drwxrwxr-x   6 aneto aneto   4096 Apr 22 17:44 z-schema
+drwxrwxr-x   6 aneto aneto   4096 Apr 24 18:27 zustand
+
+=== F. PLUGIN-CONFIG-DATA FILES ===
+course-provider.json
+freeboard-sk.json
+kip
+kip.json
+resources-provider
+resources-provider.json
+signalk-app-dock.json
+signalk-astronomical.json
+signalk-performance-polars.json
+signalk-rpi-cpu-temp.json
+signalk-sails-management-v2.json
+signalk-to-influxdb2.json
+signalk-to-nmea0183.json
+signalk-to-nmea2000.json
+signalk-um982-gnss.json
+signalk-wit-imu-ble.json
+sk-to-nmea0183.json
+sk-to-nmea2000.json
+--- course-provider.json ---
+{
+  "enabled": true,
+  "configuration": {}
+}--- freeboard-sk.json ---
+{
+  "enabled": true,
+  "configuration": {}
+}--- kip.json ---
+{
+  "enabled": true,
+  "configuration": {}
+}--- resources-provider.json ---
+{
+  "enabled": true,
+  "configuration": {
+    "standard": {
+      "routes": true,
+      "waypoints": true,
+      "notes": true,
+      "regions": true,
+      "charts": true
+    },
+    "custom": []
+  }
+}--- signalk-app-dock.json ---
+{
+  "enabled": true,
+  "configuration": {
+    "showNightModeButton": true,
+    "showExitButton": false,
+    "apps": [
+      {
+        "enabled": true,
+        "autostart": true,
+        "url": "/@signalk/freeboard-sk/",
+        "label": "Freeboard-SK",
+        "icon": "/@signalk/freeboard-sk/assets/icons/icon-72x72.png",
+        "color": ""
+      },
+      {
+        "enabled": true,
+        "autostart": false,
+        "url": "/@mxtommy/kip/",
+        "label": "KIP",
+        "icon": "/@mxtommy/kip/assets/icon-72x72.png",
+        "color": ""
+      },
+      {
+        "enabled": true,
+        "autostart": false,
+        "url": "/admin/",
+        "label": "Settings",
+        "icon": "/@signalk/app-dock/icon-settings.svg",
+        "color": "#78788c"
+      }
+    ]
+  }
+}--- signalk-astronomical.json ---
+{
+  "configuration": {
+    "enabled": true,
+    "debug": false,
+    "noaaStation": "8518750"
+  },
+  "enabled": true
+}--- signalk-performance-polars.json ---
+{
+  "configuration": {
+    "enabled": true,
+    "debug": false,
+    "updateInterval": 1000
+  },
+  "enabled": true
+}--- signalk-rpi-cpu-temp.json ---
+{
+  "configuration": {
+    "enabled": true,
+    "updateInterval": 10
+  },
+  "enabled": true
+}--- signalk-sails-management-v2.json ---
+{
+  "configuration": {
+    "enabled": true,
+    "debug": true,
+    "updateInterval": 2000
+  },
+  "enabled": true
+}--- signalk-to-influxdb2.json ---
+{
+  "configuration": {
+    "outputDailyLog": false,
+    "influxes": [
+      {
+        "name": "MidnightRider",
+        "url": "http://localhost:8086",
+        "org": "MidnightRider",
+        "bucket": "midnight_rider",
+        "token": "XxIolCzqcNaLrP3tEzcKdmKUoxmlut4M1mrkVaQPhh6jzd2QZ3bKp6zV42_2ciYNKOYcFSEp_Ej4FWt2kS2fAw==",
+        "writeInterval": 1
+      }
+    ]
+  },
+  "enabled": true,
+  "bucket": "midnight_rider",
+  "org": "MidnightRider"
+}--- signalk-to-nmea0183.json ---
+{
+  "enabled": true,
+  "servers": {
+    "tcp": {
+      "enabled": true,
+      "port": 10110,
+      "address": "0.0.0.0"
+    },
+    "udp": {
+      "enabled": false
+    }
+  },
+  "convertToNMEA": [
+    "navigation.position",
+    "navigation.courseOverGround",
+    "navigation.speedOverGround",
+    "navigation.headingTrue",
+    "navigation.headingMagnetic",
+    "environment.wind.speedApparent",
+    "environment.wind.angleApparent",
+    "environment.depth.belowTransducer"
+  ],
+  "sentences": {
+    "RMC": {
+      "enabled": true,
+      "senderId": "GP",
+      "throttle": 1000
+    },
+    "GGA": {
+      "enabled": true,
+      "senderId": "GN",
+      "throttle": 1000
+    },
+    "GLL": {
+      "enabled": true,
+      "senderId": "GN",
+      "throttle": 1000
+    },
+    "VTG": {
+      "enabled": true,
+      "senderId": "GP",
+      "throttle": 1000
+    },
+    "HDT": {
+      "enabled": true,
+      "senderId": "GN",
+      "throttle": 1000
+    },
+    "MWV": {
+      "enabled": true,
+      "senderId": "WI",
+      "throttle": 1000
+    },
+    "VHW": {
+      "enabled": true,
+      "senderId": "GN",
+      "throttle": 1000
+    }
+  },
+  "excludeSources": [
+    "signalk-to-nmea0183"
+  ]
+}
+--- signalk-to-nmea2000.json ---
+{
+  "enabled": true,
+  "configuration": {
+    "PGNs": [
+      "129025",
+      "129026",
+      "129029",
+      "127250",
+      "130306",
+      "127257",
+      "128259",
+      "128267"
+    ]
+  }
+}--- signalk-um982-gnss.json ---
+{
+  "configuration": {
+    "port": "/dev/ttyUSB0",
+    "baudRate": 115200,
+    "freqAttitude": 5,
+    "freqPosition": 1,
+    "antennaAxis": "port-starboard",
+    "reverseHeading": false,
+    "rollOffset": 0,
+    "pitchOffset": 0,
+    "reverseRoll": true,
+    "reversePitch": false
+  },
+  "enabled": true
+}--- signalk-wit-imu-ble.json ---
+{
+  "configuration": {
+    "bleAddress": "E9:10:DB:8B:CE:C7",
+    "bleName": "WT901BLE68",
+    "characteristicHandle": "0x0030",
+    "autoReconnect": true,
+    "updateRate": 100,
+    "filterAlpha": 0.05,
+    "enableAcceleration": true,
+    "enableRateOfTurn": true,
+    "rollOffset": 0,
+    "pitchOffset": 0,
+    "yawOffset": 0,
+    "accelXOffset": 0,
+    "accelYOffset": 0,
+    "accelZOffset": 0,
+    "gyroZOffset": 0,
+    "rateOfTurnZOffset": 0
+  },
+  "enabled": true
+}--- sk-to-nmea0183.json ---
+{
+  "configuration": {
+    "APB": false,
+    "APB_throttle": 0,
+    "APB-true": false,
+    "APB-true_throttle": 0,
+    "DBK": false,
+    "DBK_throttle": 0,
+    "DBS": false,
+    "DBS_throttle": 0,
+    "DBT": false,
+    "DBT_throttle": 0,
+    "DPT": false,
+    "DPT_throttle": 0,
+    "DPT-surface": false,
+    "DPT-surface_throttle": 0,
+    "GGA": false,
+    "GGA_throttle": 0,
+    "GLL": false,
+    "GLL_throttle": 0,
+    "HDG": false,
+    "HDG_throttle": 0,
+    "HDM": false,
+    "HDM_throttle": 0,
+    "HDMC": false,
+    "HDMC_throttle": 0,
+    "HDT": true,
+    "HDT_throttle": 1000,
+    "HDTC": false,
+    "HDTC_throttle": 0,
+    "MMB": false,
+    "MMB_throttle": 0,
+    "MTA": false,
+    "MTA_throttle": 0,
+    "MTW": false,
+    "MTW_throttle": 0,
+    "MWD": true,
+    "MWD_throttle": 0,
+    "MWVR": true,
+    "MWVR_throttle": 0,
+    "MWVT": true,
+    "MWVT_throttle": 0,
+    "PNKEP01": false,
+    "PNKEP01_throttle": 0,
+    "PNKEP02": false,
+    "PNKEP02_throttle": 0,
+    "PNKEP03": false,
+    "PNKEP03_throttle": 0,
+    "PNKEP99": false,
+    "PNKEP99_throttle": 0,
+    "PSILCD1": false,
+    "PSILCD1_throttle": 0,
+    "PSILTBS": false,
+    "PSILTBS_throttle": 0,
+    "RMB": false,
+    "RMB_throttle": 0,
+    "RMC": true,
+    "RMC_throttle": 1000,
+    "ROT": false,
+    "ROT_throttle": 0,
+    "RSA": false,
+    "RSA_throttle": 0,
+    "VHW": true,
+    "VHW_throttle": 0,
+    "VLW": false,
+    "VLW_throttle": 0,
+    "VPW": true,
+    "VPW_throttle": 0,
+    "VTG": true,
+    "VTG_throttle": 1000,
+    "VWR": true,
+    "VWR_throttle": 0,
+    "VWT": true,
+    "VWT_throttle": 0,
+    "XDRBaro": true,
+    "XDRBaro_throttle": 0,
+    "XDRNA": true,
+    "XDRNA_throttle": 1000,
+    "XDRTemp": true,
+    "XDRTemp_throttle": 0,
+    "XTE": false,
+    "XTE_throttle": 0,
+    "XTE-GC": false,
+    "XTE-GC_throttle": 0,
+    "ZDA": false,
+    "ZDA_throttle": 0
+  },
+  "enabled": true
+}--- sk-to-nmea2000.json ---
+{
+  "configuration": {
+    "AISv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "ATTITUDE": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "BATTERYv2": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30,
+      "batteries": []
+    },
+    "COG_SOGv2": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "DEPTHv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "EXHAUST_TEMPERATURE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "engines": []
+    },
+    "ENGINE_PARAMETERS": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "engines": []
+    },
+    "ENVIRONMENT_PARAMETERS": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "GPS_LOCATIONv2": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "HEADINGv2": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "HUMIDITY_OUTSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "HUMIDITY_INSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "LEEWAY": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "magneticvariation": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "xte": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "navigationdata": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "routewpinformation": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "NOTIFICATIONS": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "PRESSURE_ATMOSPHERIC": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "RAYMARINE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "groups": []
+    },
+    "RAYMARINENAV": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "ENVIRONMENT_PARAMETERS_SEA": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "SetDrift": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "SOLAR": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "chargers": []
+    },
+    "SPEED": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "SYSTEM_TIMEv2": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "TANKS": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "TEMPERATURE_OUTSIDE": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 101
+    },
+    "TEMPERATURE2_OUTSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 101
+    },
+    "TEMPERATURE_INSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 102
+    },
+    "TEMPERATURE2_INSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 102
+    },
+    "TEMPERATURE_ENGINEROOM": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 103
+    },
+    "TEMPERATURE2_ENGINEROOM": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 103
+    },
+    "TEMPERATURE_MAINCABIN": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_MAINCABIN": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_refridgerator": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_refridgerator": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_HEATINGSYSTEM": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_HEATINGSYSTEM": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_DEWPOINT": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_DEWPOINT": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_APPARENTWINDCHILL": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_APPARENTWINDCHILL": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_THEORETICALWINDCHILL": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_THEORETICALWINDCHILL": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_HEATINDEX": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_HEATINDEX": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_FREEZER": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_FREEZER": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TRUE_HEADING": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "WINDv2": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "WIND_TRUE_GROUND": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "WIND_TRUE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    }
+  },
+  "enabled": true
+}
+=== G. FILE PERMISSIONS ===
+total 132
+drwxrwxr-x  11 aneto aneto  4096 May 21 22:05 .
+drwx------  35 aneto aneto 12288 May 21 22:25 ..
+drwxrwxr-x   3 aneto aneto  4096 Apr 22 18:21 backups
+-rw-r--r--   1 aneto aneto   478 Apr 24 19:17 baseDeltas.json
+drwxrwxr-x 495 aneto aneto 20480 May 21 22:00 node_modules
+drwxrwxr-x 495 aneto aneto 20480 Apr 24 18:41 node_modules.backup-20260424_184129
+-rw-rw-r--   1 aneto aneto    19 Jan 25 11:46 .npmrc
+-rw-rw-r--   1 aneto aneto   554 Apr 23 10:37 package.json
+drwxrwxr-x   4 aneto aneto  4096 May 21 22:05 plugin-config-data
+drwxrwxr-x   3 aneto aneto  4096 Apr 24 19:27 plugins
+drwxrwxr-x   3 aneto aneto  4096 Apr 23 21:10 plugins-old
+drwxrwxr-x   3 aneto aneto  4096 Apr 22 01:38 plugins-src
+drwxr-xr-x   3 aneto aneto  4096 Apr 22 17:34 serverState
+-rw-r--r--   1 aneto aneto  3282 May 21 22:05 settings.json
+-rw-r--r--   1 aneto aneto  1085 Apr 24 01:51 settings.json.backup
+-rw-r--r--   1 aneto aneto  1470 Apr 24 19:00 settings.json.backup-1777071652
+-rw-r--r--   1 aneto aneto  2893 May 21 22:05 settings.json.backup-before-um982-add
+-rw-r--r--   1 aneto aneto  3808 Apr 23 12:33 settings.json.broken
+-rw-r--r--   1 aneto aneto  2136 Apr 24 21:55 settings.json.broken.215508
+-rw-r--r--   1 aneto aneto  2137 Apr 24 22:26 settings.json.broken.222622
+-rw-r--r--   1 aneto aneto  2493 Apr 22 17:32 settings.json.current
+drwxr-xr-x   3 aneto aneto  4096 Apr 22 00:49 unitpreferences
+-rw-rw-r--   1 aneto aneto   427 Apr 22 10:45 wit-calibration.json
+  File: /home/aneto/.signalk/settings.json
+  Size: 3282      	Blocks: 8          IO Block: 4096   regular file
+Device: 8,2	Inode: 6989760     Links: 1
+Access: (0644/-rw-r--r--)  Uid: ( 1000/   aneto)   Gid: ( 1000/   aneto)
+Access: 2026-05-17 14:59:04.328472635 -0400
+Modify: 2026-05-21 22:05:11.896150405 -0400
+Change: 2026-05-21 22:05:11.896150405 -0400
+ Birth: 2026-05-17 14:59:04.328472635 -0400
+  File: /home/aneto/.signalk/package.json
+  Size: 554       	Blocks: 8          IO Block: 4096   regular file
+Device: 8,2	Inode: 6984451     Links: 1
+Access: (0664/-rw-rw-r--)  Uid: ( 1000/   aneto)   Gid: ( 1000/   aneto)
+Access: 2026-04-18 10:42:29.750330697 -0400
+Modify: 2026-04-23 10:37:04.419486824 -0400
+Change: 2026-04-23 10:37:04.419486824 -0400
+ Birth: 2026-04-18 10:42:29.750330697 -0400
+
+=== H. PLUGINS API RAW JSON ===
+[{"id":"signalk-app-dock","name":"App Dock","packageName":"@signalk/app-dock","keywords":["signalk-node-server-plugin","signalk-webapp","signalk-plugin-configurator","signalk-category-instruments"],"version":"0.2.1","schema":{"type":"object","description":"Open /@signalk/app-dock/config.html for the visual configurator with discover button and drag-to-reorder.","required":[],"properties":{"position":{"type":"string","title":"Dock position","enum":["bottom","top","left","right"],"default":"bottom"},"triggerCorner":{"type":"string","title":"Double-tap corner","description":"Screen corner that activates the dock on double-tap","enum":["bottom-right","bottom-left","top-right","top-left"],"default":"bottom-right"},"iframeMode":{"type":"string","title":"iFrame lifecycle","description":"keep-alive: load once and hide/show (faster switching, more RAM). destroy: reload on every switch (slower, minimal RAM).","enum":["keep-alive","destroy"],"default":"keep-alive"},"iconSize":{"type":"number","title":"Icon size (px)","default":56},"magnification":{"type":"boolean","title":"Enable dock magnification effect","default":true},"magnificationScale":{"type":"number","title":"Magnification scale (1.0 = none, 2.5 = maximum)","default":1.7},"showNightModeButton":{"type":"boolean","title":"Show night/day mode toggle","description":"Adds a sun/moon button to the dock that toggles environment.mode","default":true},"showExitButton":{"type":"boolean","title":"Show exit button","description":"Adds an X button to the dock that returns to Signal K admin UI","default":false},"tourDismissed":{"type":"boolean","title":"Welcome tour dismissed","description":"Set automatically when a user clicks \"Don't show again\" in the welcome tour. Uncheck to show the tour again on all devices.","default":false},"apps":{"type":"array","title":"Dock Apps","description":"Installed webapps are added here automatically. Reorder, disable, or override labels/icons as needed.","items":{"type":"object","required":["url"],"properties":{"enabled":{"type":"boolean","title":"Enabled","default":true},"autostart":{"type":"boolean","title":"Autostart","description":"Load this app automatically when the dock page opens","default":false},"url":{"type":"string","title":"URL"},"label":{"type":"string","title":"Label override"},"icon":{"type":"string","title":"Icon override","description":"Emoji or image path"},"color":{"type":"string","title":"Background color"}}},"default":[]}}},"statusMessage":"","data":{"enabled":true,"configuration":{"showNightModeButton":true,"showExitButton":false,"apps":[{"enabled":true,"autostart":true,"url":"/@signalk/freeboard-sk/","label":"Freeboard-SK","icon":"/@signalk/freeboard-sk/assets/icons/icon-72x72.png","color":""},{"enabled":true,"autostart":false,"url":"/@mxtommy/kip/","label":"KIP","icon":"/@mxtommy/kip/assets/icon-72x72.png","color":""},{"enabled":true,"autostart":false,"url":"/admin/","label":"Settings","icon":"/@signalk/app-dock/icon-settings.svg","color":"#78788c"}]}}},{"id":"calibration","name":"Calibration","packageName":"@signalk/calibration","keywords":["signalk-node-server-plugin","signalk-plugin-configurator"],"version":"1.3.3","description":"Plugin that uses linear interpolation to adjust incoming deltas in the server for calibrating inputs","schema":{"type":"object","properties":{"calibrations":{"type":"array","items":{"type":"object","required":["path","mappings"],"properties":{"path":{"type":"string"},"sourceRef":{"type":"string"},"period":{"type":"number"},"mappings":{"type":"array","items":{"type":"object","properties":{"in":{"type":"number"},"out":{"type":"number"}}}}}}}}},"statusMessage":"","data":{}},{"id":"sk-to-nmea0183","name":"Convert Signal K to NMEA0183","packageName":"@signalk/signalk-to-nmea0183","keywords":["signalk-node-server-plugin"],"version":"1.16.1","description":"Plugin to convert Signal K to NMEA0183","schema":{"type":"object","title":"Conversions to NMEA0183","description":"If there is SK data for the conversion generate the following NMEA0183 sentences from Signal K data. For converting NMEA2000 AIS to NMEA 0183 use the signalk-n2kais-to-nmea0183 plugin.","properties":{"APB":{"title":"APB - Autopilot info (magnetic bearings)","type":"boolean","default":false},"APB_throttle":{"title":"APB throttle ms","type":"number","default":0},"APB-true":{"title":"APB - Autopilot info (true bearings)","type":"boolean","default":false},"APB-true_throttle":{"title":"APB-true throttle ms","type":"number","default":0},"DBK":{"title":"DBK - Depth Below Keel","type":"boolean","default":false},"DBK_throttle":{"title":"DBK throttle ms","type":"number","default":0},"DBS":{"title":"DBS - Depth Below Surface","type":"boolean","default":false},"DBS_throttle":{"title":"DBS throttle ms","type":"number","default":0},"DBT":{"title":"DBT - Depth Below Transducer","type":"boolean","default":false},"DBT_throttle":{"title":"DBT throttle ms","type":"number","default":0},"DPT":{"title":"DPT - Depth","type":"boolean","default":false},"DPT_throttle":{"title":"DPT throttle ms","type":"number","default":0},"DPT-surface":{"title":"DPT - Depth at Surface (using surfaceToTransducer)","type":"boolean","default":false},"DPT-surface_throttle":{"title":"DPT-surface throttle ms","type":"number","default":0},"GGA":{"title":"GGA - Time, position, and fix related data","type":"boolean","default":false},"GGA_throttle":{"title":"GGA throttle ms","type":"number","default":0},"GLL":{"title":"GLL - Geographical position, latitude and longitude","type":"boolean","default":false},"GLL_throttle":{"title":"GLL throttle ms","type":"number","default":0},"HDG":{"title":"HDG - Heading, Deviation & Variation","type":"boolean","default":false},"HDG_throttle":{"title":"HDG throttle ms","type":"number","default":0},"HDM":{"title":"HDM - Heading Magnetic","type":"boolean","default":false},"HDM_throttle":{"title":"HDM throttle ms","type":"number","default":0},"HDMC":{"title":"HDM - Heading Magnetic, calculated from True","type":"boolean","default":false},"HDMC_throttle":{"title":"HDMC throttle ms","type":"number","default":0},"HDT":{"title":"HDT - Heading True","type":"boolean","default":false},"HDT_throttle":{"title":"HDT throttle ms","type":"number","default":0},"HDTC":{"title":"HDT - Heading True calculated from magnetic heading and variation","type":"boolean","default":false},"HDTC_throttle":{"title":"HDTC throttle ms","type":"number","default":0},"MMB":{"title":"MMB - Environment outside pressure","type":"boolean","default":false},"MMB_throttle":{"title":"MMB throttle ms","type":"number","default":0},"MTA":{"title":"MTA - Air temperature.","type":"boolean","default":false},"MTA_throttle":{"title":"MTA throttle ms","type":"number","default":0},"MTW":{"title":"MTW - Water Temperature","type":"boolean","default":false},"MTW_throttle":{"title":"MTW throttle ms","type":"number","default":0},"MWD":{"title":"MWD - Wind relative to North, speed might be ground speed.","type":"boolean","default":false},"MWD_throttle":{"title":"MWD throttle ms","type":"number","default":0},"MWVR":{"title":"MWV - Apparent Wind heading and speed","type":"boolean","default":false},"MWVR_throttle":{"title":"MWVR throttle ms","type":"number","default":0},"MWVT":{"title":"MWV - True Wind heading and speed","type":"boolean","default":false},"MWVT_throttle":{"title":"MWVT throttle ms","type":"number","default":0},"PNKEP01":{"title":"PNKEP,01 - Target Polar speed","type":"boolean","default":false},"PNKEP01_throttle":{"title":"PNKEP01 throttle ms","type":"number","default":0},"PNKEP02":{"title":"PNKEP,02 - Course (COG) on other tack from 0 to 359°","type":"boolean","default":false},"PNKEP02_throttle":{"title":"PNKEP02 throttle ms","type":"number","default":0},"PNKEP03":{"title":"PNKEP,03 - Polar and VMG, and optimum angle.","type":"boolean","default":false},"PNKEP03_throttle":{"title":"PNKEP03 throttle ms","type":"number","default":0},"PNKEP99":{"title":"PNKEP,99 - Debug","type":"boolean","default":false},"PNKEP99_throttle":{"title":"PNKEP99 throttle ms","type":"number","default":0},"PSILCD1":{"title":"PSILCD1 - Send polar speed and target wind angle to Silva/Nexus/Garmin displays","type":"boolean","default":false},"PSILCD1_throttle":{"title":"PSILCD1 throttle ms","type":"number","default":0},"PSILTBS":{"title":"PSILTBS - Garmin proprietary target boat speed","type":"boolean","default":false},"PSILTBS_throttle":{"title":"PSILTBS throttle ms","type":"number","default":0},"RMB":{"title":"RMB - Heading and distance to waypoint","type":"boolean","default":false},"RMB_throttle":{"title":"RMB throttle ms","type":"number","default":0},"RMC":{"title":"RMC - GPS recommended minimum","type":"boolean","default":false},"RMC_throttle":{"title":"RMC throttle ms","type":"number","default":0},"ROT":{"title":"ROT - Rate of Turn","type":"boolean","default":false},"ROT_throttle":{"title":"ROT throttle ms","type":"number","default":0},"RSA":{"title":"RSA - Rudder Sensor Angle","type":"boolean","default":false},"RSA_throttle":{"title":"RSA throttle ms","type":"number","default":0},"VHW":{"title":"VHW - Speed and direction","type":"boolean","default":false},"VHW_throttle":{"title":"VHW throttle ms","type":"number","default":0},"VLW":{"title":"VLW - Total log and daily log","type":"boolean","default":false},"VLW_throttle":{"title":"VLW throttle ms","type":"number","default":0},"VPW":{"title":"VPW - Speed – Measured Parallel to Wind","type":"boolean","default":false},"VPW_throttle":{"title":"VPW throttle ms","type":"number","default":0},"VTG":{"title":"VTG - Track made good and Ground Speed (COG,SOG)","type":"boolean","default":false},"VTG_throttle":{"title":"VTG throttle ms","type":"number","default":0},"VWR":{"title":"VWR - Apparent wind angle and speed","type":"boolean","default":false},"VWR_throttle":{"title":"VWR throttle ms","type":"number","default":0},"VWT":{"title":"VWT - True wind speed relative to boat.","type":"boolean","default":false},"VWT_throttle":{"title":"VWT throttle ms","type":"number","default":0},"XDRBaro":{"title":"XDR (Barometer) - Atmospheric Pressure","type":"boolean","default":false},"XDRBaro_throttle":{"title":"XDRBaro throttle ms","type":"number","default":0},"XDRNA":{"title":"XDR (PTCH-ROLL) - Pitch and Roll","type":"boolean","default":false},"XDRNA_throttle":{"title":"XDRNA throttle ms","type":"number","default":0},"XDRTemp":{"title":"XDR (TempAir) - Air temperature.","type":"boolean","default":false},"XDRTemp_throttle":{"title":"XDRTemp throttle ms","type":"number","default":0},"XTE":{"title":"XTE - Cross-track error (w.r.t. Rhumb line)","type":"boolean","default":false},"XTE_throttle":{"title":"XTE throttle ms","type":"number","default":0},"XTE-GC":{"title":"XTE - Cross-track error (w.r.t. Great Circle)","type":"boolean","default":false},"XTE-GC_throttle":{"title":"XTE-GC throttle ms","type":"number","default":0},"ZDA":{"title":"ZDA - UTC time and date","type":"boolean","default":false},"ZDA_throttle":{"title":"ZDA throttle ms","type":"number","default":0}}},"statusMessage":"","data":{"configuration":{"APB":false,"APB_throttle":0,"APB-true":false,"APB-true_throttle":0,"DBK":false,"DBK_throttle":0,"DBS":false,"DBS_throttle":0,"DBT":false,"DBT_throttle":0,"DPT":false,"DPT_throttle":0,"DPT-surface":false,"DPT-surface_throttle":0,"GGA":false,"GGA_throttle":0,"GLL":false,"GLL_throttle":0,"HDG":false,"HDG_throttle":0,"HDM":false,"HDM_throttle":0,"HDMC":false,"HDMC_throttle":0,"HDT":true,"HDT_throttle":1000,"HDTC":false,"HDTC_throttle":0,"MMB":false,"MMB_throttle":0,"MTA":false,"MTA_throttle":0,"MTW":false,"MTW_throttle":0,"MWD":true,"MWD_throttle":0,"MWVR":true,"MWVR_throttle":0,"MWVT":true,"MWVT_throttle":0,"PNKEP01":false,"PNKEP01_throttle":0,"PNKEP02":false,"PNKEP02_throttle":0,"PNKEP03":false,"PNKEP03_throttle":0,"PNKEP99":false,"PNKEP99_throttle":0,"PSILCD1":false,"PSILCD1_throttle":0,"PSILTBS":false,"PSILTBS_throttle":0,"RMB":false,"RMB_throttle":0,"RMC":true,"RMC_throttle":1000,"ROT":false,"ROT_throttle":0,"RSA":false,"RSA_throttle":0,"VHW":true,"VHW_throttle":0,"VLW":false,"VLW_throttle":0,"VPW":true,"VPW_throttle":0,"VTG":true,"VTG_throttle":1000,"VWR":true,"VWR_throttle":0,"VWT":true,"VWT_throttle":0,"XDRBaro":true,"XDRBaro_throttle":0,"XDRNA":true,"XDRNA_throttle":1000,"XDRTemp":true,"XDRTemp_throttle":0,"XTE":false,"XTE_throttle":0,"XTE-GC":false,"XTE-GC_throttle":0,"ZDA":false,"ZDA_throttle":0},"enabled":true}},{"id":"course-provider","name":"Course Data provider","packageName":"@signalk/course-provider","keywords":["signalk-node-server-plugin","signalk-category-utility","signalk","signalk-min-api-version:2"],"version":"1.2.6","schema":{"properties":{"notifications":{"type":"object","title":"Notifications","description":"Configure the options for generated notifications.","properties":{"sound":{"type":"boolean","title":"Enable sound"}}},"calculations":{"type":"object","title":"Calculations","description":"Configure course calculations options.","properties":{"method":{"type":"string","default":"GreatCircle","enum":["GreatCircle","Rhumbline"]}}}}},"statusMessage":"","uiSchema":{"notifications":{"sound":{"ui:widget":"checkbox","ui:title":" ","ui:help":""}},"calculations":{"method":{"ui:widget":"radio","ui:title":"Course calculation method","ui:help":" "}}},"data":{"enabled":true,"configuration":{}}},{"id":"freeboard-sk","name":"Freeboard-SK","packageName":"@signalk/freeboard-sk","keywords":["signalk-webapp","signalk-node-server-plugin","signalk-category-chart-plotters"],"version":"2.21.0","schema":{"properties":{}},"statusMessage":"","uiSchema":{},"data":{"enabled":true,"configuration":{}}},{"id":"kip","name":"KIP","packageName":"@mxtommy/kip","keywords":["signalk-webapp","signalk-category-instruments","signalk-category-notifications","signalk-category-ais","signalk-node-server-plugin","signal k","signalk","instruments","dashboard","marine","nmea"],"version":"4.8.0","description":"KIP server plugin","schema":{"type":"object","title":"Remote Control and Data Series","description":"NOTE: All plugin settings are also managed from within KIP's Display Options panel. Changes made here will be overridden when KIP applies settings from the Display Options.","properties":{"nodeSqliteAvailable":{"type":"boolean","title":"node:sqlite Available","description":"Indicates if node:sqlite is available in the current runtime (requires Node.js version 22.5.0 or newer). This is set automatically and is read-only.\n\nBefore upgrading Node.js, always verify compatibility with your Signal K server version at https://demo.signalk.org/documentation.","readOnly":true,"default":true},"historySeriesServiceEnabled":{"type":"boolean","title":"Enable Automatic Historical Time-Series Capture and Management","description":"Historical Time-Series are data captures that supply the widget historical data and seed the Data Chart and Wind Trends widgets. If disabled, data capture must be configured in your chosen history provider plugin.","default":true},"registerAsHistoryApiProvider":{"type":"boolean","title":"Enable Query Provider","description":"The built-in History-API query provider is a feature that enables the plugin to respond to History-API requests. If you want to use another History-API provider, disable this option and configure your chosen History-API compatible provider accordingly and KIP will query that provider.","default":true}}},"statusMessage":"","data":{"enabled":true,"configuration":{}}},{"id":"signalk-n2kais-to-nmea0183","name":"N2K AIS to NMEA0183","packageName":"signalk-n2kais-to-nmea0183","keywords":["signalk-node-server-plugin","signalk-category-ais","signalk-category-nmea-2000"],"version":"2.0.3","description":"N2K AIS to NMEA0183","schema":{"type":"object","properties":{"events":{"type":"string","title":"NMEA 0183 Out Events","default":"nmea0183out","description":"can be comma separated list"},"sendSelf":{"type":"boolean","title":"Send self data","default":false}}},"statusMessage":"","data":{}},{"id":"resources-provider","name":"Resources Provider (built-in)","packageName":"@signalk/resources-provider","keywords":["signalk-node-server-plugin","signalk-category-utility","signalk","resources","routes","waypoints","regions","notes"],"version":"1.5.1","schema":{"properties":{"standard":{"type":"object","title":"Resources (standard)","description":"ENABLE / DISABLE provider for the following SignalK resource types.","properties":{"routes":{"type":"boolean","title":"ROUTES"},"waypoints":{"type":"boolean","title":"WAYPOINTS"},"notes":{"type":"boolean","title":"NOTES"},"regions":{"type":"boolean","title":"REGIONS"},"charts":{"type":"boolean","title":"CHART SOURCES"}}},"custom":{"type":"array","title":"Resources (custom)","description":"Add provider for custom resource collections.","items":{"type":"object","required":["name"],"properties":{"name":{"type":"string","title":"Collection Name","description":"/signalk/v2/api/resources/{name}"},"description":{"type":"string","title":"Description","description":"Type of resource in this collection."}}}}}},"statusMessage":"","uiSchema":{"standard":{"routes":{"ui:widget":"checkbox","ui:title":" ","ui:help":"/signalk/v2/api/resources/routes"},"waypoints":{"ui:widget":"checkbox","ui:title":" ","ui:help":"/signalk/v2/api/resources/waypoints"},"notes":{"ui:widget":"checkbox","ui:title":" ","ui:help":"/signalk/v2/api/resources/notes"},"regions":{"ui:widget":"checkbox","ui:title":" ","ui:help":"/signalk/v2/api/resources/regions"},"charts":{"ui:widget":"checkbox","ui:title":" ","ui:help":"/signalk/v2/api/resources/charts"}}},"data":{"enabled":true,"configuration":{"standard":{"routes":true,"waypoints":true,"notes":true,"regions":true,"charts":true},"custom":[]}}},{"id":"set-system-time","name":"Set System Time","packageName":"@signalk/set-system-time","keywords":["signalk-node-server-plugin"],"version":"1.5.0","description":"Plugin that sets the system date & time from navigation.datetime delta messages","schema":{"title":"Set System Time","type":"object","properties":{"interval":{"type":"number","title":"Interval between updates in seconds (0 is once upon plugin start when datetime received)","default":0},"sudo":{"type":"boolean","title":"Use sudo as fallback when setting time without sudo fails","default":true},"preferNetworkTime":{"type":"boolean","title":"Set system time only if no other source is available (only chrony detected)","default":true}}},"statusMessage":"","data":{}},{"id":"signalk-to-influxdb2","name":"Signal K to InfluxDb 2","packageName":"signalk-to-influxdb2","keywords":["signalk-node-server-plugin"],"version":"1.12.1","description":"Signal K integration with InfluxDb 2","schema":{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"outputDailyLog":{"title":"Output Daily Distance Log values","description":"Calculate periodically daily distance from navigation.position values since 00:00 local time and output under navigation.trip.daily","default":false,"type":"boolean"},"influxes":{"type":"array","items":{"type":"object","properties":{"url":{"description":"InfluxDB server address in http://hostname:port format","default":"http://127.0.0.1:8086","title":"Url","type":"string"},"token":{"description":"Authentication token","title":"Token","type":"string"},"org":{"title":"Organisation","type":"string"},"bucket":{"title":"Bucket","type":"string"},"onlySelf":{"title":"Store only self data","default":true,"description":"Store data only for \"self\" vessel, not for example AIS targets' data","type":"boolean"},"filteringRules":{"title":"Filtering Rules","default":[],"description":"Filtering rules for allowing and/or ignoring data for writing. First matching rule decides whether to allow writing or ignore and not write the value. If there are rules but none of them match the value will be written. Adding rules disables ignoredPaths and ignoredValues. To pick some values add allow rules for them and an \"ignore all\" rule at the end with .* in either path or source field. Activate Debug logging in plugin configuration to get logging on server startup about ignored and allowed data.","type":"array","items":{"type":"object","properties":{"allow":{"title":"Allow rule","description":"Check to use this rule for picking data for writing, otherwise this rule will cause data to be ignored.","type":"boolean"},"path":{"title":"Path","description":"Literal value or JS regular expression.","type":"string"},"source":{"title":"Source","description":"Literal value or JS regular expression. You can copypaste values from server's Data Browser","type":"string"}}}},"ignoredPaths":{"title":"Ignored paths","default":[],"description":"Paths that should be ignored and not written to InfluxDB (JS regular expressions work)","type":"array","items":{"type":"string"}},"ignoredSources":{"title":"Ignored sources","default":[],"description":"Sources whose data should be ignored and not written to InfluxDB (JS regular expressions work)","type":"array","items":{"type":"string"}},"useSKTimestamp":{"title":"Use timestamps from SK data","default":false,"description":"Whether the timestamps in SK data should be used instead of time of insertion to InfluxDB","type":"boolean"},"resolution":{"title":"Resolution (milliseconds)","default":": 0","description":"Time resolution of data written to the database. Zero means write all data, 1000 means write each context-path-source combination once per second. Updates arriving more quicker will not be written.","type":"number"},"writeOptions":{"type":"object","properties":{"batchSize":{"description":"max number of records/lines to send in a batch","type":"number"},"flushInterval":{"description":"delay between data flushes in milliseconds, at most `batch size` records are sent during flush","type":"number"},"defaultTags":{"description":"default tags, unescaped","type":"object"},"headers":{"description":"HTTP headers that will be sent with every write request","type":"object","additionalProperties":{"type":"string"}},"gzipThreshold":{"description":"When specified, write bodies larger than the threshold are gzipped","type":"number"},"maxBatchBytes":{"description":"max size of a batch in bytes","type":"number"},"consistency":{"description":"InfluxDB Enterprise write consistency as explained in https://docs.influxdata.com/enterprise_influxdb/v1.9/concepts/clustering/#write-consistency","enum":["all","any","one","quorum"],"type":"string"},"writeFailed":{"description":"WriteFailed is called to inform about write errors.","type":"object"},"writeSuccess":{"description":"WriteSuccess is informed about successfully written lines.","type":"object"},"writeRetrySkipped":{"description":"WriteRetrySkipped is informed about lines that were removed from the retry buffer\nto keep the size of the retry buffer under the configured limit (maxBufferLines).","type":"object"},"maxRetries":{"description":"max count of retries after the first write fails","type":"number"},"maxRetryTime":{"description":"max time (millis) that can be spent with retries","type":"number"},"maxBufferLines":{"description":"the maximum size of retry-buffer (in lines)","type":"number"},"retryJitter":{"description":"add `random(retryJitter)` milliseconds delay when retrying HTTP calls","type":"number"},"minRetryDelay":{"description":"minimum delay when retrying write (milliseconds)","type":"number"},"maxRetryDelay":{"description":"maximum delay when retrying write (milliseconds)","type":"number"},"exponentialBase":{"description":"base for the exponential retry delay","type":"number"},"randomRetry":{"description":"randomRetry indicates whether the next retry delay is deterministic (false) or random (true).\nThe deterministic delay starts with `minRetryDelay * exponentialBase` and it is multiplied\nby `exponentialBase` until it exceeds `maxRetryDelay`.\nWhen random is `true`, the next delay is computed as a random number between next retry attempt (upper)\nand the lower number in the deterministic sequence. `random(retryJitter)` is added to every returned value.","type":"boolean"}}}}}}}},"statusMessage":"","data":{"configuration":{"outputDailyLog":false,"influxes":[{"name":"MidnightRider","url":"http://localhost:8086","org":"MidnightRider","bucket":"midnight_rider","token":"XxIolCzqcNaLrP3tEzcKdmKUoxmlut4M1mrkVaQPhh6jzd2QZ3bKp6zV42_2ciYNKOYcFSEp_Ej4FWt2kS2fAw==","writeInterval":1}]},"enabled":true,"bucket":"midnight_rider","org":"MidnightRider"}},{"id":"sk-to-nmea2000","name":"Signal K to NMEA 2000","packageName":"signalk-to-nmea2000","keywords":["signalk-node-server-plugin"],"version":"2.24.0","description":"Plugin to convert Signal K to NMEA2000","schema":{"type":"object","title":"Conversions to NMEA2000","description":"If there is SignalK data for the conversion generate the following NMEA2000 pgns from Signal K data:","properties":{"AISv2":{"type":"object","title":"AIS (129794, 129038, 129041)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30}}},"ATTITUDE":{"type":"object","title":"Attitude (127257) - Roll/Pitch/Yaw from WIT IMU","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationattituderoll":{"title":"Source for navigation.attitude.roll","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationattitudepitch":{"title":"Source for navigation.attitude.pitch","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationattitudeyaw":{"title":"Source for navigation.attitude.yaw","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"BATTERYv2":{"type":"object","title":"Battery (127506 & 127508)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"batteries":{"title":"Battery Mapping","type":"array","items":{"type":"object","properties":{"signalkId":{"title":"Signal K battery id","type":"string"},"instanceId":{"title":"NMEA2000 Battery Instance Id","type":"number"}}}}}},"COG_SOGv2":{"type":"object","title":"COG & SOG (129026)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationcourseOverGroundTrue":{"title":"Source for navigation.courseOverGroundTrue","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationspeedOverGround":{"title":"Source for navigation.speedOverGround","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"DEPTHv2":{"type":"object","title":"Depth (128267)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentdepthbelowTransducer":{"title":"Source for environment.depth.belowTransducer","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"EXHAUST_TEMPERATURE":{"type":"object","title":"Temperature, exhaust (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"engines":{"title":"Engine Mapping","type":"array","items":{"type":"object","properties":{"signalkId":{"title":"Signal K engine id","type":"string"},"tempInstanceId":{"title":"NMEA2000 Temperature Instance Id","type":"number"}}}}}},"ENGINE_PARAMETERS":{"type":"object","title":"Engine Parameters (127489,127488)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"engines":{"title":"Engine Mapping","type":"array","items":{"type":"object","properties":{"signalkId":{"title":"Signal K engine id","type":"string"},"instanceId":{"title":"NMEA2000 Engine Instance Id","type":"number"}}}}}},"ENVIRONMENT_PARAMETERS":{"type":"object","title":"Atmospheric Pressure (130311)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsidepressure":{"title":"Source for environment.outside.pressure","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"GPS_LOCATIONv2":{"type":"object","title":"Location (129025,129029)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationposition":{"title":"Source for navigation.position","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"HEADINGv2":{"type":"object","title":"Heading (127250)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationheadingMagnetic":{"title":"Source for navigation.headingMagnetic","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationmagneticVariation":{"title":"Source for navigation.magneticVariation","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"HUMIDITY_OUTSIDE":{"type":"object","title":"Outside Humidity (PGN130313)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsiderelativeHumidity":{"title":"Source for environment.outside.relativeHumidity","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"HUMIDITY_INSIDE":{"type":"object","title":"Inside Humidity (PGN130313)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsiderelativeHumidity":{"title":"Source for environment.inside.relativeHumidity","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"LEEWAY":{"type":"object","title":"Leeway (128000)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"performanceleeway":{"title":"Source for performance.leeway","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"magneticvariation":{"type":"object","title":"Magnetic Variation (127258)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationmagneticVariation":{"title":"Source for navigation.magneticVariation","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationmagneticVariationsource":{"title":"Source for navigation.magneticVariation.source","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"xte":{"type":"object","title":"Cross Track Error (129283)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationcoursecalcValuescrossTrackError":{"title":"Source for navigation.course.calcValues.crossTrackError","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"navigationdata":{"type":"object","title":"Navigation Data (129284)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationcoursecalcValuesdistance":{"title":"Source for navigation.course.calcValues.distance","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationcoursecalcValuesbearingTrue":{"title":"Source for navigation.course.calcValues.bearingTrue","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationcoursecalcValuesbearingTrackTrue":{"title":"Source for navigation.course.calcValues.bearingTrackTrue","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationcoursenextPoint":{"title":"Source for navigation.course.nextPoint","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationcoursecalcValuesvelocityMadeGood":{"title":"Source for navigation.course.calcValues.velocityMadeGood","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationcoursecalcValuescalcMethod":{"title":"Source for navigation.course.calcValues.calcMethod","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"notificationsnavigationarrivalCircleEntered":{"title":"Source for notifications.navigation.arrivalCircleEntered","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"notificationsnavigationperpendicularPassed":{"title":"Source for notifications.navigation.perpendicularPassed","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"navigationcourseactiveRoute":{"title":"Source for navigation.course.activeRoute","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"routewpinformation":{"type":"object","title":"Route/WP Information (129285)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30}}},"NOTIFICATIONS":{"type":"object","title":"Notifications (126983, 126985)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"notifications*":{"title":"Source for notifications.*","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"PRESSURE_ATMOSPHERIC":{"type":"object","title":"Atmospheric Pressure (130314)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsidepressure":{"title":"Source for environment.outside.pressure","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"RAYMARINE":{"type":"object","title":"Raymarine (Seatalk) Display Brightness (126720)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"groups":{"title":"Group Mapping","type":"array","items":{"type":"object","properties":{"signalkId":{"title":"Signal K Group id","type":"string"},"instanceId":{"title":"NMEA2000 Group Instance Id","type":"string"}}}}}},"RAYMARINENAV":{"type":"object","title":"Raymarine Route and Waypoint Information (130848, 130918)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30}}},"ENVIRONMENT_PARAMETERS_SEA":{"type":"object","title":"Sea/Air Temp (130310)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentwatertemperature":{"title":"Source for environment.water.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"environmentoutsidetemperature":{"title":"Source for environment.outside.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"environmentoutsidepressure":{"title":"Source for environment.outside.pressure","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"SetDrift":{"type":"object","title":"Set/Drift (129291)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentcurrentsetTrue":{"title":"Source for environment.current.setTrue","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"environmentcurrentdrift":{"title":"Source for environment.current.drift","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"SOLAR":{"type":"object","title":"Solar as Battery (127506 & 127508)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"chargers":{"title":"Solar Mapping","type":"array","items":{"type":"object","required":["signalkId","instanceId","panelInstanceId"],"properties":{"signalkId":{"title":"Signal K Solar id","type":"string"},"instanceId":{"title":"NMEA2000 Battery Instance Id","description":"Used for current/voltage","type":"number"},"panelInstanceId":{"title":"NMEA2000 Battery Panel Instance Id","description":"Used for panel current/voltage","type":"number"}}}}}},"SPEED":{"type":"object","title":"Speed (128259)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationspeedThroughWater":{"title":"Source for navigation.speedThroughWater","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"SYSTEM_TIMEv2":{"type":"object","title":"System Time (126992)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30}}},"TANKS":{"type":"object","title":"Tank Levels (127505)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30}}},"TEMPERATURE_OUTSIDE":{"type":"object","title":"Outside Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsidetemperature":{"title":"Source for environment.outside.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":101}}},"TEMPERATURE2_OUTSIDE":{"type":"object","title":"Outside Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsidetemperature":{"title":"Source for environment.outside.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":101}}},"TEMPERATURE_INSIDE":{"type":"object","title":"Inside Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsidetemperature":{"title":"Source for environment.inside.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":102}}},"TEMPERATURE2_INSIDE":{"type":"object","title":"Inside Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsidetemperature":{"title":"Source for environment.inside.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":102}}},"TEMPERATURE_ENGINEROOM":{"type":"object","title":"Engine Room Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsideengineRoomtemperature":{"title":"Source for environment.inside.engineRoom.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":103}}},"TEMPERATURE2_ENGINEROOM":{"type":"object","title":"Engine Room Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsideengineRoomtemperature":{"title":"Source for environment.inside.engineRoom.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":103}}},"TEMPERATURE_MAINCABIN":{"type":"object","title":"Main Cabin Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsidemainCabintemperature":{"title":"Source for environment.inside.mainCabin.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE2_MAINCABIN":{"type":"object","title":"Main Cabin Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsidemainCabintemperature":{"title":"Source for environment.inside.mainCabin.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE_refridgerator":{"type":"object","title":"Refrigeration Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsiderefrigeratortemperature":{"title":"Source for environment.inside.refrigerator.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE2_refridgerator":{"type":"object","title":"Refrigeration Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsiderefrigeratortemperature":{"title":"Source for environment.inside.refrigerator.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE_HEATINGSYSTEM":{"type":"object","title":"Heating System Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsideheatingtemperature":{"title":"Source for environment.inside.heating.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE2_HEATINGSYSTEM":{"type":"object","title":"Heating System Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsideheatingtemperature":{"title":"Source for environment.inside.heating.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE_DEWPOINT":{"type":"object","title":"Dew Point Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsidedewPointTemperature":{"title":"Source for environment.outside.dewPointTemperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE2_DEWPOINT":{"type":"object","title":"Dew Point Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsidedewPointTemperature":{"title":"Source for environment.outside.dewPointTemperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE_APPARENTWINDCHILL":{"type":"object","title":"Apparent Wind Chill Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsideapparentWindChillTemperature":{"title":"Source for environment.outside.apparentWindChillTemperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE2_APPARENTWINDCHILL":{"type":"object","title":"Apparent Wind Chill Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsideapparentWindChillTemperature":{"title":"Source for environment.outside.apparentWindChillTemperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE_THEORETICALWINDCHILL":{"type":"object","title":"Theoretical Wind Chill Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsidetheoreticalWindChillTemperature":{"title":"Source for environment.outside.theoreticalWindChillTemperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE2_THEORETICALWINDCHILL":{"type":"object","title":"Theoretical Wind Chill Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsidetheoreticalWindChillTemperature":{"title":"Source for environment.outside.theoreticalWindChillTemperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE_HEATINDEX":{"type":"object","title":"Heat Index Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsideheatIndexTemperature":{"title":"Source for environment.outside.heatIndexTemperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE2_HEATINDEX":{"type":"object","title":"Heat Index Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentoutsideheatIndexTemperature":{"title":"Source for environment.outside.heatIndexTemperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE_FREEZER":{"type":"object","title":"Freezer Temperature (130312)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsidefreezertemperature":{"title":"Source for environment.inside.freezer.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TEMPERATURE2_FREEZER":{"type":"object","title":"Freezer Temperature (130316)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentinsidefreezertemperature":{"title":"Source for environment.inside.freezer.temperature","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"instance":{"title":"N2K Temperature Instance","type":"number","default":107}}},"TRUE_HEADING":{"type":"object","title":"TrueHeading (127250)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"navigationheadingTrue":{"title":"Source for navigation.headingTrue","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"WINDv2":{"type":"object","title":"Wind (130306)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentwindangleApparent":{"title":"Source for environment.wind.angleApparent","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"environmentwindspeedApparent":{"title":"Source for environment.wind.speedApparent","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"WIND_TRUE_GROUND":{"type":"object","title":"Wind True over ground (130306)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentwinddirectionTrue":{"title":"Source for environment.wind.directionTrue","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"environmentwindspeedOverGround":{"title":"Source for environment.wind.speedOverGround","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}},"WIND_TRUE":{"type":"object","title":"Wind True over water (130306)","properties":{"enabled":{"title":"Enabled","type":"boolean","default":false},"resend":{"type":"number","title":"Resend (seconds)","description":"If non-zero, the msg will be periodically resent","default":0},"resendTime":{"type":"number","title":"Resend Duration (seconds)","description":"The value will be resent for the given #number of seconds","default":30},"environmentwindangleTrueWater":{"title":"Source for environment.wind.angleTrueWater","description":"Use data only from this source (leave blank to ignore source)","type":"string"},"environmentwindspeedTrue":{"title":"Source for environment.wind.speedTrue","description":"Use data only from this source (leave blank to ignore source)","type":"string"}}}}},"statusMessage":"","data":{"configuration":{"AISv2":{"enabled":false,"resend":0,"resendTime":30},"ATTITUDE":{"enabled":true,"resend":0,"resendTime":30},"BATTERYv2":{"enabled":true,"resend":0,"resendTime":30,"batteries":[]},"COG_SOGv2":{"enabled":true,"resend":0,"resendTime":30},"DEPTHv2":{"enabled":false,"resend":0,"resendTime":30},"EXHAUST_TEMPERATURE":{"enabled":false,"resend":0,"resendTime":30,"engines":[]},"ENGINE_PARAMETERS":{"enabled":false,"resend":0,"resendTime":30,"engines":[]},"ENVIRONMENT_PARAMETERS":{"enabled":false,"resend":0,"resendTime":30},"GPS_LOCATIONv2":{"enabled":true,"resend":0,"resendTime":30},"HEADINGv2":{"enabled":true,"resend":0,"resendTime":30},"HUMIDITY_OUTSIDE":{"enabled":false,"resend":0,"resendTime":30},"HUMIDITY_INSIDE":{"enabled":false,"resend":0,"resendTime":30},"LEEWAY":{"enabled":false,"resend":0,"resendTime":30},"magneticvariation":{"enabled":true,"resend":0,"resendTime":30},"xte":{"enabled":false,"resend":0,"resendTime":30},"navigationdata":{"enabled":true,"resend":0,"resendTime":30},"routewpinformation":{"enabled":true,"resend":0,"resendTime":30},"NOTIFICATIONS":{"enabled":false,"resend":0,"resendTime":30},"PRESSURE_ATMOSPHERIC":{"enabled":false,"resend":0,"resendTime":30},"RAYMARINE":{"enabled":false,"resend":0,"resendTime":30,"groups":[]},"RAYMARINENAV":{"enabled":false,"resend":0,"resendTime":30},"ENVIRONMENT_PARAMETERS_SEA":{"enabled":false,"resend":0,"resendTime":30},"SetDrift":{"enabled":true,"resend":0,"resendTime":30},"SOLAR":{"enabled":false,"resend":0,"resendTime":30,"chargers":[]},"SPEED":{"enabled":true,"resend":0,"resendTime":30},"SYSTEM_TIMEv2":{"enabled":true,"resend":0,"resendTime":30},"TANKS":{"enabled":false,"resend":0,"resendTime":30},"TEMPERATURE_OUTSIDE":{"enabled":true,"resend":0,"resendTime":30,"instance":101},"TEMPERATURE2_OUTSIDE":{"enabled":false,"resend":0,"resendTime":30,"instance":101},"TEMPERATURE_INSIDE":{"enabled":false,"resend":0,"resendTime":30,"instance":102},"TEMPERATURE2_INSIDE":{"enabled":false,"resend":0,"resendTime":30,"instance":102},"TEMPERATURE_ENGINEROOM":{"enabled":false,"resend":0,"resendTime":30,"instance":103},"TEMPERATURE2_ENGINEROOM":{"enabled":false,"resend":0,"resendTime":30,"instance":103},"TEMPERATURE_MAINCABIN":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE2_MAINCABIN":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE_refridgerator":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE2_refridgerator":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE_HEATINGSYSTEM":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE2_HEATINGSYSTEM":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE_DEWPOINT":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE2_DEWPOINT":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE_APPARENTWINDCHILL":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE2_APPARENTWINDCHILL":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE_THEORETICALWINDCHILL":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE2_THEORETICALWINDCHILL":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE_HEATINDEX":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE2_HEATINDEX":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE_FREEZER":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TEMPERATURE2_FREEZER":{"enabled":false,"resend":0,"resendTime":30,"instance":107},"TRUE_HEADING":{"enabled":true,"resend":0,"resendTime":30},"WINDv2":{"enabled":true,"resend":0,"resendTime":30},"WIND_TRUE_GROUND":{"enabled":true,"resend":0,"resendTime":30},"WIND_TRUE":{"enabled":false,"resend":0,"resendTime":30}},"enabled":true}},{"id":"udp-nmea-sender","name":"UDP NMEA0183 Sender","packageName":"@signalk/udp-nmea-plugin","keywords":["signalk-node-server-plugin"],"version":"2.0.0","schema":{"type":"object","properties":{"destinations":{"type":"array","items":{"type":"object","properties":{"ipaddress":{"type":"string","title":"IP Address (overrides broadcast address if entered)"},"broadcastAddress":{"type":"string","enum":["-","192.168.1.255","172.18.255.255","169.254.255.255"],"default":"-"},"port":{"type":"number","title":"Port","default":2000},"nmea0183":{"type":"boolean","title":"Use server event nmea0183","default":true},"nmea0183out":{"type":"boolean","title":"Use server event nmea0183out","default":true},"additionalEvents":{"type":"array","title":"Additional events whose data should be sent","items":{"type":"string"}},"lineDelimiter":{"type":"string","title":"Line delimiter","enum":["None","LF","CRLF"],"default":"None"}}}}}},"statusMessage":"","data":{}}]
+=== I. CALYPSO SERVICE FILE ===
+[Unit]
+Description=Calypso Anemometer BLE Reader
+After=network.target bluetooth.target
+Wants=bluetooth.target
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_8 --target=udp+signalk+delta://localhost:4122
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+=== J. CALYPSO JOURNAL LAST 50 ===
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]:   File "/home/aneto/.local/lib/python3.13/site-packages/calypso_anemometer/engine.py", line 83, in handler
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]:     await calypso.set_datarate(rate)
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]:   File "/home/aneto/.local/lib/python3.13/site-packages/calypso_anemometer/core.py", line 212, in set_datarate
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]:     await self.client.write_gatt_char(
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]:         CalypsoDeviceStatusCharacteristic.rate.value.uuid, data=bytes([rate.value]), response=True
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]:     )
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]:   File "/home/aneto/.local/lib/python3.13/site-packages/bleak/__init__.py", line 779, in write_gatt_char
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]:     raise BleakCharacteristicNotFoundError(char_specifier)
+May 21 22:32:16 MidnightRider calypso-anemometer[34994]: bleak.exc.BleakCharacteristicNotFoundError: Characteristic 0000a002-0000-1000-8000-00805f9b34fb was not found!
+May 21 22:32:16 MidnightRider systemd[1]: calypso_anemometer.service: Main process exited, code=exited, status=1/FAILURE
+May 21 22:32:16 MidnightRider systemd[1]: calypso_anemometer.service: Failed with result 'exit-code'.
+May 21 22:32:27 MidnightRider systemd[1]: calypso_anemometer.service: Scheduled restart job, restart counter is at 27.
+May 21 22:32:27 MidnightRider systemd[1]: Started calypso_anemometer.service - Calypso Anemometer BLE Reader.
+May 21 22:32:27 MidnightRider calypso-anemometer[35300]: 2026-05-21 22:32:27,421 [calypso_anemometer.core  ] INFO    : Initializing client with Settings(ble_adapter='hci0', ble_address='F8:5F:12:9D:D2:EE', ble_discovery_timeout=10.0, ble_connect_timeout=10.0)
+May 21 22:32:27 MidnightRider calypso-anemometer[35300]: 2026-05-21 22:32:27,526 [calypso_anemometer.core  ] INFO    : Connecting to device at 'F8:5F:12:9D:D2:EE' with adapter 'None'
+May 21 22:32:46 MidnightRider calypso-anemometer[35300]: 2026-05-21 22:32:46,349 [calypso_anemometer.core  ] ERROR   : TimeoutError:
+May 21 22:32:46 MidnightRider calypso-anemometer[35300]: 2026-05-21 22:32:46,349 [calypso_anemometer.engine] ERROR   : TimeoutError:
+May 21 22:32:46 MidnightRider systemd[1]: calypso_anemometer.service: Main process exited, code=exited, status=1/FAILURE
+May 21 22:32:46 MidnightRider systemd[1]: calypso_anemometer.service: Failed with result 'exit-code'.
+May 21 22:32:56 MidnightRider systemd[1]: calypso_anemometer.service: Scheduled restart job, restart counter is at 28.
+May 21 22:32:56 MidnightRider systemd[1]: Started calypso_anemometer.service - Calypso Anemometer BLE Reader.
+May 21 22:32:57 MidnightRider calypso-anemometer[35357]: 2026-05-21 22:32:57,199 [calypso_anemometer.core  ] INFO    : Initializing client with Settings(ble_adapter='hci0', ble_address='F8:5F:12:9D:D2:EE', ble_discovery_timeout=10.0, ble_connect_timeout=10.0)
+May 21 22:32:57 MidnightRider calypso-anemometer[35357]: 2026-05-21 22:32:57,270 [calypso_anemometer.core  ] INFO    : Connecting to device at 'F8:5F:12:9D:D2:EE' with adapter 'None'
+May 21 22:33:14 MidnightRider calypso-anemometer[35357]: 2026-05-21 22:33:14,477 [bleak.backends.bluezdbus.client] WARNING : Failed to cancel connection (/org/bluez/hci0/dev_F8_5F_12_9D_D2_EE):
+May 21 22:33:14 MidnightRider calypso-anemometer[35357]: 2026-05-21 22:33:14,478 [calypso_anemometer.core  ] ERROR   : TimeoutError:
+May 21 22:33:14 MidnightRider calypso-anemometer[35357]: 2026-05-21 22:33:14,478 [calypso_anemometer.engine] ERROR   : TimeoutError:
+May 21 22:33:14 MidnightRider systemd[1]: calypso_anemometer.service: Main process exited, code=exited, status=1/FAILURE
+May 21 22:33:14 MidnightRider systemd[1]: calypso_anemometer.service: Failed with result 'exit-code'.
+May 21 22:33:24 MidnightRider systemd[1]: calypso_anemometer.service: Scheduled restart job, restart counter is at 29.
+May 21 22:33:24 MidnightRider systemd[1]: Started calypso_anemometer.service - Calypso Anemometer BLE Reader.
+May 21 22:33:25 MidnightRider calypso-anemometer[35589]: 2026-05-21 22:33:25,168 [calypso_anemometer.core  ] INFO    : Initializing client with Settings(ble_adapter='hci0', ble_address='F8:5F:12:9D:D2:EE', ble_discovery_timeout=10.0, ble_connect_timeout=10.0)
+May 21 22:33:25 MidnightRider calypso-anemometer[35589]: 2026-05-21 22:33:25,254 [calypso_anemometer.core  ] INFO    : Connecting to device at 'F8:5F:12:9D:D2:EE' with adapter 'None'
+May 21 22:33:41 MidnightRider calypso-anemometer[35589]: 2026-05-21 22:33:41,485 [bleak.backends.bluezdbus.client] WARNING : Failed to cancel connection (/org/bluez/hci0/dev_F8_5F_12_9D_D2_EE):
+May 21 22:33:41 MidnightRider calypso-anemometer[35589]: 2026-05-21 22:33:41,487 [calypso_anemometer.core  ] ERROR   : TimeoutError:
+May 21 22:33:41 MidnightRider calypso-anemometer[35589]: 2026-05-21 22:33:41,487 [calypso_anemometer.engine] ERROR   : TimeoutError:
+May 21 22:33:41 MidnightRider systemd[1]: calypso_anemometer.service: Main process exited, code=exited, status=1/FAILURE
+May 21 22:33:41 MidnightRider systemd[1]: calypso_anemometer.service: Failed with result 'exit-code'.
+May 21 22:33:51 MidnightRider systemd[1]: calypso_anemometer.service: Scheduled restart job, restart counter is at 30.
+May 21 22:33:51 MidnightRider systemd[1]: Started calypso_anemometer.service - Calypso Anemometer BLE Reader.
+May 21 22:33:52 MidnightRider calypso-anemometer[35632]: 2026-05-21 22:33:52,136 [calypso_anemometer.core  ] INFO    : Initializing client with Settings(ble_adapter='hci0', ble_address='F8:5F:12:9D:D2:EE', ble_discovery_timeout=10.0, ble_connect_timeout=10.0)
+May 21 22:33:52 MidnightRider calypso-anemometer[35632]: 2026-05-21 22:33:52,206 [calypso_anemometer.core  ] INFO    : Connecting to device at 'F8:5F:12:9D:D2:EE' with adapter 'None'
+May 21 22:34:07 MidnightRider calypso-anemometer[35632]: 2026-05-21 22:34:07,583 [bleak.backends.bluezdbus.client] WARNING : Failed to cancel connection (/org/bluez/hci0/dev_F8_5F_12_9D_D2_EE):
+May 21 22:34:07 MidnightRider calypso-anemometer[35632]: 2026-05-21 22:34:07,584 [calypso_anemometer.core  ] ERROR   : TimeoutError:
+May 21 22:34:07 MidnightRider calypso-anemometer[35632]: 2026-05-21 22:34:07,584 [calypso_anemometer.engine] ERROR   : TimeoutError:
+May 21 22:34:07 MidnightRider systemd[1]: calypso_anemometer.service: Main process exited, code=exited, status=1/FAILURE
+May 21 22:34:07 MidnightRider systemd[1]: calypso_anemometer.service: Failed with result 'exit-code'.
+May 21 22:34:17 MidnightRider systemd[1]: calypso_anemometer.service: Scheduled restart job, restart counter is at 31.
+May 21 22:34:17 MidnightRider systemd[1]: Started calypso_anemometer.service - Calypso Anemometer BLE Reader.
+May 21 22:34:18 MidnightRider calypso-anemometer[35895]: 2026-05-21 22:34:18,221 [calypso_anemometer.core  ] INFO    : Initializing client with Settings(ble_adapter='hci0', ble_address='F8:5F:12:9D:D2:EE', ble_discovery_timeout=10.0, ble_connect_timeout=10.0)
+May 21 22:34:18 MidnightRider calypso-anemometer[35895]: 2026-05-21 22:34:18,314 [calypso_anemometer.core  ] INFO    : Connecting to device at 'F8:5F:12:9D:D2:EE' with adapter 'None'
+
+=== K. FILTER PROXY JOURNAL LAST 30 ===
+May 21 21:18:56 MidnightRider systemd[1]: Started calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug).
+May 21 21:18:56 MidnightRider python3[1169]: 2026-05-21 21:18:56,808 [calypso-filter] Filter proxy started — UDP:4122 → UDP:4123
+May 21 21:18:56 MidnightRider python3[1169]: 2026-05-21 21:18:56,808 [calypso-filter] Whitelist: ('environment.wind.', 'electrical.batteries.')
+May 21 21:18:56 MidnightRider python3[1169]: 2026-05-21 21:18:56,808 [calypso-filter] Blocking: roll, pitch, yaw, headingMagnetic, temperature (known zeros)
+May 21 21:55:44 MidnightRider systemd[1]: Stopping calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug)...
+May 21 21:55:44 MidnightRider systemd[1]: calypso_filter_proxy.service: Deactivated successfully.
+May 21 21:55:44 MidnightRider systemd[1]: Stopped calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug).
+May 21 21:56:09 MidnightRider systemd[1]: Started calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug).
+May 21 21:56:09 MidnightRider python3[20900]: 2026-05-21 21:56:09,851 [calypso-filter] Filter proxy started — UDP:4122 → UDP:4123
+May 21 21:56:09 MidnightRider python3[20900]: 2026-05-21 21:56:09,851 [calypso-filter] Whitelist: ('environment.wind.', 'electrical.batteries.')
+May 21 21:56:09 MidnightRider python3[20900]: 2026-05-21 21:56:09,851 [calypso-filter] Blocking: roll, pitch, yaw, headingMagnetic, temperature (known zeros)
+May 21 22:01:15 MidnightRider systemd[1]: Stopping calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug)...
+May 21 22:01:15 MidnightRider systemd[1]: calypso_filter_proxy.service: Deactivated successfully.
+May 21 22:01:15 MidnightRider systemd[1]: Stopped calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug).
+May 21 22:01:43 MidnightRider systemd[1]: Started calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug).
+May 21 22:01:43 MidnightRider python3[23249]: 2026-05-21 22:01:43,214 [calypso-filter] Filter proxy started — UDP:4122 → UDP:4123
+May 21 22:01:43 MidnightRider python3[23249]: 2026-05-21 22:01:43,215 [calypso-filter] Whitelist: ('environment.wind.', 'electrical.batteries.')
+May 21 22:01:43 MidnightRider python3[23249]: 2026-05-21 22:01:43,216 [calypso-filter] Blocking: roll, pitch, yaw, headingMagnetic, temperature (known zeros)
+May 21 22:05:18 MidnightRider systemd[1]: Stopping calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug)...
+May 21 22:05:18 MidnightRider systemd[1]: calypso_filter_proxy.service: Deactivated successfully.
+May 21 22:05:18 MidnightRider systemd[1]: Stopped calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug).
+May 21 22:05:45 MidnightRider systemd[1]: Started calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug).
+May 21 22:05:45 MidnightRider python3[24903]: 2026-05-21 22:05:45,794 [calypso-filter] Filter proxy started — UDP:4122 → UDP:4123
+May 21 22:05:45 MidnightRider python3[24903]: 2026-05-21 22:05:45,794 [calypso-filter] Whitelist: ('environment.wind.', 'electrical.batteries.')
+May 21 22:05:45 MidnightRider python3[24903]: 2026-05-21 22:05:45,795 [calypso-filter] Blocking: roll, pitch, yaw, headingMagnetic, temperature (known zeros)
+
+=== L. WATCHDOG JOURNAL LAST 20 ===
+May 21 22:32:02 MidnightRider python3[24904]: [2026-05-21 22:32:02] L3: Full BLE reset
+May 21 22:32:02 MidnightRider sudo[34888]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/systemctl stop calypso-anemometer
+May 21 22:32:02 MidnightRider sudo[34888]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:02 MidnightRider sudo[34888]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:02 MidnightRider sudo[34892]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/systemctl stop bluetooth
+May 21 22:32:02 MidnightRider sudo[34892]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:02 MidnightRider sudo[34892]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:05 MidnightRider sudo[34987]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/hciconfig hci0 reset
+May 21 22:32:05 MidnightRider sudo[34987]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:05 MidnightRider sudo[34987]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:05 MidnightRider sudo[34991]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/systemctl start bluetooth
+May 21 22:32:05 MidnightRider sudo[34991]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:05 MidnightRider sudo[34991]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:09 MidnightRider sudo[35056]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/hciconfig hci0 up
+May 21 22:32:09 MidnightRider sudo[35056]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:09 MidnightRider sudo[35056]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:16 MidnightRider sudo[35269]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/systemctl start calypso-anemometer
+May 21 22:32:16 MidnightRider sudo[35269]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:16 MidnightRider sudo[35269]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:16 MidnightRider python3[24904]: [2026-05-21 22:32:16] L3 done — cooldown 120s
+
+=== M. ALL SERVICE STATUSES ===
+● signalk.service - Signal K Server
+     Loaded: loaded (/etc/systemd/system/signalk.service; disabled; preset: enabled)
+     Active: active (running) since Thu 2026-05-21 22:05:20 EDT; 29min ago
+ Invocation: eb3af4c6ff214158b347d8f857c4b27c
+   Main PID: 24645 (MainThread)
+      Tasks: 12 (limit: 8745)
+        CPU: 4min 19.220s
+     CGroup: /system.slice/signalk.service
+             └─24645 node /usr/bin/signalk-server
+
+May 21 22:32:27 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 156.442 ms - 93987
+May 21 22:32:57 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 12.771 ms - 5938
+May 21 22:32:58 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 172.032 ms - 93985
+May 21 22:33:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.837 ms - 5944
+May 21 22:33:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 172.610 ms - 93991
+May 21 22:33:58 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.407 ms - 5945
+May 21 22:33:58 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 155.265 ms - 94000
+May 21 22:34:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels/self/navigation 200 11.482 ms - 5946
+May 21 22:34:28 MidnightRider signalk-server[24645]: GET /signalk/v1/api/vessels 200 165.280 ms - 93996
+May 21 22:34:29 MidnightRider signalk-server[24645]: GET /skServer/plugins 200 13.401 ms - 67550
+● calypso_anemometer.service - Calypso Anemometer BLE Reader
+     Loaded: loaded (/etc/systemd/system/calypso_anemometer.service; disabled; preset: enabled)
+     Active: active (running) since Thu 2026-05-21 22:34:17 EDT; 11s ago
+ Invocation: fad5cfb73d684352a21269f507707c2d
+   Main PID: 35895 (calypso-anemome)
+      Tasks: 1 (limit: 8745)
+        CPU: 541ms
+     CGroup: /system.slice/calypso_anemometer.service
+             └─35895 /usr/bin/python3 /home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_8 --target=udp+signalk+delta://localhost:4122
+
+May 21 22:34:17 MidnightRider systemd[1]: calypso_anemometer.service: Scheduled restart job, restart counter is at 31.
+May 21 22:34:17 MidnightRider systemd[1]: Started calypso_anemometer.service - Calypso Anemometer BLE Reader.
+May 21 22:34:18 MidnightRider calypso-anemometer[35895]: 2026-05-21 22:34:18,221 [calypso_anemometer.core  ] INFO    : Initializing client with Settings(ble_adapter='hci0', ble_address='F8:5F:12:9D:D2:EE', ble_discovery_timeout=10.0, ble_connect_timeout=10.0)
+May 21 22:34:18 MidnightRider calypso-anemometer[35895]: 2026-05-21 22:34:18,314 [calypso_anemometer.core  ] INFO    : Connecting to device at 'F8:5F:12:9D:D2:EE' with adapter 'None'
+● calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug)
+     Loaded: loaded (/etc/systemd/system/calypso_filter_proxy.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-05-21 22:05:45 EDT; 28min ago
+ Invocation: b105ed667b9f43d98ee959b143d7079b
+   Main PID: 24903 (python3)
+      Tasks: 1 (limit: 8745)
+        CPU: 187ms
+     CGroup: /system.slice/calypso_filter_proxy.service
+             └─24903 /usr/bin/python3 /home/aneto/calypso_filter_proxy.py
+
+May 21 22:05:45 MidnightRider systemd[1]: Started calypso_filter_proxy.service - Calypso UDP Filter Proxy — strips broken eCompass/temp data (lib v0.6.0 bug).
+May 21 22:05:45 MidnightRider python3[24903]: 2026-05-21 22:05:45,794 [calypso-filter] Filter proxy started — UDP:4122 → UDP:4123
+May 21 22:05:45 MidnightRider python3[24903]: 2026-05-21 22:05:45,794 [calypso-filter] Whitelist: ('environment.wind.', 'electrical.batteries.')
+May 21 22:05:45 MidnightRider python3[24903]: 2026-05-21 22:05:45,795 [calypso-filter] Blocking: roll, pitch, yaw, headingMagnetic, temperature (known zeros)
+● calypso_robust_watchdog.service - Calypso UP10 Robust BLE Watchdog (L1/L2/L3 escalating recovery)
+     Loaded: loaded (/etc/systemd/system/calypso_robust_watchdog.service; enabled; preset: enabled)
+     Active: active (running) since Thu 2026-05-21 22:05:45 EDT; 28min ago
+ Invocation: 933b7f9637b242e7a2fe95bbd800708f
+   Main PID: 24904 (python3)
+      Tasks: 1 (limit: 8745)
+        CPU: 2.913s
+     CGroup: /system.slice/calypso_robust_watchdog.service
+             └─24904 /usr/bin/python3 /home/aneto/calypso_robust_watchdog.py
+
+May 21 22:32:05 MidnightRider sudo[34991]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/systemctl start bluetooth
+May 21 22:32:05 MidnightRider sudo[34991]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:05 MidnightRider sudo[34991]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:09 MidnightRider sudo[35056]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/hciconfig hci0 up
+May 21 22:32:09 MidnightRider sudo[35056]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:09 MidnightRider sudo[35056]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:16 MidnightRider sudo[35269]:     root : PWD=/ ; USER=root ; COMMAND=/usr/bin/systemctl start calypso-anemometer
+May 21 22:32:16 MidnightRider sudo[35269]: pam_unix(sudo:session): session opened for user root(uid=0) by (uid=0)
+May 21 22:32:16 MidnightRider sudo[35269]: pam_unix(sudo:session): session closed for user root
+May 21 22:32:16 MidnightRider python3[24904]: [2026-05-21 22:32:16] L3 done — cooldown 120s
+
+=== N. HCI0 BLE ADAPTER ===
+hci0:	Type: Primary  Bus: UART
+	BD Address: D8:3A:DD:F1:26:B7  ACL MTU: 1021:8  SCO MTU: 64:1
+	UP RUNNING 
+	RX bytes:1238825 acl:21714 sco:0 events:18278 errors:0
+	TX bytes:185783 acl:1451 sco:0 commands:5510 errors:0
+	Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+	Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3 
+	Link policy: RSWITCH SNIFF 
+	Link mode: PERIPHERAL ACCEPT 
+	Name: 'MidnightRider'
+	Class: 0x6c0000
+	Service Classes: Rendering, Capturing, Audio, Telephony
+	Device Class: Miscellaneous, 
+	HCI Version: 5.0 (0x9)  Revision: 0x17e
+	LMP Version: 5.0 (0x9)  Subversion: 0x6119
+	Manufacturer: Cypress Semiconductor (305)
+
+
+Controller D8:3A:DD:F1:26:B7 (public)
+	Manufacturer: 0x0131 (305)
+	Version: 0x09 (9)
+	Name: MidnightRider
+	Alias: MidnightRider
+	Class: 0x006c0000 (7077888)
+	Powered: yes
+	PowerState: on
+	Discoverable: no
+	DiscoverableTimeout: 0x000000b4 (180)
+
+=== O. BLE SCAN 10 SECONDS ===
+SCAN EMPTY OR FAILED
+
+=== P. PORTS ===
+UNCONN 0      0            0.0.0.0:4122       0.0.0.0:*    users:(("python3",pid=24903,fd=3))        
+UNCONN 0      0            0.0.0.0:4123       0.0.0.0:*    users:(("MainThread",pid=24645,fd=34))    
+LISTEN 0      4096         0.0.0.0:8086       0.0.0.0:*                                              
+LISTEN 0      4096            [::]:8086          [::]:*                                              
+LISTEN 0      4096               *:3001             *:*                                              
+LISTEN 0      511                *:3000             *:*    users:(("MainThread",pid=24645,fd=32))    
+
+=== Q. SIGNAL K RAW DATA ===
+WIND:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /signalk/v1/api/vessels/self/environment/wind</pre>
+</body>
+</html>
+
+POSITION:
+{"meta":{"description":"The position of the vessel in 2 or 3 dimensions (WGS84 datum)","properties":{"longitude":{"type":"number","description":"Longitude","units":"deg","example":4.98765245},"latitude":{"type":"number","description":"Latitude","units":"deg","example":52.0987654},"altitude":{"type":"number","description":"Altitude","units":"m"}}},"value":{"longitude":-73.544741,"latitude":41.0384581},"$source":"N2K.1","timestamp":"2026-05-22T02:34:34.856Z","pgn":129025}
+HEADING:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /signalk/v1/api/vessels/self/navigation/headingTrue</pre>
+</body>
+</html>
+
+ATTITUDE:
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET /signalk/v1/api/vessels/self/navigation/attitude</pre>
+</body>
+</html>
+
+=== R. NODE NPM VERSIONS ===
+v24.14.1
+11.11.0
+
+=== END OF DIAGNOSTIC ===

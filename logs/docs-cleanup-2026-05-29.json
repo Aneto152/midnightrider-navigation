@@ -1,0 +1,115 @@
+{
+  "task": "docs-logs-cleanup",
+  "date": "2026-05-28T22:32:19.699046",
+  "status": "SUCCESS",
+  "deleted": [
+    {
+      "file": "docs/grafana-dashboards/01-cockpit.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/02-environment.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/03-performance.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/04-wind-current.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/05-competitive.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/06-electrical.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/07-race.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/08-alerts.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/09-crew.json"
+    },
+    {
+      "file": "docs/grafana-dashboards/README.md"
+    },
+    {
+      "file": "docs/archive/SAILS-DECISION-MATRIX-DETAILED.md"
+    },
+    {
+      "file": "docs/archive/SAILS-MANAGEMENT-SYSTEM.md"
+    },
+    {
+      "file": "docs/archive/J30-JIBSAILS-CLASSIFICATION.md"
+    },
+    {
+      "file": "docs/archive/J30-SAILS-SPECIFICS.md"
+    },
+    {
+      "file": "docs/archive/POLAR-PERFORMANCE-INTEGRATION.md"
+    },
+    {
+      "file": "docs/archive/LAYLINES-INTEGRATION.md"
+    },
+    {
+      "file": "docs/archive/LOCH-CALIBRATION-SYSTEM.md"
+    },
+    {
+      "file": "docs/archive/CURRENT-CALCULATOR-SYSTEM.md"
+    },
+    {
+      "file": "docs/archive/VICTRON-ORION-12-18-CONFIG.md"
+    },
+    {
+      "file": "docs/archive/VICTRON-ORION-BLUETOOTH.md"
+    },
+    {
+      "file": "docs/archive/VICTRON-ORION-INTEGRATION.md"
+    },
+    {
+      "file": "docs/archive/SIGNALK-INVENTORY.md"
+    },
+    {
+      "file": "logs/all_calypso_code.txt"
+    },
+    {
+      "file": "logs/ble_reset_success.txt"
+    },
+    {
+      "file": "logs/boot_fix_enabled.txt"
+    },
+    {
+      "file": "logs/calypso_crash_diagnosis.txt"
+    },
+    {
+      "file": "logs/calypso_final_clean.txt"
+    },
+    {
+      "file": "logs/calypso_fix_final.txt"
+    },
+    {
+      "file": "logs/calypso_recovery_09h47.txt"
+    },
+    {
+      "file": "logs/calypso_recovery_success.txt"
+    },
+    {
+      "file": "logs/FINAL_DEPLOYMENT_STATUS_2026-05-15.json"
+    },
+    {
+      "file": "logs/FINAL_STATUS_2026-05-15.json"
+    },
+    {
+      "file": "logs/MIDNIGHT_REPORTER_STATUS.json"
+    },
+    {
+      "file": "logs/SESSION_STATUS_2026-05-15-1653.json"
+    }
+  ],
+  "errors": [],
+  "completed_at": "2026-05-28T22:32:39.176653",
+  "summary": {
+    "total_deleted": 34,
+    "total_errors": 0
+  }
+}
