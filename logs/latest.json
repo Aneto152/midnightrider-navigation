@@ -1,28 +1,19 @@
 {
-  "task": "fix-p5-log-path",
-  "date": "2026-06-14T20:20:57.528574",
+  "task": "audit-5-critical-fixes",
+  "date": "2026-06-14T22:39:54.284121",
   "status": "SUCCESS",
-  "steps_completed": [
-    "signalk-n2k-bridge.js: LOG_FILE now uses absolute PROJECT_ROOT path",
-    "P5 reinstalled as v1.0.1 in ~/.signalk/node_modules/",
-    "SK restarted via systemctl",
-    "Log file confirmed at midnightrider-navigation/logs/services/signalk-n2k-bridge.log",
-    "All 5 conversions loaded successfully"
+  "fixes_applied": [
+    "FIX 1: bandg-performance.js \u2014 navigation.leeway \u2192 performance.leewayAngle (B&G Vulcan display)",
+    "FIX 2: current-calculator.js \u2014 synced from running v1.0.4 (git had older version)",
+    "FIX 3: calypso_direct.service \u2014 added to services/ (was active but untracked)",
+    "FIX 4: signalk-um982-gnss.js \u2014 already in git (verified present)",
+    "FIX 5: log files \u2014 .gitignore updated to exclude calypso-*.log"
   ],
   "files_modified": [
-    "plugins/signalk-n2k-bridge.js (PROJECT_ROOT + LOG_FILE paths)"
+    "plugins/n2k-conversions/bandg-performance.js",
+    "plugins/signalk-current-calculator.js",
+    "services/calypso_direct.service (NEW)",
+    ".gitignore"
   ],
-  "log_sample": [
-    "Loaded conversion: Vessel Attitude (PGN 127257)",
-    "Loaded conversion: B&G Performance Data (PGN 130824)",
-    "Loaded conversion: Current Set & Drift (PGN 129291)",
-    "Loaded conversion: True Heading (PGN 127250)",
-    "Loaded conversion: Leeway Angle (PGN 128000)"
-  ],
-  "n2k_status": {
-    "signalk-to-nmea2000": "DISABLED",
-    "signalk-n2k-bridge-P5": "ACTIVE v1.0.1",
-    "bandgPerformance": "ENABLED \u2014 PGN 130824",
-    "logging": "FIXED \u2014 correct path confirmed"
-  }
+  "repo_consistency": "VERIFIED \u2014 all critical plugins now in git"
 }

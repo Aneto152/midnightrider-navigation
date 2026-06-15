@@ -63,7 +63,7 @@ module.exports = {
   description: 'Leeway, tide, polar speed/performance, target TWA, beat angle → Vulcan/Zeus/Triton2',
   optionKey: 'bandgPerformance',
   keys: [
-    'navigation.leeway',
+    'performance.leewayAngle',
     'environment.current.setTrue',
     'environment.current.drift',
     'performance.polarSpeed',
