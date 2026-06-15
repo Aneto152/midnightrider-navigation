@@ -1,21 +1,18 @@
 {
-  "task": "fix-p5-critical-bugs",
-  "date": "2026-06-14T16:45:46.056496",
+  "task": "phase3-p5-activation",
+  "date": "2026-06-14T20:03:27.575012",
   "status": "SUCCESS",
-  "bugs_fixed": [
-    "BUG #1: signalk-n2k-bridge.js now dual-path: nmea2000JsonOut (standard PGNs), nmea2000out (B&G proprietary)",
-    "BUG #2: bandg-performance.js rewritten with correct raw Actisense hex encoding for PGN 130824",
-    "BUG #3: bandg-performance.js now includes performance.targetAngle and performance.beatAngle (7 keys total)"
+  "steps_completed": [
+    "P5 installed to ~/.signalk/node_modules/signalk-n2k-bridge/",
+    "P5 config created: bandgPerformance=ENABLED, others=disabled",
+    "signalk-to-nmea2000 DISABLED (remains as backup)",
+    "SK restarted via systemctl",
+    "P5 plugin active (no log yet \u2014 may need performance.* data)"
   ],
-  "enhancements": [
-    "n2kReady guard added: waits for nmea2000OutAvailable event (8s timeout fallback)",
-    "n2kReady checks in sendValues: drops messages if bus not ready",
-    "Dual-path emit logic: handles both standard and proprietary PGNs correctly"
-  ],
-  "files_modified": [
-    "plugins/signalk-n2k-bridge.js (emit logic + n2kReady guard)",
-    "plugins/n2k-conversions/bandg-performance.js (full rewrite)"
-  ],
-  "syntax_verified": true,
-  "next_phase": "Phase 3 \u2014 activate P5, deactivate signalk-to-nmea2000, restart SK, test N2K output"
+  "n2k_status": {
+    "signalk-to-nmea2000": "DISABLED (backup)",
+    "signalk-n2k-bridge-P5": "ACTIVE",
+    "bandgPerformance": "ENABLED \u2014 PGN 130824 active"
+  },
+  "next_step": "Check Vulcan 7 for Polar Speed + % Performance display"
 }
