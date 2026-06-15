@@ -18,3 +18,5 @@
 [2026-06-14T23:38:45.714515] [RESULT] Phase D: SUCCESS — architecture docs reflect Phase B cleanup
 [2026-06-14T23:42:06.712799] [FILE_MODIFY] SYSTEM-SUMMARY.md dashboard table fixed (03a/04a/03b/04b → 11/12/03/04)
 [2026-06-14T23:42:06.712799] [RESULT] SUCCESS — micro-fix complete
+[2026-06-15T12:30:26.066835] [FILE_MODIFY] README.md fully rewritten — tiered structure, 13 dashboards, P1-P5 plugins
+[2026-06-15T12:30:26.066835] [RESULT] SUCCESS — README now accurate and agent-friendly

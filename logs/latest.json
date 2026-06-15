@@ -1,24 +1,32 @@
 {
-  "task": "microfix-system-summary-dashboard-table",
-  "date": "2026-06-14T23:42:06.787052",
+  "task": "readme-rewrite",
+  "date": "2026-06-15T12:30:26.066835",
   "status": "SUCCESS",
   "steps_completed": [
-    "STEP 1: old dashboard notation identified (03a/03b/04a/04b)",
-    "STEP 2: replaced with correct IDs (11=Astronomical, 12=Alerts, 03=Performance, 04=Wind)",
-    "STEP 3: verified no old notation remains (4 replacements)"
+    "STEP 1: current facts gathered",
+    "STEP 2: README.md fully rewritten with tiered structure",
+    "STEP 3: verified structure, links, dashboard count"
   ],
   "files_modified": [
-    "docs/SYSTEM-SUMMARY.md"
+    "README.md"
   ],
-  "fixes_applied": [
-    "03a (Astronomical) \u2192 11",
-    "03b (Performance) \u2192 03",
-    "04a (Alerts) \u2192 12",
-    "04b (Wind & Current) \u2192 04"
+  "sections_added": [
+    "How to Read This Repo",
+    "What It Does",
+    "Data Pipeline",
+    "Repository Structure",
+    "Stack at a Glance",
+    "Instruments (details drawer)",
+    "Plugins P1-P5 (details drawer)",
+    "Grafana Dashboards (details drawer)",
+    "AI Integration (details drawer)",
+    "Quick Start",
+    "Configuration",
+    "Production Status"
   ],
   "verification": {
-    "old_notation_remaining": 0,
-    "clean": true
-  },
-  "next_recommended": "Update Dust: reference docs/ARCHITECTURE-MASTER.md (not old deleted files)"
+    "ARCHITECTURE-MASTER_links": "present",
+    "dashboard_count": 13,
+    "no_sensitive_IPs": true
+  }
 }
