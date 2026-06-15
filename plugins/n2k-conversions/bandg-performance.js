@@ -8,7 +8,7 @@
  * Format: <ts>,3,130824,<src>,255,<len>,7d,99,<key>,<type>,<val_lo>,<val_hi>,...
  *
  * Source SK paths (7 total):
- * navigation.leeway (rad) → key 82,20 — Leeway Angle
+ * performance.leewayAngle (rad) → key 82,20 — Leeway Angle
  * environment.current.setTrue (rad) → key 84,20 — Tide Set
  * environment.current.drift (m/s) → key 83,20 — Tide Rate
  * performance.polarSpeed (m/s) → key 7e,20 — Polar Boat Speed
