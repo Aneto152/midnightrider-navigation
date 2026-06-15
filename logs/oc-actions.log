@@ -32,3 +32,7 @@
 [2026-06-15T14:20:11.358947] [FILE_DELETE] [root] requirements.txt deleted (disconnected + wrong)
 [2026-06-15T14:20:11.358947] [FILE_MODIFY] [scripts] install-midnight-rider.sh: uses requirements files
 [2026-06-15T14:20:11.358947] [RESULT] Phase G: SUCCESS — requirements reorganized
+[2026-06-15T14:34:48.785698] [FILE_MODIFY] [docs] ARCHITECTURE-MASTER.md v5.1→v5.2: IP→mDNS, LEN 6→7, Vulcan 1→2
+[2026-06-15T14:34:48.785698] [FILE_MODIFY] [docs] SYSTEM-SUMMARY.md: IP→midnightrider.local, date updated
+[2026-06-15T14:34:48.785698] [FILE_MODIFY] [docs] 6 HARDWARE files: all IPs → midnightrider.local
+[2026-06-15T14:34:48.785698] [RESULT] Phase H: SUCCESS — canonical IP everywhere

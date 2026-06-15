@@ -52,11 +52,11 @@ InfluxDB et les visualisant dans Grafana.
 | Composant | Détail |
 |-----------|--------|
 | **Raspberry Pi 4 Model B** | 4 Go RAM, microSD 64 Go |
-| **IP locale fixe** | 192.168.1.131 |
+| **Accès local** | `midnightrider.local` (mDNS/Avahi) — IP DHCP variable |
 | **OS** | Raspberry Pi OS (Debian 12 Bookworm) |
 | **Rôle** | Signal K server, Docker host (InfluxDB, Grafana), gateway BLE, scripts Python |
 | **Alimentation** | 12V → 5V USB-C via convertisseur DC/DC |
-| **Accès local** | SSH (`aneto@192.168.1.131`) |
+| **Accès local** | SSH (`aneto@midnightrider.local`) |
 | **Accès distant** | Cloudflare Tunnel (voir `CLOUDFLARE-TUNNEL-URL.md`) |
 
 ### 2.2 Instruments actifs
@@ -68,7 +68,7 @@ InfluxDB et les visualisant dans Grafana.
 | 3 | Vent masthead | Calypso UP10 | Bluetooth LE | Vent apparent/vrai + temp air |
 | 4 | Vent masthead (N2K) | B&G WS320 | NMEA 2000 | Vent apparent → Vulcan 7 direct |
 | 5 | Passerelle N2K | Yacht Devices YDNU-02 | USB + NMEA 2000 | Bridge Signal K ↔ N2K |
-| 6 | Chartplotter | B&G Vulcan 7 FS | NMEA 2000 | Affichage helm + GPS secondaire |
+| 6 | Chartplotter (×2) | B&G Vulcan 7 FS | NMEA 2000 | PORT (helm) + STBD (nav) — LEN 1+1 |
 | 7 | Batterie | SOK SK12V100PC LiFePO4 | Bluetooth LE | Monitoring BMS (direct InfluxDB) |
 | 8 | Baromètre | Yacht Devices YDBC-05 | NMEA 2000 | Pression atmosphérique |
 | 9 | Transpondeur AIS | B&G AIS700 Class B | NMEA 2000 | AIS TX/RX + sécurité |
@@ -82,7 +82,7 @@ InfluxDB et les visualisant dans Grafana.
 | WS320 Base Station | 2 | Émetteur vent via BLE→N2K |
 | YDBC-05 Barometer | 1 | Émetteur pression |
 | AIS700 | 1 | Transpondeur AIS |
-| **Total** | **6 / 50 LEN max** | ✅ |
+| **Total** | **7 / 50 LEN max** | ✅ (14% — 43 slots free) |
 
 ---
 
@@ -138,7 +138,7 @@ YDNU-02 ──T── Vulcan 7 FS
 ### 3.4 Réseau IP (WiFi)
 
 ```
-RPi 4 (192.168.1.131)
+RPi 4 (midnightrider.local)
   ├── Point d'accès WiFi (hostapd)
   │     SSID: MidnightRider / password: voir wifi-ap.txt
   │     Connecté: téléphones équipage, tablettes

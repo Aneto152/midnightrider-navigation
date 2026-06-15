@@ -28,7 +28,7 @@ Advanced J/30 yacht racing system with real-time data analytics:
 | IMU | WitMotion WT901BLECL | Roll/pitch/heading/accel (10 Hz, BLE) |
 | Anemometer | Calypso UP10 | Wind speed/direction (BLE) |
 | Gateway | Yacht Devices YDNU-02 | Signal K → NMEA 2000 bridge |
-| Computer | Raspberry Pi 4 | Runs Signal K hub (192.168.1.131) |
+| Computer | Raspberry Pi 4 | Runs Signal K hub (midnightrider.local) |
 | Display | B&G Vulcan 7 FS | NMEA 2000 MFD (heel, wind, polars) |
 | Power | SOK SK12V100PC | House battery with BLE BMS |
 

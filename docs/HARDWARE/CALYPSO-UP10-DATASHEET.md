@@ -104,7 +104,7 @@ running as a **systemd service**, injecting data directly into Signal K via UDP.
 ```
 Calypso UP10 (BLE)
      ↓ Bluetooth LE (~30m range)
-RPi 4 (192.168.1.131) — hci0 BLE adapter
+RPi 4 (midnightrider.local) — hci0 BLE adapter
      ↓ calypso-anemometer Python service
      ↓ Signal K Delta UDP → port 4123
 Signal K (port 3000, systemctl)

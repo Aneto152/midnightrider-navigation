@@ -1,32 +1,26 @@
 {
-  "task": "phase-G-requirements-fix",
-  "date": "2026-06-15T14:20:11.358947",
+  "task": "phase-H-ip-fix-zombie-cleanup",
+  "date": "2026-06-15T14:34:48.785698",
   "status": "SUCCESS",
   "steps_completed": [
-    "Created ble/requirements.txt (bleak==0.21.3 from code audit)",
-    "Created scripts/requirements.txt (pyserial>=3.5 from code audit)",
-    "Deleted root requirements.txt (was disconnected from actual usage)",
-    "Fixed install-midnight-rider.sh to reference requirements files"
+    "Zombie ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md already deleted (Phase B)",
+    "docs/ARCHITECTURE-MASTER.md v5.2: IP\u2192midnightrider.local, LEN 7/50, Vulcan \u00d72",
+    "docs/SYSTEM-SUMMARY.md: IP\u2192midnightrider.local, date 2026-06-15",
+    "All 8 HARDWARE/DASHBOARDS docs: IPs \u2192 midnightrider.local"
   ],
-  "files_created": [
-    "ble/requirements.txt",
-    "scripts/requirements.txt"
-  ],
-  "files_deleted": [
-    "requirements.txt"
-  ],
+  "ip_canonical": "midnightrider.local (mDNS/Avahi)",
   "files_modified": [
-    "scripts/install-midnight-rider.sh"
+    "docs/ARCHITECTURE-MASTER.md",
+    "docs/SYSTEM-SUMMARY.md",
+    "docs/HARDWARE/UM982-GNSS-DATASHEET.md",
+    "docs/HARDWARE/WIT-WT901BLECL-DATASHEET.md",
+    "docs/HARDWARE/CALYPSO-UP10-DATASHEET.md",
+    "docs/HARDWARE/SOK-BMS-BLE-PROTOCOL.md",
+    "docs/DASHBOARDS-README.md",
+    "docs/INTEGRATION/SOK-BMS-INTEGRATION.md",
+    "docs/setup/GRAFANA-DEPLOYMENT.md"
   ],
-  "dependency_changes": {
-    "ble_modules": "bleak==0.21.3 (verified: used by wit-ble-direct.py, calypso_direct.py, sok_direct.py)",
-    "script_modules": "pyserial>=3.5 (verified: used by enable_gnhpr.py)",
-    "removed_bloat": [
-      "twilio (not imported anywhere)",
-      "pyyaml (not imported anywhere)",
-      "requests (imported but only indirectly via other packages)",
-      "numpy, scipy, websocket-client, websockets (never imported)"
-    ]
-  },
-  "errors": []
+  "hardcoded_ips_before": 14,
+  "hardcoded_ips_after": 0,
+  "mdns_references": 10
 }

@@ -622,7 +622,7 @@ MOUNT_DEG = 90.0      # Rotation magnitude (degrees)
 ```
 WT901BLECL BLE 5.0 (companionway bulkhead)
   ↓ Bluetooth LE (~15m range, 10 Hz polling)
-RPi 4 (192.168.1.131) — hci0 BLE adapter
+RPi 4 (midnightrider.local) — hci0 BLE adapter
   ↓
 ble/wit-ble-direct.py (Python BLE driver — wit-ble-direct systemd service)
   ├─ Imports ble_common.py (shared BLE infrastructure)
