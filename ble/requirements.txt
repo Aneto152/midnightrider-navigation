@@ -1,0 +1,5 @@
+# Midnight Rider — BLE Daemons
+# Used by: wit-ble-direct.py, calypso_direct.py, sok_direct.py
+# Install: pip3 install -r ble/requirements.txt
+
+bleak==0.21.3

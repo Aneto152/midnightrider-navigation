@@ -1,38 +1,32 @@
 {
-  "task": "phase-E-final-ssot-architecture",
-  "date": "2026-06-15T13:03:05.736284",
-  "status": "\u2705 COMPLETE",
-  "phase_e_summary": {
-    "commits": 5,
-    "datasheets_created": 3,
-    "integration_guides_created": 3,
-    "files_renamed": 3,
-    "files_deleted": 1,
-    "ssot_documents": 1,
-    "instruments_documented": "9 / 9"
-  },
-  "ssot_enforced": {
-    "HARDWARE_datasheets": "Device specs + PGN formats",
-    "INTEGRATION_guides": "Setup procedures (no PGN duplication)",
-    "N2K_NETWORK_ARCHITECTURE": "System topology + PGN flows (CANONICAL)",
-    "ARCHITECTURE_MASTER": "System overview + cross-references"
-  },
-  "critical_corrections": [
-    "LEN budget: 6\u21927/50 (both Vulcan 7 units counted)",
-    "YDNU-02 device path: ttyUSB0\u2192ttyACM0 (CDC ACM)",
-    "WIT IMU rate: 30Hz\u219210Hz (BLE limit)",
-    "File names: spaces removed (B&G WS320, RAYMARINE AIS700, YDBC-05)",
-    "INSTRUMENT-INVENTORY merged into ARCHITECTURE-MASTER \u00a78"
+  "task": "phase-G-requirements-fix",
+  "date": "2026-06-15T14:20:11.358947",
+  "status": "SUCCESS",
+  "steps_completed": [
+    "Created ble/requirements.txt (bleak==0.21.3 from code audit)",
+    "Created scripts/requirements.txt (pyserial>=3.5 from code audit)",
+    "Deleted root requirements.txt (was disconnected from actual usage)",
+    "Fixed install-midnight-rider.sh to reference requirements files"
   ],
-  "documentation_coverage": {
-    "UM982": "\u2705 datasheet + guides",
-    "WIT_IMU": "\u2705 datasheet + guides",
-    "Calypso": "\u2705 datasheet + guides",
-    "WS320": "\u2705 datasheet (renamed) + integration guide (new)",
-    "YDNU_02": "\u2705 datasheet (new) + integration guide (fixed)",
-    "Vulcan_7_FS": "\u2705 datasheet (new) + integration guide",
-    "YDBC_05": "\u2705 datasheet (new) + integration guide (new)",
-    "AIS700": "\u2705 datasheet (renamed) + integration guide (new)",
-    "SOK_BMS": "\u2705 datasheet + guides"
-  }
+  "files_created": [
+    "ble/requirements.txt",
+    "scripts/requirements.txt"
+  ],
+  "files_deleted": [
+    "requirements.txt"
+  ],
+  "files_modified": [
+    "scripts/install-midnight-rider.sh"
+  ],
+  "dependency_changes": {
+    "ble_modules": "bleak==0.21.3 (verified: used by wit-ble-direct.py, calypso_direct.py, sok_direct.py)",
+    "script_modules": "pyserial>=3.5 (verified: used by enable_gnhpr.py)",
+    "removed_bloat": [
+      "twilio (not imported anywhere)",
+      "pyyaml (not imported anywhere)",
+      "requests (imported but only indirectly via other packages)",
+      "numpy, scipy, websocket-client, websockets (never imported)"
+    ]
+  },
+  "errors": []
 }

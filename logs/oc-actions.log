@@ -27,3 +27,8 @@
 [2026-06-15T12:57:05.634711] [PHASE_E] Updated Section 2.3: N2K Bus now references SSOT
 [2026-06-15T13:03:05.736284] [FILE_MODIFY] INDEX.md: added N2K network section + new datasheets/guides
 [2026-06-15T13:03:05.736284] [RESULT] Phase E COMPLETE: SSOT architecture fully implemented
+[2026-06-15T14:20:11.358947] [FILE_CREATE] [ble] ble/requirements.txt (bleak==0.21.3)
+[2026-06-15T14:20:11.358947] [FILE_CREATE] [scripts] scripts/requirements.txt (pyserial>=3.5)
+[2026-06-15T14:20:11.358947] [FILE_DELETE] [root] requirements.txt deleted (disconnected + wrong)
+[2026-06-15T14:20:11.358947] [FILE_MODIFY] [scripts] install-midnight-rider.sh: uses requirements files
+[2026-06-15T14:20:11.358947] [RESULT] Phase G: SUCCESS — requirements reorganized

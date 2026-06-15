@@ -110,12 +110,13 @@ else
 fi
 
 # Python dependencies
-echo "Installing Python dependencies..."
-python3 -m pip install --upgrade pip
-python3 -m pip install influxdb-client twilio bleak pyyaml requests
+echo "Installing Python dependencies from requirements files..."
+python3 -m pip install -r ble/requirements.txt
+python3 -m pip install -r scripts/requirements.txt
+echo "Python dependencies installed"
 
 echo ""
-echo -e "${BLUE}⛵ Phase 5: Signal K Server${NC}"
+echo -e "${BLUE}Phase 5: Signal K Server${NC}"
 
 if ! command -v signalk-server &> /dev/null; then
   echo "Installing Signal K server..."
