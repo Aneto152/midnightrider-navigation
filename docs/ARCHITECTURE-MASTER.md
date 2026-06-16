@@ -1047,3 +1047,23 @@ Remplacera `signalk-n2k-bridge (P5)` pour l'output N2K avec:
 Règles .gitignore:
 - Exclus: logs/calypso-*.log, logs/services/*.log, logs/debug/*.log, logs/*.txt
 - Gardés: logs/latest.json, logs/oc-actions.log, logs/debug/aggregate-errors.sh
+
+---
+
+## 5.8 Configuration Backup (`config/`)
+
+All RPi system configuration files are backed up in `config/` for disaster recovery.
+See **[config/README.md](../config/README.md)** for complete inventory and sync/restore procedures.
+
+**Key files:**
+
+| File | Purpose |
+|------|----------|
+| `config/grafana-custom.ini` | Grafana: iframe embed + 1s refresh (critical for portal) |
+| `config/signalk-to-influxdb2.json` | Plugin P3: SK → InfluxDB (token via env var) |
+| `config/signalk/settings-sanitized.json` | Signal K server settings (sanitized) |
+| `config/system/avahi-daemon.conf` | mDNS: `midnightrider.local` hostname |
+| `config/system/dhcpcd.conf` | Static IP on `eth0` |
+| `config/ufw-rules.txt` | Firewall rules reference |
+
+> ⚠️ Port 8888 (portal) not in UFW explicit rules — accessible via WiFi hotspot catch-all (192.168.4.0/24) only.
