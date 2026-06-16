@@ -1,54 +1,54 @@
 # AIS Competitor Tracker — `ais/`
 
-> **Module de suivi des concurrents en course** | Midnight Rider (J/30) | Phase J-1/J-2 | v1.1
+> **Real-time competitor tracking for offshore racing** | Midnight Rider (J/30) | Phase J-1/J-2 | v1.1
 
-Intégration du flux AIS reçu par Signal K avec la base de données des concurrents inscrits,
-pour afficher en temps réel qui est autour de vous, à quelle distance, et si vous gagnez ou perdez du terrain.
+Integrates the AIS feed received by Signal K with the registered competitor database,
+to display in real time who is around you, at what distance, and whether you are gaining or losing ground.
 
 ---
 
-## Table des matières
+## Table of Contents
 
-1. [Vue d'ensemble](#vue-densemble)
+1. [Overview](#overview)
 2. [Architecture](#architecture)
 3. [Modules](#modules)
 4. [API Reference](#api-reference)
-5. [Base de données des concurrents](#base-de-données-des-concurrents)
-6. [Logique couleur VMG](#logique-couleur-vmg)
-7. [Daemon AIS Watch](#daemon-ais-watch)
+5. [Competitor Database](#competitor-database)
+6. [VMG Color Logic](#vmg-color-logic)
+7. [AIS Watch Daemon](#ais-watch-daemon)
 8. [Tests](#tests)
-9. [Déploiement Docker](#déploiement-docker)
-10. [Utilisation en course](#utilisation-en-course)
-11. [Historique des versions](#historique-des-versions)
+9. [Docker Deployment](#docker-deployment)
+10. [Race Day Usage](#race-day-usage)
+11. [Version History](#version-history)
 
 ---
 
-## Vue d'ensemble
+## Overview
 
-### Fonctionnalité principale
+### Core Functionality
 
-Le module AIS répond à une question simple en course :
+The AIS module answers one simple question during a race:
 
-> **"Parmi les bateaux inscrits que je vois sur AIS, lesquels gagnent du terrain sur moi ?"**
+> **"Among the registered boats I can see on AIS, which ones are gaining ground on me?"**
 
-Il croise deux sources de données :
-- **Signal K** : flux AIS en temps réel (position, cap, vitesse de tous les bateaux à portée VHF)
-- **`regatta/competitors.json`** : base de données des 68 concurrents inscrits (MMSI, PHRF, équipage)
+It cross-references two data sources:
+- **Signal K**: real-time AIS feed (position, heading, speed of all vessels within VHF range)
+- **`regatta/competitors.json`**: database of 68 registered competitors (MMSI, PHRF, crew)
 
-Le résultat : un tableau de concurrents avec leur VMG calculé, codé **GREEN** (vous gagnez)
-ou **RED** (ils gagnent), mis à jour toutes les 30 secondes.
+The result: a competitor table with computed VMG, color-coded **GREEN** (you are gaining)
+or **RED** (they are gaining), updated every 30 seconds.
 
-### Ce que le module fait
+### What the Module Does
 
-- Récupère la position, cap et vitesse de Midnight Rider depuis Signal K
-- Récupère le vent vrai (TWD/TWS) depuis Signal K
-- Récupère la marque suivante depuis Signal K (si waypoint actif dans Vulcan 7)
-- Parcourt tous les `vessels/` dans Signal K, filtre les AIS dans un rayon configurable
-- Croise les MMSI AIS avec la base de données des concurrents inscrits
-- Calcule TWA, VMG vent et VMG marque pour chaque concurrent ET pour Midnight Rider
-- Compare les VMG et produit la couleur GREEN/RED/NEUTRAL
-- Conserve un historique de 30 minutes pour calculer les deltas (qui se rapproche / s'éloigne)
-- Expose deux endpoints HTTP REST consommés par les frontends HTML (Phase J-3)
+- Fetches Midnight Rider's position, heading and speed from Signal K
+- Fetches true wind (TWD/TWS) from Signal K
+- Fetches the next waypoint/mark from Signal K (if active in Vulcan 7)
+- Iterates all `vessels/` in Signal K, filters AIS targets within a configurable radius
+- Cross-references MMSI numbers against the registered competitor database
+- Computes TWA, wind VMG and mark VMG for each competitor AND for Midnight Rider
+- Compares VMGs and assigns a GREEN/RED/NEUTRAL color
+- Maintains a 30-minute position history to compute deltas (who is closing/opening)
+- Exposes two HTTP REST endpoints consumed by HTML frontends (Phase J-3)
 
 ---
 
@@ -56,32 +56,32 @@ ou **RED** (ils gagnent), mis à jour toutes les 30 secondes.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    SOURCES DE DONNÉES                           │
+│                       DATA SOURCES                              │
 ├─────────────────────────────────────────────────────────────────┤
 │  Signal K (port 3000)          regatta/competitors.json         │
-│  ├── vessels/self/...          ├── 68 bateaux inscrits          │
-│  │   ├── navigation.position  ├── MMSI par bateau              │
+│  ├── vessels/self/...          ├── 68 registered boats          │
+│  │   ├── navigation.position  ├── MMSI per boat                │
 │  │   ├── navigation.SOG/COG   ├── PHRF LIS + IRC TCC           │
-│  │   └── environment.wind.*   └── skipper, classe              │
+│  │   └── environment.wind.*   └── skipper, class               │
 │  └── vessels/<mmsi>/...                                         │
-│      ├── navigation.position  ← flux AIS décodé par SK         │
+│      ├── navigation.position  ← AIS feed decoded by SK         │
 │      ├── navigation.SOG/COG                                     │
 │      └── name                                                   │
-└──────────────┬────────────────────────┬────────────────────┘
-               │                        │
-               ▼                        ▼
+└──────────────┬────────────────────────────┬────────────────────┘
+               │                            │
+               ▼                            ▼
 ┌──────────────────────┐     ┌──────────────────────────┐
 │  server_handlers.py  │     │   competitors_db.py       │
 │  api_competitors()   │◄────│   CompetitorDB            │
 │  api_fleet_db()      │     │   TTL cache: 5 min        │
 └──────────┬───────────┘     └──────────────────────────┘
            │                            ▲
-           │ calcule via                │ enrich()
+           │ computed via               │ enrich()
            ▼                            │
 ┌──────────────────────┐     ┌──────────────────────────┐
-│    ais_lib.py        │     │   ais_watch.py (optionnel)│
-│  Pure math functions │     │   Daemon: SK → InfluxDB   │
-│  haversine, TWA, VMG │     │   toutes les 30s          │
+│    ais_lib.py        │     │   ais_watch.py (optional) │
+│  Pure math library   │     │   Daemon: SK → InfluxDB   │
+│  haversine, TWA, VMG │     │   every 30s               │
 │  delta, color logic  │     │   logs/services/          │
 └──────────┬───────────┘     └──────────────────────────┘
            │
@@ -94,121 +94,121 @@ ou **RED** (ils gagnent), mis à jour toutes les 30 secondes.
            │
            ▼
 ┌──────────────────────────────────────────────────────────────┐
-│          portal/server.py (port interne)                     │
+│          portal/server.py (internal port)                    │
 │  GET /ais/           → tracker.html  (Phase J-3)             │
 │  GET /ais/fleet_db   → fleet_db.html (Phase J-3)            │
 └──────────────────────────────────────────────────────────────┘
 ```
 
-### Flux de données en course
+### Race-Day Data Flow
 
 ```
-Bus NMEA 2000
+NMEA 2000 bus
     └── YDNU-02 USB (/dev/ttyACM0)
         └── Signal K (canboatjs decoder)
             ├── AIS Class A/B (PGN 129038/129039)
             │   → vessels/<mmsi>/navigation.position, SOG, COG
-            └── GPS/vent propre → vessels/self/navigation.*, environment.*
+            └── Own GPS/wind → vessels/self/navigation.*, environment.*
                     │
                     ▼
-        server_handlers.py (à chaque requête HTTP)
+        server_handlers.py (on each HTTP request)
                     │
-                    ├── vessels/self → position MR, SOG, COG, TWD, TWS, marque
-                    ├── vessels/*   → filtre dans radius_nm
+                    ├── vessels/self → MR position, SOG, COG, TWD, TWS, mark
+                    ├── vessels/*   → filter by radius_nm
                     ├── MMSI        → CompetitorDB.get_by_mmsi()
                     ├── compute_twa(COG, TWD)
                     ├── compute_vmg_wind(SOG, TWA)
                     ├── is_gaining_ground(VMG_MR, VMG_comp) → color
-                    └── JSON response avec couleur par concurrent
+                    └── JSON response with color per competitor
 ```
 
 ---
 
 ## Modules
 
-### `ais_lib.py` — Bibliothèque mathématique pure
+### `ais_lib.py` — Pure Math Library
 
-**Rôle** : 9 fonctions stateless, sans I/O, sans état global. Aucune dépendance externe.
-Testées unitairement à 100% (34 tests).
+**Role**: 9 stateless functions, no I/O, no global state. No external dependencies — stdlib only.
+Fully unit-tested (34 tests, 100% coverage).
 
-| Fonction | Description | Entrées | Sortie |
-|----------|-------------|---------|--------|
-| `haversine_ll(lat1,lon1,lat2,lon2)` | Distance great-circle | degrés décimaux | **mètres** |
-| `bearing_ll(lat1,lon1,lat2,lon2)` | Relèvement vrai | degrés décimaux | **degrés 0–360** |
-| `compute_twa(cog_deg, twd_deg)` | True Wind Angle ±180 | degrés | **degrés ±180** (+ = tribord) |
-| `compute_vmg_wind(sog_kts, twa_deg)` | VMG vers le vent | kts, degrés | **kts** (+ = au vent) |
-| `compute_vmg_mark(sog_kts, cog_deg, brg_mark_deg)` | VMG vers la marque | kts, degrés | **kts** (+ = vers marque) |
-| `make_history_store()` | Créer store historique 30 min | — | `defaultdict(deque(maxlen=80))` |
-| `record_position(store, mmsi, dist_m, brg_deg)` | Enregistrer une position | — | — |
-| `compute_delta(store, mmsi, window_s=1800)` | Delta vs ~30 min | — | `(Δdist_m, Δbrg_deg, age_min)` |
-| `is_gaining_ground(vmg_mr, vmg_comp)` | Logique couleur | kts, kts | `'green'` / `'red'` / `'neutral'` |
+| Function | Description | Inputs | Output |
+|----------|-------------|--------|--------|
+| `haversine_ll(lat1,lon1,lat2,lon2)` | Great-circle distance | decimal degrees | **meters** |
+| `bearing_ll(lat1,lon1,lat2,lon2)` | True bearing 0–360 | decimal degrees | **degrees 0–360** |
+| `compute_twa(cog_deg, twd_deg)` | True Wind Angle ±180 | degrees | **degrees ±180** (+ = stbd) |
+| `compute_vmg_wind(sog_kts, twa_deg)` | VMG toward wind | kts, degrees | **kts** (+ = upwind) |
+| `compute_vmg_mark(sog_kts, cog_deg, brg_mark_deg)` | VMG toward mark | kts, degrees | **kts** (+ = toward mark) |
+| `make_history_store()` | Create 30-min history store | — | `defaultdict(deque(maxlen=80))` |
+| `record_position(store, mmsi, dist_m, brg_deg)` | Record a position | — | — |
+| `compute_delta(store, mmsi, window_s=1800)` | Delta vs ~30 min ago | — | `(Δdist_m, Δbrg_deg, age_min)` |
+| `is_gaining_ground(vmg_mr, vmg_comp)` | Color logic | kts, kts | `'green'` / `'red'` / `'neutral'` |
 
 ```python
-# Exemples
+# Examples
 from ais_lib import haversine_ll, compute_twa, compute_vmg_wind, is_gaining_ground
 
 dist_nm = haversine_ll(40.921, -73.751, 41.167, -71.583) / 1852  # → 101 nm (Larchmont→Block Island)
-twa     = compute_twa(cog_deg=45.0, twd_deg=0.0)                  # → +45° (tribord amures)
+twa     = compute_twa(cog_deg=45.0, twd_deg=0.0)                  # → +45° (starboard tack)
 vmg     = compute_vmg_wind(sog_kts=6.5, twa_deg=45.0)             # → 4.60 kts
 color   = is_gaining_ground(vmg_mr=5.1, vmg_comp=4.8)             # → 'green'
 ```
 
 ---
 
-### `competitors_db.py` — Gestionnaire de la base de données
+### `competitors_db.py` — Competitor Database Manager
 
-**Rôle** : Charge `regatta/competitors.json`, le met en cache (TTL 5 min),
-et fournit les méthodes de lookup utilisées par `server_handlers.py`.
+**Role**: Loads `regatta/competitors.json`, caches it (TTL 5 min),
+and provides lookup methods used by `server_handlers.py`.
 
 ```python
 from competitors_db import CompetitorDB
 
 db = CompetitorDB('/repo/regatta/competitors.json')
 
-# Lookup par MMSI (accepte int ou str, supporte ais.mmsi et mmsi direct)
-boat = db.get_by_mmsi('338123456')   # → dict brut ou None
-boat = db.get_by_mmsi(338123456)     # → même résultat (int accepté)
+# MMSI lookup (accepts int or str, supports both ais.mmsi and direct mmsi)
+boat = db.get_by_mmsi('338123456')   # → raw dict or None
+boat = db.get_by_mmsi(338123456)     # → same result (int accepted)
 
-# Normaliser les données (retourne un dict uniforme)
+# Normalize data (returns a uniform dict)
 e = db.enrich(boat)
 # {'id': 'boat-01', 'name': 'Wind Hunter', 'sail_num': 'USA 1234',
 #  'skipper': 'John Doe', 'boat_class': 'J/Boats J/30',
 #  'mmsi': '338123456', 'phrf_lis': 171, 'irc_tcc': 1.012,
 #  'priority': 'high', 'events': ['BIR2026']}
 
-# Listes
-db.get_all()                # 68 bateaux (actifs + inactifs)
-db.get_all_active()         # 56 bateaux actifs (active: true)
-db.get_all_active_mmsis()   # set de strings MMSI des actifs
+# Lists
+db.get_all()                # 68 boats (active + inactive)
+db.get_all_active()         # 56 active boats (active: true)
+db.get_all_active_mmsis()   # set of MMSI strings for active boats
 
-# Recherche texte (nom, sail number, MMSI, classe)
-db.search('Wind')           # → liste de correspondances
-db.search('USA 1234')       # → lookup par sail number
-db.search('338123456')      # → lookup par MMSI
+# Text search (name, sail number, MMSI, class)
+db.search('Wind')           # → list of matches
+db.search('USA 1234')       # → sail number lookup
+db.search('338123456')      # → MMSI lookup
 
-# Métadonnées du fichier
+# File metadata
 db.get_meta()               # → {'version': '...', 'event': 'BIR2026', ...}
 ```
 
 ---
 
-### `server_handlers.py` — Handlers API HTTP
+### `server_handlers.py` — HTTP API Handlers
 
-**Rôle** : Deux fonctions importées par `regatta/server.py` via `sys.path.insert(0, '/repo/ais')`.
-Chaque appel HTTP lit Signal K en temps réel — pas de cache Signal K côté handler.
+**Role**: Two functions imported by `regatta/server.py` via `sys.path.insert(0, '/repo/ais')`.
+Each HTTP call reads Signal K in real time — no Signal K-side caching in the handler.
 
 #### `api_competitors(sk_fn, gps_fn, radius=10.0, min_sog=0.0, inc_unk=False, vmode='wind')`
 
-| Paramètre | Type | Défaut | Description |
-|-----------|------|--------|-------------|
-| `sk_fn` | callable | — | `sk_fn(path) → dict` — accès Signal K |
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `sk_fn` | callable | — | `sk_fn(path) → dict` — Signal K path accessor |
 | `gps_fn` | callable | — | `gps_fn() → {'lat': float, 'lon': float}` |
-| `radius` | float | 10.0 | Rayon de recherche en milles nautiques |
-| `min_sog` | float | 0.0 | SOG minimale (filtre les bateaux mouillés) |
-| `inc_unk` | bool | False | Inclure les AIS hors base de données |
-| `vmode` | str | `'wind'` | Mode VMG : `'wind'` ou `'mark'` |
+| `radius` | float | 10.0 | Search radius in nautical miles |
+| `min_sog` | float | 0.0 | Minimum SOG (filters anchored boats) |
+| `inc_unk` | bool | False | Include AIS targets not in competitor DB |
+| `vmode` | str | `'wind'` | VMG mode: `'wind'` or `'mark'` |
 
-**Réponse JSON :**
+**JSON Response:**
 ```json
 {
   "ts": 1718485200,
@@ -234,15 +234,15 @@ Chaque appel HTTP lit Signal K en temps réel — pas de cache Signal K côté h
 }
 ```
 
-**Erreur (GPS inactif) :**
+**Error (GPS inactive):**
 ```json
 {"error": "no_position", "competitors": []}
 ```
-Comportement **normal au quai**. Disparaît dès que Signal K publie `navigation.position`.
+**Normal behavior at dock.** Disappears as soon as Signal K publishes `navigation.position`.
 
 #### `api_fleet_db(sk_fn)`
 
-Vue statique de tous les concurrents avec leur statut AIS courant.
+Returns the full competitor list with real-time AIS status.
 
 ```json
 {
@@ -254,24 +254,24 @@ Vue statique de tous les concurrents avec leur statut AIS courant.
 }
 ```
 
-**Statuts AIS :**
+**AIS Status values:**
 
-| Statut | Condition | Interprétation |
-|--------|-----------|----------------|
-| `live` | Vu par Signal K < 2 min | Transponder actif, signal reçu |
-| `stale` | Vu il y a 2–10 min | Signal intermittent / limite de portée |
-| `old` | Vu il y a 10–60 min | Probablement hors de portée VHF |
-| `absent` | Non vu dans Signal K | Pas de transponder AIS, ou hors portée |
+| Status | Condition | Meaning |
+|--------|-----------|---------|
+| `live` | Seen by Signal K < 2 min ago | Active transponder, signal received |
+| `stale` | Seen 2–10 min ago | Intermittent signal / at range limit |
+| `old` | Seen 10–60 min ago | Probably out of VHF range |
+| `absent` | Not seen in Signal K | No AIS transponder, or out of range |
 
 ---
 
-### `ais_watch.py` — Daemon InfluxDB (optionnel)
+### `ais_watch.py` — Optional InfluxDB Daemon
 
-**Rôle** : Daemon standalone qui poll Signal K toutes les 30 secondes et écrit
-les données de tracking dans InfluxDB pour analyse post-course dans Grafana.
+**Role**: Standalone daemon that polls Signal K every 30 seconds and writes
+tracking data to InfluxDB for post-race analysis in Grafana.
 
 ```bash
-# Variables d'environnement (valeurs par défaut)
+# Environment variables (all optional — defaults shown below)
 export SIGNALK_HTTP=http://localhost:3000
 export INFLUX_URL=http://localhost:8086
 export INFLUX_ORG=MidnightRider
@@ -282,32 +282,32 @@ export AIS_RADIUS_NM=20
 python3 /home/aneto/midnightrider-navigation/ais/ais_watch.py
 ```
 
-**Measurement InfluxDB :** `competitor_tracking`
-Tags : `mmsi`, `name`, `sail`
-Fields : `dist_nm`, `bearing`, `sog_kts`, `cog`, `twa`, `vmg_wind`, `vmg_mark`, `color`, `phrf_lis`
+**InfluxDB measurement:** `competitor_tracking`
+Tags: `mmsi`, `name`, `sail`
+Fields: `dist_nm`, `bearing`, `sog_kts`, `cog`, `twa`, `vmg_wind`, `vmg_mark`, `color`, `phrf_lis`
 
-**Logs :** `logs/services/ais-watch.log` (RotatingFileHandler 5 MB × 3)
+**Logs:** `logs/services/ais-watch.log` (RotatingFileHandler 5 MB × 3 backups)
 
 ---
 
 ## API Reference
 
 ```bash
-# Concurrents dans un rayon de 15 nm, VMG vent
+# Competitors within 15 nm, wind VMG mode
 curl "http://midnightrider.local:5000/api/competitors?radius_nm=15"
 
-# VMG vers la marque, exclure les mouillés (SOG < 0.5 kts)
+# Mark VMG mode, exclude anchored boats (SOG < 0.5 kts)
 curl "http://midnightrider.local:5000/api/competitors?radius_nm=10&vmg_mode=mark&min_sog_kts=0.5"
 
-# Inclure les AIS hors base de données
+# Include AIS targets not in the competitor database
 curl "http://midnightrider.local:5000/api/competitors?radius_nm=20&include_unknown=true"
 
-# Base de données complète (ne nécessite pas de GPS actif)
+# Full fleet database (does not require active GPS)
 curl "http://midnightrider.local:5000/api/fleet_db"
 ```
 
-| Paramètre `api/competitors` | Valeurs | Défaut |
-|-----------------------------|---------|--------|
+| Parameter (`/api/competitors`) | Values | Default |
+|--------------------------------|--------|---------|
 | `radius_nm` | 1–50 | 10 |
 | `vmg_mode` | `wind`, `mark` | `wind` |
 | `min_sog_kts` | 0–20 | 0 |
@@ -315,18 +315,18 @@ curl "http://midnightrider.local:5000/api/fleet_db"
 
 ---
 
-## Base de données des concurrents
+## Competitor Database
 
-### Fichier source
+### Source File
 
 ```
 regatta/competitors.json
 ```
 
-Source de vérité unique. Rechargé automatiquement toutes les 5 minutes (cache TTL).
-**Ne jamais éditer en cours de course** — utiliser `git pull` pour mettre à jour.
+Single source of truth for all competitors. Automatically reloaded every 5 minutes (TTL cache).
+**Do not edit during a race** — use `git pull` to update from ashore.
 
-### Format complet
+### File Format
 
 ```json
 {
@@ -358,30 +358,30 @@ Source de vérité unique. Rechargé automatiquement toutes les 5 minutes (cache
 }
 ```
 
-### Champs
+### Field Reference
 
-| Champ | Obligatoire | Type | Description |
-|-------|-------------|------|-------------|
-| `id` | ✅ | string | Identifiant unique stable (`boat-01`) |
-| `boat_name` | ✅ | string | Nom du bateau |
-| `sail_number` | ✅ | string | Numéro de voile (`USA 1234`) |
-| `active` | ✅ | bool | `true` = apparaît dans le tracker |
-| `ais.mmsi` | ⭐ | int | **Requis pour le tracking AIS** — 9 chiffres |
-| `mmsi` | ⭐ | int | Alternative à `ais.mmsi` (les deux formats acceptés) |
-| `ratings.PHRF_LIS.value` | — | int | Handicap PHRF (entier) |
-| `ratings.PHRF_LIS` | — | int | Raccourci direct (int au lieu de dict) |
-| `ratings.IRC.TCC` | — | float | Coefficient IRC (ex : `1.012`) |
-| `vessel.make` + `vessel.model` | — | string | Classe du bateau |
-| `priority` | — | string | `high`/`medium`/`low` — tri d'affichage |
-| `events` | — | list | Régates (`["BIR2026"]`) |
+| Field | Required | Type | Description |
+|-------|----------|------|-------------|
+| `id` | ✅ | string | Stable unique identifier (`boat-01`) |
+| `boat_name` | ✅ | string | Boat name |
+| `sail_number` | ✅ | string | Sail number (`USA 1234`) |
+| `active` | ✅ | bool | `true` = appears in the tracker |
+| `ais.mmsi` | ⭐ | int | **Required for AIS tracking** — 9 digits |
+| `mmsi` | ⭐ | int | Alternative to `ais.mmsi` (both formats supported) |
+| `ratings.PHRF_LIS.value` | — | int | PHRF handicap (integer) |
+| `ratings.PHRF_LIS` | — | int | Shorthand (direct int instead of dict) |
+| `ratings.IRC.TCC` | — | float | IRC time correction coefficient (e.g. `1.012`) |
+| `vessel.make` + `vessel.model` | — | string | Boat class |
+| `priority` | — | string | `high`/`medium`/`low` — display sort order |
+| `events` | — | list | Regattas (`["BIR2026"]`) |
 
-### Ajouter un concurrent
+### Adding a Competitor
 
 ```bash
-# 1. Éditer le fichier
+# 1. Edit the file
 nano /home/aneto/midnightrider-navigation/regatta/competitors.json
 
-# 2. Ajouter l'entrée dans le tableau "competitors" :
+# 2. Add entry in the "competitors" array:
 # {
 #   "id": "boat-69",
 #   "boat_name": "New Challenger",
@@ -395,34 +395,34 @@ nano /home/aneto/midnightrider-navigation/regatta/competitors.json
 #   "events": ["BIR2026"]
 # }
 
-# 3. Mettre à jour _meta.total_boats et _meta.last_updated
+# 3. Update _meta.total_boats and _meta.last_updated
 
-# 4. Valider le JSON
+# 4. Validate JSON
 python3 -c "import json; json.load(open('regatta/competitors.json')); print('JSON valid')"
 
-# 5. Committer
+# 5. Commit and push
 git add regatta/competitors.json
 git commit -m "data: add New Challenger USA 9876 (MMSI 338001234)"
 git push origin main
 ```
 
-Le cache se rechargera **automatiquement dans les 5 minutes** sans redémarrer le container.
+The cache reloads **automatically within 5 minutes** — no container restart needed.
 
-### Désactiver un concurrent
+### Deactivating a Competitor
 
-Passer `"active": false`. Le bateau apparaît toujours dans `/api/fleet_db`
-(avec `ais_status: "absent"`) mais est exclu de `/api/competitors`.
+Set `"active": false`. The boat still appears in `/api/fleet_db`
+(with `ais_status: "absent"`) but is excluded from `/api/competitors`.
 
-### Trouver le MMSI d'un bateau
+### Finding a Boat's MMSI
 
 ```bash
-# Option 1 : MarineTraffic (navigateur)
+# Option 1: MarineTraffic (browser)
 # https://www.marinetraffic.com/en/ais/details/ships/name:WIND+HUNTER
 
-# Option 2 : VesselFinder
+# Option 2: VesselFinder
 # https://www.vesselfinder.com/?name=WIND+HUNTER
 
-# Option 3 : depuis Signal K en mer (bateau visible à portée AIS)
+# Option 3: from Signal K at sea (boat visible within AIS range)
 curl -s http://localhost:3000/signalk/v1/api/vessels/ | python3 -c "
 import sys, json
 for k, v in json.load(sys.stdin).items():
@@ -433,30 +433,30 @@ for k, v in json.load(sys.stdin).items():
 
 ---
 
-## Logique couleur VMG
+## VMG Color Logic
 
 ```
 VMG_MR   = SOG_MR   × cos(TWA_MR)    ← Midnight Rider
-VMG_comp = SOG_comp × cos(TWA_comp)   ← Concurrent
+VMG_comp = SOG_comp × cos(TWA_comp)   ← Competitor
 
-VMG_MR - VMG_comp > +0.05 kts  →  GREEN  (vous gagnez du terrain)
-VMG_comp - VMG_MR > +0.05 kts  →  RED    (le concurrent gagne)
-Différence ≤ 0.05 kts           →  NEUTRAL
+VMG_MR - VMG_comp > +0.05 kts  →  GREEN   (you are gaining ground)
+VMG_comp - VMG_MR > +0.05 kts  →  RED     (competitor is gaining)
+Difference ≤ 0.05 kts           →  NEUTRAL
 ```
 
-**Seuil 0.05 kts** = 90 m/heure — évite le clignotement sur les micro-variations.
+**0.05 kt threshold** = ~90 m/hour — prevents flickering on micro-variations.
 
-**Mode `vmg_mode=mark`** : remplace `cos(TWA)` par `cos(angle_vers_marque)`.
-Plus pertinent sur les bords de reaching ou lors de l'approche d'une marque.
+**`vmg_mode=mark`**: replaces `cos(TWA)` with `cos(angle_to_mark)`.
+More relevant on reaching legs or when approaching a mark.
 
-**Cas particuliers :**
+**Edge cases:**
 
-| Situation | Comportement |
-|-----------|-------------|
-| Vent non disponible dans SK | Tous NEUTRAL (TWD manquant → TWA incalculable) |
-| Marque non disponible | Mode mark impossible → fallback mode wind |
-| VMG_MR ou VMG_comp = None | NEUTRAL |
-| SOG = 0 (bateau mouillé) | VMG = 0 → utiliser `min_sog_kts=0.5` pour exclure |
+| Situation | Behavior |
+|-----------|----------|
+| Wind not available in SK | All NEUTRAL (TWD missing → TWA incalculable) |
+| Mark not available | Mark mode impossible → falls back to wind mode |
+| VMG_MR or VMG_comp = None | NEUTRAL |
+| SOG = 0 (anchored) | VMG = 0 → use `min_sog_kts=0.5` to exclude |
 
 ---
 
@@ -465,139 +465,136 @@ Plus pertinent sur les bords de reaching ou lors de l'approche d'une marque.
 ```bash
 cd /home/aneto/midnightrider-navigation
 
-# Suite complète — 75 tests, ~0.04s
+# Full suite — 75 tests, ~0.04s
 python3 -m unittest discover -s tests/ -p 'test_*.py' -v
 
-# Par module
-python3 -m unittest tests.test_ais_lib -v           # 34 tests (maths pures)
-python3 -m unittest tests.test_competitors_db -v    # 23 tests (base de données)
+# Single module
+python3 -m unittest tests.test_ais_lib -v           # 34 tests (pure math)
+python3 -m unittest tests.test_competitors_db -v    # 23 tests (database)
 python3 -m unittest tests.test_server_handlers -v   # 18 tests (API handlers)
 ```
 
-| Fichier test | N | Couverture |
-|---|---|---|
-| `test_ais_lib.py` | 34 | haversine, bearing, TWA wrap-around, VMG vent/marque, delta 30min, couleur threshold, history store |
+| Test file | Count | Coverage |
+|-----------|-------|----------|
+| `test_ais_lib.py` | 34 | haversine, bearing, TWA wrap-around, VMG wind/mark, 30-min delta, color threshold, history store |
 | `test_competitors_db.py` | 23 | CRUD, MMSI nested/direct, search, enrich PHRF dict+int, IRC TCC, boat_class, meta |
-| `test_server_handlers.py` | 18 | no_position, SOG m/s→kts, COG rad→deg, wind/mark available, fleet_db structure, cache isolation |
+| `test_server_handlers.py` | 18 | no_position, SOG m/s→kts, COG rad→deg, wind/mark availability, fleet_db structure, cache isolation |
 
 ---
 
-## Déploiement Docker
+## Docker Deployment
 
 ```yaml
-# docker-compose.yml (extrait)
+# docker-compose.yml (excerpt)
 regatta:
-  build: ./regatta
-  ports:
-    - "5000:5000"
   volumes:
     - /home/aneto/midnightrider-navigation:/repo
-  environment:
-    SIGNALK_HTTP: http://signalk:3000
-    INFLUX_URL: http://influxdb:8086
 ```
 
-**Point de montage** : `/repo/ais` accessible en Python via `sys.path`.
-
-**Redémarrage du container** : Requiert `/repo` à l'exécution (pas de copie lors du build).
-
----
-
-## Utilisation en course
-
-### Vérifier le module avant de partir
-
-```bash
-# 1. Vérifier que Signal K reçoit du vert AIS
-curl -s http://localhost:3000/signalk/v1/api/vessels/ | python3 -m json.tool | head -20
-
-# 2. Tester les API
-curl "http://localhost:5000/api/fleet_db" | python3 -m json.tool
-curl "http://localhost:5000/api/competitors?radius_nm=15" | python3 -m json.tool
-
-# 3. Vérifier les logs
-tail -20 logs/latest.json
+The `ais/` folder is accessible inside the container at `/repo/ais/`.
+Imported by `regatta/server.py` via:
+```python
+sys.path.insert(0, '/repo/ais')
+from server_handlers import api_competitors as _AC, api_fleet_db as _AF
 ```
 
-### En mer
-
-L'endpoint `/api/competitors` affiche en **temps réel** (pas de cache) :
-- Concurrents dans le rayon spécifié
-- Couleur GREEN/RED/NEUTRAL basée sur le VMG
-- Historique 30 min pour voir les **tendances** (delta distance + bearing)
-
-**À ignorer :**
-- AIS non dans la base de données (`in_comp_db: false`) — sauf si vous pourchassez un invité
-- Bateaux avec `ais_status: "old"` ou `"absent"` → probablement hors portée
-
-### Post-course (optionnel)
-
+**Useful commands:**
 ```bash
-# Récupérer la séquence InfluxDB du daemon ais_watch
-influx query --org MidnightRider \
-  'from(bucket:"midnight_rider") 
-   |> range(start: 2026-05-22T08:00:00Z, stop: 2026-05-22T20:00:00Z)
-   |> filter(fn: (r) => r._measurement == "competitor_tracking")'
-```
+# Verify the volume mount is active
+docker exec regatta python3 -c "import os; print(os.listdir('/repo/ais'))"
 
-Importer dans Grafana pour analyser les performances relatives (leeway, pression, trim, etc.).
+# Restart after modifying AIS code (NO rebuild needed)
+docker compose restart regatta
 
----
+# Container logs
+docker logs regatta --tail=50 -f
 
-## Historique des versions
+# Test from inside the container
+docker exec regatta python3 -c "
+import sys; sys.path.insert(0,'/repo/ais')
+from ais_lib import haversine_ll
+print(round(haversine_ll(40.921,-73.751,41.167,-71.583)/1852,1), 'nm to Block Island')
+"
 
-| Version | Date | Changements |
-|---------|------|-------------|
-| v1.1 | 2026-06-16 | Docs complètes (381 lignes) — Phase J-2c finalisé |
-| v1.0 | 2026-06-15 | Déploiement initial — Phase J-1 |
-
----
-
-## Support & Troubleshooting
-
-### "No position" en mer
-
-**Cause** : Signal K ne reçoit pas de données GPS (UM982 pas en ligne).
-
-```bash
-curl -s http://localhost:3000/signalk/v1/api/vessels/self/navigation/ | python3 -c "
-import sys, json
-d = json.load(sys.stdin)
-print('Position:', d.get('position', {}).get('value'))
-print('SOG:', d.get('speedOverGround', {}).get('value'), 'm/s')
+# Test endpoint locally
+curl -s http://localhost:5000/api/fleet_db | python3 -c "
+import sys,json; d=json.load(sys.stdin)
+print(f'Fleet DB: {d[\"total\"]} boats, {d[\"active\"]} active')
 "
 ```
 
-Si vide → redémarrer UM982 ou le service SK GPS. L'AIS continuera de fonctionner, mais le calcul de VMG comparatif sera bloqué.
+---
 
-### Vent non disponible
+## Race Day Usage
 
-**Cause** : P4 (truewind) n'a pas démarré, ou pas de vent apparent mesuré.
+### Pre-Race Checklist
 
-```bash
-curl -s http://localhost:3000/signalk/v1/api/vessels/self/environment/ | grep -A2 wind
+1. ✅ GPS active — Signal K publishing `navigation.position`
+2. ✅ Wind active — Signal K publishing `environment.wind.directionTrue`
+3. ✅ Active waypoint set in Vulcan 7 (for `vmg_mode=mark`)
+4. ✅ Validate: `curl "http://midnightrider.local:5000/api/competitors?radius_nm=15"`
+
+### Reading the Competitor Table
+
+```
+Wind Hunter  USA 1234 | dist: 1.24nm  brg: 047°  SOG: 5.9kt  TWA: +25.5°
+VMG: 5.33kt | Δ30min: -340m (-0.18nm) | RED → they gain 0.18kt VMG on you
 ```
 
-Fallback : Tous les concurrents en NEUTRAL jusqu'au redémarrage du calculateur de vent.
+| Field | Meaning |
+|-------|---------|
+| `dist` | Distance in nautical miles |
+| `brg` | True bearing from Midnight Rider |
+| `TWA` | + = starboard tack, - = port tack |
+| `VMG` | Effective speed toward wind (or mark) |
+| `Δ30min` | Negative = closing, positive = opening |
+| GREEN | Your VMG > their VMG — you are gaining |
+| RED | Their VMG > your VMG — they are gaining |
 
-### Competitor toujours RED
+### Recommended Radius
 
-Le concurrent a un meilleur VMG depuis 30 min. Vérifier :
-1. **Réglages** : loupe-t-il? avez-vous trop de gîte?
-2. **Vent** : a-t-il trouvé du meilleur vent?
-3. **Marque** : vous déportez vers la marque?
+| Situation | `radius_nm` |
+|-----------|-------------|
+| Starting line | 2–5 |
+| Close-hauled upwind leg | 5–10 |
+| Offshore passage | 10–20 |
+| Open ocean crossing (Block Island) | 15–25 |
 
-Utiliser `delta_dist_m` pour voir si la distance s'accroît ou décroît.
+### Troubleshooting
 
-### Test failed: cache isolation
-
-Le test de réinitialisation de cache (`reset_caches()`) fail en production ?
-
-C'est un **problème de test**, pas du code. La production utilise les mêmes caches
-TTL depuis le démarrage du container (sain). Les tests les réinitialisent entre
-chaque test pour isoler la fixture (normal).
+| Symptom | Likely Cause | Action |
+|---------|-------------|--------|
+| `error: no_position` | GPS inactive | `systemctl status signalk` — check UM982 plugin |
+| All NEUTRAL | Wind not received | Check Calypso UP10 / BLE plugin |
+| 0 competitors | Radius too small | Increase `radius_nm` |
+| AIS absent | Out of VHF range (~20nm) | Normal offshore |
 
 ---
 
-**Midnight Rider Navigation — AIS Competitor Tracker — v1.1**  
-**Déployable | Testé | Documenté | Prêt pour Block Island Race 2026** ⛵
+## Version History
+
+| Version | Date | Phase | Changes |
+|---------|------|-------|---------|
+| **1.1** | 2026-06-16 | J-2 | English translation, 75 unit tests PASS, comprehensive docs |
+| **1.0** | 2026-06-15 | J-1 | Initial release — 5 modules, 2 endpoints, 576 lines of code |
+
+### Module Files
+
+| File | Lines | Role |
+|------|-------|------|
+| `ais/__init__.py` | 1 | Package marker |
+| `ais/ais_lib.py` | 73 | Pure math library (9 functions) |
+| `ais/competitors_db.py` | 81 | Database manager (TTL cache 5 min) |
+| `ais/ais_watch.py` | 153 | Optional InfluxDB daemon |
+| `ais/server_handlers.py` | 155 | HTTP API handlers |
+| `ais/README.md` | — | This file |
+
+| Test file | Tests | Target |
+|-----------|-------|--------|
+| `tests/test_ais_lib.py` | 34 | `ais_lib.py` |
+| `tests/test_competitors_db.py` | 23 | `competitors_db.py` |
+| `tests/test_server_handlers.py` | 18 | `server_handlers.py` |
+
+---
+
+*Midnight Rider — J/30 — Larchmont Yacht Club — Block Island Race 2026*
