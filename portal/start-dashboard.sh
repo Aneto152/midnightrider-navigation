@@ -1,33 +1,26 @@
 #!/bin/bash
-# Start Dashboard Portal
+# Midnight Rider Portal Launcher
 
-# Kill any existing server on port 8888
-pkill -f "http.server 8888" 2>/dev/null || true
+set -e
+REPO="/home/aneto/midnightrider-navigation"
+PORT=8888
+LOG="/tmp/mr-portal.log"
 
-# Start HTTP server in background
-cd /home/aneto/.openclaw/workspace
-python3 -m http.server 8888 > /tmp/dashboard-server.log 2>&1 &
+pkill -f "portal/server.py" 2>/dev/null || true
+pkill -f "http.server $PORT" 2>/dev/null || true
+sleep 1
+
+echo "[$(date -Iseconds)] Starting portal on port $PORT" | tee "$LOG"
+cd "$REPO"
+python3 portal/server.py >> "$LOG" 2>&1 &
 SERVER_PID=$!
-
-# Wait for server to start
+echo "PID: $SERVER_PID"
 sleep 2
 
-# Get the default browser
-if command -v firefox &> /dev/null; then
-    BROWSER="firefox"
-elif command -v chromium &> /dev/null; then
-    BROWSER="chromium"
-elif command -v google-chrome &> /dev/null; then
-    BROWSER="google-chrome"
-elif command -v google-chrome-stable &> /dev/null; then
-    BROWSER="google-chrome-stable"
-else
-    # Fallback to xdg-open but with explicit URL
-    $BROWSER "http://localhost:8888" 2>/dev/null &
-    exit 0
+if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+    echo "ERROR: Server failed to start"
+    exit 1
 fi
 
-# Open browser with explicit port
-$BROWSER "http://localhost:8888" 2>/dev/null &
-
+echo "Portal: http://midnightrider.local:$PORT"
 exit 0

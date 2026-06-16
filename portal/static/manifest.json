@@ -1,17 +1,35 @@
 {
   "name": "Midnight Rider Navigation",
   "short_name": "MR Nav",
-  "description": "Navigation dashboard for J/30 sailing vessel",
+  "description": "J/30 race telemetry & monitoring \u2014 Larchmont Yacht Club",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0d0d0d",
-  "theme_color": "#cc4400",
+  "background_color": "#0a1628",
+  "theme_color": "#0a1628",
   "orientation": "landscape",
   "icons": [
     {
-      "src": "/static/img/midnight-rider-icon.svg",
+      "src": "/midnight-rider-icon.svg",
       "sizes": "any",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "AIS Tracker",
+      "url": "/ais/",
+      "description": "Live competitor tracking"
+    },
+    {
+      "name": "Fleet Database",
+      "url": "/ais/fleet_db",
+      "description": "68 registered competitors"
+    },
+    {
+      "name": "Reporter",
+      "url": "/reporter",
+      "description": "Family flash generator"
     }
   ]
 }

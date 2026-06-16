@@ -1,170 +1,126 @@
-/* MidnightRider — Night Mode
- * Optimized for iPad cockpit use at night
- * Preserves night vision: no blue/white, uses red/amber palette
- * Toggle via: document.body.classList.toggle('night-mode')
- */
+/* Midnight Rider — Shared Design System
+   Used by: index.html, reporter.html, viewer.html
+   AIS pages (tracker.html, fleet_db.html) use inline CSS for portability
+*/
 
-/* ── Day mode baseline (no change — portal default) ─────── */
-body {
-  transition: background-color 0.3s ease, color 0.3s ease;
+/* CSS Custom Properties */
+:root {
+  --bg-base:        #0a1628;
+  --bg-gradient:    linear-gradient(135deg, #0a1628 0%, #0f1f3d 100%);
+  --bg-card:        rgba(255, 255, 255, 0.05);
+  --bg-card-hover:  rgba(0, 212, 255, 0.08);
+  --bg-input:       rgba(255, 255, 255, 0.07);
+  --border-card:    rgba(0, 212, 255, 0.15);
+  --border-focus:   rgba(0, 212, 255, 0.5);
+  --border-subtle:  rgba(255, 255, 255, 0.06);
+  --text-primary:   #e0e8f0;
+  --text-dim:       rgba(255, 255, 255, 0.5);
+  --text-muted:     rgba(255, 255, 255, 0.3);
+  --text-link:      #7bb8f0;
+  --accent-cyan:    #00d4ff;
+  --accent-green:   #22c55e;
+  --accent-red:     #ef4444;
+  --accent-yellow:  #eab308;
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-/* ── Night mode ──────────────────────────────────────────── */
-body.night-mode {
-  background-color: #0d0d0d !important;
-  color: #cc4400 !important;
-}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); background: var(--bg-base); color: var(--text-primary); line-height: 1.5; }
+a { color: var(--text-link); text-decoration: none; }
+a:hover { opacity: 0.85; }
 
-/* Navigation bar */
-body.night-mode nav,
-body.night-mode .navbar,
-body.night-mode header {
-  background-color: #1a0a00 !important;
-  border-bottom: 1px solid #cc4400 !important;
-}
-
-body.night-mode nav a,
-body.night-mode .navbar a,
-body.night-mode header a {
-  color: #cc4400 !important;
-}
-
-/* Cards and panels */
-body.night-mode .card,
-body.night-mode .panel,
-body.night-mode .box,
-body.night-mode .widget,
-body.night-mode [class*="card"],
-body.night-mode [class*="panel"] {
-  background-color: #1a0800 !important;
-  border-color: #661a00 !important;
-  color: #cc4400 !important;
-}
-
-/* Stat values — large cockpit numbers */
-body.night-mode .stat-value,
-body.night-mode .value,
-body.night-mode [class*="stat"],
-body.night-mode h1, body.night-mode h2, body.night-mode h3 {
-  color: #ff6600 !important;
-  text-shadow: 0 0 8px rgba(255, 102, 0, 0.4);
-}
-
-/* Tables */
-body.night-mode table {
-  border-color: #661a00 !important;
-}
-
-body.night-mode th {
-  background-color: #1a0800 !important;
-  color: #cc4400 !important;
-}
-
-body.night-mode td {
-  color: #cc4400 !important;
-  border-color: #661a00 !important;
-}
-
-body.night-mode tr:hover {
-  background-color: #2a1000 !important;
-}
-
-/* Buttons */
-body.night-mode button,
-body.night-mode .btn {
-  background-color: #2a0a00 !important;
-  color: #cc4400 !important;
-  border-color: #cc4400 !important;
-}
-
-body.night-mode button:hover,
-body.night-mode .btn:hover {
-  background-color: #3d1400 !important;
-}
-
-/* Input fields */
-body.night-mode input,
-body.night-mode select,
-body.night-mode textarea {
-  background-color: #1a0800 !important;
-  color: #cc4400 !important;
-  border-color: #661a00 !important;
-}
-
-/* Links */
-body.night-mode a {
-  color: #ff8800 !important;
-}
-
-/* Grafana iframes — dim slightly */
-body.night-mode iframe {
-  filter: brightness(0.7) sepia(0.5) hue-rotate(-20deg);
-  transition: filter 0.3s ease;
-}
-
-/* Status indicators */
-body.night-mode .status-ok,
-body.night-mode .success,
-body.night-mode [class*="success"] {
-  color: #885500 !important;
-}
-
-body.night-mode .status-warn,
-body.night-mode .warning,
-body.night-mode [class*="warn"] {
-  color: #aa6600 !important;
-}
-
-body.night-mode .status-error,
-body.night-mode .danger,
-body.night-mode [class*="error"],
-body.night-mode [class*="danger"] {
-  color: #ff2200 !important;
-}
-
-/* ── Night mode toggle button (always visible) ───────────── */
-#night-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  border: 2px solid #888;
-  background: rgba(0, 0, 0, 0.6);
-  cursor: pointer;
-  font-size: 24px;
+.mr-nav {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  transition: all 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-card);
+  background: rgba(0, 0, 0, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.mr-nav-title { font-size: 0.85em; font-weight: 600; opacity: 0.9; }
+.mr-nav a { font-size: 0.8em; opacity: 0.65; padding: 6px 10px; border-radius: var(--radius-sm); }
+.mr-nav a:hover { opacity: 1; background: var(--bg-card); }
+
+.mr-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  transition: all 0.15s;
+}
+.mr-card:hover { background: var(--bg-card-hover); border-color: var(--border-focus); }
+
+.mr-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 0.82em;
+  font-family: var(--font-sans);
+  transition: all 0.15s;
+}
+.mr-btn:hover { background: var(--bg-card-hover); border-color: var(--border-focus); }
+
+.mr-badge {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 0.68em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mr-badge.live    { background: rgba(34,197,94,0.2);  color: var(--accent-green); }
+.mr-badge.stale   { background: rgba(234,179,8,0.2);  color: var(--accent-yellow); }
+.mr-badge.absent  { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+
+.mr-status-bar {
+  display: flex;
+  gap: 8px;
+  padding: 8px 12px;
+  flex-wrap: wrap;
+  background: rgba(0, 212, 255, 0.03);
+  border-bottom: 1px solid var(--border-subtle);
+}
+.mr-stat { font-size: 0.75em; padding: 4px 10px; border-radius: var(--radius-sm); background: var(--bg-card); }
+.mr-stat .lbl { opacity: 0.45; margin-right: 5px; }
+.mr-stat .val { font-weight: 600; }
+
+@keyframes mr-spin { to { transform: rotate(360deg); } }
+.mr-spinner {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 2px solid rgba(0, 212, 255, 0.25);
+  border-top-color: var(--accent-cyan);
+  border-radius: 50%;
+  animation: mr-spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
 }
 
-#night-toggle:hover {
-  transform: scale(1.1);
-  border-color: #cc4400;
-}
+.mr-empty { text-align: center; padding: 40px 20px; opacity: 0.4; font-size: 0.88em; }
 
-body.night-mode #night-toggle {
-  border-color: #cc4400;
-  background: rgba(26, 8, 0, 0.9);
+.mr-input {
+  padding: 8px 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.85em;
+  outline: none;
 }
+.mr-input::placeholder { opacity: 0.35; }
+.mr-input:focus { border-color: var(--border-focus); background: rgba(255,255,255,0.09); }
 
-/* ── Cockpit mode (extra large numbers) ─────────────────── */
-body.cockpit-mode .stat-value,
-body.cockpit-mode .value,
-body.cockpit-mode [class*="stat-num"] {
-  font-size: 4rem !important;
-  font-family: 'Roboto Mono', monospace !important;
-  letter-spacing: 2px;
-}
-
-body.night-mode.cockpit-mode .stat-value,
-body.night-mode.cockpit-mode .value {
-  color: #ff6600 !important;
-  text-shadow: 0 0 12px rgba(255, 102, 0, 0.6);
-}
+.mr-text-dim { opacity: 0.5; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; }

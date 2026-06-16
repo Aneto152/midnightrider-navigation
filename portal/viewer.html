@@ -1,73 +1,162 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="MR Nav">
-    <link rel="manifest" href="/static/manifest.json">
-    <link rel="stylesheet" href="/static/css/night-mode.css">
-    <title>Dashboard</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #1a1a2e; overflow: hidden; }
-        
-        #loader {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #1a1a2e;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            z-index: 1000;
-            color: #a0aec0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Dashboard — Midnight Rider</title>
+<link rel="stylesheet" href="/static/css/night-mode.css">
+<style>
+  html, body { height: 100%; overflow: hidden; }
+  body { display: flex; flex-direction: column; background: var(--bg-base); }
 
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid rgba(0, 212, 255, 0.2);
-            border-top: 4px solid #00d4ff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
+  .viewer-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-card);
+    background: rgba(0,0,0,0.35);
+    flex-shrink: 0;
+    min-height: 44px;
+  }
+  .viewer-nav a, .viewer-nav button {
+    font-size: 0.78em;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    color: var(--text-link);
+    cursor: pointer;
+    white-space: nowrap;
+    text-decoration: none;
+    font-family: var(--font-sans);
+  }
+  .viewer-nav a:hover, .viewer-nav button:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-focus);
+  }
+  .viewer-title {
+    flex: 1;
+    font-size: 0.82em;
+    font-weight: 600;
+    opacity: 0.8;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .viewer-time {
+    font-size: 0.72em;
+    opacity: 0.4;
+    white-space: nowrap;
+  }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+  #grafana-frame { flex: 1; border: none; width: 100%; background: var(--bg-base); }
+
+  .loading-overlay {
+    position: absolute;
+    inset: 44px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    background: var(--bg-base);
+    z-index: 10;
+    transition: opacity 0.3s;
+  }
+  .loading-overlay.hidden { opacity: 0; pointer-events: none; }
+
+  .error-overlay {
+    position: absolute;
+    inset: 44px 0 0 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: var(--bg-base);
+    z-index: 11;
+  }
+  .error-overlay.visible { display: flex; }
+  .error-msg { font-size: 0.9em; opacity: 0.6; text-align: center; max-width: 280px; line-height: 1.6; }
+</style>
 </head>
 <body>
-    <div id="loader">
-        <div class="spinner"></div>
-        <p>Loading dashboard...</p>
-    </div>
 
-    <script>
-        // Parse URL parameters
-        const params = new URLSearchParams(window.location.search);
-        const dashboard = params.get('dashboard') || 'cockpit-main';
-        const name = params.get('name') || 'Dashboard';
+<nav class="viewer-nav">
+  <a href="/">⬅ Portal</a>
+  <span class="viewer-title" id="dashTitle">Loading…</span>
+  <span class="viewer-time" id="clock">—</span>
+  <button onclick="reloadFrame()" title="Refresh">↻</button>
+</nav>
 
-        // Get host from parameter (default to localhost)
-        const host = params.get('host') || 'localhost';
-        
-        // Read theme preference from portal localStorage
-        const nightMode = localStorage.getItem('midnightrider-night-mode');
-        const grafanaTheme = (nightMode === 'on') ? 'dark' : 'light';
-        
-        // Build direct Grafana URL with theme parameter (kiosk mode, no iframe needed)
-        const grafanaUrl = `http://${host}:3001/d/${dashboard}?kiosk&refresh=5s&theme=${grafanaTheme}`;
-        
-        console.log('Theme:', grafanaTheme, '→ Redirecting to:', grafanaUrl);
+<div class="loading-overlay" id="loadingOverlay">
+  <span class="mr-spinner"></span>
+  <span>Loading dashboard…</span>
+</div>
 
-        // Redirect directly to Grafana (no iframe)
-        window.location.href = grafanaUrl;
-    </script>
-    <script src="/static/js/night-mode.js"></script>
+<div class="error-overlay" id="errorOverlay">
+  <div style="font-size:2.5em">📡</div>
+  <div class="error-msg">Could not load Grafana. Check that <br><code style="color:var(--accent-cyan)">midnightrider.local:3001</code> is reachable.</div>
+</div>
+
+<iframe id="grafana-frame" title="Grafana Dashboard" allowfullscreen></iframe>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const dash = params.get('dashboard') || 'cockpit-main';
+const host = params.get('host') || window.location.hostname;
+const refresh = params.get('refresh') || '10s';
+
+const NAMES = {
+  '01-navigation-dashboard': 'Navigation',
+  'cockpit-main': 'Cockpit',
+  '03-performance': 'Performance',
+  '04-wind-current': 'Weather & Wind',
+  '08-alerts': 'Alerts',
+};
+
+const title = NAMES[dash] || dash.replace(/-/g, ' ').toUpperCase();
+document.getElementById('dashTitle').textContent = title;
+document.title = title + ' — Midnight Rider';
+
+const grafanaUrl = `http://${host}:3001/d/${dash}?kiosk=1&refresh=${refresh}&theme=dark`;
+const frame = document.getElementById('grafana-frame');
+
+function reloadFrame() {
+  document.getElementById('loadingOverlay').classList.remove('hidden');
+  document.getElementById('errorOverlay').classList.remove('visible');
+  frame.src = '';
+  setTimeout(() => { frame.src = grafanaUrl; }, 100);
+}
+
+frame.addEventListener('load', () => {
+  document.getElementById('loadingOverlay').classList.add('hidden');
+});
+
+frame.addEventListener('error', () => {
+  document.getElementById('loadingOverlay').classList.add('hidden');
+  document.getElementById('errorOverlay').classList.add('visible');
+});
+
+let loadTimeout = setTimeout(() => {
+  if (!document.getElementById('loadingOverlay').classList.contains('hidden')) {
+    document.getElementById('loadingOverlay').classList.add('hidden');
+    document.getElementById('errorOverlay').classList.add('visible');
+  }
+}, 8000);
+
+frame.addEventListener('load', () => clearTimeout(loadTimeout));
+
+function updateClock() {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString();
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+frame.src = grafanaUrl;
+</script>
 </body>
 </html>

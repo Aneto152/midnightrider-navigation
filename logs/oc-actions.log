@@ -67,3 +67,9 @@
 [2026-06-16T09:05:21.978839] [FILE_CREATE] [config/README.md] Full config inventory + sync/restore
 [2026-06-16T09:05:21.978839] [FILE_MODIFY] [docs/INDEX.md] config/ + test counts 110
 [2026-06-16T09:05:21.978839] [FILE_MODIFY] [docs/ARCHITECTURE-MASTER.md] §5.7 config/
+[2026-06-16T18:18:03.049000] [FILE_CREATE] [portal/static/css/night-mode.css] Shared CSS
+[2026-06-16T18:18:03.049000] [FILE_CREATE] [portal/viewer.html] Grafana iframe (WAS MISSING!)
+[2026-06-16T18:18:03.049000] [FILE_MODIFY] [config/grafana-custom.ini] allow_embedding=true
+[2026-06-16T18:18:03.049000] [FILE_MODIFY] [portal/static/manifest.json] Fix icon+colors
+[2026-06-16T18:18:03.049000] [FILE_MODIFY] [portal/start-dashboard.sh] Fix serving path
+[2026-06-16T18:18:03.049000] [FILE_MODIFY] [portal/server.py] v2.0 threaded+logging+sandbox
