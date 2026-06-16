@@ -1067,3 +1067,22 @@ See **[config/README.md](../config/README.md)** for complete inventory and sync/
 | `config/ufw-rules.txt` | Firewall rules reference |
 
 > ⚠️ Port 8888 (portal) not in UFW explicit rules — accessible via WiFi hotspot catch-all (192.168.4.0/24) only.
+
+
+---
+
+## 5.9 Portal Server (`portal/server.py`)
+
+**Purpose**: Main web interface on port 8888. Serves HTML pages, proxies API calls.
+
+See **[portal/README.md](../portal/README.md)** for full documentation.
+
+| Feature | Detail |
+|---------|--------|
+| Threading | `ThreadingMixIn` — concurrent requests |
+| Logging | `logs/services/portal.log` |
+| Security | Path sandbox, shutdown auth |
+| Grafana | iframe embed (requires `allow_embedding = true`) |
+
+**Pages**: `/` (dashboard), `/viewer.html` (Grafana), `/reporter` (flash), `/ais/*` (AIS)
+

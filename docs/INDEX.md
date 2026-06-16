@@ -137,6 +137,22 @@ Alert categories:
 
 ---
 
+
+---
+
+## 🌐 Portal (port 8888)
+
+Main web interface — serves HTML pages and proxies API calls.
+
+| File | Route | Description |
+|------|-------|-------------|
+| **[portal/README.md](../portal/README.md)** | — | Portal documentation |
+| `portal/server.py` | — | HTTP server: threaded, proxy, security |
+| `portal/index.html` | `/` | Dashboard grid |
+| `portal/viewer.html` | `/viewer.html?dashboard=X` | Grafana iframe |
+| `portal/reporter.html` | `/reporter` | Family flash generator |
+| `portal/static/css/night-mode.css` | `/static/css/night-mode.css` | Shared CSS |
+
 ## ⚙️ System Configuration Backup
 
 Reference copies of all RPi system configuration files.

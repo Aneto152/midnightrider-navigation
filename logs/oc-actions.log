@@ -73,3 +73,8 @@
 [2026-06-16T18:18:03.049000] [FILE_MODIFY] [portal/static/manifest.json] Fix icon+colors
 [2026-06-16T18:18:03.049000] [FILE_MODIFY] [portal/start-dashboard.sh] Fix serving path
 [2026-06-16T18:18:03.049000] [FILE_MODIFY] [portal/server.py] v2.0 threaded+logging+sandbox
+[2026-06-16T19:01:27.319995] [FILE_MODIFY] [portal/reporter.html] English + shared CSS
+[2026-06-16T19:01:27.319995] [FILE_CREATE] [tests/test_portal.py] Portal unit tests
+[2026-06-16T19:01:27.319995] [FILE_CREATE] [portal/README.md] Documentation
+[2026-06-16T19:01:27.319995] [FILE_MODIFY] [docs/INDEX.md] portal section
+[2026-06-16T19:01:27.319995] [FILE_MODIFY] [docs/ARCHITECTURE-MASTER.md] §5.9
