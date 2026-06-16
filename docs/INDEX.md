@@ -248,4 +248,7 @@ docs/
 | `ais/ais_watch.py` | Daemon: SK → InfluxDB every 30s |
 | `ais/server_handlers.py` | API: `/api/competitors` + `/api/fleet_db` |
 
-**Unit tests:** `tests/test_ais_lib.py` (24) · `tests/test_competitors_db.py` (9) · `tests/test_server_handlers.py` (6) — 39 total
+**| `ais/tracker.html` | Live competitor tracker UI — accessible at `/ais/` on portal |
+| `ais/fleet_db.html` | Fleet database browser — accessible at `/ais/fleet_db` on portal |
+
+Unit tests:** `tests/test_ais_lib.py` (24) · `tests/test_competitors_db.py` (9) · `tests/test_server_handlers.py` (6) — 39 total

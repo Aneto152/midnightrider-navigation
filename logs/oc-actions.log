@@ -59,3 +59,8 @@
 [2026-06-16T07:48:02.506841] [FILE_MODIFY] [ais/README.md] Rewritten in English — v1.1 EN
 [2026-06-16T08:03:25.756320] [FILE_CREATE] [ais/tracker.html] Phase J-3 — live competitor tracker
 [2026-06-16T08:03:25.756320] [FILE_CREATE] [ais/fleet_db.html] Phase J-3 — fleet database browser
+[2026-06-16T08:21:14.267653] [FILE_CREATE] [tests/test_ais_html.py] HTML structural tests
+[2026-06-16T08:21:14.267653] [FILE_MODIFY] [portal/index.html] AIS Tracker + Fleet DB cards
+[2026-06-16T08:21:14.267653] [FILE_MODIFY] [ais/README.md] Phase J-3 section v1.2
+[2026-06-16T08:21:14.267653] [FILE_MODIFY] [docs/INDEX.md] tracker.html + fleet_db.html
+[2026-06-16T08:21:14.267653] [FILE_MODIFY] [docs/ARCHITECTURE-MASTER.md] v5.3 §5.6
