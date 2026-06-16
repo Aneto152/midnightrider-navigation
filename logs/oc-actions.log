@@ -78,3 +78,5 @@
 [2026-06-16T19:01:27.319995] [FILE_CREATE] [portal/README.md] Documentation
 [2026-06-16T19:01:27.319995] [FILE_MODIFY] [docs/INDEX.md] portal section
 [2026-06-16T19:01:27.319995] [FILE_MODIFY] [docs/ARCHITECTURE-MASTER.md] §5.9
+[2026-06-16T19:42:55-04:00] [FILE_MODIFY] [config/signalk-to-influxdb2.json] Synced from live: bucket signalk→midnight_rider, token sanitized
+[2026-06-16T19:42:55-04:00] [FILE_CREATE] [mcp/racing-server.js] Recovered from .openclaw workspace (653 lines)
