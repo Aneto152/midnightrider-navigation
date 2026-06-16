@@ -133,6 +133,30 @@ Alert categories:
 
 ---
 
+
+
+---
+
+## ⚙️ System Configuration Backup
+
+Reference copies of all RPi system configuration files.
+
+| File | Live path | Purpose |
+|------|-----------|---------|
+| **[config/README.md](../config/README.md)** | — | Inventory + sync/restore procedures |
+| `config/docker-daemon.json` | `/etc/docker/daemon.json` | Docker data root |
+| `config/grafana-custom.ini` | Docker volume | Grafana: iframes + 1s refresh |
+| `config/signalk-package.json` | `.signalk/package.json` | Installed SK plugins |
+| `config/signalk-to-influxdb2.json` | SK plugin-config/ | InfluxDB config (token via env) |
+| `config/ufw-rules.txt` | Reference only | Firewall rules snapshot |
+| `config/signalk/settings-sanitized.json` | `.signalk/settings.json` | SK settings (sanitized) |
+| `config/system/avahi-daemon.conf` | `/etc/avahi/avahi-daemon.conf` | mDNS → midnightrider.local |
+| `config/system/dhcpcd.conf` | `/etc/dhcpcd.conf` | Static IP on eth0 |
+| `config/system/hostname` | `/etc/hostname` | Hostname: midnightrider |
+| `config/system/hosts` | `/etc/hosts` | Local DNS |
+| `config/system/rfkill-wifi-block.sh` | `/usr/local/bin/` | Disable WiFi at boot |
+| `config/system/90-NM-*.yaml` | NetworkManager/ | Static IP profile |
+
 ## 🔐 Security & Configuration
 
 ### Configuration
@@ -251,4 +275,4 @@ docs/
 **| `ais/tracker.html` | Live competitor tracker UI — accessible at `/ais/` on portal |
 | `ais/fleet_db.html` | Fleet database browser — accessible at `/ais/fleet_db` on portal |
 
-Unit tests:** `tests/test_ais_lib.py` (24) · `tests/test_competitors_db.py` (9) · `tests/test_server_handlers.py` (6) — 39 total
+Unit tests:** `tests/test_ais_lib.py` (34) · `tests/test_competitors_db.py` (23) · `tests/test_server_handlers.py` (18) · `tests/test_ais_html.py` (35) — **110 total**

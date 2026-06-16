@@ -64,3 +64,6 @@
 [2026-06-16T08:21:14.267653] [FILE_MODIFY] [ais/README.md] Phase J-3 section v1.2
 [2026-06-16T08:21:14.267653] [FILE_MODIFY] [docs/INDEX.md] tracker.html + fleet_db.html
 [2026-06-16T08:21:14.267653] [FILE_MODIFY] [docs/ARCHITECTURE-MASTER.md] v5.3 §5.6
+[2026-06-16T09:05:21.978839] [FILE_CREATE] [config/README.md] Full config inventory + sync/restore
+[2026-06-16T09:05:21.978839] [FILE_MODIFY] [docs/INDEX.md] config/ + test counts 110
+[2026-06-16T09:05:21.978839] [FILE_MODIFY] [docs/ARCHITECTURE-MASTER.md] §5.7 config/
