@@ -3,19 +3,16 @@
     "outputDailyLog": false,
     "influxes": [
       {
+        "name": "MidnightRider",
         "url": "http://localhost:8086",
-        "token": "${INFLUX_TOKEN}",
         "org": "MidnightRider",
-        "bucket": "signalk",
-        "onlySelf": false,
-        "filteringRules": [],
-        "ignoredPaths": [],
-        "ignoredSources": [],
-        "useSKTimestamp": false,
-        "resolution": 1000
+        "bucket": "midnight_rider",
+        "token": "${INFLUX_TOKEN}",
+        "writeInterval": 1
       }
     ]
   },
   "enabled": true,
-  "enableDebug": true
+  "bucket": "midnight_rider",
+  "org": "MidnightRider"
 }
