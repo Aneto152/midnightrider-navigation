@@ -4,7 +4,7 @@ Structural tests: file existence, required elements, fetch URLs, no secrets/IPs.
 """
 import unittest, os
 
-BASE = os.path.join(os.path.dirname(__file__), '..')
+BASE = os.path.join(os.path.dirname(__file__), '..', '..'), '..', '..')
 TRACKER  = os.path.join(BASE, 'ais', 'tracker.html')
 FLEET_DB = os.path.join(BASE, 'ais', 'fleet_db.html')
 

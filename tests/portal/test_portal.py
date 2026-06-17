@@ -2,7 +2,7 @@
 """Unit tests for the portal module."""
 import unittest, os, re, json
 
-BASE = os.path.join(os.path.dirname(__file__), '..')
+BASE = os.path.join(os.path.dirname(__file__), '..', '..'), '..', '..')
 
 def read(rel): 
     with open(os.path.join(BASE, rel)) as f: return f.read()

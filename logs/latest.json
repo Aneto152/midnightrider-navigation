@@ -1,6 +1,6 @@
 {
-  "task": "mcp-phase-4",
-  "date": "2026-06-17T11:55:44Z",
+  "task": "tests-restructure",
+  "date": "2026-06-17T16:22:23Z",
   "status": "SUCCESS",
   "steps_completed": [
     "config/signalk-to-influxdb2.json: bucket midnight_rider (synced from live)",
@@ -29,5 +29,12 @@
     "Security check + git commit + push"
   ],
   "verified_at": "2026-06-15T22:50:43Z",
-  "timestamp": "2026-06-16T07:40:15.763636"
+  "timestamp": "2026-06-16T07:40:15.763636",
+  "steps": [
+    "mirror root",
+    "conftest",
+    "pytest.ini",
+    "run_all.sh",
+    "README"
+  ]
 }

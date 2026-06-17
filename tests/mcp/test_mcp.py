@@ -2,7 +2,7 @@
 """MCP module tests"""
 import unittest, os, re, json
 
-BASE = os.path.join(os.path.dirname(__file__), '..')
+BASE = os.path.join(os.path.dirname(__file__), '..', '..'), '..', '..')
 MCP = os.path.join(BASE, 'mcp')
 
 def exists(rel): return os.path.isfile(os.path.join(BASE, rel))
