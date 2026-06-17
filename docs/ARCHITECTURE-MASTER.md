@@ -1086,3 +1086,6 @@ See **[portal/README.md](../portal/README.md)** for full documentation.
 
 **Pages**: `/` (dashboard), `/viewer.html` (Grafana), `/reporter` (flash), `/ais/*` (AIS)
 
+
+## 5.10 MCP Servers
+See [mcp/README.md](../mcp/README.md).

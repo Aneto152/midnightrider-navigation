@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/static/css/night-mode.css">
+<title>MCP Servers — Midnight Rider</title>
+<style>
+  body { padding: 0; max-width: 900px; margin: 0 auto; }
+  .page-body { padding: 16px; }
+  h1 { font-size: 1em; opacity: 0.7; }
+  .server-grid { display: grid; gap: 10px; margin-bottom: 20px; }
+  .server-card { background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius-md); padding: 12px 16px; display: flex; gap: 12px; }
+  .server-icon { font-size: 1.3em; }
+  .server-info { flex: 1; }
+  .server-name { font-weight: 600; }
+  .server-desc { font-size: 0.75em; opacity: 0.5; }
+  .config-box { background: var(--bg-card); border: 1px solid var(--border-card);
+    border-radius: var(--radius-md); padding: 16px; }
+  .config-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .config-label { font-size: 0.78em; min-width: 120px; }
+  .config-val { flex: 1; font-size: 0.82em; background: var(--bg-input);
+    padding: 5px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-card); }
+  pre { background: rgba(0,0,0,0.35); padding: 12px; font-size: 0.72em;
+    border-radius: var(--radius-md); overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<nav class="mr-nav">
+  <a href="/">⬅ Portal</a>
+  <span class="mr-nav-title">⚡ MCP Servers</span>
+</nav>
+
+<div class="page-body">
+
+  <div style="margin-bottom: 24px;">
+    <h2 style="font-size:0.75em;opacity:0.4;text-transform:uppercase">Server Status</h2>
+    <div class="server-grid" id="serverGrid"></div>
+  </div>
+
+  <div style="margin-bottom: 24px;">
+    <h2 style="font-size:0.75em;opacity:0.4;text-transform:uppercase">Config Generator</h2>
+    <div class="config-box">
+      <div class="config-row">
+        <span class="config-label">Repo path</span>
+        <input class="config-val" id="repoPath" value="/home/aneto/midnightrider-navigation">
+      </div>
+      <div class="config-row">
+        <span class="config-label">InfluxDB URL</span>
+        <input class="config-val" id="influxUrl" value="http://midnightrider.local:8086">
+      </div>
+      <div class="config-row">
+        <span class="config-label">InfluxDB org</span>
+        <input class="config-val" id="influxOrg" value="MidnightRider">
+      </div>
+      <button class="mr-btn" onclick="generateConfig()">Generate claude_desktop_config.json</button>
+    </div>
+  </div>
+
+  <div id="configOut" style="display:none;margin-bottom:24px;">
+    <h2 style="font-size:0.75em;opacity:0.4;text-transform:uppercase">Generated Config</h2>
+    <pre id="configPre"></pre>
+    <button class="mr-btn" onclick="copyConfig()" style="margin-top:10px">📋 Copy to clipboard</button>
+  </div>
+
+</div>
+
+<script>
+const SERVERS = [
+  { icon: '⛵', name: 'Competitor', desc: 'AIS fleet tracking' },
+  { icon: '🌙', name: 'Astronomical', desc: 'Sun, moon, tides' },
+  { icon: '🏁', name: 'Racing', desc: 'VMG, polar, tactics' },
+  { icon: '🌬', name: 'Weather', desc: 'Forecasts' },
+  { icon: '🔵', name: 'Buoy', desc: 'Buoy data' },
+  { icon: '📊', name: 'Polar', desc: 'Polar diagram' },
+  { icon: '🏆', name: 'Race', desc: 'Race management' },
+  { icon: '📐', name: 'IMU', desc: 'Heel, pitch, motion' },
+  { icon: '⚡', name: 'Electrical', desc: 'Battery, alternator' },
+  { icon: '🖥', name: 'System', desc: 'RPi status' },
+  { icon: '👥', name: 'Crew', desc: 'Crew workload' },
+];
+
+function init() {
+  const grid = document.getElementById('serverGrid');
+  for (const s of SERVERS) {
+    const card = document.createElement('div');
+    card.className = 'server-card';
+    card.innerHTML = `<span class="server-icon">${s.icon}</span><div class="server-info"><div class="server-name">${s.name}</div><div class="server-desc">${s.desc}</div></div>`;
+    grid.appendChild(card);
+  }
+}
+
+function generateConfig() {
+  const repo = document.getElementById('repoPath').value;
+  const url = document.getElementById('influxUrl').value;
+  const org = document.getElementById('influxOrg').value;
+  const servers = {};
+  const names = ['competitor', 'astronomical', 'racing', 'weather', 'buoy', 'polar', 'race', 'imu', 'electrical', 'system', 'crew'];
+  for (const name of names) {
+    servers[name] = {
+      command: 'node',
+      args: [`${repo}/mcp/servers/${name}.js`],
+      env: { INFLUX_URL: url, INFLUX_TOKEN: 'REPLACE_WITH_REAL_TOKEN', INFLUX_ORG: org, INFLUX_BUCKET: 'midnight_rider' }
+    };
+  }
+  const config = { mcpServers: servers };
+  document.getElementById('configPre').textContent = JSON.stringify(config, null, 2);
+  document.getElementById('configOut').style.display = '';
+}
+
+function copyConfig() {
+  navigator.clipboard.writeText(document.getElementById('configPre').textContent);
+}
+
+init();
+</script>
+</body>
+</html>

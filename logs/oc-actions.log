@@ -81,3 +81,4 @@
 [2026-06-16T19:42:55-04:00] [FILE_MODIFY] [config/signalk-to-influxdb2.json] Synced from live: bucket signalk→midnight_rider, token sanitized
 [2026-06-16T19:42:55-04:00] [FILE_CREATE] [mcp/racing-server.js] Recovered from .openclaw workspace (653 lines)
 [2026-06-17T07:51:22.499943] [REFACTOR] MCP phases 1+2+3: servers/ lib/ tests/ + competitor rewrite
+[2026-06-17T07:55:44.139732] [FILE_CREATE] [tests/test_mcp.py] MCP tests
