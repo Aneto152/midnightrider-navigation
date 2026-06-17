@@ -40,6 +40,7 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         if path.startswith("/api/"): self._proxy("GET")
         elif path in ("/", ""): self._serve(PORTAL / "index.html")
         elif path == "/manifest.json": self._serve(PORTAL / "static" / "manifest.json")
+        elif path in ("/mcp", "/mcp/"): self._serve(PORTAL / "mcp.html")
         elif path in ("/reporter", "/reporter/"): self._serve(PORTAL / "reporter.html")
         elif path in ("/ais", "/ais/"): self._serve(AIS / "tracker.html")
         elif path in ("/ais/fleet_db", "/ais/fleet_db/"): self._serve(AIS / "fleet_db.html")
