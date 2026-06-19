@@ -1,33 +1,11 @@
 {
-  "task": "fleet-db-add-lis-weekend-2026-06-21",
-  "date": "2026-06-19T22:13:56.566893",
+  "task": "fix-ais-routes-404",
+  "date": "2026-06-19T22:28:15",
   "status": "SUCCESS",
   "steps_completed": [
-    "14 competitors added/updated for LIS Weekend Race 2026-06-21",
-    "MMSI enriched from MarineTraffic/VesselFinder/MyShipTracking research",
-    "_meta.total_boats updated to 79"
-  ],
-  "mmsi_summary": {
-    "verified": [
-      "Inessa II 338509299",
-      "Palomino 338469505",
-      "Sanguine 368387130",
-      "Tenebrae 368034190"
-    ],
-    "probable": [
-      "El Diablo 338554674",
-      "First Rate 338442426",
-      "Flying Circus 338562447",
-      "Impulse 338193854",
-      "New Freedom 338501741"
-    ],
-    "low": [
-      "Deviation YCC 368358170"
-    ],
-    "not_found": [
-      "Tantara \u2014 no AIS signal detected"
-    ]
-  },
-  "action_summary": "Added 11 new boats (Deviation YCC, El Diablo, First Rate, Flying Circus, Impulse, Inessa II, New Freedom, Palomino, Sanguine, Tantara, Tenebrae). Updated 3 existing boats (DUET 338479036, Eagle 338076269, Thin Man 368114910) with new event tag.",
-  "timestamp": "2026-06-19T22:13:56.566893"
+    "/ais/ route added \u2192 HTTP 200",
+    "/ais/fleet_db route added \u2192 HTTP 200",
+    "/api/competitors operational",
+    "/api/fleet_db operational (79 boats)"
+  ]
 }

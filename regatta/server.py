@@ -417,6 +417,30 @@ class Handler(BaseHTTPRequestHandler):
             self.serve_file("voiles.html")
         elif self.path == "/api/race_data":
             self.send_json(get_race_data())
+        elif self.path in ("/ais", "/ais/"):
+            try:
+                with open("/repo/ais/tracker.html", "rb") as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(content)))
+                self.end_headers()
+                self.wfile.write(content)
+            except:
+                self.send_response(404)
+                self.end_headers()
+        elif self.path == "/ais/fleet_db":
+            try:
+                with open("/repo/ais/fleet_db.html", "rb") as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(content)))
+                self.end_headers()
+                self.wfile.write(content)
+            except:
+                self.send_response(404)
+                self.end_headers()
         else:
             self.send_response(404)
             self.end_headers()
