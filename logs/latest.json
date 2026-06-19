@@ -1,40 +1,33 @@
 {
-  "task": "tests-restructure",
-  "date": "2026-06-17T16:22:23Z",
+  "task": "fleet-db-add-lis-weekend-2026-06-21",
+  "date": "2026-06-19T22:13:56.566893",
   "status": "SUCCESS",
   "steps_completed": [
-    "config/signalk-to-influxdb2.json: bucket midnight_rider (synced from live)",
-    "mcp/racing-server.js: recovered from .openclaw workspace"
+    "14 competitors added/updated for LIS Weekend Race 2026-06-21",
+    "MMSI enriched from MarineTraffic/VesselFinder/MyShipTracking research",
+    "_meta.total_boats updated to 79"
   ],
-  "new_api_endpoints": [
-    "GET /api/competitors?radius_nm=10&min_sog_kts=0&vmg_mode=wind|mark",
-    "GET /api/fleet_db"
-  ],
-  "new_modules": [
-    "ais/ais_lib.py: pure math (haversine, bearing, TWA, VMG, delta, gaining_ground)",
-    "ais/competitors_db.py: competitor database manager (load, search, enrich)",
-    "ais/server_handlers.py: regatta container request handlers",
-    "ais/ais_watch.py: optional standalone daemon (logs to ais-watch.log, InfluxDB)"
-  ],
-  "color_logic": {
-    "GREEN": "VMG_MR > VMG_comp (MidnightRider gaining ground on competitor)",
-    "RED": "VMG_MR < VMG_comp (competitor gaining ground on MidnightRider)",
-    "NEUTRAL": "VMG unavailable or equal (within 0.05kt threshold)"
+  "mmsi_summary": {
+    "verified": [
+      "Inessa II 338509299",
+      "Palomino 338469505",
+      "Sanguine 368387130",
+      "Tenebrae 368034190"
+    ],
+    "probable": [
+      "El Diablo 338554674",
+      "First Rate 338442426",
+      "Flying Circus 338562447",
+      "Impulse 338193854",
+      "New Freedom 338501741"
+    ],
+    "low": [
+      "Deviation YCC 368358170"
+    ],
+    "not_found": [
+      "Tantara \u2014 no AIS signal detected"
+    ]
   },
-  "next_steps": [
-    "Restart regatta Docker: docker restart regatta && sleep 8",
-    "Test /api/competitors: curl -s 'http://localhost:5000/api/competitors?radius_nm=15'",
-    "Test /api/fleet_db: curl -s 'http://localhost:5000/api/fleet_db'",
-    "Restart portal: systemctl restart midnightrider-portal",
-    "Security check + git commit + push"
-  ],
-  "verified_at": "2026-06-15T22:50:43Z",
-  "timestamp": "2026-06-16T07:40:15.763636",
-  "steps": [
-    "mirror root",
-    "conftest",
-    "pytest.ini",
-    "run_all.sh",
-    "README"
-  ]
+  "action_summary": "Added 11 new boats (Deviation YCC, El Diablo, First Rate, Flying Circus, Impulse, Inessa II, New Freedom, Palomino, Sanguine, Tantara, Tenebrae). Updated 3 existing boats (DUET 338479036, Eagle 338076269, Thin Man 368114910) with new event tag.",
+  "timestamp": "2026-06-19T22:13:56.566893"
 }

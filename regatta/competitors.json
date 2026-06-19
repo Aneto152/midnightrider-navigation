@@ -3,9 +3,9 @@
     "description": "Midnight Rider Competitor Library",
     "vessel": "J/30 hull 511",
     "fleet": "Block Island Race Week 2026",
-    "updated": "2026-05-13",
+    "updated": "2026-06-19",
     "format_version": "1.0",
-    "total_boats": 69,
+    "total_boats": 79,
     "mmsi_verified": 16,
     "mmsi_probable": 41,
     "mmsi_not_found": 12
@@ -449,7 +449,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "LIS Weekend Race 2026-06-21"
       ],
       "notes": ""
     },
@@ -475,7 +476,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "LIS Weekend Race 2026-06-21"
       ],
       "notes": ""
     },
@@ -1593,7 +1595,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "LIS Weekend Race 2026-06-21"
       ],
       "notes": ""
     },
@@ -1804,6 +1807,303 @@
         "Block Island Race Week 2026"
       ],
       "notes": ""
+    },
+    {
+      "id": "c070",
+      "boat_name": "Deviation YCC",
+      "skipper": "Iris Vogel",
+      "sail_number": "USA 24",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/88"
+      },
+      "mmsi": "368358170",
+      "mmsi_confidence": "low",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "Only US DEVIATION in AIS. AIS LOA=16m vs actual 8.84m (likely entry error). Last pos: Nanny Cay BVI May 2026. FCC callsign WDP4845."
+    },
+    {
+      "id": "c071",
+      "boat_name": "El Diablo",
+      "skipper": "Robert Fryer",
+      "sail_number": "USA 56600",
+      "vessel": {
+        "make": "Bolt",
+        "model": "Bolt 37"
+      },
+      "mmsi": "338554674",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 12x4m. Last pos 40.94N/73.71W (Cos Cob CT area, near American YC) May 31 2026."
+    },
+    {
+      "id": "c072",
+      "boat_name": "First Rate",
+      "skipper": "Marek Antkowiak",
+      "sail_number": "40819",
+      "vessel": {
+        "make": "Tartan",
+        "model": "Tartan 34-2"
+      },
+      "mmsi": "338442426",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 10x3m, callsign WRXE775. Active Jun 17 2026. Last pos 40.83N/73.79W (City Island LIS area)."
+    },
+    {
+      "id": "c073",
+      "boat_name": "Flying Circus",
+      "skipper": "Stuart Markowitz",
+      "sail_number": "USA 52695",
+      "vessel": {
+        "make": "C&C",
+        "model": "C&C 115"
+      },
+      "mmsi": "338562447",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 12x4m. Active Jun 17-18 2026. Renamed from Godspeed (hull #58) Sep 2025 — MMSI recently registered."
+    },
+    {
+      "id": "c074",
+      "boat_name": "Impulse",
+      "skipper": "Len Di Iorio",
+      "sail_number": "USA 52463",
+      "vessel": {
+        "make": "O'Day",
+        "model": "O'Day 39"
+      },
+      "mmsi": "338193854",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 13x4m. Last pos 41.18N/71.81W (Block Island Sound) Jun 7 2026 at 6.9kts. Port calls: Greenport NY (LIS)."
+    },
+    {
+      "id": "c075",
+      "boat_name": "Inessa II",
+      "skipper": "Nikolas Grubecki",
+      "sail_number": "11379",
+      "vessel": {
+        "make": "Jeanneau",
+        "model": "Jeanneau 44"
+      },
+      "mmsi": "338509299",
+      "mmsi_confidence": "verified",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "Confirmed on MarineTraffic + VesselFinder + MyShipTracking. Departed Port Jefferson (LIS) May 29 2026."
+    },
+    {
+      "id": "c076",
+      "boat_name": "New Freedom",
+      "skipper": "Michael Mullan",
+      "sail_number": "73",
+      "vessel": {
+        "make": "Catalina",
+        "model": "Catalina 34"
+      },
+      "mmsi": "338501741",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 10x4m (perfect Catalina 34 match). Last pos 40.88N/73.73W (City Island area LIS) Sep 2025."
+    },
+    {
+      "id": "c077",
+      "boat_name": "Palomino",
+      "skipper": "Eugenio Silvestrini",
+      "sail_number": "USA 61107",
+      "vessel": {
+        "make": "C&C",
+        "model": "C&C 37"
+      },
+      "mmsi": "338469505",
+      "mmsi_confidence": "verified",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "GPS Jun 14 2026 at 40.85735N/73.65644W = exact coordinates of Hempstead Harbour Club (<15m error)."
+    },
+    {
+      "id": "c078",
+      "boat_name": "Sanguine",
+      "skipper": "Steven Landy / Derek Soohoo",
+      "sail_number": "USA 100",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/100"
+      },
+      "mmsi": "368387130",
+      "mmsi_confidence": "verified",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "VesselFinder photo Oct 2023 at 40.93N/73.59W captioned 'Sanguine Sailing on Long Island Sound'. Last pos 40.84N/73.78W Sep 2025."
+    },
+    {
+      "id": "c079",
+      "boat_name": "Tantara",
+      "skipper": "Sam Boyer",
+      "sail_number": "1588",
+      "vessel": {
+        "make": "Sparkman & Stephens",
+        "model": "Custom 44"
+      },
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "1975 S&S aluminum racer built at Minneford Yard, City Island. No AIS signal found in MarineTraffic, VesselFinder, MyShipTracking. Likely no AIS transponder."
+    },
+    {
+      "id": "c080",
+      "boat_name": "Tenebrae",
+      "skipper": "William Ingraham",
+      "sail_number": "USA 52400",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/124"
+      },
+      "mmsi": "368034190",
+      "mmsi_confidence": "verified",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "Confirmed MarineTraffic. Last departed Harbor Island Park, Mamaroneck NY (= Larchmont YC area). LOA 12m matches J/124 12.4m."
     }
   ]
 }

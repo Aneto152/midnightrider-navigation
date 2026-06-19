@@ -83,3 +83,5 @@
 [2026-06-17T07:51:22.499943] [REFACTOR] MCP phases 1+2+3: servers/ lib/ tests/ + competitor rewrite
 [2026-06-17T07:55:44.139732] [FILE_CREATE] [tests/test_mcp.py] MCP tests
 [2026-06-17T12:22:23.356966] [REFACTOR] tests/ restructured to mirror root layout
+[2026-06-19T22:13:49] [FILE_MODIFY] [regatta/competitors.json] Added 11 + updated 3 for LIS Weekend Race 2026-06-21
+[2026-06-19T22:13:49] [RESULT] SUCCESS — 4 verified / 5 probable / 1 low / 1 not_found (14 boats total)
