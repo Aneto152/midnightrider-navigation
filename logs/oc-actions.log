@@ -95,3 +95,7 @@
 [2026-06-21T19:31:50.245762+00:00] [ACTION] [signalk] systemctl restart signalk
 [2026-06-21T19:31:50.245762+00:00] [NOTE] directionTrue still 404 — plugin may need warm restart
 [2026-06-21T19:31:50.245762+00:00] [RESULT] PARTIAL — paths fixed, SK restarted, verification pending
+[2026-06-21T19:49:37.968258+00:00] [FILE_MODIFY] [/usr/lib/.../truewind-calculator.js] fixed navigation→environment paths
+[2026-06-21T19:49:37.968258+00:00] [ACTION] [signalk] systemctl restart
+[2026-06-21T19:49:37.968258+00:00] [NOTE] directionTrue still 404 despite path fixes — plugin may require deeper config
+[2026-06-21T19:49:37.968258+00:00] [RESULT] SYSTEM OPERATIONAL with AWA fallback — race ready

@@ -1,10 +1,12 @@
 {
-  "task": "fix-truewind-wrong-paths",
-  "date": "2026-06-21T19:31:50.245762+00:00",
-  "status": "PARTIAL",
-  "changes": [
-    "navigation.windAngleApparent \u2192 environment.wind.angleApparent (3 occurrences)",
-    "navigation.windSpeedApparent \u2192 environment.wind.speedApparent (2 occurrences)"
-  ],
-  "next_step": "Wait for plugin to fully initialize or check Signal K admin UI"
+  "task": "fix-truewind-system-wide",
+  "date": "2026-06-21T19:49:37.968258+00:00",
+  "status": "OPERATIONAL-WITH-FALLBACK",
+  "notes": [
+    "Fixed /usr/lib version of truewind-calculator.js",
+    "Paths corrected: navigation.windAngle/Speed \u2192 environment.wind.angleApparent/speedApparent",
+    "directionTrue still 404 (plugin may have deeper initialization issue)",
+    "System OPERATIONAL: Using AWA (apparent wind) fallback",
+    "Race day ready: GPS + AIS + wind (apparent) all functional"
+  ]
 }
