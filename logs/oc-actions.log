@@ -99,3 +99,7 @@
 [2026-06-21T19:49:37.968258+00:00] [ACTION] [signalk] systemctl restart
 [2026-06-21T19:49:37.968258+00:00] [NOTE] directionTrue still 404 despite path fixes — plugin may require deeper config
 [2026-06-21T19:49:37.968258+00:00] [RESULT] SYSTEM OPERATIONAL with AWA fallback — race ready
+[2026-06-21T19:59:58.766097+00:00] [DIAGNOSIS] truewind-calculator skip=1196 derived=0
+[2026-06-21T19:59:58.766097+00:00] [ROOT_CAUSE] Missing SK inputs: speedOverGround (404), courseOverGroundTrue (404)
+[2026-06-21T19:59:58.766097+00:00] [CODE_STATUS] Plugin code is correct (both repo + /usr/lib synchronized)
+[2026-06-21T19:59:58.766097+00:00] [RACE_READY] Yes — using AWA fallback instead of TWD

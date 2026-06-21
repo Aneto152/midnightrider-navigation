@@ -1,12 +1,12 @@
 {
-  "task": "fix-truewind-system-wide",
-  "date": "2026-06-21T19:49:37.968258+00:00",
-  "status": "OPERATIONAL-WITH-FALLBACK",
-  "notes": [
-    "Fixed /usr/lib version of truewind-calculator.js",
-    "Paths corrected: navigation.windAngle/Speed \u2192 environment.wind.angleApparent/speedApparent",
-    "directionTrue still 404 (plugin may have deeper initialization issue)",
-    "System OPERATIONAL: Using AWA (apparent wind) fallback",
-    "Race day ready: GPS + AIS + wind (apparent) all functional"
+  "task": "diagnose-truewind-skip",
+  "date": "2026-06-21T19:59:58.766097+00:00",
+  "status": "ROOT_CAUSE_IDENTIFIED",
+  "findings": [
+    "Plugin code is correct in both locations (repo + /usr/lib)",
+    "skip=1196, derived=0 because speedOverGround and courseOverGroundTrue not published by Signal K",
+    "This is input data issue, not plugin code issue",
+    "System uses AWA fallback \u2014 operational for race day",
+    "GPS position tracking works independently for AIS tracker"
   ]
 }
