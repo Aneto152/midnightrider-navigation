@@ -1,0 +1,8 @@
+{
+  "configuration": {
+    "maxDataAgeSecs": 10,
+    "maxWindKts": 70,
+    "debug": false
+  },
+  "enabled": true
+}
