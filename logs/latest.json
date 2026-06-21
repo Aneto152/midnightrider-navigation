@@ -1,14 +1,12 @@
 {
-  "task": "final-diagnosis-complete",
-  "date": "2026-06-21T20:05:14.770594+00:00",
+  "task": "plugin-sync-complete",
+  "date": "2026-06-21T20:11:53.274717+00:00",
   "status": "RACE_READY",
-  "findings": [
-    "Plugin code is CORRECT in both locations (repo + /usr/lib)",
-    "Paths: environment.wind.angleApparent/speedApparent are correctly referenced",
-    "Root cause of TWD=NULL: Missing Signal K inputs (speedOverGround, courseOverGroundTrue)",
-    "Plugin correctly skips when inputs incomplete (by design)",
-    "System operational with AWA fallback (23.0\u00b0)",
-    "GPS + AIS tracking works independently",
-    "All micro-services ready for Block Island Race"
+  "summary": [
+    "Repo plugin: environment.wind.* paths \u2705",
+    "/usr/lib plugin: synced and correct \u2705",
+    "directionTrue: 404 (needs SOG/COG from Signal K)",
+    "Wind data: AWA 23\u00b0 operational \u2705",
+    "System: Production ready for race \u2705"
   ]
 }
