@@ -1,12 +1,12 @@
 {
-  "task": "fix-api-competitors-gps-wrapper",
-  "date": "2026-06-21T14:50:26.717266+00:00",
+  "task": "fix-wind-apparent-fallback",
+  "date": "2026-06-21T15:14:26.354893+00:00",
   "status": "SUCCESS",
   "steps_completed": [
-    "/api/competitors now wraps GPS data (latitude/longitude) to (lat/lon) format",
-    "Default radius: 20nm (was 10nm)",
-    "176 competitors returned successfully",
-    "vessel_type_id and in_comp_db flags present",
-    "Wind data: awaiting TWD calculation"
+    "Added _awa_aws() function to fetch apparent wind",
+    "/api/competitors returns awa + aws_kts when TWD unavailable",
+    "tracker.html displays 'AWA 45\u00b0 1.6kt' when true wind missing",
+    "Wind available=true when either TWD or AWA present",
+    "180 competitors showing in range"
   ]
 }

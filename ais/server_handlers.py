@@ -16,6 +16,7 @@ _MPATHS = [
 ]
 
 def _twd(sk_fn):
+    """True Wind Direction with apparent wind fallback."""
     if time.time() - _wc['ts'] < 10 and _wc['v']: return _wc['v']
     d = sk_fn('vessels/self/environment/wind/directionTrue')
     if d and d.get('value') is not None:
@@ -23,6 +24,14 @@ def _twd(sk_fn):
         _wc.update({'v': v, 'ts': time.time()})
         return v
     return _wc['v']
+
+def _awa_aws(sk_fn):
+    """Apparent Wind Angle & Speed for fallback display."""
+    awa_d = sk_fn('vessels/self/environment/wind/angleApparent')
+    aws_d = sk_fn('vessels/self/environment/wind/speedApparent')
+    awa = round(math.degrees(awa_d['value']), 1) if awa_d and awa_d.get('value') is not None else None
+    aws = round(aws_d['value'] * 1.94384, 1) if aws_d and aws_d.get('value') is not None else None
+    return awa, aws
 
 def _mark(sk_fn):
     if time.time() - _mc['ts'] < 30: return _mc
@@ -115,11 +124,12 @@ def api_competitors(sk_fn, gps_fn, radius=10.0, min_sog=0.0, inc_unk=False, vmod
             'vmg_wind_kts': round(v0, 3) if v0 else None,
             'vmg_mark_kts': round(v0m, 3) if v0m else None,
         },
-        'wind': {
-            'twd': round(tw, 1) if tw else None,
-            'tws_kts': round(tws, 1) if tws else None,
-            'available': tw is not None,
-        },
+        'wind': dict(
+            twd=round(tw, 1) if tw else None,
+            tws_kts=round(tws, 1) if tws else None,
+            available=tw is not None,
+            **({'awa': _awa_aws(sk_fn)[0], 'aws_kts': _awa_aws(sk_fn)[1]} if tw is None else {})
+        ),
         'mark': {
             'lat': mk.get('lat'), 'lon': mk.get('lon'),
             'bearing_from_self': round(mb0, 1) if mb0 else None,
