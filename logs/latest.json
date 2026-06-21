@@ -1,12 +1,10 @@
 {
-  "task": "fix-wind-apparent-fallback",
-  "date": "2026-06-21T15:14:26.354893+00:00",
-  "status": "SUCCESS",
-  "steps_completed": [
-    "Added _awa_aws() function to fetch apparent wind",
-    "/api/competitors returns awa + aws_kts when TWD unavailable",
-    "tracker.html displays 'AWA 45\u00b0 1.6kt' when true wind missing",
-    "Wind available=true when either TWD or AWA present",
-    "180 competitors showing in range"
-  ]
+  "task": "fix-truewind-wrong-paths",
+  "date": "2026-06-21T19:31:50.245762+00:00",
+  "status": "PARTIAL",
+  "changes": [
+    "navigation.windAngleApparent \u2192 environment.wind.angleApparent (3 occurrences)",
+    "navigation.windSpeedApparent \u2192 environment.wind.speedApparent (2 occurrences)"
+  ],
+  "next_step": "Wait for plugin to fully initialize or check Signal K admin UI"
 }

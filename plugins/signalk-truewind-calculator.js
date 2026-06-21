@@ -65,8 +65,8 @@ module.exports = function(app) {
         if (o.timestamp && (now - new Date(o.timestamp).getTime()) > maxAgeMs) return null;
         return o.value;
       }
-      var awa = getVal('navigation.windAngleApparent');
-      var aws = getVal('navigation.windSpeedApparent');
+      var awa = getVal('environment.wind.angleApparent');
+      var aws = getVal('environment.wind.speedApparent');
       var ht = getVal('navigation.headingTrue');
       var sog = getVal('navigation.speedOverGround');
       var cog = getVal('navigation.courseOverGroundTrue');
@@ -140,7 +140,7 @@ module.exports = function(app) {
 
     try {
       if (app.streambundle && typeof app.streambundle.getSelfBus === 'function') {
-        var bus = app.streambundle.getSelfBus('navigation.windAngleApparent');
+        var bus = app.streambundle.getSelfBus('environment.wind.angleApparent');
         if (bus && typeof bus.onValue === 'function') {
           var unsub = bus.onValue(function() { computeAndPublish(cfg); });
           unsubscribes.push(unsub);
@@ -159,8 +159,8 @@ module.exports = function(app) {
                 var hasWind = false;
                 delta.updates.forEach(function(u){
                   if (u && u.values) u.values.forEach(function(pv){
-                    if (pv && (pv.path==='navigation.windAngleApparent'||
-                      pv.path==='navigation.windSpeedApparent')) hasWind=true;
+                    if (pv && (pv.path==='environment.wind.angleApparent'||
+                      pv.path==='environment.wind.speedApparent')) hasWind=true;
                   });
                 });
                 if (hasWind) computeAndPublish(cfg);

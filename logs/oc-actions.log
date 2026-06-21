@@ -91,3 +91,7 @@
 [2026-06-21T14:50:26.717266+00:00] [RESULT] SUCCESS — GPS 40.836, -73.712 — 176 AIS targets in range
 [2026-06-21T15:14:26.354893+00:00] [FILE_MODIFY] apparent wind fallback + tracker display
 [2026-06-21T15:14:26.354893+00:00] [RESULT] SUCCESS — AWA 45.0° AWS 1.6kt — 180 competitors
+[2026-06-21T19:31:50.245762+00:00] [FILE_MODIFY] [plugins/signalk-truewind-calculator.js] fix SK paths
+[2026-06-21T19:31:50.245762+00:00] [ACTION] [signalk] systemctl restart signalk
+[2026-06-21T19:31:50.245762+00:00] [NOTE] directionTrue still 404 — plugin may need warm restart
+[2026-06-21T19:31:50.245762+00:00] [RESULT] PARTIAL — paths fixed, SK restarted, verification pending
