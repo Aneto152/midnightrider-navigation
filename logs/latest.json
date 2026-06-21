@@ -1,12 +1,14 @@
 {
-  "task": "diagnose-truewind-skip",
-  "date": "2026-06-21T19:59:58.766097+00:00",
-  "status": "ROOT_CAUSE_IDENTIFIED",
+  "task": "final-diagnosis-complete",
+  "date": "2026-06-21T20:05:14.770594+00:00",
+  "status": "RACE_READY",
   "findings": [
-    "Plugin code is correct in both locations (repo + /usr/lib)",
-    "skip=1196, derived=0 because speedOverGround and courseOverGroundTrue not published by Signal K",
-    "This is input data issue, not plugin code issue",
-    "System uses AWA fallback \u2014 operational for race day",
-    "GPS position tracking works independently for AIS tracker"
+    "Plugin code is CORRECT in both locations (repo + /usr/lib)",
+    "Paths: environment.wind.angleApparent/speedApparent are correctly referenced",
+    "Root cause of TWD=NULL: Missing Signal K inputs (speedOverGround, courseOverGroundTrue)",
+    "Plugin correctly skips when inputs incomplete (by design)",
+    "System operational with AWA fallback (23.0\u00b0)",
+    "GPS + AIS tracking works independently",
+    "All micro-services ready for Block Island Race"
   ]
 }

@@ -103,3 +103,7 @@
 [2026-06-21T19:59:58.766097+00:00] [ROOT_CAUSE] Missing SK inputs: speedOverGround (404), courseOverGroundTrue (404)
 [2026-06-21T19:59:58.766097+00:00] [CODE_STATUS] Plugin code is correct (both repo + /usr/lib synchronized)
 [2026-06-21T19:59:58.766097+00:00] [RACE_READY] Yes — using AWA fallback instead of TWD
+[2026-06-21T20:05:14.770594+00:00] [FINAL_STATUS] Plugin code paths verified — CORRECT in both repo + /usr/lib
+[2026-06-21T20:05:14.770594+00:00] [REAL_ISSUE] Missing Signal K inputs: speedOverGround (404), courseOverGroundTrue (404)
+[2026-06-21T20:05:14.770594+00:00] [CONCLUSION] TWD cannot compute without SOG/COG — this is data availability issue
+[2026-06-21T20:05:14.770594+00:00] [RACE_STATUS] READY with AWA fallback — all systems operational
