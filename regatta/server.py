@@ -146,7 +146,7 @@ def get_ais_targets(radius_nm=10):
 
 def get_gps_position():
     import time
-    if _gps_cache["lat"] and (time.time() - _gps_cache["ts"]) < 30:
+    if _gps_cache["lat"] is not None and (time.time() - _gps_cache["ts"]) < 30:
         return {"latitude": _gps_cache["lat"], "longitude": _gps_cache["lon"]}
     try:
         url = f"{SIGNALK_URL}/signalk/v1/api/vessels/self/navigation/position"
@@ -154,9 +154,9 @@ def get_gps_position():
         pos = json.loads(res.read()).get("value", {})
         if pos.get("latitude"):
             _gps_cache.update({"lat": pos["latitude"], "lon": pos["longitude"], "ts": time.time()})
-        return pos
+        return {"latitude": pos.get("latitude"), "longitude": pos.get("longitude")}
     except:
-        if _gps_cache["lat"]:
+        if _gps_cache["lat"] is not None:
             return {"latitude": _gps_cache["lat"], "longitude": _gps_cache["lon"]}
         return {}
 
@@ -390,11 +390,14 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path.startswith("/api/competitors"):
             import urllib.parse as _u
             p = _u.parse_qs(_u.urlparse(self.path).query)
-            r  = float(p.get('radius_nm',   ['10'])[0])
+            r  = float(p.get('radius_nm',   ['20'])[0])
             ms = float(p.get('min_sog_kts', ['0' ])[0])
             iu = p.get('include_unknown', ['false'])[0].lower() == 'true'
             vm = p.get('vmg_mode', ['wind'])[0]
-            data = _AC(get_signalk, get_gps_position, r, ms, iu, vm) if _AIS else {'error': 'unavailable'}
+            # Wrap get_gps_position to return lat/lon keys that _AC expects
+            gps_data = get_gps_position()
+            gps_fn = lambda: {'lat': gps_data.get('latitude'), 'lon': gps_data.get('longitude')}
+            data = _AC(get_signalk, gps_fn, r, ms, iu, vm) if _AIS else {'error': 'unavailable'}
             self.send_json(data)
         elif self.path.startswith("/api/fleet_db"):
             data = _AF(get_signalk) if _AIS else {'error': 'unavailable'}

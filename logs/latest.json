@@ -1,11 +1,12 @@
 {
-  "task": "fix-ais-routes-404",
-  "date": "2026-06-19T22:28:15",
+  "task": "fix-api-competitors-gps-wrapper",
+  "date": "2026-06-21T14:50:26.717266+00:00",
   "status": "SUCCESS",
   "steps_completed": [
-    "/ais/ route added \u2192 HTTP 200",
-    "/ais/fleet_db route added \u2192 HTTP 200",
-    "/api/competitors operational",
-    "/api/fleet_db operational (79 boats)"
+    "/api/competitors now wraps GPS data (latitude/longitude) to (lat/lon) format",
+    "Default radius: 20nm (was 10nm)",
+    "176 competitors returned successfully",
+    "vessel_type_id and in_comp_db flags present",
+    "Wind data: awaiting TWD calculation"
   ]
 }

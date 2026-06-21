@@ -58,7 +58,12 @@ def api_competitors(sk_fn, gps_fn, radius=10.0, min_sog=0.0, inc_unk=False, vmod
         mmsi = ''.join(filter(str.isdigit, key))
         if not mmsi: continue
         indb = (mmsi in act)
-        if not indb and not inc_unk: continue
+        # Vessel type filter: show sailing (36-39), unknown (0), or DB vessels
+        _vt = vessel.get('design', {}).get('aisShipType', {}).get('value', {})
+        vtype_id = (_vt.get('id', 0) if isinstance(_vt, dict) else (int(_vt) if _vt else 0))
+        is_sailing = (vtype_id == 0 or 36 <= vtype_id <= 39)
+        if not indb and not is_sailing:
+            continue  # skip confirmed non-sailing vessels (cargo, tankers)
         nv = vessel.get('navigation', {})
         pd = nv.get('position', {})
         pv = (pd.get('value', {}) if isinstance(pd, dict) else {})
@@ -91,6 +96,7 @@ def api_competitors(sk_fn, gps_fn, radius=10.0, min_sog=0.0, inc_unk=False, vmod
             'sail_num': ce.get('sail_num', ''), 'boat_class': ce.get('boat_class', ''),
             'phrf_lis': ce.get('phrf_lis'), 'irc_tcc': ce.get('irc_tcc'),
             'priority': ce.get('priority', 'medium'), 'in_comp_db': indb,
+            'vessel_type_id': vtype_id,
             'lat': la, 'lon': lo, 'sog_kts': round(sog, 2), 'cog': round(cog, 1),
             'dist_nm': round(dn, 2), 'dist_m': round(dm, 1), 'bearing': round(brg, 1),
             'twd': round(tw, 1) if tw else None,

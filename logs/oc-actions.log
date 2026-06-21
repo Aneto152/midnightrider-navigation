@@ -87,3 +87,5 @@
 [2026-06-19T22:13:49] [RESULT] SUCCESS — 4 verified / 5 probable / 1 low / 1 not_found (14 boats total)
 [2026-06-19T22:28:15] [CONFIG_CHANGE] [regatta/server.py] Added /ais/ /ais/fleet_db routes
 [2026-06-19T22:28:15] [RESULT] SUCCESS — All routes HTTP 200
+[2026-06-21T14:50:26.717266+00:00] [CONFIG_CHANGE] [regatta/server.py] /api/competitors GPS wrapper fix
+[2026-06-21T14:50:26.717266+00:00] [RESULT] SUCCESS — GPS 40.836, -73.712 — 176 AIS targets in range
