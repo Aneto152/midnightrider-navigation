@@ -121,3 +121,5 @@
 [2026-06-28T19:47:50] [FILE_MODIFY] [docs] Updated CALYPSO-UP10-DATASHEET.md — added wind offset section
 [2026-06-28T19:47:50] [FILE_MODIFY] [docs] Updated INDEX.md — added CALYPSO-UP10-INTEGRATION-GUIDE
 [2026-06-28T19:47:50] [RESULT] [calypso_direct] SUCCESS — wind offset +7° active, BLE connected
+[2026-06-28T19:55:04] [FILE_MODIFY] [docs] Fixed broken Markdown table in INDEX.md — Calypso UP10 row repaired
+[2026-06-28T19:55:04] [RESULT] [docs] SUCCESS — INDEX.md table row clean

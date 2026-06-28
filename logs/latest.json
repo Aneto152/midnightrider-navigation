@@ -1,7 +1,7 @@
 {
-  "last_task": "calypso-wind-offset-7deg",
+  "last_task": "fix-index-md-calypso-table",
   "status": "SUCCESS",
-  "timestamp": "2026-06-28T19:47:50Z",
+  "timestamp": "2026-06-28T19:55:04Z",
   "details": {
     "action": "Added CALYPSO_WIND_OFFSET_DEG=7 to calypso_direct.py + systemd service",
     "offset_degrees": 7,
