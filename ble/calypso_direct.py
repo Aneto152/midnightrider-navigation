@@ -100,6 +100,7 @@ DATA_TIMEOUT_S = int(os.environ.get('CALYPSO_DATA_TIMEOUT_S', '60'))
 HEARTBEAT_S = int(os.environ.get('CALYPSO_HEARTBEAT_S', '300'))
 RECONNECT_MAX_S = int(os.environ.get('CALYPSO_RECONNECT_MAX_S', '60'))
 L2_THRESHOLD = int(os.environ.get('CALYPSO_L2_THRESHOLD', '10'))  # Lowered: 20→10 for faster recovery
+WIND_OFFSET_DEG = float(os.environ.get('CALYPSO_WIND_OFFSET_DEG', '0'))  # Wind angle offset (degrees) — corrects masthead misalignment
 
 SERVICE_NAME = 'calypso-direct'
 PID_FILE = '/tmp/calypso_direct.pid'
@@ -164,6 +165,10 @@ def decode_packet(data: bytes) -> dict | None:
         )
         wind_ms = raw_speed / 100.0
         wind_deg = raw_dir if wind_ms > 0.0 else 0  # Calypso quirk
+        
+        # Apply wind angle offset (corrects masthead misalignment)
+        if WIND_OFFSET_DEG != 0:
+            wind_deg = int((wind_deg + WIND_OFFSET_DEG) % 360)
         batt_pct = raw_batt * 10
         temp_c = raw_temp - 100
 

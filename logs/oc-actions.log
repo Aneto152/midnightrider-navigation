@@ -114,3 +114,10 @@
 [2026-06-28T19:12:26] [CONFIG_CHANGE] [signalk] Disabled ghost TcpProvider (qtVLM-NMEA-Input) in settings.json — host=127.0.0.1 port=10111 set to enabled=false
 [2026-06-28T19:12:26] [SERVICE_RESTART] [signalk] systemctl restart signalk — triggered after settings.json change
 [2026-06-28T19:12:26] [RESULT] SUCCESS — ECONNREFUSED spam stopped (0 errors in new process), ttyACM0 stable
+[2026-06-28T19:47:50] [FILE_MODIFY] [calypso_direct] Added WIND_OFFSET_DEG env var — applies (wind_dir + offset) % 360
+[2026-06-28T19:47:50] [CONFIG_CHANGE] [calypso_direct.service] Set CALYPSO_WIND_OFFSET_DEG=7 — corrects ~7° starboard masthead misalignment
+[2026-06-28T19:47:50] [SERVICE_RESTART] [calypso_direct] systemctl restart + daemon-reload — offset active
+[2026-06-28T19:47:50] [FILE_CREATE] [docs] Created CALYPSO-UP10-INTEGRATION-GUIDE.md
+[2026-06-28T19:47:50] [FILE_MODIFY] [docs] Updated CALYPSO-UP10-DATASHEET.md — added wind offset section
+[2026-06-28T19:47:50] [FILE_MODIFY] [docs] Updated INDEX.md — added CALYPSO-UP10-INTEGRATION-GUIDE
+[2026-06-28T19:47:50] [RESULT] [calypso_direct] SUCCESS — wind offset +7° active, BLE connected

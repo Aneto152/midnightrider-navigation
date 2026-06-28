@@ -31,6 +31,40 @@
 
 ---
 
+
+---
+
+## WIND ANGLE OFFSET (SOFTWARE CALIBRATION)
+
+> ⚠️ The UP10 has **NO firmware-level wind offset** (no GATT UUID for calibration).
+> Unlike the B&G WS320 (configurable via Vulcan 7), all wind angle correction is applied in software
+> by `calypso_direct.py` before Signal K injection.
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| `CALYPSO_WIND_OFFSET_DEG` | float | `0` | Degrees added to raw wind_dir before Signal K injection (can be negative) |
+
+**Positive value** = rotate clockwise (corrects sensor mounted offset to starboard)  
+**Negative value** = rotate counter-clockwise (corrects sensor mounted offset to port)
+
+**Current configuration** (race-ready): `CALYPSO_WIND_OFFSET_DEG=+7`  
+Reason: Masthead unit physically ~7° offset to starboard (measured 2026-06-28)
+
+Implementation in `ble/calypso_direct.py::decode_packet()`:
+```python
+# After raw sensor read:
+wind_deg = raw_dir if wind_ms > 0.0 else 0
+
+# Apply offset correction:
+if WIND_OFFSET_DEG != 0:
+    wind_deg = int((wind_deg + WIND_OFFSET_DEG) % 360)
+
+# Inject to Signal K (UDP:4123)
+angle_rad = math.radians(wind_deg)
+```
+
+**Re-calibration procedure** → [CALYPSO-UP10-INTEGRATION-GUIDE.md](../INTEGRATION/CALYPSO-UP10-INTEGRATION-GUIDE.md)
+
 ## BLUETOOTH LE PROTOCOL
 
 ### Device Discovery

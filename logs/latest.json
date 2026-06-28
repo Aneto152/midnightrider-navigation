@@ -1,13 +1,19 @@
 {
-  "last_task": "fix-qtVLM-NMEA-Input-ghost-provider",
+  "last_task": "calypso-wind-offset-7deg",
   "status": "SUCCESS",
-  "timestamp": "2026-06-28T19:12:26",
+  "timestamp": "2026-06-28T19:47:50Z",
   "details": {
-    "action": "Disabled TcpProvider qtVLM-NMEA-Input (127.0.0.1:10111)",
-    "method": "python3 json edit \u2014 enabled set to false",
-    "signalk_restarted": true,
-    "econnrefused_stopped": true,
-    "old_process_errors": 74,
-    "new_process_errors": 0
+    "action": "Added CALYPSO_WIND_OFFSET_DEG=7 to calypso_direct.py + systemd service",
+    "offset_degrees": 7,
+    "reason": "Masthead sensor physically offset ~7\u00b0 to starboard",
+    "service_restarted": true,
+    "ble_connected": true,
+    "docs_created": [
+      "docs/INTEGRATION/CALYPSO-UP10-INTEGRATION-GUIDE.md"
+    ],
+    "docs_updated": [
+      "docs/HARDWARE/CALYPSO-UP10-DATASHEET.md",
+      "docs/INDEX.md"
+    ]
   }
 }
