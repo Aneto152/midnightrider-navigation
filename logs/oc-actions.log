@@ -111,3 +111,6 @@
 [2026-06-21T20:11:53.274717+00:00] [ACTION] systemctl restart signalk
 [2026-06-21T20:11:53.274717+00:00] [RESULT] directionTrue still 404 (expected — missing SOG/COG inputs)
 [2026-06-21T20:11:53.274717+00:00] [STATUS] System RACE READY with AWA fallback
+[2026-06-28T19:12:26] [CONFIG_CHANGE] [signalk] Disabled ghost TcpProvider (qtVLM-NMEA-Input) in settings.json — host=127.0.0.1 port=10111 set to enabled=false
+[2026-06-28T19:12:26] [SERVICE_RESTART] [signalk] systemctl restart signalk — triggered after settings.json change
+[2026-06-28T19:12:26] [RESULT] SUCCESS — ECONNREFUSED spam stopped (0 errors in new process), ttyACM0 stable

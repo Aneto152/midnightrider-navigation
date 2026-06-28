@@ -1,12 +1,13 @@
 {
-  "task": "plugin-sync-complete",
-  "date": "2026-06-21T20:11:53.274717+00:00",
-  "status": "RACE_READY",
-  "summary": [
-    "Repo plugin: environment.wind.* paths \u2705",
-    "/usr/lib plugin: synced and correct \u2705",
-    "directionTrue: 404 (needs SOG/COG from Signal K)",
-    "Wind data: AWA 23\u00b0 operational \u2705",
-    "System: Production ready for race \u2705"
-  ]
+  "last_task": "fix-qtVLM-NMEA-Input-ghost-provider",
+  "status": "SUCCESS",
+  "timestamp": "2026-06-28T19:12:26",
+  "details": {
+    "action": "Disabled TcpProvider qtVLM-NMEA-Input (127.0.0.1:10111)",
+    "method": "python3 json edit \u2014 enabled set to false",
+    "signalk_restarted": true,
+    "econnrefused_stopped": true,
+    "old_process_errors": 74,
+    "new_process_errors": 0
+  }
 }
