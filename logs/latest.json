@@ -1,24 +1,13 @@
 {
-  "last_task": "ais-tracker-compact-v4",
+  "last_task": "ais-tracker-verification-ae9dd15",
   "status": "SUCCESS",
-  "timestamp": "2026-07-11T23:08:30Z",
+  "timestamp": "2026-07-11T23:16:14Z",
   "details": {
-    "action": "AIS Tracker compact v4: 9-col, stacked cells, cVMG, no AIS badge, 2-line name",
-    "files_modified": [
-      "ais/tracker.html"
+    "action": "Verified: ae9dd15 already contains both vmgCorrCell color + boat-name CSS",
+    "fixes_verified": [
+      "vmgCorrCell: return span with color:${col}",
+      ".boat-name: font-size+font-weight+overflow+webkit-line-clamp:2"
     ],
-    "columns_final": [
-      "BOAT",
-      "DIST",
-      "BRG\u00b1/\u0394BRG",
-      "SOG/COG",
-      "TWA",
-      "VMG \u039430",
-      "cVMG",
-      "HCP%",
-      "dot"
-    ],
-    "changes": 8,
-    "mobile_optimized": true
+    "no_changes_needed": true
   }
 }
