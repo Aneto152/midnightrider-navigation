@@ -31,14 +31,14 @@ a{color:#7bb8f0;text-decoration:none}
 .refresh-info{margin-left:auto;font-size:0.72em;opacity:0.5}
 .refresh-btn{background:#1a5c3a;border-color:#1a5c3a;font-weight:600}
 .refresh-btn:hover{background:#22723f}
-.comp-header{padding:6px 12px;display:grid;grid-template-columns:1fr 46px 40px 46px 44px 44px 54px 50px 42px 20px;gap:4px;font-size:0.68em;opacity:0.45;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid rgba(255,255,255,0.06)}
+.comp-header{padding:6px 12px;display:grid;grid-template-columns:1fr 44px 52px 52px 44px 54px 50px 50px 20px;gap:4px;font-size:0.68em;opacity:0.45;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid rgba(255,255,255,0.06)}
 .comp-list{padding:0 12px}
-.comp-row{display:grid;grid-template-columns:1fr 46px 40px 46px 44px 44px 54px 50px 42px 20px;gap:4px;padding:9px 10px;margin:4px 0;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);align-items:center;cursor:default;transition:background 0.1s}
+.comp-row{display:grid;grid-template-columns:1fr 44px 52px 52px 44px 54px 50px 50px 20px;gap:4px;padding:9px 10px;margin:4px 0;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);align-items:center;cursor:default;transition:background 0.1s}
 .comp-row:hover{background:rgba(255,255,255,0.07)}
 .comp-row.green{border-left:3px solid #22c55e;background:rgba(34,197,94,0.06)}
 .comp-row.red{border-left:3px solid #ef4444;background:rgba(239,68,68,0.07)}
 .comp-row.neutral{border-left:3px solid rgba(255,255,255,0.15)}
-.boat-name{font-size:0.85em;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.boat-name{}
 .sail{font-size:0.72em;opacity:0.55;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cell{font-size:0.82em;font-weight:500;text-align:right}
 .cell.dim{opacity:0.55;font-size:0.75em}
@@ -56,7 +56,7 @@ a{color:#7bb8f0;text-decoration:none}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(0,212,255,0.3);border-top-color:#00d4ff;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px}
 @media(max-width:400px){
-  .comp-header,.comp-row{grid-template-columns:1fr 40px 36px 40px 38px 38px 48px 44px 36px 16px}
+  .comp-header,.comp-row{grid-template-columns:1fr 38px 46px 46px 40px 48px 44px 44px 16px}
   .cell{font-size:0.78em}
 }
 .badge-db{display:inline-block;background:#00d4ff22;border:1px solid #00d4ff66;color:#00d4ff;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px;letter-spacing:0.5px;vertical-align:middle}
@@ -119,12 +119,11 @@ a{color:#7bb8f0;text-decoration:none}
   <span style="text-align:right">Dist</span>
   <span style="text-align:right">BRG±</span>
   <span style="text-align:right">SOG</span>
-  <span style="text-align:right">COG</span>
-  <span style="text-align:right">TWA</span>
+   <span style="text-align:right">TWA</span>
   <span style="text-align:right">VMG Δ30</span>
-  <span style="text-align:right">HCP%</span>
-  <span style="text-align:right">ΔBRG</span>
-  <span></span>
+  <span style="text-align:right">cVMG</span>
+ <span style="text-align:right">HCP%</span>
+   <span></span>
 </div>
 
 <div class="comp-list" id="compList">
@@ -145,6 +144,15 @@ function fmtRelBrg(brg,ref){
  const s=r>=0?'+':'';
  return`${s}${Math.round(r)}°`;
 }
+function vmgCorrCell(vmgComp,phrf,vmgMr){
+ if(vmgComp==null||phrf==null)return'<span style="opacity:0.3">—</span>';
+ if(vmgMr==null||Math.abs(vmgMr)<0.05)return`<span style="opacity:0.6">${vmgComp.toFixed(1)}kt</span>`;
+ const f=1+(phrf-138)*Math.abs(vmgMr)/3600;
+ const cv=vmgComp*f;
+ const diff=cv-vmgMr;
+ const col=diff>0.1?'#ef4444':diff<-0.1?'#22c55e':'inherit';
+ return`<span style="color:${col}">${cv.toFixed(1)}kt</span>`;
+}
 function hcpCell(phrf,vmg){
  if(phrf==null||vmg==null||Math.abs(vmg)<0.05)return'<span style="opacity:0.3">—</span>';
  const pct=100+(phrf-138)*Math.abs(vmg)/36;
@@ -157,7 +165,7 @@ function dBrgCell(db){
  const op=Math.abs(db)<0.5?'opacity:0.35;':'';
  return`<span style="${op}">${s}${db.toFixed(1)}°</span>`;
 }
-async function refresh(){countdown=30;const list=document.getElementById('compList');try{const url=`/api/competitors?radius_nm=${radius}&vmg_mode=${mode}`;const r=await fetch(url);const d=await r.json();const ts=new Date(d.ts*1000);document.getElementById('statTime').innerHTML='<span class="lbl">Updated</span><span class="val">'+ts.toLocaleTimeString()+'</span>';const sw=document.getElementById('statWind');if(d.wind&&d.wind.available){const windDisplay=d.wind.twd!=null?`${Math.round(d.wind.twd)}° ${fmt1(d.wind.tws_kts)}kt`:`AWA ${Math.round(d.wind.awa)}° ${fmt1(d.wind.aws_kts)}kt`;sw.className='stat wind-ok';sw.innerHTML=`<span class="lbl">Wind</span><span class="val">${windDisplay}</span>`}else{sw.className='stat';sw.innerHTML='<span class="lbl">Wind</span><span class="val err">No data</span>'}const sm=document.getElementById('statMark');if(d.mark&&d.mark.available){sm.className='stat mark-ok';sm.innerHTML=`<span class="lbl">Mark</span><span class="val">${fmtNm(d.mark.dist_nm)}nm ${Math.round(d.mark.brg)}°</span>`}else{sm.className='stat';sm.innerHTML='<span class="lbl">Mark</span><span class="val">No waypoint</span>'}document.getElementById('statCount').innerHTML=`<span class="lbl">AIS</span><span class="val">${(d.competitors||[]).length} in ${radius}nm</span>`;if(d.error==='no_position'){document.getElementById('selfCard').style.display='none';list.innerHTML=`<div class="no-pos"><div class="icon">📡</div><div class="msg">GPS not active — Signal K has no vessel position.<br>Start engine / GPS receiver and wait for fix.</div></div>`;return}if(d.self){const s=d.self;document.getElementById('selfCard').style.display='flex';document.getElementById('selfSog').textContent=fmt1(s.sog_kts)+'kt';document.getElementById('selfCog').textContent=fmtDeg(s.cog);document.getElementById('selfTwa').textContent=s.twa!=null?(s.twa>=0?'+':'')+s.twa.toFixed(1)+'°':'—';const vmg=mode==='mark'?s.vmg_mark_kts:s.vmg_wind_kts;selfCog=s.cog;selfVmg=vmg;document.getElementById('selfVmg').textContent=fmt1(vmg)+'kt'}const comps=d.competitors||[];if(!comps.length){list.innerHTML='<div class="empty">No AIS targets in range<br><small>Try increasing radius</small></div>';return}comps.sort((a,b)=>{if(a.color==='red'&&b.color!=='red')return -1;if(b.color==='red'&&a.color!=='red')return 1;return(a.dist_nm||99)-(b.dist_nm||99)});const vmgKey=mode==='mark'?'vmg_mark_kts':'vmg_wind_kts';list.innerHTML=comps.map(c=>{const name=c.name||c.mmsi;const sail=c.sail_num||'';const vmgVal=fmt1(c[vmgKey]);const twa=c.twa!=null?(c.twa>=0?'+':'')+c.twa.toFixed(1)+'°':'—';return `<div class="comp-row ${c.color}"><div><div class="boat-name">${name}${c.in_comp_db ? '<span class="badge-db">DB</span>' : '<span class="badge-ais">AIS</span>'}</div><div class="sail">${sail}</div></div><div class="cell">${fmtNm(c.dist_nm)}<span style="font-size:0.8em;opacity:0.5">nm</span></div><div class="cell">${fmtRelBrg(c.bearing,selfCog)}</div><div class="cell">${fmt1(c.sog_kts)}<span style="font-size:0.8em;opacity:0.5">kt</span></div><div class="cell">${fmtDeg(c.cog)}</div><div class="cell">${twa}</div><div class="cell">${vmgVal}kt ${fmtDelta(c.delta_dist_m)}</div><div class="cell">${hcpCell(c.phrf_lis,selfVmg)}</div><div class="cell">${dBrgCell(c.delta_brg)}</div><div class="color-dot ${c.color}"></div></div>`}).join('')}catch(e){list.innerHTML=`<div class="empty">Error: ${e.message}<br><small>Check regatta container</small></div>`}}
+async function refresh(){countdown=30;const list=document.getElementById('compList');try{const url=`/api/competitors?radius_nm=${radius}&vmg_mode=${mode}`;const r=await fetch(url);const d=await r.json();const ts=new Date(d.ts*1000);document.getElementById('statTime').innerHTML='<span class="lbl">Updated</span><span class="val">'+ts.toLocaleTimeString()+'</span>';const sw=document.getElementById('statWind');if(d.wind&&d.wind.available){const windDisplay=d.wind.twd!=null?`${Math.round(d.wind.twd)}° ${fmt1(d.wind.tws_kts)}kt`:`AWA ${Math.round(d.wind.awa)}° ${fmt1(d.wind.aws_kts)}kt`;sw.className='stat wind-ok';sw.innerHTML=`<span class="lbl">Wind</span><span class="val">${windDisplay}</span>`}else{sw.className='stat';sw.innerHTML='<span class="lbl">Wind</span><span class="val err">No data</span>'}const sm=document.getElementById('statMark');if(d.mark&&d.mark.available){sm.className='stat mark-ok';sm.innerHTML=`<span class="lbl">Mark</span><span class="val">${fmtNm(d.mark.dist_nm)}nm ${Math.round(d.mark.brg)}°</span>`}else{sm.className='stat';sm.innerHTML='<span class="lbl">Mark</span><span class="val">No waypoint</span>'}document.getElementById('statCount').innerHTML=`<span class="lbl">AIS</span><span class="val">${(d.competitors||[]).length} in ${radius}nm</span>`;if(d.error==='no_position'){document.getElementById('selfCard').style.display='none';list.innerHTML=`<div class="no-pos"><div class="icon">📡</div><div class="msg">GPS not active — Signal K has no vessel position.<br>Start engine / GPS receiver and wait for fix.</div></div>`;return}if(d.self){const s=d.self;document.getElementById('selfCard').style.display='flex';document.getElementById('selfSog').textContent=fmt1(s.sog_kts)+'kt';document.getElementById('selfCog').textContent=fmtDeg(s.cog);document.getElementById('selfTwa').textContent=s.twa!=null?(s.twa>=0?'+':'')+s.twa.toFixed(1)+'°':'—';const vmg=mode==='mark'?s.vmg_mark_kts:s.vmg_wind_kts;selfCog=s.cog;selfVmg=vmg;document.getElementById('selfVmg').textContent=fmt1(vmg)+'kt'}const comps=d.competitors||[];if(!comps.length){list.innerHTML='<div class="empty">No AIS targets in range<br><small>Try increasing radius</small></div>';return}comps.sort((a,b)=>{if(a.color==='red'&&b.color!=='red')return -1;if(b.color==='red'&&a.color!=='red')return 1;return(a.dist_nm||99)-(b.dist_nm||99)});const vmgKey=mode==='mark'?'vmg_mark_kts':'vmg_wind_kts';list.innerHTML=comps.map(c=>{const name=c.name||c.mmsi;const sail=c.sail_num||'';const vmgVal=fmt1(c[vmgKey]);const twa=c.twa!=null?(c.twa>=0?'+':'')+c.twa.toFixed(1)+'°':'—';return `<div class="comp-row ${c.color}"><div><div class="boat-name">${name}${c.in_comp_db ? '<span class="badge-db">DB</span>' : ''}</div><div class="sail">${sail}</div></div><div class="cell">${fmtNm(c.dist_nm)}<span style="font-size:0.8em;opacity:0.5">nm</span></div><div class="cell" style="display:flex;flex-direction:column;align-items:flex-end;gap:1px"><div>${fmtRelBrg(c.bearing,selfCog)}</div><div style="font-size:0.8em;opacity:0.6">${dBrgCell(c.delta_brg)}</div></div><div class="cell" style="display:flex;flex-direction:column;align-items:flex-end;gap:1px"><div>${fmt1(c.sog_kts)}<span style="font-size:0.75em;opacity:0.5">kt</span></div><div style="font-size:0.8em;opacity:0.65">${fmtDeg(c.cog)}</div></div><div class="cell">${twa}</div><div class="cell">${vmgVal}kt ${fmtDelta(c.delta_dist_m)}</div><div class="cell">${vmgCorrCell(c[vmgKey],c.phrf_lis,selfVmg)}</div><div class="cell">${hcpCell(c.phrf_lis,selfVmg)}</div><div class="color-dot ${c.color}"></div></div>`}).join('')}catch(e){list.innerHTML=`<div class="empty">Error: ${e.message}<br><small>Check regatta container</small></div>`}}
 function startTimer(){if(timer)clearInterval(timer);timer=setInterval(()=>{countdown--;document.getElementById('refreshInfo').textContent=countdown>0?`Refresh in ${countdown}s`:'Refreshing…';if(countdown<=0){refresh();countdown=30}},1000)}
 refresh();
 startTimer();
