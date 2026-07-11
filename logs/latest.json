@@ -1,13 +1,13 @@
 {
-  "last_task": "ais-tracker-verification-ae9dd15",
+  "last_task": "ais-tracker-mark-fix",
   "status": "SUCCESS",
-  "timestamp": "2026-07-11T23:16:14Z",
+  "timestamp": "2026-07-11T23:53:59Z",
   "details": {
-    "action": "Verified: ae9dd15 already contains both vmgCorrCell color + boat-name CSS",
-    "fixes_verified": [
-      "vmgCorrCell: return span with color:${col}",
-      ".boat-name: font-size+font-weight+overflow+webkit-line-clamp:2"
+    "action": "Fix tracker.html: use bearing_from_self not brg for mark display",
+    "root_cause": "API returns 'bearing_from_self' but HTML was reading 'brg' (undefined)",
+    "files_modified": [
+      "ais/tracker.html"
     ],
-    "no_changes_needed": true
+    "fix": "Changed d.mark.brg \u2192 d.mark.bearing_from_self"
   }
 }
