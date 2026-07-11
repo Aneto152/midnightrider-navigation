@@ -1,21 +1,14 @@
 {
-  "last_task": "truewind-speedTrue-to-speedOverGround",
+  "last_task": "cleanup-zombie-backup-truewind-minor-fixes",
   "status": "SUCCESS",
-  "timestamp": "2026-07-11T20:26:18Z",
+  "timestamp": "2026-07-11T20:32:46Z",
   "details": {
-    "action": "Renamed SK path environment.wind.speedTrue \u2192 environment.wind.speedOverGround in signalk-truewind-calculator.js",
-    "plugin": "signalk-truewind-calculator",
-    "version_before": "1.0.1",
-    "version_after": "1.0.2",
-    "occurrences_changed": 2,
+    "action": "Removed zombie file ble/calypso_direct.py.backup-*, fixed plugin.version 1.0.1\u21921.0.2",
+    "files_deleted": [
+      "ble/calypso_direct.py.backup-2026-06-28T193838Z"
+    ],
     "files_modified": [
       "plugins/signalk-truewind-calculator.js"
-    ],
-    "files_deployed": [
-      "/usr/lib/node_modules/signalk-server/node_modules/signalk-truewind-calculator/signalk-truewind-calculator.js"
-    ],
-    "signalk_restarted": true,
-    "new_path_value_ms": 2.14,
-    "grafana_note": "Dashboards querying environment.wind.speedTrue must be updated to speedOverGround"
+    ]
   }
 }

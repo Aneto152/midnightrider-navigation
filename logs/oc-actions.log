@@ -127,3 +127,6 @@
 [2026-07-11T20:26:18] [FILE_DEPLOY] [truewind-calculator] Deployed to /usr/lib/node_modules/signalk-server/node_modules/
 [2026-07-11T20:26:18] [SERVICE_RESTART] [signalk] systemctl restart signalk — plugin reloaded
 [2026-07-11T20:26:18] [RESULT] SUCCESS — new path speedOverGround published (value: 2.14 m/s), old path no longer available
+[2026-07-11T20:32:46] [FILE_DELETE] [cleanup] zombie file ble/calypso_direct.py.backup-* removed from git
+[2026-07-11T20:32:46] [FILE_MODIFY] [truewind] plugin.version 1.0.1→1.0.2 (line 120)
+[2026-07-11T20:32:46] [RESULT] SUCCESS — repo clean
