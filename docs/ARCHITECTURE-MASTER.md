@@ -72,6 +72,7 @@ InfluxDB et les visualisant dans Grafana.
 | 7 | Batterie | SOK SK12V100PC LiFePO4 | Bluetooth LE | Monitoring BMS (direct InfluxDB) |
 | 8 | Baromètre | Yacht Devices YDBC-05 | NMEA 2000 | Pression atmosphérique |
 | 9 | Transpondeur AIS | B&G AIS700 Class B | NMEA 2000 | AIS TX/RX + sécurité |
+| 10 | Loch / Sonde / Temp eau | Airmar DST810 | NMEA 2000 | STW + profondeur + température eau |
 
 ### 2.3 Bus NMEA 2000 — Charge réseau
 

@@ -42,7 +42,10 @@
 | Roll / Pitch | WIT IMU via SK+P5 | 127257 | 10 Hz | Primary |
 | Position (GNSS) | UM982 via SK+P5 | 129025 | 1 Hz | Primary |
 | COG / SOG | UM982 via SK+P5 | 129026 | 1 Hz | Primary |
+| Speed Through Water (STW) | Airmar DST810 direct N2K | 128259 | 1 Hz | Current calc input (P3) |
+| Water Depth | Airmar DST810 direct N2K | 128267 | 1 Hz | Depth display |
 | Apparent wind | WS320 direct N2K | 130306 | 5 Hz | Direct (real-time) |
+| Current Set & Drift | Signal K P3 via P5 | 129291 | 1 Hz | Computed from STW+COG+heading |
 | AIS targets | AIS700 direct N2K | 129038/039 | event-driven | Direct (safety-critical) |
 | Pressure | YDBC-05 | 130314 | 0.5 Hz | Supplement |
 | Internal position | Vulcan own GPS | 129025 | 1 Hz | Fallback (secondary) |
@@ -72,7 +75,7 @@
 ## Notes
 
 - **SailSteer requires true heading** — magnetic compass not aboard, relies 100% on UM982 GPS dual-antenna heading via Signal K
-- **STW/speed through water unavailable** — no hull-mounted log sensor installed. Leeway calculation uses SOG − STW, currently estimated
+- **STW available via Airmar DST810** — hull-mounted transducer publishes PGN 128259 on N2K bus → navigation.speedThroughWater in Signal K → primary input to current calculator (P3)
 - **ForwardScan sonar NOT installed** — no depth or fish finder sonar
 - **Both units synchronized** — if one loses GPS, both show fallback position until UM982 recovers
 

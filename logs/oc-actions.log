@@ -130,3 +130,9 @@
 [2026-07-11T20:32:46] [FILE_DELETE] [cleanup] zombie file ble/calypso_direct.py.backup-* removed from git
 [2026-07-11T20:32:46] [FILE_MODIFY] [truewind] plugin.version 1.0.1→1.0.2 (line 120)
 [2026-07-11T20:32:46] [RESULT] SUCCESS — repo clean
+[2026-07-11T20:50:53] [FILE_CREATE] [docs] AIRMAR-DST810-DATASHEET.md — canonical specs
+[2026-07-11T20:50:53] [FILE_MODIFY] [docs] VULCAN-7-FS-DATASHEET.md — STW note corrected, PGN rows added
+[2026-07-11T20:50:53] [FILE_MODIFY] [docs] N2K-NETWORK-ARCHITECTURE.md — DST810 + PGN 129291
+[2026-07-11T20:50:53] [FILE_MODIFY] [docs] ARCHITECTURE-MASTER.md — instrument #10 (DST810)
+[2026-07-11T20:50:53] [FILE_MODIFY] [docs] INDEX.md — DST810 reference added
+[2026-07-11T20:50:53] [RESULT] [ssot] SUCCESS — 7 errors fixed, LEN=8/50

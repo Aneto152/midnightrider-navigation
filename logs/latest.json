@@ -1,14 +1,20 @@
 {
-  "last_task": "cleanup-zombie-backup-truewind-minor-fixes",
+  "last_task": "ssot-fix-dst810-pgn129291",
   "status": "SUCCESS",
-  "timestamp": "2026-07-11T20:32:46Z",
+  "timestamp": "2026-07-11T20:50:53Z",
   "details": {
-    "action": "Removed zombie file ble/calypso_direct.py.backup-*, fixed plugin.version 1.0.1\u21921.0.2",
-    "files_deleted": [
-      "ble/calypso_direct.py.backup-2026-06-28T193838Z"
+    "action": "SSOT fix \u2014 Airmar DST810 documented + PGN 129291 added",
+    "files_created": [
+      "docs/HARDWARE/AIRMAR-DST810-DATASHEET.md"
     ],
     "files_modified": [
-      "plugins/signalk-truewind-calculator.js"
-    ]
+      "docs/HARDWARE/VULCAN-7-FS-DATASHEET.md",
+      "docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md",
+      "docs/ARCHITECTURE-MASTER.md",
+      "docs/INDEX.md"
+    ],
+    "ssot_errors_fixed": 7,
+    "len_budget_updated": "8/50",
+    "pgn_129291_added": true
   }
 }

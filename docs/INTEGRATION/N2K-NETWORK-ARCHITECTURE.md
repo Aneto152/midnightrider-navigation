@@ -20,6 +20,7 @@ YDNU-02 (USB ↔ N2K Bridge) ──T── /dev/ttyACM0 (RPi4 Signal K)
 ├──T── Vulcan 7 FS (STBD nav) — LEN 1
 ├──T── YDBC-05 (Barometer) — LEN 1
 ├──T── AIS700 (Class B AIS) — LEN 1
+├──T── Airmar DST810 (STW + depth + water temp) — LEN 1
 └──T── [End terminator, 120Ω]
 
 [T] = T-connector with 120Ω terminators at both physical ends
@@ -38,9 +39,10 @@ Backbone: Micro-C connector, 250 kbps
 | WS320 Base Station | 2 | BG-WS320-DATASHEET.md | Wind TX (wireless) |
 | YDBC-05 Barometer | 1 | YDBC-05-DATASHEET.md | Pressure sensor |
 | AIS700 Class B | 1 | AIS700-DATASHEET.md | AIS transponder |
-| **TOTAL** | **7 / 50** | — | **14% capacity** ✅ |
+| Airmar DST810 | 1 | AIRMAR-DST810-DATASHEET.md | STW + depth + water temp |
+| **TOTAL** | **8 / 50** | — | **14% capacity** ✅ |
 
-**Available future slots:** +43 LEN units for STW/log, depth sounder, VHF DSC
+**Available future slots:** +42 LEN units for VHF DSC, additional sensors
 
 ---
 
@@ -54,6 +56,9 @@ Backbone: Micro-C connector, 250 kbps
 | WS320 | 130311 | Air temperature (masthead) | environment.outside.temperature | 0.2 Hz |
 | YDBC-05 | 130314 | Atmospheric pressure | environment.outside.pressure | 0.5 Hz |
 | AIS700 | 129038–129810 | AIS targets (MMSI, position, COG, SOG) | vessels.* | event-driven |
+| Airmar DST810 | 128259 | Speed Through Water (STW) | navigation.speedThroughWater | 1 Hz |
+| Airmar DST810 | 128267 | Water depth (below transducer) | environment.depth.belowTransducer | 1 Hz |
+| Airmar DST810 | 130310 | Water temperature | environment.water.temperature | 0.2 Hz |
 | Vulcan 7 FS | 129025, 129026 | GPS position + COG/SOG (secondary fallback) | navigation.* | 1 Hz |
 
 ### Transmitted from Signal K → N2K (via P5 plugin → YDNU-02)
@@ -65,6 +70,7 @@ Backbone: Micro-C connector, 250 kbps
 | Vulcan 7 FS (×2) | 129025 | GNSS position | P1: UM982 GPS | 1 Hz |
 | Vulcan 7 FS (×2) | 129026 | COG + SOG | P1: UM982 GPS | 1 Hz |
 | (Optional) Vulcan 7 FS (×2) | 130306 | Wind (true/apparent) | Calypso UP10 (via Plugins) | 1 Hz |
+| Vulcan 7 FS (×2) | 129291 | Current Set & Drift | P3: signalk-current-calculator (via P5) | 1 Hz |
 | (Pending) Vulcan 7 FS (×2) | 130824 | B&G Performance (leeway, VMG, beat angle) | P5: signalk-n2k-bridge | On request |
 
 ### Direct N2K (No Signal K Involvement)
