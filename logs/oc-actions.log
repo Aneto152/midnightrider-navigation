@@ -123,3 +123,7 @@
 [2026-06-28T19:47:50] [RESULT] [calypso_direct] SUCCESS — wind offset +7° active, BLE connected
 [2026-06-28T19:55:04] [FILE_MODIFY] [docs] Fixed broken Markdown table in INDEX.md — Calypso UP10 row repaired
 [2026-06-28T19:55:04] [RESULT] [docs] SUCCESS — INDEX.md table row clean
+[2026-07-11T20:26:18] [FILE_MODIFY] [truewind-calculator] environment.wind.speedTrue → environment.wind.speedOverGround (JSDoc + handleMessage values)
+[2026-07-11T20:26:18] [FILE_DEPLOY] [truewind-calculator] Deployed to /usr/lib/node_modules/signalk-server/node_modules/
+[2026-07-11T20:26:18] [SERVICE_RESTART] [signalk] systemctl restart signalk — plugin reloaded
+[2026-07-11T20:26:18] [RESULT] SUCCESS — new path speedOverGround published (value: 2.14 m/s), old path no longer available

@@ -1,7 +1,7 @@
 'use strict';
 /**
  * @file signalk-truewind-calculator.js
- * @version 1.0.1
+ * @version 1.0.2
  * @license MIT
  *
  * PURPOSE
@@ -28,7 +28,7 @@
  *
  * OUTPUTS
  * environment.wind.directionTrue [rad] TWD clockwise from N
- * environment.wind.speedTrue [m/s] TWS
+ * environment.wind.speedOverGround [m/s] TWS
  * environment.wind.angleTrueGround [rad] TWA from bow (+/-pi, + = stbd)
  *
  * SK 2.25.0 PATTERN — PLUGIN-DEVELOPMENT-GUIDE.md
@@ -99,7 +99,7 @@ module.exports = function(app) {
         timestamp: new Date().toISOString(),
         values: [
           { path:'environment.wind.directionTrue', value:twd },
-          { path:'environment.wind.speedTrue', value:tws },
+          { path:'environment.wind.speedOverGround', value:tws },
           { path:'environment.wind.angleTrueGround', value:twa }
         ]}]
       });

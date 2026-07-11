@@ -1,19 +1,21 @@
 {
-  "last_task": "fix-index-md-calypso-table",
+  "last_task": "truewind-speedTrue-to-speedOverGround",
   "status": "SUCCESS",
-  "timestamp": "2026-06-28T19:55:04Z",
+  "timestamp": "2026-07-11T20:26:18Z",
   "details": {
-    "action": "Added CALYPSO_WIND_OFFSET_DEG=7 to calypso_direct.py + systemd service",
-    "offset_degrees": 7,
-    "reason": "Masthead sensor physically offset ~7\u00b0 to starboard",
-    "service_restarted": true,
-    "ble_connected": true,
-    "docs_created": [
-      "docs/INTEGRATION/CALYPSO-UP10-INTEGRATION-GUIDE.md"
+    "action": "Renamed SK path environment.wind.speedTrue \u2192 environment.wind.speedOverGround in signalk-truewind-calculator.js",
+    "plugin": "signalk-truewind-calculator",
+    "version_before": "1.0.1",
+    "version_after": "1.0.2",
+    "occurrences_changed": 2,
+    "files_modified": [
+      "plugins/signalk-truewind-calculator.js"
     ],
-    "docs_updated": [
-      "docs/HARDWARE/CALYPSO-UP10-DATASHEET.md",
-      "docs/INDEX.md"
-    ]
+    "files_deployed": [
+      "/usr/lib/node_modules/signalk-server/node_modules/signalk-truewind-calculator/signalk-truewind-calculator.js"
+    ],
+    "signalk_restarted": true,
+    "new_path_value_ms": 2.14,
+    "grafana_note": "Dashboards querying environment.wind.speedTrue must be updated to speedOverGround"
   }
 }
