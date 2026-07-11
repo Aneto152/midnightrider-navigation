@@ -136,3 +136,5 @@
 [2026-07-11T20:50:53] [FILE_MODIFY] [docs] ARCHITECTURE-MASTER.md — instrument #10 (DST810)
 [2026-07-11T20:50:53] [FILE_MODIFY] [docs] INDEX.md — DST810 reference added
 [2026-07-11T20:50:53] [RESULT] [ssot] SUCCESS — 7 errors fixed, LEN=8/50
+[2026-07-11T22:17:33] [FILE_MODIFY] [ais] tracker.html — 10-col: +COG +HCP% +ΔBRG (9 exact replacements)
+[2026-07-11T22:17:33] [RESULT] [ais] SUCCESS

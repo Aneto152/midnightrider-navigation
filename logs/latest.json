@@ -1,20 +1,26 @@
 {
-  "last_task": "ssot-fix-dst810-pgn129291",
+  "last_task": "ais-tracker-10col-cog-hcp-dbrg",
   "status": "SUCCESS",
-  "timestamp": "2026-07-11T20:50:53Z",
+  "timestamp": "2026-07-11T22:17:33Z",
   "details": {
-    "action": "SSOT fix \u2014 Airmar DST810 documented + PGN 129291 added",
-    "files_created": [
-      "docs/HARDWARE/AIRMAR-DST810-DATASHEET.md"
-    ],
+    "action": "AIS Tracker 10-col: +COG +HCP% +\u0394BRG \u2014 exact string replacements",
     "files_modified": [
-      "docs/HARDWARE/VULCAN-7-FS-DATASHEET.md",
-      "docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md",
-      "docs/ARCHITECTURE-MASTER.md",
-      "docs/INDEX.md"
+      "ais/tracker.html"
     ],
-    "ssot_errors_fixed": 7,
-    "len_budget_updated": "8/50",
-    "pgn_129291_added": true
+    "columns_final": [
+      "BOAT",
+      "DIST",
+      "BRG",
+      "SOG",
+      "COG",
+      "TWA",
+      "VMG \u039430",
+      "HCP%",
+      "\u0394BRG",
+      "dot"
+    ],
+    "mr_phrf": 138,
+    "changes": 9,
+    "mr_vmg_globally_available": true
   }
 }
