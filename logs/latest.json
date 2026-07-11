@@ -1,26 +1,14 @@
 {
-  "last_task": "ais-tracker-10col-cog-hcp-dbrg",
+  "last_task": "ais-tracker-relative-brg",
   "status": "SUCCESS",
-  "timestamp": "2026-07-11T22:17:33Z",
+  "timestamp": "2026-07-11T22:53:37Z",
   "details": {
-    "action": "AIS Tracker 10-col: +COG +HCP% +\u0394BRG \u2014 exact string replacements",
+    "action": "AIS Tracker: BRG absolute \u2192 BRG relative to MR heading (selfCog)",
     "files_modified": [
       "ais/tracker.html"
     ],
-    "columns_final": [
-      "BOAT",
-      "DIST",
-      "BRG",
-      "SOG",
-      "COG",
-      "TWA",
-      "VMG \u039430",
-      "HCP%",
-      "\u0394BRG",
-      "dot"
-    ],
-    "mr_phrf": 138,
-    "changes": 9,
-    "mr_vmg_globally_available": true
+    "formula": "((brg_abs - cog_mr) + 540) % 360 - 180",
+    "range": "-180 to +180 (port=neg, stbd=pos)",
+    "changes": 5
   }
 }

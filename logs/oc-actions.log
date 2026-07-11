@@ -138,3 +138,5 @@
 [2026-07-11T20:50:53] [RESULT] [ssot] SUCCESS — 7 errors fixed, LEN=8/50
 [2026-07-11T22:17:33] [FILE_MODIFY] [ais] tracker.html — 10-col: +COG +HCP% +ΔBRG (9 exact replacements)
 [2026-07-11T22:17:33] [RESULT] [ais] SUCCESS
+[2026-07-11T22:53:37] [FILE_MODIFY] [ais] tracker.html — BRG absolute → relative to MR heading
+[2026-07-11T22:53:37] [RESULT] [ais] SUCCESS
