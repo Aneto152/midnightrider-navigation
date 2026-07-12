@@ -148,3 +148,5 @@
 [2026-07-11T23:53:59] [RESULT] [ais] SUCCESS
 [2026-07-12T00:13:44] [FILE_MODIFY] [ais] server_handlers.py, tracker.html — TWS fallback + dist_nm
 [2026-07-12T00:13:44] [RESULT] [ais] SUCCESS
+[2026-07-12T00:18:54] [SERVICE_RESTART] [ais] docker restart regatta — activate d44488e changes
+[2026-07-12T00:18:54] [RESULT] [ais] SUCCESS — tws_kts=5.2, dist_nm=2.64

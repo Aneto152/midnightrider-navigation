@@ -1,17 +1,12 @@
 {
-  "last_task": "ais-tracker-fix-tws-dist",
+  "last_task": "ais-server-restart-d44488e",
   "status": "SUCCESS",
-  "timestamp": "2026-07-12T00:13:44Z",
+  "timestamp": "2026-07-12T00:18:54Z",
   "details": {
-    "action": "Fix TWS (speedApparent fallback) + mark dist_nm + graceful display",
-    "files_modified": [
-      "ais/server_handlers.py",
-      "ais/tracker.html"
-    ],
-    "fixes": [
-      "TWS: fallback speedTrue \u2192 speedApparent when true wind unavailable",
-      "Mark: added dist_nm calculation using haversine_ll",
-      "Tracker: graceful display when dist_nm is null (show bearing only)"
-    ]
+    "action": "Restart port-5000 server (Docker regatta container) to activate d44488e Python changes",
+    "verification": {
+      "wind.tws_kts": "5.2 (from speedApparent fallback)",
+      "mark.dist_nm": "2.64 (calculated via haversine_ll)"
+    }
   }
 }
