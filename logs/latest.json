@@ -1,23 +1,17 @@
 {
-  "last_task": "truewind-plugin-v1.0.3",
+  "last_task": "truewind-plugin-v1.0.4",
   "status": "SUCCESS",
-  "timestamp": "2026-07-12T16:50:19Z",
+  "timestamp": "2026-07-12T16:59:33Z",
   "details": {
-    "file": "plugins/signalk-truewind-calculator.js",
-    "version": "1.0.2 \u2192 1.0.3",
-    "added": [
-      "environment.wind.angleTrueWater",
-      "environment.wind.speedTrue"
+    "bug_fixed": "v1.0.3 IIFE commented out by backslash-newline in comment",
+    "fix": "Rewrote as clean vals[] array \u2014 no IIFE, no backslash line continuations",
+    "version": "1.0.3 \u2192 1.0.4",
+    "outputs": [
+      "angleTrueWater",
+      "speedTrue",
+      "angleTrueGround",
+      "directionTrue"
     ],
-    "preserved": [
-      "environment.wind.angleTrueGround",
-      "environment.wind.directionTrue",
-      "environment.wind.speedOverGround"
-    ],
-    "inputs_added": [
-      "navigation.speedThroughWater (STW)",
-      "navigation.leewayAngle (optional)"
-    ],
-    "note": "Water-referenced calculations conditional on STW > 0 (skipped when boat idle)"
+    "note": "Water-referenced paths publish only when STW > 0 (currently idle/dock)"
   }
 }
