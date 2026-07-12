@@ -1,17 +1,17 @@
 {
-  "last_task": "sk-source-priority-wind-fusion",
-  "status": "SUCCESS",
-  "timestamp": "2026-07-12T15:45:59Z",
+  "last_task": "sk-truewind-angleTrueWater-speedTrue",
+  "status": "CONFIG_APPLIED_AWAIT_VERIFICATION",
+  "timestamp": "2026-07-12T16:28:03Z",
   "details": {
-    "action": "Configure SK source priorities: N2K angle + Calypso speed",
-    "files_modified": [
-      "~/.signalk/settings.json (sourcePriorities)",
-      "docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md"
-    ],
+    "action": "Enable angleTrueWater + speedTrue in signalk-truewind-calculator",
+    "config_applied": true,
+    "config_method": "Signal K API POST /skServer/plugins/signalk-truewind-calculator/config",
     "config": {
-      "angleApparent": "N2K.10 (WS310 masthead) > Calypso.XX",
-      "speedApparent": "Calypso.XX > N2K.10 (WS310 speed broken = 0kn)"
+      "setTrueWindAngle": true,
+      "setTrueWindSpeed": true,
+      "setTrueWindDirection": true,
+      "useMagneticTrue": false
     },
-    "verification": "N2K.10 now primary for angleApparent"
+    "status_note": "Configuration applied successfully; paths not yet published in API. Requires further investigation or manual Signal K restart."
   }
 }

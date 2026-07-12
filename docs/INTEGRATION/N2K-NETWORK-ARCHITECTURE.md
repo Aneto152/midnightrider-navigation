@@ -142,6 +142,21 @@ cat /dev/ttyACM0 | xxd | head -20
 > (always returns 0 kn). Awaiting repair. Calypso UP10 provides reliable speed until RMA.
 > Angle is accurate and prioritized for sail trim via direct N2K path to Vulcan chartplotters (5 Hz).
 
+### True Wind Computation Chain (STW-Based)
+
+| Output Path | Inputs | Plugin | Status |
+|-------------|--------|--------|--------|
+| environment.wind.angleTrueWater | AWA (N2K.10) + AWS (Calypso) + STW (DST810 PGN 128259) + headingTrue (UM982) | signalk-truewind-calculator | ⏳ Config applied (2026-07-12) |
+| environment.wind.speedTrue | AWA + AWS + STW + headingTrue | signalk-truewind-calculator | ⏳ Config applied (2026-07-12) |
+| environment.wind.angleTrueGround | AWA + AWS + SOG + COG | signalk-truewind-calculator | ✅ Active |
+| environment.wind.directionTrue | AWA + AWS + SOG + headingTrue | signalk-truewind-calculator | ✅ Active |
+
+> **Note:** angleTrueWater uses STW (Airmar DST810 — PGN 128259) + headingTrue (UM982 dual-antenna GPS).
+> Leeway correction applied automatically when navigation.leewayAngle is available.
+>
+> **Pending — Phase I:** Configure P5 (signalk-to-nmea2000) to transmit angleTrueWater + speedTrue
+> as PGN 130306 (Wind — Reference=3 True/Boat) → Vulcan 7 FS chartplotters (1 Hz).
+
 ### Attitude & Heading (Roll/Pitch/Yaw)
 
 | Priority | Source | Protocol | Frequency | Path |
