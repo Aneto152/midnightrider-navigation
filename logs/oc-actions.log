@@ -156,3 +156,6 @@
 [2026-07-12T16:28:03] [RESULT] [signalk] CONFIG_APPLIED — awaiting path publication
 [2026-07-12T16:32:57] [SERVICE_RESTART] [signalk] emergency fix truewind-calculator
 [2026-07-12T16:32:57] [RESULT] [signalk] SUCCESS — rolled back to minimal config
+[2026-07-12T16:50:19] [FILE_MODIFY] [signalk] truewind-calculator.js v1.0.3 — +angleTrueWater +speedTrue
+[2026-07-12T16:50:19] [SERVICE_RESTART] [signalk] sudo systemctl restart signalk
+[2026-07-12T16:50:19] [RESULT] [signalk] SUCCESS — code deployed

@@ -1,7 +1,7 @@
 'use strict';
 /**
  * @file signalk-truewind-calculator.js
- * @version 1.0.2
+ * @version 1.0.3
  * @license MIT
  *
  * PURPOSE
@@ -100,7 +100,34 @@ module.exports = function(app) {
         values: [
           { path:'environment.wind.directionTrue', value:twd },
           { path:'environment.wind.speedOverGround', value:tws },
-          { path:'environment.wind.angleTrueGround', value:twa }
+          { path:'environment.wind.angleTrueGround', value:twa },
+          // Water-referenced true wind (v1.0.3)
+          ...(() => {
+            var stw = getVal('navigation.speedThroughWater');
+            var leeway = getVal('navigation.leewayAngle') || 0;
+            if (stw !== null && isFinite(stw) && stw >= 0) {
+              var hdg_lw = ht + leeway;
+              var vbw_N = stw * Math.cos(hdg_lw);
+              var vbw_E = stw * Math.sin(hdg_lw);
+              var vtw_w_N = v_aw_N + vbw_N;
+              var vtw_w_E = v_aw_E + vbw_E;
+              var tws_w = Math.sqrt(vtw_w_N*vtw_w_N + vtw_w_E*vtw_w_E);
+              if (isFinite(tws_w) && tws_w * MS_TO_KTS <= cfg.maxWindKts) {
+                var twd_w = ((Math.atan2(vtw_w_E, vtw_w_N) + Math.PI) % TWO_PI + TWO_PI) % TWO_PI;
+                var twa_w = twd_w - ht;
+                while (twa_w > Math.PI) twa_w -= TWO_PI;
+                while (twa_w < -Math.PI) twa_w += TWO_PI;
+                if (isFinite(twa_w)) {
+                  if (cfg.debug) svcLog('DEBUG','WaterTW: TWA_w='+(twa_w*RAD_TO_DEG).toFixed(1)+'deg TWS_w='+(tws_w*MS_TO_KTS).toFixed(1)+'kts');
+                  return [
+                    { path:'environment.wind.angleTrueWater', value:twa_w },
+                    { path:'environment.wind.speedTrue', value:tws_w }
+                  ];
+                }
+              }
+            }
+            return [];
+          })()
         ]}]
       });
       stats.derived++;
@@ -115,9 +142,9 @@ module.exports = function(app) {
 
   const plugin = {
     id: PLUGIN_ID,
-    name: 'True Wind Calculator (TWD / TWS / TWA)',
+    name: 'True Wind Calculator (TWD / TWS / TWA / TWS_water)',
     description: 'Event-driven on AWA. TWD/TWS/TWA from apparent wind + SOG/COG vector math.',
-    version: '1.0.2',
+    version: '1.0.3',
     schema: { type:'object', title:'True Wind Calculator', properties: {
       maxDataAgeSecs:{ type:'number', title:'Max input age (s)', default:10, minimum:2, maximum:60 },
       maxWindKts: { type:'number', title:'Max TWS cap (kts)', default:70, minimum:5, maximum:120 },
