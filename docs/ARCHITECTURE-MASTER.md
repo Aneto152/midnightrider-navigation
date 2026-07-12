@@ -1090,3 +1090,74 @@ See **[portal/README.md](../portal/README.md)** for full documentation.
 
 ## 5.10 MCP Servers
 See [mcp/README.md](../mcp/README.md).
+
+---
+
+## 5.8 Plugin Deployment Pattern (CRITICAL — 2026-07-12)
+
+### Architecture Principle: SSOT Source in Repo
+
+Signal K loads plugins from the system directory (`/usr/lib/node_modules/`), NOT from the git repo.
+This creates a dual-source problem unless carefully managed.
+
+**Rule**: The repo `/plugins/` directory is the Single Source of Truth (SSOT).
+Always edit plugin files there, then sync to the system.
+
+### File Locations
+
+| Location | Purpose | Who edits it? |
+|----------|---------|---------------|
+| `plugins/signalk-*.js` | SSOT source — edit these | ✅ You (always) |
+| `/usr/lib/node_modules/signalk-server/node_modules/signalk-*/` | Runtime — what SK actually loads | ❌ Never directly |
+
+### Sync Procedure
+
+After modifying any plugin file:
+
+```bash
+# Option 1: Use helper script (recommended)
+sudo bash scripts/sync-plugins.sh
+sudo systemctl restart signalk
+
+# Option 2: Manual copy (if helper unavailable)
+sudo cp plugins/signalk-truewind-calculator.js \
+  /usr/lib/node_modules/signalk-server/node_modules/signalk-truewind-calculator/signalk-truewind-calculator.js
+sudo systemctl restart signalk
+```
+
+### Active Plugin Inventory (v1.0.4+, 2026-07-12)
+
+| Plugin | Repo Path | System Path | Version | Status |
+|--------|-----------|-------------|---------|--------|
+| truewind-calculator | `plugins/signalk-truewind-calculator.js` | `/usr/lib/.../signalk-truewind-calculator/` | 1.0.4 | ✅ Synced |
+| current-calculator | `plugins/signalk-current-calculator.js` | `/usr/lib/.../signalk-current-calculator/` | 1.0.4 | ✅ Synced |
+| j30-leeway | `plugins/signalk-j30-leeway.js` | `/usr/lib/.../signalk-j30-leeway/` | 1.0.4 | ✅ Synced |
+| heading-true-calculator | `plugins/signalk-heading-true-calculator.js` | `/usr/lib/.../signalk-heading-true-calculator/` | 1.0.6 | ✅ Synced |
+
+### Outputs of Key Plugins (v1.0.4, 2026-07-12)
+
+#### signalk-truewind-calculator (v1.0.4)
+
+**Inputs**:
+- `environment.wind.angleApparent` (N2K.10 WS310 masthead)
+- `environment.wind.speedApparent` (Calypso UP10)
+- `navigation.headingTrue` (UM982 dual-antenna)
+- `navigation.speedOverGround` (UM982)
+- `navigation.courseOverGroundTrue` (UM982)
+- `navigation.speedThroughWater` (DST810 PGN 128259) — optional, water-ref only
+- `navigation.leewayAngle` — optional, water-ref only
+
+**Outputs** (Ground-Referenced):
+- `environment.wind.directionTrue` (always)
+- `environment.wind.speedOverGround` (always)
+- `environment.wind.angleTrueGround` (always)
+
+**Outputs** (Water-Referenced, new in v1.0.4):
+- `environment.wind.angleTrueWater` (STW-based, when STW > 0)
+- `environment.wind.speedTrue` (STW-based, when STW > 0)
+
+**Logic**:
+```
+Ground-Ref: true wind = apparent wind + SOG/COG vector
+Water-Ref:  true wind = apparent wind + STW/heading vector + leeway
+```

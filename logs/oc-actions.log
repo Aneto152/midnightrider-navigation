@@ -165,3 +165,8 @@
 [2026-07-12T17:07:43] [SYNC] [signalk] plugin v1.0.4 → /usr/lib/node_modules
 [2026-07-12T17:07:43] [SERVICE_RESTART] [signalk] sudo systemctl restart signalk
 [2026-07-12T17:07:43] [RESULT] [signalk] SUCCESS — all wind paths publishing
+[2026-07-12T17:11:42] [FILE_DELETE] [git] data-flow.log removed from tracking
+[2026-07-12T17:11:42] [AUDIT] [signalk] all plugins checked: 4/4 in sync
+[2026-07-12T17:11:42] [FILE_CREATE] [scripts] sync-plugins.sh created
+[2026-07-12T17:11:42] [DOCS_UPDATE] [arch] ARCHITECTURE-MASTER.md plugin section added
+[2026-07-12T17:11:42] [RESULT] [all] SUCCESS
