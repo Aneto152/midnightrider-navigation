@@ -1,14 +1,20 @@
 {
-  "last_task": "fix-gitignore-dataflow-ssot-plugin-paths",
+  "last_task": "import-alir2026-competitors",
   "status": "SUCCESS",
-  "timestamp": "2026-07-12T17:11:42Z",
+  "timestamp": "2026-07-12T23:15:56Z",
   "details": {
-    "fixes": [
-      "data-flow.log removed from git tracking",
-      "All plugins audited and synced repo \u2192 /usr/lib",
-      "scripts/sync-plugins.sh created",
-      "ARCHITECTURE-MASTER.md updated with plugin deployment pattern"
-    ],
-    "plugin_audit_result": "4/4 active plugins in sync (truewind-calculator, current-calculator, j30-leeway, heading-true-calculator)"
+    "action": "Added 33 + updated 2 ALIR2026 competitors to regatta/competitors.json",
+    "new_boats": 33,
+    "updated_boats": 2,
+    "total_competitors": 112,
+    "mmsi_confirmed": 2,
+    "breakdown": {
+      "Non-Spinnaker": 7,
+      "Spinnaker_ORC": 3,
+      "Spinnaker_ToD_ToT": 21,
+      "Double-Handed": 2,
+      "Multihull": 1,
+      "Around_Islands_Spinnaker": 1
+    }
   }
 }

@@ -170,3 +170,6 @@
 [2026-07-12T17:11:42] [FILE_CREATE] [scripts] sync-plugins.sh created
 [2026-07-12T17:11:42] [DOCS_UPDATE] [arch] ARCHITECTURE-MASTER.md plugin section added
 [2026-07-12T17:11:42] [RESULT] [all] SUCCESS
+[2026-07-12T23:15:56] [FILE_MODIFY] [regatta] competitors.json: +33 ALIR2026 boats
+[2026-07-12T23:15:56] [FILE_MODIFY] [regatta] c001 Abilyn + c016 DUET: added ALIR2026 event
+[2026-07-12T23:15:56] [RESULT] [regatta] SUCCESS — 112 total competitors, 35 ALIR2026

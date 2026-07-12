@@ -3,12 +3,17 @@
     "description": "Midnight Rider Competitor Library",
     "vessel": "J/30 hull 511",
     "fleet": "Block Island Race Week 2026",
-    "updated": "2026-06-19",
+    "updated": "2026-07-12",
     "format_version": "1.0",
-    "total_boats": 79,
+    "total_boats": 112,
     "mmsi_verified": 16,
     "mmsi_probable": 41,
-    "mmsi_not_found": 12
+    "mmsi_not_found": 46,
+    "events": [
+      "ALIR2026",
+      "BIRW2026"
+    ],
+    "alir2026_boats": 35
   },
   "self": {
     "id": "c040",
@@ -59,9 +64,11 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
-      "notes": ""
+      "notes": "",
+      "race_class": "Double-Handed"
     },
     {
       "id": "c002",
@@ -450,9 +457,11 @@
       "priority": "medium",
       "events": [
         "Block Island Race Week 2026",
-        "LIS Weekend Race 2026-06-21"
+        "LIS Weekend Race 2026-06-21",
+        "ALIR2026"
       ],
-      "notes": ""
+      "notes": "",
+      "race_class": "Spinnaker ToD/ToT"
     },
     {
       "id": "c017",
@@ -2104,6 +2113,1031 @@
         "LIS Weekend Race 2026-06-21"
       ],
       "notes": "Confirmed MarineTraffic. Last departed Harbor Island Park, Mamaroneck NY (= Larchmont YC area). LOA 12m matches J/124 12.4m."
+    },
+    {
+      "id": "c081",
+      "boat_name": "Cool Change",
+      "sail_number": "121",
+      "skipper": "James Sheed",
+      "yacht_club": "Shore and Country Club",
+      "home_port": "Darien, CT",
+      "vessel": {
+        "make": "Hunter",
+        "model": "39"
+      },
+      "length_ft": 39,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 144,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c082",
+      "boat_name": "Dolcezza",
+      "sail_number": "53",
+      "skipper": "Neill Parker Jr",
+      "yacht_club": "Manhasset Bay YC",
+      "home_port": "Port Washington, NY",
+      "vessel": {
+        "make": "Hunter",
+        "model": "Legend 37.5"
+      },
+      "length_ft": 37,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 150,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c084",
+      "boat_name": "Java",
+      "sail_number": "279",
+      "skipper": "Marc Grill",
+      "yacht_club": "Port Washington YC",
+      "home_port": "Port Washington, NY",
+      "vessel": {
+        "make": "Jeanneau",
+        "model": "36.2 SO"
+      },
+      "length_ft": 36,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 183,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c085",
+      "boat_name": "MARA",
+      "sail_number": "none",
+      "skipper": "Alexander Malochka",
+      "yacht_club": "none",
+      "home_port": "Brooklyn, NY",
+      "vessel": {
+        "make": "Pearson",
+        "model": "39-2"
+      },
+      "length_ft": 39,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 123,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c087",
+      "boat_name": "Shooting Star",
+      "sail_number": "USA 20802",
+      "skipper": "David Kingsbury",
+      "yacht_club": "Housatonic Boat Club",
+      "home_port": "Orange, CT",
+      "vessel": {
+        "make": "Peterson",
+        "model": "34"
+      },
+      "length_ft": 33.9,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 117,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c088",
+      "boat_name": "Veronique",
+      "sail_number": "60141",
+      "skipper": "Bert Rubin de Cervens",
+      "yacht_club": "Ketewomoke YC",
+      "home_port": "Huntington, NY",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "First 345"
+      },
+      "length_ft": 34.5,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 135,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c089",
+      "boat_name": "YES 4X",
+      "sail_number": "393",
+      "skipper": "Henryk Walerys",
+      "yacht_club": "CPYC",
+      "home_port": "Katonah, NY",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "Oceanis 46.1"
+      },
+      "length_ft": 47.9,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 135,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c090",
+      "boat_name": "Beagle",
+      "sail_number": "USA 44007",
+      "skipper": "Willets Meyer",
+      "yacht_club": "Seawanhaka Corinthian YC",
+      "home_port": "Oyster Bay, NY",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/44"
+      },
+      "length_ft": 44,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ORC",
+      "notes": ""
+    },
+    {
+      "id": "c091",
+      "boat_name": "Ohana",
+      "sail_number": "435",
+      "skipper": "Ken Wisdom",
+      "yacht_club": "CPYC/NYYC/RORC",
+      "home_port": "Wilton, CT",
+      "vessel": {
+        "make": "Arcona",
+        "model": "435 MkII"
+      },
+      "length_ft": 44.7,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "ORC_APH": 483.8,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ORC",
+      "notes": ""
+    },
+    {
+      "id": "c092",
+      "boat_name": "Surface Tension",
+      "sail_number": "Uni 52556",
+      "skipper": "Lou Melillo / Mike Bermann",
+      "yacht_club": "Atlantic Highlands YC / Storm Trysail Club",
+      "home_port": "Middletown, NJ",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "First 44.7"
+      },
+      "length_ft": 44,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "ORC_APH": 505.4,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ORC",
+      "notes": ""
+    },
+    {
+      "id": "c093",
+      "boat_name": "ACTAEA",
+      "sail_number": "USA 3815",
+      "skipper": "Michael M Cone",
+      "yacht_club": "EYC / CCA / NYYC",
+      "home_port": "Philadelphia, PA",
+      "vessel": {
+        "make": "Alden",
+        "model": "Bermuda 40"
+      },
+      "length_ft": 40.75,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 153,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "Newport-Bermuda Race winner 2014"
+    },
+    {
+      "id": "c094",
+      "boat_name": "Avalanche",
+      "sail_number": "GBR 20",
+      "skipper": "Craig Albrecht / Alexis Gesualdo",
+      "yacht_club": "Storm Trysail Club / Northport YC",
+      "home_port": "Glen Cove, NY",
+      "vessel": {
+        "make": "Soto",
+        "model": "40"
+      },
+      "length_ft": 40,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": -33,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "British flag (GBR). Fast boat, negative PHRF"
+    },
+    {
+      "id": "c095",
+      "boat_name": "Avatar",
+      "sail_number": "USA 61971",
+      "skipper": "Janusz Kedzierski",
+      "yacht_club": "Mill Basin Club",
+      "home_port": "New York, NY",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "First 42"
+      },
+      "length_ft": 42,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c096",
+      "boat_name": "BETELGEUSE YCC",
+      "sail_number": "43392",
+      "skipper": "Ben Cohen",
+      "yacht_club": "YCC",
+      "home_port": "Brooklyn, NY",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/36"
+      },
+      "length_ft": 36,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 81,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c097",
+      "boat_name": "Crocodile",
+      "sail_number": "USA 61150",
+      "skipper": "Scott Ward",
+      "yacht_club": "STC / CCA",
+      "home_port": "Hollywood, MD",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "First 50"
+      },
+      "length_ft": 49,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c098",
+      "boat_name": "Elizabeth",
+      "sail_number": "46294",
+      "skipper": "Tom Hurter",
+      "yacht_club": "St Petersburg YC",
+      "home_port": "St Petersburg, FL",
+      "vessel": {
+        "make": "Catalina",
+        "model": "42"
+      },
+      "length_ft": 42,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c099",
+      "boat_name": "Gup E",
+      "sail_number": "USA 61759",
+      "skipper": "Nathaniel Beachum",
+      "yacht_club": "Raritan YC",
+      "home_port": "Madison, NJ",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/99"
+      },
+      "length_ft": 32.61,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 72,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c103",
+      "boat_name": "MARIE",
+      "sail_number": "42832",
+      "skipper": "Paul Eliea",
+      "yacht_club": "Ketewomoke YC / Lloyd Harbor YC",
+      "home_port": "South Huntington, NY",
+      "vessel": {
+        "make": "Tartan",
+        "model": "372"
+      },
+      "length_ft": 37,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 135,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c105",
+      "boat_name": "Mayhem",
+      "sail_number": "18",
+      "skipper": "Mark May",
+      "yacht_club": "Shattemuc YC",
+      "home_port": "Ossining, NY",
+      "vessel": {
+        "make": "German Frers",
+        "model": "Frers 30"
+      },
+      "length_ft": 29.5,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c106",
+      "boat_name": "Peggy-O",
+      "sail_number": "43895",
+      "skipper": "Pedro Escandon",
+      "yacht_club": "Metedeconk River YC",
+      "home_port": "Brick, NJ",
+      "vessel": {
+        "make": "Sabre",
+        "model": "38"
+      },
+      "length_ft": 38,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 129,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c108",
+      "boat_name": "Poseidon",
+      "sail_number": "USA 52059",
+      "skipper": "Nico Martinez",
+      "yacht_club": "US Navy",
+      "home_port": "Annapolis, MD",
+      "vessel": {
+        "make": "Swan",
+        "model": "45"
+      },
+      "length_ft": 45,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c109",
+      "boat_name": "Random",
+      "sail_number": "USA 51362",
+      "skipper": "Robert Millstein",
+      "yacht_club": "Shattemuc YC",
+      "home_port": "Briarcliff Manor, NY",
+      "vessel": {
+        "make": "Sabre",
+        "model": "362"
+      },
+      "length_ft": 36,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 126,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c110",
+      "boat_name": "Ripple",
+      "sail_number": "USA 32685",
+      "skipper": "Michael Colucci",
+      "yacht_club": "Chelsea YC / STC",
+      "home_port": "Fishkill, NY",
+      "vessel": {
+        "make": "S2",
+        "model": "9.1"
+      },
+      "length_ft": 29.9,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 135,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c111",
+      "boat_name": "Scarlett",
+      "sail_number": "USA 332",
+      "skipper": "David Wightman",
+      "yacht_club": "Kingston Sailing Club",
+      "home_port": "New Paltz, NY",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/30"
+      },
+      "length_ft": 30,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 147,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "⚠️ DIRECT COMPETITOR — Same class: J/30 Spinnaker ToD/ToT"
+    },
+    {
+      "id": "c112",
+      "boat_name": "The Rover",
+      "sail_number": "USA 93310",
+      "skipper": "S. Steven Yang",
+      "yacht_club": "NYYC",
+      "home_port": "New York, NY",
+      "vessel": {
+        "make": "Swan",
+        "model": "44 MKII"
+      },
+      "length_ft": 44,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 75,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "NYYC"
+    },
+    {
+      "id": "c113",
+      "boat_name": "Tynaje",
+      "sail_number": "USA 2222",
+      "skipper": "Daniel Fisher",
+      "yacht_club": "Sachems Head YC",
+      "home_port": "Guilford, CT",
+      "vessel": {
+        "make": "Ohlson",
+        "model": "38"
+      },
+      "length_ft": 38,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c114",
+      "boat_name": "Valiant YCC",
+      "sail_number": "508",
+      "skipper": "Stamford YC Juniors",
+      "yacht_club": "Stamford YC Junior Big Boat Program",
+      "home_port": "Stamford, CT",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/105"
+      },
+      "length_ft": 34.5,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 75,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "Junior program"
+    },
+    {
+      "id": "c115",
+      "boat_name": "Velocita",
+      "sail_number": "USA 319",
+      "skipper": "Marc De Souter",
+      "yacht_club": "Liberty YC",
+      "home_port": "Wayne, NJ",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/109"
+      },
+      "length_ft": 35,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 69,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c116",
+      "boat_name": "WANDERER",
+      "sail_number": "181",
+      "skipper": "Stefano Basilico",
+      "yacht_club": "Port Jefferson YC / Bellport Bay YC",
+      "home_port": "Brooklyn, NY",
+      "vessel": {
+        "make": "Hanse",
+        "model": "458"
+      },
+      "length_ft": 44.5,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 60,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c117",
+      "boat_name": "Zammermoos",
+      "sail_number": "Uni 4224",
+      "skipper": "David Fass",
+      "yacht_club": "New York Yacht Club",
+      "home_port": "Mamaroneck, NY",
+      "vessel": {
+        "make": "ClubSwan",
+        "model": "42"
+      },
+      "length_ft": 42,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": -15,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "NYYC. Fast boat, negative PHRF."
+    },
+    {
+      "id": "c118",
+      "boat_name": "Halve Maen",
+      "sail_number": "USA 075",
+      "skipper": "Walther van Stipriaan",
+      "yacht_club": "Unqua Corinthian YC",
+      "home_port": "Amityville, NY",
+      "vessel": {
+        "make": "Tartan",
+        "model": "33"
+      },
+      "length_ft": 34,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 156,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Double-Handed",
+      "notes": ""
+    },
+    {
+      "id": "c120",
+      "boat_name": "Three Little Birds",
+      "sail_number": "USA 52985",
+      "skipper": "Peter Malloy",
+      "yacht_club": "Orient YC",
+      "home_port": "Orient, NY",
+      "vessel": {
+        "make": "Farrier",
+        "model": "PT11 Trimaran"
+      },
+      "length_ft": 36,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": -25,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Multihull",
+      "notes": "Trimaran"
+    },
+    {
+      "id": "c122",
+      "boat_name": "Nomad",
+      "sail_number": "USA 52968",
+      "skipper": "Shane Haas",
+      "yacht_club": "Poughkeepsie YC",
+      "home_port": "West Shokan, NY",
+      "vessel": {
+        "make": "Hunter",
+        "model": "41DS"
+      },
+      "length_ft": 40.4,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Around Islands - Spinnaker",
+      "notes": ""
     }
   ]
 }
