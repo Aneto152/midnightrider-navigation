@@ -154,3 +154,5 @@
 [2026-07-12T15:45:59] [RESULT] [signalk] SUCCESS — angleApparent=N2K.10, speedApparent=Calypso.XX
 [2026-07-12T16:28:03] [CONFIG_CHANGE] [signalk] truewind-calculator: config applied via API
 [2026-07-12T16:28:03] [RESULT] [signalk] CONFIG_APPLIED — awaiting path publication
+[2026-07-12T16:32:57] [SERVICE_RESTART] [signalk] emergency fix truewind-calculator
+[2026-07-12T16:32:57] [RESULT] [signalk] SUCCESS — rolled back to minimal config

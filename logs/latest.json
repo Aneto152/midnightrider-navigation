@@ -1,17 +1,11 @@
 {
-  "last_task": "sk-truewind-angleTrueWater-speedTrue",
-  "status": "CONFIG_APPLIED_AWAIT_VERIFICATION",
-  "timestamp": "2026-07-12T16:28:03Z",
+  "last_task": "truewind-emergency-fix",
+  "status": "SUCCESS",
+  "timestamp": "2026-07-12T16:32:57Z",
   "details": {
-    "action": "Enable angleTrueWater + speedTrue in signalk-truewind-calculator",
-    "config_applied": true,
-    "config_method": "Signal K API POST /skServer/plugins/signalk-truewind-calculator/config",
-    "config": {
-      "setTrueWindAngle": true,
-      "setTrueWindSpeed": true,
-      "setTrueWindDirection": true,
-      "useMagneticTrue": false
-    },
-    "status_note": "Configuration applied successfully; paths not yet published in API. Requires further investigation or manual Signal K restart."
+    "action": "Emergency restart and config rollback for truewind-calculator",
+    "root_cause": "Full feature config (setTrueWindSpeed=true) caused plugin to freeze",
+    "solution": "Reverted to minimal config with setTrueWindDirection + setTrueWindAngle only",
+    "verification": "angleTrueGround now publishing correctly"
   }
 }
