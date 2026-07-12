@@ -146,3 +146,5 @@
 [2026-07-11T23:16:14] [RESULT] [ais] NO CHANGES NEEDED — commit ae9dd15 is production-ready
 [2026-07-11T23:53:59] [FILE_MODIFY] [ais] tracker.html — fix mark bearing field name
 [2026-07-11T23:53:59] [RESULT] [ais] SUCCESS
+[2026-07-12T00:13:44] [FILE_MODIFY] [ais] server_handlers.py, tracker.html — TWS fallback + dist_nm
+[2026-07-12T00:13:44] [RESULT] [ais] SUCCESS

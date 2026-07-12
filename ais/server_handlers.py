@@ -58,7 +58,11 @@ def api_competitors(sk_fn, gps_fn, radius=10.0, min_sog=0.0, inc_unk=False, vmod
     mb0 = bearing_ll(la0, lo0, mk['lat'], mk['lon']) if mk.get('lat') else None
     v0m = compute_vmg_mark(s0, c0, mb0) if mb0 else None
     tws_d = sk_fn('vessels/self/environment/wind/speedTrue')
-    tws = ((tws_d.get('value') or 0) * 1.94384) if tws_d else None
+    tws = (tws_d['value'] * 1.94384) if tws_d and tws_d.get('value') is not None else None
+    if tws is None:  # fallback to apparent wind speed (Calypso)
+        tws_ap = sk_fn('vessels/self/environment/wind/speedApparent')
+        if tws_ap and tws_ap.get('value') is not None:
+            tws = tws_ap['value'] * 1.94384
     act = _cdb.get_all_active_mmsis()
     vs  = sk_fn('vessels') or {}
     result = []
@@ -132,6 +136,7 @@ def api_competitors(sk_fn, gps_fn, radius=10.0, min_sog=0.0, inc_unk=False, vmod
         ),
         'mark': {
             'lat': mk.get('lat'), 'lon': mk.get('lon'),
+            'dist_nm': round(haversine_ll(la0, lo0, mk['lat'], mk['lon']) / 1852, 2) if mk.get('lat') else None,
             'bearing_from_self': round(mb0, 1) if mb0 else None,
             'available': bool(mk.get('lat')),
         },
