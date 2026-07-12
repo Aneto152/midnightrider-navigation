@@ -150,3 +150,5 @@
 [2026-07-12T00:13:44] [RESULT] [ais] SUCCESS
 [2026-07-12T00:18:54] [SERVICE_RESTART] [ais] docker restart regatta — activate d44488e changes
 [2026-07-12T00:18:54] [RESULT] [ais] SUCCESS — tws_kts=5.2, dist_nm=2.64
+[2026-07-12T15:45:59] [CONFIG_CHANGE] [signalk] source priorities: N2K angle + Calypso speed
+[2026-07-12T15:45:59] [RESULT] [signalk] SUCCESS — angleApparent=N2K.10, speedApparent=Calypso.XX

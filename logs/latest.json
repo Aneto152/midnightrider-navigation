@@ -1,12 +1,17 @@
 {
-  "last_task": "ais-server-restart-d44488e",
+  "last_task": "sk-source-priority-wind-fusion",
   "status": "SUCCESS",
-  "timestamp": "2026-07-12T00:18:54Z",
+  "timestamp": "2026-07-12T15:45:59Z",
   "details": {
-    "action": "Restart port-5000 server (Docker regatta container) to activate d44488e Python changes",
-    "verification": {
-      "wind.tws_kts": "5.2 (from speedApparent fallback)",
-      "mark.dist_nm": "2.64 (calculated via haversine_ll)"
-    }
+    "action": "Configure SK source priorities: N2K angle + Calypso speed",
+    "files_modified": [
+      "~/.signalk/settings.json (sourcePriorities)",
+      "docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md"
+    ],
+    "config": {
+      "angleApparent": "N2K.10 (WS310 masthead) > Calypso.XX",
+      "speedApparent": "Calypso.XX > N2K.10 (WS310 speed broken = 0kn)"
+    },
+    "verification": "N2K.10 now primary for angleApparent"
   }
 }

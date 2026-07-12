@@ -123,17 +123,26 @@ cat /dev/ttyACM0 | xxd | head -20
 
 ## 5. Data Source Priorities (Signal K)
 
-### Wind Heading
+### Wind Data (Fusion Strategy)
 
-| Priority | Source | Protocol | Frequency | Path |
-|----------|--------|----------|-----------|------|
-| 1 (primary) | Calypso UP10 (`calypso-up10`) | BLE → UDP:4123 | 4 Hz | environment.wind.* |
-| 2 (fallback) | WS320 (`nmea2000_ws320`) | N2K via YDNU-02 | 5 Hz | environment.wind.* |
+| Path | Priority 1 | Priority 2 | Rationale |
+|------|-----------|-----------|----------|
+| environment.wind.angleApparent | WS320 N2K (masthead) | Calypso UP10 | Better positioning at masthead |
+| environment.wind.speedApparent | Calypso UP10 | WS320 N2K | WS310 speed sensor defective (0 kn) |
 
-> **Note:** WS320 also feeds Vulcan 7 FS **directly** at 5 Hz via N2K backbone,
-> independent of Signal K (for real-time sail trim).
+**Signal K Source Config** (as of 2026-07-12):
+```json
+"sourcePriorities": {
+  "environment.wind.angleApparent": ["N2K.10", "Calypso.XX"],
+  "environment.wind.speedApparent": ["Calypso.XX", "N2K.10"]
+}
+```
 
-### Attitude (Roll/Pitch/Yaw)
+> **Operational Note:** WS310 masthead wireless sensor has a defective speed output 
+> (always returns 0 kn). Awaiting repair. Calypso UP10 provides reliable speed until RMA.
+> Angle is accurate and prioritized for sail trim via direct N2K path to Vulcan chartplotters (5 Hz).
+
+### Attitude & Heading (Roll/Pitch/Yaw)
 
 | Priority | Source | Protocol | Frequency | Path |
 |----------|--------|----------|-----------|------|
