@@ -1,17 +1,17 @@
 {
-  "last_task": "truewind-plugin-v1.0.4",
+  "last_task": "truewind-v1.0.4-sync-to-system",
   "status": "SUCCESS",
-  "timestamp": "2026-07-12T16:59:33Z",
+  "timestamp": "2026-07-12T17:07:43Z",
   "details": {
-    "bug_fixed": "v1.0.3 IIFE commented out by backslash-newline in comment",
-    "fix": "Rewrote as clean vals[] array \u2014 no IIFE, no backslash line continuations",
-    "version": "1.0.3 \u2192 1.0.4",
-    "outputs": [
-      "angleTrueWater",
-      "speedTrue",
-      "angleTrueGround",
-      "directionTrue"
-    ],
-    "note": "Water-referenced paths publish only when STW > 0 (currently idle/dock)"
+    "issue": "v1.0.4 file in repo but Signal K loading old v1.0.2 from /usr/lib",
+    "solution": "Synced repo plugin to system: sudo cp plugins/signalk-truewind-calculator.js /usr/lib/.../signalk-truewind-calculator.js",
+    "result": "All 5 wind paths now publishing (ground-ref + water-ref)",
+    "verification": [
+      "angleTrueWater: \u2705 137.6\u00b0",
+      "speedTrue: \u2705 2.5kn",
+      "angleTrueGround: \u2705 138.2\u00b0",
+      "directionTrue: \u2705 17.1\u00b0",
+      "speedOverGround: \u2705 (implicit)"
+    ]
   }
 }
