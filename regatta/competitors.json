@@ -13,7 +13,7 @@
       "ALIR2026",
       "BIRW2026"
     ],
-    "alir2026_boats": 35
+    "alir2026_boats": 44
   },
   "self": {
     "id": "c040",
@@ -746,7 +746,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -798,7 +799,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -876,7 +878,8 @@
       "active": false,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": "CAY flag"
     },
@@ -928,7 +931,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -1058,7 +1062,8 @@
       "active": true,
       "priority": "high",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -1240,7 +1245,8 @@
       "active": true,
       "priority": "high",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -1605,7 +1611,8 @@
       "priority": "medium",
       "events": [
         "Block Island Race Week 2026",
-        "LIS Weekend Race 2026-06-21"
+        "LIS Weekend Race 2026-06-21",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -1894,7 +1901,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "LIS Weekend Race 2026-06-21"
+        "LIS Weekend Race 2026-06-21",
+        "ALIR2026"
       ],
       "notes": "US flag, sailing vessel, 10x3m, callsign WRXE775. Active Jun 17 2026. Last pos 40.83N/73.79W (City Island LIS area)."
     },
@@ -2029,7 +2037,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "LIS Weekend Race 2026-06-21"
+        "LIS Weekend Race 2026-06-21",
+        "ALIR2026"
       ],
       "notes": "GPS Jun 14 2026 at 40.85735N/73.65644W = exact coordinates of Hempstead Harbour Club (<15m error)."
     },

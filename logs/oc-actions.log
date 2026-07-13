@@ -177,3 +177,5 @@
 [2026-07-13T00:19:30] [FILE_CREATE] [scripts] sync-plugins.sh created
 [2026-07-13T00:19:30] [FILE_MODIFY] [docs] ARCHITECTURE-MASTER.md: section 5.8 fixed
 [2026-07-13T00:19:30] [RESULT] [fix] SUCCESS — 142d493 corrections applied
+[2026-07-13T02:02:13] [FILE_MODIFY] [regatta] competitors.json: added ALIR2026 event to 9 boats
+[2026-07-13T02:02:13] [RESULT] [regatta] SUCCESS — ALIR2026 fleet complete (44 boats)
