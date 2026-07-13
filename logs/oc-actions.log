@@ -173,3 +173,7 @@
 [2026-07-12T23:15:56] [FILE_MODIFY] [regatta] competitors.json: +33 ALIR2026 boats
 [2026-07-12T23:15:56] [FILE_MODIFY] [regatta] c001 Abilyn + c016 DUET: added ALIR2026 event
 [2026-07-12T23:15:56] [RESULT] [regatta] SUCCESS — 112 total competitors, 35 ALIR2026
+[2026-07-13T00:19:30] [FILE_DELETE] [git] data-flow.log: git rm --cached SUCCESS
+[2026-07-13T00:19:30] [FILE_CREATE] [scripts] sync-plugins.sh created
+[2026-07-13T00:19:30] [FILE_MODIFY] [docs] ARCHITECTURE-MASTER.md: section 5.8 fixed
+[2026-07-13T00:19:30] [RESULT] [fix] SUCCESS — 142d493 corrections applied

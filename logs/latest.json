@@ -1,20 +1,13 @@
 {
-  "last_task": "import-alir2026-competitors",
+  "last_task": "fix-142d493-incomplete-items",
   "status": "SUCCESS",
-  "timestamp": "2026-07-12T23:15:56Z",
+  "timestamp": "2026-07-13T00:19:30Z",
   "details": {
-    "action": "Added 33 + updated 2 ALIR2026 competitors to regatta/competitors.json",
-    "new_boats": 33,
-    "updated_boats": 2,
-    "total_competitors": 112,
-    "mmsi_confirmed": 2,
-    "breakdown": {
-      "Non-Spinnaker": 7,
-      "Spinnaker_ORC": 3,
-      "Spinnaker_ToD_ToT": 21,
-      "Double-Handed": 2,
-      "Multihull": 1,
-      "Around_Islands_Spinnaker": 1
-    }
+    "fixes": [
+      "data-flow.log properly removed from git tracking (git rm --cached)",
+      "scripts/sync-plugins.sh created and committed",
+      "ARCHITECTURE-MASTER.md section 5.8 cleaned up and simplified",
+      "Fixed STW documentation: defaults to 0, diverges with movement"
+    ]
   }
 }
