@@ -1,0 +1,300 @@
+{
+  "configuration": {
+    "AISv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "ATTITUDE": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "BATTERYv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "batteries": []
+    },
+    "COG_SOGv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "DEPTHv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "EXHAUST_TEMPERATURE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "engines": []
+    },
+    "ENGINE_PARAMETERS": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "engines": []
+    },
+    "ENVIRONMENT_PARAMETERS": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "GPS_LOCATIONv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "HEADINGv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "HUMIDITY_OUTSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "HUMIDITY_INSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "LEEWAY": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "magneticvariation": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "xte": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "navigationdata": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "routewpinformation": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "NOTIFICATIONS": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "PRESSURE_ATMOSPHERIC": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "RAYMARINE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "groups": []
+    },
+    "RAYMARINENAV": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "ENVIRONMENT_PARAMETERS_SEA": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "SetDrift": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "SOLAR": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "chargers": []
+    },
+    "SPEED": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "SYSTEM_TIMEv2": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "TANKS": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "TEMPERATURE_OUTSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 101
+    },
+    "TEMPERATURE2_OUTSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 101
+    },
+    "TEMPERATURE_INSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 102
+    },
+    "TEMPERATURE2_INSIDE": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 102
+    },
+    "TEMPERATURE_ENGINEROOM": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 103
+    },
+    "TEMPERATURE2_ENGINEROOM": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 103
+    },
+    "TEMPERATURE_MAINCABIN": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_MAINCABIN": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_refridgerator": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_refridgerator": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_HEATINGSYSTEM": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_HEATINGSYSTEM": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_DEWPOINT": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_DEWPOINT": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_APPARENTWINDCHILL": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_APPARENTWINDCHILL": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_THEORETICALWINDCHILL": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_THEORETICALWINDCHILL": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_HEATINDEX": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_HEATINDEX": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE_FREEZER": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TEMPERATURE2_FREEZER": {
+      "enabled": false,
+      "resend": 0,
+      "resendTime": 30,
+      "instance": 107
+    },
+    "TRUE_HEADING": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30,
+      "navigationheadingTrue": "signalk-heading-true-calculator.XX"
+    },
+    "WINDv2": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "WIND_TRUE_GROUND": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    },
+    "WIND_TRUE": {
+      "enabled": true,
+      "resend": 0,
+      "resendTime": 30
+    }
+  },
+  "enabled": true,
+  "enableLogging": false,
+  "enableDebug": false
+}
