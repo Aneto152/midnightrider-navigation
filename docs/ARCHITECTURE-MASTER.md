@@ -257,7 +257,7 @@ UM982 GNSS (ANT1 + ANT2)
 signalk-um982-gnss plugin
   ↓ Signal K — navigation.headingTrue (radians)
   ├──► InfluxDB → Grafana 01-Cockpit
-  └──► signalk-n2k-bridge (P5)
+  └──► sk-to-nmea2000 (npm)
          ↓ PGN 127250 (Vessel Heading)
          YDNU-02 → N2K bus
          └── Vulcan 7 FS (affichage helm)
@@ -274,7 +274,7 @@ WIT WT901BLECL (BLE 5.0, 30 Hz)
   ├──► InfluxDB → Grafana 01-Cockpit
   ├──► Wave Analyzer v1.1 (heel correction)
   │       ↓ environment.water.waves.*
-  └──► signalk-n2k-bridge (P5)
+  └──► sk-to-nmea2000 (npm)
          ↓ PGN 127257 (Attitude)    ← attitude.js patché 2026-05-17
          YDNU-02 → N2K bus
          └── Vulcan 7 FS (affichage gîte en temps réel)
@@ -288,7 +288,7 @@ Calypso UP10 (BLE → UDP 4123) — PRIORITÉ 1 pour Signal K
   ↓ Signal K Delta UDP port 4123
   ↓ environment.wind.{speedApparent, angleApparent, speedTrue, directionTrue}
   ├──► InfluxDB → Grafana 02-Environment
-  └──► signalk-n2k-bridge (P5) → PGN 130306 → Vulcan 7
+  └──► sk-to-nmea2000 (npm) → PGN 130306 → Vulcan 7
 
 B&G WS320 (BLE → base station → N2K) — PRIORITÉ 2 pour Signal K
   ↓ NMEA 2000 PGN 130306 (5 Hz) — DIRECT vers Vulcan 7 FS
@@ -1020,12 +1020,12 @@ midnightrider-navigation/
 |---|---|---|---|
 | signalk-performance-polars | "Actif" | Config orpheline, jamais installé | ✅ SUPPRIMÉ |
 | signalk-sails-management-v2 | "Actif" | Config orpheline, jamais installé | ✅ SUPPRIMÉ |
-| signalk-n2k-bridge (P5) | "Émet PGNs N2K" | 0 mappings configurés | ⚠️ Conservé comme backup |
+| sk-to-nmea2000 (npm) | "Émet PGNs N2K" | 0 mappings configurés | ⚠️ Conservé comme backup |
 | Output N2K (SK → Vulcan) | "Actif" | INACTIF — aucun PGN transmis | 🔧 P5 planifié |
 
-### P5 — Plugin N2K Bridge (conception en cours)
+### sk-to-nmea2000 Bridge (conception en cours)
 
-Remplacera `signalk-n2k-bridge (P5)` pour l'output N2K avec:
+Remplacera `sk-to-nmea2000 (npm)` pour l'output N2K avec:
 - Conversions standard (leeway PGN 128000, courant PGN 129291)
 - Conversions B&G propriétaires (PGN 130824)
 - Architecture extensible et modulaire
