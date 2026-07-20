@@ -65,13 +65,13 @@ Backbone: Micro-C connector, 250 kbps
 
 | Destination | PGN | Data | SK Source | Frequency |
 |---|---|---|---|---|
-| Vulcan 7 FS (×2) | 127250 | True heading | P1: UM982 GPS (dual-antenna) | 1 Hz |
+| Vulcan 7 FS (×2) | 127250 | True heading | WIT IMU → heading-true-calculator → TRUE_HEADING | 1 Hz |
 | Vulcan 7 FS (×2) | 127257 | Roll, pitch, yaw | WIT IMU via BLE | 10 Hz |
-| Vulcan 7 FS (×2) | 129025 | GNSS position | P1: UM982 GPS | 1 Hz |
-| Vulcan 7 FS (×2) | 129026 | COG + SOG | P1: UM982 GPS | 1 Hz |
+| Vulcan 7 FS (×2) | 129025 | GNSS position | P1: UM982 GPS (not connected) | — |
+| Vulcan 7 FS (×2) | 129026 | COG + SOG | P1: UM982 GPS (not connected) | — |
 | (Optional) Vulcan 7 FS (×2) | 130306 | Wind (true/apparent) | Calypso UP10 (via Plugins) | 1 Hz |
 | Vulcan 7 FS (×2) | 129291 | Current Set & Drift | P3: signalk-current-calculator (via P5) | 1 Hz |
-| (Pending) Vulcan 7 FS (×2) | 130824 | B&G Performance (leeway, VMG, beat angle) | P5: signalk-n2k-bridge | On request |
+| Vulcan 7 FS (×2) | 130306 | Wind (true/apparent) | sk-to-nmea2000 (3 streams) | 1 Hz |
 
 ### Direct N2K (No Signal K Involvement)
 
@@ -115,9 +115,9 @@ cat /dev/ttyACM0 | xxd | head -20
 
 | Setting | Value |
 |---------|-------|
-| Plugin | `@signalk/signalk-to-nmea2000` |
-| Config file | `~/.signalk/plugin-config-data/signalk-to-nmea2000.json` |
-| Status (June 15) | Enabled, but 0 mappings configured (P5 pending) |
+| Plugin | signalk-to-nmea2000 (Plugin ID: `sk-to-nmea2000`) |
+| Config file | `~/.signalk/plugin-config-data/sk-to-nmea2000.json` |
+| Status | ✅ Enabled — 7 active conversions (see docs/INTEGRATION/SK-TO-N2K-BRIDGE.md) |
 
 ---
 

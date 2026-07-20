@@ -280,6 +280,46 @@ sudo systemctl restart signalk
 
 ---
 
+## 6. Custom Files & Recovery
+
+### trueheading.js — Custom Extension
+
+`trueheading.js` **was added** to the installed node_modules and is not in the official `signalk-to-nmea2000` npm package v2.24.0.
+
+**Location**: `~/.signalk/node_modules/signalk-to-nmea2000/conversions/trueheading.js`  
+**Git backup**: `plugins/sk-to-nmea2000-reference/conversions/trueheading.js`
+
+**Recovery after npm update**:
+```bash
+cp ~/midnightrider-navigation/plugins/sk-to-nmea2000-reference/conversions/trueheading.js \
+ ~/.signalk/node_modules/signalk-to-nmea2000/conversions/trueheading.js
+sudo systemctl restart signalk
+```
+
+### Comparison: trueheading.js vs heading.js
+
+| Aspect | trueheading.js (ACTIVE) | heading.js (DISABLED) |
+|--------|-------------------------|----------------------|
+| SK input | `navigation.headingTrue` | `navigation.headingMagnetic` + `magneticVariation` |
+| PGN 127250 Reference | True | Magnetic |
+| Variation field | undefined (omitted) | value from SK |
+| Use case | Pre-calculated true heading | Raw magnetic + correction |
+
+### Dormant Custom Bridge
+
+**File**: `plugins/signalk-n2k-bridge.js` (in Git repo)  
+**Status**: Not currently active (not loaded by plugin loader)
+**Conversions**: `plugins/n2k-conversions/` (collection of custom conversion modules)
+
+**To activate** (if needed):
+1. Add to `plugins/plugin-loader.js`
+2. Create plugin config in `~/.signalk/plugin-config-data/`
+3. Restart Signal K
+
+Currently superseded by npm plugin `sk-to-nmea2000`.
+
+---
+
 ## 8. References
 
 - **Official Plugin**: https://github.com/SignalK/signalk-to-nmea2000

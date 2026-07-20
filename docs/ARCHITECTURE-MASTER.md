@@ -32,7 +32,7 @@ InfluxDB et les visualisant dans Grafana.
 │  SOK BMS (BLE) ─────────────────────────────────────► InfluxDB │
 │                                                      │          │
 │                                           │         ▼          │
-│  Signal K ──► signalk-n2k-bridge (P5) ──────────────► Grafana :3001│
+│  Signal K ──► sk-to-nmea2000 (npm v2.24.0) ────────────► Grafana :3001│
 │                    │                                            │
 │                    ▼                                            │
 │               YDNU-02 (USB/N2K) ──► N2K backbone               │
@@ -173,7 +173,7 @@ RPi 4 (midnightrider.local)
 |--------|------|-----------|
 | `signalk-um982-gnss` | Lecture UM982 (NMEA+proprietary) | `signalk-um982-gnss.UM982-HDG` |
 | `signalk-wit-imu-ble` | Lecture WIT IMU BLE | `signalk-wit-imu-ble.XX` |
-| `signalk-n2k-bridge (P5)` | Émission PGNs → YDNU-02 → N2K | — |
+| `sk-to-nmea2000` (npm) | Émission PGNs → YDNU-02 → N2K (7 actifs) | ✅ OPERATIONAL |
 | `signalk-to-influxdb2` | Persistence SK → InfluxDB | — |
 | `signalk-performance-polars` | Calcul VMG, efficacité polaire | `performance.*` |
 | signalk-heading-true-calculator | Cap vrai (HM + variation mag.) | navigation.headingTrue |
@@ -1029,7 +1029,7 @@ Remplacera `signalk-n2k-bridge (P5)` pour l'output N2K avec:
 - Conversions standard (leeway PGN 128000, courant PGN 129291)
 - Conversions B&G propriétaires (PGN 130824)
 - Architecture extensible et modulaire
-- `signalk-n2k-bridge (P5)` maintenu comme backup jusqu'à validation P5
+- `sk-to-nmea2000` npm plugin fully operational (see docs/INTEGRATION/SK-TO-N2K-BRIDGE.md)
 
 
 ---

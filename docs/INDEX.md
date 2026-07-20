@@ -47,6 +47,12 @@ Complete reference guide for the Midnight Rider navigation system.
   - Data source priorities
   - Failure modes & troubleshooting
 
+- **[SK-TO-N2K-BRIDGE.md](INTEGRATION/SK-TO-N2K-BRIDGE.md)** — Signal K → NMEA 2000 plugin details
+  - signalk-to-nmea2000 plugin (v2.24.0, Plugin ID: `sk-to-nmea2000`)
+  - 7 active conversions (TRUE_HEADING, WINDv2, WIND_TRUE_GROUND, WIND_TRUE, ATTITUDE, LEEWAY, SetDrift)
+  - Heading & wind data flows (critical paths)
+  - Plugin configuration & troubleshooting
+
 ---
 
 ## 💻 Software Documentation
