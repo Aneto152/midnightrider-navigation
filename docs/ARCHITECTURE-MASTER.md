@@ -1020,12 +1020,12 @@ midnightrider-navigation/
 |---|---|---|---|
 | signalk-performance-polars | "Actif" | Config orpheline, jamais installé | ✅ SUPPRIMÉ |
 | signalk-sails-management-v2 | "Actif" | Config orpheline, jamais installé | ✅ SUPPRIMÉ |
-| sk-to-nmea2000 (npm) | "Émet PGNs N2K" | 0 mappings configurés | ⚠️ Conservé comme backup |
-| Output N2K (SK → Vulcan) | "Actif" | INACTIF — aucun PGN transmis | 🔧 P5 planifié |
+| sk-to-nmea2000 (npm) | "Émet PGNs N2K" | 7 conversions actives | ✅ Opérationnel |
+| Output N2K (SK → Vulcan) | "Actif" | ✅ ACTIF — 7 PGNs transmis | ✅ Production |
 
-### sk-to-nmea2000 Bridge (conception en cours)
+### Custom N2K Bridge (dormant — alternative au plugin npm)
 
-Remplacera `sk-to-nmea2000 (npm)` pour l'output N2K avec:
+Fichier: `plugins/signalk-n2k-bridge.js` (Git repo, inactif). Alternative au plugin npm pour contrôle total via Git. Détails:
 - Conversions standard (leeway PGN 128000, courant PGN 129291)
 - Conversions B&G propriétaires (PGN 130824)
 - Architecture extensible et modulaire
