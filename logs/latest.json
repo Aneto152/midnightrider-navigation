@@ -1,22 +1,14 @@
 {
-  "last_task": "phrf-ratings-batch2-multihull-nonspinnaker",
+  "last_task": "birw2026-ratings-batch-phrf-orc",
   "status": "SUCCESS",
-  "timestamp": "2026-07-22T03:19:25Z",
+  "timestamp": "2026-07-22T03:40:56Z",
   "details": {
-    "action": "PHRF Batch 2 \u2014 Around Long Island Course: Multihull NEMA (1) + Non-Spinnaker (10)",
-    "boats_updated": [
-      "First Rate (138.0)",
-      "Palomino (129.0)"
-    ],
-    "boats_already_set": [
-      "Three Little Birds (-25.0)",
-      "Cool Change (144.0)",
-      "Dolcezza (150.0)",
-      "Java (183.0)",
-      "Shooting Star (117.0)",
-      "Veronique (135.0)",
-      "YES 4X (135.0)"
-    ],
-    "cumulative_total": "42 boats with PHRF_LIS"
+    "action": "BIRW2026 + Execution Rocks ratings batch: PHRF_LIS + ORC.APH",
+    "phrf_newly_set": 24,
+    "orc_aph_newly_set": 21,
+    "phrf_total": 66,
+    "orc_total": 21,
+    "midnight_rider_preserved": "PHRF_LIS = 141.0 \u2705",
+    "note": "PHRF only set if was null | ORC.APH new field added (backward-compatible)"
   }
 }

@@ -15,7 +15,9 @@
     ],
     "alir2026_boats": 44,
     "phrf_source": "ALIR2026 official class lists (Spinnaker, Double-Handed, Around the Islands, Multihull NEMA, Non-Spinnaker)",
-    "phrf_updated": "2026-07-22"
+    "phrf_updated": "2026-07-22",
+    "phrf_set_total": 66,
+    "orc_aph_total": 21
   },
   "self": {
     "id": "c040",
@@ -89,6 +91,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 508.6
         }
       },
       "active": true,
@@ -109,7 +114,7 @@
       "mmsi": "338447497",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -39.0,
         "IRC": {
           "TCC": null
         },
@@ -141,6 +146,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 506.8
         }
       },
       "active": true,
@@ -161,7 +169,7 @@
       "mmsi": "368234250",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 33.0,
         "IRC": {
           "TCC": null
         },
@@ -219,6 +227,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 527.5
         }
       },
       "active": false,
@@ -239,7 +250,7 @@
       "mmsi": "338249654",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 81.0,
         "IRC": {
           "TCC": null
         },
@@ -291,7 +302,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 51.0,
         "IRC": {
           "TCC": null
         },
@@ -317,12 +328,15 @@
       "mmsi": "338324718",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 45.0,
         "IRC": {
           "TCC": null
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 526.2
         }
       },
       "active": true,
@@ -343,7 +357,7 @@
       "mmsi": "338507533",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 78.0,
         "IRC": {
           "TCC": null
         },
@@ -375,6 +389,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 466.5
         }
       },
       "active": true,
@@ -401,6 +418,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 464.2
         }
       },
       "active": false,
@@ -427,6 +447,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 508.4
         }
       },
       "active": true,
@@ -529,7 +552,7 @@
       "mmsi": "368298420",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 60.0,
         "IRC": {
           "TCC": null
         },
@@ -555,7 +578,7 @@
       "mmsi": "368327540",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 69.0,
         "IRC": {
           "TCC": null
         },
@@ -581,7 +604,7 @@
       "mmsi": "338349417",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 24.0,
         "IRC": {
           "TCC": null
         },
@@ -607,7 +630,7 @@
       "mmsi": "367481990",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 63.0,
         "IRC": {
           "TCC": null
         },
@@ -633,7 +656,7 @@
       "mmsi": "368372710",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -15.0,
         "IRC": {
           "TCC": null
         },
@@ -659,7 +682,7 @@
       "mmsi": "338173639",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 69.0,
         "IRC": {
           "TCC": null
         },
@@ -717,6 +740,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 523.5
         }
       },
       "active": true,
@@ -823,6 +849,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 537.8
         }
       },
       "active": true,
@@ -849,6 +878,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 528.2
         }
       },
       "active": true,
@@ -955,6 +987,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 511.3
         }
       },
       "active": true,
@@ -1001,7 +1036,7 @@
       "mmsi": "367704280",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 42.0,
         "IRC": {
           "TCC": null
         },
@@ -1106,7 +1141,7 @@
       "mmsi": "368447410",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 123.0,
         "IRC": {
           "TCC": null
         },
@@ -1132,7 +1167,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -6.0,
         "IRC": {
           "TCC": null
         },
@@ -1158,7 +1193,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -6.0,
         "IRC": {
           "TCC": null
         },
@@ -1190,6 +1225,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 322.3
         }
       },
       "active": false,
@@ -1216,6 +1254,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 497.9
         }
       },
       "active": true,
@@ -1295,6 +1336,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 511.2
         }
       },
       "active": false,
@@ -1321,6 +1365,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 523.2
         }
       },
       "active": true,
@@ -1347,6 +1394,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 480.8
         }
       },
       "active": true,
@@ -1399,6 +1449,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 546.1
         }
       },
       "active": true,
@@ -1419,7 +1472,7 @@
       "mmsi": "367328930",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 15.0,
         "IRC": {
           "TCC": null
         },
@@ -1451,6 +1504,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 504.4
         }
       },
       "active": true,
@@ -1477,6 +1533,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 517.1
         }
       },
       "active": false,
@@ -1523,7 +1582,7 @@
       "mmsi": "338147636",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 27.0,
         "IRC": {
           "TCC": null
         },
@@ -1549,7 +1608,7 @@
       "mmsi": "338187885",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 66.0,
         "IRC": {
           "TCC": null
         },
@@ -1575,7 +1634,7 @@
       "mmsi": "338406561",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 102.0,
         "IRC": {
           "TCC": null
         },
@@ -1635,6 +1694,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 490.4
         }
       },
       "active": true,
@@ -1655,7 +1717,7 @@
       "mmsi": "367775510",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 120.0,
         "IRC": {
           "TCC": null
         },
@@ -1707,7 +1769,7 @@
       "mmsi": "367685320",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 93.0,
         "IRC": {
           "TCC": null
         },
@@ -1759,7 +1821,7 @@
       "mmsi": "338093016",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 87.0,
         "IRC": {
           "TCC": null
         },
@@ -1817,6 +1879,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 503.9
         }
       },
       "active": true,
@@ -1947,7 +2012,7 @@
       "mmsi": "338193854",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 138.0,
         "IRC": {
           "TCC": null
         },
