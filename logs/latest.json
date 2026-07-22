@@ -1,12 +1,22 @@
 {
-  "last_task": "phrf-ratings-update-alir2026-all-classes",
+  "last_task": "phrf-ratings-batch2-multihull-nonspinnaker",
   "status": "SUCCESS",
-  "timestamp": "2026-07-22T03:08:06Z",
+  "timestamp": "2026-07-22T03:19:25Z",
   "details": {
-    "action": "Updated PHRF_LIS for ALIR2026 Spinnaker (33), Double-Handed (4), Around the Islands (2)",
-    "total_updated": 40,
-    "source": "ALIR2026 official class lists (ToT column)",
-    "self_updated": "Midnight Rider - PMP Strategy = 141.0 (was None)",
-    "birw_unmatched": "79 BIRW2026 boats (no PHRF in update list \u2014 expected)"
+    "action": "PHRF Batch 2 \u2014 Around Long Island Course: Multihull NEMA (1) + Non-Spinnaker (10)",
+    "boats_updated": [
+      "First Rate (138.0)",
+      "Palomino (129.0)"
+    ],
+    "boats_already_set": [
+      "Three Little Birds (-25.0)",
+      "Cool Change (144.0)",
+      "Dolcezza (150.0)",
+      "Java (183.0)",
+      "Shooting Star (117.0)",
+      "Veronique (135.0)",
+      "YES 4X (135.0)"
+    ],
+    "cumulative_total": "42 boats with PHRF_LIS"
   }
 }

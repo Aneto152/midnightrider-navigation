@@ -185,3 +185,9 @@
 [2026-07-22T03:07:55] [RESULT] [regatta] SUCCESS — PHRF_LIS updated: 34 boats
 [2026-07-22T03:07:55]  Skipped (no ToT) : []
 [2026-07-22T03:07:55]  No match in DB : 79 boats
+[2026-07-22T03:19:14] [CONFIG_CHANGE] [regatta] PHRF Batch 2 — 11 boats (Multihull + Non-Spinnaker)
+[2026-07-22T03:19:14]  [INFO] First Rate: PHRF_LIS set to 138.0
+[2026-07-22T03:19:14]  [INFO] Palomino: PHRF_LIS set to 129.0
+[2026-07-22T03:19:14] [RESULT] [regatta] SUCCESS — Batch 2: 2 boats updated
+[2026-07-22T03:19:14]  Already had PHRF (skipped): 7
+[2026-07-22T03:19:14]  No match in DB: 103

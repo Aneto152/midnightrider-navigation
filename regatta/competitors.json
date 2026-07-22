@@ -3,7 +3,7 @@
     "description": "Midnight Rider Competitor Library",
     "vessel": "J/30 hull 511",
     "fleet": "Block Island Race Week 2026",
-    "updated": "2026-07-21",
+    "updated": "2026-07-22",
     "format_version": "1.0",
     "total_boats": 112,
     "mmsi_verified": 16,
@@ -14,8 +14,8 @@
       "BIRW2026"
     ],
     "alir2026_boats": 44,
-    "phrf_source": "ALIR2026 official class lists (Spinnaker, Double-Handed, Around the Islands)",
-    "phrf_updated": "2026-07-21"
+    "phrf_source": "ALIR2026 official class lists (Spinnaker, Double-Handed, Around the Islands, Multihull NEMA, Non-Spinnaker)",
+    "phrf_updated": "2026-07-22"
   },
   "self": {
     "id": "c040",
@@ -1892,7 +1892,7 @@
       "mmsi": "338442426",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 138.0,
         "IRC": {
           "TCC": null
         },
@@ -2028,7 +2028,7 @@
       "mmsi": "338469505",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 129.0,
         "IRC": {
           "TCC": null
         },
