@@ -1029,7 +1029,7 @@ Fichier: `plugins/signalk-n2k-bridge.js` (Git repo, inactif). Alternative au plu
 - Conversions standard (leeway PGN 128000, courant PGN 129291)
 - Conversions B&G propriétaires (PGN 130824)
 - Architecture extensible et modulaire
-- `sk-to-nmea2000` npm plugin fully operational (see docs/INTEGRATION/SK-TO-N2K-BRIDGE.md)
+
 
 
 ---
