@@ -1,15 +1,16 @@
 {
-  "last_task": "mmsi-update-birw2026-dust-preresearch",
+  "last_task": "add-kitli-yopo-alir2026",
   "status": "SUCCESS",
-  "timestamp": "2026-07-22T03:53:29Z",
+  "timestamp": "2026-07-22T04:01:52Z",
   "details": {
-    "action": "Apply Dust pre-researched MMSIs + validate existing",
-    "dust_mmsis_list": 14,
-    "newly_applied": 1,
-    "already_set_verified": 5,
-    "already_set_probable": 7,
-    "not_in_db": 1,
-    "final_state": "verified=19, probable=47, not_found=45",
-    "source": "VesselTracker \u2014 validated by vessel dimensions + LIS/East Coast area"
+    "action": "Added Kitli (MMSI 338072036, probable) + Yopo (no MMSI) to DB",
+    "total_boats": 114,
+    "kitli_id": "c123",
+    "kitli_mmsi": "338072036 (probable \u2014 VesselTracker/Dust)",
+    "kitli_phrf": 156.0,
+    "yopo_id": "c124",
+    "yopo_mmsi": "not_found",
+    "yopo_phrf": 222.0,
+    "race_class": "Non-Spinnaker ALIR2026"
   }
 }
