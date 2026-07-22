@@ -243,3 +243,6 @@
 [2026-07-22T03:40:47]  [INFO] ORC Touch of Grey: APH=490.4
 [2026-07-22T03:40:47]  [INFO] ORC Zig Zag: APH=503.9
 [2026-07-22T03:40:47] [RESULT] [regatta] BIRW batch: PHRF +24, ORC +21
+[2026-07-22T03:53:19] [CONFIG_CHANGE] [regatta] Apply Dust pre-researched MMSIs (14 boats)
+[2026-07-22T03:53:19]  [INFO] SqueeZeplay: MMSI=338334462 (probable)
+[2026-07-22T03:53:19] [RESULT] [regatta] Dust MMSI: 1 applied, 12 skipped, 1 not in DB
