@@ -1,11 +1,12 @@
 {
-  "last_task": "alir2026-missing-event-patch",
+  "last_task": "phrf-ratings-update-alir2026-all-classes",
   "status": "SUCCESS",
-  "timestamp": "2026-07-13T02:02:13Z",
+  "timestamp": "2026-07-22T03:08:06Z",
   "details": {
-    "action": "Added ALIR2026 event tag to 9 boats missing it",
-    "boats_patched": 9,
-    "reason": "Boats were in DB but lacked ALIR2026 event tag from d451460 import",
-    "total_alir2026_now": 44
+    "action": "Updated PHRF_LIS for ALIR2026 Spinnaker (33), Double-Handed (4), Around the Islands (2)",
+    "total_updated": 40,
+    "source": "ALIR2026 official class lists (ToT column)",
+    "self_updated": "Midnight Rider - PMP Strategy = 141.0 (was None)",
+    "birw_unmatched": "79 BIRW2026 boats (no PHRF in update list \u2014 expected)"
   }
 }

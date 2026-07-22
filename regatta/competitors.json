@@ -3,7 +3,7 @@
     "description": "Midnight Rider Competitor Library",
     "vessel": "J/30 hull 511",
     "fleet": "Block Island Race Week 2026",
-    "updated": "2026-07-12",
+    "updated": "2026-07-21",
     "format_version": "1.0",
     "total_boats": 112,
     "mmsi_verified": 16,
@@ -13,7 +13,9 @@
       "ALIR2026",
       "BIRW2026"
     ],
-    "alir2026_boats": 44
+    "alir2026_boats": 44,
+    "phrf_source": "ALIR2026 official class lists (Spinnaker, Double-Handed, Around the Islands)",
+    "phrf_updated": "2026-07-21"
   },
   "self": {
     "id": "c040",
@@ -26,7 +28,7 @@
     "mmsi": "338554109",
     "mmsi_confidence": "verified",
     "ratings": {
-      "PHRF_LIS": null,
+      "PHRF_LIS": 141.0,
       "IRC": {
         "TCC": null
       },
@@ -53,7 +55,7 @@
       "mmsi": "368042460",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 39.0,
         "IRC": {
           "TCC": null
         },
@@ -445,7 +447,7 @@
       "mmsi": "368367990",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 45.0,
         "IRC": {
           "TCC": null
         },
@@ -735,7 +737,7 @@
       "mmsi": "338413878",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 15.0,
         "IRC": {
           "TCC": null
         },
@@ -762,7 +764,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -48.0,
         "IRC": {
           "TCC": null
         },
@@ -788,7 +790,7 @@
       "mmsi": "338153506",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 90.0,
         "IRC": {
           "TCC": null
         },
@@ -867,7 +869,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -18.0,
         "IRC": {
           "TCC": null
         },
@@ -920,7 +922,7 @@
       "mmsi": "338160808",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 24.0,
         "IRC": {
           "TCC": null
         },
@@ -1051,7 +1053,7 @@
       "mmsi": "368420440",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -18.0,
         "IRC": {
           "TCC": null
         },
@@ -1234,7 +1236,7 @@
       "mmsi": "368077430",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 87.0,
         "IRC": {
           "TCC": null
         },
@@ -1599,7 +1601,7 @@
       "mmsi": "368114910",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 72.0,
         "IRC": {
           "TCC": null
         },
@@ -2231,7 +2233,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 123,
+        "PHRF_LIS": 120.0,
         "IRC": {
           "TCC": null
         },
@@ -2450,7 +2452,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 153,
+        "PHRF_LIS": 153.0,
         "IRC": {
           "TCC": null
         },
@@ -2481,7 +2483,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": -33,
+        "PHRF_LIS": -33.0,
         "IRC": {
           "TCC": null
         },
@@ -2512,7 +2514,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 42.0,
         "IRC": {
           "TCC": null
         },
@@ -2543,7 +2545,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 81,
+        "PHRF_LIS": 81.0,
         "IRC": {
           "TCC": null
         },
@@ -2574,7 +2576,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 9.0,
         "IRC": {
           "TCC": null
         },
@@ -2605,7 +2607,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 111.0,
         "IRC": {
           "TCC": null
         },
@@ -2636,7 +2638,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 72,
+        "PHRF_LIS": 72.0,
         "IRC": {
           "TCC": null
         },
@@ -2667,7 +2669,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 135,
+        "PHRF_LIS": 135.0,
         "IRC": {
           "TCC": null
         },
@@ -2698,7 +2700,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 132.0,
         "IRC": {
           "TCC": null
         },
@@ -2729,7 +2731,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 129,
+        "PHRF_LIS": 129.0,
         "IRC": {
           "TCC": null
         },
@@ -2760,7 +2762,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -24.0,
         "IRC": {
           "TCC": null
         },
@@ -2791,7 +2793,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 126,
+        "PHRF_LIS": 126.0,
         "IRC": {
           "TCC": null
         },
@@ -2822,7 +2824,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 135,
+        "PHRF_LIS": 135.0,
         "IRC": {
           "TCC": null
         },
@@ -2853,7 +2855,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 147,
+        "PHRF_LIS": 147.0,
         "IRC": {
           "TCC": null
         },
@@ -2884,7 +2886,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 75,
+        "PHRF_LIS": 75.0,
         "IRC": {
           "TCC": null
         },
@@ -2915,7 +2917,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 144.0,
         "IRC": {
           "TCC": null
         },
@@ -2946,7 +2948,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 75,
+        "PHRF_LIS": 75.0,
         "IRC": {
           "TCC": null
         },
@@ -2977,7 +2979,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 69,
+        "PHRF_LIS": 69.0,
         "IRC": {
           "TCC": null
         },
@@ -3008,7 +3010,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 60,
+        "PHRF_LIS": 60.0,
         "IRC": {
           "TCC": null
         },
@@ -3039,7 +3041,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": -15,
+        "PHRF_LIS": -15.0,
         "IRC": {
           "TCC": null
         },
@@ -3070,7 +3072,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": 156,
+        "PHRF_LIS": 156.0,
         "IRC": {
           "TCC": null
         },
@@ -3132,7 +3134,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 174.0,
         "IRC": {
           "TCC": null
         },
