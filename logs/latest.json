@@ -1,14 +1,15 @@
 {
-  "last_task": "birw2026-ratings-batch-phrf-orc",
+  "last_task": "mmsi-update-birw2026-dust-preresearch",
   "status": "SUCCESS",
-  "timestamp": "2026-07-22T03:40:56Z",
+  "timestamp": "2026-07-22T03:53:29Z",
   "details": {
-    "action": "BIRW2026 + Execution Rocks ratings batch: PHRF_LIS + ORC.APH",
-    "phrf_newly_set": 24,
-    "orc_aph_newly_set": 21,
-    "phrf_total": 66,
-    "orc_total": 21,
-    "midnight_rider_preserved": "PHRF_LIS = 141.0 \u2705",
-    "note": "PHRF only set if was null | ORC.APH new field added (backward-compatible)"
+    "action": "Apply Dust pre-researched MMSIs + validate existing",
+    "dust_mmsis_list": 14,
+    "newly_applied": 1,
+    "already_set_verified": 5,
+    "already_set_probable": 7,
+    "not_in_db": 1,
+    "final_state": "verified=19, probable=47, not_found=45",
+    "source": "VesselTracker \u2014 validated by vessel dimensions + LIS/East Coast area"
   }
 }

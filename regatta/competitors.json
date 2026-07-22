@@ -6,9 +6,9 @@
     "updated": "2026-07-22",
     "format_version": "1.0",
     "total_boats": 112,
-    "mmsi_verified": 16,
-    "mmsi_probable": 41,
-    "mmsi_not_found": 46,
+    "mmsi_verified": 19,
+    "mmsi_probable": 47,
+    "mmsi_not_found": 45,
     "events": [
       "ALIR2026",
       "BIRW2026"
@@ -1524,8 +1524,8 @@
         "make": "Intensity",
         "model": "IMX 40"
       },
-      "mmsi": null,
-      "mmsi_confidence": "not_found",
+      "mmsi": "338334462",
+      "mmsi_confidence": "probable",
       "ratings": {
         "PHRF_LIS": null,
         "IRC": {
@@ -1538,12 +1538,12 @@
           "APH": 517.1
         }
       },
-      "active": false,
+      "active": true,
       "priority": "medium",
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": "MMSI not found"
+      "notes": "MMSI IMX 40, 12×4, Long Island Sound, 2026-05-23 — Dust/VesselTracker 2026-07-22 — verify before 'verified'"
     },
     {
       "id": "c057",
