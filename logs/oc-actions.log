@@ -246,3 +246,7 @@
 [2026-07-22T03:53:19] [CONFIG_CHANGE] [regatta] Apply Dust pre-researched MMSIs (14 boats)
 [2026-07-22T03:53:19]  [INFO] SqueeZeplay: MMSI=338334462 (probable)
 [2026-07-22T03:53:19] [RESULT] [regatta] Dust MMSI: 1 applied, 12 skipped, 1 not in DB
+[2026-07-22T04:01:43] [FILE_MODIFY] [regatta] Adding Kitli and Yopo to competitors.json
+[2026-07-22T04:01:43]  [INFO] Kitli added as c123
+[2026-07-22T04:01:43]  [INFO] Yopo added as c124
+[2026-07-22T04:01:43] [RESULT] [regatta] Added: ['Kitli (c123) | MMSI=338072036 (probable) | PHRF=156.0', 'Yopo (c124) | MMSI=None (not_found) | PHRF=222.0']
