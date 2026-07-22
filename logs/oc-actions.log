@@ -179,3 +179,9 @@
 [2026-07-13T00:19:30] [RESULT] [fix] SUCCESS — 142d493 corrections applied
 [2026-07-13T02:02:13] [FILE_MODIFY] [regatta] competitors.json: added ALIR2026 event to 9 boats
 [2026-07-13T02:02:13] [RESULT] [regatta] SUCCESS — ALIR2026 fleet complete (44 boats)
+[2026-07-22T03:07:55] [CONFIG_CHANGE] [regatta] Starting PHRF_LIS update — ALIR2026 all classes
+[2026-07-22T03:07:55]  [INFO] MARA: overwriting PHRF_LIS 123 → 120.0
+[2026-07-22T03:07:55]  [INFO] self (Midnight Rider - PMP Strategy): PHRF_LIS None → 141.0
+[2026-07-22T03:07:55] [RESULT] [regatta] SUCCESS — PHRF_LIS updated: 34 boats
+[2026-07-22T03:07:55]  Skipped (no ToT) : []
+[2026-07-22T03:07:55]  No match in DB : 79 boats
