@@ -191,3 +191,55 @@
 [2026-07-22T03:19:14] [RESULT] [regatta] SUCCESS — Batch 2: 2 boats updated
 [2026-07-22T03:19:14]  Already had PHRF (skipped): 7
 [2026-07-22T03:19:14]  No match in DB: 103
+
+[2026-07-22T03:29:40] [FILE_MODIFY] [signalk] attitude.js deployed to node_modules
+[2026-07-22T03:29:40] [SERVICE_RESTART] [signalk] sudo systemctl restart signalk — SUCCESS
+[2026-07-22T03:29:40] [INFO] Yaw field now uses navigation.headingTrue (was navigation.attitude.yaw)
+[2026-07-22T03:29:40] [INFO] PGN 127257 Yaw now consistent with PGN 127250 Heading (both True)
+[2026-07-22T03:40:47] [CONFIG_CHANGE] [regatta] BIRW2026 ratings batch — PHRF + ORC APH
+[2026-07-22T03:40:47]  [INFO] PHRF ARMA: null → -39.0
+[2026-07-22T03:40:47]  [INFO] PHRF Blitzen: null → 33.0
+[2026-07-22T03:40:47]  [INFO] PHRF Cathexis: null → 81.0
+[2026-07-22T03:40:47]  [INFO] PHRF Charlotte: null → 51.0
+[2026-07-22T03:40:47]  [INFO] PHRF Christopher Dragon XII: null → 45.0
+[2026-07-22T03:40:47]  [INFO] PHRF Co-Conspirator: null → 78.0
+[2026-07-22T03:40:47]  [INFO] PHRF Elan: null → 60.0
+[2026-07-22T03:40:47]  [INFO] PHRF Eventyr: null → 69.0
+[2026-07-22T03:40:47]  [INFO] PHRF Fireball: null → 24.0
+[2026-07-22T03:40:47]  [INFO] PHRF Flying Lady: null → 63.0
+[2026-07-22T03:40:47]  [INFO] PHRF Fortissimo: null → -15.0
+[2026-07-22T03:40:47]  [INFO] PHRF FULL TILT: null → 69.0
+[2026-07-22T03:40:47]  [INFO] PHRF Madison: null → 42.0
+[2026-07-22T03:40:47]  [INFO] PHRF MXM: null → 123.0
+[2026-07-22T03:40:47]  [INFO] PHRF Oakcliff Farr 40 Blue: null → -6.0
+[2026-07-22T03:40:47]  [INFO] PHRF Oakcliff Farr 40 Red: null → -6.0
+[2026-07-22T03:40:47]  [INFO] PHRF Scylla: null → 15.0
+[2026-07-22T03:40:47]  [INFO] PHRF Summer Grace: null → 27.0
+[2026-07-22T03:40:47]  [INFO] PHRF Sunny Side: null → 66.0
+[2026-07-22T03:40:47]  [INFO] PHRF Tacktile: null → 102.0
+[2026-07-22T03:40:47]  [INFO] PHRF Towhee: null → 120.0
+[2026-07-22T03:40:47]  [INFO] PHRF Windfall: null → 93.0
+[2026-07-22T03:40:47]  [INFO] PHRF Young American: null → 87.0
+[2026-07-22T03:40:47]  [INFO] PHRF Impulse: null → 138.0
+[2026-07-22T03:40:47]  [INFO] ORC Alibi: APH=508.6
+[2026-07-22T03:40:47]  [INFO] ORC BANTER: APH=506.8
+[2026-07-22T03:40:47]  [INFO] ORC Blue Skies: APH=527.5
+[2026-07-22T03:40:47]  [INFO] ORC Christopher Dragon XII: APH=526.2
+[2026-07-22T03:40:47]  [INFO] ORC Cool Breeze: APH=466.5
+[2026-07-22T03:40:47]  [INFO] ORC Cougar: APH=464.2
+[2026-07-22T03:40:47]  [INFO] ORC Dire Wolf: APH=508.4
+[2026-07-22T03:40:47]  [INFO] ORC Groupe 5: APH=523.5
+[2026-07-22T03:40:47]  [INFO] ORC Inisharon: APH=537.8
+[2026-07-22T03:40:47]  [INFO] ORC In Theory: APH=528.2
+[2026-07-22T03:40:47]  [INFO] ORC Loki: APH=511.3
+[2026-07-22T03:40:47]  [INFO] ORC OC-86: APH=322.3
+[2026-07-22T03:40:47]  [INFO] ORC Palantir 5: APH=497.9
+[2026-07-22T03:40:47]  [INFO] ORC Quickdraw: APH=511.2
+[2026-07-22T03:40:47]  [INFO] ORC Ragana: APH=523.2
+[2026-07-22T03:40:47]  [INFO] ORC Rocksteady: APH=480.8
+[2026-07-22T03:40:47]  [INFO] ORC Save the Sound: APH=546.1
+[2026-07-22T03:40:47]  [INFO] ORC Skye: APH=504.4
+[2026-07-22T03:40:47]  [INFO] ORC SqueeZeplay: APH=517.1
+[2026-07-22T03:40:47]  [INFO] ORC Touch of Grey: APH=490.4
+[2026-07-22T03:40:47]  [INFO] ORC Zig Zag: APH=503.9
+[2026-07-22T03:40:47] [RESULT] [regatta] BIRW batch: PHRF +24, ORC +21
