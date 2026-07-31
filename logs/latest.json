@@ -1,9 +1,9 @@
 {
-  "last_task": "influxdb-integration-hardening",
+  "last_task": "sk-influxdb-plugin-config-export",
   "status": "SUCCESS",
-  "timestamp": "2026-07-31T20:39:12Z",
+  "timestamp": "2026-07-31T20:59:59Z",
   "details": {
-    "action": "InfluxDB integration audit + 5 hardening fixes applied",
+    "action": "Export and sanitize Signal K InfluxDB2 plugin config to repo",
     "fixes": [
       "signalk-to-influxdb2 plugin config exported (sanitized, token redacted)",
       "regatta/server.py: INFLUX_* hardcoded values \u2192 env vars",
