@@ -254,3 +254,7 @@
 [2026-07-31T20:59:59.971013+00:00] [RESULT] SUCCESS — token sanitized, ready for commit
 [2026-07-31T21:13:09.648974+00:00] [CONFIG_CHANGE] [influxdb] midnight_rider retention: 30d → INFINITE
 [2026-07-31T21:13:09.648974+00:00] [RESULT] SUCCESS — retentionRules set to everySeconds=0 via PATCH
+[2026-07-31T21:49:11.590079+00:00] [INSTALL] [tailscale] installed and authorized
+[2026-07-31T21:49:11.590079+00:00] [INFO] hostname=midnightrider, tailscale_ip=100.97.76.25
+[2026-07-31T21:49:11.590079+00:00] [INFO] owner=denis.lafarge@
+[2026-07-31T21:49:11.590079+00:00] [RESULT] SUCCESS — remote access enabled, auto-start configured
