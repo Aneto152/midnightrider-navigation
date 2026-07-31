@@ -250,3 +250,5 @@
 [2026-07-22T04:01:43]  [INFO] Kitli added as c123
 [2026-07-22T04:01:43]  [INFO] Yopo added as c124
 [2026-07-22T04:01:43] [RESULT] [regatta] Added: ['Kitli (c123) | MMSI=338072036 (probable) | PHRF=156.0', 'Yopo (c124) | MMSI=None (not_found) | PHRF=222.0']
+[2026-07-31T20:59:59.971013+00:00] [FILE_CREATE] [signalk-influxdb2] Plugin config exported to config/signalk-plugins/
+[2026-07-31T20:59:59.971013+00:00] [RESULT] SUCCESS — token sanitized, ready for commit
