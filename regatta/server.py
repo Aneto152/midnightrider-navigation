@@ -3,21 +3,44 @@
 
 from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json, time, urllib.parse, urllib.request, os, math
+import logging
+from logging.handlers import RotatingFileHandler
 import weather_collector
 import sys as _s
 _s.path.insert(0, '/repo/ais')
+
+def _setup_regatta_logger():
+    log_dir = '/home/aneto/midnightrider-navigation/logs/services'
+    os.makedirs(log_dir, exist_ok=True)
+    logger = logging.getLogger('regatta-server')
+    logger.setLevel(logging.DEBUG)
+    if not logger.handlers:
+        h = RotatingFileHandler(
+            f'{log_dir}/regatta-server.log',
+            maxBytes=5*1024*1024, backupCount=3
+        )
+        h.setFormatter(logging.Formatter(
+            '[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s',
+            datefmt='%Y-%m-%dT%H:%M:%S'
+        ))
+        logger.addHandler(h)
+        logger.addHandler(logging.StreamHandler())
+    return logger
+
+_log = _setup_regatta_logger()
+
 try:
     from server_handlers import api_competitors as _AC, api_fleet_db as _AF
     _AIS = True
 except Exception as _e:
-    print(f"[AIS] {_e}")
+    _log.warning(f"[AIS] {_e}")
     _AIS = False
 
 
-INFLUX_URL = "http://localhost:8086"
+INFLUX_URL = os.getenv('INFLUX_URL', 'http://localhost:8086')
 INFLUX_TOKEN = os.getenv('INFLUX_TOKEN') or os.getenv('INFLUXDB_TOKEN', '')
-INFLUX_ORG = "MidnightRider"
-INFLUX_BUCKET = "midnight_rider"
+INFLUX_ORG = os.getenv('INFLUX_ORG', 'MidnightRider')
+INFLUX_BUCKET = os.getenv('INFLUX_BUCKET', 'midnight_rider')
 SIGNALK_URL = "http://localhost:3000"
 
 # Cache vent (TTL 5 min)
@@ -45,7 +68,7 @@ def write_influx(measurement, fields, tags={}):
         urllib.request.urlopen(req, timeout=3)
         return True
     except Exception as e:
-        print(f"InfluxDB error: {e}")
+        _log.error(f"InfluxDB write failed [{measurement}]: {e}")
         return False
 
 def get_signalk(path):
@@ -536,7 +559,9 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
 
 if __name__ == "__main__":
+    _log.info(f"STARTUP regatta-server — InfluxDB={INFLUX_URL} org={INFLUX_ORG} bucket={INFLUX_BUCKET}")
+    _log.info(f"STARTUP token_set={'YES' if INFLUX_TOKEN else 'NO (MISSING!)'}")
     load_start_line_from_signalk()
     server = ThreadingHTTPServer(("0.0.0.0", 5000), Handler)
-    print("Regatta server on :5000")
+    _log.info("Regatta server listening on :5000")
     server.serve_forever()

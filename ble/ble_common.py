@@ -45,7 +45,7 @@ def setup_logger(service_name: str) -> logging.Logger:
     if not logger.handlers:
         handler = RotatingFileHandler(
             os.path.join(LOG_BASE, f'{service_name}.log'),
-            maxBytes=10 * 1024 * 1024,
+            maxBytes=5 * 1024 * 1024,  # 5MB — MR logging standard
             backupCount=3
         )
         handler.setFormatter(logging.Formatter(
@@ -85,8 +85,8 @@ def release_singleton(pid_file: str, logger: logging.Logger) -> None:
 
 # ── SK UDP Publisher ───────────────────────────────────────────
 
-SK_HOST = '127.0.0.1'
-SK_PORT = 4123
+SK_HOST = os.environ.get('SK_UDP_HOST', '127.0.0.1')
+SK_PORT = int(os.environ.get('SK_UDP_PORT', '4123'))
 _sk_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 

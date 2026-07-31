@@ -1,16 +1,23 @@
 {
-  "last_task": "add-kitli-yopo-alir2026",
+  "last_task": "influxdb-integration-hardening",
   "status": "SUCCESS",
-  "timestamp": "2026-07-22T04:01:52Z",
+  "timestamp": "2026-07-31T20:39:12Z",
   "details": {
-    "action": "Added Kitli (MMSI 338072036, probable) + Yopo (no MMSI) to DB",
-    "total_boats": 114,
-    "kitli_id": "c123",
-    "kitli_mmsi": "338072036 (probable \u2014 VesselTracker/Dust)",
-    "kitli_phrf": 156.0,
-    "yopo_id": "c124",
-    "yopo_mmsi": "not_found",
-    "yopo_phrf": 222.0,
-    "race_class": "Non-Spinnaker ALIR2026"
+    "action": "InfluxDB integration audit + 5 hardening fixes applied",
+    "fixes": [
+      "signalk-to-influxdb2 plugin config exported (sanitized, token redacted)",
+      "regatta/server.py: INFLUX_* hardcoded values \u2192 env vars",
+      "regatta/server.py: print() errors \u2192 structured logging (_log.error)",
+      "regatta/server.py: STARTUP logging added to __main__",
+      "ble_common.py: maxBytes 10MB \u2192 5MB (standard)",
+      "ble_common.py: SK_HOST/SK_PORT \u2192 respect env vars (SK_UDP_HOST, SK_UDP_PORT)"
+    ],
+    "docker_status": "influxdb=Up(47h), grafana=Up",
+    "influxdb_health": "pass",
+    "log_files_created": [
+      "logs/services/regatta-server.log (5MB rotated)",
+      "logs/services/calypso-direct.log (5MB rotated)",
+      "logs/services/wit-ble-direct.log (5MB rotated)"
+    ]
   }
 }
