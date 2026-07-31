@@ -1,23 +1,12 @@
 {
-  "last_task": "sk-influxdb-plugin-config-export",
+  "last_task": "influxdb-retention-infinite",
   "status": "SUCCESS",
-  "timestamp": "2026-07-31T20:59:59Z",
+  "timestamp": "2026-07-31T21:13:09Z",
   "details": {
-    "action": "Export and sanitize Signal K InfluxDB2 plugin config to repo",
-    "fixes": [
-      "signalk-to-influxdb2 plugin config exported (sanitized, token redacted)",
-      "regatta/server.py: INFLUX_* hardcoded values \u2192 env vars",
-      "regatta/server.py: print() errors \u2192 structured logging (_log.error)",
-      "regatta/server.py: STARTUP logging added to __main__",
-      "ble_common.py: maxBytes 10MB \u2192 5MB (standard)",
-      "ble_common.py: SK_HOST/SK_PORT \u2192 respect env vars (SK_UDP_HOST, SK_UDP_PORT)"
-    ],
-    "docker_status": "influxdb=Up(47h), grafana=Up",
-    "influxdb_health": "pass",
-    "log_files_created": [
-      "logs/services/regatta-server.log (5MB rotated)",
-      "logs/services/calypso-direct.log (5MB rotated)",
-      "logs/services/wit-ble-direct.log (5MB rotated)"
-    ]
+    "action": "InfluxDB midnight_rider retention changed: 30d \u2192 INFINITE",
+    "bucket": "midnight_rider",
+    "previous_retention": "30 days (2592000s)",
+    "new_retention": "infinite (everySeconds=0)",
+    "method": "PATCH /api/v2/buckets/{bucket_id}"
   }
 }

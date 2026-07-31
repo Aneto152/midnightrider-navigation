@@ -1,5 +1,7 @@
 services:
   influxdb:
+    # Data retention: INFINITE — set via API 2026-07-31 (was 30d)
+    # Bucket midnight_rider: retentionRules=[{type: expire, everySeconds: 0}]
     image: influxdb:2.8
     container_name: influxdb
     restart: unless-stopped
