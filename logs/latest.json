@@ -1,17 +1,13 @@
 {
-  "last_task": "tailscale-install-complete",
+  "last_task": "create-system-summary",
   "status": "SUCCESS",
-  "timestamp": "2026-07-31T21:49:11Z",
+  "timestamp": "2026-08-14T10:41:51.558273Z",
   "details": {
-    "action": "Tailscale installed and authorized \u2014 remote access enabled",
-    "hostname": "midnightrider",
-    "tailscale_ip": "100.97.76.25",
-    "service": "tailscaled \u2014 enabled on boot",
-    "owner": "denis.lafarge@",
-    "access": {
-      "grafana": "http://100.97.76.25:3001 or http://midnightrider:3001 (via Tailscale)",
-      "signalk": "http://100.97.76.25:3000 or http://midnightrider:3000 (via Tailscale)",
-      "ssh": "ssh aneto@100.97.76.25 or ssh aneto@midnightrider (via Tailscale)"
-    }
+    "file_created": "SYSTEM-SUMMARY.md",
+    "index_updated": false,
+    "ssot_checked": true,
+    "security_checked": true,
+    "sections": 15,
+    "links_validated": true
   }
 }

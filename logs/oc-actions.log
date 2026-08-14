@@ -258,3 +258,7 @@
 [2026-07-31T21:49:11.590079+00:00] [INFO] hostname=midnightrider, tailscale_ip=100.97.76.25
 [2026-07-31T21:49:11.590079+00:00] [INFO] owner=denis.lafarge@
 [2026-07-31T21:49:11.590079+00:00] [RESULT] SUCCESS — remote access enabled, auto-start configured
+[2026-08-14T10:41:54.678763Z] [FILE_CREATE] [documentation] Created SYSTEM-SUMMARY.md — 15-section operational summary
+[2026-08-14T10:41:54.678763Z] [VALIDATION] [documentation] Links validated, no hardcoded LAN IPs, no credentials exposed
+[2026-08-14T10:41:54.678763Z] [VALIDATION] [documentation] SSOT compliance verified — no PGN duplication
+[2026-08-14T10:41:54.678763Z] [RESULT] [documentation] SUCCESS — SYSTEM-SUMMARY.md created and validated
