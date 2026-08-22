@@ -266,3 +266,6 @@
 [2026-08-22T14:34:57.500066Z] [STAT] [AIS fleet] 4 safe updates applied, 11 already present, 4 preserved (conflicts), 10 not found, 2 low-confidence
 [2026-08-22T14:34:57.500066Z] [VERIFICATION] [AIS fleet] All MMSIs valid 9-digit, PHRF unchanged, ORC APH unchanged, no web research by OC
 [2026-08-22T14:34:57.500066Z] [RESULT] [AIS fleet] SUCCESS — minimal MMSI database patch complete
+[2026-08-22T14:42:37.808256+00:00] [ROLLBACK] [regatta/competitors.json] Removed four MMSI assignments with class contradictions
+[2026-08-22T14:42:37.808256+00:00] [REASON] [AIS fleet] c064 J/99≠J/111, c014 J/160≠J/105, c010 J/120≠J/109, c115 J/109≠J/105
+[2026-08-22T14:42:37.808256+00:00] [RESULT] [AIS fleet] SUCCESS - unsafe MMSI assignments rolled back

@@ -1,27 +1,28 @@
 {
-  "task": "minimal-mmsi-database-patch",
+  "task": "rollback-mismatched-mmsi-patch",
   "status": "SUCCESS",
-  "source": "Coordinator-provided fixed AIS research candidates",
+  "source": "Coordinator verification of commit ba0ab2271653c7942f26dec50b051fbde8786a81",
   "web_research_by_oc": false,
-  "timestamp": "2026-08-22T14:34:57.500066Z",
+  "timestamp": "2026-08-22T14:42:37.808256+00:00",
   "details": {
     "records_added": 0,
-    "records_updated": 4,
-    "mmsi_added": 4,
-    "mmsi_already_present": 11,
-    "mmsi_preserved": 4,
-    "ambiguous_records": 0,
-    "not_found": 10,
-    "low_confidence_not_applied": 2,
-    "mmsi_conflicts": 0,
+    "records_updated": 0,
+    "mmsi_added": 0,
+    "mmsi_removed": 4,
+    "sail_numbers_removed": 3,
     "phrf_modified": 0,
     "orc_aph_modified": 0,
-    "candidates_total": 31,
-    "safe_updates_applied": [
-      "c064: Velocity2 \u2192 MMSI=338412468",
-      "c014: Cougar \u2192 MMSI=303392000",
-      "c010: Charlotte \u2192 MMSI=368248080",
-      "c115: Velocita \u2192 MMSI=338446443"
+    "unsafe_assignments_removed": [
+      "c064 Velocity2 (J/99 ≠ J/111)",
+      "c014 Cougar (J/160 ≠ J/105)",
+      "c010 Charlotte (J/120 ≠ J/109)",
+      "c115 Velocita (J/109 ≠ J/105)"
+    ],
+    "reason": "Candidate MMSI class/model contradicted the existing database record",
+    "files_modified": [
+      "regatta/competitors.json",
+      "logs/latest.json",
+      "logs/oc-actions.log"
     ]
   }
 }
