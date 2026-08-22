@@ -299,8 +299,8 @@
         "make": "J/Boats",
         "model": "J/120"
       },
-      "mmsi": null,
-      "mmsi_confidence": "not_found",
+      "mmsi": "368248080",
+      "mmsi_confidence": "probable",
       "ratings": {
         "PHRF_LIS": 51.0,
         "IRC": {
@@ -315,7 +315,8 @@
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": "MMSI not found"
+      "notes": "MMSI not found",
+      "sail_number": "USA 46650"
     },
     {
       "id": "c011",
@@ -409,8 +410,8 @@
         "make": "J/Boats",
         "model": "J/160"
       },
-      "mmsi": null,
-      "mmsi_confidence": "not_found",
+      "mmsi": "303392000",
+      "mmsi_confidence": "probable",
       "ratings": {
         "PHRF_LIS": null,
         "IRC": {
@@ -428,7 +429,8 @@
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": "MMSI not found"
+      "notes": "MMSI not found",
+      "sail_number": "USA 4900"
     },
     {
       "id": "c015",
@@ -1543,7 +1545,7 @@
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": "MMSI IMX 40, 12×4, Long Island Sound, 2026-05-23 — Dust/VesselTracker 2026-07-22 — verify before 'verified'"
+      "notes": "MMSI IMX 40, 12\u00d74, Long Island Sound, 2026-05-23 \u2014 Dust/VesselTracker 2026-07-22 \u2014 verify before 'verified'"
     },
     {
       "id": "c057",
@@ -1740,8 +1742,8 @@
         "make": "J/Boats",
         "model": "J/99"
       },
-      "mmsi": null,
-      "mmsi_confidence": "not_found",
+      "mmsi": "338412468",
+      "mmsi_confidence": "probable",
       "ratings": {
         "PHRF_LIS": null,
         "IRC": {
@@ -1756,7 +1758,8 @@
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": "MMSI not found"
+      "notes": "MMSI not found",
+      "sail_number": "USA 22"
     },
     {
       "id": "c065",
@@ -1998,7 +2001,7 @@
       "events": [
         "LIS Weekend Race 2026-06-21"
       ],
-      "notes": "US flag, sailing vessel, 12x4m. Active Jun 17-18 2026. Renamed from Godspeed (hull #58) Sep 2025 — MMSI recently registered."
+      "notes": "US flag, sailing vessel, 12x4m. Active Jun 17-18 2026. Renamed from Godspeed (hull #58) Sep 2025 \u2014 MMSI recently registered."
     },
     {
       "id": "c074",
@@ -2934,7 +2937,7 @@
         "ALIR2026"
       ],
       "race_class": "Spinnaker ToD/ToT",
-      "notes": "⚠️ DIRECT COMPETITOR — Same class: J/30 Spinnaker ToD/ToT"
+      "notes": "\u26a0\ufe0f DIRECT COMPETITOR \u2014 Same class: J/30 Spinnaker ToD/ToT"
     },
     {
       "id": "c112",
@@ -3041,8 +3044,8 @@
         "model": "J/109"
       },
       "length_ft": 35,
-      "mmsi": null,
-      "mmsi_confidence": "not_found",
+      "mmsi": "338446443",
+      "mmsi_confidence": "probable",
       "ratings": {
         "PHRF_LIS": 69.0,
         "IRC": {
@@ -3239,7 +3242,7 @@
       "events": [
         "ALIR2026"
       ],
-      "notes": "MMSI 338072036 — VesselTracker/Dust 2026-07-22 — verify before 'verified'. Execution Rocks Non-Spin.",
+      "notes": "MMSI 338072036 \u2014 VesselTracker/Dust 2026-07-22 \u2014 verify before 'verified'. Execution Rocks Non-Spin.",
       "race_class": "Non-Spinnaker"
     },
     {

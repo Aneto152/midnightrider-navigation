@@ -1,13 +1,27 @@
 {
-  "last_task": "create-system-summary",
+  "task": "minimal-mmsi-database-patch",
   "status": "SUCCESS",
-  "timestamp": "2026-08-14T10:41:51.558273Z",
+  "source": "Coordinator-provided fixed AIS research candidates",
+  "web_research_by_oc": false,
+  "timestamp": "2026-08-22T14:34:57.500066Z",
   "details": {
-    "file_created": "SYSTEM-SUMMARY.md",
-    "index_updated": false,
-    "ssot_checked": true,
-    "security_checked": true,
-    "sections": 15,
-    "links_validated": true
+    "records_added": 0,
+    "records_updated": 4,
+    "mmsi_added": 4,
+    "mmsi_already_present": 11,
+    "mmsi_preserved": 4,
+    "ambiguous_records": 0,
+    "not_found": 10,
+    "low_confidence_not_applied": 2,
+    "mmsi_conflicts": 0,
+    "phrf_modified": 0,
+    "orc_aph_modified": 0,
+    "candidates_total": 31,
+    "safe_updates_applied": [
+      "c064: Velocity2 \u2192 MMSI=338412468",
+      "c014: Cougar \u2192 MMSI=303392000",
+      "c010: Charlotte \u2192 MMSI=368248080",
+      "c115: Velocita \u2192 MMSI=338446443"
+    ]
   }
 }

@@ -262,3 +262,7 @@
 [2026-08-14T10:41:54.678763Z] [VALIDATION] [documentation] Links validated, no hardcoded LAN IPs, no credentials exposed
 [2026-08-14T10:41:54.678763Z] [VALIDATION] [documentation] SSOT compliance verified — no PGN duplication
 [2026-08-14T10:41:54.678763Z] [RESULT] [documentation] SUCCESS — SYSTEM-SUMMARY.md created and validated
+[2026-08-22T14:34:57.500066Z] [FILE_MODIFY] [regatta/competitors.json] Applied safe MMSI updates from coordinator-provided candidates
+[2026-08-22T14:34:57.500066Z] [STAT] [AIS fleet] 4 safe updates applied, 11 already present, 4 preserved (conflicts), 10 not found, 2 low-confidence
+[2026-08-22T14:34:57.500066Z] [VERIFICATION] [AIS fleet] All MMSIs valid 9-digit, PHRF unchanged, ORC APH unchanged, no web research by OC
+[2026-08-22T14:34:57.500066Z] [RESULT] [AIS fleet] SUCCESS — minimal MMSI database patch complete
