@@ -269,3 +269,4 @@
 [2026-08-22T14:42:37.808256+00:00] [ROLLBACK] [regatta/competitors.json] Removed four MMSI assignments with class contradictions
 [2026-08-22T14:42:37.808256+00:00] [REASON] [AIS fleet] c064 J/99≠J/111, c014 J/160≠J/105, c010 J/120≠J/109, c115 J/109≠J/105
 [2026-08-22T14:42:37.808256+00:00] [RESULT] [AIS fleet] SUCCESS - unsafe MMSI assignments rolled back
+[2026-08-22T15:00:38.505233+00:00] [COMMIT] [AIS fleet] SHA: 0835e6b8b4126386cebca262ba98ca12ac1ed2e6

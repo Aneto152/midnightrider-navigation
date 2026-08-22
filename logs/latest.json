@@ -24,5 +24,6 @@
       "logs/latest.json",
       "logs/oc-actions.log"
     ]
-  }
+  },
+  "commit_sha": "0835e6b8b4126386cebca262ba98ca12ac1ed2e6"
 }
