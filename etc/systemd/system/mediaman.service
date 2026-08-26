@@ -1,0 +1,32 @@
+[Unit]
+Description=Midnight Rider MediaMan — Telegram Race Reporter (one-shot)
+Documentation=file:///home/aneto/midnightrider-navigation/mediaman/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/aneto/midnightrider-navigation
+ExecStart=/usr/bin/python3 -m mediaman.mediaman
+User=aneto
+Group=aneto
+
+# Environment variable configuration (systemd can source from file)
+EnvironmentFile=-/home/aneto/.openclaw/mediaman/.env
+Environment="DRY_RUN=false"
+Environment="MEDIAMAN_CONTENT_PROVIDER=test"
+
+# Security hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/home/aneto/midnightrider-navigation/logs /home/aneto/.openclaw/mediaman
+
+# Resource limits
+TimeoutStartSec=30
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
