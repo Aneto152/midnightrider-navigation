@@ -1,14 +1,26 @@
 {
-  "task": "mediaman-step-2c-mcp-lifecycle-and-timestamp-correction",
+  "task": "mediaman-step-2c-finalize-publication",
   "status": "SUCCESS",
-  "step": "2c",
-  "timestamp": "2026-08-27T23:39:13.914250Z",
+  "step": "2c-finalized",
+  "timestamp": "2026-08-27T23:43:44.114773Z",
+  "publication_verification": {
+    "main_before_sha": "75c120ebfbcf3095c56f0ef9e5073ccd02a4bae9",
+    "main_after_sha": "7649cb300948dc8598e0d527dfa579a19d98a97b",
+    "origin_main_current": "7649cb300948dc8598e0d527dfa579a19d98a97b"
+  },
   "details": {
-    "startup_exception_classification_verified": true,
-    "process_exit_detection_verified": true,
-    "reader_path_propagation_verified": true,
-    "utc_timestamp_corrected": true,
-    "tests_restored_from_step_2b": true,
+    "startup_timeout_verified": true,
+    "startup_timeout_seconds": 10,
+    "request_timeout_seconds": 5,
+    "reader_to_pending_request_verified": true,
+    "oversized_pending_request_verified": true,
+    "process_exit_while_pending_verified": true,
+    "mcp_client_tests_collected": 34,
+    "mcp_client_tests_passed": 34,
+    "full_mediaman_suite_collected": 139,
+    "full_mediaman_suite_passed": 139,
+    "step_2b_coverage_preserved": true,
+    "strict_jsonrpc_validation_coverage": 10,
     "mcp_live_server_contacted": false,
     "event_detector_implemented": false,
     "real_llm_generation_performed": false,
@@ -16,19 +28,13 @@
     "telegram_bot_or_group_created": false,
     "mediaman_timer_activation_authorized": false,
     "signalk_modified": false,
-    "docker_modified": false
+    "docker_modified": false,
+    "zombie_cleanup": "DEFERRED"
   },
-  "test_counts": {
-    "mcp_client_tests_collected": 34,
-    "mcp_client_tests_passed": 34,
-    "full_mediaman_suite_collected": 139,
-    "full_mediaman_suite_passed": 139
-  },
-  "files_modified": [
-    "mediaman/mcp_client.py",
-    "tests/mediaman/test_mcp_client.py",
-    "logs/latest.json",
-    "logs/oc-actions.log"
-  ],
-  "commit_sha": "b737f10cfc2f99099dffe3faeea9e45d6b1b9790"
+  "commits": {
+    "step_2c_core": "e06febc9abe5863fbdf80a7a1b18ae8768955373",
+    "step_2c_logs": "1ccf77fdb4a618fb58c7650f920ad8da6fae67d3",
+    "step_2c_coverage_restore": "b737f10cfc2f99099dffe3faeea9e45d6b1b9790",
+    "final_sync": "7649cb300948dc8598e0d527dfa579a19d98a97b"
+  }
 }
