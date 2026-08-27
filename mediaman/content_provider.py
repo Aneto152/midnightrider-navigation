@@ -74,6 +74,77 @@ class TestContentProvider(ContentProvider):
         return True, ""
 
 
+class LocalLLMProvider(ContentProvider):
+    """
+    LLM-based content provider using local OpenClaw agent.
+    
+    Flow:
+    1. Collect RaceFacts from Regatta API
+    2. Build French-language prompt
+    3. Call OpenClaw agent CLI (outbound only)
+    4. Validate output (no hallucinations, credentials, etc.)
+    5. Return article or fail closed
+    
+    Pre-production implementation:
+    - Fully testable with mocked subprocess
+    - No real Telegram calls here
+    - No production activation
+    """
+    
+    MAX_LENGTH = 700  # characters
+    
+    def __init__(self):
+        """Initialize LLM provider with lazy adapter loading."""
+        from .openclaw_adapter import OpenClawAdapter
+        from .race_facts import RaceFacts
+        from .llm_validator import OutputValidator
+        
+        self.adapter = OpenClawAdapter()
+        self.RaceFacts = RaceFacts  # For type hints
+        self.OutputValidator = OutputValidator
+    
+    def get_content(self, race_id: str, cycle_timestamp: str) -> str:
+        """
+        Generate article from RaceFacts using LLM.
+        
+        Raises NotImplementedError in pre-production (awaits real RaceFacts fetch).
+        """
+        raise NotImplementedError(
+            "LocalLLMProvider requires real RaceFacts collection from Regatta API. "
+            "Currently in pre-production validation phase."
+        )
+    
+    def validate(self, content: str) -> tuple[bool, str]:
+        """Validate article output."""
+        if not content:
+            return False, "Content is empty"
+        
+        if len(content) > self.MAX_LENGTH:
+            return False, f"Content exceeds {self.MAX_LENGTH} characters"
+        
+        # Check for credentials (basic patterns)
+        credential_patterns = [
+            r'token',
+            r'password',
+            r'secret',
+            r'api[_-]?key',
+            r'auth',
+        ]
+        
+        for pattern in credential_patterns:
+            if re.search(pattern, content, re.IGNORECASE):
+                return False, f"Content contains credential pattern: {pattern}"
+        
+        # Check for French
+        french_indicators = ['é', 'è', 'ê', 'ç', 'le ', 'la ', 'et ', 'un ', 'une ']
+        has_french = any(ind in content.lower() for ind in french_indicators)
+        
+        if not has_french:
+            return False, "Content does not appear to be in French"
+        
+        return True, ""
+
+
 class OpenClawGatewayProvider(ContentProvider):
     """
     Future provider that fetches content from local OpenClaw Gateway.
