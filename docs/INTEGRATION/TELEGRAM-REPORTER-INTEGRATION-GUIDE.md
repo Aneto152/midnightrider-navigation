@@ -76,7 +76,7 @@ PENDING → SENDING → SENT  (final, non-retryable)
 ### Blocked Components
 
 **Content Provider:**
-- OpenClawGatewayProvider: placeholder (raises NotImplementedError)
+- OpenClawGatewayProvider: placeholder (raises NotImplementedError, must not be used for production) (raises NotImplementedError)
 - TestContentProvider: test-only (cannot be used in production)
 - Real LLM adapter: not implemented
 
@@ -143,8 +143,8 @@ Create `/etc/mediaman/mediaman.env` (not version-controlled):
 
 ```bash
 # Telegram credentials (required for production)
-TELEGRAM_BOT_TOKEN=<secured-token>
-TELEGRAM_CHAT_ID=<secured-group-id>
+TELEGRAM_BOT_TOKEN=<your-bot-token>
+TELEGRAM_CHAT_ID=<your-group-id>
 
 # Enable production mode
 MEDIAMAN_PRODUCTION_MODE=true
@@ -169,8 +169,18 @@ sudo chmod 600 /etc/mediaman/mediaman.env
 Only after content provider and credentials are verified:
 
 ```bash
-sudo systemctl enable mediaman.timer
-sudo systemctl start mediaman.timer
+**Future Production Activation** (not yet authorized):
+
+When MediaMan real content provider is implemented and explicitly approved by Denis:
+1. Create Telegram bot via @BotFather → obtain TELEGRAM_BOT_TOKEN
+2. Create private Telegram group → obtain TELEGRAM_CHAT_ID
+3. Configure credentials in /etc/mediaman/mediaman.env
+4. Test with DRY_RUN=true first
+5. Enable timer: systemctl enable mediaman.timer
+6. Start: systemctl start mediaman.timer
+7. Monitor: journalctl -u mediaman -f
+
+**This procedure requires explicit approval and is not authorized in the current development phase.**
 sudo journalctl -u mediaman -f  # Monitor
 ```
 
@@ -183,8 +193,8 @@ sudo journalctl -u mediaman -f  # Monitor
 Test the complete stack without network I/O:
 
 ```bash
-export TELEGRAM_BOT_TOKEN=test
-export TELEGRAM_CHAT_ID="-123"
+export TELEGRAM_BOT_TOKEN=<configure-in-env>
+export TELEGRAM_CHAT_ID=<configure-in-env>
 export DRY_RUN=true
 export MEDIAMAN_CONTENT_PROVIDER=test
 
@@ -210,8 +220,8 @@ Expected: 51/51 tests pass
 Once production activation is explicitly approved, use:
 
 ```bash
-export TELEGRAM_BOT_TOKEN=<secured-token>
-export TELEGRAM_CHAT_ID=<secured-id>
+export TELEGRAM_BOT_TOKEN=<your-bot-token>
+export TELEGRAM_CHAT_ID=<your-group-id>
 export MEDIAMAN_PRODUCTION_MODE=true
 export DRY_RUN=false
 export MEDIAMAN_CONTENT_PROVIDER=local  # or "openclaw"
@@ -317,8 +327,8 @@ CREATE TABLE deliveries (
 ### Running a Dry-Run Test
 
 ```bash
-export TELEGRAM_BOT_TOKEN=test
-export TELEGRAM_CHAT_ID="-123"
+export TELEGRAM_BOT_TOKEN=<configure-in-env>
+export TELEGRAM_CHAT_ID=<configure-in-env>
 export DRY_RUN=true
 export MEDIAMAN_CONTENT_PROVIDER=test
 
