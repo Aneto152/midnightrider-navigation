@@ -75,6 +75,7 @@
         "Clarified that OpenClawGatewayProvider is unimplemented",
         "Verified .gitignore protections (.secret, .openclaw-token, *.env)"
       ]
-    }
+    },
+    "commit_sha": "a0f4675398ea6dfbd7c865ed3263f1e85a8c22a6"
   }
 }
