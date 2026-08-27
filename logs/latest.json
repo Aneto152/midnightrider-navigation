@@ -1,44 +1,33 @@
 {
-  "task": "rollback-mismatched-mmsi-patch",
-  "status": "SUCCESS",
-  "source": "Coordinator verification of commit ba0ab2271653c7942f26dec50b051fbde8786a81",
-  "web_research_by_oc": false,
-  "timestamp": "2026-08-22T14:42:37.808256+00:00",
-  "details": {
-    "records_added": 0,
-    "records_updated": 0,
-    "mmsi_added": 0,
-    "mmsi_removed": 4,
-    "sail_numbers_removed": 3,
-    "phrf_modified": 0,
-    "orc_aph_modified": 0,
-    "unsafe_assignments_removed": [
-      "c064 Velocity2 (J/99 \u2260 J/111)",
-      "c014 Cougar (J/160 \u2260 J/105)",
-      "c010 Charlotte (J/120 \u2260 J/109)",
-      "c115 Velocita (J/109 \u2260 J/105)"
-    ],
-    "reason": "Candidate MMSI class/model contradicted the existing database record",
+  "current_audit": {
+    "task": "mediaman-audit-state-finalization",
+    "status": "SUCCESS",
+    "web_research_by_oc": false,
+    "timestamp": "2026-08-27T17:22:23Z",
+    "commit_sha": "57698cd4c5247a9c187eb82a35c4e34668ea90d6",
     "files_modified": [
-      "regatta/competitors.json",
+      "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
       "logs/latest.json",
       "logs/oc-actions.log"
-    ]
-  },
-  "commit_sha": "0835e6b8b4126386cebca262ba98ca12ac1ed2e6",
-  "entry_1": {
-    "timestamp": "2026-08-27T16:18:56.455343+00:00",
-    "action": "DOCUMENTATION_UPDATE",
-    "phase": "documentation-and-audit-correction",
-    "changes": [
-      "Added MediaMan section to docs/ARCHITECTURE-MASTER.md (section 4.6)",
-      "Updated docs/INDEX.md: replaced WhatsApp with Telegram references",
-      "Fixed trailing whitespace in TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
-      "Security validation: no credentials or IPs found"
     ],
-    "status": "COMPLETE"
+    "details": {
+      "documentation_correction_complete": true,
+      "future_production_shell_blocks_removed": true,
+      "duplicate_start_line_entry_removed": true,
+      "dry_run_foundation_validated": true,
+      "sqlite_delivery_state_validated": true,
+      "real_content_provider_implemented": false,
+      "openclaw_mediaman_adapter_implemented": false,
+      "telegram_real_send_authorized": false,
+      "telegram_bot_or_group_created": false,
+      "mediaman_timer_activation_authorized": false,
+      "inbound_telegram_processing": false,
+      "runtime_code_modified": false,
+      "signalk_modified": false,
+      "docker_modified": false
+    }
   },
-  "current_audit": {
+  "previous_media_audit": {
     "timestamp": "2026-08-27T17:18:45Z",
     "task": "mediaman-audit-closure",
     "status": "SUCCESS",
@@ -72,7 +61,7 @@
     },
     "commit_sha": "57698cd4c5247a9c187eb82a35c4e34668ea90d6"
   },
-  "previous_state": {
+  "previous_rollback": {
     "timestamp": "2026-08-27T17:14:46Z",
     "task": "mediaman-final-content-and-audit-state-fix",
     "status": "SUCCESS",
