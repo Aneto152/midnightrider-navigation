@@ -130,3 +130,8 @@ class SanitizedMessage:
             f"length={content_length} "
             f"valid={valid}"
         )
+    
+    @staticmethod
+    def heartbeat(provider):
+        """MediaMan heartbeat log."""
+        return f"HEARTBEAT provider={provider}"

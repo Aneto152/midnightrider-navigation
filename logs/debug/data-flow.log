@@ -42095,3 +42095,9 @@ Traceback (most recent call last):
 AttributeError: type object 'SanitizedMessage' has no attribute 'heartbeat'
 [2026-08-27T11:36:49] STARTUP dry_run=True production_mode=False provider=test
 [2026-08-27T11:36:49] DATA_IN normalized_cycle=2026-08-27T15:30:00+00:00 now=2026-08-27T15:36:49.381546+00:00
+[2026-08-27T11:39:57] STARTUP dry_run=True production_mode=False provider=test
+[2026-08-27T11:39:57] DATA_IN normalized_cycle=2026-08-27T15:30:00+00:00 now=2026-08-27T15:39:57.984644+00:00
+[2026-08-27T11:39:57] SEND_ATTEMPT dry_run=True content_length=298 execution_id=1e54a341
+[2026-08-27T11:39:57] SEND_RESULT success=True error_code= execution_id=1e54a341
+[2026-08-27T11:39:58] HEARTBEAT cycle=2026-08-27T15:30:00+00:00 provider=test
+[2026-08-27T11:39:58] SHUTDOWN execution_count=1
