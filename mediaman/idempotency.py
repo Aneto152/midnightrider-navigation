@@ -132,7 +132,9 @@ class IdempotencyStore:
             )
     
     def _save_state(self, state: dict) -> None:
-        """Save state atomically: temp → fsync → rename."""
+        """Save state atomically: temp → fsync → rename. Raises on failure."""
+        temp_fd = None
+        temp_path = None
         try:
             temp_fd, temp_path = tempfile.mkstemp(
                 dir=str(self.state_dir),
@@ -144,12 +146,36 @@ class IdempotencyStore:
                     json.dump(state, f, indent=2)
                     f.flush()
                     os.fsync(f.fileno())
-            except Exception:
-                os.close(temp_fd)
+                temp_fd = None  # fd closed by fdopen
+            except Exception as e:
+                if temp_fd is not None:
+                    try:
+                        os.close(temp_fd)
+                    except Exception:
+                        pass
                 raise
             Path(temp_path).replace(self.state_file)
-        except Exception:
-            pass
+        except (IOError, OSError) as e:
+            if temp_path and Path(temp_path).exists():
+                try:
+                    Path(temp_path).unlink()
+                except Exception:
+                    pass
+            raise RuntimeError(f"State persistence failed: {type(e).__name__}: {e}")
+        except json.JSONEncodeError as e:
+            if temp_path and Path(temp_path).exists():
+                try:
+                    Path(temp_path).unlink()
+                except Exception:
+                    pass
+            raise RuntimeError(f"State JSON encoding failed: {e}")
+        except Exception as e:
+            if temp_path and Path(temp_path).exists():
+                try:
+                    Path(temp_path).unlink()
+                except Exception:
+                    pass
+            raise RuntimeError(f"Unexpected state save error: {type(e).__name__}: {e}")
     
     def record_pending(self, key: IdempotencyKey) -> bool:
         """Acquire lock, check if new, record PENDING.
