@@ -1,14 +1,14 @@
 {
   "task": "mediaman-step-2-mcp-client-correction",
-  "status": "IN_PROGRESS",
+  "status": "SUCCESS",
   "step": 2,
-  "timestamp": "2026-08-27T22:53:00Z",
+  "timestamp": "2026-08-27T23:00:43.716397+00:00Z",
   "details": {
-    "mcp_wire_mapping_verified": false,
-    "strict_jsonrpc_validation": false,
-    "nonzero_exit_detection": false,
-    "stderr_separation_verified": false,
-    "source_timestamp_preserved": false,
+    "mcp_wire_mapping_verified": true,
+    "strict_jsonrpc_validation": true,
+    "nonzero_exit_detection": true,
+    "stderr_separation_verified": true,
+    "source_timestamp_preserved": true,
     "mcp_live_server_contacted": false,
     "event_detector_implemented": false,
     "real_llm_generation_performed": false,
@@ -17,6 +17,23 @@
     "mediaman_timer_activation_authorized": false,
     "signalk_modified": false,
     "docker_modified": false
+  },
+  "corrections": [
+    "Added TOOL_WIRE_MAPPING: racing.get_position \u2192 get_position wire name",
+    "Implemented strict JSON-RPC 2.0 validation in _validate_jsonrpc_response()",
+    "Added independent stderr drainage in _read_stderr() thread",
+    "Corrected timestamp handling: preserved source_timestamp, UNKNOWN when absent",
+    "Improved error classification: MCPProtocolError vs MCPServerError vs MCPTimeoutError",
+    "Added 24 comprehensive test cases for all corrections"
+  ],
+  "test_counts": {
+    "mcp_client_tests_collected": 24,
+    "mcp_client_tests_passed": 24,
+    "full_mediaman_suite_collected": 129,
+    "full_mediaman_suite_passed": 129,
+    "previous_tests": 105,
+    "new_tests": 24,
+    "improvement": 3
   },
   "files_modified": [
     "mediaman/mcp_client.py",

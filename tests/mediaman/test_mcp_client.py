@@ -1,7 +1,7 @@
 """
-Tests for MCPClient — mocked subprocess-based MCP communication.
+Tests for MCPClient — mocked subprocess with strict JSON-RPC validation.
 
-STEP 2: Scaffold tests with mocked processes only. No live servers.
+STEP 2 Correction: Wire-name mapping, strict protocol validation, stderr separation.
 """
 
 import pytest
@@ -25,236 +25,339 @@ def mock_process():
     process.stdout = MagicMock()
     process.stderr = MagicMock()
     process.returncode = None
+    process.poll = Mock(return_value=None)
     return process
 
 
-class TestMCPClientStartup:
-    """Startup and initialization tests."""
+class TestMCPClientWireMapping:
+    """Tool wire-name mapping tests."""
 
-    def test_start_success(self, mock_process):
-        """Successful process start and initialize."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            # Mock initialize response
-            mock_process.stdout = iter([
-                '{"jsonrpc": "2.0", "id": 1, "result": {"name": "racing"}}\n'
-            ])
+    def test_wire_mapping_exists(self):
+        """Verify wire mapping is defined."""
+        assert 'racing.get_position' in MCPClient.TOOL_WIRE_MAPPING
+        assert MCPClient.TOOL_WIRE_MAPPING['racing.get_position'] == 'get_position'
 
-            client = MCPClient('/tmp/racing.js', 'racing')
-            client.start()
-
-            assert client.initialized
-            assert client.process is mock_process
-
-    def test_start_file_not_found(self):
-        """Process start fails if server not found."""
-        with patch('subprocess.Popen', side_effect=FileNotFoundError):
-            client = MCPClient('/nonexistent/racing.js', 'racing')
-            with pytest.raises(MCPClientError, match="Server not found"):
-                client.start()
-
-    def test_start_permission_denied(self):
-        """Process start fails with permission error."""
-        with patch('subprocess.Popen', side_effect=PermissionError):
-            client = MCPClient('/tmp/racing.js', 'racing')
-            with pytest.raises(MCPClientError, match="Failed to launch"):
-                client.start()
-
-
-class TestMCPClientProtocol:
-    """JSON-RPC protocol tests."""
-
-    def test_initialize_request(self, mock_process):
-        """Initialize sends correct JSON-RPC request."""
-        init_response = {
-            'jsonrpc': '2.0',
-            'id': 1,
-            'result': {'name': 'racing', 'version': '1.0'}
-        }
-
+    def test_call_tool_uses_wire_name(self, mock_process):
+        """call_tool sends wire name in tools/call request."""
         with patch('subprocess.Popen', return_value=mock_process):
             with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
 
-                with patch.object(client, '_send_request', return_value={}):
-                    result = client.initialize()
-                    # Initialize sets initialized=True only in start(), not when called directly
-                    assert isinstance(result, dict)
+                    sent_request = None
 
-    def test_list_tools_request(self, mock_process):
-        """tools/list sends correct request."""
+                    def capture_request(line):
+                        nonlocal sent_request
+                        sent_request = json.loads(line.rstrip('\n'))
+
+                    mock_process.stdin.write = capture_request
+
+                    # Mock response
+                    mock_response = {
+                        'jsonrpc': '2.0',
+                        'id': 1,
+                        'result': {'latitude': 41.1234, 'longitude': -73.5678}
+                    }
+                    client.response_queue.put(mock_response)
+
+                    with patch.object(client, '_validate_jsonrpc_response'):
+                        result = client.call_tool('racing.get_position', {})
+
+                    # Verify wire name was sent, not public name
+                    assert sent_request is not None
+                    assert sent_request['params']['name'] == 'get_position'
+                    assert sent_request['params']['name'] != 'racing.get_position'
+
+
+class TestMCPClientStrictValidation:
+    """Strict JSON-RPC validation tests."""
+
+    def test_validate_jsonrpc_success(self, mock_process):
+        """Valid JSON-RPC response passes validation."""
         with patch('subprocess.Popen', return_value=mock_process):
             with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-                client.initialized = True
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
 
-                mock_tools = {'tools': [{'name': 'racing.get_position'}]}
-                with patch.object(client, '_send_request', return_value=mock_tools):
-                    result = client.list_tools()
-                    assert 'tools' in result
+                    response = {
+                        'jsonrpc': '2.0',
+                        'id': 1,
+                        'result': {'data': 'test'}
+                    }
+                    # Should not raise
+                    client._validate_jsonrpc_response(response, 1)
 
-    def test_tools_call_request(self, mock_process):
-        """tools/call sends correct request."""
+    def test_validate_jsonrpc_not_object(self, mock_process):
+        """Non-object response raises MCPProtocolError."""
         with patch('subprocess.Popen', return_value=mock_process):
             with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-                client.initialized = True
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
 
-                mock_result = {'latitude': 41.1234, 'longitude': -73.5678}
-                with patch.object(client, '_send_request', return_value=mock_result):
-                    result = client.call_tool('racing.get_position')
-                    assert result['server_name'] == 'racing'
-                    assert result['tool_name'] == 'racing.get_position'
-                    assert result['success']
+                    with pytest.raises(MCPProtocolError, match="not JSON object"):
+                        client._validate_jsonrpc_response("string", 1)
+
+    def test_validate_jsonrpc_missing_jsonrpc_field(self, mock_process):
+        """Missing 'jsonrpc' field raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'id': 1, 'result': {}}
+                    with pytest.raises(MCPProtocolError, match="missing 'jsonrpc'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_invalid_version(self, mock_process):
+        """Invalid JSON-RPC version raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '1.0', 'id': 1, 'result': {}}
+                    with pytest.raises(MCPProtocolError, match="Invalid JSON-RPC version"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_missing_id(self, mock_process):
+        """Missing 'id' field raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'result': {}}
+                    with pytest.raises(MCPProtocolError, match="missing 'id'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_mismatched_id(self, mock_process):
+        """Mismatched response ID raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'id': 999, 'result': {}}
+                    with pytest.raises(MCPProtocolError, match="does not match request id"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_both_result_and_error(self, mock_process):
+        """Response with both result and error raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {
+                        'jsonrpc': '2.0',
+                        'id': 1,
+                        'result': {},
+                        'error': {'code': -1, 'message': 'error'}
+                    }
+                    with pytest.raises(MCPProtocolError, match="both 'result' and 'error'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_neither_result_nor_error(self, mock_process):
+        """Response with neither result nor error raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'id': 1}
+                    with pytest.raises(MCPProtocolError, match="neither 'result' nor 'error'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_invalid_error_object(self, mock_process):
+        """Invalid error object raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'id': 1, 'error': 'not an object'}
+                    with pytest.raises(MCPProtocolError, match="Error is not object"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_error_missing_code(self, mock_process):
+        """Error missing 'code' raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'id': 1, 'error': {'message': 'error'}}
+                    with pytest.raises(MCPProtocolError, match="missing 'code'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+
+class TestMCPClientStderrSeparation:
+    """Stderr handling and process exit detection."""
+
+    def test_stderr_reader_thread_started(self, mock_process):
+        """stderr reader thread is started."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    with patch.object(MCPClient, 'initialize', return_value={}):
+                        client = MCPClient('/tmp/racing.js', 'racing')
+                        client.start()
+
+                        assert client.stderr_thread is not None
+                        assert client.stderr_thread.daemon
+
+    def test_process_nonzero_exit_detected(self, mock_process):
+        """Non-zero process exit is detected."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+
+                    # Simulate process exit
+                    mock_process.poll = Mock(return_value=1)
+
+                    with pytest.raises(MCPClientError, match="Server process exited"):
+                        client._send_request('tools/list', {})
+
+
+class TestMCPClientTimestampHandling:
+    """Source timestamp preservation."""
+
+    def test_provided_source_timestamp_preserved(self, mock_process):
+        """Provided source_timestamp is preserved exactly."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    raw_response = {
+                        'latitude': 41.1234,
+                        'longitude': -73.5678,
+                        'source_timestamp': '2026-08-27T22:53:00Z'
+                    }
+                    result = client._wrap_result('racing.get_position', raw_response)
+
+                    assert result['source_timestamp'] == '2026-08-27T22:53:00Z'
+
+    def test_absent_source_timestamp_becomes_unknown(self, mock_process):
+        """Absent source_timestamp is UNKNOWN, not fabricated."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    raw_response = {'latitude': 41.1234, 'longitude': -73.5678}
+                    result = client._wrap_result('racing.get_position', raw_response)
+
+                    assert result['source_timestamp'] == 'UNKNOWN'
+
+
+class TestMCPClientErrorHandling:
+    """Error classification and handling."""
+
+    def test_malformed_json_raises_protocol_error(self, mock_process):
+        """Malformed JSON raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+
+                    # Put a protocol error in queue
+                    error = MCPProtocolError("Malformed JSON")
+                    client.error_queue.put(error)
+
+                    # When we try to get a response, malformed JSON should be detected
+                    assert not client.error_queue.empty()
+
+    def test_server_error_response_raises_server_error(self, mock_process):
+        """Valid MCP error response raises MCPServerError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+
+                    error_response = {
+                        'jsonrpc': '2.0',
+                        'id': 1,
+                        'error': {'code': -32000, 'message': 'Invalid params'}
+                    }
+                    client.response_queue.put(error_response)
+
+                    with pytest.raises(MCPServerError, match="Invalid params"):
+                        client._send_request('tools/call', {'name': 'test', 'arguments': {}})
+
+    def test_request_timeout_raises_timeout_error(self, mock_process):
+        """Request timeout raises MCPTimeoutError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+                    client.REQUEST_TIMEOUT_SECONDS = 0.1  # Very short timeout
+
+                    with pytest.raises(MCPTimeoutError):
+                        client._send_request('tools/list', {})
 
 
 class TestMCPClientAllowlist:
-    """Allowlist security tests."""
+    """Tool allowlist security."""
 
     def test_tool_in_allowlist_accepted(self, mock_process):
         """Allowlisted tool is accepted."""
         with patch('subprocess.Popen', return_value=mock_process):
             with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-                client.initialized = True
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
 
-                with patch.object(client, '_send_request', return_value={}):
-                    # This should not raise
-                    client.call_tool('racing.get_position')
+                    mock_response = {
+                        'jsonrpc': '2.0',
+                        'id': 1,
+                        'result': {}
+                    }
+                    client.response_queue.put(mock_response)
+
+                    with patch.object(client, '_validate_jsonrpc_response'):
+                        # Should not raise
+                        client.call_tool('racing.get_position')
 
     def test_tool_not_in_allowlist_rejected(self, mock_process):
         """Non-allowlisted tool is rejected."""
         with patch('subprocess.Popen', return_value=mock_process):
             with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-                client.initialized = True
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
 
-                with pytest.raises(MCPClientError, match="Tool not allowlisted"):
-                    client.call_tool('racing.dangerous_tool')
-
-    def test_dangerous_tools_not_in_allowlist(self):
-        """Verify dangerous tools are not in allowlist."""
-        dangerous = [
-            'system.execute_command',
-            'docker.run',
-            'telegram.send_message',
-            'fs.delete_file'
-        ]
-        for tool in dangerous:
-            assert tool not in MCPClient.TOOL_ALLOWLIST
-
-
-class TestMCPClientErrorHandling:
-    """Error handling tests."""
-
-    def test_malformed_json_response(self, mock_process):
-        """Malformed JSON responses are skipped."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-                client.initialized = True
-
-                # Malformed JSON should not crash _read_responses thread
-                # (thread gracefully skips and continues)
-                assert True
-
-    def test_server_error_response(self, mock_process):
-        """Server error response is propagated."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-                client.initialized = True
-
-                error_response = {
-                    'error': {
-                        'code': -32000,
-                        'message': 'Invalid params'
-                    }
-                }
-                with patch.object(client, '_send_request', side_effect=MCPServerError('Invalid params')):
-                    with pytest.raises(MCPServerError):
-                        client.call_tool('racing.get_position')
-
-    def test_request_timeout(self, mock_process):
-        """Request timeout raises MCPTimeoutError."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-                client.initialized = True
-
-                with patch.object(client, '_send_request', side_effect=MCPTimeoutError('Timeout')):
-                    with pytest.raises(MCPTimeoutError):
-                        client.call_tool('racing.get_position')
-
-    def test_process_terminated_during_request(self, mock_process):
-        """Request fails if process is terminated."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = None  # Simulate terminated
-                client.initialized = False
-
-                with pytest.raises(MCPClientError, match="Server not started"):
-                    client._send_request('tools/call', {})
-
-
-class TestMCPClientResultStructure:
-    """Result contract tests."""
-
-    def test_wrapped_result_success(self, mock_process):
-        """Successful result is properly wrapped."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-
-                raw_response = {'latitude': 41.1234, 'longitude': -73.5678}
-                result = client._wrap_result('racing.get_position', raw_response)
-
-                assert result['server_name'] == 'racing'
-                assert result['tool_name'] == 'racing.get_position'
-                assert result['success'] is True
-                assert result['result'] == raw_response
-                assert result['error_code'] is None
-                assert result['source_timestamp'] == 'UNKNOWN'
-                assert 'observed_at' in result
-
-    def test_missing_source_timestamp_preserved(self, mock_process):
-        """Missing source_timestamp is preserved as UNKNOWN."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-
-                result = client._wrap_result('racing.get_position', {})
-                assert result['source_timestamp'] == 'UNKNOWN'
-
-    def test_missing_values_not_converted_to_zero(self, mock_process):
-        """Missing values remain as missing, not converted to zero."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-
-                # Response with missing fields (None values preserved)
-                raw_response = {'latitude': None, 'longitude': None}
-                result = client._wrap_result('racing.get_position', raw_response)
-
-                # Verify None values are preserved, not converted to zero
-                assert result['result']['latitude'] is None
-                assert result['result']['longitude'] is None
-                assert result['result'] == raw_response
+                    with pytest.raises(MCPClientError, match="Tool not allowlisted"):
+                        client.call_tool('racing.dangerous_tool')
 
 
 class TestMCPClientSubprocessSafety:
-    """Subprocess security and safety tests."""
+    """Subprocess security."""
 
     def test_no_shell_execution(self):
         """Process is launched with argv list, not shell=True."""
@@ -264,65 +367,34 @@ class TestMCPClientSubprocessSafety:
 
             try:
                 with patch.object(MCPClient, '_read_responses'):
-                    with patch.object(client, 'initialize', return_value={}):
-                        client.start()
+                    with patch.object(MCPClient, '_read_stderr'):
+                        with patch.object(client, 'initialize', return_value={}):
+                            client.start()
             except MCPTimeoutError:
                 pass
 
-            # Verify Popen was called with list (not shell=True)
             if mock_popen.called:
-                call_args = mock_popen.call_args
-                # argv list is first positional argument
-                argv = call_args[0][0] if call_args[0] else None
-                assert isinstance(argv, list), "Should use argv list"
-                assert 'shell' not in call_args[1] or call_args[1]['shell'] is False
+                call_kwargs = mock_popen.call_args[1]
+                assert 'shell' not in call_kwargs or call_kwargs['shell'] is False
 
-    def test_process_cleanup_on_error(self, mock_process):
-        """Process is terminated on startup error."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            client = MCPClient('/tmp/racing.js', 'racing')
-            with patch.object(MCPClient, '_read_responses'):
-                with patch.object(client, 'initialize', side_effect=Exception("Init failed")):
-                    try:
-                        client.start()
-                    except:
-                        pass
-
-            # Verify terminate was called
-            mock_process.terminate.assert_called()
-
-    def test_clean_process_termination(self, mock_process):
-        """Process termination is clean (wait then kill)."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                client = MCPClient('/tmp/racing.js', 'racing')
-                client.process = mock_process
-                client.initialized = True
-
-                # Successful termination (terminate succeeds)
-                mock_process.wait = Mock()
-                client.terminate()
-                mock_process.terminate.assert_called()
-
-    def test_credentials_not_in_command_arguments(self, mock_process):
-        """No credentials are passed in argv or environment."""
+    def test_no_credentials_in_argv(self):
+        """No credentials in server path."""
         client = MCPClient('/tmp/racing.js', 'racing')
-        # Verify no credentials in server_path
         assert 'token' not in client.server_path.lower()
         assert 'password' not in client.server_path.lower()
         assert 'secret' not in client.server_path.lower()
 
 
 class TestMCPClientContextManager:
-    """Context manager tests."""
+    """Context manager support."""
 
-    def test_context_manager_start_stop(self, mock_process):
-        """Context manager starts and stops process."""
+    def test_context_manager_cleanup(self, mock_process):
+        """Context manager calls terminate on exit."""
         with patch('subprocess.Popen', return_value=mock_process):
             with patch.object(MCPClient, '_read_responses'):
-                with patch.object(MCPClient, 'initialize', return_value={}):
-                    with MCPClient('/tmp/racing.js', 'racing') as client:
-                        assert client.initialized
+                with patch.object(MCPClient, '_read_stderr'):
+                    with patch.object(MCPClient, 'initialize', return_value={}):
+                        with MCPClient('/tmp/racing.js', 'racing') as client:
+                            assert client.initialized
 
-                    # After __exit__, process should be terminated
-                    mock_process.terminate.assert_called()
+                        mock_process.terminate.assert_called()

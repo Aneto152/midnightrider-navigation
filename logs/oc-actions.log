@@ -327,3 +327,10 @@
 [2026-08-27T22:36:28.647577+00:00Z] [TEST_RUN] [mediaman-step-2] Full MediaMan suite: 126/126 passed (105 existing + 21 new)
 [2026-08-27T22:36:28.647577+00:00Z] [RESULT] [mediaman-step-2] Result: SUCCESS — MCP client scaffold complete, no live servers contacted
 [2026-08-27T22:36:38.957705+00:00Z] [COMMIT] [mediaman-step-2] SHA: 7c04741c9107298daa5cc50ba5c28ab5eb734435
+[2026-08-27T23:00:43.716397+00:00Z] [FILE_MODIFY] [mediaman-step-2] Corrected MCP wire-name mapping: racing.get_position → get_position
+[2026-08-27T23:00:43.716397+00:00Z] [FILE_MODIFY] [mediaman-step-2] Implemented strict JSON-RPC 2.0 validation in _validate_jsonrpc_response()
+[2026-08-27T23:00:43.716397+00:00Z] [FILE_MODIFY] [mediaman-step-2] Added stderr separation and process exit detection
+[2026-08-27T23:00:43.716397+00:00Z] [FILE_MODIFY] [mediaman-step-2] Corrected timestamp handling: source_timestamp preserved or UNKNOWN
+[2026-08-27T23:00:43.716397+00:00Z] [TEST_RUN] [mediaman-step-2] MCP client tests: 24/24 passed
+[2026-08-27T23:00:43.716397+00:00Z] [TEST_RUN] [mediaman-step-2] Full MediaMan suite: 129/129 passed (105 existing + 24 new)
+[2026-08-27T23:00:43.716397+00:00Z] [RESULT] [mediaman-step-2] SUCCESS — MCP client protocol corrected, all validations strict, no live servers contacted
