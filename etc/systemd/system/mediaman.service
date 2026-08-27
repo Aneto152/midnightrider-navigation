@@ -7,17 +7,24 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/aneto/midnightrider-navigation
+
+# State and logs directories (systemd auto-creation)
+StateDirectory=mediaman
+LogsDirectory=mediaman
+RuntimeDirectory=mediaman
+
+# Execute the mediaman orchestration
 ExecStart=/usr/bin/python3 -m mediaman.mediaman
+
+# User/group
 User=aneto
 Group=aneto
 
-# Environment variable configuration (systemd can source from file)
+# Environment configuration
+# Must be explicitly set for production; defaults to safe test mode
 EnvironmentFile=-/etc/mediaman/mediaman.env
-# Production: require explicit provider and DRY_RUN=false
-# Default to test mode to prevent silent test content publishing
 Environment="DRY_RUN=true"
 Environment="MEDIAMAN_CONTENT_PROVIDER=test"
-# Must be explicitly set to non-test for production
 Environment="MEDIAMAN_PRODUCTION_MODE=false"
 
 # Security hardening
@@ -25,7 +32,7 @@ NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
 ProtectHome=yes
-ReadWritePaths=/var/lib/mediaman /var/log/mediaman
+ReadWritePaths=/var/lib/mediaman /var/log/mediaman /home/aneto/midnightrider-navigation/logs
 
 # Resource limits
 TimeoutStartSec=30
