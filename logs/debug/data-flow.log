@@ -42061,3 +42061,5 @@ Traceback (most recent call last):
 TypeError: SanitizedMessage.send_attempt() missing 1 required positional argument: 'execution_id'
 [2026-08-27T11:21:02] STARTUP dry_run=True production_mode=False provider=test
 [2026-08-27T11:21:02] DATA_IN normalized_cycle=2026-08-27T15:15:00+00:00 now=2026-08-27T15:21:02.434779+00:00
+[2026-08-27T11:21:13] STARTUP dry_run=True production_mode=False provider=test
+[2026-08-27T11:21:13] DATA_IN normalized_cycle=2026-08-27T15:15:00+00:00 now=2026-08-27T15:21:13.255323+00:00
