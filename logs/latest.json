@@ -1,13 +1,12 @@
 {
-  "task": "mediaman-audit-state-finalization",
+  "task": "mediaman-step-1-factregistry-correction",
   "status": "SUCCESS",
   "web_research_by_oc": false,
   "timestamp": "2026-08-27T17:22:23Z",
   "commit_sha": "57698cd4c5247a9c187eb82a35c4e34668ea90d6",
   "files_modified": [
-    "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
-    "logs/latest.json",
-    "logs/oc-actions.log"
+    "mediaman/race_facts.py",
+    "tests/mediaman/test_race_facts.py"
   ],
   "details": {
     "documentation_correction_complete": true,
@@ -94,5 +93,31 @@
       ]
     },
     "commit_sha": "b8d7de3bc2bff1ae316bd044840d4c9917e1ed11"
-  }
+  },
+  "step": 1,
+  "scope": "source-backed RaceFacts and freshness handling",
+  "source_fields_corrected": [
+    "Removed unproven wind_direction_true from /api/race_data mapping",
+    "Separated source_timestamp (from API) from observed_at (local parse time)",
+    "Missing SOG/COG remain unavailable, never become zero",
+    "Exact coordinates suppressed from prompt context by default",
+    "Wind marked as UNPROVEN pending MCP timestamp audit"
+  ],
+  "timestamp_behavior": "source_timestamp=API measurement time, observed_at=local parse time",
+  "freshness_behavior": "Determined by source_timestamp age, never by observed_at",
+  "missing_value_behavior": "Remain unavailable or None, never zero-substituted",
+  "wind_handling": "UNPROVEN and currently invalid, not extracted from /api/race_data",
+  "coordinate_handling": "Suppressed from prompt context by default, available with allow_exact_coordinates=True",
+  "expected_offline_handling": "Reserved for future sensor-offline classification",
+  "tests_executed": "19 test cases for RaceFacts validation",
+  "tests_result": "ALL PASSED",
+  "mcp_client_implemented": false,
+  "mcp_launched": false,
+  "event_detector_implemented": false,
+  "real_llm_generation_performed": false,
+  "real_telegram_send_performed": false,
+  "telegram_bot_or_group_created": false,
+  "mediaman_timer_activation_authorized": false,
+  "signalk_modified": false,
+  "docker_modified": false
 }

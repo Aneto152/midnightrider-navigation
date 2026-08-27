@@ -293,3 +293,11 @@
 [2026-08-27T17:25:17Z] [FILE_MODIFY] [audit] Flattened current MediaMan audit state in latest.json
 [2026-08-27T17:25:17Z] [RESULT] [audit] Result: SUCCESS — latest.json now exposes the current audit at top level
 [2026-08-27T17:25:17Z] [COMMIT] [audit] SHA: 33bc44d011db0773fe1f3f7416582c79e868dfdd
+[2026-08-27T21:23:24.384013+00:00Z] [FILE_MODIFY] [mediaman-step-1] Corrected source-backed RaceFacts and freshness handling
+[2026-08-27T21:23:24.384013+00:00Z] [FILE_MODIFY] [mediaman-step-1] - Removed unproven wind_direction_true from /api/race_data
+[2026-08-27T21:23:24.384013+00:00Z] [FILE_MODIFY] [mediaman-step-1] - Separated source_timestamp (from API) from observed_at (local)
+[2026-08-27T21:23:24.384013+00:00Z] [FILE_MODIFY] [mediaman-step-1] - Missing SOG/COG remain unavailable (no zero-substitution)
+[2026-08-27T21:23:24.384013+00:00Z] [FILE_MODIFY] [mediaman-step-1] - Exact coordinates suppressed from prompt context by default
+[2026-08-27T21:23:24.384013+00:00Z] [FILE_MODIFY] [mediaman-step-1] - Wind marked UNPROVEN pending MCP timestamp audit
+[2026-08-27T21:23:24.384013+00:00Z] [TEST_RUN] [mediaman-step-1] 19 test cases executed for RaceFacts validation
+[2026-08-27T21:23:24.384013+00:00Z] [RESULT] [mediaman-step-1] Result: SUCCESS — FactRegistry correction validated
