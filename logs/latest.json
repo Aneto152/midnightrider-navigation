@@ -76,7 +76,8 @@
         "Corrected provider documentation (test and gateway only)",
         "Verified /api/race_data does not claim wind/COG/SOG"
       ]
-    }
+    },
+    "commit_sha": "104b23b393b6ab62fd8be7126ccf4dc9cc542b99"
   },
   "previous_state": {
     "timestamp": "2026-08-27T16:52:59Z",
