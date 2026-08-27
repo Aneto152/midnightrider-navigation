@@ -68,13 +68,13 @@ Complete reference guide for the Midnight Rider navigation system.
 | **Scripts Catalog** | [SOFTWARE/SCRIPTS-CATALOG.md](SOFTWARE/SCRIPTS-CATALOG.md) |
 | **Wave Analyzer v1.1** | [SOFTWARE/WAVE-ANALYZER-V1.1-GUIDE.md](SOFTWARE/WAVE-ANALYZER-V1.1-GUIDE.md) |
 
-### Race Reporting (Media Man)
+### Race Reporting (MediaMan)
 
-- **[WHATSAPP_REPORTER.md](WHATSAPP_REPORTER.md)** — Media Man agent documentation
-  - WhatsApp group messaging
-  - Message templates
-  - Queue & offline mode
-  - Testing procedures
+- **[TELEGRAM-REPORTER-INTEGRATION-GUIDE.md](INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md)** — Telegram outbound reporter (foundation phase)
+  - DRY-RUN validated, production blocked
+  - SQLite delivery state machine
+  - One-way outbound only (no inbound)
+  - Setup & activation procedures
 
 ---
 

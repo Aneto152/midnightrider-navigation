@@ -1,24 +1,36 @@
 # Telegram Reporter (MediaMan) Integration Guide
 
-**Status:** Foundation phase - production ready for safe deployment
+**Status:** FOUNDATION ONLY — DRY-RUN VALIDATED — PRODUCTION ACTIVATION BLOCKED
+
+**Current Development Phase (2026-08-27):**
+- ✅ SQLite delivery state machine (PENDING → SENDING → SENT / FAILED)
+- ✅ Telegram sender (outbound-only, no inbound)
+- ✅ Logging infrastructure (structured, sanitized)
+- ✅ Systemd units (service + timer) present but disabled
+- ❌ Real content provider (not implemented)
+- ❌ OpenClaw LLM adapter (not implemented)
+- ⏳ Telegram bot/group (not created — development phase only)
 
 ## System Overview
 
-MediaMan is a **one-way outbound reporter** for Telegram group messages. It publishes race performance articles every 15 minutes to a temporary regatta group.
+MediaMan is a planned outbound-only Telegram reporter for race performance articles. It publishes content every 15 minutes to a temporary regatta group via a one-shot systemd timer.
 
-- **No inbound processing** – read-only sender
-- **No webhook** – systemd timer-triggered one-shot
-- **No personal accounts** – dedicated bot account required
-- **No credentials in code** – environment variables only
-- **Idempotent delivery** – 15-minute cycle buckets prevent duplicates
+**Security properties (current):**
+- No inbound Telegram webhook, polling, getUpdates, or command processing
+- No personal Telegram accounts
+- No credentials in version control
+- No Signal K modifications required
+- No Docker changes required
+- Fail-closed: invalid content → skip send (never fake article)
 
 ## Architecture
 
-### Data Flow
+### Data Flow (When Implemented)
 
 ```
-SK System → MediaMan → Telegram Bot API → Group Chat
-(one-way, no replies, no callbacks)
+RaceFacts (validated) → Content Provider → Telegram Sender → Group Chat
+                             ↓
+                        (no inbound)
 ```
 
 ### Delivery States
@@ -39,221 +51,312 @@ PENDING → SENDING → SENT  (final, non-retryable)
 15-minute UTC buckets prevent duplicate sends:
 
 ```
-2026-08-26T19:00:00Z → same send, if retried
-2026-08-26T19:14:59Z → same cycle
-2026-08-26T19:15:00Z → new cycle
+2026-08-27T15:00:00Z → same send, if retried
+2026-08-27T15:14:59Z → same cycle
+2026-08-27T15:15:00Z → new cycle
 ```
 
-## Setup
+## Current Status
 
-### 1. Telegram Bot Account
+### Validated Components
 
-Create a bot via @BotFather:
+**DRY_RUN Foundation:**
+- MediaMan main orchestration
+- SQLite state transitions
+- Logging (structured, sanitized)
+- Test content provider (for validation only)
+- Systemd timer/service files
 
-```
-/newbot
-Name: Midnight Rider Reporter
-Username: midnight_rider_reporter_bot
-```
+**Test Coverage:**
+- 51 unit tests (all passing)
+- Dry-run integration test
+- SQLite state machine test
+- Logging signature test
 
-You will receive: `TELEGRAM_BOT_TOKEN=123456:ABC...`
+### Blocked Components
 
-### 2. Telegram Group (Temporary per Regatta)
+**Content Provider:**
+- OpenClawGatewayProvider: placeholder (raises NotImplementedError)
+- TestContentProvider: test-only (cannot be used in production)
+- Real LLM adapter: not implemented
 
-Create a private group for each regatta:
+**Telegram Integration:**
+- No real bot created
+- No real group created
+- No real send authorized
+- Timer remains disabled
+- MEDIAMAN_PRODUCTION_MODE=false by default
 
-- Group name: `Midnight Rider — Block Island 2026`
-- Make the bot an admin (required for posting)
-- Only admins can send messages
+## Not Authorized Yet
 
-### 3. Environment Configuration
+The following actions are NOT authorized in this development phase:
 
-Create `/etc/mediaman/mediaman.env`:
+- ❌ Creating a Telegram bot account
+- ❌ Creating or joining a Telegram group
+- ❌ Enabling or starting mediaman.timer
+- ❌ Sending real Telegram messages
+- ❌ Configuring production credentials
+- ❌ Exposing any endpoint via Portal/Regatta for Telegram inbound
+
+## Future Activation (When Explicitly Approved)
+
+### Phase 1: Create Telegram Infrastructure
+
+This requires manual external action (not part of code):
+
+1. Contact @BotFather on Telegram
+   - Create dedicated bot for race reporting
+   - Store token securely (not in this repo)
+
+2. Create a private Telegram group
+   - Add bot as admin (required for posting)
+   - Store group ID securely (not in this repo)
+
+### Phase 2: Implement Content Provider
+
+Choose one of the following:
+
+**Option A: OpenClaw CLI (Recommended)**
+- Use documented command: `openclaw agent --agent main --message "<prompt>"`
+- Timeout flag: `--timeout <seconds>` (not `--timeout-seconds`)
+- File input: `--message-file <path>` available
+- Local Gateway routing: default behavior
+- Implementation required: MediaMan adapter for subprocess orchestration
+- Status: Design complete, not yet implemented
+
+**Option B: Regatta API Provider (Minimal Facts)**
+- Proven data sources:
+  - Own position: `/api/position`
+  - Own speed/course: `/api/navigation`
+  - Wind direction: `/api/race_data` (via Signal K)
+  - Start line geometry: `/api/race_data`
+  - Competitors nearby: `/api/ais` (if AIS active)
+  - External wind: `/api/ndbc/<station>` (5+ min old)
+- Unproven (must omit from content):
+  - Race ID, elapsed time, ranking, competitor delta, heel angle
+- Implementation required: Facts collector + article template
+- Status: Design complete, not yet implemented
+
+### Phase 3: Configure Runtime Environment
+
+Create `/etc/mediaman/mediaman.env` (not version-controlled):
 
 ```bash
-# Required for production
-TELEGRAM_BOT_TOKEN=<bot-token-from-botfather>
-TELEGRAM_CHAT_ID=<group-id>
+# Telegram credentials (required for production)
+TELEGRAM_BOT_TOKEN=<secured-token>
+TELEGRAM_CHAT_ID=<secured-group-id>
 
-# Production activation (defaults to false for safety)
+# Enable production mode
 MEDIAMAN_PRODUCTION_MODE=true
 
-# Content provider (future: "gateway" for SK integration)
-MEDIAMAN_CONTENT_PROVIDER=test
+# Select content provider (must be real, not "test")
+MEDIAMAN_CONTENT_PROVIDER=openclaw  # or "local"
 
-# Dry-run disabled (required for real sends)
+# Disable dry-run
 DRY_RUN=false
 
 # Race identifier
 MEDIAMAN_RACE_ID=block-island-2026
 ```
 
-**⚠️ Security:** This file must be protected:
-
+Protect the file:
 ```bash
 sudo chmod 600 /etc/mediaman/mediaman.env
 ```
 
-### 4. Systemd Activation
+### Phase 4: Enable Systemd Timer
+
+Only after content provider and credentials are verified:
 
 ```bash
 sudo systemctl enable mediaman.timer
 sudo systemctl start mediaman.timer
+sudo journalctl -u mediaman -f  # Monitor
 ```
 
-Monitor:
+**WARNING:** These commands are NOT authorized in the current development phase.
+
+## Testing (Current Development Phase)
+
+### Dry-Run Validation (Currently Authorized)
+
+Test the complete stack without network I/O:
 
 ```bash
-sudo journalctl -u mediaman -f
-```
-
-## Testing
-
-### Dry-Run (No Network I/O)
-
-```bash
+export TELEGRAM_BOT_TOKEN=test
+export TELEGRAM_CHAT_ID="-123"
 export DRY_RUN=true
+export MEDIAMAN_CONTENT_PROVIDER=test
+
 python3 -m mediaman.mediaman
 ```
 
-Expected: Logs show "DRY_RUN" and no network requests.
+Expected results:
+- Exit code: 0
+- No network requests to Telegram
+- SQLite state transitions: PENDING → SENDING → SENT
+- Logs sanitized (no credentials)
 
-### Real Test (With Real Bot)
+### Unit Tests
 
 ```bash
-export TELEGRAM_BOT_TOKEN=<your-token>
-export TELEGRAM_CHAT_ID=<your-chat-id>
+python3 -m unittest discover -s tests/mediaman -p 'test_*.py'
+```
+
+Expected: 51/51 tests pass
+
+### Real Test (NOT Authorized Yet)
+
+Once production activation is explicitly approved, use:
+
+```bash
+export TELEGRAM_BOT_TOKEN=<secured-token>
+export TELEGRAM_CHAT_ID=<secured-id>
 export MEDIAMAN_PRODUCTION_MODE=true
 export DRY_RUN=false
+export MEDIAMAN_CONTENT_PROVIDER=local  # or "openclaw"
+
 python3 -m mediaman.mediaman
 ```
 
-Expected: One message sent to group.
+This is NOT authorized in the current development phase.
+
+## Data Availability (Verified)
+
+### Proven Sources
+
+| Data | Source | Unit | Freshness |
+|------|--------|------|-----------|
+| Own position | `/api/position` | degrees | ≤ 30s |
+| Own SOG | `/api/navigation` | knots | Real-time |
+| Own COG | `/api/navigation` | degrees | Real-time |
+| Wind direction | `/api/race_data` → Signal K | degrees | ≤ 10s |
+| Start line distance | `/api/race_data` | meters | Real-time |
+| Start line side | `/api/race_data` | enum (OCS/CLEAR/BEHIND) | Real-time |
+| Competitors nearby | `/api/ais` | count | Event-driven |
+| External wind speed | `/api/ndbc/<station>` | knots | 5-30 min |
+
+### Not Available
+
+- ❌ Race ID (not returned by any endpoint)
+- ❌ Race elapsed time (no timer state exposed)
+- ❌ Own ranking or competitor delta (requires external algorithm)
+- ❌ Own heel angle (not queried from Signal K)
+- ❌ True wind speed from Signal K (NDBC used instead, with age)
 
 ## Logging
 
-### Service Logs
+### Service Logs (When Enabled)
 
-```bash
-/var/log/mediaman/mediaman.log
-```
+Location: `/var/log/mediaman/mediaman.log`
 
-Structured output (rotated at 5 MB, 3 backups):
+Example output (DRY_RUN=true):
 
 ```
-[2026-08-26T19:00:00] [INFO] [mediaman] STARTUP dry_run=False
-[2026-08-26T19:00:00] [INFO] [mediaman] CONTENT_VALIDATION race_id=block-island cycle=2026-08-26T19:00:00Z length=450 valid=True
-[2026-08-26T19:00:00] [INFO] [mediaman] SEND_ATTEMPT dry_run=False chat_id=-******* length=450 execution_id=abc12345
-[2026-08-26T19:00:01] [INFO] [mediaman] SEND_RESULT dry_run=False success=True provider_status=OK error_code= execution_id=abc12345
-[2026-08-26T19:00:01] [INFO] [mediaman] HEARTBEAT cycle=2026-08-26T19:00:00Z provider=test
-[2026-08-26T19:00:01] [INFO] [mediaman] SHUTDOWN execution_count=1
+[2026-08-27T15:30:00] [INFO] [mediaman] STARTUP dry_run=True
+[2026-08-27T15:30:00] [INFO] [mediaman] CONTENT_VALIDATION race_id=... cycle=... length=450 valid=True
+[2026-08-27T15:30:00] [INFO] [mediaman] SEND_ATTEMPT dry_run=True chat_id=***** length=450 execution_id=...
+[2026-08-27T15:30:01] [INFO] [mediaman] SEND_RESULT dry_run=True success=True provider_status=DRY_RUN error_code= execution_id=...
+[2026-08-27T15:30:01] [INFO] [mediaman] HEARTBEAT provider=test
+[2026-08-27T15:30:01] [INFO] [mediaman] SHUTDOWN execution_count=1
 ```
 
-### Data-Flow Logs
-
-```bash
-/var/log/mediaman/data-flow.log
-```
-
-## Idempotency & Locking
-
-MediaMan uses **fcntl file locking** for safe concurrent access:
-
-1. Lock on `/var/lib/mediaman/idempotency.lock`
-2. Load state from `/var/lib/mediaman/idempotency.json`
-3. Check if cycle was already sent
-4. If not sent: write temp file → fsync → atomically rename
-5. Release lock
-
-This prevents:
-
-- Duplicate sends (same cycle)
-- Concurrent state corruption
-- Lost updates
+**Security note:** No credentials are logged. Chat ID is masked. Token is never included.
 
 ## Security & Privacy
 
-✅ **What's protected:**
+### What's Protected
 
-- Telegram bot token never logged
-- Chat IDs masked in logs (`-*******`)
-- Message bodies not logged (only length)
-- Credentials in environment, not code
-- No personal Telegram accounts
-- No inbound message processing
-- No webhook listener
+- ✅ Telegram bot token: never logged or exposed
+- ✅ Chat ID: masked in logs (`-*******`)
+- ✅ Message bodies: not logged (only length)
+- ✅ Credentials: environment variables only (not code)
+- ✅ No personal Telegram accounts
+- ✅ No inbound message processing
+- ✅ No webhook listener
+- ✅ One-way flow enforced
 
-⚠️ **What you must protect:**
+### What You Must Protect
 
-- `/etc/mediaman/mediaman.env` – chmod 600
-- Telegram bot token – rotate regularly
-- Group membership – admins only
-- Chat ID – not shared publicly
+Once production credentials are configured:
 
-## Recovery
+- `/etc/mediaman/mediaman.env` → `chmod 600`
+- Telegram bot token → rotate regularly via @BotFather
+- Group membership → admins only
+- Chat ID → not shared publicly
 
-### Stale SENDING State
+## State Management (SQLite)
 
-If the process crashes during send, the state remains "SENDING". On next run:
+MediaMan uses SQLite for idempotent delivery tracking:
 
+```sql
+CREATE TABLE deliveries (
+    delivery_key TEXT PRIMARY KEY,
+    race_id TEXT NOT NULL,
+    cycle_id TEXT NOT NULL,
+    target_id TEXT NOT NULL,
+    state TEXT CHECK (state IN ('PENDING', 'SENDING', 'SENT', 'FAILED')),
+    created_at INTEGER NOT NULL,
+    updated_at INTEGER NOT NULL,
+    sent_at INTEGER,
+    provider_message_id TEXT,
+    retry_count INTEGER DEFAULT 0,
+    last_error TEXT,
+    UNIQUE(race_id, cycle_id, target_id)
+);
 ```
-Check timestamp → if > stale_timeout: retry
+
+**Recovery:**
+- Stale SENDING (> 3600s): retryable
+- SENT: never retried
+- FAILED: remains retryable
+- PENDING: transient
+
+## Troubleshooting (Development Phase)
+
+### Running a Dry-Run Test
+
+```bash
+export TELEGRAM_BOT_TOKEN=test
+export TELEGRAM_CHAT_ID="-123"
+export DRY_RUN=true
+export MEDIAMAN_CONTENT_PROVIDER=test
+
+python3 -m mediaman.mediaman
 ```
 
-This is safe: a stale send is retried, duplicate is prevented by cycle ID.
+Expected: Exit 0, no network I/O, SQLite state transitions.
 
-### Failed Send
+### Checking SQLite State
 
-```
-State: FAILED
-Error: "NETWORK_ERROR" (or Telegram error code)
-
-Next cycle: automatically retried
-Manual retry: run same MEDIAMAN_RACE_ID within same 15-minute bucket
+```bash
+sqlite3 /var/lib/mediaman/state.sqlite3 \
+  "SELECT state, race_id, cycle_id FROM deliveries ORDER BY created_at DESC LIMIT 5;"
 ```
 
-### Production Activation
+### Viewing Logs
 
-To go live:
+```bash
+tail -20 /var/log/mediaman/mediaman.log
+```
 
-1. Create bot + group (Telegram)
-2. Write `/etc/mediaman/mediaman.env`
-3. Run one-shot test: `python3 -m mediaman.mediaman`
-4. Verify message in group
-5. Enable timer: `sudo systemctl enable mediaman.timer`
-6. Start timer: `sudo systemctl start mediaman.timer`
-7. Monitor logs: `journalctl -u mediaman -f`
+### Systemd Timer Status (Non-Destructive)
 
-## Future: OpenClaw Gateway Integration
-
-The `OpenClawGatewayProvider` is a placeholder for fetching French race articles directly from the SK system. When implemented, it will:
-
-1. Call local Gateway API (documented path TBD)
-2. Fetch race-specific article content
-3. Validate French output
-4. Send via Telegram
-
-This allows real-time race reporting instead of test articles.
-
-## Troubleshooting
-
-| Problem | Solution |
-|---------|----------|
-| Timer not running | `sudo systemctl status mediaman.timer` |
-| No message in group | Check logs: `journalctl -u mediaman -n 20` |
-| "FAILED" state persists | Verify token/chat ID in .env, then retry |
-| "SENDING" for >1 hour | Stale state: manual restart of timer |
-| Token leaked in logs | Update token via @BotFather, rotate immediately |
+```bash
+systemctl is-enabled mediaman.timer || echo "not-found"
+systemctl is-active mediaman.timer || echo "inactive"
+```
 
 ## References
 
-- Telegram Bot API: https://core.telegram.org/bots/api
-- MediaMan README: `mediaman/README.md`
-- Systemd units: `etc/systemd/system/mediaman.{service,timer}`
-- Configuration schema: `.env.example`
+- **Repository:** `/home/aneto/midnightrider-navigation`
+- **Source:** `mediaman/`
+- **Tests:** `tests/mediaman/`
+- **Systemd:** `etc/systemd/system/mediaman.{service,timer}`
+- **Architecture:** See SYSTEM-SUMMARY.md
 
 ---
 
-**Last Updated:** 2026-08-27  
-**Version:** 1.0 (Foundation)  
-**Status:** Production-ready for safe deployment
+**Last Updated:** 2026-08-27
+**Status:** Foundation Phase (DRY-RUN Validated, Production Blocked)
+**Next Step:** Implement real content provider (OpenClaw or Regatta-based)

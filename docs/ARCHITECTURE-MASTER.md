@@ -246,6 +246,44 @@ services:
 
 ---
 
+---
+
+## 4.6 MediaMan (Telegram Reporter) — Foundation Phase
+
+**Status:** FOUNDATION ONLY — DRY-RUN VALIDATED — PRODUCTION NOT AUTHORIZED
+
+**Current State (2026-08-27):**
+- ✅ SQLite delivery state machine (PENDING → SENDING → SENT / FAILED)
+- ✅ Telegram sender (outbound-only, no inbound)
+- ✅ Logging infrastructure (structured, sanitized)
+- ✅ Systemd units present (service + timer disabled)
+- ❌ Real content provider not implemented
+- ❌ OpenClaw LLM adapter not implemented
+- ⏳ Telegram bot/group not created
+
+**Key Properties:**
+- One-way outbound only (no inbound Telegram processing, webhook, polling, or getUpdates)
+- No Signal K modifications required
+- No Docker service changes
+- No Portal or Regatta endpoint exposure
+- Fail-closed: invalid content → skip send (never fake article)
+
+**Production Blockers:**
+- Real content provider (LLM adapter) not implemented
+- OpenClaw CLI integration not implemented
+- No explicit Denis approval for production activation
+
+**Systemd Units (Disabled):**
+- `mediaman.service` — one-shot execution
+- `mediaman.timer` — 15-minute intervals (NOT enabled)
+
+**Configuration:**
+- Environment: `/etc/mediaman/mediaman.env` (not version-controlled)
+- State: SQLite at `/var/lib/mediaman/state.sqlite3` (runtime only)
+- Logs: `/var/log/mediaman/mediaman.log` (structured, sanitized)
+
+**For Details:** See [docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md](../INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md)
+
 ## 5. FLUX DE DONNÉES DÉTAILLÉS
 
 ### 5.1 Cap vrai (headingTrue)
