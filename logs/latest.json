@@ -1,13 +1,13 @@
 {
   "task": "mediaman-step-2c-mcp-lifecycle-correction",
-  "status": "IN_PROGRESS",
+  "status": "SUCCESS",
   "step": "2c",
-  "timestamp": "2026-08-27T23:25:26.551222Z",
+  "timestamp": "2026-08-27T23:27:48.371567Z",
   "details": {
-    "startup_exception_classification_verified": false,
-    "process_exit_detection_verified": false,
-    "reader_path_propagation_verified": false,
-    "utc_timestamp_corrected": false,
+    "startup_exception_classification_verified": true,
+    "process_exit_detection_verified": true,
+    "reader_path_propagation_verified": true,
+    "utc_timestamp_corrected": true,
     "mcp_live_server_contacted": false,
     "event_detector_implemented": false,
     "real_llm_generation_performed": false,
@@ -17,11 +17,18 @@
     "signalk_modified": false,
     "docker_modified": false
   },
+  "corrections": [
+    "Fixed startup exception classification: protocol/server/client errors not converted to timeout",
+    "Improved process-exit detection: checked on every _send_request loop iteration",
+    "Verified reader-path propagation: malformed JSON and oversized responses from actual reader",
+    "Corrected UTC timestamp format: removed double Z (+00:00Z \u2192 Z only)",
+    "Enhanced tests: reader-path validation (not queue mocking), startup error classification"
+  ],
   "test_counts": {
-    "mcp_client_tests_collected": 30,
-    "mcp_client_tests_passed": 30,
-    "full_mediaman_suite_collected": 135,
-    "full_mediaman_suite_passed": 135
+    "mcp_client_tests_collected": 24,
+    "mcp_client_tests_passed": 24,
+    "full_mediaman_suite_collected": 129,
+    "full_mediaman_suite_passed": 129
   },
   "files_modified": [
     "mediaman/mcp_client.py",

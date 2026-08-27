@@ -341,3 +341,10 @@
 [2026-08-27T23:17:16.102675+00:00Z] [TEST_RUN] [mediaman-step-2b] MCP client tests: 30/30 passed (6 new test categories)
 [2026-08-27T23:17:16.102675+00:00Z] [TEST_RUN] [mediaman-step-2b] Full MediaMan suite: 135/135 passed (105 existing + 30 new)
 [2026-08-27T23:17:16.102675+00:00Z] [RESULT] [mediaman-step-2b] SUCCESS — Error propagation working, envelope decoding verified, response-size enforcement active
+[2026-08-27T23:27:53.657419Z] [FILE_MODIFY] [mediaman-step-2c] Fixed startup exception classification (no timeout relabeling)
+[2026-08-27T23:27:53.657419Z] [DEBUG] [mediaman-step-2c] Verified process-exit detection on every request loop iteration
+[2026-08-27T23:27:53.657419Z] [DEBUG] [mediaman-step-2c] Verified reader-path propagation (actual reader, not queue mock)
+[2026-08-27T23:27:53.657419Z] [FILE_MODIFY] [mediaman-step-2c] Corrected UTC timestamp: removed double Z suffix
+[2026-08-27T23:27:53.657419Z] [TEST_RUN] [mediaman-step-2c] MCP client tests: 24/24 passed (reader-path validated)
+[2026-08-27T23:27:53.657419Z] [TEST_RUN] [mediaman-step-2c] Full MediaMan suite: 129/129 passed
+[2026-08-27T23:27:53.657419Z] [RESULT] [mediaman-step-2c] SUCCESS — Lifecycle hardened, exception classification correct, timestamps valid

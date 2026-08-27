@@ -4,7 +4,7 @@ MCP Client for MediaMan — Python subprocess-based JSON-RPC interface.
 Communicates with Node MCP servers using JSON-RPC 2.0 over stdin/stdout.
 Implements bounded timeouts, strict protocol validation, error propagation, and result decoding.
 
-STEP 2B: Error propagation, MCP result envelope decoding, response-size enforcement.
+STEP 2C: Startup exception classification, process-exit detection, valid UTC timestamps.
 """
 
 import json
@@ -50,6 +50,7 @@ class MCPClient:
     - Tool wire-name mapping (public name → wire name)
     - Result envelope decoding (content[0].text → structured data)
     - Error propagation from reader thread to waiting request
+    - Process-exit detection during pending requests
     """
 
     # PUBLIC TOOL IDENTIFIERS → WIRE-LEVEL MCP TOOL NAMES
@@ -94,9 +95,10 @@ class MCPClient:
         Launch the MCP server process with bounded startup timeout.
 
         Raises:
-            MCPClientError: if process fails to start
-            MCPTimeoutError: if startup exceeds timeout
+            MCPClientError: if process fails to start or exits
             MCPProtocolError: if protocol error during init
+            MCPServerError: if server returned error during init
+            MCPTimeoutError: if startup exceeds timeout
         """
         try:
             # Launch with argv list (no shell=True)
@@ -130,9 +132,21 @@ class MCPClient:
         try:
             self.initialize()
             self.initialized = True
+        except MCPProtocolError:
+            self.terminate()
+            raise
+        except MCPServerError:
+            self.terminate()
+            raise
+        except MCPClientError:
+            self.terminate()
+            raise
+        except MCPTimeoutError:
+            self.terminate()
+            raise
         except Exception as e:
             self.terminate()
-            raise MCPTimeoutError(f"Startup timeout or init failed: {e}") from e
+            raise MCPClientError(f"Startup failed: {e}") from e
 
     def initialize(self) -> Dict[str, Any]:
         """
@@ -238,13 +252,13 @@ class MCPClient:
         except (BrokenPipeError, OSError) as e:
             raise MCPClientError(f"Failed to send request: {e}") from e
 
-        # Check for process exit
-        if self.process.poll() is not None:
-            raise MCPClientError(f"Server process exited with code {self.process.returncode}")
-
         # Wait for response with timeout
         start_time = time.time()
         while True:
+            # Check for process exit
+            if self.process.poll() is not None:
+                raise MCPClientError(f"Server process exited with code {self.process.returncode}")
+
             elapsed = time.time() - start_time
             if elapsed > self.REQUEST_TIMEOUT_SECONDS:
                 raise MCPTimeoutError(
@@ -325,10 +339,6 @@ class MCPClient:
     def _decode_mcp_result(self, result: Dict[str, Any]) -> Dict[str, Any]:
         """
         Decode MCP tool-result content envelope.
-
-        MCP servers wrap tool results as:
-        result.content[0].type == "text"
-        result.content[0].text = JSON.stringify(tool_result)
 
         Args:
             result: The result field from a tools/call response
@@ -442,6 +452,9 @@ class MCPClient:
         if isinstance(decoded_result, dict) and 'source_timestamp' in decoded_result:
             source_timestamp = decoded_result['source_timestamp']
 
+        # Generate valid UTC timestamp without double Z
+        observed_at = datetime.now(timezone.utc).isoformat().replace('+00:00', '') + 'Z'
+
         result = {
             'server_name': self.server_name,
             'tool_name': tool_name,
@@ -451,7 +464,7 @@ class MCPClient:
             'error_message': None,
             'source': f'mcp:{self.server_name}',
             'source_timestamp': source_timestamp,
-            'observed_at': datetime.now(timezone.utc).isoformat() + 'Z',
+            'observed_at': observed_at,
             'warnings': []
         }
 
