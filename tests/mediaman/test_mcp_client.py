@@ -411,6 +411,138 @@ class TestMCPClientAllowlist:
                         client.call_tool('racing.dangerous_tool')
 
 
+class TestMCPClientStrictValidation:
+    """Strict JSON-RPC 2.0 validation tests."""
+
+    def test_validate_jsonrpc_success(self, mock_process):
+        """Valid JSON-RPC response passes validation."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {
+                        'jsonrpc': '2.0',
+                        'id': 1,
+                        'result': {'data': 'test'}
+                    }
+                    # Should not raise
+                    client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_not_object(self, mock_process):
+        """Non-object response raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    with pytest.raises(MCPProtocolError, match="not JSON object"):
+                        client._validate_jsonrpc_response("string", 1)
+
+    def test_validate_jsonrpc_missing_jsonrpc_field(self, mock_process):
+        """Missing 'jsonrpc' field raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'id': 1, 'result': {}}
+                    with pytest.raises(MCPProtocolError, match="missing 'jsonrpc'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_invalid_version(self, mock_process):
+        """Invalid JSON-RPC version raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '1.0', 'id': 1, 'result': {}}
+                    with pytest.raises(MCPProtocolError, match="Invalid JSON-RPC version"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_missing_id(self, mock_process):
+        """Missing 'id' field raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'result': {}}
+                    with pytest.raises(MCPProtocolError, match="missing 'id'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_mismatched_id(self, mock_process):
+        """Mismatched response ID raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'id': 999, 'result': {}}
+                    with pytest.raises(MCPProtocolError, match="does not match request id"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_both_result_and_error(self, mock_process):
+        """Response with both result and error raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {
+                        'jsonrpc': '2.0',
+                        'id': 1,
+                        'result': {},
+                        'error': {'code': -1, 'message': 'error'}
+                    }
+                    with pytest.raises(MCPProtocolError, match="both 'result' and 'error'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_neither_result_nor_error(self, mock_process):
+        """Response with neither result nor error raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'id': 1}
+                    with pytest.raises(MCPProtocolError, match="neither 'result' nor 'error'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_invalid_error_object(self, mock_process):
+        """Invalid error object raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'id': 1, 'error': 'not an object'}
+                    with pytest.raises(MCPProtocolError, match="Error is not object"):
+                        client._validate_jsonrpc_response(response, 1)
+
+    def test_validate_jsonrpc_error_missing_code(self, mock_process):
+        """Error missing 'code' raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    response = {'jsonrpc': '2.0', 'id': 1, 'error': {'message': 'error'}}
+                    with pytest.raises(MCPProtocolError, match="missing 'code'"):
+                        client._validate_jsonrpc_response(response, 1)
+
+
 class TestMCPClientSubprocessSafety:
     """Subprocess security."""
 

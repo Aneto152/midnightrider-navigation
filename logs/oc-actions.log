@@ -348,3 +348,9 @@
 [2026-08-27T23:27:53.657419Z] [TEST_RUN] [mediaman-step-2c] MCP client tests: 24/24 passed (reader-path validated)
 [2026-08-27T23:27:53.657419Z] [TEST_RUN] [mediaman-step-2c] Full MediaMan suite: 129/129 passed
 [2026-08-27T23:27:53.657419Z] [RESULT] [mediaman-step-2c] SUCCESS — Lifecycle hardened, exception classification correct, timestamps valid
+[2026-08-27T23:39:42.235592Z] [DEBUG] [mediaman-step-2c] Verified origin/main at 1ccf77fdb4a618fb58c7650f920ad8da6fae67d3
+[2026-08-27T23:39:42.235592Z] [FILE_MODIFY] [mediaman-step-2c] Restored complete Step 2B strict JSON-RPC validation test coverage
+[2026-08-27T23:39:42.235592Z] [DEBUG] [mediaman-step-2c] Confirmed Step 2C implementation: exception classification, process-exit detection, UTC timestamps
+[2026-08-27T23:39:42.235592Z] [TEST_RUN] [mediaman-step-2c] MCP client tests: 34/34 passed (strict validation restored)
+[2026-08-27T23:39:42.235592Z] [TEST_RUN] [mediaman-step-2c] Full MediaMan suite: 139/139 passed (105 existing + 34 new)
+[2026-08-27T23:39:42.235592Z] [RESULT] [mediaman-step-2c-publish] SUCCESS — Step 2C lifecycle hardening complete with full test coverage
