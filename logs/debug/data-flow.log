@@ -42065,3 +42065,7 @@ TypeError: SanitizedMessage.send_attempt() missing 1 required positional argumen
 [2026-08-27T11:21:13] DATA_IN normalized_cycle=2026-08-27T15:15:00+00:00 now=2026-08-27T15:21:13.255323+00:00
 [2026-08-27T11:24:55] STARTUP dry_run=True production_mode=False provider=test
 [2026-08-27T11:24:55] DATA_IN normalized_cycle=2026-08-27T15:15:00+00:00 now=2026-08-27T15:24:55.529406+00:00
+[2026-08-27T11:25:03] STARTUP dry_run=True production_mode=False provider=test
+[2026-08-27T11:25:03] DATA_IN normalized_cycle=2026-08-27T15:15:00+00:00 now=2026-08-27T15:25:03.652993+00:00
+[2026-08-27T11:29:52] STARTUP dry_run=True production_mode=False provider=test
+[2026-08-27T11:29:52] DATA_IN normalized_cycle=2026-08-27T15:15:00+00:00 now=2026-08-27T15:29:52.949852+00:00

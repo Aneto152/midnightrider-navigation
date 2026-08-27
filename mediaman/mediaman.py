@@ -125,7 +125,7 @@ def main():
         service_logger.info(
             SanitizedMessage.send_result(dry_run, sender_result.success, sender_result.error_code, sender.execution_id)
         )
-        debug_logger.info(f"SEND_RESULT success={sender_result.success} error={sender_result.get('error', '')} execution_id={sender.execution_id}")
+        debug_logger.info(f"SEND_RESULT success={sender_result.success} error_code={sender_result.error_code} execution_id={sender_result.execution_id}")
         
         # Record result in state store
         try:
@@ -135,10 +135,10 @@ def main():
                     race_id, cycle_ts, sender.chat_id,
                     provider_message_id=None
                 )
-                service_logger.info(f"Delivery SENT: race_id={race_id} cycle={cycle_ts} message_id={sender_result.get('message_id', 'N/A')}")
+                service_logger.info(f"Delivery SENT: race_id={race_id} cycle={cycle_ts}")
             else:
                 # Mark as FAILED
-                error_msg = sender_result.get("error", "Unknown error")
+                error_msg = sender_result.error_code or "Unknown error"
                 idempotency_store.record_failed(race_id, cycle_ts, sender.chat_id, error_msg)
                 service_logger.error(f"Delivery FAILED: race_id={race_id} cycle={cycle_ts} error={error_msg}")
                 return 1
