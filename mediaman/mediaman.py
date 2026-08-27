@@ -106,7 +106,7 @@ def main():
         
         # Send via Telegram
         service_logger.info(
-            SanitizedMessage.send_attempt(dry_run, len(content), sender.execution_id)
+            SanitizedMessage.send_attempt(dry_run, sender.chat_id, len(content), sender.execution_id)
         )
         debug_logger.info(f"SEND_ATTEMPT dry_run={dry_run} content_length={len(content)} execution_id={sender.execution_id}")
         
@@ -123,7 +123,7 @@ def main():
             return 1
         
         service_logger.info(
-            SanitizedMessage.send_result(dry_run, sender_result.success, sender_result.error_code, sender.execution_id)
+            SanitizedMessage.send_result(dry_run, sender_result.success, sender_result.provider_status, sender_result.error_code, sender_result.execution_id)
         )
         debug_logger.info(f"SEND_RESULT success={sender_result.success} error_code={sender_result.error_code} execution_id={sender_result.execution_id}")
         
