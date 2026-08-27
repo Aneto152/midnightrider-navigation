@@ -11,7 +11,8 @@ from datetime import datetime, timezone
 
 from .telegram_sender import TelegramSender
 from .content_provider import get_content_provider
-from .idempotency import IdempotencyKey, IdempotencyStore, normalize_to_15min_bucket, DeliveryRecord
+from .idempotency import normalize_to_15min_bucket
+from .sqlite_state import SQLiteStateStore
 from .logging_utils import setup_service_logger, setup_debug_logger, SanitizedMessage
 
 
@@ -63,7 +64,7 @@ def main():
         # Initialize components
         sender = TelegramSender()
         provider = get_content_provider()
-        idempotency_store = IdempotencyStore()
+        idempotency_store = SQLiteStateStore()
         
         # BLOCKER 4: Use stable 15-minute cycle ID
         now_utc = datetime.now(timezone.utc)
@@ -89,34 +90,32 @@ def main():
         
         # Check idempotency and create delivery record
         try:
-            idem_key = IdempotencyKey(race_id, cycle_ts, sender.chat_id)
-            
             # BLOCKER 3: Use explicit delivery states
-            is_new = idempotency_store.record_pending(idem_key)
+            is_new = idempotency_store.record_pending(race_id, cycle_ts, sender.chat_id)
             
             if not is_new:
-                current_state = idempotency_store.get_state(idem_key)
-                if current_state == DeliveryRecord.SENT:
+                current_state = idempotency_store.get_state(race_id, cycle_ts, sender.chat_id)
+                if current_state == 'SENT':
                     service_logger.info(
                         f"Skipping already-sent cycle: race_id={race_id} cycle={cycle_ts} state=SENT"
                     )
                     return 0
-                elif current_state == DeliveryRecord.FAILED:
+                elif current_state == 'FAILED':
                     service_logger.info(
                         f"Retrying failed delivery: race_id={race_id} cycle={cycle_ts}"
                     )
-                    idempotency_store.record_sending(idem_key)
+                    idempotency_store.record_sending(race_id, cycle_ts, sender.chat_id)
                 elif current_state == DeliveryRecord.SENDING:
                     service_logger.warning(
                         f"Stale SENDING state recovered: race_id={race_id} cycle={cycle_ts}"
                     )
-                    idempotency_store.record_sending(idem_key)
+                    idempotency_store.record_sending(race_id, cycle_ts, sender.chat_id)
                 else:
                     service_logger.info(
                         f"Resuming cycle: race_id={race_id} cycle={cycle_ts} state={current_state}"
                     )
             else:
-                idempotency_store.record_sending(idem_key)
+                idempotency_store.record_sending(race_id, cycle_ts, sender.chat_id)
         
         except Exception as e:
             service_logger.error(f"Idempotency check failed: {e}")
@@ -134,7 +133,7 @@ def main():
         if result.success:
             idempotency_store.record_sent(idem_key)
         else:
-            idempotency_store.record_failed(idem_key, result.error_code)
+            idempotency_store.record_failed(race_id, cycle_ts, sender.chat_id, result.error_code)
         
         # Log result
         service_logger.info(
