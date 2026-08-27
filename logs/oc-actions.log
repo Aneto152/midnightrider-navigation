@@ -290,3 +290,6 @@
 [2026-08-27T17:22:27Z] [FILE_MODIFY] [audit] Promoted current MediaMan audit state to top-level latest.json
 [2026-08-27T17:22:27Z] [RESULT] [audit] Result: SUCCESS — latest audit state normalized
 [2026-08-27T17:22:27Z] [COMMIT] [audit] SHA: 14ee379c1336c996184ecdbfcaa847a6671a3277
+[2026-08-27T17:25:17Z] [FILE_MODIFY] [audit] Flattened current MediaMan audit state in latest.json
+[2026-08-27T17:25:17Z] [RESULT] [audit] Result: SUCCESS — latest.json now exposes the current audit at top level
+[2026-08-27T17:25:17Z] [COMMIT] [audit] SHA: 33bc44d011db0773fe1f3f7416582c79e868dfdd

@@ -1,31 +1,29 @@
 {
-  "current_audit": {
-    "task": "mediaman-audit-state-finalization",
-    "status": "SUCCESS",
-    "web_research_by_oc": false,
-    "timestamp": "2026-08-27T17:22:23Z",
-    "commit_sha": "57698cd4c5247a9c187eb82a35c4e34668ea90d6",
-    "files_modified": [
-      "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
-      "logs/latest.json",
-      "logs/oc-actions.log"
-    ],
-    "details": {
-      "documentation_correction_complete": true,
-      "future_production_shell_blocks_removed": true,
-      "duplicate_start_line_entry_removed": true,
-      "dry_run_foundation_validated": true,
-      "sqlite_delivery_state_validated": true,
-      "real_content_provider_implemented": false,
-      "openclaw_mediaman_adapter_implemented": false,
-      "telegram_real_send_authorized": false,
-      "telegram_bot_or_group_created": false,
-      "mediaman_timer_activation_authorized": false,
-      "inbound_telegram_processing": false,
-      "runtime_code_modified": false,
-      "signalk_modified": false,
-      "docker_modified": false
-    }
+  "task": "mediaman-audit-state-finalization",
+  "status": "SUCCESS",
+  "web_research_by_oc": false,
+  "timestamp": "2026-08-27T17:22:23Z",
+  "commit_sha": "57698cd4c5247a9c187eb82a35c4e34668ea90d6",
+  "files_modified": [
+    "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
+    "logs/latest.json",
+    "logs/oc-actions.log"
+  ],
+  "details": {
+    "documentation_correction_complete": true,
+    "future_production_shell_blocks_removed": true,
+    "duplicate_start_line_entry_removed": true,
+    "dry_run_foundation_validated": true,
+    "sqlite_delivery_state_validated": true,
+    "real_content_provider_implemented": false,
+    "openclaw_mediaman_adapter_implemented": false,
+    "telegram_real_send_authorized": false,
+    "telegram_bot_or_group_created": false,
+    "mediaman_timer_activation_authorized": false,
+    "inbound_telegram_processing": false,
+    "runtime_code_modified": false,
+    "signalk_modified": false,
+    "docker_modified": false
   },
   "previous_media_audit": {
     "timestamp": "2026-08-27T17:18:45Z",
