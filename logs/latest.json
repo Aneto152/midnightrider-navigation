@@ -1,46 +1,41 @@
 {
-  "task": "mediaman-validator-final-coverage",
+  "task": "mediaman-step-2-mcp-client-scaffold",
   "status": "SUCCESS",
   "web_research_by_oc": false,
-  "timestamp": "2026-08-27T22:31:05.369460+00:00Z",
-  "commit_sha": "91cb621c35c4629b6466b8ee3f6eaedc7078fdef",
+  "timestamp": "2026-08-27T22:36:28.646537+00:00Z",
+  "commit_sha": null,
   "files_modified": [
-    "mediaman/llm_validator.py",
-    "tests/mediaman/test_llm_validator.py",
+    "mediaman/mcp_client.py",
+    "tests/mediaman/test_mcp_client.py",
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
   "details": {
-    "validator_tests": "23 collected, 23 passed",
-    "full_mediaman_suite": "105 collected, 105 passed",
-    "coordinate_formats_tested": 7,
-    "coordinate_formats_covered": [
-      "41.1234\u00b0N, 73.5678\u00b0W",
-      "41.1234 N, -73.5678 W",
-      "-41.1234, 73.5678",
-      "41.1234\u00b0 -73.5678\u00b0",
-      "41.1234 -73.5678",
-      "41.1234, 73.5678",
-      "-41.1234\u00b0S, 73.5678\u00b0E"
-    ],
-    "wind_speed_fail_closed": true,
-    "wind_fact_fields": "direction_true only (no speed field)",
-    "wind_behavior": "Explicit wind speed claims rejected when unavailable",
-    "application_code_modified": true,
-    "tests_modified": true,
-    "test_count_previous": 21,
-    "test_count_current": 23,
-    "tests_added": [
-      "test_coordinates_cardinal_south_east",
-      "test_coordinates_unsigned_comma_separated"
-    ],
-    "mcp_launched": false,
+    "mcp_client_implemented": true,
+    "mcp_live_server_contacted": false,
+    "mcp_vertical_slice_mocked": true,
+    "event_detector_implemented": false,
     "real_llm_generation_performed": false,
     "real_telegram_send_performed": false,
     "telegram_bot_or_group_created": false,
     "mediaman_timer_activation_authorized": false,
     "signalk_modified": false,
-    "docker_modified": false
+    "docker_modified": false,
+    "mcp_tests_collected": 21,
+    "mcp_tests_passed": 21,
+    "full_mediaman_suite": "126 collected, 126 passed",
+    "tool_allowlist_count": 1,
+    "tool_allowlist": [
+      "racing.get_position"
+    ],
+    "protocol_verified": "JSON-RPC 2.0 stdio-based (source-verified)",
+    "subprocess_safety": "argv-based launch, no shell=True, clean termination",
+    "timeout_seconds": {
+      "startup": 10,
+      "request": 5
+    },
+    "source_timestamp_behavior": "Preserved as UNKNOWN when not provided",
+    "error_handling": "malformed JSON skipped, server errors propagated, timeouts raised"
   },
   "previous_media_audit": {
     "timestamp": "2026-08-27T17:18:45Z",
@@ -112,7 +107,7 @@
     },
     "commit_sha": "b8d7de3bc2bff1ae316bd044840d4c9917e1ed11"
   },
-  "step": 1,
+  "step": 2,
   "scope": "source-backed RaceFacts and freshness handling",
   "source_fields_corrected": [
     "Removed unproven wind_direction_true from /api/race_data mapping",
