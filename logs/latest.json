@@ -1,5 +1,5 @@
 {
-  "task": "mediaman-step-1-factregistry-correction",
+  "task": "mediaman-step-1b-field-aware-validator",
   "status": "SUCCESS",
   "web_research_by_oc": false,
   "timestamp": "2026-08-27T17:22:23Z",
@@ -119,5 +119,11 @@
   "telegram_bot_or_group_created": false,
   "mediaman_timer_activation_authorized": false,
   "signalk_modified": false,
-  "docker_modified": false
+  "docker_modified": false,
+  "pytest_executed": true,
+  "pytest_version": "9.1.1",
+  "targeted_validator_tests": "22 collected, 22 passed",
+  "full_mediaman_suite": "104 collected, 104 passed",
+  "application_code_modified": true,
+  "tests_modified": true
 }

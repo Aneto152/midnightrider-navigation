@@ -301,3 +301,7 @@
 [2026-08-27T21:23:24.384013+00:00Z] [FILE_MODIFY] [mediaman-step-1] - Wind marked UNPROVEN pending MCP timestamp audit
 [2026-08-27T21:23:24.384013+00:00Z] [TEST_RUN] [mediaman-step-1] 19 test cases executed for RaceFacts validation
 [2026-08-27T21:23:24.384013+00:00Z] [RESULT] [mediaman-step-1] Result: SUCCESS — FactRegistry correction validated
+[2026-08-27T22:00:36.545846+00:00Z] [FILE_MODIFY] [mediaman-step-1b] Implemented field-aware numeric validation with preserved security checks
+[2026-08-27T22:00:36.545846+00:00Z] [TEST_RUN] [mediaman-step-1b] Validator tests: 22/22 passed
+[2026-08-27T22:00:36.545846+00:00Z] [TEST_RUN] [mediaman-step-1b] Full MediaMan suite: 104/104 passed
+[2026-08-27T22:00:36.545846+00:00Z] [RESULT] [mediaman-step-1b] Result: SUCCESS — Field-aware validator and full suite validated
