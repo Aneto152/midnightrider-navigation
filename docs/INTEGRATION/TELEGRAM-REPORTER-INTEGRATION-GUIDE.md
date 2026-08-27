@@ -129,7 +129,6 @@ Choose one of the following:
   - Own position: `/api/position`
   - Own speed/course: `/api/navigation`
   - Start line geometry: `/api/race_data` (verified)
-  - Start line geometry: `/api/race_data`
   - Competitors nearby: `/api/ais` (if AIS active)
   - External wind: `/api/ndbc/<station>` (5+ min old)
 - Unproven (must omit from content):
@@ -139,54 +138,17 @@ Choose one of the following:
 
 ### Phase 3: Configure Runtime Environment
 
-Create `/etc/mediaman/mediaman.env` (not version-controlled):
+Future production configuration requires:
+1. Create `/etc/mediaman/mediaman.env` (not version-controlled)
+2. Set `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` from secured sources
+3. Set `MEDIAMAN_CONTENT_PROVIDER` to gateway (when implemented)
+4. Protect file: `chmod 600 /etc/mediaman/mediaman.env`
 
-```bash
-# Telegram credentials (required for production)
-TELEGRAM_BOT_TOKEN is read from secured environment
-TELEGRAM_CHAT_ID is read from secured environment
 
-# Enable production mode
-MEDIAMAN_PRODUCTION_MODE=true
 
-# Select content provider
-# Use gateway (intended future provider, currently unimplemented)
+### Phase 4: Future Timer Activation
 
-# Disable dry-run
-DRY_RUN=false
-
-# Race identifier
-MEDIAMAN_RACE_ID=block-island-2026
-```
-
-Protect the file:
-```bash
-sudo chmod 600 /etc/mediaman/mediaman.env
-```
-
-### Phase 4: Enable Systemd Timer
-
-Only after content provider and credentials are verified:
-
-```bash
-**Future Production Activation** (not yet authorized):
-
-When MediaMan real content provider is implemented and explicitly approved by Denis:
-1. Create Telegram bot via @BotFather → obtain TELEGRAM_BOT_TOKEN
-2. Create private Telegram group → obtain TELEGRAM_CHAT_ID
-3. Configure credentials in /etc/mediaman/mediaman.env
-4. Test with DRY_RUN=true first
-5. Enable timer: Timer activation is not authorized in the current development phase.
-6. Start: Timer activation is not authorized in the current development phase.
-7. Monitor: journalctl -u mediaman -f
-
-**This procedure requires explicit approval and is not authorized in the current development phase.**
-sudo journalctl -u mediaman -f  # Monitor
-```
-
-**WARNING:** These commands are NOT authorized in the current development phase.
-
-## Testing (Current Development Phase)
+Timer activation is not authorized in the current development phase. Any future activation requires explicit Denis approval after the real content provider, credentials, and controlled validation are complete.
 
 ### Dry-Run Validation (Currently Authorized)
 

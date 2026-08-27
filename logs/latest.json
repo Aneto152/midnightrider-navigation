@@ -39,6 +39,39 @@
     "status": "COMPLETE"
   },
   "current_audit": {
+    "timestamp": "2026-08-27T17:18:45Z",
+    "task": "mediaman-audit-closure",
+    "status": "SUCCESS",
+    "web_research_by_oc": false,
+    "files_modified": [
+      "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
+      "logs/latest.json",
+      "logs/oc-actions.log"
+    ],
+    "details": {
+      "future_production_shell_blocks_removed": true,
+      "duplicate_start_line_entry_removed": true,
+      "dry_run_foundation_validated": true,
+      "sqlite_delivery_state_validated": true,
+      "real_content_provider_implemented": false,
+      "openclaw_mediaman_adapter_implemented": false,
+      "telegram_real_send_authorized": false,
+      "telegram_bot_or_group_created": false,
+      "mediaman_timer_activation_authorized": false,
+      "inbound_telegram_processing": false,
+      "runtime_code_modified": false,
+      "signalk_modified": false,
+      "docker_modified": false,
+      "final_corrections": [
+        "Removed Phase 3 executable production configuration block (MEDIAMAN_PRODUCTION_MODE, DRY_RUN, chmod)",
+        "Replaced with prose-only requirements listing",
+        "Removed duplicate 'Start line geometry' data source entry",
+        "Replaced Phase 4 'Enable Systemd Timer' shell commands with prose-only notice",
+        "All documentation now prose-only for future production (no executable blocks)"
+      ]
+    }
+  },
+  "previous_state": {
     "timestamp": "2026-08-27T17:14:46Z",
     "task": "mediaman-final-content-and-audit-state-fix",
     "status": "SUCCESS",
@@ -73,46 +106,5 @@
       ]
     },
     "commit_sha": "b8d7de3bc2bff1ae316bd044840d4c9917e1ed11"
-  },
-  "previous_state": {
-    "timestamp": "2026-08-27T16:58:09Z",
-    "task": "mediaman-documentation-security-finalization",
-    "status": "SUCCESS",
-    "web_research_by_oc": false,
-    "files_modified": [
-      ".gitignore",
-      "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
-      "logs/latest.json",
-      "logs/oc-actions.log"
-    ],
-    "details": {
-      "documentation_corrected": true,
-      "gitignore_exact_secret_rule_present": true,
-      "activation_commands_removed": true,
-      "credential_values_removed": true,
-      "provider_names_match_code": true,
-      "race_data_contract_conservative": true,
-      "dry_run_foundation_validated": true,
-      "sqlite_delivery_state_validated": true,
-      "real_content_provider_implemented": false,
-      "openclaw_mediaman_adapter_implemented": false,
-      "telegram_real_send_authorized": false,
-      "telegram_bot_or_group_created": false,
-      "mediaman_timer_activation_authorized": false,
-      "inbound_telegram_processing": false,
-      "runtime_code_modified": false,
-      "signalk_modified": false,
-      "docker_modified": false,
-      "violations_fixed": [
-        "Added exact .secret rule to .gitignore",
-        "Removed credential placeholder examples (TELEGRAM_BOT_TOKEN=<...>, TELEGRAM_CHAT_ID=<...>)",
-        "Removed unsupported provider names (openclaw, local)",
-        "Removed executable systemctl commands",
-        "Replaced with non-executable prose requiring approval",
-        "Corrected provider documentation (test and gateway only)",
-        "Verified /api/race_data does not claim wind/COG/SOG"
-      ]
-    },
-    "commit_sha": "104b23b393b6ab62fd8be7126ccf4dc9cc542b99"
   }
 }
