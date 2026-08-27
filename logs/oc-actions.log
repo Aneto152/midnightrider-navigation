@@ -359,3 +359,12 @@
 [2026-08-27T23:43:47.488045Z] [TEST_RUN] [mediaman-step-2c-finalize] MCP client tests: 34/34 passed (all E2E verified)
 [2026-08-27T23:43:47.488045Z] [TEST_RUN] [mediaman-step-2c-finalize] Full MediaMan suite: 139/139 passed (Step 2B coverage preserved)
 [2026-08-27T23:43:47.488045Z] [RESULT] [mediaman-step-2c-finalize] SUCCESS — Step 2C lifecycle hardening published, full coverage verified
+[2026-08-27T23:48:43.156861Z] [DEBUG] [mediaman-step-2c] Verified origin/main at 26a76cad709ba49e6549acf24832eb6e42b1c95c
+[2026-08-27T23:48:43.156861Z] [FILE_MODIFY] [mediaman-step-2c] Constants STARTUP_TIMEOUT_SECONDS=10, REQUEST_TIMEOUT_SECONDS=5 defined and verified
+[2026-08-27T23:48:43.156861Z] [TEST_RUN] [mediaman-step-2c] Reader-to-pending-request tests: malformed JSON → MCPProtocolError PASS
+[2026-08-27T23:48:43.156861Z] [TEST_RUN] [mediaman-step-2c] Reader-to-pending-request tests: oversized response → MCPProtocolError PASS
+[2026-08-27T23:48:43.156861Z] [TEST_RUN] [mediaman-step-2c] Reader-to-pending-request tests: valid response decoded PASS
+[2026-08-27T23:48:43.156861Z] [TEST_RUN] [mediaman-step-2c] Process exit during pending request: detected before timeout PASS
+[2026-08-27T23:48:43.156861Z] [TEST_RUN] [mediaman-step-2c] MCP client tests: 34/34 passed (all lifecycle tests)
+[2026-08-27T23:48:43.156861Z] [TEST_RUN] [mediaman-step-2c] Full MediaMan suite: 139/139 passed (Step 2B coverage preserved)
+[2026-08-27T23:48:43.156861Z] [RESULT] [mediaman-step-2c-evidence] SUCCESS — Reader lifecycle verified, process exit detection proven, exception classification confirmed
