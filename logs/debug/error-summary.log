@@ -1,1 +1,44 @@
-[2026-05-29T08:37:20.130551] Error summary initialized
+=== ERROR SUMMARY — 2026-08-27T14:05:47-04:00 ===
+[calypso-anemometer] Errors: 0
+0 | Last: none
+[calypso-direct] Errors: 30 | Last: none
+[calypso] Errors: 0
+0 | Last: none
+[calypso-watchdog] Errors: 0
+0 | Last: none
+[current-calc] Errors: 0
+0 | Last: none
+[grafana] Errors: 0
+0 | Last: none
+[heading-true-calc] Errors: 0
+0 | Last: none
+[influxdb] Errors: 0
+0 | Last: none
+[j30-leeway-calc] Errors: 0
+0 | Last: none
+[mediaman] Errors: 26 | Last: [2026-08-27T11:36:46] [ERROR] [mediaman.dataflow] ERROR: AttributeError: type object 'SanitizedMessage' has no attribute 'heartbeat'
+[monitor-resources] Errors: 0
+0 | Last: none
+[openclaw-gateway] Errors: 0
+0 | Last: none
+[portal] Errors: 0
+0 | Last: none
+[signalk-astronomical] Errors: 0
+0 | Last: none
+[signalk] Errors: 0
+0 | Last: none
+[signalk-n2k-bridge] Errors: 0
+0 | Last: none
+[signalk-nmea] Errors: 0
+0 | Last: none
+[signalk-um982] Errors: 0
+0 | Last: none
+[sok-direct] Errors: 89 | Last: [2026-06-13T18:43:52.747] [ERROR] [sok-direct] [ERROR] BLE error (L1 #5): Device with address A9:9A:16:28:50:DD was not found.
+[truewind-calc] Errors: 0
+0 | Last: none
+[um982-gnss] Errors: 0
+0 | Last: none
+[wit-ble-direct] Errors: 0
+0 | Last: none
+[wit-ble] Errors: 0
+0 | Last: none
