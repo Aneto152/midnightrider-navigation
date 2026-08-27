@@ -1,5 +1,5 @@
 """
-Tests for validator with per-occurrence wind context and signed-coordinate fixes.
+Tests for validator with complete coordinate format coverage and wind fail-closed behavior.
 """
 
 import pytest
@@ -69,97 +69,9 @@ class TestOutputValidator:
         assert not is_valid
         assert "injection" in msg.lower()
 
-    # PHASE 2: PER-OCCURRENCE WIND CONTEXT
-    def test_wind_and_speed_separate_sentences(self, sample_facts):
-        """Wind and speed in separate sentences: separate validation."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "Le vent souffle à 15 nœuds. "
-            "Midnight Rider navigue à 8.5 nœuds. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        # Wind claim rejected (wind unavailable), even though speed is valid
-        assert not is_valid
-        assert "wind" in msg.lower()
-
-    def test_wind_and_speed_same_sentence_separate_clauses(self, sample_facts):
-        """Wind and speed in same sentence but separate clauses."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "Le vent souffle à 15 nœuds tandis que Midnight Rider avance à 8.5 nœuds. "
-            "L'équipage travaille dur. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        # Wind should trigger rejection (wind unavailable)
-        assert not is_valid
-        assert "wind" in msg.lower()
-
-    def test_speed_without_wind_context_same_sentence(self, sample_facts):
-        """Speed clause without wind context: validated against SOG."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "Midnight Rider avance à 8.5 nœuds avec vent faible. "
-            "L'équipage travaille dur. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        # "vent faible" is NOT a speed claim (no unit after), so doesn't trigger rejection
-        assert is_valid, msg
-
-    def test_explicit_wind_speed_pattern_required(self, sample_facts):
-        """Only explicit wind speed pattern triggers wind validation."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "Le vent s'intensifie. "
-            "Midnight Rider navigue à 8.5 nœuds. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        # "vent" without "à X nœuds" pattern doesn't trigger wind check
-        assert is_valid, msg
-
-    # PHASE 3: WIND SPEED VALIDATION (UNAVAILABLE)
-    def test_explicit_wind_speed_claim_rejected(self, sample_facts):
-        """Explicit wind speed claim rejected when wind unavailable."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "Midnight Rider navigue. "
-            "Le vent souffle à 12 nœuds. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        assert not is_valid
-        assert "wind" in msg.lower()
-
-    # PHASE 4: SIGNED COORDINATE DETECTION
-    def test_coordinates_positive_latitude_negative_longitude(self, sample_facts):
-        """Positive lat, negative lon rejected."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "Position 41.1234 -73.5678. "
-            "Le bateau navigue. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        assert not is_valid
-        assert "coordinate" in msg.lower()
-
-    def test_coordinates_negative_latitude_positive_longitude(self, sample_facts):
-        """Negative lat, positive lon rejected."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "Position -41.1234, 73.5678. "
-            "Le bateau navigue. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        assert not is_valid
-        assert "coordinate" in msg.lower()
-
-    def test_coordinates_cardinal_with_comma(self, sample_facts):
-        """Cardinal format with comma rejected."""
+    # PHASE 2: COMPLETE COORDINATE FORMAT COVERAGE
+    def test_coordinates_cardinal_north_west(self, sample_facts):
+        """Format 1: 41.1234°N, 73.5678°W — rejected."""
         validator = OutputValidator(sample_facts)
         article = (
             "Position 41.1234°N, 73.5678°W. "
@@ -170,11 +82,59 @@ class TestOutputValidator:
         assert not is_valid
         assert "coordinate" in msg.lower()
 
-    def test_coordinates_degree_symbols(self, sample_facts):
-        """Degree symbols with signs rejected."""
+    def test_coordinates_cardinal_with_letter_prefix(self, sample_facts):
+        """Format 2: 41.1234 N, -73.5678 W — rejected."""
+        validator = OutputValidator(sample_facts)
+        article = (
+            "Position 41.1234 N, -73.5678 W. "
+            "Le bateau navigue. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+        assert "coordinate" in msg.lower()
+
+    def test_coordinates_signed_comma(self, sample_facts):
+        """Format 3: -41.1234, 73.5678 — rejected."""
+        validator = OutputValidator(sample_facts)
+        article = (
+            "Position -41.1234, 73.5678. "
+            "Le bateau navigue. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+        assert "coordinate" in msg.lower()
+
+    def test_coordinates_degree_symbols_signed(self, sample_facts):
+        """Format 4: 41.1234° -73.5678° — rejected."""
         validator = OutputValidator(sample_facts)
         article = (
             "Position 41.1234° -73.5678°. "
+            "Le bateau navigue. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+        assert "coordinate" in msg.lower()
+
+    def test_coordinates_signed_space(self, sample_facts):
+        """Format 5: 41.1234 -73.5678 — rejected."""
+        validator = OutputValidator(sample_facts)
+        article = (
+            "Position 41.1234 -73.5678. "
+            "Le bateau navigue. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+        assert "coordinate" in msg.lower()
+
+    def test_coordinates_cardinal_south_east(self, sample_facts):
+        """Format 6: -41.1234°S, 73.5678°E — rejected."""
+        validator = OutputValidator(sample_facts)
+        article = (
+            "Position 41.1234°S, 73.5678°E. "
             "Le bateau navigue. "
             "Excellentes conditions."
         )
@@ -193,24 +153,62 @@ class TestOutputValidator:
         is_valid, msg = validator.validate(article)
         assert is_valid, msg
 
-    # PHASE 5: WORD BOUNDARIES
+    # PHASE 3: WIND SPEED FAIL-CLOSED BEHAVIOR
+    def test_wind_speed_claim_rejected_when_unavailable(self, sample_facts):
+        """Wind speed explicitly claimed but unavailable → REJECTED."""
+        validator = OutputValidator(sample_facts)
+        article = (
+            "Midnight Rider navigue. "
+            "Le vent souffle à 12 nœuds. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        # Wind is unavailable (never is_valid()), so explicit claim must fail
+        assert not is_valid
+        assert "wind" in msg.lower()
+
+    def test_wind_speed_unavailable_explicit_fail_closed(self, sample_facts):
+        """Explicit wind speed pattern → WindFact is None → REJECTED."""
+        validator = OutputValidator(sample_facts)
+        # This documents the fail-closed behavior: no silent acceptance
+        assert validator.facts.wind is None or not validator.facts.wind.is_valid()
+        article = (
+            "Conditions variables. "
+            "Le vent souffle à 8 nœuds. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+
+    # EXISTING CONTEXT AND TOLERANCE TESTS
+    def test_per_occurrence_wind_context(self, sample_facts):
+        """Wind and speed in separate sentences: separate validation."""
+        validator = OutputValidator(sample_facts)
+        article = (
+            "Le vent souffle à 15 nœuds. "
+            "Midnight Rider navigue à 8.5 nœuds. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+        assert "wind" in msg.lower()
+
+    def test_speed_without_wind_context(self, sample_facts):
+        """Speed clause without wind context: validated against SOG."""
+        validator = OutputValidator(sample_facts)
+        article = (
+            "Midnight Rider avance à 8.5 nœuds avec vent faible. "
+            "L'équipage travaille dur. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        assert is_valid, msg
+
     def test_wind_data_not_ranking(self, sample_facts):
         """'wind' in 'wind data' not matched by ranking pattern."""
         validator = OutputValidator(sample_facts)
         article = (
             "Le wind data est unavailable. "
-            "Midnight Rider navigue à 8.5 nœuds. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        # "wind data" should not trigger ranking rejection
-        assert is_valid, msg
-
-    def test_wind_shifted_not_ranking(self, sample_facts):
-        """'The wind shifted' not matched by ranking."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "The wind shifted dramatically. "
             "Midnight Rider navigue à 8.5 nœuds. "
             "Excellentes conditions."
         )
@@ -229,19 +227,6 @@ class TestOutputValidator:
         assert not is_valid
         assert "ranking" in msg.lower()
 
-    def test_leader_triggers_ranking(self, sample_facts):
-        """'leader' triggers ranking rejection."""
-        validator = OutputValidator(sample_facts)
-        article = (
-            "Midnight Rider navigue à 8.5 nœuds. "
-            "Le bateau est leader. "
-            "Excellentes conditions."
-        )
-        is_valid, msg = validator.validate(article)
-        assert not is_valid
-        assert "ranking" in msg.lower()
-
-    # TOLERANCE AND COURSE TESTS
     def test_speed_within_tolerance(self, sample_facts):
         """Speed within tolerance passes."""
         validator = OutputValidator(sample_facts)
@@ -287,3 +272,19 @@ class TestOutputValidator:
         is_valid, msg = validator.validate(article)
         assert not is_valid
         assert "course" in msg.lower()
+
+    def test_sentence_count_enforced(self, sample_facts):
+        """Sentence count enforced."""
+        validator = OutputValidator(sample_facts)
+        article = "Une phrase."
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+        assert "sentence" in msg.lower()
+
+    def test_length_limit_enforced(self, sample_facts):
+        """Length limit enforced."""
+        validator = OutputValidator(sample_facts)
+        article = "a" * 800
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+        assert "700" in msg

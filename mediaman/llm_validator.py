@@ -155,8 +155,8 @@ class OutputValidator:
     def _has_exact_coordinates(self, text: str) -> bool:
         """Check for exact coordinates in multiple formats."""
         patterns = [
-            # Cardinal format: 41.1234°N, 73.5678°W
-            r'\d+\.\d{2,}[°º]?\s*[NS]\s*[,\s]\s*\d+\.\d{2,}[°º]?\s*[EW]',
+            # Cardinal format: 41.1234°N, 73.5678°W or 41.1234 N, -73.5678 W
+            r'\d+\.\d{2,}[°º]?\s*[NS]\s*[,\s]\s*[+-]?\d+\.\d{2,}[°º]?\s*[EW]',
             # Signed with space: 41.1234 -73.5678
             r'[+-]?\d+\.\d{2,}\s+[+-]\d+\.\d{2,}',
             # Signed comma: -41.1234, 73.5678
@@ -246,15 +246,10 @@ class OutputValidator:
     def _is_speed_in_wind_context(self, text: str, start: int, end: int) -> bool:
         """Check if this specific speed occurrence is in wind context.
 
-        Look for wind/vent pattern within proximity of the speed match.
+        Look for wind/vent pattern immediately before the speed match.
         """
-        # Look backward and forward for wind context (within ~50 chars)
-        context_start = max(0, start - 50)
-        context_end = min(len(text), end + 50)
-        context = text[context_start:context_end]
-
-        # Check if the context before this match contains wind pattern
-        before = text[context_start:start]
+        # Check if the text immediately before this match contains wind pattern
+        before = text[max(0, start - 80):start]
         if re.search(r'(?:vent|wind)\s+(?:souffle\s+)?(?:à|at)\s+$', before, re.IGNORECASE):
             return True
 
