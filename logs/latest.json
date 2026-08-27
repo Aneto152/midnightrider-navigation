@@ -42,7 +42,7 @@
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
-  "commit_sha": null,
+  "commit_sha": "2c75d3cfca12572f362dfed6bc75d997b52a6b96",
   "envelope_decoding": {
     "protocol": "MCP tools/call response wraps tool result as content[0].text JSON",
     "validation": "Strict schema: result.content[0].type=='text' and valid JSON",
