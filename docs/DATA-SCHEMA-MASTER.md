@@ -46,7 +46,7 @@
     MCP (7 serveurs · 37 outils)
          │
          ▼
-    OC / Claude → WhatsApp → Denis & Anne-Sophie
+    OC / Claude → Telegram (MediaMan) → Denis & Anne-Sophie
 ```
 
 ---

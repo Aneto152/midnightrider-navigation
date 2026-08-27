@@ -233,7 +233,43 @@ SOK BMS (BLE) ──────────────────────
 
 ---
 
-## 8. Logging
+## 8. MediaMan (Telegram Reporter) — Foundation Phase
+
+**Status:** FOUNDATION ONLY — DRY-RUN VALIDATED — PRODUCTION NOT AUTHORIZED
+
+**Current State (2026-08-27):**
+- ✅ SQLite delivery state machine (PENDING → SENDING → SENT / FAILED)
+- ✅ Telegram sender (outbound-only, no inbound)
+- ✅ Logging infrastructure (structured, sanitized)
+- ✅ Systemd units present (service + timer disabled)
+- ❌ Real content provider not implemented
+- ❌ OpenClaw LLM adapter not implemented
+- ⏳ Telegram bot/group not created
+
+**Verified Scope:**
+- Dry-run foundation: exit code 0, no network I/O, SQLite state transitions correct
+- Test content provider: deterministic French article (DRY_RUN only)
+- Logging signatures: all aligned, no credentials exposed
+- Systemd integration: service and timer syntax valid, timer disabled and inactive
+
+**Not Authorized:**
+- Creating a Telegram bot account
+- Creating or joining a Telegram group
+- Enabling or starting mediaman.timer
+- Sending real Telegram messages
+- Configuring production credentials
+
+**Production Blockers:**
+- Real content provider (LLM adapter) not implemented
+- Regatta API data contract incomplete (missing race_id, elapsed time, ranking)
+- OpenClaw CLI integration not implemented
+- No explicit Denis approval for production activation
+
+**For Details:** See [docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md](docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md)
+
+---
+
+## 9. Logging
 
 **Log directory:** `/home/aneto/midnightrider-navigation/logs/`
 
@@ -265,7 +301,7 @@ SOK BMS (BLE) ──────────────────────
 
 ---
 
-## 9. Python Dependencies
+## 10. Python Dependencies
 
 **BLE communication:**
 ```
@@ -285,7 +321,7 @@ requests >= 2.26.0
 
 ---
 
-## 10. Operational Security Rules
+## 11. Operational Security Rules
 
 **Never:**
 - Expose OpenClaw Gateway publicly (port 18789)
@@ -315,7 +351,7 @@ requests >= 2.26.0
 
 ---
 
-## 11. Standard Operational Procedures
+## 12. Standard Operational Procedures
 
 ### Read-only system check
 
@@ -387,7 +423,7 @@ git push origin main
 
 ---
 
-## 12. Incident Response
+## 13. Incident Response
 
 ### If Signal K fails
 
@@ -457,7 +493,7 @@ git push origin main
 
 ---
 
-## 13. Documentation Ownership
+## 14. Documentation Ownership
 
 | Content | Source of Truth | Location |
 |---------|-----------------|----------|
@@ -475,7 +511,7 @@ git push origin main
 
 ---
 
-## 14. Known Gaps
+## 15. Known Gaps
 
 The following items require follow-up:
 
@@ -492,7 +528,7 @@ The following items require follow-up:
 
 ---
 
-## 15. Change Policy
+## 16. Change Policy
 
 **Any structural change requires Denis validation before execution.**
 
