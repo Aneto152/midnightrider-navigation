@@ -110,7 +110,17 @@ def main():
         )
         debug_logger.info(f"SEND_ATTEMPT dry_run={dry_run} content_length={len(content)} execution_id={sender.execution_id}")
         
-        sender_result = sender.send(content)
+        try:
+            sender_result = sender.send(content)
+        except Exception as e:
+            error_msg = f"Sender error: {type(e).__name__}: {str(e)[:200]}"
+            service_logger.error(error_msg)
+            debug_logger.error(f"SEND_ERROR: {error_msg}")
+            try:
+                idempotency_store.record_failed(race_id, cycle_ts, sender.chat_id, error_msg)
+            except Exception as db_e:
+                service_logger.error(f"Failed to record error: {db_e}")
+            return 1
         
         service_logger.info(
             SanitizedMessage.send_result(dry_run, sender_result.success, sender_result.error_code, sender.execution_id)
