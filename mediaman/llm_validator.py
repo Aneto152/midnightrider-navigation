@@ -6,6 +6,7 @@ Fails closed if validation fails.
 """
 
 import re
+import math
 from typing import Tuple, Set, Optional
 from .race_facts import RaceFacts
 
@@ -47,48 +48,26 @@ class OutputValidator:
     # Field-aware numeric context patterns
     SPEED_UNITS = r'(?:nœud|nœuds|knot|knots?|kt|kts|vitesse)'
     COURSE_LABELS = r'(?:cap|route|course|heading|COG|direction|bearing|direction de route)'
-    WIND_CONTEXT = r'(?:vent|wind|direction du vent|force du vent|vitesse du vent)'
+    WIND_SPEED_PATTERN = r'(?:vent|wind)\s+(?:souffle\s+)?(?:\u00e0|at)\s+(\d+(?:[.,]\d+)?)\s*(?:nœud|nœuds|knot|knots?|kt|kts)'
     HEEL_CONTEXT = r'(?:gîte|inclinaison|heel|angle|inclination)'
     ELAPSED_TIME_CONTEXT = r'(?:durée|temps de course|elapsed|hours? since|minutes? since|time since start|heures de course)'
-    RANKING_CONTEXT = r'(?:classement|position dans la flotte|rang|place|leader|leading|first place|second place|win|winning)'
+    RANKING_CONTEXT = r'\b(?:classement|position dans la flotte|rang|place|leader|leading|first place|second place|winning)\b'
 
     def __init__(self, facts: RaceFacts):
         """Initialize validator with reference facts."""
         self.facts = facts
-        self.valid_speeds: Set[float] = set()
-        self.valid_courses: Set[float] = set()
-        self._extract_valid_values()
+        self.factual_sog: Optional[float] = None
+        self.factual_cog: Optional[float] = None
+        self._extract_factual_values()
 
-    def _extract_valid_values(self):
-        """Extract known valid values from facts for comparison."""
+    def _extract_factual_values(self):
+        """Extract factual values from facts (no pre-expansion)."""
         if self.facts.navigation and self.facts.navigation.is_valid():
-            sog = self.facts.navigation.sog_knots
-            cog = self.facts.navigation.cog_degrees
-            # Allow ±1.5 knots and ±40 degrees variation
-            if sog:
-                for v in [sog - 1.5, sog - 1, sog - 0.5, sog, sog + 0.5, sog + 1, sog + 1.5]:
-                    if v >= 0:
-                        self.valid_speeds.add(round(v, 1))
-            if cog:
-                for v in range(int(max(0, cog - 40)), int(min(361, cog + 41))):
-                    self.valid_courses.add(v)
+            self.factual_sog = self.facts.navigation.sog_knots
+            self.factual_cog = self.facts.navigation.cog_degrees
 
     def validate(self, output: str) -> Tuple[bool, str]:
-        """
-        Validate output. Return (is_valid, error_message).
-
-        Validation order:
-        1. Empty/UTF-8
-        2. Length
-        3. Sentence count
-        4. Markdown
-        5. Credentials
-        6. Commands
-        7. Injection
-        8. Coordinates
-        9. Unsupported claims
-        10. Field-aware numeric claims
-        """
+        """Validate output with strict security-first approach."""
 
         # Empty check
         if not output or not output.strip():
@@ -129,7 +108,7 @@ class OutputValidator:
         if self._has_exact_coordinates(output):
             return False, "Exact coordinates not permitted (use summarized descriptions instead)"
 
-        # Unsupported explicit claims
+        # Unsupported explicit claims (with word boundaries)
         valid, reason = self._validate_unsupported_claims(output)
         if not valid:
             return False, reason
@@ -176,27 +155,34 @@ class OutputValidator:
         return False
 
     def _has_exact_coordinates(self, text: str) -> bool:
-        """Check for exact coordinates."""
-        coord_pattern = r'(\d+\.\d{2,})[°º]?\s*[NS]?\s*[,\s]\s*(\d+\.\d{2,})[°º]?\s*[EW]?'
-        return bool(re.search(coord_pattern, text))
+        """Check for exact coordinates in multiple formats."""
+        patterns = [
+            r'\d+\.\d{2,}[°º]?\s*[NS]?\s*[,\s]\s*\d+\.\d{2,}[°º]?\s*[EW]?',
+            r'\d+\.\d{2,}\s+[+-]?\d+\.\d{2,}',
+            r'\d+\.\d{2,}[°º]\s+[+-]?\d+\.\d{2,}[°º]',
+        ]
+        for pattern in patterns:
+            if re.search(pattern, text):
+                return True
+        return False
 
     def _validate_unsupported_claims(self, text: str) -> Tuple[bool, str]:
         """Reject explicit unsupported claims."""
 
-        # Wind claims (not supported in this FactRegistry version)
-        if re.search(self.WIND_CONTEXT, text, re.IGNORECASE):
+        # Wind speed claims only if explicit wind+speed pattern
+        if re.search(self.WIND_SPEED_PATTERN, text, re.IGNORECASE):
             if self.facts.wind is None or not self.facts.wind.is_valid():
                 return False, "Wind claims not supported (wind facts unavailable)"
 
-        # Heel claims (not in RaceFacts)
+        # Heel claims
         if re.search(self.HEEL_CONTEXT, text, re.IGNORECASE):
             return False, "Heel/attitude claims not supported (not available in facts)"
 
-        # Elapsed time claims (not in RaceFacts)
+        # Elapsed time claims
         if re.search(self.ELAPSED_TIME_CONTEXT, text, re.IGNORECASE):
             return False, "Elapsed time claims not supported (not available in facts)"
 
-        # Ranking claims (not in RaceFacts)
+        # Ranking claims (word boundaries)
         if re.search(self.RANKING_CONTEXT, text, re.IGNORECASE):
             return False, "Ranking claims not supported (not available in facts)"
 
@@ -205,23 +191,32 @@ class OutputValidator:
     def _validate_numeric_claims(self, text: str) -> Tuple[bool, str]:
         """Validate numeric claims using field-aware context."""
 
-        # Speed claims: must have speed unit
+        # Boat speed claims: speed unit without wind context
         speed_pattern = rf'(\d+(?:[.,]\d+)?)\s*({self.SPEED_UNITS})'
+
         for match in re.finditer(speed_pattern, text, re.IGNORECASE):
+            start = match.start()
+
+            # Skip if in explicit wind context
+            if self._is_in_explicit_wind_context(text, start):
+                continue
+
             speed_str = match.group(1).replace(',', '.')
             try:
                 speed_val = float(speed_str)
             except ValueError:
                 continue
 
-            if self.valid_speeds and speed_val not in self.valid_speeds:
-                is_close = any(abs(speed_val - v) <= 1.5 for v in self.valid_speeds)
-                if not is_close:
-                    closest = min(self.valid_speeds, key=lambda v: abs(v - speed_val))
-                    return False, f"Speed claim {speed_val} not supported by facts (closest: {closest})"
+            if self.factual_sog is None:
+                continue
 
-        # Course claims: must have course label
+            # Boat speed tolerance: ±1.5 knots
+            if not self._is_within_tolerance(speed_val, self.factual_sog, 1.5):
+                return False, f"Speed claim {speed_val} not supported by facts (factual: {self.factual_sog})"
+
+        # Course claims: course label + numeric
         course_pattern = rf'({self.COURSE_LABELS})\s+(\d+)(?:\s*(?:degrés?|°))?'
+
         for match in re.finditer(course_pattern, text, re.IGNORECASE):
             course_str = match.group(2)
             try:
@@ -229,10 +224,40 @@ class OutputValidator:
             except ValueError:
                 continue
 
-            if self.valid_courses and course_val not in self.valid_courses:
-                is_close = any(abs(course_val - v) <= 40 for v in self.valid_courses)
-                if not is_close:
-                    closest = min(self.valid_courses, key=lambda v: abs(v - course_val))
-                    return False, f"Course claim {course_val}° not supported by facts (closest: {closest}°)"
+            if self.factual_cog is None:
+                continue
+
+            # Course tolerance: circular distance ±40 degrees
+            if not self._is_within_circular_tolerance(course_val, self.factual_cog, 40.0):
+                return False, f"Course claim {course_val}° not supported by facts (factual: {self.factual_cog}°)"
 
         return True, ""
+
+    def _is_in_explicit_wind_context(self, text: str, position: int) -> bool:
+        """Check if position is in explicit wind speed context (wind + vent)."""
+        # Find sentence boundaries
+        sent_start = text.rfind('.', 0, position)
+        sent_start = sent_start + 1 if sent_start >= 0 else 0
+        sent_end = text.find('.', position)
+        sent_end = sent_end if sent_end >= 0 else len(text)
+
+        sentence = text[sent_start:sent_end]
+        # Only true if sentence has wind context pattern (wind/vent + units nearby)
+        return bool(re.search(r'(?:vent|wind)', sentence, re.IGNORECASE))
+
+    def _is_within_tolerance(self, claim: float, factual: float, tolerance: float) -> bool:
+        """Check if claim is within tolerance of factual value."""
+        return abs(claim - factual) <= tolerance
+
+    def _is_within_circular_tolerance(self, claim: float, factual: float, tolerance: float) -> bool:
+        """Check if course claim is within circular tolerance."""
+        # Normalize to 0-360
+        claim = claim % 360
+        factual = factual % 360
+
+        # Calculate shortest distance on circle
+        diff = abs(claim - factual)
+        if diff > 180:
+            diff = 360 - diff
+
+        return diff <= tolerance

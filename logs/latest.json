@@ -1,5 +1,5 @@
 {
-  "task": "mediaman-step-1b-field-aware-validator",
+  "task": "mediaman-step-1b-validator-hardening",
   "status": "SUCCESS",
   "web_research_by_oc": false,
   "timestamp": "2026-08-27T17:22:23Z",
@@ -125,5 +125,10 @@
   "targeted_validator_tests": "22 collected, 22 passed",
   "full_mediaman_suite": "104 collected, 104 passed",
   "application_code_modified": true,
-  "tests_modified": true
+  "tests_modified": true,
+  "validator_tests_collected": 22,
+  "validator_tests_passed": 22,
+  "full_mediaman_tests_collected": 104,
+  "full_mediaman_tests_passed": 104,
+  "validator_edge_cases_added": true
 }

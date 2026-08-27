@@ -305,3 +305,7 @@
 [2026-08-27T22:00:36.545846+00:00Z] [TEST_RUN] [mediaman-step-1b] Validator tests: 22/22 passed
 [2026-08-27T22:00:36.545846+00:00Z] [TEST_RUN] [mediaman-step-1b] Full MediaMan suite: 104/104 passed
 [2026-08-27T22:00:36.545846+00:00Z] [RESULT] [mediaman-step-1b] Result: SUCCESS — Field-aware validator and full suite validated
+[2026-08-27T22:07:08.957462+00:00Z] [FILE_MODIFY] [mediaman-step-1b] Hardened field-aware numeric validation with wind/speed separation, tolerance fixes, coordinate detection, word boundaries
+[2026-08-27T22:07:08.957462+00:00Z] [TEST_RUN] [mediaman-step-1b] Validator tests: 22/22 passed (edge cases: wind vs speed, tolerance boundaries, circular course, coordinate formats, word boundaries)
+[2026-08-27T22:07:08.957462+00:00Z] [TEST_RUN] [mediaman-step-1b] Full MediaMan suite: 104/104 passed
+[2026-08-27T22:07:08.957462+00:00Z] [RESULT] [mediaman-step-1b] Result: SUCCESS — Validator hardened with comprehensive edge case coverage
