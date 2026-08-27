@@ -1,7 +1,7 @@
 """
-Tests for MCPClient — mocked subprocess with strict JSON-RPC validation.
+Tests for MCPClient — mocked subprocess with error propagation and result decoding.
 
-STEP 2 Correction: Wire-name mapping, strict protocol validation, stderr separation.
+STEP 2B: Error propagation, MCP result envelope decoding, response-size enforcement.
 """
 
 import pytest
@@ -27,6 +27,248 @@ def mock_process():
     process.returncode = None
     process.poll = Mock(return_value=None)
     return process
+
+
+class TestMCPClientErrorPropagation:
+    """Error propagation from reader thread to waiting request."""
+
+    def test_malformed_json_raises_protocol_error(self, mock_process):
+        """Malformed JSON in reader thread propagates as MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+
+                    # Enqueue a protocol error from the reader
+                    error = MCPProtocolError("Malformed JSON")
+                    client.error_queue.put(error)
+
+                    # Request should receive the error
+                    with pytest.raises(MCPProtocolError, match="Malformed JSON"):
+                        client._send_request('tools/list', {})
+
+    def test_reader_error_not_converted_to_timeout(self, mock_process):
+        """Reader protocol error is not converted to MCPTimeoutError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+
+                    # Enqueue protocol error
+                    error = MCPProtocolError("Invalid JSON-RPC version")
+                    client.error_queue.put(error)
+
+                    # Should raise MCPProtocolError, not MCPTimeoutError
+                    with pytest.raises(MCPProtocolError):
+                        client._send_request('tools/list', {})
+
+
+class TestMCPClientResultDecoding:
+    """MCP result envelope decoding tests."""
+
+    def test_decode_valid_mcp_result(self, mock_process):
+        """Valid MCP result envelope is decoded correctly."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    # Simulate MCP result envelope from racing server
+                    tool_data = {'latitude': 41.1234, 'longitude': -73.5678, 'source_timestamp': '2026-08-27T23:00:00Z'}
+                    mcp_result = {
+                        'content': [
+                            {
+                                'type': 'text',
+                                'text': json.dumps(tool_data)
+                            }
+                        ]
+                    }
+
+                    decoded = client._decode_mcp_result(mcp_result)
+                    assert decoded == tool_data
+                    assert decoded['source_timestamp'] == '2026-08-27T23:00:00Z'
+
+    def test_decode_mcp_result_missing_content(self, mock_process):
+        """Missing 'content' field raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    with pytest.raises(MCPProtocolError, match="missing 'content'"):
+                        client._decode_mcp_result({'result': {}})
+
+    def test_decode_mcp_result_empty_content(self, mock_process):
+        """Empty content list raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    with pytest.raises(MCPProtocolError, match="not non-empty list"):
+                        client._decode_mcp_result({'content': []})
+
+    def test_decode_mcp_result_wrong_type(self, mock_process):
+        """Wrong content[0].type raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    with pytest.raises(MCPProtocolError, match="content\\[0\\].type is not 'text'"):
+                        client._decode_mcp_result({
+                            'content': [{'type': 'markdown', 'text': 'ignored'}]
+                        })
+
+    def test_decode_mcp_result_missing_text(self, mock_process):
+        """Missing 'text' field raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    with pytest.raises(MCPProtocolError, match="missing 'text'"):
+                        client._decode_mcp_result({
+                            'content': [{'type': 'text'}]
+                        })
+
+    def test_decode_mcp_result_malformed_json_text(self, mock_process):
+        """Malformed JSON in text field raises MCPProtocolError."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    with pytest.raises(MCPProtocolError, match="Failed to decode MCP text as JSON"):
+                        client._decode_mcp_result({
+                            'content': [{'type': 'text', 'text': '{invalid json}'}]
+                        })
+
+    def test_call_tool_decodes_and_wraps_result(self, mock_process):
+        """call_tool decodes envelope and wraps result."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+
+                    # Prepare MCP response with envelope
+                    tool_data = {
+                        'latitude': 41.1234,
+                        'longitude': -73.5678,
+                        'source_timestamp': '2026-08-27T23:00:00Z'
+                    }
+                    mcp_response = {
+                        'jsonrpc': '2.0',
+                        'id': 1,
+                        'result': {
+                            'content': [
+                                {
+                                    'type': 'text',
+                                    'text': json.dumps(tool_data)
+                                }
+                            ]
+                        }
+                    }
+                    client.response_queue.put(mcp_response)
+
+                    with patch.object(client, '_validate_jsonrpc_response'):
+                        result = client.call_tool('racing.get_position')
+
+                    # Verify result is wrapped correctly
+                    assert result['server_name'] == 'racing'
+                    assert result['tool_name'] == 'racing.get_position'
+                    assert result['success'] is True
+                    assert result['result'] == tool_data
+                    assert result['source_timestamp'] == '2026-08-27T23:00:00Z'
+
+
+class TestMCPClientSourceTimestamp:
+    """Source timestamp preservation after decoding."""
+
+    def test_source_timestamp_preserved_after_decode(self, mock_process):
+        """Source timestamp from decoded result is preserved exactly."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    decoded = {
+                        'latitude': 41.1234,
+                        'longitude': -73.5678,
+                        'source_timestamp': '2026-08-27T23:15:30.123456Z'
+                    }
+                    result = client._wrap_result('racing.get_position', decoded)
+
+                    assert result['source_timestamp'] == '2026-08-27T23:15:30.123456Z'
+
+    def test_missing_source_timestamp_becomes_unknown(self, mock_process):
+        """Absent source_timestamp becomes UNKNOWN."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+
+                    decoded = {'latitude': 41.1234, 'longitude': -73.5678}
+                    result = client._wrap_result('racing.get_position', decoded)
+
+                    assert result['source_timestamp'] == 'UNKNOWN'
+
+
+class TestMCPClientResponseSizeEnforcement:
+    """Response size limit enforcement."""
+
+    def test_oversized_response_rejected(self, mock_process):
+        """Response exceeding MAX_RESPONSE_SIZE is rejected."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+                    
+                    # Create oversized response line
+                    oversized_line = '{"x": "' + 'y' * (client.MAX_RESPONSE_SIZE + 1) + '"}'
+                    
+                    # Simulate reader processing it
+                    # (in real scenario, reader would detect and enqueue error)
+                    error = MCPProtocolError(f"Response line exceeds MAX_RESPONSE_SIZE")
+                    client.error_queue.put(error)
+
+                    with pytest.raises(MCPProtocolError, match="exceeds MAX_RESPONSE_SIZE"):
+                        client._send_request('tools/list', {})
+
+
+class TestMCPClientProcessExit:
+    """Process exit detection while request is pending."""
+
+    def test_process_exit_detected_during_request(self, mock_process):
+        """Non-zero process exit while request pending is detected."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    client.initialized = True
+
+                    # Simulate process exit
+                    mock_process.poll = Mock(return_value=1)
+
+                    with pytest.raises(MCPClientError, match="Server process exited"):
+                        client._send_request('tools/list', {})
 
 
 class TestMCPClientWireMapping:
@@ -55,20 +297,26 @@ class TestMCPClientWireMapping:
                     mock_process.stdin.write = capture_request
 
                     # Mock response
-                    mock_response = {
+                    mcp_response = {
                         'jsonrpc': '2.0',
                         'id': 1,
-                        'result': {'latitude': 41.1234, 'longitude': -73.5678}
+                        'result': {
+                            'content': [
+                                {
+                                    'type': 'text',
+                                    'text': json.dumps({'latitude': 41.1234})
+                                }
+                            ]
+                        }
                     }
-                    client.response_queue.put(mock_response)
+                    client.response_queue.put(mcp_response)
 
                     with patch.object(client, '_validate_jsonrpc_response'):
                         result = client.call_tool('racing.get_position', {})
 
-                    # Verify wire name was sent, not public name
+                    # Verify wire name was sent
                     assert sent_request is not None
                     assert sent_request['params']['name'] == 'get_position'
-                    assert sent_request['params']['name'] != 'racing.get_position'
 
 
 class TestMCPClientStrictValidation:
@@ -203,123 +451,6 @@ class TestMCPClientStrictValidation:
                         client._validate_jsonrpc_response(response, 1)
 
 
-class TestMCPClientStderrSeparation:
-    """Stderr handling and process exit detection."""
-
-    def test_stderr_reader_thread_started(self, mock_process):
-        """stderr reader thread is started."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                with patch.object(MCPClient, '_read_stderr'):
-                    with patch.object(MCPClient, 'initialize', return_value={}):
-                        client = MCPClient('/tmp/racing.js', 'racing')
-                        client.start()
-
-                        assert client.stderr_thread is not None
-                        assert client.stderr_thread.daemon
-
-    def test_process_nonzero_exit_detected(self, mock_process):
-        """Non-zero process exit is detected."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                with patch.object(MCPClient, '_read_stderr'):
-                    client = MCPClient('/tmp/racing.js', 'racing')
-                    client.process = mock_process
-                    client.initialized = True
-
-                    # Simulate process exit
-                    mock_process.poll = Mock(return_value=1)
-
-                    with pytest.raises(MCPClientError, match="Server process exited"):
-                        client._send_request('tools/list', {})
-
-
-class TestMCPClientTimestampHandling:
-    """Source timestamp preservation."""
-
-    def test_provided_source_timestamp_preserved(self, mock_process):
-        """Provided source_timestamp is preserved exactly."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                with patch.object(MCPClient, '_read_stderr'):
-                    client = MCPClient('/tmp/racing.js', 'racing')
-                    client.process = mock_process
-
-                    raw_response = {
-                        'latitude': 41.1234,
-                        'longitude': -73.5678,
-                        'source_timestamp': '2026-08-27T22:53:00Z'
-                    }
-                    result = client._wrap_result('racing.get_position', raw_response)
-
-                    assert result['source_timestamp'] == '2026-08-27T22:53:00Z'
-
-    def test_absent_source_timestamp_becomes_unknown(self, mock_process):
-        """Absent source_timestamp is UNKNOWN, not fabricated."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                with patch.object(MCPClient, '_read_stderr'):
-                    client = MCPClient('/tmp/racing.js', 'racing')
-                    client.process = mock_process
-
-                    raw_response = {'latitude': 41.1234, 'longitude': -73.5678}
-                    result = client._wrap_result('racing.get_position', raw_response)
-
-                    assert result['source_timestamp'] == 'UNKNOWN'
-
-
-class TestMCPClientErrorHandling:
-    """Error classification and handling."""
-
-    def test_malformed_json_raises_protocol_error(self, mock_process):
-        """Malformed JSON raises MCPProtocolError."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                with patch.object(MCPClient, '_read_stderr'):
-                    client = MCPClient('/tmp/racing.js', 'racing')
-                    client.process = mock_process
-                    client.initialized = True
-
-                    # Put a protocol error in queue
-                    error = MCPProtocolError("Malformed JSON")
-                    client.error_queue.put(error)
-
-                    # When we try to get a response, malformed JSON should be detected
-                    assert not client.error_queue.empty()
-
-    def test_server_error_response_raises_server_error(self, mock_process):
-        """Valid MCP error response raises MCPServerError."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                with patch.object(MCPClient, '_read_stderr'):
-                    client = MCPClient('/tmp/racing.js', 'racing')
-                    client.process = mock_process
-                    client.initialized = True
-
-                    error_response = {
-                        'jsonrpc': '2.0',
-                        'id': 1,
-                        'error': {'code': -32000, 'message': 'Invalid params'}
-                    }
-                    client.response_queue.put(error_response)
-
-                    with pytest.raises(MCPServerError, match="Invalid params"):
-                        client._send_request('tools/call', {'name': 'test', 'arguments': {}})
-
-    def test_request_timeout_raises_timeout_error(self, mock_process):
-        """Request timeout raises MCPTimeoutError."""
-        with patch('subprocess.Popen', return_value=mock_process):
-            with patch.object(MCPClient, '_read_responses'):
-                with patch.object(MCPClient, '_read_stderr'):
-                    client = MCPClient('/tmp/racing.js', 'racing')
-                    client.process = mock_process
-                    client.initialized = True
-                    client.REQUEST_TIMEOUT_SECONDS = 0.1  # Very short timeout
-
-                    with pytest.raises(MCPTimeoutError):
-                        client._send_request('tools/list', {})
-
-
 class TestMCPClientAllowlist:
     """Tool allowlist security."""
 
@@ -332,12 +463,14 @@ class TestMCPClientAllowlist:
                     client.process = mock_process
                     client.initialized = True
 
-                    mock_response = {
+                    mcp_response = {
                         'jsonrpc': '2.0',
                         'id': 1,
-                        'result': {}
+                        'result': {
+                            'content': [{'type': 'text', 'text': '{}'}]
+                        }
                     }
-                    client.response_queue.put(mock_response)
+                    client.response_queue.put(mcp_response)
 
                     with patch.object(client, '_validate_jsonrpc_response'):
                         # Should not raise

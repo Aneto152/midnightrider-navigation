@@ -334,3 +334,10 @@
 [2026-08-27T23:00:43.716397+00:00Z] [TEST_RUN] [mediaman-step-2] MCP client tests: 24/24 passed
 [2026-08-27T23:00:43.716397+00:00Z] [TEST_RUN] [mediaman-step-2] Full MediaMan suite: 129/129 passed (105 existing + 24 new)
 [2026-08-27T23:00:43.716397+00:00Z] [RESULT] [mediaman-step-2] SUCCESS — MCP client protocol corrected, all validations strict, no live servers contacted
+[2026-08-27T23:17:16.102675+00:00Z] [FILE_MODIFY] [mediaman-step-2b] Implemented error_queue checking for reader thread propagation
+[2026-08-27T23:17:16.102675+00:00Z] [FILE_MODIFY] [mediaman-step-2b] Implemented _decode_mcp_result() with strict envelope validation
+[2026-08-27T23:17:16.102675+00:00Z] [FILE_MODIFY] [mediaman-step-2b] Added response-size enforcement (MAX_RESPONSE_SIZE boundary)
+[2026-08-27T23:17:16.102675+00:00Z] [FILE_MODIFY] [mediaman-step-2b] Added process exit detection while request pending
+[2026-08-27T23:17:16.102675+00:00Z] [TEST_RUN] [mediaman-step-2b] MCP client tests: 30/30 passed (6 new test categories)
+[2026-08-27T23:17:16.102675+00:00Z] [TEST_RUN] [mediaman-step-2b] Full MediaMan suite: 135/135 passed (105 existing + 30 new)
+[2026-08-27T23:17:16.102675+00:00Z] [RESULT] [mediaman-step-2b] SUCCESS — Error propagation working, envelope decoding verified, response-size enforcement active

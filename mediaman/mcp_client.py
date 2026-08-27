@@ -2,9 +2,9 @@
 MCP Client for MediaMan — Python subprocess-based JSON-RPC interface.
 
 Communicates with Node MCP servers using JSON-RPC 2.0 over stdin/stdout.
-Implements bounded timeouts, strict protocol validation, error handling, and allowlist security.
+Implements bounded timeouts, strict protocol validation, error propagation, and result decoding.
 
-STEP 2 Correction: Wire-name mapping, strict JSON-RPC validation, stderr separation.
+STEP 2B: Error propagation, MCP result envelope decoding, response-size enforcement.
 """
 
 import json
@@ -48,10 +48,11 @@ class MCPClient:
     - Separated stdout/stderr drainage
     - Clean process termination
     - Tool wire-name mapping (public name → wire name)
+    - Result envelope decoding (content[0].text → structured data)
+    - Error propagation from reader thread to waiting request
     """
 
     # PUBLIC TOOL IDENTIFIERS → WIRE-LEVEL MCP TOOL NAMES
-    # Maps public MediaMan tool names to actual MCP server wire names
     TOOL_WIRE_MAPPING = {
         'racing.get_position': 'get_position',
     }
@@ -95,6 +96,7 @@ class MCPClient:
         Raises:
             MCPClientError: if process fails to start
             MCPTimeoutError: if startup exceeds timeout
+            MCPProtocolError: if protocol error during init
         """
         try:
             # Launch with argv list (no shell=True)
@@ -189,8 +191,11 @@ class MCPClient:
             {'name': wire_name, 'arguments': arguments}
         )
 
+        # Decode MCP result envelope
+        decoded_result = self._decode_mcp_result(response)
+
         # Wrap in structured result
-        return self._wrap_result(tool_name, response)
+        return self._wrap_result(tool_name, decoded_result)
 
     def _send_request(
         self,
@@ -208,7 +213,7 @@ class MCPClient:
             Response result (not including jsonrpc/id wrapper)
 
         Raises:
-            MCPProtocolError: if malformed JSON-RPC
+            MCPProtocolError: if malformed JSON-RPC or reader error
             MCPServerError: if server returned error
             MCPTimeoutError: if response timeout
             MCPClientError: if process error
@@ -245,6 +250,13 @@ class MCPClient:
                 raise MCPTimeoutError(
                     f"Request timeout after {self.REQUEST_TIMEOUT_SECONDS}s"
                 )
+
+            # Check error queue first (propagate reader errors immediately)
+            try:
+                error = self.error_queue.get_nowait()
+                raise error
+            except queue.Empty:
+                pass
 
             try:
                 response = self.response_queue.get(
@@ -310,6 +322,54 @@ class MCPClient:
             if 'code' not in error or 'message' not in error:
                 raise MCPProtocolError("Error missing 'code' or 'message' field")
 
+    def _decode_mcp_result(self, result: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Decode MCP tool-result content envelope.
+
+        MCP servers wrap tool results as:
+        result.content[0].type == "text"
+        result.content[0].text = JSON.stringify(tool_result)
+
+        Args:
+            result: The result field from a tools/call response
+
+        Returns:
+            Decoded tool result as structured dictionary
+
+        Raises:
+            MCPProtocolError: if envelope is malformed or unexpected
+        """
+        if not isinstance(result, dict):
+            raise MCPProtocolError(f"MCP result is not dict, got {type(result)}")
+
+        if 'content' not in result:
+            raise MCPProtocolError("MCP result missing 'content' field")
+
+        content = result['content']
+        if not isinstance(content, list) or len(content) == 0:
+            raise MCPProtocolError(f"MCP content is not non-empty list, got {type(content)}")
+
+        content_item = content[0]
+        if not isinstance(content_item, dict):
+            raise MCPProtocolError(f"MCP content[0] is not dict, got {type(content_item)}")
+
+        if content_item.get('type') != 'text':
+            raise MCPProtocolError(f"MCP content[0].type is not 'text', got {content_item.get('type')}")
+
+        if 'text' not in content_item:
+            raise MCPProtocolError("MCP content[0] missing 'text' field")
+
+        text = content_item['text']
+        if not isinstance(text, str):
+            raise MCPProtocolError(f"MCP text is not string, got {type(text)}")
+
+        # Parse the JSON text
+        try:
+            decoded = json.loads(text)
+            return decoded
+        except json.JSONDecodeError as e:
+            raise MCPProtocolError(f"Failed to decode MCP text as JSON: {e}") from e
+
     def _read_responses(self) -> None:
         """
         Background thread: read JSON-RPC responses from stdout.
@@ -320,6 +380,13 @@ class MCPClient:
 
         for line in self.process.stdout:
             if not line.strip():
+                continue
+
+            # Check response size
+            if len(line) > self.MAX_RESPONSE_SIZE:
+                self.error_queue.put(
+                    MCPProtocolError(f"Response line exceeds MAX_RESPONSE_SIZE ({len(line)} > {self.MAX_RESPONSE_SIZE})")
+                )
                 continue
 
             try:
@@ -351,10 +418,10 @@ class MCPClient:
     def _wrap_result(
         self,
         tool_name: str,
-        raw_response: Dict[str, Any]
+        decoded_result: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Wrap raw MCP response in structured result contract.
+        Wrap decoded MCP result in structured result contract.
 
         Returns:
             {
@@ -370,16 +437,16 @@ class MCPClient:
                 warnings
             }
         """
-        # Extract source_timestamp if present in result
+        # Extract source_timestamp if present in decoded result
         source_timestamp = 'UNKNOWN'
-        if isinstance(raw_response, dict) and 'source_timestamp' in raw_response:
-            source_timestamp = raw_response['source_timestamp']
+        if isinstance(decoded_result, dict) and 'source_timestamp' in decoded_result:
+            source_timestamp = decoded_result['source_timestamp']
 
         result = {
             'server_name': self.server_name,
             'tool_name': tool_name,
             'success': True,
-            'result': raw_response,
+            'result': decoded_result,
             'error_code': None,
             'error_message': None,
             'source': f'mcp:{self.server_name}',
@@ -389,7 +456,7 @@ class MCPClient:
         }
 
         # Preserve missing values
-        if raw_response is None or (isinstance(raw_response, dict) and len(raw_response) == 0):
+        if decoded_result is None or (isinstance(decoded_result, dict) and len(decoded_result) == 0):
             result['warnings'].append('Result is empty or None (data unavailable)')
 
         return result

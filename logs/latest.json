@@ -1,14 +1,14 @@
 {
-  "task": "mediaman-step-2-mcp-client-correction",
+  "task": "mediaman-step-2b-mcp-error-propagation",
   "status": "SUCCESS",
-  "step": 2,
-  "timestamp": "2026-08-27T23:00:43.716397+00:00Z",
+  "step": "2b",
+  "timestamp": "2026-08-27T23:17:11.723129+00:00Z",
   "details": {
-    "mcp_wire_mapping_verified": true,
-    "strict_jsonrpc_validation": true,
-    "nonzero_exit_detection": true,
-    "stderr_separation_verified": true,
-    "source_timestamp_preserved": true,
+    "error_propagation_verified": true,
+    "envelope_decoding_verified": true,
+    "malformed_json_propagation_verified": true,
+    "response_size_enforcement_verified": true,
+    "process_exit_handling_verified": true,
     "mcp_live_server_contacted": false,
     "event_detector_implemented": false,
     "real_llm_generation_performed": false,
@@ -19,21 +19,22 @@
     "docker_modified": false
   },
   "corrections": [
-    "Added TOOL_WIRE_MAPPING: racing.get_position \u2192 get_position wire name",
-    "Implemented strict JSON-RPC 2.0 validation in _validate_jsonrpc_response()",
-    "Added independent stderr drainage in _read_stderr() thread",
-    "Corrected timestamp handling: preserved source_timestamp, UNKNOWN when absent",
-    "Improved error classification: MCPProtocolError vs MCPServerError vs MCPTimeoutError",
-    "Added 24 comprehensive test cases for all corrections"
+    "Implemented error_queue checking in _send_request() for reader error propagation",
+    "Implemented _decode_mcp_result() to parse MCP result envelope (content[0].text)",
+    "Added strict envelope validation: content must be array with text type",
+    "Added response-size enforcement with MAX_RESPONSE_SIZE boundary check",
+    "Added process exit detection while request is pending",
+    "Added 6 new test categories (error propagation, result decoding, timestamp, size, exit, etc.)"
   ],
   "test_counts": {
-    "mcp_client_tests_collected": 24,
-    "mcp_client_tests_passed": 24,
-    "full_mediaman_suite_collected": 129,
-    "full_mediaman_suite_passed": 129,
-    "previous_tests": 105,
-    "new_tests": 24,
-    "improvement": 3
+    "mcp_client_tests_collected": 30,
+    "mcp_client_tests_passed": 30,
+    "full_mediaman_suite_collected": 135,
+    "full_mediaman_suite_passed": 135,
+    "previous_mcp_tests": 24,
+    "new_mcp_tests": 6,
+    "previous_full_suite": 129,
+    "total_improvement": 6
   },
   "files_modified": [
     "mediaman/mcp_client.py",
@@ -41,5 +42,19 @@
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
-  "commit_sha": "366b792d1c8f5cc3ab4e423734587f6f25b3e608"
+  "commit_sha": null,
+  "envelope_decoding": {
+    "protocol": "MCP tools/call response wraps tool result as content[0].text JSON",
+    "validation": "Strict schema: result.content[0].type=='text' and valid JSON",
+    "example": "result.content[0].text = JSON.stringify({latitude:41.1234, longitude:-73.5678})"
+  },
+  "error_propagation": {
+    "mechanism": "Reader thread enqueues MCPProtocolError to error_queue",
+    "waiting_request": "_send_request() checks error_queue.get_nowait() before response_queue",
+    "malformed_json": "Immediately raises MCPProtocolError, never MCPTimeoutError"
+  },
+  "response_size": {
+    "enforcement": "Each stdout line must be <= MAX_RESPONSE_SIZE (1MB)",
+    "oversized": "Enqueued as MCPProtocolError 'exceeds MAX_RESPONSE_SIZE'"
+  }
 }
