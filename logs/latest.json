@@ -71,7 +71,8 @@
         "Removed executable production activation blocks (MEDIAMAN_PRODUCTION_MODE=true, DRY_RUN=false, python3 commands)",
         "Replaced with prose requiring explicit approval for future activation"
       ]
-    }
+    },
+    "commit_sha": "b8d7de3bc2bff1ae316bd044840d4c9917e1ed11"
   },
   "previous_state": {
     "timestamp": "2026-08-27T16:58:09Z",
