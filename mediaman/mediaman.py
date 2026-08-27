@@ -88,84 +88,68 @@ def main():
             )
         )
         
-        # Check idempotency and create delivery record
+        # Claim delivery for sending
         try:
-            # BLOCKER 3: Use explicit delivery states
-            is_new = idempotency_store.record_pending(race_id, cycle_ts, sender.chat_id)
+            can_send = idempotency_store.claim_for_send(race_id, cycle_ts, sender.chat_id)
             
-            if not is_new:
+            if not can_send:
                 current_state = idempotency_store.get_state(race_id, cycle_ts, sender.chat_id)
-                if current_state == 'SENT':
-                    service_logger.info(
-                        f"Skipping already-sent cycle: race_id={race_id} cycle={cycle_ts} state=SENT"
-                    )
-                    return 0
-                elif current_state == 'FAILED':
-                    service_logger.info(
-                        f"Retrying failed delivery: race_id={race_id} cycle={cycle_ts}"
-                    )
-                    idempotency_store.record_sending(race_id, cycle_ts, sender.chat_id)
-                elif current_state == DeliveryRecord.SENDING:
-                    service_logger.warning(
-                        f"Stale SENDING state recovered: race_id={race_id} cycle={cycle_ts}"
-                    )
-                    idempotency_store.record_sending(race_id, cycle_ts, sender.chat_id)
-                else:
-                    service_logger.info(
-                        f"Resuming cycle: race_id={race_id} cycle={cycle_ts} state={current_state}"
-                    )
-            else:
-                idempotency_store.record_sending(race_id, cycle_ts, sender.chat_id)
+                service_logger.info(
+                    f"Delivery not retryable: race_id={race_id} cycle={cycle_ts} state={current_state}"
+                )
+                return 0
         
         except Exception as e:
-            service_logger.error(f"Idempotency check failed: {e}")
-            debug_logger.error(f"IDEMPOTENCY_ERROR: {e}")
+            service_logger.error(f"State store error during claim: {e}")
+            debug_logger.error(f"CLAIM_ERROR: {type(e).__name__}: {e}")
             return 1
         
-        # Send to Telegram
+        # Send via Telegram
         service_logger.info(
-            SanitizedMessage.send_attempt(dry_run, sender.chat_id, len(content), sender.execution_id)
+            SanitizedMessage.send_attempt(dry_run, len(content), sender.execution_id)
         )
+        debug_logger.info(f"SEND_ATTEMPT dry_run={dry_run} content_length={len(content)} execution_id={sender.execution_id}")
         
-        result = sender.send(content)
+        sender_result = sender.send(content)
         
-        # Update delivery state based on result
-        if result.success:
-            idempotency_store.record_sent(idem_key)
-        else:
-            idempotency_store.record_failed(race_id, cycle_ts, sender.chat_id, result.error_code)
-        
-        # Log result
         service_logger.info(
-            SanitizedMessage.send_result(
-                result.dry_run,
-                result.success,
-                result.provider_status,
-                result.error_code,
-                result.execution_id
-            )
+            SanitizedMessage.send_result(dry_run, sender_result.success, sender_result.error_code, sender.execution_id)
         )
+        debug_logger.info(f"SEND_RESULT success={sender_result.success} error={sender_result.get('error', '')} execution_id={sender.execution_id}")
         
-        # Log data flow (data out)
-        debug_logger.info(
-            f"DATA_OUT provider_status={result.provider_status} "
-            f"success={result.success} "
-            f"length={result.message_length}"
-        )
+        # Record result in state store
+        try:
+            if sender_result.success:
+                # Mark as SENT
+                idempotency_store.record_sent(
+                    race_id, cycle_ts, sender.chat_id,
+                    provider_message_id=None
+                )
+                service_logger.info(f"Delivery SENT: race_id={race_id} cycle={cycle_ts} message_id={sender_result.get('message_id', 'N/A')}")
+            else:
+                # Mark as FAILED
+                error_msg = sender_result.get("error", "Unknown error")
+                idempotency_store.record_failed(race_id, cycle_ts, sender.chat_id, error_msg)
+                service_logger.error(f"Delivery FAILED: race_id={race_id} cycle={cycle_ts} error={error_msg}")
+                return 1
         
-        # Log heartbeat (one per successful cycle)
-        if result.success:
-            debug_logger.info(f"HEARTBEAT cycle={cycle_ts} provider={provider_name}")
+        except Exception as e:
+            service_logger.error(f"State store error during result recording: {e}")
+            debug_logger.error(f"RECORD_ERROR: {type(e).__name__}: {e}")
+            return 1
         
-        # Log shutdown
+        # Heartbeat
+        service_logger.info(SanitizedMessage.heartbeat(provider_name))
+        debug_logger.info(f"HEARTBEAT cycle={cycle_ts} provider={provider_name}")
+        
         service_logger.info(SanitizedMessage.shutdown(1))
-        debug_logger.info("SHUTDOWN")
+        debug_logger.info("SHUTDOWN execution_count=1")
         
-        return 0 if result.success else 1
+        return 0
     
     except Exception as e:
-        service_logger.error(f"Fatal error: {e}", exc_info=True)
-        debug_logger.error(f"FATAL: {type(e).__name__}: {e}")
+        service_logger.error(f"Unhandled exception: {type(e).__name__}: {e}")
+        debug_logger.error(f"ERROR: {type(e).__name__}: {e}", exc_info=True)
         return 1
 
 

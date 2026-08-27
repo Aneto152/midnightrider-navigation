@@ -27,7 +27,10 @@ class SQLiteStateStore:
             db_path = "/var/lib/mediaman/state.sqlite3"
         
         self.db_path = Path(db_path)
-        self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            self.db_path.parent.mkdir(parents=True, exist_ok=True)
+        except (OSError, PermissionError) as e:
+            raise RuntimeError(f"Cannot create state directory {self.db_path.parent}: {e}")
         
         self._init_schema()
     
@@ -168,6 +171,81 @@ class SQLiteStateStore:
         except sqlite3.Error as e:
             raise RuntimeError(f"Failed to record failure: {e}")
     
+    def claim_for_send(self, race_id: str, cycle_id: str, target_id: str) -> bool:
+        """Claim a delivery for sending. Returns True if allowed to send.
+        
+        Allowed:
+        - absent → PENDING → SENDING
+        - FAILED → SENDING (retry)
+        - stale SENDING → SENDING (recovery)
+        
+        Blocked:
+        - SENT (never retry)
+        - recent SENDING (already in progress)
+        """
+        key = self._make_key(race_id, cycle_id, target_id)
+        now = int(datetime.now(timezone.utc).timestamp())
+        
+        try:
+            with self._transaction() as conn:
+                # Check existing state
+                cursor = conn.execute(
+                    "SELECT state, updated_at FROM deliveries WHERE delivery_key=?",
+                    (key,)
+                )
+                row = cursor.fetchone()
+                
+                if not row:
+                    # New delivery: reserve as PENDING, transition to SENDING
+                    conn.execute(
+                        """
+                        INSERT INTO deliveries 
+                        (delivery_key, race_id, cycle_id, target_id, state, created_at, updated_at, retry_count)
+                        VALUES (?, ?, ?, ?, 'SENDING', ?, ?, 0)
+                        """,
+                        (key, race_id, cycle_id, target_id, now, now)
+                    )
+                    return True
+                
+                state, updated_at = row
+                
+                if state == 'SENT':
+                    return False  # Never retry SENT
+                
+                if state == 'FAILED':
+                    # Retry: transition to SENDING
+                    conn.execute(
+                        "UPDATE deliveries SET state='SENDING', updated_at=? WHERE delivery_key=?",
+                        (now, key)
+                    )
+                    return True
+                
+                if state == 'SENDING':
+                    age = now - updated_at
+                    if age > self.STALE_SENDING_TIMEOUT_SECONDS:
+                        # Stale: retry transition to SENDING
+                        conn.execute(
+                            "UPDATE deliveries SET state='SENDING', updated_at=? WHERE delivery_key=?",
+                            (now, key)
+                        )
+                        return True
+                    else:
+                        # Recent: do not retry
+                        return False
+                
+                # PENDING: transition to SENDING
+                if state == 'PENDING':
+                    conn.execute(
+                        "UPDATE deliveries SET state='SENDING', updated_at=? WHERE delivery_key=?",
+                        (now, key)
+                    )
+                    return True
+                
+                return False
+        except sqlite3.Error as e:
+            raise RuntimeError(f"Failed to claim for send: {e}")
+
+
     def can_retry(self, race_id: str, cycle_id: str, target_id: str) -> bool:
         """Check if a delivery is retryable."""
         key = self._make_key(race_id, cycle_id, target_id)
