@@ -1,14 +1,13 @@
 {
-  "task": "mediaman-step-2b-mcp-error-propagation",
-  "status": "SUCCESS",
-  "step": "2b",
-  "timestamp": "2026-08-27T23:17:11.723129+00:00Z",
+  "task": "mediaman-step-2c-mcp-lifecycle-correction",
+  "status": "IN_PROGRESS",
+  "step": "2c",
+  "timestamp": "2026-08-27T23:25:26.551222Z",
   "details": {
-    "error_propagation_verified": true,
-    "envelope_decoding_verified": true,
-    "malformed_json_propagation_verified": true,
-    "response_size_enforcement_verified": true,
-    "process_exit_handling_verified": true,
+    "startup_exception_classification_verified": false,
+    "process_exit_detection_verified": false,
+    "reader_path_propagation_verified": false,
+    "utc_timestamp_corrected": false,
     "mcp_live_server_contacted": false,
     "event_detector_implemented": false,
     "real_llm_generation_performed": false,
@@ -18,23 +17,11 @@
     "signalk_modified": false,
     "docker_modified": false
   },
-  "corrections": [
-    "Implemented error_queue checking in _send_request() for reader error propagation",
-    "Implemented _decode_mcp_result() to parse MCP result envelope (content[0].text)",
-    "Added strict envelope validation: content must be array with text type",
-    "Added response-size enforcement with MAX_RESPONSE_SIZE boundary check",
-    "Added process exit detection while request is pending",
-    "Added 6 new test categories (error propagation, result decoding, timestamp, size, exit, etc.)"
-  ],
   "test_counts": {
     "mcp_client_tests_collected": 30,
     "mcp_client_tests_passed": 30,
     "full_mediaman_suite_collected": 135,
-    "full_mediaman_suite_passed": 135,
-    "previous_mcp_tests": 24,
-    "new_mcp_tests": 6,
-    "previous_full_suite": 129,
-    "total_improvement": 6
+    "full_mediaman_suite_passed": 135
   },
   "files_modified": [
     "mediaman/mcp_client.py",
@@ -42,19 +29,5 @@
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
-  "commit_sha": "2c75d3cfca12572f362dfed6bc75d997b52a6b96",
-  "envelope_decoding": {
-    "protocol": "MCP tools/call response wraps tool result as content[0].text JSON",
-    "validation": "Strict schema: result.content[0].type=='text' and valid JSON",
-    "example": "result.content[0].text = JSON.stringify({latitude:41.1234, longitude:-73.5678})"
-  },
-  "error_propagation": {
-    "mechanism": "Reader thread enqueues MCPProtocolError to error_queue",
-    "waiting_request": "_send_request() checks error_queue.get_nowait() before response_queue",
-    "malformed_json": "Immediately raises MCPProtocolError, never MCPTimeoutError"
-  },
-  "response_size": {
-    "enforcement": "Each stdout line must be <= MAX_RESPONSE_SIZE (1MB)",
-    "oversized": "Enqueued as MCPProtocolError 'exceeds MAX_RESPONSE_SIZE'"
-  }
+  "commit_sha": null
 }
