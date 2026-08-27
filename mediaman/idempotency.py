@@ -111,14 +111,25 @@ class IdempotencyStore:
             pass
     
     def _load_state(self) -> dict:
-        """Load state from disk."""
+        """Load state from disk. Fail-closed on corruption."""
+        if not self.state_file.exists():
+            return {}  # OK: file doesn't exist yet
+        
         try:
-            if self.state_file.exists():
-                with open(self.state_file) as f:
-                    return json.load(f)
-        except Exception:
-            pass
-        return {}
+            with open(self.state_file) as f:
+                return json.load(f)  # OK: valid JSON
+        except json.JSONDecodeError as e:
+            raise RuntimeError(
+                f"State file corrupted (invalid JSON): {self.state_file} at position {e.pos}"
+            )
+        except OSError as e:
+            raise RuntimeError(
+                f"State file storage error: {self.state_file} ({e})"
+            )
+        except Exception as e:
+            raise RuntimeError(
+                f"Unexpected state file error: {self.state_file} ({type(e).__name__}: {e})"
+            )
     
     def _save_state(self, state: dict) -> None:
         """Save state atomically: temp → fsync → rename."""
@@ -141,10 +152,14 @@ class IdempotencyStore:
             pass
     
     def record_pending(self, key: IdempotencyKey) -> bool:
-        """Acquire lock, check if new, record PENDING."""
+        """Acquire lock, check if new, record PENDING.
+        
+        Raises:
+            RuntimeError: If state file is corrupted or storage error occurs.
+        """
         self._acquire_lock()
         try:
-            state = self._load_state()
+            state = self._load_state()  # Raises RuntimeError on corruption
             key_hash = key.hash()
             
             if key_hash in state:
