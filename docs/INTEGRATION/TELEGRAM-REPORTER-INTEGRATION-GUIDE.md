@@ -76,7 +76,7 @@ PENDING → SENDING → SENT  (final, non-retryable)
 ### Blocked Components
 
 **Content Provider:**
-- OpenClawGatewayProvider: placeholder (raises NotImplementedError, must not be used for production) (raises NotImplementedError)
+- OpenClawGatewayProvider: placeholder (raises NotImplementedError, must not be used for production)
 - TestContentProvider: test-only (cannot be used in production)
 - Real LLM adapter: not implemented
 
@@ -128,7 +128,7 @@ Choose one of the following:
 - Proven data sources:
   - Own position: `/api/position`
   - Own speed/course: `/api/navigation`
-  - Wind direction: `/api/race_data` (via Signal K)
+  - Start line geometry: `/api/race_data` (verified)
   - Start line geometry: `/api/race_data`
   - Competitors nearby: `/api/ais` (if AIS active)
   - External wind: `/api/ndbc/<station>` (5+ min old)
@@ -149,8 +149,8 @@ TELEGRAM_CHAT_ID is read from secured environment
 # Enable production mode
 MEDIAMAN_PRODUCTION_MODE=true
 
-# Select content provider (must be real, not "test")
-MEDIAMAN_CONTENT_PROVIDER=test  # (only test or gateway supported)
+# Select content provider
+# Use gateway (intended future provider, currently unimplemented)
 
 # Disable dry-run
 DRY_RUN=false
@@ -222,11 +222,13 @@ Once production activation is explicitly approved, use:
 ```bash
 export TELEGRAM_BOT_TOKEN is read from secured environment
 export TELEGRAM_CHAT_ID is read from secured environment
-export MEDIAMAN_PRODUCTION_MODE=true
-export DRY_RUN=false
-export MEDIAMAN_CONTENT_PROVIDER=test  # (only test or gateway supported)
+Future production activation requires:
+1. Real content provider implementation
+2. Explicit credential and approval verification
+3. Separate systemd unit configuration
+4. Explicit Denis approval
 
-python3 -m mediaman.mediaman
+No automated commands are provided for production activation.
 ```
 
 This is NOT authorized in the current development phase.
@@ -240,7 +242,7 @@ This is NOT authorized in the current development phase.
 | Own position | `/api/position` | degrees | ≤ 30s |
 | Own SOG | `/api/navigation` | knots | Real-time |
 | Own COG | `/api/navigation` | degrees | Real-time |
-| Wind direction | `/api/race_data` → Signal K | degrees | ≤ 10s |
+| Wind source & freshness | Requires runtime verification (Signal K or weather API) | varies | varies |
 | Start line distance | `/api/race_data` | meters | Real-time |
 | Start line side | `/api/race_data` | enum (OCS/CLEAR/BEHIND) | Real-time |
 | Competitors nearby | `/api/ais` | count | Event-driven |
@@ -332,7 +334,6 @@ export TELEGRAM_CHAT_ID is read from secured environment
 export DRY_RUN=true
 export MEDIAMAN_CONTENT_PROVIDER=test
 
-python3 -m mediaman.mediaman
 ```
 
 Expected: Exit 0, no network I/O, SQLite state transitions.

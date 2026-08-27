@@ -39,6 +39,41 @@
     "status": "COMPLETE"
   },
   "current_audit": {
+    "timestamp": "2026-08-27T17:14:46Z",
+    "task": "mediaman-final-content-and-audit-state-fix",
+    "status": "SUCCESS",
+    "web_research_by_oc": false,
+    "files_modified": [
+      "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
+      "logs/latest.json",
+      "logs/oc-actions.log"
+    ],
+    "details": {
+      "duplicate_provider_wording_removed": true,
+      "race_data_contract_corrected": true,
+      "production_test_provider_example_removed": true,
+      "future_activation_blocks_removed": true,
+      "dry_run_foundation_validated": true,
+      "sqlite_delivery_state_validated": true,
+      "real_content_provider_implemented": false,
+      "openclaw_mediaman_adapter_implemented": false,
+      "telegram_real_send_authorized": false,
+      "telegram_bot_or_group_created": false,
+      "mediaman_timer_activation_authorized": false,
+      "inbound_telegram_processing": false,
+      "runtime_code_modified": false,
+      "signalk_modified": false,
+      "docker_modified": false,
+      "corrections_applied": [
+        "Removed duplicate '(raises NotImplementedError)' from OpenClawGatewayProvider description",
+        "Removed wind direction claim from /api/race_data (changed to 'Wind source & freshness requires runtime verification')",
+        "Removed test provider example from production configuration section",
+        "Removed executable production activation blocks (MEDIAMAN_PRODUCTION_MODE=true, DRY_RUN=false, python3 commands)",
+        "Replaced with prose requiring explicit approval for future activation"
+      ]
+    }
+  },
+  "previous_state": {
     "timestamp": "2026-08-27T16:58:09Z",
     "task": "mediaman-documentation-security-finalization",
     "status": "SUCCESS",
@@ -78,45 +113,5 @@
       ]
     },
     "commit_sha": "104b23b393b6ab62fd8be7126ccf4dc9cc542b99"
-  },
-  "previous_state": {
-    "timestamp": "2026-08-27T16:52:59Z",
-    "task": "mediaman-documentation-and-security-correction",
-    "status": "SUCCESS",
-    "web_research_by_oc": false,
-    "files_modified": [
-      ".gitignore",
-      "docs/ARCHITECTURE-MASTER.md",
-      "SYSTEM-SUMMARY.md",
-      "docs/INDEX.md",
-      "docs/DATA-SCHEMA-MASTER.md",
-      "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
-      "logs/latest.json",
-      "logs/oc-actions.log"
-    ],
-    "details": {
-      "documentation_corrected": true,
-      "audit_log_corrected": true,
-      "gitignore_protection_corrected": true,
-      "dry_run_foundation_validated": true,
-      "sqlite_delivery_state_validated": true,
-      "real_content_provider_implemented": false,
-      "openclaw_mediaman_adapter_implemented": false,
-      "telegram_real_send_authorized": false,
-      "telegram_bot_or_group_created": false,
-      "mediaman_timer_activation_authorized": false,
-      "inbound_telegram_processing": false,
-      "runtime_code_modified": false,
-      "signalk_modified": false,
-      "docker_modified": false,
-      "violations_fixed": [
-        "Removed WHATSAPP_REPORTER.md from INDEX.md file tree",
-        "Removed credential value examples from TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
-        "Replaced sudo systemctl activation commands with non-executable prose",
-        "Clarified that OpenClawGatewayProvider is unimplemented",
-        "Verified .gitignore protections (.secret, .openclaw-token, *.env)"
-      ]
-    },
-    "commit_sha": "a0f4675398ea6dfbd7c865ed3263f1e85a8c22a6"
   }
 }

@@ -279,3 +279,6 @@
 [2026-08-27T16:58:13Z] [FILE_MODIFY] [documentation] Corrected provider names and Regatta data-contract wording
 [2026-08-27T16:58:13Z] [RESULT] [documentation] Result: SUCCESS — final MediaMan documentation correction
 [2026-08-27T16:58:33Z] [COMMIT] [documentation] SHA: 104b23b393b6ab62fd8be7126ccf4dc9cc542b99
+[2026-08-27T17:14:49Z] [FILE_MODIFY] [documentation] Removed duplicate provider wording and corrected Regatta data-contract claims
+[2026-08-27T17:14:49Z] [FILE_MODIFY] [documentation] Removed executable future-production configuration blocks
+[2026-08-27T17:14:49Z] [RESULT] [documentation] Result: SUCCESS — final MediaMan content correction
