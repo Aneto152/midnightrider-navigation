@@ -42079,3 +42079,19 @@ Traceback (most recent call last):
 TypeError: SanitizedMessage.send_attempt() missing 1 required positional argument: 'execution_id'
 [2026-08-27T11:33:59] STARTUP dry_run=True production_mode=False provider=test
 [2026-08-27T11:33:59] DATA_IN normalized_cycle=2026-08-27T15:30:00+00:00 now=2026-08-27T15:33:59.905027+00:00
+[2026-08-27T11:34:10] STARTUP dry_run=True production_mode=False provider=test
+[2026-08-27T11:34:10] DATA_IN normalized_cycle=2026-08-27T15:30:00+00:00 now=2026-08-27T15:34:10.651916+00:00
+[2026-08-27T11:36:30] STARTUP dry_run=True production_mode=False provider=test
+[2026-08-27T11:36:30] DATA_IN normalized_cycle=2026-08-27T15:30:00+00:00 now=2026-08-27T15:36:30.720800+00:00
+[2026-08-27T11:36:46] STARTUP dry_run=True production_mode=False provider=test
+[2026-08-27T11:36:46] DATA_IN normalized_cycle=2026-08-27T15:30:00+00:00 now=2026-08-27T15:36:46.894993+00:00
+[2026-08-27T11:36:46] SEND_ATTEMPT dry_run=True content_length=298 execution_id=055b525e
+[2026-08-27T11:36:46] SEND_RESULT success=True error_code= execution_id=055b525e
+[2026-08-27T11:36:46] ERROR: AttributeError: type object 'SanitizedMessage' has no attribute 'heartbeat'
+Traceback (most recent call last):
+  File "/home/aneto/midnightrider-navigation/mediaman/mediaman.py", line 152, in main
+    service_logger.info(SanitizedMessage.heartbeat(provider_name))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: type object 'SanitizedMessage' has no attribute 'heartbeat'
+[2026-08-27T11:36:49] STARTUP dry_run=True production_mode=False provider=test
+[2026-08-27T11:36:49] DATA_IN normalized_cycle=2026-08-27T15:30:00+00:00 now=2026-08-27T15:36:49.381546+00:00
