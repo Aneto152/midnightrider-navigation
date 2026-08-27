@@ -274,3 +274,7 @@
 [2026-08-27T16:53:02Z] [FILE_MODIFY] [security] Verified .secret protection in .gitignore (with .openclaw-token, *.env)
 [2026-08-27T16:53:02Z] [RESULT] [documentation] Result: SUCCESS — documentation and audit trail corrected
 [2026-08-27T16:53:17Z] [COMMIT] [documentation] SHA: a0f4675398ea6dfbd7c865ed3263f1e85a8c22a6
+[2026-08-27T16:58:13Z] [FILE_MODIFY] [security] Added exact .secret protection to .gitignore
+[2026-08-27T16:58:13Z] [FILE_MODIFY] [documentation] Removed activation commands and credential-like examples
+[2026-08-27T16:58:13Z] [FILE_MODIFY] [documentation] Corrected provider names and Regatta data-contract wording
+[2026-08-27T16:58:13Z] [RESULT] [documentation] Result: SUCCESS — final MediaMan documentation correction

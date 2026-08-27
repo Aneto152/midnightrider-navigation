@@ -77,6 +77,7 @@ __pycache__/
 # Python bytecode
 queue.json
 *.secret
+.secret
 secrets/
 # Secrets — automatic protection
 # Service runtime logs — NOT tracked in git (RotatingFileHandler on RPi)
