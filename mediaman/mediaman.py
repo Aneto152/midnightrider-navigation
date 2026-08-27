@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 
 from .telegram_sender import TelegramSender
 from .content_provider import get_content_provider
-from .idempotency import IdempotencyKey, IdempotencyStore
+from .idempotency import IdempotencyKey, IdempotencyStore, normalize_to_15min_bucket, DeliveryRecord
 from .logging_utils import setup_service_logger, setup_debug_logger, SanitizedMessage
 
 
@@ -22,28 +22,53 @@ def main():
     Environment variables:
     - TELEGRAM_BOT_TOKEN: Required for real sends
     - TELEGRAM_CHAT_ID: Required for real sends
-    - DRY_RUN: Set to "true" for testing without network I/O
+    - DRY_RUN: Set to "true" for testing without network I/O (default: true)
     - MEDIAMAN_CONTENT_PROVIDER: "test" or "gateway" (default: test)
     - MEDIAMAN_RACE_ID: Race identifier (default: "test-race")
+    - MEDIAMAN_PRODUCTION_MODE: "true" only when explicitly set for production (default: false)
     """
     
     # Setup logging
     service_logger = setup_service_logger("mediaman")
     debug_logger = setup_debug_logger()
     
-    dry_run = os.getenv("DRY_RUN", "").lower() == "true"
+    dry_run = os.getenv("DRY_RUN", "true").lower() == "true"
+    production_mode = os.getenv("MEDIAMAN_PRODUCTION_MODE", "false").lower() == "true"
     race_id = os.getenv("MEDIAMAN_RACE_ID", "test-race")
+    provider_name = os.getenv("MEDIAMAN_CONTENT_PROVIDER", "test").lower()
     
     try:
+        # BLOCKER 1: Fail closed if attempting production without explicit mode
+        if not dry_run and not production_mode:
+            service_logger.error(
+                "BLOCKER: Production mode requested (DRY_RUN=false) "
+                "but MEDIAMAN_PRODUCTION_MODE not set. Failing closed."
+            )
+            debug_logger.error("BLOCKER: Production mode not explicitly enabled")
+            return 1
+        
+        # BLOCKER 2: Fail closed if using test provider with production
+        if not dry_run and provider_name == "test":
+            service_logger.error(
+                "BLOCKER: Test provider cannot be used in production. "
+                "Enable MEDIAMAN_PRODUCTION_MODE only with a real provider."
+            )
+            debug_logger.error("BLOCKER: Test provider in production mode")
+            return 1
+        
         # Log startup
         service_logger.info(SanitizedMessage.startup(dry_run))
+        debug_logger.info(f"STARTUP dry_run={dry_run} production_mode={production_mode} provider={provider_name}")
         
         # Initialize components
         sender = TelegramSender()
         provider = get_content_provider()
         idempotency_store = IdempotencyStore()
         
-        cycle_ts = datetime.now(timezone.utc).isoformat()
+        # BLOCKER 4: Use stable 15-minute cycle ID
+        now_utc = datetime.now(timezone.utc)
+        cycle_ts = normalize_to_15min_bucket(now_utc)
+        debug_logger.info(f"DATA_IN normalized_cycle={cycle_ts} now={now_utc.isoformat()}")
         
         # Generate content
         content = provider.get_content(race_id, cycle_ts)
@@ -62,19 +87,41 @@ def main():
             )
         )
         
-        # Check idempotency
+        # Check idempotency and create delivery record
         try:
             idem_key = IdempotencyKey(race_id, cycle_ts, sender.chat_id)
-            should_send = idempotency_store.check_and_record(idem_key)
             
-            if not should_send:
-                service_logger.info(
-                    f"Skipping duplicate cycle: race_id={race_id} cycle={cycle_ts}"
-                )
-                return 0
+            # BLOCKER 3: Use explicit delivery states
+            is_new = idempotency_store.record_pending(idem_key)
+            
+            if not is_new:
+                current_state = idempotency_store.get_state(idem_key)
+                if current_state == DeliveryRecord.SENT:
+                    service_logger.info(
+                        f"Skipping already-sent cycle: race_id={race_id} cycle={cycle_ts} state=SENT"
+                    )
+                    return 0
+                elif current_state == DeliveryRecord.FAILED:
+                    service_logger.info(
+                        f"Retrying failed delivery: race_id={race_id} cycle={cycle_ts}"
+                    )
+                    idempotency_store.record_sending(idem_key)
+                elif current_state == DeliveryRecord.SENDING:
+                    service_logger.warning(
+                        f"Stale SENDING state recovered: race_id={race_id} cycle={cycle_ts}"
+                    )
+                    idempotency_store.record_sending(idem_key)
+                else:
+                    service_logger.info(
+                        f"Resuming cycle: race_id={race_id} cycle={cycle_ts} state={current_state}"
+                    )
+            else:
+                idempotency_store.record_sending(idem_key)
+        
         except Exception as e:
             service_logger.error(f"Idempotency check failed: {e}")
-            # Continue anyway (fail open)
+            debug_logger.error(f"IDEMPOTENCY_ERROR: {e}")
+            return 1
         
         # Send to Telegram
         service_logger.info(
@@ -82,6 +129,12 @@ def main():
         )
         
         result = sender.send(content)
+        
+        # Update delivery state based on result
+        if result.success:
+            idempotency_store.record_sent(idem_key)
+        else:
+            idempotency_store.record_failed(idem_key, result.error_code)
         
         # Log result
         service_logger.info(
@@ -101,8 +154,13 @@ def main():
             f"length={result.message_length}"
         )
         
+        # Log heartbeat (one per successful cycle)
+        if result.success:
+            debug_logger.info(f"HEARTBEAT cycle={cycle_ts} provider={provider_name}")
+        
         # Log shutdown
         service_logger.info(SanitizedMessage.shutdown(1))
+        debug_logger.info("SHUTDOWN")
         
         return 0 if result.success else 1
     

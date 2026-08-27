@@ -12,16 +12,20 @@ User=aneto
 Group=aneto
 
 # Environment variable configuration (systemd can source from file)
-EnvironmentFile=-/home/aneto/.openclaw/mediaman/.env
-Environment="DRY_RUN=false"
+EnvironmentFile=-/etc/mediaman/mediaman.env
+# Production: require explicit provider and DRY_RUN=false
+# Default to test mode to prevent silent test content publishing
+Environment="DRY_RUN=true"
 Environment="MEDIAMAN_CONTENT_PROVIDER=test"
+# Must be explicitly set to non-test for production
+Environment="MEDIAMAN_PRODUCTION_MODE=false"
 
 # Security hardening
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
 ProtectHome=yes
-ReadWritePaths=/home/aneto/midnightrider-navigation/logs /home/aneto/.openclaw/mediaman
+ReadWritePaths=/var/lib/mediaman /var/log/mediaman
 
 # Resource limits
 TimeoutStartSec=30
