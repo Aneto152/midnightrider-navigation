@@ -142,6 +142,18 @@ class TestOutputValidator:
         assert not is_valid
         assert "coordinate" in msg.lower()
 
+    def test_coordinates_unsigned_comma_separated(self, sample_facts):
+        """Format 7: 41.1234, 73.5678 (unsigned comma-separated) — rejected."""
+        validator = OutputValidator(sample_facts)
+        article = (
+            "Position 41.1234, 73.5678. "
+            "Le bateau navigue. "
+            "Excellentes conditions."
+        )
+        is_valid, msg = validator.validate(article)
+        assert not is_valid
+        assert "coordinate" in msg.lower()
+
     def test_coarse_location_allowed(self, sample_facts):
         """Coarse location text allowed."""
         validator = OutputValidator(sample_facts)
