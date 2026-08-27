@@ -309,3 +309,7 @@
 [2026-08-27T22:07:08.957462+00:00Z] [TEST_RUN] [mediaman-step-1b] Validator tests: 22/22 passed (edge cases: wind vs speed, tolerance boundaries, circular course, coordinate formats, word boundaries)
 [2026-08-27T22:07:08.957462+00:00Z] [TEST_RUN] [mediaman-step-1b] Full MediaMan suite: 104/104 passed
 [2026-08-27T22:07:08.957462+00:00Z] [RESULT] [mediaman-step-1b] Result: SUCCESS — Validator hardened with comprehensive edge case coverage
+[2026-08-27T22:12:14.062211+00:00Z] [FILE_MODIFY] [mediaman-validator] Fixed per-occurrence wind context, signed-coordinate validation, and word boundary preservation
+[2026-08-27T22:12:14.062211+00:00Z] [TEST_RUN] [mediaman-validator] Validator tests: 21/21 passed (wind context, coordinates, word boundaries)
+[2026-08-27T22:12:14.062211+00:00Z] [TEST_RUN] [mediaman-validator] Full MediaMan suite: 103/103 passed
+[2026-08-27T22:12:14.062211+00:00Z] [RESULT] [mediaman-validator] Result: SUCCESS — Context edge cases closed

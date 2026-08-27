@@ -6,8 +6,7 @@ Fails closed if validation fails.
 """
 
 import re
-import math
-from typing import Tuple, Set, Optional
+from typing import Tuple, Optional
 from .race_facts import RaceFacts
 
 
@@ -48,7 +47,6 @@ class OutputValidator:
     # Field-aware numeric context patterns
     SPEED_UNITS = r'(?:nœud|nœuds|knot|knots?|kt|kts|vitesse)'
     COURSE_LABELS = r'(?:cap|route|course|heading|COG|direction|bearing|direction de route)'
-    WIND_SPEED_PATTERN = r'(?:vent|wind)\s+(?:souffle\s+)?(?:\u00e0|at)\s+(\d+(?:[.,]\d+)?)\s*(?:nœud|nœuds|knot|knots?|kt|kts)'
     HEEL_CONTEXT = r'(?:gîte|inclinaison|heel|angle|inclination)'
     ELAPSED_TIME_CONTEXT = r'(?:durée|temps de course|elapsed|hours? since|minutes? since|time since start|heures de course)'
     RANKING_CONTEXT = r'\b(?:classement|position dans la flotte|rang|place|leader|leading|first place|second place|winning)\b'
@@ -61,13 +59,13 @@ class OutputValidator:
         self._extract_factual_values()
 
     def _extract_factual_values(self):
-        """Extract factual values from facts (no pre-expansion)."""
+        """Extract factual values from facts."""
         if self.facts.navigation and self.facts.navigation.is_valid():
             self.factual_sog = self.facts.navigation.sog_knots
             self.factual_cog = self.facts.navigation.cog_degrees
 
     def validate(self, output: str) -> Tuple[bool, str]:
-        """Validate output with strict security-first approach."""
+        """Validate output."""
 
         # Empty check
         if not output or not output.strip():
@@ -108,7 +106,7 @@ class OutputValidator:
         if self._has_exact_coordinates(output):
             return False, "Exact coordinates not permitted (use summarized descriptions instead)"
 
-        # Unsupported explicit claims (with word boundaries)
+        # Unsupported explicit claims
         valid, reason = self._validate_unsupported_claims(output)
         if not valid:
             return False, reason
@@ -157,9 +155,14 @@ class OutputValidator:
     def _has_exact_coordinates(self, text: str) -> bool:
         """Check for exact coordinates in multiple formats."""
         patterns = [
-            r'\d+\.\d{2,}[°º]?\s*[NS]?\s*[,\s]\s*\d+\.\d{2,}[°º]?\s*[EW]?',
-            r'\d+\.\d{2,}\s+[+-]?\d+\.\d{2,}',
-            r'\d+\.\d{2,}[°º]\s+[+-]?\d+\.\d{2,}[°º]',
+            # Cardinal format: 41.1234°N, 73.5678°W
+            r'\d+\.\d{2,}[°º]?\s*[NS]\s*[,\s]\s*\d+\.\d{2,}[°º]?\s*[EW]',
+            # Signed with space: 41.1234 -73.5678
+            r'[+-]?\d+\.\d{2,}\s+[+-]\d+\.\d{2,}',
+            # Signed comma: -41.1234, 73.5678
+            r'[+-]\d+\.\d{2,}\s*,\s*[+-]?\d+\.\d{2,}',
+            # Degree format: 41.1234° -73.5678°
+            r'\d+\.\d{2,}[°º]\s+[+-]\d+\.\d{2,}[°º]',
         ]
         for pattern in patterns:
             if re.search(pattern, text):
@@ -169,8 +172,9 @@ class OutputValidator:
     def _validate_unsupported_claims(self, text: str) -> Tuple[bool, str]:
         """Reject explicit unsupported claims."""
 
-        # Wind speed claims only if explicit wind+speed pattern
-        if re.search(self.WIND_SPEED_PATTERN, text, re.IGNORECASE):
+        # Wind claims: only if explicit wind pattern with numeric speed
+        # Pattern: (vent|wind) ... (number) (unit)
+        if self._has_explicit_wind_speed_claim(text):
             if self.facts.wind is None or not self.facts.wind.is_valid():
                 return False, "Wind claims not supported (wind facts unavailable)"
 
@@ -188,17 +192,23 @@ class OutputValidator:
 
         return True, ""
 
-    def _validate_numeric_claims(self, text: str) -> Tuple[bool, str]:
-        """Validate numeric claims using field-aware context."""
+    def _has_explicit_wind_speed_claim(self, text: str) -> bool:
+        """Check for explicit wind speed pattern: vent/wind + à/at + number + unit."""
+        # Only match if vent/wind is proximal to the numeric claim
+        pattern = r'(?:vent|wind)\s+(?:souffle\s+)?(?:à|at)\s+(\d+(?:[.,]\d+)?)\s*(?:nœud|nœuds|knot|knots?|kt|kts)'
+        return bool(re.search(pattern, text, re.IGNORECASE))
 
-        # Boat speed claims: speed unit without wind context
+    def _validate_numeric_claims(self, text: str) -> Tuple[bool, str]:
+        """Validate numeric claims with per-occurrence context."""
+
+        # Boat speed claims: speed unit but NOT in wind context
         speed_pattern = rf'(\d+(?:[.,]\d+)?)\s*({self.SPEED_UNITS})'
 
         for match in re.finditer(speed_pattern, text, re.IGNORECASE):
             start = match.start()
 
-            # Skip if in explicit wind context
-            if self._is_in_explicit_wind_context(text, start):
+            # Skip if this specific occurrence is in wind context
+            if self._is_speed_in_wind_context(text, start, match.end()):
                 continue
 
             speed_str = match.group(1).replace(',', '.')
@@ -233,17 +243,22 @@ class OutputValidator:
 
         return True, ""
 
-    def _is_in_explicit_wind_context(self, text: str, position: int) -> bool:
-        """Check if position is in explicit wind speed context (wind + vent)."""
-        # Find sentence boundaries
-        sent_start = text.rfind('.', 0, position)
-        sent_start = sent_start + 1 if sent_start >= 0 else 0
-        sent_end = text.find('.', position)
-        sent_end = sent_end if sent_end >= 0 else len(text)
+    def _is_speed_in_wind_context(self, text: str, start: int, end: int) -> bool:
+        """Check if this specific speed occurrence is in wind context.
 
-        sentence = text[sent_start:sent_end]
-        # Only true if sentence has wind context pattern (wind/vent + units nearby)
-        return bool(re.search(r'(?:vent|wind)', sentence, re.IGNORECASE))
+        Look for wind/vent pattern within proximity of the speed match.
+        """
+        # Look backward and forward for wind context (within ~50 chars)
+        context_start = max(0, start - 50)
+        context_end = min(len(text), end + 50)
+        context = text[context_start:context_end]
+
+        # Check if the context before this match contains wind pattern
+        before = text[context_start:start]
+        if re.search(r'(?:vent|wind)\s+(?:souffle\s+)?(?:à|at)\s+$', before, re.IGNORECASE):
+            return True
+
+        return False
 
     def _is_within_tolerance(self, claim: float, factual: float, tolerance: float) -> bool:
         """Check if claim is within tolerance of factual value."""
@@ -251,13 +266,9 @@ class OutputValidator:
 
     def _is_within_circular_tolerance(self, claim: float, factual: float, tolerance: float) -> bool:
         """Check if course claim is within circular tolerance."""
-        # Normalize to 0-360
         claim = claim % 360
         factual = factual % 360
-
-        # Calculate shortest distance on circle
         diff = abs(claim - factual)
         if diff > 180:
             diff = 360 - diff
-
         return diff <= tolerance
