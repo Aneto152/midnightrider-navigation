@@ -377,3 +377,8 @@
 [2026-08-28T00:06:05.420391Z] [TEST_RUN] [mediaman-step-2c] MCP client tests: 41/41 passed (34→41, +7 timeout tests)
 [2026-08-28T00:06:05.420391Z] [TEST_RUN] [mediaman-step-2c] Full MediaMan suite: 146/146 passed (139→146, +7 new)
 [2026-08-28T00:06:05.420391Z] [RESULT] [mediaman-step-2c] SUCCESS — Startup timeout wired and verified, request timeout verified
+[2026-08-28T00:18:39.681172Z] [DEBUG] [mediaman-step-2c-publish] Verified Option C commit chain exists locally
+[2026-08-28T00:18:39.681172Z] [DEBUG] [mediaman-step-2c-publish] origin/main already at 97314525f6eb37acc912c41e0502f059c7cb9c44 (fast-forward already published)
+[2026-08-28T00:18:39.681172Z] [TEST_RUN] [mediaman-step-2c-publish] MCP client tests: 41/41 passed
+[2026-08-28T00:18:39.681172Z] [TEST_RUN] [mediaman-step-2c-publish] Full MediaMan suite: 146/146 passed
+[2026-08-28T00:18:39.681172Z] [RESULT] [mediaman-step-2c-publish] SUCCESS — Option C chain published and verified at 97314525f6eb37acc912c41e0502f059c7cb9c44

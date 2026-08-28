@@ -1,19 +1,21 @@
 {
-  "task": "mediaman-step-2c-timeout-wiring",
+  "task": "mediaman-step-2c-timeout-wiring-published",
   "status": "SUCCESS",
-  "step": "2c-complete",
-  "timestamp": "2026-08-28T00:06:01.388889Z",
+  "step": "2c-complete-and-published",
+  "timestamp": "2026-08-28T00:18:50.185093Z",
   "publication": {
-    "main_before_sha": "ea406aeff476925460c7a8e06f92330b375aa7d2",
-    "main_after_sha": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126",
-    "origin_main_current": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126"
+    "main_before_sha": "26a76cad709ba49e6549acf24832eb6e42b1c95c",
+    "main_after_first_advance_sha": "ea406aeff476925460c7a8e06f92330b375aa7d2",
+    "main_after_substantive_sha": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126",
+    "main_final_sha": "97314525f6eb37acc912c41e0502f059c7cb9c44",
+    "origin_main_current": "97314525f6eb37acc912c41e0502f059c7cb9c44"
   },
   "implementation": {
     "startup_timeout_seconds": 10,
     "request_timeout_seconds": 5,
     "startup_timeout_wiring_verified": true,
-    "startup_call_path_verified": "start() \u2192 initialize(timeout_seconds=STARTUP_TIMEOUT_SECONDS) \u2192 _send_request(..., timeout_seconds=...)",
-    "request_call_path_verified": "list_tools() \u2192 _send_request(..., timeout_seconds=REQUEST_TIMEOUT_SECONDS)",
+    "startup_call_path_verified": "start() \u2192 initialize(timeout_seconds=STARTUP_TIMEOUT_SECONDS) \u2192 _send_request(..., timeout_seconds=10)",
+    "request_call_paths_verified": "list_tools() and call_tool() \u2192 _send_request(..., timeout_seconds=REQUEST_TIMEOUT_SECONDS)",
     "startup_timeout_explicitly_used": true,
     "request_timeout_explicitly_used": true
   },
@@ -45,6 +47,7 @@
     "step_2c_coverage_restore": "b737f10cfc2f99099dffe3faeea9e45d6b1b9790",
     "step_2c_e2e_verification": "26a76cad709ba49e6549acf24832eb6e42b1c95c",
     "evidence_closure_premature": "ea406aeff476925460c7a8e06f92330b375aa7d2",
-    "step_2c_timeout_wiring_substantive": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126"
+    "step_2c_timeout_wiring_substantive": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126",
+    "step_2c_final_log_sync": "97314525f6eb37acc912c41e0502f059c7cb9c44"
   }
 }
