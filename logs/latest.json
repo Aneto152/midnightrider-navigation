@@ -1,48 +1,48 @@
 {
-  "task": "mediaman-step-3a-finalized",
+  "task": "mediaman-step-4a-event-detector",
   "status": "SUCCESS",
-  "timestamp": "2026-08-28T01:42:36.726859Z",
-  "step": "3a-finalized-with-documentation",
+  "timestamp": "2026-08-28T02:06:51.265419Z",
+  "step": "4a-event-detector-complete",
   "test_counts": {
+    "event_detector_tests_collected": 14,
+    "event_detector_tests_passed": 14,
     "mcp_client_tests_collected": 41,
     "mcp_client_tests_passed": 41,
     "collector_tests_collected": 32,
     "collector_tests_passed": 32,
-    "full_mediaman_tests_collected": 178,
-    "full_mediaman_tests_passed": 178,
+    "full_mediaman_tests_collected": 192,
+    "full_mediaman_tests_passed": 192,
     "note": "All tests are mocked unit tests; no runtime E2E verification"
   },
-  "verified_implementation": {
-    "mcclient_allowlist": {
-      "racing.get_position": {
-        "wire_name": "get_position",
-        "freshness_limit": 30
-      },
-      "racing.get_sog": {
-        "wire_name": "get_sog",
-        "freshness_limit": 15
-      },
-      "racing.get_cog": {
-        "wire_name": "get_cog",
-        "freshness_limit": 15
-      }
-    },
-    "logger_configuration": {
-      "setup_service_logger": "retained (no overwrite)",
-      "path": "logs/services/mediaman-mcp-collector.log",
-      "handler": "RotatingFileHandler (5MB, 3 backups)"
-    },
-    "stale_facts": "cannot produce COMPLETE status",
-    "llm_safe_serialization": "exact coordinates suppressed",
-    "field_validation": "latitude/longitude/SOG/COG ranges verified",
-    "provenance_tracking": "tool, server, wire_name, source_id, timestamps, freshness"
+  "implemented_features": {
+    "event_detector": {
+      "status": "COMPLETE",
+      "file": "mediaman/event_detector.py",
+      "class": "EventDetector",
+      "event_types": [
+        "NAVIGATION_DATA_LOST",
+        "NAVIGATION_DATA_RECOVERED",
+        "FACT_BECAME_STALE",
+        "FACT_BECAME_INVALID",
+        "FACT_RECOVERED"
+      ],
+      "input": "previous CollectionResult (optional) + current CollectionResult + observed_at",
+      "output": "List[DetectedEvent]",
+      "deterministic_event_ids": "SHA256-based (no random UUIDs)",
+      "coordinate_suppression": "Exact lat/lon never in payloads",
+      "fail_closed": "No missing values replaced, stale facts not upgraded"
+    }
   },
-  "evidence_verification": {
-    "logger_output_tests": 2,
-    "freshness_edge_case_tests": 2,
-    "llm_safe_serialization_tests": 2,
-    "real_client_compatibility_tests": 4,
-    "total_evidence_tests": 8
+  "test_evidence": {
+    "no_previous_result": "No transition events fabricated",
+    "collection_status_transitions": "COMPLETE\u2194PARTIAL transitions verified",
+    "fact_transitions": "valid\u2192stale\u2192recovered paths verified",
+    "event_id_determinism": "Same transition produces same ID",
+    "coordinate_suppression": "Exact coordinates absent from events",
+    "input_immutability": "Detector does not modify inputs",
+    "missing_timestamps": "Preserved as None (not fabricated)",
+    "real_objects": "Tests use real CollectionResult/NavigationFact (not mocks)",
+    "fail_closed": "Malformed input handled gracefully, NaN/infinity rejected"
   },
   "security": {
     "mcp_live_server_contacted": false,
@@ -51,24 +51,18 @@
     "openclaw_contacted": false,
     "telegram_contacted": false,
     "timer_activated": false,
-    "event_detector_implemented": false,
-    "sqlite_events_implemented": false,
-    "mocked_tests_only": true
+    "sqlite_implemented": false,
+    "mocked_tests_only": true,
+    "no_credentials_logged": true,
+    "no_coordinates_logged": true
   },
-  "documentation": {
-    "architecture_updated": true,
-    "section": "4.7 MCPCollector (Navigation Facts) \u2014 Step 3A",
-    "includes": [
-      "Source-verified tools table",
-      "Provenance tracking",
-      "Freshness validation",
-      "Field validation",
-      "LLM-safe serialization",
-      "Structured logging",
-      "Test evidence",
-      "Not-yet-implemented features"
-    ]
-  },
-  "current_sha": "7224a664a95b689656f35d9d5f52f529ae73800c",
+  "not_implemented_step_4a": [
+    "SQLite event queue",
+    "OpenClaw adapter",
+    "Telegram reporter",
+    "Timer or scheduler",
+    "Runtime service wrapper"
+  ],
+  "current_sha": "941f5fe4fb08b7ae3c95a868af0f6899d7d57057",
   "zombie_cleanup_status": "DEFERRED"
 }

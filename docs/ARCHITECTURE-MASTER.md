@@ -322,13 +322,65 @@ services:
 - LLM-safe serialization verified (coordinate suppression)
 
 **Not Implemented at This Stage:**
-- EventDetector
 - SQLite event queue
 - OpenClaw adapter
 - Telegram integration
 - Timer activation
 
 **For Details:** `mediaman/mcp_collector.py` and `tests/mediaman/test_mcp_collector.py`
+
+### 4.8 EventDetector (Deterministic Transitions) — Step 4A
+
+**Status:** ✅ COMPLETE — Mocked unit tests passing (14/14 detector + 192/192 full suite)
+
+**Boundary:** MCPCollector output (CollectionResult) → EventDetector → DetectedEvent list
+
+**Event Types:**
+
+| Event Type | Trigger | Severity | Details |
+|---|---|---|---|
+| NAVIGATION_DATA_LOST | COMPLETE → PARTIAL/FAILED | WARNING | Collection status degraded |
+| NAVIGATION_DATA_RECOVERED | PARTIAL → COMPLETE | INFO | Collection status recovered |
+| FACT_BECAME_STALE | valid → stale | WARNING | Individual fact freshness exceeded |
+| FACT_BECAME_INVALID | valid → invalid | ERROR | Individual fact validation failed |
+| FACT_RECOVERED | stale/missing/invalid → valid | INFO | Individual fact recovered |
+
+**Key Properties:**
+
+- **Deterministic input:** previous CollectionResult (optional) + current CollectionResult + observed_at timestamp
+- **No transition fabrication:** if previous is None, no events emitted (initial observation is side-effect-free)
+- **Fail-closed semantics:** stale/invalid facts never upgraded to valid; missing values not replaced
+- **Deterministic event IDs:** SHA256-based hash of (race_id, event_type, field_name, observed_at) — no random UUIDs
+- **Coordinate suppression:** exact latitude/longitude never appear in event payloads
+- **Input immutability:** detector does not modify previous or current CollectionResult
+- **No external side effects:** pure function; no file I/O, network access, or subprocess calls
+
+**Test Evidence (Mocked Unit Tests):**
+
+- EventDetector tests: 14/14 PASSED
+  - No previous result → no fabricated events
+  - Collection-level transitions (COMPLETE ↔ PARTIAL)
+  - Fact-level transitions (valid → stale → recovered)
+  - Event ID determinism
+  - Coordinate suppression in payloads
+  - Input immutability
+  - Malformed input handled gracefully
+  - Real CollectionResult/NavigationFact objects (not mocks)
+
+- MCP client tests: 41/41 PASSED (unchanged from Step 3A)
+- Collector tests: 32/32 PASSED (unchanged from Step 3A)
+- Full MediaMan suite: 192/192 PASSED (includes all above)
+
+**All tests are mocked unit tests with no runtime E2E verification.**
+
+**Not Implemented at This Stage:**
+- SQLite event queue (Step 4B)
+- OpenClaw LLM adapter (Step 4C)
+- Telegram reporter (Step 4D)
+- Timer or scheduler (Step 4E)
+- Runtime service wrapper
+
+**For Details:** `mediaman/event_detector.py` and `tests/mediaman/test_event_detector.py`
 
 ## 5. FLUX DE DONNÉES DÉTAILLÉS
 
