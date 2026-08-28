@@ -1,65 +1,74 @@
 {
-  "task": "mediaman-step-3a-evidence-closure",
+  "task": "mediaman-step-3a-finalized",
   "status": "SUCCESS",
-  "timestamp": "2026-08-28T01:38:20.416582Z",
-  "step": "3a-evidence-gaps-closed",
-  "evidence_tests_added": {
-    "logger_output": 2,
-    "freshness_edge_cases": 2,
-    "llm_safe_serialization": 2,
-    "total_new": 6
-  },
-  "test_results": {
+  "timestamp": "2026-08-28T01:42:36.726859Z",
+  "step": "3a-finalized-with-documentation",
+  "test_counts": {
     "mcp_client_tests_collected": 41,
     "mcp_client_tests_passed": 41,
     "collector_tests_collected": 32,
     "collector_tests_passed": 32,
     "full_mediaman_tests_collected": 178,
     "full_mediaman_tests_passed": 178,
-    "note": "Full MediaMan suite includes nested 41 + 32 collector tests; reported separately"
+    "note": "All tests are mocked unit tests; no runtime E2E verification"
   },
   "verified_implementation": {
-    "effective_logger": {
-      "status": "VERIFIED",
-      "configured_by": "setup_service_logger('mediaman-mcp-collector')",
-      "no_overwrite": true,
-      "test_evidence": "test_logger_writes_startup PASSED",
-      "path": "logs/services/mediaman-mcp-collector.log"
+    "mcclient_allowlist": {
+      "racing.get_position": {
+        "wire_name": "get_position",
+        "freshness_limit": 30
+      },
+      "racing.get_sog": {
+        "wire_name": "get_sog",
+        "freshness_limit": 15
+      },
+      "racing.get_cog": {
+        "wire_name": "get_cog",
+        "freshness_limit": 15
+      }
     },
-    "logger_output_suppression": {
-      "status": "VERIFIED",
-      "exact_coordinates_suppressed": true,
-      "test_evidence": "test_logger_suppresses_coordinates PASSED"
+    "logger_configuration": {
+      "setup_service_logger": "retained (no overwrite)",
+      "path": "logs/services/mediaman-mcp-collector.log",
+      "handler": "RotatingFileHandler (5MB, 3 backups)"
     },
-    "freshness_edge_cases": {
-      "status": "VERIFIED",
-      "future_timestamps": "marked 'missing'",
-      "malformed_timestamps": "handled gracefully (no exception)",
-      "test_evidence": "Both edge-case tests PASSED"
-    },
-    "llm_safe_serialization": {
-      "status": "VERIFIED",
-      "latitude_suppressed": true,
-      "longitude_suppressed": true,
-      "test_evidence": "Both LLM-safe tests PASSED"
-    }
+    "stale_facts": "cannot produce COMPLETE status",
+    "llm_safe_serialization": "exact coordinates suppressed",
+    "field_validation": "latitude/longitude/SOG/COG ranges verified",
+    "provenance_tracking": "tool, server, wire_name, source_id, timestamps, freshness"
+  },
+  "evidence_verification": {
+    "logger_output_tests": 2,
+    "freshness_edge_case_tests": 2,
+    "llm_safe_serialization_tests": 2,
+    "real_client_compatibility_tests": 4,
+    "total_evidence_tests": 8
   },
   "security": {
     "mcp_live_server_contacted": false,
-    "signalk_accessed": false,
-    "influxdb_accessed": false,
+    "signalk_modified": false,
     "docker_modified": false,
     "openclaw_contacted": false,
     "telegram_contacted": false,
+    "timer_activated": false,
     "event_detector_implemented": false,
     "sqlite_events_implemented": false,
-    "timer_activated": false,
     "mocked_tests_only": true
   },
-  "commits": {
-    "evidence_closure_sha": "2cc10501b4a6cf116e413b8b2ee7ac794859e87c",
-    "message": "test(mediaman): close collector contract evidence gaps"
+  "documentation": {
+    "architecture_updated": true,
+    "section": "4.7 MCPCollector (Navigation Facts) \u2014 Step 3A",
+    "includes": [
+      "Source-verified tools table",
+      "Provenance tracking",
+      "Freshness validation",
+      "Field validation",
+      "LLM-safe serialization",
+      "Structured logging",
+      "Test evidence",
+      "Not-yet-implemented features"
+    ]
   },
-  "zombie_cleanup_status": "DEFERRED",
-  "next_step": "STEP 3A COMPLETE \u2014 Await Denis authorization for STEP 4"
+  "current_sha": "7224a664a95b689656f35d9d5f52f529ae73800c",
+  "zombie_cleanup_status": "DEFERRED"
 }
