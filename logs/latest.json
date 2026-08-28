@@ -1,48 +1,34 @@
 {
-  "task": "mediaman-step-4a-event-detector",
-  "status": "SUCCESS",
-  "timestamp": "2026-08-28T02:06:51.265419Z",
-  "step": "4a-event-detector-complete",
+  "task": "mediaman-step-4a-1-fix-forward",
+  "status": "IN_PROGRESS",
+  "timestamp": "2026-08-28T03:09:10.880373Z",
+  "step": "4a-1-enum-contract-fix",
+  "verified_base_sha": "784cda0ce36bc9e96ba0417204c9ff40732a177a",
+  "fix_objective": "Align EventDetector with real CollectionStatus enum contract (lowercase strings)",
   "test_counts": {
     "event_detector_tests_collected": 14,
-    "event_detector_tests_passed": 14,
+    "event_detector_tests_passed": 0,
     "mcp_client_tests_collected": 41,
-    "mcp_client_tests_passed": 41,
+    "mcp_client_tests_passed": 0,
     "collector_tests_collected": 32,
-    "collector_tests_passed": 32,
+    "collector_tests_passed": 0,
     "full_mediaman_tests_collected": 192,
-    "full_mediaman_tests_passed": 192,
-    "note": "All tests are mocked unit tests; no runtime E2E verification"
+    "full_mediaman_tests_passed": 0,
+    "note": "Tests are offline unit tests using real domain objects"
   },
-  "implemented_features": {
-    "event_detector": {
-      "status": "COMPLETE",
-      "file": "mediaman/event_detector.py",
-      "class": "EventDetector",
-      "event_types": [
-        "NAVIGATION_DATA_LOST",
-        "NAVIGATION_DATA_RECOVERED",
-        "FACT_BECAME_STALE",
-        "FACT_BECAME_INVALID",
-        "FACT_RECOVERED"
-      ],
-      "input": "previous CollectionResult (optional) + current CollectionResult + observed_at",
-      "output": "List[DetectedEvent]",
-      "deterministic_event_ids": "SHA256-based (no random UUIDs)",
-      "coordinate_suppression": "Exact lat/lon never in payloads",
-      "fail_closed": "No missing values replaced, stale facts not upgraded"
-    }
-  },
-  "test_evidence": {
-    "no_previous_result": "No transition events fabricated",
-    "collection_status_transitions": "COMPLETE\u2194PARTIAL transitions verified",
-    "fact_transitions": "valid\u2192stale\u2192recovered paths verified",
-    "event_id_determinism": "Same transition produces same ID",
-    "coordinate_suppression": "Exact coordinates absent from events",
-    "input_immutability": "Detector does not modify inputs",
-    "missing_timestamps": "Preserved as None (not fabricated)",
-    "real_objects": "Tests use real CollectionResult/NavigationFact (not mocks)",
-    "fail_closed": "Malformed input handled gracefully, NaN/infinity rejected"
+  "implementation": {
+    "collection_status_enum": {
+      "COMPLETE": "complete",
+      "PARTIAL": "partial",
+      "INVALID": "invalid",
+      "FAILED": "failed"
+    },
+    "fixes_applied": [
+      "Import CollectionStatus from mcp_collector",
+      "Use enum values in status comparisons",
+      "Include sanitized source_id in deterministic event IDs",
+      "Normalize status handling fail-closed"
+    ]
   },
   "security": {
     "mcp_live_server_contacted": false,
@@ -63,6 +49,5 @@
     "Timer or scheduler",
     "Runtime service wrapper"
   ],
-  "current_sha": "941f5fe4fb08b7ae3c95a868af0f6899d7d57057",
   "zombie_cleanup_status": "DEFERRED"
 }
