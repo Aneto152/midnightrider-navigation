@@ -419,8 +419,57 @@ class TestMCPCollectorResultSerialization:
         result = collector.collect([SourceVerifiedTools.POSITION])
         result_dict = result.to_dict()
         
-        assert result_dict['status'] == 'complete'  # Position only, but completed
+        assert result_dict['status'] == 'partial'  # Stale fact due to old timestamp
         assert result_dict['race_id'] == 'BIR-2026'
         assert len(result_dict['facts']) == 2  # latitude and longitude
         assert result_dict['facts'][0]['field_name'] == 'latitude'
         assert result_dict['facts'][0]['provenance']['tool_public_id'] == 'racing.get_position'
+
+
+
+class TestMCPCollectorRealClientCompatibility:
+    """Test collector with actual MCPClient (subprocess mocked)."""
+
+    @pytest.fixture
+    def real_client(self):
+        """Real MCPClient instance with subprocess mocked."""
+        from unittest.mock import Mock, patch
+        
+        with patch('mediaman.mcp_client.subprocess.Popen') as mock_popen:
+            # Mock the process
+            mock_proc = Mock()
+            mock_proc.stdin = Mock()
+            mock_proc.stdout = Mock()
+            mock_proc.stderr = Mock()
+            mock_proc.poll.return_value = None
+            mock_popen.return_value = mock_proc
+            
+            # Create real MCPClient
+            from mediaman.mcp_client import MCPClient
+            client = MCPClient('/fake/path/to/racing.js', 'racing')
+            client._process = mock_proc
+            client._reader_thread = Mock()
+            client._reader_thread.is_alive.return_value = True
+            
+            yield client
+
+    def test_real_client_allowlist_position(self, real_client):
+        """Real MCPClient allowlist contains racing.get_position."""
+        assert 'racing.get_position' in real_client.TOOL_ALLOWLIST
+        assert real_client.TOOL_ALLOWLIST['racing.get_position']['safe'] is True
+
+    def test_real_client_allowlist_sog(self, real_client):
+        """Real MCPClient allowlist contains racing.get_sog."""
+        assert 'racing.get_sog' in real_client.TOOL_ALLOWLIST
+        assert real_client.TOOL_ALLOWLIST['racing.get_sog']['safe'] is True
+
+    def test_real_client_allowlist_cog(self, real_client):
+        """Real MCPClient allowlist contains racing.get_cog."""
+        assert 'racing.get_cog' in real_client.TOOL_ALLOWLIST
+        assert real_client.TOOL_ALLOWLIST['racing.get_cog']['safe'] is True
+
+    def test_wire_mapping_all_three(self, real_client):
+        """Wire mappings exist for all three tools."""
+        assert real_client.TOOL_WIRE_MAPPING['racing.get_position'] == 'get_position'
+        assert real_client.TOOL_WIRE_MAPPING['racing.get_sog'] == 'get_sog'
+        assert real_client.TOOL_WIRE_MAPPING['racing.get_cog'] == 'get_cog'

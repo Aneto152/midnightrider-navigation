@@ -24,6 +24,7 @@ from enum import Enum
 from datetime import datetime, timezone
 
 from mediaman.mcp_client import MCPClient, MCPClientError, MCPProtocolError, MCPServerError, MCPTimeoutError
+from mediaman.logging_utils import setup_service_logger
 
 
 class CollectionStatus(Enum):
@@ -198,6 +199,8 @@ class MCPCollector:
         self.client = client
         self.race_id = race_id
         self.reference_time = reference_time  # For deterministic testing
+        # Configure structured logging
+        self.logger = setup_service_logger('mediaman-mcp-collector')
         self.logger = logging.getLogger(__name__)
 
     def collect(self, tools: Optional[List[SourceVerifiedTools]] = None) -> CollectionResult:
@@ -256,9 +259,15 @@ class MCPCollector:
                 self.logger.error(f"Collector ERROR: {error_msg}")
         
         # Determine collection status
-        if len(result.tools_succeeded) == len(result.tools_attempted):
+        # Check if any facts are stale — stale facts cannot contribute to COMPLETE status
+        has_stale_facts = any(
+            fact.provenance.validation_status == 'stale' 
+            for fact in result.facts
+        )
+        
+        if len(result.tools_succeeded) == len(result.tools_attempted) and not has_stale_facts:
             result.status = CollectionStatus.COMPLETE
-        elif len(result.tools_succeeded) > 0:
+        elif len(result.tools_succeeded) > 0 or has_stale_facts:
             result.status = CollectionStatus.PARTIAL
         elif len(result.facts) > 0:
             result.status = CollectionStatus.INVALID
