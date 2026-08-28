@@ -368,3 +368,12 @@
 [2026-08-27T23:48:43.156861Z] [TEST_RUN] [mediaman-step-2c] MCP client tests: 34/34 passed (all lifecycle tests)
 [2026-08-27T23:48:43.156861Z] [TEST_RUN] [mediaman-step-2c] Full MediaMan suite: 139/139 passed (Step 2B coverage preserved)
 [2026-08-27T23:48:43.156861Z] [RESULT] [mediaman-step-2c-evidence] SUCCESS — Reader lifecycle verified, process exit detection proven, exception classification confirmed
+[2026-08-28T00:06:05.420391Z] [FILE_MODIFY] [mediaman-step-2c] Wired STARTUP_TIMEOUT_SECONDS into initialize call path
+[2026-08-28T00:06:05.420391Z] [FILE_MODIFY] [mediaman-step-2c] Added timeout_seconds parameter to _send_request()
+[2026-08-28T00:06:05.420391Z] [FILE_MODIFY] [mediaman-step-2c] Updated initialize(), list_tools(), call_tool() to pass explicit timeouts
+[2026-08-28T00:06:05.420391Z] [TEST_RUN] [mediaman-step-2c] Timeout propagation tests added (7 new tests)
+[2026-08-28T00:06:05.420391Z] [TEST_RUN] [mediaman-step-2c] Startup timeout call-path test: PASS
+[2026-08-28T00:06:05.420391Z] [TEST_RUN] [mediaman-step-2c] Request timeout call-path test: PASS
+[2026-08-28T00:06:05.420391Z] [TEST_RUN] [mediaman-step-2c] MCP client tests: 41/41 passed (34→41, +7 timeout tests)
+[2026-08-28T00:06:05.420391Z] [TEST_RUN] [mediaman-step-2c] Full MediaMan suite: 146/146 passed (139→146, +7 new)
+[2026-08-28T00:06:05.420391Z] [RESULT] [mediaman-step-2c] SUCCESS — Startup timeout wired and verified, request timeout verified

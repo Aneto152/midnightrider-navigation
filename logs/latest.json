@@ -1,26 +1,35 @@
 {
-  "task": "mediaman-step-2c-evidence-closure",
+  "task": "mediaman-step-2c-timeout-wiring",
   "status": "SUCCESS",
-  "step": "2c-evidence",
-  "timestamp": "2026-08-27T23:48:38.508971Z",
-  "verification": {
-    "origin_main_verified_sha": "26a76cad709ba49e6549acf24832eb6e42b1c95c",
+  "step": "2c-complete",
+  "timestamp": "2026-08-28T00:06:01.388889Z",
+  "publication": {
+    "main_before_sha": "ea406aeff476925460c7a8e06f92330b375aa7d2",
+    "main_after_sha": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126",
+    "origin_main_current": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126"
+  },
+  "implementation": {
     "startup_timeout_seconds": 10,
     "request_timeout_seconds": 5,
-    "startup_timeout_wiring_note": "Constants defined; initialization routed through _send_request (uses REQUEST_TIMEOUT). Startup timeout available for future explicit bounding."
+    "startup_timeout_wiring_verified": true,
+    "startup_call_path_verified": "start() \u2192 initialize(timeout_seconds=STARTUP_TIMEOUT_SECONDS) \u2192 _send_request(..., timeout_seconds=...)",
+    "request_call_path_verified": "list_tools() \u2192 _send_request(..., timeout_seconds=REQUEST_TIMEOUT_SECONDS)",
+    "startup_timeout_explicitly_used": true,
+    "request_timeout_explicitly_used": true
   },
-  "details": {
+  "testing": {
+    "mcp_client_tests_collected": 41,
+    "mcp_client_tests_passed": 41,
+    "new_timeout_propagation_tests": 7,
+    "full_mediaman_suite_collected": 146,
+    "full_mediaman_suite_passed": 146,
     "reader_to_pending_request_verified": true,
-    "reader_propagation_tested": "malformed JSON, oversized responses, valid responses",
     "process_exit_while_pending_verified": true,
-    "process_exit_detection_location": "Every _send_request loop iteration",
-    "exception_classification_verified": true,
-    "mcp_client_tests_collected": 34,
-    "mcp_client_tests_passed": 34,
-    "full_mediaman_suite_collected": 139,
-    "full_mediaman_suite_passed": 139,
-    "step_2b_coverage_preserved": true,
-    "strict_jsonrpc_validation_count": 10,
+    "startup_exception_classification_verified": true,
+    "strict_jsonrpc_validation_tests": 10,
+    "step_2b_coverage_preserved": true
+  },
+  "security": {
     "mcp_live_server_contacted": false,
     "event_detector_implemented": false,
     "real_llm_generation_performed": false,
@@ -31,11 +40,11 @@
     "docker_modified": false,
     "zombie_cleanup_status": "DEFERRED"
   },
-  "evidence": {
-    "reader_path_malformed_json": "test_malformed_json_from_reader_propagates PASS",
-    "reader_path_oversized_response": "test_oversized_response_from_reader_propagates PASS",
-    "reader_path_valid_response": "test_valid_mcp_response_decoded_from_reader PASS",
-    "process_exit_detection": "test_process_exit_while_request_pending PASS",
-    "startup_exception_classification": "5 tests (protocol, server, client, timeout, cleanup) PASS"
+  "commits": {
+    "step_2c_core": "e06febc9abe5863fbdf80a7a1b18ae8768955373",
+    "step_2c_coverage_restore": "b737f10cfc2f99099dffe3faeea9e45d6b1b9790",
+    "step_2c_e2e_verification": "26a76cad709ba49e6549acf24832eb6e42b1c95c",
+    "evidence_closure_premature": "ea406aeff476925460c7a8e06f92330b375aa7d2",
+    "step_2c_timeout_wiring_substantive": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126"
   }
 }
