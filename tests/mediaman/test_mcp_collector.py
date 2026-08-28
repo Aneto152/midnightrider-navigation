@@ -473,3 +473,128 @@ class TestMCPCollectorRealClientCompatibility:
         assert real_client.TOOL_WIRE_MAPPING['racing.get_position'] == 'get_position'
         assert real_client.TOOL_WIRE_MAPPING['racing.get_sog'] == 'get_sog'
         assert real_client.TOOL_WIRE_MAPPING['racing.get_cog'] == 'get_cog'
+
+
+
+class TestMCPCollectorLoggerOutput:
+    """Verify effective logger output (not just setup function call)."""
+
+    def test_logger_writes_startup(self, tmp_path, monkeypatch, mock_mcp_client):
+        """Verify STARTUP event is logged to file."""
+        import logging
+        from mediaman.mcp_collector import MCPCollector
+        
+        # Configure logger to write to temp file
+        log_file = tmp_path / "test.log"
+        handler = logging.FileHandler(log_file)
+        collector = MCPCollector(mock_mcp_client)
+        collector.logger.addHandler(handler)
+        
+        # Trigger collection
+        mock_mcp_client.call_tool.return_value = {
+            'result': {'latitude': 41.0, 'longitude': -73.0, 'source_timestamp': '2026-08-27T20:40:00Z'},
+            'observed_at': '2026-08-27T20:40:01Z'
+        }
+        result = collector.collect([SourceVerifiedTools.POSITION])
+        
+        # Verify log file contains event markers
+        log_content = log_file.read_text()
+        assert 'STARTUP' in log_content or 'Collector STARTUP' in log_content
+
+    def test_logger_suppresses_coordinates(self, tmp_path, mock_mcp_client):
+        """Verify exact coordinates are not logged."""
+        import logging
+        from mediaman.mcp_collector import MCPCollector
+        
+        log_file = tmp_path / "test.log"
+        handler = logging.FileHandler(log_file)
+        collector = MCPCollector(mock_mcp_client)
+        collector.logger.addHandler(handler)
+        
+        mock_mcp_client.call_tool.return_value = {
+            'result': {'latitude': 41.123456789, 'longitude': -73.987654321, 'source_timestamp': '2026-08-27T20:40:00Z'},
+            'observed_at': '2026-08-27T20:40:01Z'
+        }
+        result = collector.collect([SourceVerifiedTools.POSITION])
+        
+        log_content = log_file.read_text()
+        # Exact coordinates should not appear in logs
+        assert '41.123456789' not in log_content
+        assert '73.987654321' not in log_content
+
+
+class TestMCPCollectorFreshnessEdgeCases:
+    """Verify freshness validation edge cases."""
+
+    def test_future_timestamp_marked_missing(self, mock_mcp_client):
+        """Future timestamps should not be valid."""
+        from datetime import datetime, timezone, timedelta
+        from mediaman.mcp_collector import MCPCollector
+        
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:00Z')
+        
+        # Future timestamp (1 hour ahead)
+        future_ts = (datetime.fromisoformat('2026-08-27T20:40:00+00:00') + timedelta(hours=1)).isoformat().replace('+00:00', 'Z')
+        
+        mock_mcp_client.call_tool.return_value = {
+            'result': {'latitude': 41.0, 'longitude': -73.0, 'source_timestamp': future_ts},
+            'observed_at': '2026-08-27T20:40:01Z'
+        }
+        result = collector.collect([SourceVerifiedTools.POSITION])
+        
+        # Future timestamp should result in "missing" status (not valid)
+        assert result.facts[0].provenance.validation_status == 'missing'
+
+    def test_malformed_timestamp_marked_missing(self, mock_mcp_client):
+        """Malformed timestamps should be marked missing, not raise exception."""
+        from mediaman.mcp_collector import MCPCollector
+        
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:00Z')
+        
+        mock_mcp_client.call_tool.return_value = {
+            'result': {'latitude': 41.0, 'longitude': -73.0, 'source_timestamp': 'not-a-timestamp'},
+            'observed_at': '2026-08-27T20:40:01Z'
+        }
+        
+        # Should not raise exception; should handle gracefully
+        result = collector.collect([SourceVerifiedTools.POSITION])
+        
+        # Malformed timestamp should result in "missing" status
+        assert result.facts[0].provenance.validation_status == 'missing'
+
+
+class TestMCPCollectorLLMSafeSerialization:
+    """Verify to_llm_context() suppresses sensitive data."""
+
+    def test_llm_context_omits_latitude(self, mock_mcp_client):
+        """Exact latitude should not appear in LLM-safe context."""
+        from mediaman.mcp_collector import MCPCollector
+        
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
+        
+        mock_mcp_client.call_tool.return_value = {
+            'result': {'latitude': 41.123456789, 'longitude': -73.987654321, 'source_timestamp': '2026-08-27T20:40:00Z'},
+            'observed_at': '2026-08-27T20:40:01Z'
+        }
+        result = collector.collect([SourceVerifiedTools.POSITION])
+        llm_ctx = result.to_llm_context()
+        
+        # Check that exact value is not in facts
+        assert llm_ctx['facts'][0]['value'] == '<coordinate suppressed>'
+
+    def test_llm_context_omits_longitude(self, mock_mcp_client):
+        """Exact longitude should not appear in LLM-safe context."""
+        from mediaman.mcp_collector import MCPCollector
+        
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
+        
+        mock_mcp_client.call_tool.return_value = {
+            'result': {'latitude': 41.0, 'longitude': -73.987654321, 'source_timestamp': '2026-08-27T20:40:00Z'},
+            'observed_at': '2026-08-27T20:40:01Z'
+        }
+        result = collector.collect([SourceVerifiedTools.POSITION])
+        llm_ctx = result.to_llm_context()
+        
+        # Find longitude in facts
+        lon_fact = [f for f in llm_ctx['facts'] if f['field_name'] == 'longitude'][0]
+        assert lon_fact['value'] == '<coordinate suppressed>'
