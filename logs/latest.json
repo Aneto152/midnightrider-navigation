@@ -70,5 +70,15 @@
     "Telegram reporter (Step 4D)",
     "Timer and scheduler activation (Step 4E)",
     "Runtime service wrapper"
-  ]
+  ],
+  "event_detector_tests_passed": 14,
+  "event_queue_tests_passed": 19,
+  "mcp_client_tests_passed": 41,
+  "collector_tests_passed": 32,
+  "full_mediaman_tests_passed": 211,
+  "event_detector_tests": "14/14",
+  "event_queue_tests": "19/19",
+  "mcp_client_tests": "41/41",
+  "collector_tests": "32/32",
+  "full_mediaman_tests": "211/211"
 }
