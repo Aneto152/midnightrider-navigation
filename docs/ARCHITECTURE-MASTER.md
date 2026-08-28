@@ -382,6 +382,99 @@ services:
 
 **For Details:** `mediaman/event_detector.py` and `tests/mediaman/test_event_detector.py`
 
+### 4.9 EventQueue (Durable Local SQLite) — Step 4B
+
+**Status:** ✅ COMPLETE — Offline unit tests passing (19/19 queue tests, 211/211 full suite)
+
+**Boundary:** EventDetector output (DetectedEvent list) → EventQueue → queued events ready for delivery
+
+**Architecture:**
+
+EventQueue is a local SQLite library component (no daemon, no network access, no subprocess calls). It receives DetectedEvent objects from EventDetector and stores them durably for later delivery.
+
+**Key Properties:**
+
+- **Idempotency:** Events enqueued by event_id. Duplicate enqueue does not reset state or retry attempts.
+- **Statuses:** PENDING (ready to claim), PROCESSING (claimed, locked), SENT (delivery succeeded), FAILED (retry pending), DEAD_LETTER (max retries exceeded).
+- **Claiming:** Transactional SELECT with lease acquisition. Claimed events are locked by expiration time. Bounded claim size.
+- **Lease Recovery:** Expired PROCESSING locks automatically release back to PENDING.
+- **Retry Scheduling:** Deterministic exponential backoff (2^attempts seconds, capped at 3600s). Max attempt count configurable (default 5).
+- **Sensitive Payload Rejection:** Validates event payloads before enqueue—rejects exact latitude/longitude, raw MCP envelopes, tokens, credentials, passwords, connection strings.
+- **Row Mapping:** Named-column access (sqlite3.Row factory) instead of positional unpacking. All fields mapped explicitly via _row_to_queued_event() helper.
+- **Persistence:** Events survive queue close and reopen. Schema created automatically on initialize().
+- **Offline Testing:** No external services contacted. Tests use temporary SQLite databases or :memory:.
+
+**Database Schema:**
+
+| Column | Type | Role |
+|--------|------|------|
+| event_id | TEXT PRIMARY KEY | Idempotency key |
+| event_type | TEXT | Navigation data lost, fact stale, etc. |
+| observed_at | TEXT | Detector observation timestamp |
+| source_timestamp | TEXT | Original fact timestamp (nullable) |
+| race_id | TEXT | Race context (nullable) |
+| severity | TEXT | INFO, WARNING, ERROR |
+| affected_field | TEXT | Field name if applicable (nullable) |
+| payload_json | TEXT | Sanitized event data |
+| status | TEXT | PENDING, PROCESSING, SENT, FAILED, DEAD_LETTER |
+| attempts | INTEGER | Retry count |
+| next_attempt_at | TEXT | Backoff deadline (ISO 8601 UTC) |
+| locked_until | TEXT | Lease expiration (ISO 8601 UTC, nullable) |
+| last_error | TEXT | Sanitized error message (max 200 chars, nullable) |
+| created_at | TEXT | Insertion timestamp |
+| updated_at | TEXT | Last modification timestamp |
+
+**Public Methods:**
+
+- `enqueue(event: DetectedEvent) → bool` — Insert or skip (idempotent)
+- `claim(count: int, lock_duration_seconds: int) → List[QueuedEvent]` — Fetch due PENDING, lock as PROCESSING
+- `mark_sent(event_id: str) → bool` — Transition to SENT
+- `mark_failed(event_id: str, error: str, max_attempts: int) → bool` — Increment attempts, schedule retry or DEAD_LETTER
+- `release_expired_leases() → int` — Move expired PROCESSING back to PENDING
+- `get_event(event_id: str) → Optional[QueuedEvent]` — Retrieve single event
+- `count_by_status(status: str) → int` — Event count by status
+- `close()` — Clean database close
+
+**Test Evidence (Offline Unit Tests):**
+
+- EventQueue tests: 19/19 PASSED
+  - Schema creation
+  - Valid enqueue (PENDING status, zero attempts)
+  - Duplicate enqueue idempotency
+  - Duplicate enqueue preserving SENT status
+  - Coordinate rejection (exact latitude/longitude)
+  - Credential rejection (tokens, passwords)
+  - Due event claim (status → PROCESSING)
+  - Claim bounded size
+  - Lease creation and expiration
+  - Expired lease recovery (PROCESSING → PENDING)
+  - Mark sent (idempotent)
+  - Mark failed with retry scheduling
+  - Deterministic exponential backoff
+  - Dead letter transition after max attempts
+  - Sanitized error storage (no credentials in last_error)
+  - Persistence after close and reopen
+  - Transaction rollback on error
+  - Input immutability
+  - Compatibility with DetectedEvent output
+  - Count by status
+  - No network access
+  - No subprocess access
+
+- Full MediaMan suite: 211/211 PASSED (includes all above + Steps 3A/4A)
+- All tests are mocked unit tests with no runtime E2E verification
+- Uses temporary SQLite databases for test isolation
+
+**Not Implemented at This Stage:**
+
+- OpenClaw LLM adapter (Step 4C)
+- Telegram reporter (Step 4D)
+- Timer or scheduler activation (Step 4E)
+- Runtime service wrapper
+- Production database initialization
+
+**For Details:** `mediaman/event_queue.py` and `tests/mediaman/test_event_queue.py`
+
 ## 5. FLUX DE DONNÉES DÉTAILLÉS
 
 ### 5.1 Cap vrai (headingTrue)
