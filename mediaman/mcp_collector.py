@@ -199,9 +199,8 @@ class MCPCollector:
         self.client = client
         self.race_id = race_id
         self.reference_time = reference_time  # For deterministic testing
-        # Configure structured logging
+        # Configure structured logging (do not overwrite with generic getLogger)
         self.logger = setup_service_logger('mediaman-mcp-collector')
-        self.logger = logging.getLogger(__name__)
 
     def collect(self, tools: Optional[List[SourceVerifiedTools]] = None) -> CollectionResult:
         """
