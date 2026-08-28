@@ -53,18 +53,38 @@ class MCPClient:
     - Process-exit detection during pending requests
     """
 
-    # PUBLIC TOOL IDENTIFIERS → WIRE-LEVEL MCP TOOL NAMES
+    # PUBLIC TOOL IDENTIFIERS → WIRE-LEVEL MCP TOOL NAMES (SOURCE-VERIFIED)
     TOOL_WIRE_MAPPING = {
         'racing.get_position': 'get_position',
+        'racing.get_sog': 'get_sog',
+        'racing.get_cog': 'get_cog',
     }
 
-    # SAFE TOOL ALLOWLIST
+    # SAFE TOOL ALLOWLIST — SOURCE-VERIFIED NAVIGATION TOOLS ONLY
     TOOL_ALLOWLIST = {
         'racing.get_position': {
             'server': 'racing',
+            'wire_name': 'get_position',
             'description': 'Current boat position (lat/lon from Signal K)',
             'safe': True,
-            'requires_live_data': False
+            'requires_live_data': False,
+            'returns_structured_data': True
+        },
+        'racing.get_sog': {
+            'server': 'racing',
+            'wire_name': 'get_sog',
+            'description': 'Speed over ground (m/s, knots) from Signal K',
+            'safe': True,
+            'requires_live_data': False,
+            'returns_structured_data': True
+        },
+        'racing.get_cog': {
+            'server': 'racing',
+            'wire_name': 'get_cog',
+            'description': 'Course over ground (degrees, radians) from Signal K',
+            'safe': True,
+            'requires_live_data': False,
+            'returns_structured_data': True
         },
     }
 

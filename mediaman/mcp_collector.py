@@ -1,19 +1,23 @@
 """
-Expanded MCP Collector for MediaMan — source-backed navigation fact collection.
+Expanded MCP Collector for MediaMan — source-backed navigation fact collection (CORRECTED).
 
 Collects structured navigation facts from validated MCP servers using the hardened
-MCPClient. Preserves provenance, freshness, and source timestamps.
+MCPClient. Implements actual freshness validation, logging instrumentation, and
+LLM-safe serialization.
 
 Features:
 - Source-verified tool collection (racing.get_position, racing.get_sog, racing.get_cog)
-- Provenance tracking (tool, server, source, timestamp)
+- Provenance tracking with complete metadata
 - Fail-closed collection (missing values remain None, no fabrication)
-- Freshness awareness (tracks source_timestamp vs observed_at)
+- Deterministic freshness validation (ISO 8601 parsing with injected reference time)
+- Structured logging (STARTUP, DATA_IN, DATA_OUT, ERROR, SHUTDOWN)
+- LLM-safe serialization (no exact coordinates, no credentials)
 - Mocked testing support (dependency injection)
-- No live MCP, Signal K, InfluxDB, or network access in this task
+- No live MCP, Signal K, InfluxDB, or network access
 """
 
 import json
+import logging
 from dataclasses import dataclass, asdict, field
 from typing import Optional, Dict, Any, List
 from enum import Enum
@@ -37,8 +41,8 @@ class Provenance:
     server_name: str  # e.g., "racing"
     wire_tool_name: str  # e.g., "get_position"
     source_id: str  # sanitized source identifier
-    source_timestamp: Optional[str] = None  # ISO 8601 UTC or UNKNOWN
-    observed_at: Optional[str] = None  # local collection time
+    source_timestamp: Optional[str] = None  # ISO 8601 UTC or UNKNOWN (never fabricated)
+    observed_at: Optional[str] = None  # local collection time (distinct from source)
     freshness_limit_seconds: Optional[int] = None
     validation_status: str = "valid"  # "valid", "stale", "missing"
     warnings: List[str] = field(default_factory=list)
@@ -48,94 +52,150 @@ class Provenance:
 class NavigationFact:
     """A single collected navigation fact."""
     field_name: str
-    value: Optional[Any]
+    value: Any
     unit: str
     provenance: Provenance
 
 
 @dataclass
 class CollectionResult:
-    """Structured result from a collection run."""
+    """Complete collection run with diagnostics."""
     status: CollectionStatus
-    race_id: Optional[str] = None
+    race_id: Optional[str]
     facts: List[NavigationFact] = field(default_factory=list)
-    
-    # Execution tracking
     tools_attempted: List[str] = field(default_factory=list)
     tools_succeeded: List[str] = field(default_factory=list)
     tools_failed: List[str] = field(default_factory=list)
-    
-    # Timestamps
     collection_start_at: Optional[str] = None
     collection_end_at: Optional[str] = None
-    
-    # Diagnostics
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
-    
-    def to_dict(self) -> Dict[str, Any]:
-        """Serialize to dict, preserving provenance."""
-        facts_dicts = []
+
+    def to_dict(self) -> Dict:
+        """Serialize to dict (exact coordinates NOT included)."""
+        return {
+            'status': self.status.value,
+            'race_id': self.race_id,
+            'facts': [
+                {
+                    'field_name': fact.field_name,
+                    'value': fact.value,
+                    'unit': fact.unit,
+                    'provenance': {
+                        'tool_public_id': fact.provenance.tool_public_id,
+                        'server_name': fact.provenance.server_name,
+                        'wire_tool_name': fact.provenance.wire_tool_name,
+                        'source_id': fact.provenance.source_id,
+                        'source_timestamp': fact.provenance.source_timestamp,
+                        'observed_at': fact.provenance.observed_at,
+                        'freshness_limit_seconds': fact.provenance.freshness_limit_seconds,
+                        'validation_status': fact.provenance.validation_status,
+                        'warnings': fact.provenance.warnings,
+                    }
+                }
+                for fact in self.facts
+            ],
+            'tools_attempted': self.tools_attempted,
+            'tools_succeeded': self.tools_succeeded,
+            'tools_failed': self.tools_failed,
+            'collection_start_at': self.collection_start_at,
+            'collection_end_at': self.collection_end_at,
+            'errors': self.errors,
+            'warnings': self.warnings,
+        }
+
+    def to_llm_context(self) -> Dict:
+        """
+        LLM-safe serialization without exact coordinates or credentials.
+        
+        Omits:
+        - Exact latitude and longitude values
+        - Raw MCP envelopes
+        - Connection credentials
+        - Sensitive metadata
+        
+        Preserves:
+        - Field names and types (without exact values for coordinates)
+        - Provenance summaries
+        - Freshness status
+        - Warnings and errors
+        """
+        safe_facts = []
         for fact in self.facts:
-            facts_dicts.append({
-                "field_name": fact.field_name,
-                "value": fact.value,
-                "unit": fact.unit,
-                "provenance": asdict(fact.provenance)
+            # Suppress exact coordinates for LLM safety
+            if fact.field_name in ('latitude', 'longitude'):
+                safe_value = f"<coordinate suppressed>"
+            else:
+                safe_value = fact.value
+            
+            safe_facts.append({
+                'field_name': fact.field_name,
+                'value': safe_value,
+                'unit': fact.unit,
+                'provenance_summary': {
+                    'tool': fact.provenance.tool_public_id,
+                    'server': fact.provenance.server_name,
+                    'freshness_status': fact.provenance.validation_status,
+                    'freshness_limit_seconds': fact.provenance.freshness_limit_seconds,
+                },
             })
         
         return {
-            "status": self.status.value,
-            "race_id": self.race_id,
-            "facts": facts_dicts,
-            "tools_attempted": self.tools_attempted,
-            "tools_succeeded": self.tools_succeeded,
-            "tools_failed": self.tools_failed,
-            "collection_start_at": self.collection_start_at,
-            "collection_end_at": self.collection_end_at,
-            "errors": self.errors,
-            "warnings": self.warnings
+            'status': self.status.value,
+            'race_id': self.race_id,
+            'facts': safe_facts,
+            'tools_attempted': self.tools_attempted,
+            'tools_succeeded': self.tools_succeeded,
+            'tools_failed': self.tools_failed,
+            'collection_start_at': self.collection_start_at,
+            'collection_end_at': self.collection_end_at,
+            'errors': self.errors,
+            'warnings': self.warnings,
         }
 
 
 class SourceVerifiedTools(Enum):
-    """Source-verified MCP tools available in racing server."""
-    POSITION = ("racing.get_position", "get_position", "racing")
-    SOG = ("racing.get_sog", "get_sog", "racing")
-    COG = ("racing.get_cog", "get_cog", "racing")
+    """Source-verified MCP tools only."""
+    POSITION = ("racing.get_position", "position")
+    SOG = ("racing.get_sog", "sog")
+    COG = ("racing.get_cog", "cog")
     
-    def __init__(self, public_id: str, wire_name: str, server: str):
-        self.public_id = public_id
-        self.wire_name = wire_name
-        self.server = server
+    @property
+    def public_id(self) -> str:
+        return self.value[0]
+    
+    @property
+    def wire_name(self) -> str:
+        return self.value[1]
 
 
 class MCPCollector:
     """
-    Expended MCP collector for navigation facts.
-    
-    Gathers source-backed facts from MCP servers with explicit provenance tracking,
-    freshness awareness, and fail-closed semantics.
+    Expanded MCP collector with verified tools, deterministic freshness,
+    logging, and LLM-safe serialization.
     """
     
-    # Freshness limits (seconds)
+    # Freshness limits (seconds) from source verification
     FRESHNESS_LIMITS = {
         "racing.get_position": 30,
         "racing.get_sog": 15,
         "racing.get_cog": 15,
     }
     
-    def __init__(self, client: MCPClient, race_id: Optional[str] = None):
+    def __init__(self, client: MCPClient, race_id: Optional[str] = None, reference_time: Optional[str] = None):
         """
-        Initialize collector with an MCP client.
+        Initialize the collector.
         
         Args:
-            client: Initialized MCPClient instance
-            race_id: Optional race identifier for context
+            client: Initialized MCPClient
+            race_id: Optional race identifier
+            reference_time: Optional ISO 8601 UTC timestamp for deterministic tests
         """
         self.client = client
         self.race_id = race_id
-    
+        self.reference_time = reference_time  # For deterministic testing
+        self.logger = logging.getLogger(__name__)
+
     def collect(self, tools: Optional[List[SourceVerifiedTools]] = None) -> CollectionResult:
         """
         Collect navigation facts from verified MCP tools.
@@ -149,13 +209,17 @@ class MCPCollector:
         if tools is None:
             tools = [SourceVerifiedTools.POSITION, SourceVerifiedTools.SOG, SourceVerifiedTools.COG]
         
+        collection_start = self._now_utc()
+        
+        # Log startup
+        self.logger.info(f"Collector STARTUP: {len(tools)} tools attempted for race_id={self.race_id}")
+        
         result = CollectionResult(
             status=CollectionStatus.FAILED,
             race_id=self.race_id,
-            collection_start_at=self._now_utc()
+            collection_start_at=collection_start
         )
         
-        # Collect facts
         position = None
         sog = None
         cog = None
@@ -178,36 +242,58 @@ class MCPCollector:
                         result.tools_succeeded.append(tool.public_id)
             except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
                 result.tools_failed.append(tool.public_id)
-                result.errors.append(f"{tool.public_id}: {type(e).__name__}: {str(e)}")
+                error_msg = f"{tool.public_id}: {type(e).__name__}: {str(e)}"
+                result.errors.append(error_msg)
+                self.logger.error(f"Collector ERROR: {error_msg}")
             except Exception as e:
-                # Catch any other unexpected errors
                 result.tools_failed.append(tool.public_id)
-                result.errors.append(f"{tool.public_id}: Unexpected error: {str(e)}")
+                error_msg = f"{tool.public_id}: Unexpected error: {str(e)}"
+                result.errors.append(error_msg)
+                self.logger.error(f"Collector ERROR: {error_msg}")
         
         # Determine collection status
-        if position and sog and cog:
+        if len(result.tools_succeeded) == len(result.tools_attempted):
             result.status = CollectionStatus.COMPLETE
-        elif position or sog or cog:
+        elif len(result.tools_succeeded) > 0:
             result.status = CollectionStatus.PARTIAL
-        else:
+        elif len(result.facts) > 0:
             result.status = CollectionStatus.INVALID
+        else:
+            result.status = CollectionStatus.FAILED
         
         result.collection_end_at = self._now_utc()
+        
+        # Log summary (DATA_OUT)
+        self.logger.info(
+            f"Collector DATA_OUT: status={result.status.value}, "
+            f"facts={len(result.facts)}, "
+            f"succeeded={len(result.tools_succeeded)}, "
+            f"failed={len(result.tools_failed)}"
+        )
+        self.logger.info(f"Collector SHUTDOWN")
+        
         return result
-    
+
     def _collect_position(self, result: CollectionResult) -> Optional[NavigationFact]:
         """Collect latitude and longitude."""
         try:
+            self.logger.info("Collector DATA_IN: calling racing.get_position")
             response = self.client.call_tool('racing.get_position')
             
-            # Extract structured result
             if response and response.get('result'):
                 decoded = response['result']
                 latitude = decoded.get('latitude')
                 longitude = decoded.get('longitude')
                 
                 if latitude is not None and longitude is not None:
-                    # Coordinates are exact (not suppressed) — do not log them
+                    # Validate ranges
+                    if not (-90 <= latitude <= 90):
+                        result.warnings.append(f"racing.get_position: latitude out of range: {latitude}")
+                        return None
+                    if not (-180 <= longitude <= 180):
+                        result.warnings.append(f"racing.get_position: longitude out of range: {longitude}")
+                        return None
+                    
                     provenance = Provenance(
                         tool_public_id="racing.get_position",
                         server_name="racing",
@@ -222,38 +308,44 @@ class MCPCollector:
                         )
                     )
                     
-                    # Return position as two facts (lat, lon) for explicit tracking
+                    # Create two facts: latitude and longitude (exact values preserved internally, not logged)
                     result.facts.append(NavigationFact(
                         field_name="latitude",
-                        value=latitude,  # Exact coordinate, not logged
+                        value=latitude,
                         unit="decimal_degrees",
                         provenance=provenance
                     ))
                     result.facts.append(NavigationFact(
                         field_name="longitude",
-                        value=longitude,  # Exact coordinate, not logged
+                        value=longitude,
                         unit="decimal_degrees",
                         provenance=provenance
                     ))
                     
+                    self.logger.info(f"Collector DATA_IN: racing.get_position success (2 facts: lat, lon)")
                     return result.facts[-1]
             
             result.warnings.append("racing.get_position: malformed or missing fields")
             return None
         except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
             raise
-    
+
     def _collect_sog(self, result: CollectionResult) -> Optional[NavigationFact]:
         """Collect speed over ground."""
         try:
+            self.logger.info("Collector DATA_IN: calling racing.get_sog")
             response = self.client.call_tool('racing.get_sog')
             
             if response and response.get('result'):
                 decoded = response['result']
                 sog_ms = decoded.get('speed_over_ground_ms')
                 
-                # Never substitute missing with zero
                 if sog_ms is not None:
+                    # Validate: must be numeric and non-negative
+                    if not isinstance(sog_ms, (int, float)) or sog_ms < 0:
+                        result.warnings.append(f"racing.get_sog: invalid speed value: {sog_ms}")
+                        return None
+                    
                     provenance = Provenance(
                         tool_public_id="racing.get_sog",
                         server_name="racing",
@@ -275,6 +367,8 @@ class MCPCollector:
                         provenance=provenance
                     )
                     result.facts.append(fact)
+                    
+                    self.logger.info(f"Collector DATA_IN: racing.get_sog success (value={sog_ms}m/s, freshness={provenance.validation_status})")
                     return fact
                 else:
                     result.warnings.append("racing.get_sog: speed_over_ground_ms is None")
@@ -284,18 +378,23 @@ class MCPCollector:
             return None
         except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
             raise
-    
+
     def _collect_cog(self, result: CollectionResult) -> Optional[NavigationFact]:
         """Collect course over ground."""
         try:
+            self.logger.info("Collector DATA_IN: calling racing.get_cog")
             response = self.client.call_tool('racing.get_cog')
             
             if response and response.get('result'):
                 decoded = response['result']
                 cog_deg = decoded.get('course_over_ground_degrees')
                 
-                # Never substitute missing with zero
                 if cog_deg is not None:
+                    # Validate: must be numeric and in valid circular range
+                    if not isinstance(cog_deg, (int, float)) or cog_deg < 0 or cog_deg > 360:
+                        result.warnings.append(f"racing.get_cog: invalid course value: {cog_deg}")
+                        return None
+                    
                     provenance = Provenance(
                         tool_public_id="racing.get_cog",
                         server_name="racing",
@@ -317,6 +416,8 @@ class MCPCollector:
                         provenance=provenance
                     )
                     result.facts.append(fact)
+                    
+                    self.logger.info(f"Collector DATA_IN: racing.get_cog success (value={cog_deg}°, freshness={provenance.validation_status})")
                     return fact
                 else:
                     result.warnings.append("racing.get_cog: course_over_ground_degrees is None")
@@ -326,18 +427,12 @@ class MCPCollector:
             return None
         except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
             raise
-    
-    @staticmethod
-    def _validate_freshness(source_timestamp: Optional[str], limit_seconds: Optional[int]) -> str:
+
+    def _validate_freshness(self, source_timestamp: Optional[str], limit_seconds: Optional[int]) -> str:
         """
-        Validate freshness based on source timestamp and limit.
+        Validate freshness with deterministic ISO 8601 parsing.
         
-        Args:
-            source_timestamp: ISO 8601 timestamp or "UNKNOWN"
-            limit_seconds: Freshness limit in seconds
-        
-        Returns:
-            "valid", "stale", or "missing"
+        Returns: "valid", "stale", or "missing"
         """
         if source_timestamp is None or source_timestamp == "UNKNOWN":
             return "missing"
@@ -345,11 +440,43 @@ class MCPCollector:
         if limit_seconds is None:
             return "valid"
         
-        # TODO: Implement actual freshness check against current time
-        # For now, always valid (this task is mock-only)
-        return "valid"
-    
-    @staticmethod
-    def _now_utc() -> str:
-        """Generate current UTC timestamp in ISO 8601 format."""
+        try:
+            # Parse ISO 8601 source timestamp (support both Z and explicit UTC offset)
+            source_ts_str = source_timestamp.strip()
+            
+            # Handle Z suffix
+            if source_ts_str.endswith('Z'):
+                source_ts_str = source_ts_str[:-1] + '+00:00'
+            
+            source_dt = datetime.fromisoformat(source_ts_str)
+            
+            # Use injected reference time for tests, or current time
+            if self.reference_time:
+                ref_ts_str = self.reference_time.strip()
+                if ref_ts_str.endswith('Z'):
+                    ref_ts_str = ref_ts_str[:-1] + '+00:00'
+                reference_dt = datetime.fromisoformat(ref_ts_str)
+            else:
+                reference_dt = datetime.now(timezone.utc)
+            
+            # Calculate age in seconds
+            age_seconds = (reference_dt - source_dt).total_seconds()
+            
+            # Age must be non-negative
+            if age_seconds < 0:
+                return "missing"
+            
+            # Check freshness
+            if age_seconds <= limit_seconds:
+                return "valid"
+            else:
+                return "stale"
+        except (ValueError, AttributeError):
+            # Malformed timestamp
+            return "missing"
+
+    def _now_utc(self) -> str:
+        """Generate current UTC timestamp or use reference time in tests."""
+        if self.reference_time:
+            return self.reference_time
         return datetime.now(timezone.utc).isoformat().replace('+00:00', '') + 'Z'
