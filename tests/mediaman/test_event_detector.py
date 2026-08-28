@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from unittest.mock import Mock
 
 from mediaman.event_detector import EventDetector, DetectedEvent
-from mediaman.mcp_collector import CollectionResult, NavigationFact, Provenance
+from mediaman.mcp_collector import CollectionResult, CollectionStatus, NavigationFact, Provenance
 
 
 @pytest.fixture
@@ -39,7 +39,7 @@ def complete_result():
         provenance=provenance,
     )
     return CollectionResult(
-        status='COMPLETE',
+        status=CollectionStatus.COMPLETE,
         facts=[position_fact],
         race_id='race_001',
     )
@@ -65,7 +65,7 @@ def partial_result():
         provenance=provenance,
     )
     return CollectionResult(
-        status='PARTIAL',
+        status=CollectionStatus.PARTIAL,
         facts=[position_fact],
         race_id='race_001',
     )
@@ -100,8 +100,8 @@ class TestCollectionStatusTransitions:
         data_lost_events = [e for e in events if e.event_type == 'NAVIGATION_DATA_LOST']
         assert len(data_lost_events) == 1
         assert data_lost_events[0].severity == 'WARNING'
-        assert data_lost_events[0].previous_status == 'COMPLETE'
-        assert data_lost_events[0].current_status == 'PARTIAL'
+        assert data_lost_events[0].previous_status == 'complete'
+        assert data_lost_events[0].current_status == 'partial'
 
     def test_partial_to_complete_emits_data_recovered(
         self, detector, complete_result, partial_result
@@ -118,8 +118,8 @@ class TestCollectionStatusTransitions:
         ]
         assert len(recovered_events) == 1
         assert recovered_events[0].severity == 'INFO'
-        assert recovered_events[0].previous_status == 'PARTIAL'
-        assert recovered_events[0].current_status == 'COMPLETE'
+        assert recovered_events[0].previous_status == 'partial'
+        assert recovered_events[0].current_status == 'complete'
 
 
 class TestFactTransitions:
@@ -141,7 +141,7 @@ class TestFactTransitions:
             field_name='sog', value=5.2, unit='knots', provenance=prev_prov
         )
         prev_result = CollectionResult(
-            status='COMPLETE', facts=[prev_fact], race_id='race_001'
+            status=CollectionStatus.COMPLETE, facts=[prev_fact], race_id='race_001'
         )
 
         curr_prov = Provenance(
@@ -158,7 +158,7 @@ class TestFactTransitions:
             field_name='sog', value=5.2, unit='knots', provenance=curr_prov
         )
         curr_result = CollectionResult(
-            status='PARTIAL', facts=[curr_fact], race_id='race_001'
+            status=CollectionStatus.PARTIAL, facts=[curr_fact], race_id='race_001'
         )
 
         events = detector.detect_events(
@@ -186,7 +186,7 @@ class TestFactTransitions:
             field_name='cog', value=180.0, unit='degrees', provenance=prev_prov
         )
         prev_result = CollectionResult(
-            status='PARTIAL', facts=[prev_fact], race_id='race_001'
+            status=CollectionStatus.PARTIAL, facts=[prev_fact], race_id='race_001'
         )
 
         curr_prov = Provenance(
@@ -203,7 +203,7 @@ class TestFactTransitions:
             field_name='cog', value=180.0, unit='degrees', provenance=curr_prov
         )
         curr_result = CollectionResult(
-            status='COMPLETE', facts=[curr_fact], race_id='race_001'
+            status=CollectionStatus.COMPLETE, facts=[curr_fact], race_id='race_001'
         )
 
         events = detector.detect_events(
@@ -238,8 +238,8 @@ class TestEventIDDeterminism:
             provenance=prov,
         )
 
-        result_complete = CollectionResult(status='COMPLETE', facts=[fact], race_id='race_001')
-        result_partial = CollectionResult(status='PARTIAL', facts=[fact], race_id='race_001')
+        result_complete = CollectionResult(status=CollectionStatus.COMPLETE, facts=[fact], race_id='race_001')
+        result_partial = CollectionResult(status=CollectionStatus.PARTIAL, facts=[fact], race_id='race_001')
 
         # First call
         events1 = detector.detect_events(
@@ -275,7 +275,7 @@ class TestCoordinateSuppression:
         assert events == []
 
         # Test with previous
-        partial = CollectionResult(status='PARTIAL', facts=[], race_id='race_001')
+        partial = CollectionResult(status=CollectionStatus.PARTIAL, facts=[], race_id='race_001')
         events = detector.detect_events(
             current=complete_result,
             previous=partial,
@@ -311,8 +311,8 @@ class TestFailClosedBehavior:
             unit=None,
             provenance=prov,
         )
-        complete_1 = CollectionResult(status='COMPLETE', facts=[fact], race_id='race_001')
-        complete_2 = CollectionResult(status='COMPLETE', facts=[fact], race_id='race_001')
+        complete_1 = CollectionResult(status=CollectionStatus.COMPLETE, facts=[fact], race_id='race_001')
+        complete_2 = CollectionResult(status=CollectionStatus.COMPLETE, facts=[fact], race_id='race_001')
 
         events = detector.detect_events(
             current=complete_2, previous=complete_1, observed_at='2026-08-27T20:40:02Z'
@@ -326,7 +326,7 @@ class TestFailClosedBehavior:
         bad_fact = NavigationFact(
             field_name='position', value=None, unit=None, provenance=None
         )
-        result = CollectionResult(status='FAILED', facts=[bad_fact], race_id='race_001')
+        result = CollectionResult(status=CollectionStatus.FAILED, facts=[bad_fact], race_id='race_001')
 
         # Should not raise
         events = detector.detect_events(
@@ -352,7 +352,7 @@ class TestFailClosedBehavior:
             field_name='sog', value=float('nan'), unit='knots', provenance=prov
         )
         result = CollectionResult(
-            status='FAILED', facts=[nan_fact], race_id='race_001'
+            status=CollectionStatus.FAILED, facts=[nan_fact], race_id='race_001'
         )
 
         events = detector.detect_events(
@@ -419,7 +419,7 @@ class TestMissingTimestamps:
             unit=None,
             provenance=prov,
         )
-        result = CollectionResult(status='FAILED', facts=[fact], race_id='race_001')
+        result = CollectionResult(status=CollectionStatus.FAILED, facts=[fact], race_id='race_001')
 
         events = detector.detect_events(
             current=result,
@@ -452,10 +452,10 @@ class TestRealCollectionResultObjects:
             provenance=prov,
         )
         complete_result = CollectionResult(
-            status='COMPLETE', facts=[fact], race_id='race_001'
+            status=CollectionStatus.COMPLETE, facts=[fact], race_id='race_001'
         )
         partial_result = CollectionResult(
-            status='PARTIAL', facts=[], race_id='race_001'
+            status=CollectionStatus.PARTIAL, facts=[], race_id='race_001'
         )
 
         events = detector.detect_events(

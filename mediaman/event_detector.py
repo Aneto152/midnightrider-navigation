@@ -12,7 +12,7 @@ from typing import Optional, List
 from datetime import datetime, timezone
 import hashlib
 
-from mediaman.mcp_collector import CollectionResult, NavigationFact
+from mediaman.mcp_collector import CollectionResult, CollectionStatus, NavigationFact
 
 
 @dataclass
@@ -114,11 +114,11 @@ class EventDetector:
         """Detect COMPLETE/PARTIAL transitions."""
         events = []
 
-        prev_status = previous.status
-        curr_status = current.status
+        prev_status = previous.status.value if isinstance(previous.status, CollectionStatus) else str(previous.status).lower()
+        curr_status = current.status.value if isinstance(current.status, CollectionStatus) else str(current.status).lower()
 
         # NAVIGATION_DATA_LOST: COMPLETE → PARTIAL/FAILED/etc.
-        if prev_status == 'COMPLETE' and curr_status != 'COMPLETE':
+        if prev_status == 'complete' and curr_status != 'complete':
             event = DetectedEvent(
                 event_id=self._make_event_id(
                     current.race_id, 'NAVIGATION_DATA_LOST', None, observed_at
@@ -136,7 +136,7 @@ class EventDetector:
             events.append(event)
 
         # NAVIGATION_DATA_RECOVERED: non-COMPLETE → COMPLETE
-        if prev_status != 'COMPLETE' and curr_status == 'COMPLETE':
+        if prev_status != 'complete' and curr_status == 'complete':
             event = DetectedEvent(
                 event_id=self._make_event_id(
                     current.race_id, 'NAVIGATION_DATA_RECOVERED', None, observed_at

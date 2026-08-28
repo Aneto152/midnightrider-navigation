@@ -390,3 +390,7 @@
 [2026-08-28T00:36:34.231074Z] [TEST_RUN] [mediaman-step-2c-audit] MCP client tests: 41/41 passed
 [2026-08-28T00:36:34.231074Z] [TEST_RUN] [mediaman-step-2c-audit] MediaMan full suite: 146/146 passed
 [2026-08-28T00:36:34.231074Z] [RESULT] [mediaman-step-2c-audit] SUCCESS — Step 2C published and audited at 0aa3c6538f36918ad19c485704afb6feee9a864e
+[2026-08-28T15:39:36] [FILE_MODIFY] [mediaman] Step 4A.1 EventDetector enum contract aligned
+[2026-08-28T15:39:36] [FILE_MODIFY] [tests] Step 4A.1 fixtures updated to real CollectionStatus values
+[2026-08-28T15:39:36] [FILE_MODIFY] [audit] logs/latest.json updated with test results and known warning
+[2026-08-28T15:39:36] [RESULT] [mediaman] Result: SUCCESS - 192 offline unit tests passed; one known PytestCollectionWarning
