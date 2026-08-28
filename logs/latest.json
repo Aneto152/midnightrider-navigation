@@ -1,53 +1,90 @@
 {
-  "task": "mediaman-step-3a-expanded-mcp-collector",
+  "task": "mediaman-step-3a-collector-correction",
   "status": "SUCCESS",
-  "step": "3a-complete",
-  "timestamp": "2026-08-28T00:48:56.862464Z",
-  "collector": {
-    "files_created": [
-      "mediaman/mcp_collector.py",
-      "tests/mediaman/test_mcp_collector.py"
+  "timestamp": "2026-08-28T01:03:12.988547Z",
+  "step": "3a-complete-with-corrections",
+  "mcp_client_corrections": {
+    "allowlist_extended": true,
+    "verified_tools": [
+      "racing.get_position (get_position)",
+      "racing.get_sog (get_sog)",
+      "racing.get_cog (get_cog)"
     ],
-    "tools_collected": [
-      "racing.get_position",
-      "racing.get_sog",
-      "racing.get_cog"
-    ],
-    "provenance_tracking": "tool_public_id, server_name, wire_tool_name, source_id, source_timestamp, observed_at, freshness_limit",
-    "fail_closed_semantics": "missing values remain None, no zero substitution, no timestamp fabrication",
-    "freshness_aware": true,
-    "mocked_only": true
+    "wire_mappings_verified": true,
+    "safe_structured_data": true,
+    "no_credentials": true
   },
-  "testing": {
-    "mcp_collector_tests_collected": 22,
-    "mcp_collector_tests_passed": 22,
-    "full_mediaman_suite_collected": 168,
-    "full_mediaman_suite_passed": 168,
-    "collection_status_complete": true,
-    "collection_status_partial": true,
-    "collection_status_invalid": true,
-    "collection_status_failed": true,
-    "provenance_preserved": true,
-    "no_coordinate_logging": true,
-    "no_zero_substitution": true,
-    "no_timestamp_fabrication": true
+  "collector_corrections": {
+    "freshness_validation": {
+      "implementation": "deterministic ISO 8601 parsing",
+      "supports": [
+        "UTC Z suffix",
+        "explicit UTC offsets"
+      ],
+      "reference_time_injection": "enabled for tests",
+      "freshness_limits": {
+        "racing.get_position": 30,
+        "racing.get_sog": 15,
+        "racing.get_cog": 15
+      },
+      "status_values": [
+        "valid",
+        "stale",
+        "missing"
+      ]
+    },
+    "field_validation": {
+      "latitude": "range -90 to 90",
+      "longitude": "range -180 to 180",
+      "sog": "numeric, non-negative",
+      "cog": "numeric, 0-360 degrees",
+      "units_verified": true
+    },
+    "logging_instrumentation": {
+      "STARTUP": "enabled",
+      "DATA_IN": "enabled",
+      "DATA_OUT": "enabled",
+      "ERROR": "enabled",
+      "SHUTDOWN": "enabled",
+      "coordinate_suppression": true,
+      "credential_suppression": true
+    },
+    "llm_safe_serialization": {
+      "method": "to_llm_context()",
+      "exact_coordinate_suppression": true,
+      "provenance_summary_included": true,
+      "freshness_status_included": true,
+      "no_mcp_envelope": true,
+      "no_credentials": true
+    }
   },
   "security": {
-    "live_mcp_contacted": false,
-    "live_signal_k_accessed": false,
-    "live_influxdb_accessed": false,
-    "live_docker_modified": false,
-    "live_openclaw_contacted": false,
-    "live_telegram_contacted": false,
+    "mcp_live_server_contacted": false,
+    "signalk_accessed": false,
+    "influxdb_accessed": false,
+    "docker_modified": false,
+    "openclaw_contacted": false,
+    "telegram_contacted": false,
     "event_detector_implemented": false,
     "sqlite_events_implemented": false,
     "timer_activated": false,
-    "racefacts_modified": false,
-    "no_shell_execution": true,
-    "no_credentials_in_code": true,
-    "zombie_cleanup_status": "DEFERRED"
+    "no_shell_true": true,
+    "no_fabricated_timestamps": true,
+    "no_zero_substitution": true,
+    "no_stale_marked_valid": true,
+    "mocked_tests_only": true
   },
   "commits": {
-    "step_3a_substantive": "6eecdd19cc88983f839ccebb6e7fd7a445b56a9e"
-  }
+    "substantive_sha": "60c2cdded6fdf368ce96e608403622ec7b27baee",
+    "message": "fix(mediaman): align collector with verified MCP contract"
+  },
+  "verification": {
+    "mcp_client_tests": "preserved + extended allowlist",
+    "collector_tests": "preserved + new corrections",
+    "full_mediaman_tests": "preserved",
+    "no_deletions": true,
+    "no_disabling": true
+  },
+  "zombie_cleanup_status": "DEFERRED",
+  "next_step": "STEP 3A CORRECTED \u2014 await Denis authorization for STEP 4"
 }
