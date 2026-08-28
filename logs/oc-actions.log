@@ -382,3 +382,11 @@
 [2026-08-28T00:18:39.681172Z] [TEST_RUN] [mediaman-step-2c-publish] MCP client tests: 41/41 passed
 [2026-08-28T00:18:39.681172Z] [TEST_RUN] [mediaman-step-2c-publish] Full MediaMan suite: 146/146 passed
 [2026-08-28T00:18:39.681172Z] [RESULT] [mediaman-step-2c-publish] SUCCESS — Option C chain published and verified at 97314525f6eb37acc912c41e0502f059c7cb9c44
+[2026-08-28T00:36:34.231074Z] [DEBUG] [mediaman-step-2c-audit] Verified published code at immutable SHA 0aa3c6538f36918ad19c485704afb6feee9a864e
+[2026-08-28T00:36:34.231074Z] [DEBUG] [mediaman-step-2c-audit] STARTUP_TIMEOUT_SECONDS=10, REQUEST_TIMEOUT_SECONDS=5 confirmed
+[2026-08-28T00:36:34.231074Z] [DEBUG] [mediaman-step-2c-audit] start() → initialize(timeout_seconds=10) → _send_request(..., timeout_seconds) verified
+[2026-08-28T00:36:34.231074Z] [DEBUG] [mediaman-step-2c-audit] list_tools() and call_tool() pass REQUEST_TIMEOUT_SECONDS=5 verified
+[2026-08-28T00:36:34.231074Z] [DEBUG] [mediaman-step-2c-audit] Reader path and process exit tests are unit-level (mocked subprocess, queue inspection), not true E2E
+[2026-08-28T00:36:34.231074Z] [TEST_RUN] [mediaman-step-2c-audit] MCP client tests: 41/41 passed
+[2026-08-28T00:36:34.231074Z] [TEST_RUN] [mediaman-step-2c-audit] MediaMan full suite: 146/146 passed
+[2026-08-28T00:36:34.231074Z] [RESULT] [mediaman-step-2c-audit] SUCCESS — Step 2C published and audited at 0aa3c6538f36918ad19c485704afb6feee9a864e

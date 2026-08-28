@@ -1,35 +1,31 @@
 {
-  "task": "mediaman-step-2c-timeout-wiring-published",
+  "task": "mediaman-step-2c-final-audit",
   "status": "SUCCESS",
-  "step": "2c-complete-and-published",
-  "timestamp": "2026-08-28T00:18:50.185093Z",
+  "step": "2c-complete-published",
+  "timestamp": "2026-08-28T00:36:29.756523Z",
   "publication": {
     "main_before_sha": "26a76cad709ba49e6549acf24832eb6e42b1c95c",
-    "main_after_first_advance_sha": "ea406aeff476925460c7a8e06f92330b375aa7d2",
-    "main_after_substantive_sha": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126",
-    "main_final_sha": "97314525f6eb37acc912c41e0502f059c7cb9c44",
-    "origin_main_current": "97314525f6eb37acc912c41e0502f059c7cb9c44"
+    "main_after_sha": "0aa3c6538f36918ad19c485704afb6feee9a864e",
+    "origin_main_current": "0aa3c6538f36918ad19c485704afb6feee9a864e"
   },
   "implementation": {
     "startup_timeout_seconds": 10,
     "request_timeout_seconds": 5,
     "startup_timeout_wiring_verified": true,
-    "startup_call_path_verified": "start() \u2192 initialize(timeout_seconds=STARTUP_TIMEOUT_SECONDS) \u2192 _send_request(..., timeout_seconds=10)",
-    "request_call_paths_verified": "list_tools() and call_tool() \u2192 _send_request(..., timeout_seconds=REQUEST_TIMEOUT_SECONDS)",
-    "startup_timeout_explicitly_used": true,
-    "request_timeout_explicitly_used": true
+    "startup_call_path": "start() \u2192 initialize(timeout_seconds=STARTUP_TIMEOUT_SECONDS) \u2192 _send_request(..., timeout_seconds=10)",
+    "request_call_paths": "list_tools() and call_tool() \u2192 _send_request(..., timeout_seconds=REQUEST_TIMEOUT_SECONDS=5)"
   },
   "testing": {
     "mcp_client_tests_collected": 41,
     "mcp_client_tests_passed": 41,
-    "new_timeout_propagation_tests": 7,
+    "timeout_propagation_tests_new": 7,
     "full_mediaman_suite_collected": 146,
     "full_mediaman_suite_passed": 146,
-    "reader_to_pending_request_verified": true,
-    "process_exit_while_pending_verified": true,
-    "startup_exception_classification_verified": true,
-    "strict_jsonrpc_validation_tests": 10,
-    "step_2b_coverage_preserved": true
+    "reader_propagation_unit_tested": true,
+    "reader_propagation_e2e_tested": false,
+    "process_exit_unit_tested": true,
+    "process_exit_e2e_tested": false,
+    "note": "Tests are unit-level (mocked subprocesses, queues inspected), not true E2E (no real pending waits with timing/threading)"
   },
   "security": {
     "mcp_live_server_contacted": false,
@@ -46,8 +42,9 @@
     "step_2c_core": "e06febc9abe5863fbdf80a7a1b18ae8768955373",
     "step_2c_coverage_restore": "b737f10cfc2f99099dffe3faeea9e45d6b1b9790",
     "step_2c_e2e_verification": "26a76cad709ba49e6549acf24832eb6e42b1c95c",
-    "evidence_closure_premature": "ea406aeff476925460c7a8e06f92330b375aa7d2",
-    "step_2c_timeout_wiring_substantive": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126",
-    "step_2c_final_log_sync": "97314525f6eb37acc912c41e0502f059c7cb9c44"
+    "evidence_closure": "ea406aeff476925460c7a8e06f92330b375aa7d2",
+    "timeout_wiring_substantive": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126",
+    "timeout_wiring_log_sync": "97314525f6eb37acc912c41e0502f059c7cb9c44",
+    "final_audit_sync": "0aa3c6538f36918ad19c485704afb6feee9a864e"
   }
 }
