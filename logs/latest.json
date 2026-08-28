@@ -1,50 +1,53 @@
 {
-  "task": "mediaman-step-2c-final-audit",
+  "task": "mediaman-step-3a-expanded-mcp-collector",
   "status": "SUCCESS",
-  "step": "2c-complete-published",
-  "timestamp": "2026-08-28T00:36:29.756523Z",
-  "publication": {
-    "main_before_sha": "26a76cad709ba49e6549acf24832eb6e42b1c95c",
-    "main_after_sha": "0aa3c6538f36918ad19c485704afb6feee9a864e",
-    "origin_main_current": "0aa3c6538f36918ad19c485704afb6feee9a864e"
-  },
-  "implementation": {
-    "startup_timeout_seconds": 10,
-    "request_timeout_seconds": 5,
-    "startup_timeout_wiring_verified": true,
-    "startup_call_path": "start() \u2192 initialize(timeout_seconds=STARTUP_TIMEOUT_SECONDS) \u2192 _send_request(..., timeout_seconds=10)",
-    "request_call_paths": "list_tools() and call_tool() \u2192 _send_request(..., timeout_seconds=REQUEST_TIMEOUT_SECONDS=5)"
+  "step": "3a-complete",
+  "timestamp": "2026-08-28T00:48:56.862464Z",
+  "collector": {
+    "files_created": [
+      "mediaman/mcp_collector.py",
+      "tests/mediaman/test_mcp_collector.py"
+    ],
+    "tools_collected": [
+      "racing.get_position",
+      "racing.get_sog",
+      "racing.get_cog"
+    ],
+    "provenance_tracking": "tool_public_id, server_name, wire_tool_name, source_id, source_timestamp, observed_at, freshness_limit",
+    "fail_closed_semantics": "missing values remain None, no zero substitution, no timestamp fabrication",
+    "freshness_aware": true,
+    "mocked_only": true
   },
   "testing": {
-    "mcp_client_tests_collected": 41,
-    "mcp_client_tests_passed": 41,
-    "timeout_propagation_tests_new": 7,
-    "full_mediaman_suite_collected": 146,
-    "full_mediaman_suite_passed": 146,
-    "reader_propagation_unit_tested": true,
-    "reader_propagation_e2e_tested": false,
-    "process_exit_unit_tested": true,
-    "process_exit_e2e_tested": false,
-    "note": "Tests are unit-level (mocked subprocesses, queues inspected), not true E2E (no real pending waits with timing/threading)"
+    "mcp_collector_tests_collected": 22,
+    "mcp_collector_tests_passed": 22,
+    "full_mediaman_suite_collected": 168,
+    "full_mediaman_suite_passed": 168,
+    "collection_status_complete": true,
+    "collection_status_partial": true,
+    "collection_status_invalid": true,
+    "collection_status_failed": true,
+    "provenance_preserved": true,
+    "no_coordinate_logging": true,
+    "no_zero_substitution": true,
+    "no_timestamp_fabrication": true
   },
   "security": {
-    "mcp_live_server_contacted": false,
+    "live_mcp_contacted": false,
+    "live_signal_k_accessed": false,
+    "live_influxdb_accessed": false,
+    "live_docker_modified": false,
+    "live_openclaw_contacted": false,
+    "live_telegram_contacted": false,
     "event_detector_implemented": false,
-    "real_llm_generation_performed": false,
-    "real_telegram_send_performed": false,
-    "telegram_bot_or_group_created": false,
-    "mediaman_timer_activation_authorized": false,
-    "signalk_modified": false,
-    "docker_modified": false,
+    "sqlite_events_implemented": false,
+    "timer_activated": false,
+    "racefacts_modified": false,
+    "no_shell_execution": true,
+    "no_credentials_in_code": true,
     "zombie_cleanup_status": "DEFERRED"
   },
   "commits": {
-    "step_2c_core": "e06febc9abe5863fbdf80a7a1b18ae8768955373",
-    "step_2c_coverage_restore": "b737f10cfc2f99099dffe3faeea9e45d6b1b9790",
-    "step_2c_e2e_verification": "26a76cad709ba49e6549acf24832eb6e42b1c95c",
-    "evidence_closure": "ea406aeff476925460c7a8e06f92330b375aa7d2",
-    "timeout_wiring_substantive": "db34d7e4c72bfd263c1c0dd142bc5d8dfe8ad126",
-    "timeout_wiring_log_sync": "97314525f6eb37acc912c41e0502f059c7cb9c44",
-    "final_audit_sync": "0aa3c6538f36918ad19c485704afb6feee9a864e"
+    "step_3a_substantive": "6eecdd19cc88983f839ccebb6e7fd7a445b56a9e"
   }
 }
