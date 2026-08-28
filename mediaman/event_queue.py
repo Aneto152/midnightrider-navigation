@@ -114,8 +114,8 @@ class EventQueue:
 
         # Check for sensitive patterns
         if any(x in payload_json for x in ['latitude', 'longitude', 'token', 'password', 'secret']):
-            if any(pattern in event_dict.get('affected_field', '') or 
-                   str(event_dict.get('event_type', '')).count('position') > 0 
+            if any(pattern in event_dict.get('affected_field', '') or
+                   str(event_dict.get('event_type', '')).count('position') > 0
                    for pattern in ['41.', '73.', '-73.']):
                 raise ValueError("Exact coordinates not allowed in queue payload")
 
