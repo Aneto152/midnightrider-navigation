@@ -1,91 +1,47 @@
 {
-  "task": "mediaman-step-3a-final-closure",
+  "task": "mediaman-step-3a-evidence-closure",
   "status": "SUCCESS",
-  "timestamp": "2026-08-28T01:33:53.338201Z",
-  "step": "3a-complete-final",
-  "final_fixes": {
-    "logger_overwrite": {
-      "defect": "setup_service_logger() was overwritten by logging.getLogger(__name__)",
-      "fix": "Removed duplicate logger assignment",
-      "result": "Logger now correctly uses setup_service_logger configuration",
-      "path": "logs/services/mediaman-mcp-collector.log"
-    }
+  "timestamp": "2026-08-28T01:38:20.416582Z",
+  "step": "3a-evidence-gaps-closed",
+  "evidence_tests_added": {
+    "logger_output": 2,
+    "freshness_edge_cases": 2,
+    "llm_safe_serialization": 2,
+    "total_new": 6
   },
   "test_results": {
-    "mcp_client_tests": "41/41 PASSED",
-    "collector_tests": "26/26 PASSED",
-    "full_mediaman_suite": "172/172 PASSED",
-    "authoritative_total": "Full suite: 172/172"
+    "mcp_client_tests_collected": 41,
+    "mcp_client_tests_passed": 41,
+    "collector_tests_collected": 32,
+    "collector_tests_passed": 32,
+    "full_mediaman_tests_collected": 178,
+    "full_mediaman_tests_passed": 178,
+    "note": "Full MediaMan suite includes nested 41 + 32 collector tests; reported separately"
   },
   "verified_implementation": {
-    "structured_logging": {
+    "effective_logger": {
       "status": "VERIFIED",
-      "logger": "setup_service_logger('mediaman-mcp-collector')",
-      "path": "logs/services/mediaman-mcp-collector.log",
-      "handler": "RotatingFileHandler",
-      "max_bytes": 5242880,
-      "backup_count": 3,
-      "events": [
-        "STARTUP",
-        "DATA_IN",
-        "DATA_OUT",
-        "ERROR",
-        "SHUTDOWN"
-      ],
-      "sanitization": "Exact coordinates, payloads, credentials never logged"
+      "configured_by": "setup_service_logger('mediaman-mcp-collector')",
+      "no_overwrite": true,
+      "test_evidence": "test_logger_writes_startup PASSED",
+      "path": "logs/services/mediaman-mcp-collector.log"
     },
-    "stale_fact_status": {
+    "logger_output_suppression": {
       "status": "VERIFIED",
-      "behavior": "Stale facts prevent COMPLETE status (mandatory fail-safe)"
+      "exact_coordinates_suppressed": true,
+      "test_evidence": "test_logger_suppresses_coordinates PASSED"
     },
-    "real_client_compatibility": {
+    "freshness_edge_cases": {
       "status": "VERIFIED",
-      "tests": 4,
-      "tools": [
-        "racing.get_position",
-        "racing.get_sog",
-        "racing.get_cog"
-      ],
-      "approach": "Real MCPClient with mocked subprocess"
-    },
-    "freshness_validation": {
-      "status": "VERIFIED",
-      "iso8601_support": [
-        "UTC Z",
-        "explicit UTC offset"
-      ],
-      "deterministic": "reference_time injection",
-      "edge_cases": [
-        "fresh",
-        "stale",
-        "missing",
-        "malformed",
-        "future"
-      ]
+      "future_timestamps": "marked 'missing'",
+      "malformed_timestamps": "handled gracefully (no exception)",
+      "test_evidence": "Both edge-case tests PASSED"
     },
     "llm_safe_serialization": {
       "status": "VERIFIED",
-      "method": "to_llm_context()",
-      "coordinate_suppression": true,
-      "envelope_exclusion": true,
-      "credential_exclusion": true
-    }
-  },
-  "verified_tools": {
-    "racing.get_position": {
-      "wire_name": "get_position",
-      "server": "racing",
-      "freshness_limit_seconds": 30
-    },
-    "racing.get_sog": {
-      "wire_name": "get_sog",
-      "server": "racing",
-      "freshness_limit_seconds": 15
-    },
-    "racing.get_cog": {
-      "wire_name": "get_cog",
-      "server": "racing",
-      "freshness_limit_seconds": 15
+      "latitude_suppressed": true,
+      "longitude_suppressed": true,
+      "test_evidence": "Both LLM-safe tests PASSED"
     }
   },
   "security": {
@@ -101,8 +57,8 @@
     "mocked_tests_only": true
   },
   "commits": {
-    "final_substantive_sha": "c59435c1bf40c5e089b550cb338bf54117b3ead6",
-    "message": "fix(mediaman): remove logger overwrite in collector initialization"
+    "evidence_closure_sha": "2cc10501b4a6cf116e413b8b2ee7ac794859e87c",
+    "message": "test(mediaman): close collector contract evidence gaps"
   },
   "zombie_cleanup_status": "DEFERRED",
   "next_step": "STEP 3A COMPLETE \u2014 Await Denis authorization for STEP 4"
