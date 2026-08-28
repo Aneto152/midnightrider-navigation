@@ -128,9 +128,9 @@ class MCPClient:
         )
         self.stderr_thread.start()
 
-        # Initialize handshake with timeout
+        # Initialize handshake with explicit startup timeout
         try:
-            self.initialize()
+            self.initialize(timeout_seconds=self.STARTUP_TIMEOUT_SECONDS)
             self.initialized = True
         except MCPProtocolError:
             self.terminate()
@@ -148,14 +148,18 @@ class MCPClient:
             self.terminate()
             raise MCPClientError(f"Startup failed: {e}") from e
 
-    def initialize(self) -> Dict[str, Any]:
+    def initialize(self, timeout_seconds: float = REQUEST_TIMEOUT_SECONDS) -> Dict[str, Any]:
         """
         Send initialize request to MCP server.
+
+        Args:
+            timeout_seconds: Timeout for initialization request (default: REQUEST_TIMEOUT_SECONDS)
+                            Overridden to STARTUP_TIMEOUT_SECONDS by start()
 
         Returns:
             Server info response
         """
-        response = self._send_request('initialize', {})
+        response = self._send_request('initialize', {}, timeout_seconds=timeout_seconds)
         return response
 
     def list_tools(self) -> Dict[str, Any]:
@@ -165,7 +169,7 @@ class MCPClient:
         Returns:
             tools/list response
         """
-        response = self._send_request('tools/list', {})
+        response = self._send_request('tools/list', {}, timeout_seconds=self.REQUEST_TIMEOUT_SECONDS)
         return response
 
     def call_tool(
@@ -199,10 +203,11 @@ class MCPClient:
         if arguments is None:
             arguments = {}
 
-        # Call tool with wire name
+        # Call tool with wire name and explicit request timeout
         response = self._send_request(
             'tools/call',
-            {'name': wire_name, 'arguments': arguments}
+            {'name': wire_name, 'arguments': arguments},
+            timeout_seconds=self.REQUEST_TIMEOUT_SECONDS
         )
 
         # Decode MCP result envelope
@@ -214,14 +219,16 @@ class MCPClient:
     def _send_request(
         self,
         method: str,
-        params: Dict[str, Any]
+        params: Dict[str, Any],
+        timeout_seconds: float = REQUEST_TIMEOUT_SECONDS
     ) -> Dict[str, Any]:
         """
-        Send JSON-RPC request and wait for response with timeout.
+        Send JSON-RPC request and wait for response with explicit timeout.
 
         Args:
             method: JSON-RPC method
             params: Method parameters
+            timeout_seconds: Timeout in seconds (default: REQUEST_TIMEOUT_SECONDS)
 
         Returns:
             Response result (not including jsonrpc/id wrapper)
@@ -252,7 +259,7 @@ class MCPClient:
         except (BrokenPipeError, OSError) as e:
             raise MCPClientError(f"Failed to send request: {e}") from e
 
-        # Wait for response with timeout
+        # Wait for response with explicit timeout
         start_time = time.time()
         while True:
             # Check for process exit
@@ -260,9 +267,9 @@ class MCPClient:
                 raise MCPClientError(f"Server process exited with code {self.process.returncode}")
 
             elapsed = time.time() - start_time
-            if elapsed > self.REQUEST_TIMEOUT_SECONDS:
+            if elapsed > timeout_seconds:
                 raise MCPTimeoutError(
-                    f"Request timeout after {self.REQUEST_TIMEOUT_SECONDS}s"
+                    f"Request timeout after {timeout_seconds}s"
                 )
 
             # Check error queue first (propagate reader errors immediately)
@@ -274,7 +281,7 @@ class MCPClient:
 
             try:
                 response = self.response_queue.get(
-                    timeout=self.REQUEST_TIMEOUT_SECONDS - elapsed
+                    timeout=timeout_seconds - elapsed
                 )
 
                 # Strict JSON-RPC validation
@@ -291,7 +298,7 @@ class MCPClient:
 
             except queue.Empty:
                 raise MCPTimeoutError(
-                    f"Request timeout after {self.REQUEST_TIMEOUT_SECONDS}s"
+                    f"Request timeout after {timeout_seconds}s"
                 )
 
     def _validate_jsonrpc_response(self, response: Any, expected_id: int) -> None:

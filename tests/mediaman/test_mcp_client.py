@@ -570,3 +570,123 @@ class TestMCPClientSubprocessSafety:
         assert 'token' not in client.server_path.lower()
         assert 'password' not in client.server_path.lower()
         assert 'secret' not in client.server_path.lower()
+
+
+class TestMCPClientTimeoutPropagation:
+    """Verify explicit timeout propagation through call paths."""
+
+    def test_initialize_receives_startup_timeout(self, mock_process):
+        """initialize() receives explicit startup timeout from start()."""
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    
+                    # Track the timeout passed to initialize
+                    original_init = client.initialize
+                    init_timeout_used = []
+                    
+                    def track_initialize(timeout_seconds=MCPClient.REQUEST_TIMEOUT_SECONDS):
+                        init_timeout_used.append(timeout_seconds)
+                        return {}
+                    
+                    with patch.object(client, 'initialize', side_effect=track_initialize):
+                        try:
+                            client.start()
+                        except:
+                            pass
+                    
+                    # Verify startup timeout was passed
+                    assert len(init_timeout_used) > 0
+                    assert init_timeout_used[0] == MCPClient.STARTUP_TIMEOUT_SECONDS
+
+    def test_send_request_uses_provided_timeout(self, mock_process):
+        """_send_request() uses the timeout parameter provided."""
+        mock_process.stdin = MagicMock()
+        mock_process.stdout = []
+        mock_process.poll = Mock(return_value=None)
+        
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    
+                    # Call with explicit timeout and verify it's used in timeout check
+                    try:
+                        # This will timeout, but we're testing that timeout_seconds param is used
+                        client._send_request('test', {}, timeout_seconds=3.0)
+                    except MCPTimeoutError as e:
+                        # Verify the error message includes the timeout we passed
+                        assert "3.0s" in str(e)
+
+    def test_list_tools_uses_request_timeout(self, mock_process):
+        """list_tools() passes REQUEST_TIMEOUT_SECONDS to _send_request()."""
+        mock_process.stdin = MagicMock()
+        mock_process.poll = Mock(return_value=None)
+        
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    
+                    # Track timeout passed to _send_request
+                    send_request_timeout = []
+                    original_send = client._send_request
+                    
+                    def track_send(method, params, timeout_seconds=MCPClient.REQUEST_TIMEOUT_SECONDS):
+                        send_request_timeout.append(timeout_seconds)
+                        return {}
+                    
+                    with patch.object(client, '_send_request', side_effect=track_send):
+                        try:
+                            client.list_tools()
+                        except:
+                            pass
+                    
+                    # Verify REQUEST_TIMEOUT was passed
+                    assert len(send_request_timeout) > 0
+                    assert send_request_timeout[0] == MCPClient.REQUEST_TIMEOUT_SECONDS
+
+    def test_call_tool_uses_request_timeout(self, mock_process):
+        """call_tool() passes REQUEST_TIMEOUT_SECONDS to _send_request()."""
+        mock_process.stdin = MagicMock()
+        mock_process.poll = Mock(return_value=None)
+        
+        with patch('subprocess.Popen', return_value=mock_process):
+            with patch.object(MCPClient, '_read_responses'):
+                with patch.object(MCPClient, '_read_stderr'):
+                    client = MCPClient('/tmp/racing.js', 'racing')
+                    client.process = mock_process
+                    
+                    # Track timeout passed to _send_request
+                    send_request_timeout = []
+                    
+                    def track_send(method, params, timeout_seconds=MCPClient.REQUEST_TIMEOUT_SECONDS):
+                        send_request_timeout.append(timeout_seconds)
+                        return {'content': [{'type': 'text', 'text': '{}'}]}
+                    
+                    with patch.object(client, '_send_request', side_effect=track_send):
+                        try:
+                            client.call_tool('racing.get_position')
+                        except:
+                            pass
+                    
+                    # Verify REQUEST_TIMEOUT was passed
+                    assert len(send_request_timeout) > 0
+                    assert send_request_timeout[0] == MCPClient.REQUEST_TIMEOUT_SECONDS
+
+    def test_startup_timeout_10_seconds(self):
+        """STARTUP_TIMEOUT_SECONDS is 10."""
+        assert MCPClient.STARTUP_TIMEOUT_SECONDS == 10
+
+    def test_request_timeout_5_seconds(self):
+        """REQUEST_TIMEOUT_SECONDS is 5."""
+        assert MCPClient.REQUEST_TIMEOUT_SECONDS == 5
+
+    def test_startup_timeout_distinct_from_request_timeout(self):
+        """Startup and request timeouts are distinct."""
+        assert MCPClient.STARTUP_TIMEOUT_SECONDS != MCPClient.REQUEST_TIMEOUT_SECONDS
+        assert MCPClient.STARTUP_TIMEOUT_SECONDS == 10
+        assert MCPClient.REQUEST_TIMEOUT_SECONDS == 5
