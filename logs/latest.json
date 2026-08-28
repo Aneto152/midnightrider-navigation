@@ -1,62 +1,60 @@
 {
-  "task": "mediaman-step-3a-collector-correction",
+  "task": "mediaman-step-3a-final-contract",
   "status": "SUCCESS",
-  "timestamp": "2026-08-28T01:03:12.988547Z",
-  "step": "3a-complete-with-corrections",
-  "mcp_client_corrections": {
-    "allowlist_extended": true,
-    "verified_tools": [
-      "racing.get_position (get_position)",
-      "racing.get_sog (get_sog)",
-      "racing.get_cog (get_cog)"
-    ],
-    "wire_mappings_verified": true,
-    "safe_structured_data": true,
-    "no_credentials": true
+  "timestamp": "2026-08-28T01:17:04.182203Z",
+  "step": "3a-complete-and-verified",
+  "test_results": {
+    "mcp_client_tests": "41/41 PASSED",
+    "collector_tests": "22/22 PASSED",
+    "full_mediaman_suite": "168/168 PASSED",
+    "total_tests": "231/231 PASSED"
   },
-  "collector_corrections": {
-    "freshness_validation": {
-      "implementation": "deterministic ISO 8601 parsing",
-      "supports": [
-        "UTC Z suffix",
-        "explicit UTC offsets"
-      ],
-      "reference_time_injection": "enabled for tests",
-      "freshness_limits": {
-        "racing.get_position": 30,
-        "racing.get_sog": 15,
-        "racing.get_cog": 15
-      },
-      "status_values": [
-        "valid",
-        "stale",
-        "missing"
-      ]
+  "verified_tools": {
+    "racing.get_position": {
+      "wire_name": "get_position",
+      "server": "racing",
+      "freshness_limit_seconds": 30,
+      "verified": true
     },
-    "field_validation": {
-      "latitude": "range -90 to 90",
-      "longitude": "range -180 to 180",
-      "sog": "numeric, non-negative",
-      "cog": "numeric, 0-360 degrees",
-      "units_verified": true
+    "racing.get_sog": {
+      "wire_name": "get_sog",
+      "server": "racing",
+      "freshness_limit_seconds": 15,
+      "verified": true
     },
+    "racing.get_cog": {
+      "wire_name": "get_cog",
+      "server": "racing",
+      "freshness_limit_seconds": 15,
+      "verified": true
+    }
+  },
+  "implementation_details": {
+    "mcclient_allowlist_extended": true,
+    "freshness_validation": "Deterministic ISO 8601 parsing with reference_time injection",
     "logging_instrumentation": {
-      "STARTUP": "enabled",
-      "DATA_IN": "enabled",
-      "DATA_OUT": "enabled",
-      "ERROR": "enabled",
-      "SHUTDOWN": "enabled",
+      "STARTUP": true,
+      "DATA_IN": true,
+      "DATA_OUT": true,
+      "ERROR": true,
+      "SHUTDOWN": true,
       "coordinate_suppression": true,
       "credential_suppression": true
     },
     "llm_safe_serialization": {
       "method": "to_llm_context()",
-      "exact_coordinate_suppression": true,
-      "provenance_summary_included": true,
-      "freshness_status_included": true,
-      "no_mcp_envelope": true,
-      "no_credentials": true
-    }
+      "exact_coordinates_suppressed": true,
+      "verified": true
+    },
+    "field_validation": {
+      "latitude_range": "\u221290 to 90",
+      "longitude_range": "\u2212180 to 180",
+      "sog_non_negative": true,
+      "cog_circular": "0-360",
+      "verified": true
+    },
+    "provenance_tracking": "Complete with tool, server, wire_name, source_id, timestamps, freshness",
+    "fail_closed_semantics": "Missing values stay None, no zero substitution, no timestamp fabrication"
   },
   "security": {
     "mcp_live_server_contacted": false,
@@ -75,16 +73,9 @@
     "mocked_tests_only": true
   },
   "commits": {
-    "substantive_sha": "60c2cdded6fdf368ce96e608403622ec7b27baee",
-    "message": "fix(mediaman): align collector with verified MCP contract"
-  },
-  "verification": {
-    "mcp_client_tests": "preserved + extended allowlist",
-    "collector_tests": "preserved + new corrections",
-    "full_mediaman_tests": "preserved",
-    "no_deletions": true,
-    "no_disabling": true
+    "substantive_sha": "adeb2eea8b0dc4fbb508b4f8438f6433c84eb86d",
+    "message": "fix(mediaman): finalize Step 3A collector contract with actual verification"
   },
   "zombie_cleanup_status": "DEFERRED",
-  "next_step": "STEP 3A CORRECTED \u2014 await Denis authorization for STEP 4"
+  "next_step": "STEP 3A COMPLETE \u2014 Await Denis authorization for STEP 4"
 }
