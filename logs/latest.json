@@ -7,13 +7,13 @@
   "fix_objective": "Align EventDetector with real CollectionStatus enum contract (lowercase strings)",
   "test_counts": {
     "event_detector_tests_collected": 14,
-    "event_detector_tests_passed": 0,
+    "event_detector_tests_passed": 14,
     "mcp_client_tests_collected": 41,
-    "mcp_client_tests_passed": 0,
+    "mcp_client_tests_passed": 41,
     "collector_tests_collected": 32,
-    "collector_tests_passed": 0,
+    "collector_tests_passed": 32,
     "full_mediaman_tests_collected": 192,
-    "full_mediaman_tests_passed": 0,
+    "full_mediaman_tests_passed": 192,
     "note": "Tests are offline unit tests using real domain objects",
     "event_detector_tests": "14/14",
     "mcp_client_tests": "41/41",
@@ -31,8 +31,8 @@
     "fixes_applied": [
       "Import CollectionStatus from mcp_collector",
       "Use enum values in status comparisons",
-      "Include sanitized source_id in deterministic event IDs",
-      "Normalize status handling fail-closed"
+      "Normalize status handling fail-closed",
+      "source_id integration deferred to future step"
     ]
   },
   "security": {
