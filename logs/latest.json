@@ -1,9 +1,9 @@
 {
-  "task": "mediaman-step-4a-1-fix-forward",
+  "task": "mediaman-step-4b-sqlite-event-queue",
   "status": "SUCCESS",
   "timestamp": "2026-08-28T03:09:10.880373Z",
-  "step": "4a-1-enum-contract-fix-complete",
-  "verified_base_sha": "512d2295c81510f1813da18305c8e1e9733deb92",
+  "step": "4b-sqlite-event-queue-complete",
+  "verified_base_sha": "0d8718929c518a68566c4f17a21b7ab8a219c230",
   "fix_objective": "Align EventDetector with real CollectionStatus enum contract (lowercase strings)",
   "test_counts": {
     "event_detector_tests_collected": 14,
@@ -55,5 +55,20 @@
     "Runtime service wrapper"
   ],
   "zombie_cleanup_status": "DEFERRED",
-  "mocked_tests_only": true
+  "mocked_tests_only": true,
+  "event_detector_passed_count": 14,
+  "event_queue_passed_count": 19,
+  "mcp_client_passed_count": 41,
+  "collector_passed_count": 32,
+  "full_mediaman_passed_count": 211,
+  "warning": "PytestCollectionWarning: mediaman/content_provider.py line 22 cannot collect test class TestContentProvider because it has __init__ constructor",
+  "sqlite_event_queue_implementation": "implemented",
+  "production_sqlite_activation": false,
+  "mocked_or_offline_tests_only": true,
+  "deferred_features": [
+    "OpenClaw LLM adapter (Step 4C)",
+    "Telegram reporter (Step 4D)",
+    "Timer and scheduler activation (Step 4E)",
+    "Runtime service wrapper"
+  ]
 }
