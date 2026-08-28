@@ -284,6 +284,52 @@ services:
 
 **For Details:** See [docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md](../INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md)
 
+### 4.7 MCPCollector (Navigation Facts) — Step 3A
+
+**Status:** ✅ COMPLETE — Mocked unit tests passing (178/178 full suite)
+
+**Boundary:** MCPClient → MCPCollector → validated structured navigation facts
+
+**Source-Verified Tools:**
+
+| Public ID | Wire Name | Server | Freshness | Status |
+|---|---|---|---|---|
+| `racing.get_position` | `get_position` | racing | 30 sec | ✅ Verified |
+| `racing.get_sog` | `get_sog` | racing | 15 sec | ✅ Verified |
+| `racing.get_cog` | `get_cog` | racing | 15 sec | ✅ Verified |
+
+**Key Properties:**
+
+- Provenance tracking: tool_public_id, server_name, wire_tool_name, source_id, timestamps, freshness
+- Source timestamp preservation (never fabricated)
+- Observed_at distinct from source_timestamp
+- Fail-closed semantics: stale facts block COMPLETE status
+- Freshness validation: ISO 8601 UTC (Z and explicit offset), deterministic reference_time injection
+- Field validation: latitude (-90 to 90), longitude (-180 to 180), SOG (non-negative), COG (0-360°)
+- LLM-safe serialization: exact coordinates suppressed in `to_llm_context()`
+- Structured logging: STARTUP, DATA_IN, DATA_OUT, ERROR, SHUTDOWN events
+- Log output: exact coordinates, raw payloads, credentials never logged
+
+**Test Evidence (Mocked Unit Tests):**
+
+- MCP client tests: 41/41 PASSED
+- Collector tests: 32/32 PASSED (26 original + 6 evidence-closure tests)
+- Full MediaMan suite: 178/178 PASSED (includes nested tests above)
+- All tests are mocked unit tests with no runtime E2E verification
+- Real MCPClient compatibility verified with subprocess mocked
+- Logging output verified (no exact coordinates or credentials)
+- Freshness edge cases verified (future, malformed, stale timestamps)
+- LLM-safe serialization verified (coordinate suppression)
+
+**Not Implemented at This Stage:**
+- EventDetector
+- SQLite event queue
+- OpenClaw adapter
+- Telegram integration
+- Timer activation
+
+**For Details:** `mediaman/mcp_collector.py` and `tests/mediaman/test_mcp_collector.py`
+
 ## 5. FLUX DE DONNÉES DÉTAILLÉS
 
 ### 5.1 Cap vrai (headingTrue)
