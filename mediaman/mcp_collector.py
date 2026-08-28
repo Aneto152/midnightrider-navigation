@@ -156,9 +156,9 @@ class CollectionResult:
 
 class SourceVerifiedTools(Enum):
     """Source-verified MCP tools only."""
-    POSITION = ("racing.get_position", "position")
-    SOG = ("racing.get_sog", "sog")
-    COG = ("racing.get_cog", "cog")
+    POSITION = ("racing.get_position", "get_position")
+    SOG = ("racing.get_sog", "get_sog")
+    COG = ("racing.get_cog", "get_cog")
     
     @property
     def public_id(self) -> str:
@@ -167,6 +167,10 @@ class SourceVerifiedTools(Enum):
     @property
     def wire_name(self) -> str:
         return self.value[1]
+    
+    @property
+    def server(self) -> str:
+        return "racing"
 
 
 class MCPCollector:

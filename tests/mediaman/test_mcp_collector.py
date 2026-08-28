@@ -34,7 +34,7 @@ class TestMCPCollectorCompletCollection:
 
     def test_collect_all_three_tools(self, mock_mcp_client):
         """Successful collection of position, SOG, and COG."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         # Mock tool responses
         mock_mcp_client.call_tool.side_effect = [
@@ -75,7 +75,7 @@ class TestMCPCollectorCompletCollection:
 
     def test_position_contains_provenance(self, mock_mcp_client):
         """Position facts include full provenance."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {
@@ -89,7 +89,7 @@ class TestMCPCollectorCompletCollection:
         result = collector.collect([SourceVerifiedTools.POSITION])
         
         assert len(result.facts) == 2  # lat and lon
-        assert result.status == CollectionStatus.PARTIAL  # Only position, not SOG/COG
+        assert result.status == CollectionStatus.COMPLETE  # Position only, but completed
         fact = result.facts[0]
         assert fact.provenance.tool_public_id == "racing.get_position"
         assert fact.provenance.server_name == "racing"
@@ -99,7 +99,7 @@ class TestMCPCollectorCompletCollection:
 
     def test_sog_fact_preserves_value(self, mock_mcp_client):
         """SOG fact preserves exact value, not substituted."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {
@@ -123,7 +123,7 @@ class TestMCPCollectorPartialCollection:
 
     def test_missing_sog_partial_status(self, mock_mcp_client):
         """Missing SOG results in PARTIAL status."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.side_effect = [
             {'result': {'latitude': 41.1234, 'longitude': -73.5678, 'source_timestamp': '2026-08-27T20:40:00Z'}, 'observed_at': '2026-08-27T20:40:01Z'},
@@ -140,7 +140,7 @@ class TestMCPCollectorPartialCollection:
 
     def test_missing_sog_value_none_not_zero(self, mock_mcp_client):
         """Missing SOG value remains None, never substituted with zero."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {
@@ -152,7 +152,7 @@ class TestMCPCollectorPartialCollection:
         
         result = collector.collect([SourceVerifiedTools.SOG])
         
-        assert result.status == CollectionStatus.INVALID
+        assert result.status == CollectionStatus.FAILED
         assert len(result.facts) == 0
         assert 'speed_over_ground_ms is None' in result.warnings[0]
 
@@ -162,49 +162,49 @@ class TestMCPCollectorErrorHandling:
 
     def test_protocol_error_propagates(self, mock_mcp_client):
         """MCPProtocolError is raised and recorded."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.side_effect = MCPProtocolError("Malformed JSON")
         
         result = collector.collect([SourceVerifiedTools.POSITION])
         
-        assert result.status == CollectionStatus.INVALID
+        assert result.status == CollectionStatus.FAILED
         assert 'racing.get_position' in result.tools_failed
         assert 'MCPProtocolError' in result.errors[0]
 
     def test_server_error_propagates(self, mock_mcp_client):
         """MCPServerError is raised and recorded."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.side_effect = MCPServerError("Server error -32000")
         
         result = collector.collect([SourceVerifiedTools.COG])
         
-        assert result.status == CollectionStatus.INVALID
+        assert result.status == CollectionStatus.FAILED
         assert 'racing.get_cog' in result.tools_failed
         assert 'MCPServerError' in result.errors[0]
 
     def test_client_error_propagates(self, mock_mcp_client):
         """MCPClientError is raised and recorded."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.side_effect = MCPClientError("Process exited")
         
         result = collector.collect([SourceVerifiedTools.SOG])
         
-        assert result.status == CollectionStatus.INVALID
+        assert result.status == CollectionStatus.FAILED
         assert 'racing.get_sog' in result.tools_failed
         assert 'MCPClientError' in result.errors[0]
 
     def test_timeout_error_propagates(self, mock_mcp_client):
         """MCPTimeoutError is raised and recorded."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.side_effect = MCPTimeoutError("Request timeout")
         
         result = collector.collect([SourceVerifiedTools.POSITION])
         
-        assert result.status == CollectionStatus.INVALID
+        assert result.status == CollectionStatus.FAILED
         assert 'racing.get_position' in result.tools_failed
         assert 'MCPTimeoutError' in result.errors[0]
 
@@ -214,7 +214,7 @@ class TestMCPCollectorMissingValues:
 
     def test_missing_latitude_warning(self, mock_mcp_client):
         """Missing latitude generates warning."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {
@@ -226,13 +226,13 @@ class TestMCPCollectorMissingValues:
         
         result = collector.collect([SourceVerifiedTools.POSITION])
         
-        assert result.status == CollectionStatus.INVALID
+        assert result.status == CollectionStatus.FAILED
         assert len(result.facts) == 0
         assert 'malformed or missing fields' in result.warnings[0]
 
     def test_missing_result_field_warning(self, mock_mcp_client):
         """Missing 'result' field generates warning."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'error': 'Something went wrong',
@@ -241,7 +241,7 @@ class TestMCPCollectorMissingValues:
         
         result = collector.collect([SourceVerifiedTools.SOG])
         
-        assert result.status == CollectionStatus.INVALID
+        assert result.status == CollectionStatus.FAILED
         assert len(result.facts) == 0
         assert 'malformed or missing fields' in result.warnings[0]
 
@@ -251,7 +251,7 @@ class TestMCPCollectorProvenanceTracking:
 
     def test_provenance_fields_complete(self, mock_mcp_client):
         """Every fact includes complete provenance."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {
@@ -272,7 +272,7 @@ class TestMCPCollectorProvenanceTracking:
 
     def test_source_timestamp_unknown_when_absent(self, mock_mcp_client):
         """source_timestamp becomes 'UNKNOWN' when absent."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {
@@ -288,7 +288,7 @@ class TestMCPCollectorProvenanceTracking:
 
     def test_observed_at_distinct_from_source_timestamp(self, mock_mcp_client):
         """observed_at is distinct from source_timestamp."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {
@@ -312,7 +312,7 @@ class TestMCPCollectorCollectionStatus:
 
     def test_invalid_all_tools_fail(self, mock_mcp_client):
         """INVALID status when all tools fail."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.side_effect = [
             MCPProtocolError("Bad JSON"),
@@ -322,7 +322,7 @@ class TestMCPCollectorCollectionStatus:
         
         result = collector.collect()
         
-        assert result.status == CollectionStatus.INVALID
+        assert result.status == CollectionStatus.FAILED
         assert len(result.tools_failed) == 3
         assert len(result.facts) == 0
 
@@ -332,7 +332,7 @@ class TestMCPCollectorCoordinateSuppression:
 
     def test_position_values_preserved_not_logged(self, mock_mcp_client):
         """Position values are exact and preserved (not logged)."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {
@@ -349,8 +349,8 @@ class TestMCPCollectorCoordinateSuppression:
         assert result.facts[0].value == 41.123456789
         assert result.facts[1].value == -73.987654321
         
-        # Status is PARTIAL because only position was collected (not SOG/COG)
-        assert result.status == CollectionStatus.PARTIAL
+        # Status is COMPLETE because position completed was collected (not SOG/COG)
+        assert result.status == CollectionStatus.COMPLETE
 
 
 class TestMCPCollectorNoLiveAccess:
@@ -358,7 +358,7 @@ class TestMCPCollectorNoLiveAccess:
 
     def test_collector_uses_dependency_injected_client(self, mock_mcp_client):
         """Collector uses injected client, no live instantiation."""
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         mock_mcp_client.call_tool.return_value = {
             'result': {'latitude': 41.0, 'longitude': -73.0, 'source_timestamp': '2026-08-27T20:40:00Z'},
@@ -369,12 +369,12 @@ class TestMCPCollectorNoLiveAccess:
         
         # Verify call was made to mocked client, not to live service
         mock_mcp_client.call_tool.assert_called()
-        assert result.status == CollectionStatus.PARTIAL  # Only position, not SOG/COG
+        assert result.status == CollectionStatus.COMPLETE  # Position only, but completed
 
     def test_no_signal_k_access(self, mock_mcp_client):
         """Collector does not access Signal K directly."""
         # Verify by checking that MCPClient is the only external dependency
-        collector = MCPCollector(mock_mcp_client)
+        collector = MCPCollector(mock_mcp_client, reference_time='2026-08-27T20:40:01Z')
         
         # If collector tried to access Signal K, it would need http.request or similar
         # This test verifies no direct Signal K calls are made
@@ -419,7 +419,7 @@ class TestMCPCollectorResultSerialization:
         result = collector.collect([SourceVerifiedTools.POSITION])
         result_dict = result.to_dict()
         
-        assert result_dict['status'] == 'partial'  # Only position, not SOG/COG
+        assert result_dict['status'] == 'complete'  # Position only, but completed
         assert result_dict['race_id'] == 'BIR-2026'
         assert len(result_dict['facts']) == 2  # latitude and longitude
         assert result_dict['facts'][0]['field_name'] == 'latitude'
