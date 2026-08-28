@@ -1,60 +1,71 @@
 {
-  "task": "mediaman-step-3a-final-contract",
+  "task": "mediaman-step-3a-completion",
   "status": "SUCCESS",
-  "timestamp": "2026-08-28T01:17:04.182203Z",
+  "timestamp": "2026-08-28T01:29:15.052818Z",
   "step": "3a-complete-and-verified",
   "test_results": {
     "mcp_client_tests": "41/41 PASSED",
-    "collector_tests": "22/22 PASSED",
-    "full_mediaman_suite": "168/168 PASSED",
-    "total_tests": "231/231 PASSED"
+    "collector_tests": "26/26 PASSED (22 original + 4 new real-client compatibility)",
+    "full_mediaman_suite": "172/172 PASSED",
+    "total_tests": "239/239 PASSED"
+  },
+  "critical_fixes_implemented": {
+    "logging_configuration": {
+      "status": "IMPLEMENTED",
+      "details": "setup_service_logger() integrated into __init__",
+      "events": [
+        "STARTUP",
+        "DATA_IN",
+        "DATA_OUT",
+        "ERROR",
+        "SHUTDOWN"
+      ],
+      "path": "logs/services/mediaman-mcp-collector.log"
+    },
+    "stale_fact_status_check": {
+      "status": "IMPLEMENTED",
+      "details": "Status determination now checks has_stale_facts",
+      "behavior": "Stale facts downgrade COMPLETE \u2192 PARTIAL (mandatory fail-safe)"
+    },
+    "real_mcclient_compatibility": {
+      "status": "IMPLEMENTED",
+      "tests": 4,
+      "tools_verified": [
+        "racing.get_position",
+        "racing.get_sog",
+        "racing.get_cog"
+      ],
+      "approach": "Real MCPClient instance with mocked subprocess (not just generic Mock)"
+    }
   },
   "verified_tools": {
     "racing.get_position": {
       "wire_name": "get_position",
       "server": "racing",
       "freshness_limit_seconds": 30,
-      "verified": true
+      "verified_by_real_client": true
     },
     "racing.get_sog": {
       "wire_name": "get_sog",
       "server": "racing",
       "freshness_limit_seconds": 15,
-      "verified": true
+      "verified_by_real_client": true
     },
     "racing.get_cog": {
       "wire_name": "get_cog",
       "server": "racing",
       "freshness_limit_seconds": 15,
-      "verified": true
+      "verified_by_real_client": true
     }
   },
   "implementation_details": {
-    "mcclient_allowlist_extended": true,
-    "freshness_validation": "Deterministic ISO 8601 parsing with reference_time injection",
-    "logging_instrumentation": {
-      "STARTUP": true,
-      "DATA_IN": true,
-      "DATA_OUT": true,
-      "ERROR": true,
-      "SHUTDOWN": true,
-      "coordinate_suppression": true,
-      "credential_suppression": true
-    },
-    "llm_safe_serialization": {
-      "method": "to_llm_context()",
-      "exact_coordinates_suppressed": true,
-      "verified": true
-    },
-    "field_validation": {
-      "latitude_range": "\u221290 to 90",
-      "longitude_range": "\u2212180 to 180",
-      "sog_non_negative": true,
-      "cog_circular": "0-360",
-      "verified": true
-    },
+    "mcclient_allowlist": "Extended with SOG and COG, verified by real client tests",
+    "freshness_validation": "ISO 8601 parsing with reference_time injection, deterministic testing supported",
+    "logging": "setup_service_logger() configured, rotation ready (5MB, 3 backups)",
+    "llm_safe_serialization": "to_llm_context() suppresses exact coordinates",
+    "field_validation": "Latitude/longitude ranges, SOG non-negative, COG circular validated",
     "provenance_tracking": "Complete with tool, server, wire_name, source_id, timestamps, freshness",
-    "fail_closed_semantics": "Missing values stay None, no zero substitution, no timestamp fabrication"
+    "fail_closed_semantics": "Stale facts block COMPLETE status, missing values stay None, no zero substitution"
   },
   "security": {
     "mcp_live_server_contacted": false,
@@ -73,8 +84,8 @@
     "mocked_tests_only": true
   },
   "commits": {
-    "substantive_sha": "adeb2eea8b0dc4fbb508b4f8438f6433c84eb86d",
-    "message": "fix(mediaman): finalize Step 3A collector contract with actual verification"
+    "substantive_sha": "1f7013388b2e8984cd208abad933e6a95332a1ef",
+    "message": "fix(mediaman): complete MCP collector contract with logging and status hardening"
   },
   "zombie_cleanup_status": "DEFERRED",
   "next_step": "STEP 3A COMPLETE \u2014 Await Denis authorization for STEP 4"
