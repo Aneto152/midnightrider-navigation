@@ -405,3 +405,29 @@
 2026-08-28T21:42:08.192471Z FILE_MODIFY docs/ARCHITECTURE-MASTER.md
 2026-08-28T21:42:08.192471Z FILE_MODIFY logs/latest.json
 2026-08-28T21:42:08.192471Z RESULT SUCCESS: 211 offline unit tests passed; one known PytestCollectionWarning; production SQLite not activated
+
+[2026-08-29T08:29:00Z] [STEP_4B.1_HARDENING] EventQueue security hardening initiated
+[2026-08-29T08:29:15Z] [IMPLEMENTATION] Fail-closed validation for sensitive fields: latitude, longitude, token, password, api_key, secret, credential, authorization, connection_string, bearer, auth, apikey
+[2026-08-29T08:29:15Z] [IMPLEMENTATION] Sensitive pattern matching: token=, password=, secret=, api_key=, authorization=, credential=, bearer, raw MCP envelope, subprocess output
+[2026-08-29T08:29:20Z] [IMPLEMENTATION] Sanitized last_error: credential redaction, token redaction, JWT token redaction, authorization header redaction, coordinate redaction, truncation at 200 chars post-sanitization
+[2026-08-29T08:29:25Z] [IMPLEMENTATION] Atomic claim(): BEGIN IMMEDIATE transaction, race condition prevention, locked_until populated
+[2026-08-29T08:29:30Z] [IMPLEMENTATION] State guards: mark_sent idempotent (rows changed check), mark_failed guards against SENT modification
+[2026-08-29T08:29:35Z] [TEST] EventQueue: 41 tests (all pass)
+[2026-08-29T08:29:40Z] [TEST] EventDetector + EventQueue: 55 tests (all pass)
+[2026-08-29T08:29:45Z] [TEST] Full MediaMan suite: 233 tests (all pass)
+[2026-08-29T08:29:50Z] [SECURITY] No production SQLite database created
+[2026-08-29T08:29:50Z] [SECURITY] No credentials or coordinates in logs
+[2026-08-29T08:29:50Z] [SECURITY] Step 3A and 4A files unchanged
+[2026-08-29T08:29:55Z] [AUDIT] logs/latest.json synchronized with test counts and hardening details
+[2026-08-29T08:29:59Z] [STATUS] STEP_4B.1_HARDENING COMPLETE — EventQueue production-ready with fail-closed validation, sanitized errors, atomic transactions, state guards
+
+[2026-08-29T08:37:00Z] [STEP_4B.2_COMMIT] EventQueue hardening commit preparation
+[2026-08-29T08:37:05Z] [TEST_VALIDATION] EventQueue suite: 41/41 PASS
+[2026-08-29T08:37:10Z] [TEST_VALIDATION] EventDetector + EventQueue: 55/55 PASS
+[2026-08-29T08:37:15Z] [TEST_VALIDATION] Full MediaMan suite: 233/233 PASS
+[2026-08-29T08:37:20Z] [SECURITY_CHECK] No whitespace or line ending issues
+[2026-08-29T08:37:25Z] [SECURITY_CHECK] No hardcoded IPs in documentation
+[2026-08-29T08:37:30Z] [SECURITY_CHECK] No exposed credentials in action logs (sanitized redacted only)
+[2026-08-29T08:37:35Z] [SECURITY_CHECK] No production SQLite files detected
+[2026-08-29T08:37:40Z] [AUDIT] logs/latest.json synchronized with hardening implementation status
+[2026-08-29T08:37:45Z] [READY] All checks passed - proceeding to commit and push

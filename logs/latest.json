@@ -1,25 +1,16 @@
 {
-  "task": "mediaman-step-4b-sqlite-event-queue",
+  "task": "mediaman-step-4b-hardening-complete",
   "status": "SUCCESS",
-  "timestamp": "2026-08-28T03:09:10.880373Z",
-  "step": "4b-sqlite-event-queue-complete",
+  "timestamp": "2026-08-29T12:38:50.398226+00:00",
+  "step": "4b-hardening-commit-ready",
   "verified_base_sha": "0d8718929c518a68566c4f17a21b7ab8a219c230",
   "fix_objective": "Align EventDetector with real CollectionStatus enum contract (lowercase strings)",
   "test_counts": {
-    "event_detector_tests_collected": 14,
-    "event_detector_tests_passed": 14,
-    "mcp_client_tests_collected": 41,
-    "mcp_client_tests_passed": 41,
-    "collector_tests_collected": 32,
-    "collector_tests_passed": 32,
-    "full_mediaman_tests_collected": 192,
-    "full_mediaman_tests_passed": 192,
-    "note": "Tests are offline unit tests using real domain objects",
-    "event_detector_tests": "14/14",
-    "mcp_client_tests": "41/41",
-    "collector_tests": "32/32",
-    "full_mediaman_tests": "192/192",
-    "warning": "PytestCollectionWarning: TestContentProvider is not collected because it has an init constructor"
+    "EventDetector": 14,
+    "EventQueue": 41,
+    "MCP_client": 41,
+    "Collector": 32,
+    "Full_MediaMan": 233
   },
   "implementation": {
     "collection_status_enum": {
@@ -80,5 +71,46 @@
   "event_queue_tests": "19/19",
   "mcp_client_tests": "41/41",
   "collector_tests": "32/32",
-  "full_mediaman_tests": "211/211"
+  "full_mediaman_tests": "211/211",
+  "security_hardening": {
+    "fail_closed_validation": "implemented - recursive validation at any nesting level",
+    "sensitive_fields_rejected": [
+      "latitude",
+      "longitude",
+      "lat",
+      "lon",
+      "token",
+      "api_key",
+      "apikey",
+      "secret",
+      "password",
+      "credential",
+      "authorization",
+      "bearer",
+      "connection_string",
+      "raw_mcp",
+      "subprocess_output"
+    ],
+    "sensitive_patterns_rejected": [
+      "token=",
+      "password=",
+      "secret=",
+      "api_key=",
+      "api-key=",
+      "authorization:",
+      "bearer",
+      "JWT-like patterns"
+    ],
+    "sanitized_last_error": "implemented - redaction + truncation at 200 chars",
+    "atomic_claim": "implemented - BEGIN IMMEDIATE transaction with lockup prevention",
+    "state_guards": "implemented - idempotent mark_sent, SENT event protection in mark_failed"
+  },
+  "sqlite_implemented": true,
+  "offline_unit_tests_only": true,
+  "not_implemented": [
+    "OpenClaw adapter",
+    "Telegram reporter",
+    "timer or scheduler",
+    "runtime service wrapper"
+  ]
 }
