@@ -1,7 +1,7 @@
 {
-  "task": "mediaman-step-4b-hardening-complete",
-  "status": "SUCCESS",
-  "timestamp": "2026-08-29T12:38:50.398226+00:00",
+  "task": "wit-magnetic-heading-calibration-diagnostic",
+  "status": "PARTIAL",
+  "timestamp": "2026-08-29T21:57:35.681429+00:00",
   "step": "4b-hardening-commit-ready",
   "verified_base_sha": "0d8718929c518a68566c4f17a21b7ab8a219c230",
   "fix_objective": "Align EventDetector with real CollectionStatus enum contract (lowercase strings)",
@@ -112,5 +112,53 @@
     "Telegram reporter",
     "timer or scheduler",
     "runtime service wrapper"
-  ]
+  ],
+  "comparison_type": "magnetic_heading_vs_magnetic_compass",
+  "physical_alignment_assumed_correct": true,
+  "corrective_change_applied": false,
+  "signal_k_modified": false,
+  "docker_modified": false,
+  "systemd_modified": false,
+  "n2k_mapping_modified": false,
+  "heading_true_modified": false,
+  "credentials_logged": false,
+  "blocker": "Physical test data required from Denis",
+  "diagnostic_findings": {
+    "wit_service_status": "running",
+    "runtime_logs_exist": true,
+    "wit_heading_transformation": "quaternion(0x71) \u2192 mount_q \u2192 Euler-X \u2192 headingMagnetic",
+    "heading_true_status": "calculated from headingMagnetic + magnetic_variation (post-hm)",
+    "magnetic_declination_on_heading_magnetic": false,
+    "observed_discrepancy_degrees": 22,
+    "discrepancy_is_constant_or_variable": "unknown - requires physical test"
+  },
+  "suspected_causes": [
+    "WIT magnetometer calibration error",
+    "Hard-iron or soft-iron magnetic distortion",
+    "Local magnetic interference near WIT",
+    "Independent compass deviation or calibration error",
+    "WIT packet decoding or coordinate transformation error",
+    "Constant software bias in quaternion output"
+  ],
+  "evidence_collected": {
+    "wit_service_running": true,
+    "runtime_logs_exist": true,
+    "wit_output_stable": true,
+    "heading_true_calculation_verified": true,
+    "physical_test_data": "not yet available"
+  },
+  "required_physical_test": {
+    "description": "Stationary magnetic-heading comparison at multiple bearings",
+    "conditions": "boat stationary, WIT location confirmed aligned, no magnetic sources nearby",
+    "minimum_tests": "4 different headings + 1 reciprocal pair (180\u00b0 apart)",
+    "test_protocol": "See /tmp/wit_diagnostic_protocol.md"
+  },
+  "conclusion": {
+    "most_likely_explanation": "Insufficient data - physical test required",
+    "evidence_summary": "WIT service confirmed operational; heading transformation verified; magnetic declination confirmed NOT applied to headingMagnetic",
+    "next_step": "Denis executes controlled physical test to measure error consistency/variability",
+    "magnetometer_calibration_indicated": "Possible - requires constant error across headings",
+    "software_correction_authorized": "Not until physical test proves constant bias",
+    "heading_true_implicated": "No - comparison is magnetic vs magnetic, not true vs magnetic"
+  }
 }

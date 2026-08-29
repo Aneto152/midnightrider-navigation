@@ -431,3 +431,28 @@
 [2026-08-29T08:37:35Z] [SECURITY_CHECK] No production SQLite files detected
 [2026-08-29T08:37:40Z] [AUDIT] logs/latest.json synchronized with hardening implementation status
 [2026-08-29T08:37:45Z] [READY] All checks passed - proceeding to commit and push
+
+[2026-08-29T21:57:35.680880+00:00] [DIAGNOSTIC] [wit-magnetic-heading-calibration] READ-ONLY assessment initiated
+[2026-08-29T21:57:35.680880+00:00] [FINDINGS] WIT service running, outputting live heading data (Hdg=351-357°)
+[2026-08-29T21:57:35.680880+00:00] [FINDINGS] Runtime logs exist: wit-ble-direct.log with streaming quaternion output
+[2026-08-29T21:57:35.680880+00:00] [FINDINGS] WIT heading transformation: quaternion(0x71) → mounting correction → Euler-X → navigation.headingMagnetic
+[2026-08-29T21:57:35.680880+00:00] [FINDINGS] headingMagnetic is DIRECT WIT output; magnetic declination applied ONLY to headingTrue
+[2026-08-29T21:57:35.680880+00:00] [FINDINGS] headingTrue plugin confirms: ht = (hm + variation) % 2π (declination NOT on hm)
+[2026-08-29T21:57:35.680880+00:00] [ANALYSIS] ~22° discrepancy between WIT headingMagnetic and independent compass
+[2026-08-29T21:57:35.680880+00:00] [ANALYSIS] Comparison type: MAGNETIC heading vs MAGNETIC compass (not true vs magnetic)
+[2026-08-29T21:57:35.680880+00:00] [ANALYSIS] Physical WIT alignment assumed correct per Denis statement
+[2026-08-29T21:57:35.680880+00:00] [ANALYSIS] Magnetic declination cannot explain headingMagnetic discrepancy
+[2026-08-29T21:57:35.680880+00:00] [SUSPECT_A] WIT magnetometer calibration error (quaternion-derived heading biased)
+[2026-08-29T21:57:35.680880+00:00] [SUSPECT_B] Hard-iron or soft-iron magnetic distortion in boat
+[2026-08-29T21:57:35.680880+00:00] [SUSPECT_C] Magnetic interference near WIT location
+[2026-08-29T21:57:35.680880+00:00] [SUSPECT_D] Independent compass deviation or calibration error
+[2026-08-29T21:57:35.680880+00:00] [SUSPECT_E] WIT packet decoding or coordinate transformation error
+[2026-08-29T21:57:35.680880+00:00] [SUSPECT_F] Constant software bias in WIT quaternion output
+[2026-08-29T21:57:35.680880+00:00] [EVIDENCE_NEEDED] Stationary magnetic-heading comparisons at 4+ different headings
+[2026-08-29T21:57:35.680880+00:00] [EVIDENCE_NEEDED] Reciprocal heading pair (180° apart) to assess directional effects
+[2026-08-29T21:57:35.680880+00:00] [EVIDENCE_NEEDED] Test away from batteries, power cables, engines, ferrous fittings
+[2026-08-29T21:57:35.680880+00:00] [EVIDENCE_NEEDED] WIT and independent compass checked in multiple locations
+[2026-08-29T21:57:35.680880+00:00] [PROTOCOL] Prepared controlled physical test procedure for Denis execution
+[2026-08-29T21:57:35.680880+00:00] [ACTION] No corrective configuration applied (read-only diagnostic)
+[2026-08-29T21:57:35.680880+00:00] [ACTION] No WIT, Signal K, Docker, systemd, or N2K configuration modified
+[2026-08-29T21:57:35.680880+00:00] [STATUS] PARTIAL - runtime service logs exist; diagnostics require physical test data
