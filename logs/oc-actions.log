@@ -459,3 +459,19 @@
 [2026-08-30T01:31:24.930350+00:00] [SERVICE_RESTART] [wit-ble-direct] WIT systemd service restarted after targeted Signal K path removal. New PID: 5357. Service status: active (running).
 
 [2026-08-30T01:31:24.930350+00:00] [RESULT] [wit-ble-direct] navigation.attitude.yaw Signal K path verification: value=None (field stale-suppressed; will fully expire post-timeout). Roll and pitch present and streaming normally.
+[2026-08-30T01:37:04.706362+00:00] [RESULT] [git] Result: SUCCESS — remote main reachability for commit be57c45d5a7e691ee263d90715a299f150f3611a verified. Target commit is ancestor of origin/main.
+
+[2026-08-30T01:37:04.706362+00:00] [FILE_MODIFY] [wit-ble-direct] Confirmed removal of only navigation.attitude.yaw; preserved roll, pitch, headingMagnetic, headingTrue, acceleration, and rateOfTurn.
+
+[2026-08-30T01:37:04.706362+00:00] [RESULT] [wit-ble-direct] Result: SUCCESS — source verification after reconciliation complete. No active publication of navigation.attitude.yaw on origin/main.
+
+[2026-08-30T01:37:04.706362+00:00] [COMMIT] SHA: be57c45d5a7e691ee263d90715a299f150f3611a (parent) — remove WIT attitude yaw Signal K publication
+
+[2026-08-30T01:37:04.706362+00:00] [COMMIT] SHA: 6640233904640bed41d8a5634eb590d41c9a0980 (current HEAD) — logs: auto-update after WIT yaw reconciliation
+[2026-08-30T01:46:50.499501+00:00] [FILE_MODIFY] [documentation] Updated WIT output documentation: navigation.attitude.yaw is no longer published; roll, pitch, and headingMagnetic remain published. Modified: ble/README.md, docs/INTEGRATION/WIT-INTEGRATION-GUIDE.md, docs/ARCHITECTURE-MASTER.md
+
+[2026-08-30T01:46:50.499501+00:00] [FILE_MODIFY] [logs] Corrected diagnostic metadata in logs/latest.json; no fake runtime service logs created.
+
+[2026-08-30T01:46:50.499501+00:00] [RESULT] [documentation] Result: SUCCESS — documentation and diagnostic metadata synchronized with source behavior on origin/main.
+
+[2026-08-30T01:46:50.499501+00:00] [COMMIT_PREP] Documentation synchronization complete. Ready for final commit.

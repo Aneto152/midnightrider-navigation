@@ -1,7 +1,7 @@
 {
   "task": "remove-wit-attitude-yaw-publication",
   "status": "SUCCESS",
-  "timestamp": "2026-08-30T01:31:24.970203+00:00",
+  "timestamp": "2026-08-30T01:46:50.478814+00:00",
   "step": "4b-hardening-commit-ready",
   "verified_base_sha": "0d8718929c518a68566c4f17a21b7ab8a219c230",
   "fix_objective": "Align EventDetector with real CollectionStatus enum contract (lowercase strings)",
@@ -153,7 +153,7 @@
     "minimum_tests": "4 different headings + 1 reciprocal pair (180\u00b0 apart)",
     "test_protocol": "See /tmp/wit_diagnostic_protocol.md"
   },
-  "conclusion": "WIT publication of navigation.attitude.yaw removed to eliminate duplicate yaw source. Vulcan displays will use single canonical N2K PGN 127257 Yaw from headingTrue. No magnetic calibration or heading transformation modified.",
+  "conclusion": "WIT publication of navigation.attitude.yaw removed to eliminate duplicate yaw source. Vulcan displays will use single canonical N2K PGN 127257 Yaw from headingTrue. Documentation synchronized with source behavior. No magnetic calibration or heading transformation modified.",
   "change_type": "targeted_signal_k_path_removal",
   "removed_path": "navigation.attitude.yaw",
   "preserved_paths": [
@@ -179,5 +179,14 @@
   "navigation_attitude_pitch_status": "active (streaming)",
   "navigation_heading_magnetic_status": "active (streaming)",
   "navigation_heading_true_status": "active",
-  "n2k_attitude_conversion_status": "unchanged (uses headingTrue)"
+  "n2k_attitude_conversion_status": "unchanged (uses headingTrue)",
+  "runtime_logs_exist": true,
+  "remote_main_verified": true,
+  "force_push_used": false,
+  "physical_vulcan_verification": "pending",
+  "documentation_files_modified": [
+    "ble/README.md",
+    "docs/INTEGRATION/WIT-INTEGRATION-GUIDE.md",
+    "docs/ARCHITECTURE-MASTER.md"
+  ]
 }
