@@ -475,3 +475,9 @@
 [2026-08-30T01:46:50.499501+00:00] [RESULT] [documentation] Result: SUCCESS — documentation and diagnostic metadata synchronized with source behavior on origin/main.
 
 [2026-08-30T01:46:50.499501+00:00] [COMMIT_PREP] Documentation synchronization complete. Ready for final commit.
+
+[2026-08-30T02:05:00+00:00] [FILE_MODIFY] [documentation] Removed stale WIT yaw output references and obsolete calibration claims from WIT integration documentation. Updated /home/aneto/bleak_wit.py path reference to correct location.
+[2026-08-30T02:05:01+00:00] [FILE_MODIFY] [logs/latest.json] Corrected runtime task metadata; replaced EventQueue hardening task metadata with WIT attitude.yaw removal task metadata. Set runtime_logs_exist: true (33 files verified in logs/services/).
+[2026-08-30T02:05:02+00:00] [VALIDATION] [documentation] Verification complete: no remaining stale claims that WIT actively publishes navigation.attitude.yaw. Documentation synchronized with source behavior.
+[2026-08-30T02:05:03+00:00] [VALIDATION] [runtime_logs] Verified 33 legitimate runtime service log files under logs/services/. No fake logs created.
+[2026-08-30T02:05:04+00:00] [RESULT] [logs] SUCCESS — documentation and metadata cleanup complete. WIT Signal K publication layer changes validated and documented.

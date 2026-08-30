@@ -1,160 +1,7 @@
 {
   "task": "remove-wit-attitude-yaw-publication",
   "status": "SUCCESS",
-  "timestamp": "2026-08-30T01:46:50.478814+00:00",
-  "step": "4b-hardening-commit-ready",
-  "verified_base_sha": "0d8718929c518a68566c4f17a21b7ab8a219c230",
-  "fix_objective": "Align EventDetector with real CollectionStatus enum contract (lowercase strings)",
-  "test_counts": {
-    "EventDetector": 14,
-    "EventQueue": 41,
-    "MCP_client": 41,
-    "Collector": 32,
-    "Full_MediaMan": 233
-  },
-  "implementation": {
-    "collection_status_enum": {
-      "COMPLETE": "complete",
-      "PARTIAL": "partial",
-      "INVALID": "invalid",
-      "FAILED": "failed"
-    },
-    "fixes_applied": [
-      "Import CollectionStatus from mcp_collector",
-      "Use enum values in status comparisons",
-      "Normalize status handling fail-closed",
-      "source_id integration deferred to future step"
-    ]
-  },
-  "security": {
-    "mcp_live_server_contacted": false,
-    "signalk_modified": false,
-    "docker_modified": false,
-    "openclaw_contacted": false,
-    "telegram_contacted": false,
-    "timer_activated": false,
-    "sqlite_implemented": false,
-    "mocked_tests_only": true,
-    "no_credentials_logged": true,
-    "no_coordinates_logged": true
-  },
-  "not_implemented_step_4a": [
-    "SQLite event queue",
-    "OpenClaw adapter",
-    "Telegram reporter",
-    "Timer or scheduler",
-    "Runtime service wrapper"
-  ],
-  "zombie_cleanup_status": "DEFERRED",
-  "mocked_tests_only": true,
-  "event_detector_passed_count": 14,
-  "event_queue_passed_count": 19,
-  "mcp_client_passed_count": 41,
-  "collector_passed_count": 32,
-  "full_mediaman_passed_count": 211,
-  "warning": "PytestCollectionWarning: mediaman/content_provider.py line 22 cannot collect test class TestContentProvider because it has __init__ constructor",
-  "sqlite_event_queue_implementation": "implemented",
-  "production_sqlite_activation": false,
-  "mocked_or_offline_tests_only": true,
-  "deferred_features": [
-    "OpenClaw LLM adapter (Step 4C)",
-    "Telegram reporter (Step 4D)",
-    "Timer and scheduler activation (Step 4E)",
-    "Runtime service wrapper"
-  ],
-  "event_detector_tests_passed": 14,
-  "event_queue_tests_passed": 19,
-  "mcp_client_tests_passed": 41,
-  "collector_tests_passed": 32,
-  "full_mediaman_tests_passed": 211,
-  "event_detector_tests": "14/14",
-  "event_queue_tests": "19/19",
-  "mcp_client_tests": "41/41",
-  "collector_tests": "32/32",
-  "full_mediaman_tests": "211/211",
-  "security_hardening": {
-    "fail_closed_validation": "implemented - recursive validation at any nesting level",
-    "sensitive_fields_rejected": [
-      "latitude",
-      "longitude",
-      "lat",
-      "lon",
-      "token",
-      "api_key",
-      "apikey",
-      "secret",
-      "password",
-      "credential",
-      "authorization",
-      "bearer",
-      "connection_string",
-      "raw_mcp",
-      "subprocess_output"
-    ],
-    "sensitive_patterns_rejected": [
-      "token=",
-      "password=",
-      "secret=",
-      "api_key=",
-      "api-key=",
-      "authorization:",
-      "bearer",
-      "JWT-like patterns"
-    ],
-    "sanitized_last_error": "implemented - redaction + truncation at 200 chars",
-    "atomic_claim": "implemented - BEGIN IMMEDIATE transaction with lockup prevention",
-    "state_guards": "implemented - idempotent mark_sent, SENT event protection in mark_failed"
-  },
-  "sqlite_implemented": true,
-  "offline_unit_tests_only": true,
-  "not_implemented": [
-    "OpenClaw adapter",
-    "Telegram reporter",
-    "timer or scheduler",
-    "runtime service wrapper"
-  ],
-  "comparison_type": "magnetic_heading_vs_magnetic_compass",
-  "physical_alignment_assumed_correct": true,
-  "corrective_change_applied": false,
-  "signal_k_modified": true,
-  "docker_modified": false,
-  "systemd_modified": false,
-  "n2k_mapping_modified": false,
-  "heading_true_modified": false,
-  "credentials_logged": false,
-  "blocker": null,
-  "diagnostic_findings": {
-    "wit_service_status": "running",
-    "runtime_logs_exist": true,
-    "wit_heading_transformation": "quaternion(0x71) \u2192 mount_q \u2192 Euler-X \u2192 headingMagnetic",
-    "heading_true_status": "calculated from headingMagnetic + magnetic_variation (post-hm)",
-    "magnetic_declination_on_heading_magnetic": false,
-    "observed_discrepancy_degrees": 22,
-    "discrepancy_is_constant_or_variable": "unknown - requires physical test"
-  },
-  "suspected_causes": [
-    "WIT magnetometer calibration error",
-    "Hard-iron or soft-iron magnetic distortion",
-    "Local magnetic interference near WIT",
-    "Independent compass deviation or calibration error",
-    "WIT packet decoding or coordinate transformation error",
-    "Constant software bias in quaternion output"
-  ],
-  "evidence_collected": {
-    "wit_service_running": true,
-    "runtime_logs_exist": true,
-    "wit_output_stable": true,
-    "heading_true_calculation_verified": true,
-    "physical_test_data": "not yet available"
-  },
-  "required_physical_test": {
-    "description": "Stationary magnetic-heading comparison at multiple bearings",
-    "conditions": "boat stationary, WIT location confirmed aligned, no magnetic sources nearby",
-    "minimum_tests": "4 different headings + 1 reciprocal pair (180\u00b0 apart)",
-    "test_protocol": "See /tmp/wit_diagnostic_protocol.md"
-  },
-  "conclusion": "WIT publication of navigation.attitude.yaw removed to eliminate duplicate yaw source. Vulcan displays will use single canonical N2K PGN 127257 Yaw from headingTrue. Documentation synchronized with source behavior. No magnetic calibration or heading transformation modified.",
-  "change_type": "targeted_signal_k_path_removal",
+  "timestamp": "2026-08-30T02:04:56.207907+00:00",
   "removed_path": "navigation.attitude.yaw",
   "preserved_paths": [
     "navigation.attitude.roll",
@@ -166,27 +13,35 @@
     "navigation.acceleration.z",
     "navigation.rateOfTurn"
   ],
-  "magnetic_calibration_modified": false,
-  "n2k_bridge_modified": false,
+  "signal_k_modified": true,
   "signal_k_server_restarted": false,
+  "n2k_bridge_modified": false,
+  "docker_modified": false,
   "systemd_unit_modified": false,
-  "wit_service_status": "active (running)",
-  "wit_service_pid": 5357,
-  "wit_service_restart_time": "2026-08-29T21:30:13 EDT",
-  "live_sk_verification": "completed",
-  "navigation_attitude_yaw_status": "None (stale-suppressed, will expire)",
-  "navigation_attitude_roll_status": "active (streaming)",
-  "navigation_attitude_pitch_status": "active (streaming)",
-  "navigation_heading_magnetic_status": "active (streaming)",
-  "navigation_heading_true_status": "active",
-  "n2k_attitude_conversion_status": "unchanged (uses headingTrue)",
+  "magnetic_calibration_modified": false,
   "runtime_logs_exist": true,
   "remote_main_verified": true,
   "force_push_used": false,
   "physical_vulcan_verification": "pending",
-  "documentation_files_modified": [
-    "ble/README.md",
+  "credentials_logged": false,
+  "files_modified": [
+    "ble/wit-ble-direct.py",
     "docs/INTEGRATION/WIT-INTEGRATION-GUIDE.md",
-    "docs/ARCHITECTURE-MASTER.md"
-  ]
+    "docs/ARCHITECTURE-MASTER.md",
+    "ble/README.md"
+  ],
+  "verification_chain": {
+    "yaw_removal_commit": "be57c45d5a7e691ee263d90715a299f150f3611a",
+    "reconciliation_commit": "6640233904640bed41d8a5634eb590d41c9a0980",
+    "documentation_commit": "9a6c46b1ef7c8acddfb9af1b213b485cdba63e2e"
+  },
+  "safety_checks": {
+    "no_git_force_push": true,
+    "no_credentials_in_logs": true,
+    "no_coordinates_logged": true,
+    "no_fake_runtime_logs": true,
+    "n2k_unchanged": true,
+    "wit_source_unchanged_except_sk_publication": true,
+    "no_magnetic_correction_applied": true
+  }
 }

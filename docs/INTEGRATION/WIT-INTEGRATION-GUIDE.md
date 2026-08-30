@@ -58,10 +58,11 @@ Signal K uses Python `bleak` library to read WIT data:
 
 ```bash
 # Location
-cat /home/aneto/bleak_wit.py
+/home/aneto/midnightrider-navigation/ble/wit-ble-direct.py
 
-# Should output BLE notifications as JSON:
-# {"roll": 0.1, "pitch": -0.05, "yaw": 1.32, "accel_x": 0.1, ...}
+# Outputs BLE notifications as JSON to Signal K:
+# {"roll": 0.1, "pitch": -0.05, "headingMagnetic": 4.81, "accel_x": 0.1, ...}
+# Note: yaw is no longer published separately; use headingMagnetic and headingTrue instead.
 ```
 
 ### Plugin Configuration
@@ -118,9 +119,9 @@ curl -s http://localhost:3000/signalk/v1/api/vessels/self/navigation/attitude | 
 # Expected:
 # {
 #   "roll": 0.0,
-#   "pitch": 0.0,
-#   "yaw": 3.98    (arbitrary heading, doesn't matter)
+#   "pitch": 0.0
 # }
+# Note: Heading data is published separately under navigation.headingMagnetic
 
 # If not ~0, update calibration offsets in settings.json
 ```
