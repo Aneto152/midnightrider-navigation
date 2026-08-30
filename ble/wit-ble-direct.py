@@ -56,8 +56,7 @@ WIT INITIALIZATION PROTOCOL:
 SIGNAL K PATHS PUBLISHED:
  navigation.attitude.roll rad Heel (+ = starboard down)
  navigation.attitude.pitch rad Trim (+ = bow up)
- navigation.attitude.yaw rad Magnetic heading
- navigation.headingMagnetic rad Same as yaw (explicit SK path)
+ navigation.headingMagnetic rad Magnetic heading (explicit SK path)
  navigation.acceleration.x m/s² Along bow axis
  navigation.acceleration.y m/s² Along port axis
  navigation.acceleration.z m/s² Vertical
@@ -406,7 +405,6 @@ def send_attitude(data: dict, logger) -> None:
         values=[
             {'path': 'navigation.attitude.roll', 'value': data['roll']},
             {'path': 'navigation.attitude.pitch', 'value': data['pitch']},
-            {'path': 'navigation.attitude.yaw', 'value': data['yaw']},
             {'path': 'navigation.headingMagnetic', 'value': data['headingMagnetic']},
             # Raw quaternion (WitMotion convention: Q0=x Q1=y Q2=z Q3=w)
             {'path': 'sensors.wit.quaternion.w', 'value': data.get('qw', 0)},

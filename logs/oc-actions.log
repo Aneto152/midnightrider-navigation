@@ -456,3 +456,6 @@
 [2026-08-29T21:57:35.680880+00:00] [ACTION] No corrective configuration applied (read-only diagnostic)
 [2026-08-29T21:57:35.680880+00:00] [ACTION] No WIT, Signal K, Docker, systemd, or N2K configuration modified
 [2026-08-29T21:57:35.680880+00:00] [STATUS] PARTIAL - runtime service logs exist; diagnostics require physical test data
+[2026-08-30T01:31:24.930350+00:00] [SERVICE_RESTART] [wit-ble-direct] WIT systemd service restarted after targeted Signal K path removal. New PID: 5357. Service status: active (running).
+
+[2026-08-30T01:31:24.930350+00:00] [RESULT] [wit-ble-direct] navigation.attitude.yaw Signal K path verification: value=None (field stale-suppressed; will fully expire post-timeout). Roll and pitch present and streaming normally.
