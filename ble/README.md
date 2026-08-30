@@ -29,7 +29,7 @@ BLE Sensors → [ble/ drivers] → Signal K UDP:4123 → SK → InfluxDB → Gra
   → `calypso_direct.py` → wind speed/angle, battery %, temperature
 
 - **WIT WT901BLECL IMU** (E9:10:DB:8B:CE:C7)  
-  → `wit-ble-direct.py` → quaternion → attitude (roll/pitch/yaw), acceleration, heading
+  → `wit-ble-direct.py` → quaternion → attitude (roll/pitch), acceleration, magnetic heading
 
 - **SOK SK12V100PC Battery BMS** (MAC via `SOK_BLE_ADDRESS`)  
   → `sok_direct.py` → voltage/current/power, SoC, cell voltages, cycles

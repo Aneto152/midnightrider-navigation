@@ -224,7 +224,7 @@ services:
 |-------------|--------|------------------|
 | `navigation` | Signal K → signalk-to-influxdb2 | headingTrue, position, SOG, COG |
 | `environment` | Signal K → signalk-to-influxdb2 | wind.*, outside.*, water.* |
-| `attitude` | Signal K → signalk-to-influxdb2 | roll, pitch, yaw |
+| `attitude` | Signal K → signalk-to-influxdb2 | roll, pitch |
 | `performance` | Signal K → signalk-to-influxdb2 | targetSpeed, polarEfficiency, VMG |
 | `sok_bms` | Python direct | soc_pct, voltage_v, current_a, cell_1_4_mv |
 | `astronomical` | signalk-astronomical | sunrise, sunset, moon phase |
@@ -496,8 +496,9 @@ signalk-um982-gnss plugin
 
 ```
 WIT WT901BLECL (BLE 5.0, 30 Hz)
-  ↓ bleak_wit.py → signalk-wit-imu-ble plugin
-  ↓ Signal K — navigation.attitude.{roll, pitch, yaw}
+  ↓ wit-ble-direct.py → quaternion → Euler transformation
+  ↓ Signal K — navigation.attitude.{roll, pitch}
+  │              navigation.headingMagnetic (magnetic heading)
   │              navigation.acceleration.{x, y, z}
   │              navigation.rateOfTurn
   ├──► InfluxDB → Grafana 01-Cockpit

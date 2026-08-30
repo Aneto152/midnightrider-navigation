@@ -75,8 +75,7 @@ cat /home/aneto/bleak_wit.py
       "updateRate": 30,    // Hz (actually 100 Hz raw, filtered to 30)
       "calibration": {
         "roll_offset": 0.0,
-        "pitch_offset": 0.0,
-        "yaw_offset": 0.0
+        "pitch_offset": 0.0
       }
     }
   }
@@ -154,7 +153,7 @@ curl -s http://localhost:3000/signalk/v1/api/vessels/self | jq '{
 ```
 
 **Expected:**
-- attitude: `{roll, pitch, yaw}` in radians
+- attitude: `{roll, pitch}` in radians (yaw published under navigation.headingMagnetic)
 - acceleration: `{x, y, z}` in m/s²
 - waves: `{significantWaveHeight, period, seaState}`
 
