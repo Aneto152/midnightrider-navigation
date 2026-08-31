@@ -530,3 +530,25 @@
 [2026-08-31T10:20:50Z] SECURITY_CHECK SQLite artifacts check OK
 [2026-08-31T10:20:50Z] FILE_MODIFY logs/latest.json — Step 4D orchestration metadata (single_event_processing, orchestrator_state_transitions, eventqueue_retry_scheduling, strict_prompt_allowlist, internal_content_only, telegram_not_implemented, runtime_e2e_not_validated)
 [2026-08-31T10:21:00Z] RESULT Step 4D event orchestration and internal content flow implementation completed successfully
+
+[2026-08-31T14:25:00Z] FILE_MODIFY docs/ARCHITECTURE-MASTER.md added EventOrchestrator subsection (4.10) with complete role documentation
+[2026-08-31T14:25:15Z] TEST_RUN python3 -m pytest -q tests/mediaman/test_event_orchestrator.py RESULT: 13 collected, 13 passed
+[2026-08-31T14:25:30Z] TEST_RUN python3 -m pytest -q tests/mediaman/test_event_queue.py tests/mediaman/test_openclaw_adapter.py tests/mediaman/test_event_orchestrator.py RESULT: 118 collected, 118 passed
+[2026-08-31T14:25:45Z] TEST_RUN python3 -m pytest -q tests/mediaman RESULT: 303 collected, 303 passed, 1 warning (TestContentProvider collection)
+[2026-08-31T14:26:00Z] SECURITY_CHECK .gitignore rules verification RESULT: OK
+[2026-08-31T14:26:15Z] SECURITY_CHECK suspicious filename scan RESULT: OK
+[2026-08-31T14:26:30Z] SECURITY_CHECK hardcoded IP check RESULT: OK
+[2026-08-31T14:26:45Z] SECURITY_CHECK SQLite artifact check RESULT: OK
+[2026-08-31T14:27:00Z] SECURITY_CHECK protected file verification RESULT: unchanged
+[2026-08-31T14:27:15Z] FILE_MODIFY logs/latest.json hardening metadata update with complete audit trail
+[2026-08-31T14:27:30Z] VERIFICATION hardening commit SHA b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f verified on origin/main
+[2026-08-31T14:27:45Z] SOURCE_REVIEW EventOrchestrator.process_one_cycle() no raw event fields logged before validation RESULT: VERIFIED
+[2026-08-31T14:28:00Z] SOURCE_REVIEW ErrorSanitizer coverage of all credential forms (secret=, credential=, token=, api_key=, password=, authorization=, bearer, JWT, postgres, postgresql, mysql, redis, mongodb, amqp, http, https) RESULT: VERIFIED
+[2026-08-31T14:28:15Z] SOURCE_REVIEW SafePromptBuilder strict type validation fail-closed on invalid types RESULT: VERIFIED
+[2026-08-31T14:28:30Z] SOURCE_REVIEW prompt injection patterns rejected (ignore previous instructions, system message, control chars, newlines) RESULT: VERIFIED
+[2026-08-31T14:28:45Z] SOURCE_REVIEW mark_sent() and mark_failed() called only by EventOrchestrator RESULT: VERIFIED
+[2026-08-31T14:29:00Z] SOURCE_REVIEW EventQueue.claim(count=1) enforces single-event processing RESULT: VERIFIED
+[2026-08-31T14:29:15Z] SOURCE_REVIEW no raw exception messages logged (class name only) RESULT: VERIFIED
+[2026-08-31T14:29:30Z] SOURCE_REVIEW all 16 sensitive field names covered with normalization variants RESULT: VERIFIED
+[2026-08-31T14:29:45Z] DOCUMENTATION_REVIEW EventOrchestrator role documented in ARCHITECTURE-MASTER.md with: role, one-event-per-cycle, strict validation, allowlist, injection rejection, ErrorSanitizer, ownership, internal-only, no-Telegram, E2E-deferred RESULT: COMPLETE
+[2026-08-31T14:30:00Z] RESULT SUCCESS hardening_commit_sha=b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f files_modified=3 test_counts=303_passed raw_event_values_logged=false raw_errors_logged=false error_redaction_before_logging=true http_connection_string_redaction=true https_connection_string_redaction=true prompt_injection_rejection=true strict_prompt_allowlist=true event_orchestrator_documented=true single_event_processing=true orchestrator_owns_state_transitions=true event_queue_owns_retry_scheduling=true internal_content_only=true telegram_integration_implemented=false runtime_e2e_validated=false live_gateway_contacted=false mcp_live_contacted=false signalk_modified=false docker_modified=false no_credentials_logged=true no_coordinates_logged=true eventqueue_step_4b2_modified=false

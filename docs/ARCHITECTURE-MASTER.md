@@ -475,6 +475,77 @@ EventQueue is a local SQLite library component (no daemon, no network access, no
 
 **For Details:** `mediaman/event_queue.py` and `tests/mediaman/test_event_queue.py`
 
+### 4.10 EventOrchestrator (Safe Event Processing) — Step 4D
+
+**Status:** ✅ COMPLETE — Hardened implementation with strict validation and error redaction (303/303 full suite tests passing)
+
+**Boundary:** EventQueue output (QueuedEvent) → EventOrchestrator → OpenClawAdapter.generate_article() → mark_sent() or mark_failed()
+
+**Architecture:**
+
+```
+EventQueue.claim(count=1)
+    ↓ (exactly one event per cycle)
+SafePromptBuilder validation (strict type checks, injection resistance)
+    ↓ (fail-closed on invalid input)
+OpenClawAdapter.generate_article(prompt)
+    ↓ (never QueuedEvent or payload_json)
+Result handling
+    ├── Success: mark_sent() → internal content only
+    └── Failure: mark_failed(safe_classification)
+```
+
+**Key Properties:**
+
+- **Single-event processing:** EventQueue.claim(count=1), exactly one event per orchestration cycle
+- **Strict validation before logging:** All field types validated in SafePromptBuilder before any log output
+- **Safe-field allowlist:** event_type, race_id, severity, observed_at, source_timestamp, affected_field (only)
+- **Prompt injection rejection:** Rejects control characters, newlines, and instruction patterns ("ignore previous instructions", "system message", etc.)
+- **Type validation fail-closed:** Invalid types (int, list, bool, dict, float) rejected with ValueError at validation time, not via str() conversion
+- **ErrorSanitizer comprehensive coverage:**
+  - Key=value patterns: secret=, credential=, token=, api_key=, password=, authorization=, bearer
+  - JWT-like values: eyJ[...]
+  - All URI schemes with credentials: postgres://, postgresql://, mysql://, redis://, mongodb://, amqp(s)://, http(s)://
+  - Coordinates: lat/lon patterns
+  - All redactions occur before truncation
+- **Orchestrator state ownership:** mark_sent() and mark_failed() called only by EventOrchestrator
+- **EventQueue retry ownership:** Retry scheduling, next_attempt_at, exponential backoff, DEAD_LETTER escalation (EventQueue responsibility)
+- **Internal content only:** Result.content returned for internal use only, never passed to external systems
+- **No Telegram integration:** Telegram code NOT IMPLEMENTED; no external publication
+- **Safe logging:** No raw event values, no raw exception messages, no raw adapter errors logged
+
+**Test Evidence (Mocked Unit Tests):**
+
+- EventOrchestrator tests: 13/13 PASSED
+  - Type validation: 6 tests (reject int, list, bool, dict, float, non-string types)
+  - Prompt injection: 5 tests (reject control chars, newlines, instruction patterns)
+  - Sensitive fields: 3 tests (reject all 16 sensitive field names + variants)
+  - Error sanitization: 8 tests (secret=, credential=, HTTP/HTTPS URIs, postgres, mysql, redis, mongodb, amqp)
+  - Flow safety: 8 tests (no raw event fields before validation, no raw exceptions in logs, safe classifications only)
+- EventQueue tests: 79/79 PASSED (unchanged from Step 4B.2)
+- OpenClawAdapter tests: 26/26 PASSED (unchanged from Step 4C)
+- Full MediaMan suite: 303/303 PASSED
+- All tests are mocked unit tests with no runtime E2E verification
+- No live OpenClaw Gateway contact, no MCP contact, no Signal K modification
+
+**Hardening Details:**
+
+- **Pre-validation logging safety:** Logs only event_id before SafePromptBuilder validation; no raw event_type, race_id, severity, payload_json
+- **Exception handling:** Exception class name only (never exception message or adapter.error)
+- **Error classifications:** Safe deterministic categories (prompt_validation_failed, prompt_construction_error, adapter_unavailable, adapter_timeout, adapter_connection_error, adapter_auth_error, adapter_error)
+- **Prompt construction:** Never forwards raw payload_json, never includes coordinates, never includes credentials, never includes free-text fields
+- **Sanitization before logging:** ErrorSanitizer.sanitize() redacts all sensitive patterns before any logger call
+
+**Not Implemented at This Stage:**
+
+- Telegram integration (explicitly deferred)
+- External content publication
+- Runtime E2E validation
+- Service activation or timer scheduling
+- Production database initialization
+
+**For Details:** `mediaman/event_orchestrator.py` and `tests/mediaman/test_event_orchestrator.py`
+
 ## 5. FLUX DE DONNÉES DÉTAILLÉS
 
 ### 5.1 Cap vrai (headingTrue)

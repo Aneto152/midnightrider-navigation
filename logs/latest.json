@@ -1,153 +1,62 @@
 {
   "task": "mediaman-step-4d-event-orchestration-internal-content",
   "status": "SUCCESS",
-  "timestamp": "2026-08-31T13:52:03.385845+00:00",
-  "implementation_commit_sha": "11c95f957ec3da9085b67f5dd1662ab44325ff49",
-  "documentation_correction_commit_sha": "9852a486a45c0cd8ca6794e855817568ba54bb69",
-  "audit_commit_sha": "58997b878c7357ca8a406bdb8d08c50c900aff55",
-  "audit_commit_sha_self_reference": false,
-  "previous_audit_commit_sha": "d738b2d0b35bccdfe23d9c90055034cfe8a9338b",
-  "corrections_applied": [
-    "OpenClaw adapter timeout_seconds validation (rejects 0, negative, non-integer, bool, float)",
-    "agent_id clarification: is generate_article() parameter, NOT initialization parameter",
-    "8 comprehensive timeout validation tests",
-    "1 agent_id parameter location clarification test",
-    "Safe initialization logging (metadata only, no payloads)",
-    "Dependency injection support for testing (availability_check parameter)",
-    "is_available() method for adapter status queries",
-    "Fail-closed behavior when CLI unavailable",
-    "Module-level docstring clarification (agent_id is NOT init parameter)",
-    "Complete audit trail with all commit SHAs",
-    "No real OpenClaw Gateway contact during initialization",
-    "No credential exposure in any log output"
-  ],
-  "test_counts": {
-    "openclaw_adapter": {
-      "collected": 26,
-      "passed": 26
-    },
-    "event_queue_plus_adapter": {
-      "collected": 105,
-      "passed": 105
-    },
-    "full_mediaman": {
-      "collected": 290,
-      "passed": 290
-    }
-  },
-  "timeout_seconds_validation": {
-    "accepts_none": true,
-    "accepts_positive_integer": true,
-    "rejects_zero": true,
-    "rejects_negative": true,
-    "rejects_string": true,
-    "rejects_float": true,
-    "rejects_boolean": true,
-    "error_type": "ValueError"
-  },
-  "agent_id_parameter": {
-    "is_init_parameter": false,
-    "is_generate_article_parameter": true,
-    "audit_claim_corrected": true,
-    "docstring_clarified": true,
-    "default_value_in_generate_article": "main"
-  },
-  "commit_chain": [
-    {
-      "sha": "11c95f957ec3da9085b67f5dd1662ab44325ff49",
-      "type": "implementation",
-      "message": "fix(mediaman): validate adapter initialization configuration",
-      "changes": [
-        "mediaman/openclaw_adapter.py",
-        "tests/mediaman/test_openclaw_adapter.py"
-      ]
-    },
-    {
-      "sha": "dd792d38a1d6849bafb6119d3592975f2b406f82",
-      "type": "audit",
-      "message": "chore(audit): reconcile Step 4C initialization metadata",
-      "changes": [
-        "logs/latest.json"
-      ]
-    },
-    {
-      "sha": "9852a486a45c0cd8ca6794e855817568ba54bb69",
-      "type": "documentation",
-      "message": "docs(mediaman): clarify adapter initialization contract",
-      "changes": [
-        "mediaman/openclaw_adapter.py"
-      ]
-    },
-    {
-      "sha": "58997b878c7357ca8a406bdb8d08c50c900aff55",
-      "type": "audit",
-      "message": "chore(audit): finalize Step 4C initialization metadata",
-      "changes": [
-        "logs/oc-actions.log"
-      ]
-    }
-  ],
-  "cli_availability_verified": true,
-  "initialization_contract": "OpenClawAdapter(timeout_seconds=None, availability_check=None)",
-  "is_available_method": true,
-  "safe_logging_only": true,
-  "no_payload_logging": true,
-  "no_real_gateway_contact": true,
-  "no_telegram_contact": true,
-  "no_mcp_contact": true,
-  "offline_unit_tests_only": true,
+  "timestamp": "2026-08-31T17:26:57.127824+00:00",
+  "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
+  "parent_commit_sha": "6effa72541e888b7e9aa001c3b7f01b3b5692454",
+  "strict_prompt_allowlist": true,
+  "prompt_injection_rejection": true,
+  "raw_event_values_logged": false,
+  "raw_errors_logged": false,
+  "error_redaction_before_logging": true,
+  "http_connection_string_redaction": true,
+  "https_connection_string_redaction": true,
+  "event_orchestrator_documented": true,
+  "single_event_processing": true,
+  "orchestrator_owns_state_transitions": true,
+  "event_queue_owns_retry_scheduling": true,
+  "internal_content_only": true,
+  "telegram_integration_implemented": false,
   "runtime_e2e_validated": false,
-  "eventqueue_integration_implemented": false,
-  "content_generation_implemented": false,
-  "deferred_features": [
-    "Step 4D: EventQueue \u2192 Adapter event flow integration",
-    "Step 4D: Content generation via OpenClaw CLI",
-    "Step 4D: Telegram publishing (Step 4D responsibility)",
-    "Step 5: End-to-end integration testing",
-    "Runtime E2E validation"
-  ],
-  "security_checks": {
-    "gitignore_rules": "OK",
-    "suspicious_filenames": "OK",
-    "hardcoded_ips": "OK",
-    "sensitive_logs": "OK",
-    "sqlite_artifacts": "OK",
-    "protected_file_unchanged": true,
-    "step_4b2_unchanged": true
-  },
-  "step": "4D",
-  "title": "Event Orchestration and Internal Content Flow",
-  "implementation_details": {
-    "single_event_processing": true,
-    "orchestrator_owns_state_transitions": true,
-    "event_queue_owns_retry_scheduling": true,
-    "strict_prompt_allowlist": true,
-    "internal_content_only": true,
-    "telegram_integration_implemented": false,
-    "runtime_e2e_validated": false,
-    "live_gateway_contacted": false,
-    "mcp_live_contacted": false,
-    "signalk_modified": false,
-    "docker_modified": false,
-    "no_credentials_logged": true,
-    "no_coordinates_logged": true,
-    "eventqueue_step_4b2_modified": false
-  },
-  "test_coverage": {
-    "event_orchestrator_tests": 13,
-    "event_queue_tests": 79,
-    "openclaw_adapter_tests": 26,
-    "other_tests": 185,
+  "live_gateway_contacted": false,
+  "mcp_live_contacted": false,
+  "signalk_modified": false,
+  "docker_modified": false,
+  "no_credentials_logged": true,
+  "no_coordinates_logged": true,
+  "eventqueue_step_4b2_modified": false,
+  "test_counts": {
+    "event_orchestrator": 13,
+    "event_queue": 79,
+    "openclaw_adapter": 26,
+    "other": 185,
     "total_collected": 303,
     "total_passed": 303,
-    "total_warnings": 1,
-    "warnings": [
-      "TestContentProvider has __init__ constructor (pytest collection warning, not a failure)"
-    ]
+    "total_warnings": 1
   },
   "files_modified": [
     "mediaman/event_orchestrator.py",
-    "tests/mediaman/test_event_orchestrator.py"
+    "tests/mediaman/test_event_orchestrator.py",
+    "docs/ARCHITECTURE-MASTER.md"
   ],
-  "timestamp_utc": "2026-08-31T14:24:42.676496+00:00Z"
+  "hardening_corrections": [
+    "Removed all raw event field logging before validation",
+    "Extended ErrorSanitizer with complete credential coverage (secret=, credential=, token=, api_key=, all URI schemes)",
+    "All URI schemes redacted: postgres, postgresql, mysql, redis, mongodb, amqp(s), http(s) with credentials",
+    "Strict type validation fail-closed on invalid types (int, list, bool, dict, float)",
+    "Prompt injection resistance: reject control characters, newlines, instruction patterns",
+    "Pre-validation logging safety proven via caplog tests",
+    "No raw exceptions in logs (class name only)",
+    "All 16 sensitive field names covered with normalization variants",
+    "Deterministic error classifications only (never raw exception messages)",
+    "EventOrchestrator documented in ARCHITECTURE-MASTER.md with complete role description"
+  ],
+  "security_verification": {
+    "gitignore_rules": "OK",
+    "suspicious_filenames": "OK",
+    "hardcoded_ips": "OK",
+    "sqlite_artifacts": "OK",
+    "protected_files_unchanged": true,
+    "step_4b2_unchanged": true
+  }
 }
