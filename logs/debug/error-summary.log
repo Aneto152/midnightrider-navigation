@@ -1,7 +1,7 @@
-=== ERROR SUMMARY — 2026-08-27T14:19:48-04:00 ===
+=== ERROR SUMMARY — 2026-08-31T09:15:07-04:00 ===
 [calypso-anemometer] Errors: 0
 0 | Last: none
-[calypso-direct] Errors: 30 | Last: none
+[calypso-direct] Errors: 10 | Last: [2026-08-30T20:44:56.827] [ERROR] [calypso-direct] [ERROR] BLE error (L1 #10): Device with address F8:5F:12:9D:D2:EE was not found.
 [calypso] Errors: 0
 0 | Last: none
 [calypso-watchdog] Errors: 0
@@ -17,6 +17,7 @@
 [j30-leeway-calc] Errors: 0
 0 | Last: none
 [mediaman] Errors: 26 | Last: [2026-08-27T11:36:46] [ERROR] [mediaman.dataflow] ERROR: AttributeError: type object 'SanitizedMessage' has no attribute 'heartbeat'
+[mediaman-mcp-collector] Errors: 144 | Last: [2026-08-31T09:08:20] [ERROR] [mediaman-mcp-collector] Collector ERROR: racing.get_cog: MCPTimeoutError: Timeout
 [monitor-resources] Errors: 0
 0 | Last: none
 [openclaw-gateway] Errors: 0
