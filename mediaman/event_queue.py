@@ -69,6 +69,15 @@ class EventQueue:
         r'raw\s+mcp\s+envelope',
         r'subprocess\s+output',
     ]
+    # Credential-bearing URI schemes (connection strings)
+    CREDENTIAL_URI_SCHEMES = {
+        'postgres', 'postgresql', 'mysql', 'redis', 'mongodb',
+        'amqp', 'amqps', 'http', 'https', 'mongodb+srv'
+    }
+    # Generic URI pattern: scheme://[user[:password]@]host[/path][?query]
+    CREDENTIAL_BEARING_URI_PATTERN = r'\b({})://[^\s:]+:[^\s@]+@[^\s/]+'.format(
+        '|'.join(CREDENTIAL_URI_SCHEMES)
+    )
 
     def __init__(self, db_path: str = ":memory:", clock=None):
         """Initialize queue."""
@@ -112,6 +121,11 @@ class EventQueue:
                     raise ValueError(
                         f"Sensitive pattern detected at {path}: {pattern}"
                     )
+            # Check string values for credential-bearing connection strings
+            if re.search(self.CREDENTIAL_BEARING_URI_PATTERN, obj, re.IGNORECASE):
+                raise ValueError(
+                    f"Credential-bearing connection string detected at {path}"
+                )
         # For None, int, float, bool - no validation needed
 
     def _validate_payload(self, event_dict: dict) -> None:
@@ -131,6 +145,7 @@ class EventQueue:
         - Redacts token-like strings
         - Redacts authorization values
         - Removes exact coordinates
+        - Redacts credential-bearing connection strings
         - Truncates only after sanitization
         - Returns at most max_length characters
         """
@@ -163,6 +178,14 @@ class EventQueue:
             r'-?\d{1,3}\.\d{4,}',
             '<coordinate>',
             sanitized
+        )
+
+        # Redact credential-bearing connection strings (user:password@host)
+        sanitized = re.sub(
+            self.CREDENTIAL_BEARING_URI_PATTERN,
+            '<redacted-connection>',
+            sanitized,
+            flags=re.IGNORECASE
         )
 
         # Truncate after sanitization

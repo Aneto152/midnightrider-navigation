@@ -6,6 +6,7 @@ import threading
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 import sqlite3
+import re
 
 from mediaman.event_queue import EventQueue, EventStatus, QueuedEvent
 from mediaman.event_detector import DetectedEvent
@@ -355,6 +356,129 @@ class TestEventQueueRecursiveSensitiveFieldRejection:
         queue.close()
 
 
+class TestEventQueueConnectionStringRejection:
+    """Test rejection of credential-bearing connection strings."""
+
+    def test_postgres_connection_string_rejection(self, in_memory_db, clock):
+        """Events with postgres://user:pass@host connection strings are rejected."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        event_dict = {
+            'event_id': 'evt_postgres',
+            'database_url': 'postgresql://admin:secretpwd@localhost:5432/mydb'
+        }
+
+        with pytest.raises(ValueError, match="Credential-bearing connection string"):
+            queue._validate_payload(event_dict)
+        queue.close()
+
+    def test_mysql_connection_string_rejection(self, in_memory_db, clock):
+        """Events with mysql://user:pass@host connection strings are rejected."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        event_dict = {
+            'event_id': 'evt_mysql',
+            'db_url': 'mysql://dbuser:dbpass@db.example.com:3306/database'
+        }
+
+        with pytest.raises(ValueError, match="Credential-bearing connection string"):
+            queue._validate_payload(event_dict)
+        queue.close()
+
+    def test_redis_connection_string_rejection(self, in_memory_db, clock):
+        """Events with redis://user:pass@host connection strings are rejected."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        event_dict = {
+            'event_id': 'evt_redis',
+            'cache_url': 'redis://cacheuser:cachepass@cache.local:6379'
+        }
+
+        with pytest.raises(ValueError, match="Credential-bearing connection string"):
+            queue._validate_payload(event_dict)
+        queue.close()
+
+    def test_mongodb_connection_string_rejection(self, in_memory_db, clock):
+        """Events with mongodb://user:pass@host connection strings are rejected."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        event_dict = {
+            'event_id': 'evt_mongodb',
+            'mongo_uri': 'mongodb://mongouser:mongopass@mongo.internal:27017/database'
+        }
+
+        with pytest.raises(ValueError, match="Credential-bearing connection string"):
+            queue._validate_payload(event_dict)
+        queue.close()
+
+    def test_nested_connection_string_rejection(self, in_memory_db, clock):
+        """Events with nested connection strings are rejected."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        event_dict = {
+            'event_id': 'evt_nested_conn',
+            'database': {
+                'primary': 'postgresql://admin:secret@localhost/db',
+                'secondary': 'postgresql://admin:secret@backup/db'
+            }
+        }
+
+        with pytest.raises(ValueError, match="Credential-bearing connection string"):
+            queue._validate_payload(event_dict)
+        queue.close()
+
+    def test_connection_string_in_list_rejection(self, in_memory_db, clock):
+        """Events with connection strings in lists are rejected."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        event_dict = {
+            'event_id': 'evt_list_conn',
+            'replicas': [
+                'mysql://user1:pass1@replica1/db',
+                'mysql://user2:pass2@replica2/db'
+            ]
+        }
+
+        with pytest.raises(ValueError, match="Credential-bearing connection string"):
+            queue._validate_payload(event_dict)
+        queue.close()
+
+    def test_http_connection_with_credentials_rejection(self, in_memory_db, clock):
+        """Events with HTTP URLs containing credentials are rejected."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        event_dict = {
+            'event_id': 'evt_http_cred',
+            'endpoint': 'https://apiuser:apikey@api.example.com/v1/data'
+        }
+
+        with pytest.raises(ValueError, match="Credential-bearing connection string"):
+            queue._validate_payload(event_dict)
+        queue.close()
+
+    def test_amqp_connection_string_rejection(self, in_memory_db, clock):
+        """Events with AMQP connection strings are rejected."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        event_dict = {
+            'event_id': 'evt_amqp',
+            'broker_url': 'amqp://guest:guestpass@rabbitmq:5672/'
+        }
+
+        with pytest.raises(ValueError, match="Credential-bearing connection string"):
+            queue._validate_payload(event_dict)
+        queue.close()
+
+    def test_safe_uri_without_credentials_accepted(self, in_memory_db, clock):
+        """URIs without embedded credentials are accepted."""
+        queue = EventQueue(in_memory_db, clock=clock)
+        # Safe URIs (no user:password@)
+        event_dict = {
+            'event_id': 'evt_safe_uri',
+            'urls': [
+                'https://api.example.com/v1/data',
+                'postgresql://localhost:5432/mydb',
+                'redis://cache.local'
+            ]
+        }
+
+        # Should not raise
+        queue._validate_payload(event_dict)
+        queue.close()
+
+
 class TestEventQueueErrorSanitization:
     """Test error message sanitization."""
 
@@ -457,6 +581,65 @@ class TestEventQueueErrorSanitization:
         # Initially last_error is None
         event = queue.get_event(sample_event.event_id)
         assert event.last_error is None
+        queue.close()
+
+    def test_connection_string_redaction_in_error(self, temp_db, sample_event, clock):
+        """Credential-bearing connection strings are redacted from last_error."""
+        queue = EventQueue(temp_db, clock=clock)
+        queue.enqueue(sample_event)
+
+        error_with_conn = "Database connection failed: postgresql://dbuser:dbpass@db.local/mydb"
+        queue.mark_failed(sample_event.event_id, error_with_conn)
+
+        event = queue.get_event(sample_event.event_id)
+        assert event.last_error is not None
+        # Verify no credentials in error
+        assert 'dbuser' not in event.last_error
+        assert 'dbpass' not in event.last_error
+        assert 'postgresql://' not in event.last_error
+        # Verify redaction marker present
+        assert '<redacted-connection>' in event.last_error
+        queue.close()
+
+    def test_multiple_connection_strings_redacted(self, temp_db, sample_event, clock):
+        """Multiple connection strings in error are all redacted."""
+        queue = EventQueue(temp_db, clock=clock)
+        queue.enqueue(sample_event)
+
+        error = (
+            "Failover error: primary=postgresql://user1:pass1@primary/db, "
+            "secondary=mysql://user2:pass2@secondary/db"
+        )
+        queue.mark_failed(sample_event.event_id, error)
+
+        event = queue.get_event(sample_event.event_id)
+        # Verify NO credentials remain
+        assert 'user1' not in event.last_error
+        assert 'user2' not in event.last_error
+        assert 'pass1' not in event.last_error
+        assert 'pass2' not in event.last_error
+        # Verify redaction occurred
+        redacted_count = event.last_error.count('<redacted-connection>')
+        assert redacted_count >= 2, f"Expected at least 2 redactions, got {redacted_count}"
+        queue.close()
+
+    def test_connection_string_redaction_before_truncation(self, temp_db, sample_event, clock):
+        """Connection string redaction happens before truncation."""
+        queue = EventQueue(temp_db, clock=clock)
+        queue.enqueue(sample_event)
+
+        # Long error with connection string
+        error = ("x" * 150 + " postgresql://user:pass@host/db " + "y" * 150)
+        queue.mark_failed(sample_event.event_id, error)
+
+        event = queue.get_event(sample_event.event_id)
+        assert len(event.last_error) <= 200
+        # Verify no raw credential
+        assert 'postgresql://user:pass' not in event.last_error
+        # Verify redaction marker is present (if not truncated away)
+        if '<redacted-connection>' not in event.last_error:
+            # It was truncated, but that's ok - main thing is credentials are gone
+            assert 'user' not in event.last_error or event.last_error.count('user') == 0
         queue.close()
 
 
@@ -1070,6 +1253,69 @@ class TestEventQueueCountByStatus:
         queue.claim(count=1)
         assert queue.count_by_status(EventStatus.PENDING.value) == 2
         assert queue.count_by_status(EventStatus.PROCESSING.value) == 1
+        queue.close()
+
+
+class TestEventQueueConnectionStringPatternDetection:
+    """Test the connection string pattern regex specifically."""
+
+    def test_credential_uri_pattern_matches_postgres(self, in_memory_db, clock):
+        """Verify pattern matches postgres connection strings with credentials."""
+        queue = EventQueue(in_memory_db, clock=clock)
+
+        # Test that the pattern would match
+        test_uri = 'postgresql://admin:secret@localhost:5432/db'
+        assert re.search(queue.CREDENTIAL_BEARING_URI_PATTERN, test_uri, re.IGNORECASE)
+        queue.close()
+
+    def test_credential_uri_pattern_matches_mysql(self, in_memory_db, clock):
+        """Verify pattern matches mysql connection strings."""
+        queue = EventQueue(in_memory_db, clock=clock)
+
+        test_uri = 'mysql://user:pass@mysql.local/database'
+        assert re.search(queue.CREDENTIAL_BEARING_URI_PATTERN, test_uri, re.IGNORECASE)
+        queue.close()
+
+    def test_credential_uri_pattern_matches_redis(self, in_memory_db, clock):
+        """Verify pattern matches redis connection strings."""
+        queue = EventQueue(in_memory_db, clock=clock)
+
+        test_uri = 'redis://user:password@redis.local:6379'
+        assert re.search(queue.CREDENTIAL_BEARING_URI_PATTERN, test_uri, re.IGNORECASE)
+        queue.close()
+
+    def test_credential_uri_pattern_rejects_uri_without_credentials(self, in_memory_db, clock):
+        """Verify pattern does NOT match URIs without embedded credentials."""
+        queue = EventQueue(in_memory_db, clock=clock)
+
+        # No user:password@ part
+        safe_uri = 'postgresql://localhost:5432/db'
+        assert not re.search(queue.CREDENTIAL_BEARING_URI_PATTERN, safe_uri, re.IGNORECASE)
+        queue.close()
+
+
+class TestEventQueueConnectionStringIntegration:
+    """Test connection string handling in real scenarios."""
+
+    def test_event_with_safe_database_name_accepted(self, temp_db, clock):
+        """Events with safe database names (not URIs) are accepted."""
+        queue = EventQueue(temp_db, clock=clock)
+
+        safe_event = DetectedEvent(
+            event_id="evt_safe_db",
+            event_type="DATABASE_ERROR",
+            observed_at="2026-08-28T12:00:00Z",
+            severity="WARNING",
+            affected_field="db_name",  # Safe field name
+            previous_status="CONNECTED",
+            current_status="DISCONNECTED",
+        )
+
+        result = queue.enqueue(safe_event)
+        assert result is True
+
+        event = queue.get_event(safe_event.event_id)
+        assert event is not None
         queue.close()
 
 
