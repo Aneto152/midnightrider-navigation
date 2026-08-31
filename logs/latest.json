@@ -75,5 +75,14 @@
   "publication_bridge_implemented": false,
   "telegram_guide_updated": true,
   "tests_logger_injection_fixed": true,
-  "runtime_status": "HARDENING_VALIDATED"
+  "runtime_status": "HARDENING_VALIDATED",
+  "mediaman_validation": {
+    "validated_parent_commit": "ffd29a6e96696ce98b459542f50962a5b5c66ef8",
+    "total_collected": 316,
+    "total_passed": 316,
+    "total_failed": 0,
+    "total_skipped": 0,
+    "total_warnings": 1,
+    "status": "SUCCESS"
+  }
 }
