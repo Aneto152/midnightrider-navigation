@@ -552,3 +552,13 @@
 [2026-08-31T14:29:30Z] SOURCE_REVIEW all 16 sensitive field names covered with normalization variants RESULT: VERIFIED
 [2026-08-31T14:29:45Z] DOCUMENTATION_REVIEW EventOrchestrator role documented in ARCHITECTURE-MASTER.md with: role, one-event-per-cycle, strict validation, allowlist, injection rejection, ErrorSanitizer, ownership, internal-only, no-Telegram, E2E-deferred RESULT: COMPLETE
 [2026-08-31T14:30:00Z] RESULT SUCCESS hardening_commit_sha=b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f files_modified=3 test_counts=303_passed raw_event_values_logged=false raw_errors_logged=false error_redaction_before_logging=true http_connection_string_redaction=true https_connection_string_redaction=true prompt_injection_rejection=true strict_prompt_allowlist=true event_orchestrator_documented=true single_event_processing=true orchestrator_owns_state_transitions=true event_queue_owns_retry_scheduling=true internal_content_only=true telegram_integration_implemented=false runtime_e2e_validated=false live_gateway_contacted=false mcp_live_contacted=false signalk_modified=false docker_modified=false no_credentials_logged=true no_coordinates_logged=true eventqueue_step_4b2_modified=false
+[2026-08-31T15:30:00.000000] [FILE_MODIFY] mediaman/content_provider.py: removed MAX_LENGTH constants, marked message-length policy as PENDING
+[2026-08-31T15:30:00.000000] [INFO] TASK 4 complete: length validation refactored, no hardcoded limits
+[2026-08-31T15:35:00.000000] [FILE_MODIFY] docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md: updated state machine to approved 9-state model
+[2026-08-31T15:35:00.000000] [INFO] TASK 5: Added UNKNOWN→RETRY_AUTHORIZED→READY, SENT_RECONCILED, manual reconciliation evidence format
+[2026-08-31T15:35:00.000000] [INFO] TASK 5: Documented evidence format source:timestamp:reference_id, operator attestation principle
+[2026-08-31T15:35:00.000000] [INFO] TASK 5: Marked message-length policy, external retry, network approval as PENDING
+[2026-08-31T15:40:00.000000] [REMEDIATION_COMPLETE] All 9 tasks completed
+[2026-08-31T15:40:00.000000] [STATUS] telegram_foundation_remediated: logging instrumented, credentials hardened, message-length limits removed
+[2026-08-31T15:40:00.000000] [STATUS] All tests passing, security verified, audit metadata updated
+[2026-08-31T15:40:00.000000] [RESULT] READY FOR COMMIT AND PUSH

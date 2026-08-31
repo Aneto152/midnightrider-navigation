@@ -58,5 +58,19 @@
     "sqlite_artifacts": "OK",
     "protected_files_unchanged": true,
     "step_4b2_unchanged": true
-  }
+  },
+  "telegram_foundation_present": true,
+  "telegram_production_publication_implemented": false,
+  "telegram_live_contacted": false,
+  "telegram_credentials_read_or_displayed": false,
+  "telegram_credentials_configured": "NOT_CHECKED",
+  "external_publication_implemented": false,
+  "telegram_foundation_remediation_completed": true,
+  "telegram_logging_instrumented": true,
+  "partial_credential_masking_removed": true,
+  "unapproved_message_length_limits_removed": true,
+  "approved_reconciliation_documented": true,
+  "exactly_once_guarantee_claimed": false,
+  "automatic_unknown_retry": false,
+  "publication_bridge_implemented": false
 }

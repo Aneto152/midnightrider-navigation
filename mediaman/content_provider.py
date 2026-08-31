@@ -20,9 +20,12 @@ class ContentProvider(ABC):
 
 
 class TestContentProvider(ContentProvider):
-    """Deterministic test provider for dry-run and testing."""
+    """
+    Deterministic test provider for dry-run and testing.
     
-    MAX_LENGTH = 2000  # Telegram message limit is 4096, use conservative limit
+    Message length validation is PENDING operational decisions.
+    No hardcoded length limits are enforced by this provider.
+    """
     
     def __init__(self):
         self.call_count = 0
@@ -44,12 +47,14 @@ class TestContentProvider(ContentProvider):
         return article
     
     def validate(self, content: str) -> tuple[bool, str]:
-        """Validate content. Return (is_valid, error_message)."""
+        """
+        Validate content. Return (is_valid, error_message).
+        
+        Length validation is PENDING — no hardcoded limit enforced.
+        Future content must be string, valid UTF-8, and free of credentials.
+        """
         if not content:
             return False, "Content is empty"
-        
-        if len(content) > self.MAX_LENGTH:
-            return False, f"Content exceeds {self.MAX_LENGTH} characters"
         
         # Check for credentials (basic patterns)
         credential_patterns = [

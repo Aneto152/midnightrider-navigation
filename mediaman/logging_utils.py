@@ -10,22 +10,37 @@ import re
 
 
 def sanitize_token(value):
-    """Replace token characters while preserving length pattern."""
-    if not isinstance(value, str):
-        return str(value)
-    if len(value) > 20:
-        return value[:4] + "*" * (len(value) - 8) + value[-4:]
-    return "*" * len(value)
+    """
+    Return a neutral redaction marker only. Never preserve any token fragment.
+    
+    Partial credential masking is forbidden. Tokens are secrets and cannot be
+    partially masked without exposing information.
+    
+    Args:
+        value: Token value (string, int, or other type)
+    
+    Returns:
+        Neutral redaction marker only. Never returns original input characters.
+    """
+    # Never preserve prefix, suffix, length pattern, or any token material
+    return "[REDACTED — credential reference: token]"
 
 
 def sanitize_chat_id(chat_id):
-    """Replace chat ID digits while preserving sign."""
-    if not isinstance(chat_id, (int, str)):
-        return str(chat_id)
-    chat_str = str(chat_id)
-    if chat_str.startswith("-"):
-        return "-" + "*" * (len(chat_str) - 1)
-    return "*" * len(chat_str)
+    """
+    Return neutral redaction marker. Never expose chat ID value or pattern.
+    
+    Chat IDs are sensitive identifiers and cannot be partially masked or have
+    length patterns preserved without exposing information.
+    
+    Args:
+        chat_id: Chat ID (int, str, or other type)
+    
+    Returns:
+        Neutral redaction marker only. Never returns original input characters.
+    """
+    # Never expose the actual value, sign, or length pattern
+    return "[REDACTED — credential reference: chat_id]"
 
 
 def setup_service_logger(name="mediaman"):

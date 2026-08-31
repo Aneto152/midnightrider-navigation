@@ -7,12 +7,13 @@ No inbound processing, no webhooks, no getUpdates, no message replies.
 import json
 import os
 import uuid
+import logging
 from urllib.request import Request, urlopen
 from urllib.error import URLError, HTTPError
 from datetime import datetime
 from dataclasses import dataclass, asdict
 
-from .logging_utils import sanitize_token, sanitize_chat_id
+from .logging_utils import sanitize_token, sanitize_chat_id, setup_service_logger
 
 
 @dataclass
@@ -39,11 +40,17 @@ class TelegramSender:
     
     API_BASE = "https://api.telegram.org/bot"
     
-    def __init__(self):
+    def __init__(self, logger=None):
         self.token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
         self.chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip()
         self.dry_run = os.getenv("DRY_RUN", "").lower() == "true"
         self.execution_id = str(uuid.uuid4())[:8]
+        
+        # Mandatory structured service logger
+        self.logger = logger or setup_service_logger("telegram-sender")
+        
+        # Log STARTUP probe (safe initialization summary, no credentials)
+        self.logger.info(f"STARTUP dry_run={self.dry_run} execution_id={self.execution_id}")
     
     def validate(self):
         """Check required configuration. Raise ValueError if missing."""
@@ -69,6 +76,12 @@ class TelegramSender:
         
         if self.dry_run:
             # Dry-run: simulate without network I/O
+            # Log DATA_IN probe (content length and safe classification only, no body)
+            self.logger.info(f"DATA_IN content_length={content_len}")
+            # Log DATA_OUT probe (dry-run classification and length)
+            self.logger.info(f"DATA_OUT dry_run=true provider_status=DRY_RUN content_length={content_len} execution_id={self.execution_id}")
+            # Log HEARTBEAT probe (one-shot sender heartbeat)
+            self.logger.info(f"HEARTBEAT mode=dry_run")
             return SendResult(
                 dry_run=True,
                 success=True,
@@ -99,6 +112,10 @@ class TelegramSender:
                 resp_data = json.loads(response.read().decode('utf-8'))
                 
                 if resp_data.get("ok"):
+                    # Log DATA_OUT probe (provider result classification and length)
+                    self.logger.info(f"DATA_OUT dry_run=false provider_status=OK content_length={content_len} execution_id={self.execution_id}")
+                    # Log HEARTBEAT probe
+                    self.logger.info(f"HEARTBEAT mode=live_send")
                     return SendResult(
                         dry_run=False,
                         success=True,
@@ -109,6 +126,8 @@ class TelegramSender:
                     )
                 else:
                     error_code = resp_data.get("error_code", "UNKNOWN")
+                    # Log DATA_OUT probe (safe error classification, not raw response)
+                    self.logger.info(f"DATA_OUT dry_run=false provider_status=API_ERROR error_code={error_code} content_length={content_len} execution_id={self.execution_id}")
                     return SendResult(
                         dry_run=False,
                         success=False,
@@ -119,6 +138,9 @@ class TelegramSender:
                     )
         
         except HTTPError as e:
+            # Log ERROR probe (exception class only, not raw message)
+            self.logger.error(f"ERROR exception_class=HTTPError error_code={e.code} execution_id={self.execution_id}")
+            
             return SendResult(
                 dry_run=False,
                 success=False,
@@ -129,16 +151,22 @@ class TelegramSender:
             )
         
         except URLError as e:
+            # Log ERROR probe (safe classification, not raw reason)
+            self.logger.error(f"ERROR exception_class=URLError execution_id={self.execution_id}")
+            
             return SendResult(
                 dry_run=False,
                 success=False,
                 provider_status="NETWORK_ERROR",
-                error_code=str(e.reason),
+                error_code="NETWORK_ERROR",
                 message_length=content_len,
                 execution_id=self.execution_id
             )
         
         except Exception as e:
+            # Log ERROR probe (exception class only, never raw message)
+            self.logger.error(f"ERROR exception_class={type(e).__name__} execution_id={self.execution_id}")
+            
             return SendResult(
                 dry_run=False,
                 success=False,
@@ -147,6 +175,10 @@ class TelegramSender:
                 message_length=content_len,
                 execution_id=self.execution_id
             )
+        
+        finally:
+            # Log SHUTDOWN probe (clean completion event)
+            self.logger.info(f"SHUTDOWN execution_id={self.execution_id}")
     
     def result_dict(self) -> dict:
         """Return sender configuration (sanitized)."""
