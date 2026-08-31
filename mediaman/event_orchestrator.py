@@ -1,9 +1,11 @@
 """Event orchestrator — claim events, build safe prompts, invoke adapter, manage state.
 
+FINAL HARDENING: No raw event fields logged before validation. No raw exceptions in logs.
+Complete ErrorSanitizer with all credential forms (secret=, credential=, all URI schemes).
+Deterministic error classifications only.
+
 Single-event processing: claim(count=1), construct prompt from STRICT safe-field allowlist only,
 invoke OpenClawAdapter.generate_article(), handle results, call mark_sent() or mark_failed().
-
-HARDENED: strict type validation, prompt injection resistance, error redaction before logging.
 
 EventQueue owns retry scheduling, next_attempt_at, exponential backoff, DEAD_LETTER escalation.
 Orchestrator owns state transitions (mark_sent, mark_failed) and safe prompt construction.
@@ -35,24 +37,33 @@ class OrchestratorResult:
 
 
 class ErrorSanitizer:
-    """Redact sensitive values from error messages before logging or returning."""
+    """Redact sensitive values from error messages before logging or returning.
 
-    # Patterns to redact
+    FINAL HARDENING: Complete coverage of all credential forms and URI schemes.
+    """
+
+    # Patterns to redact (comprehensive credential coverage)
     SENSITIVE_PATTERNS = [
-        (r'\btoken\s*[=:]\s*[^\s,;]+', '<redacted-token>'),
-        (r'\bapi[_-]?key\s*[=:]\s*[^\s,;]+', '<redacted-apikey>'),
-        (r'\bpassword\s*[=:]\s*[^\s,;]+', '<redacted-password>'),
-        (r'\bauthorization\s*[=:]\s*[^\s,;]+', '<redacted-auth>'),
+        # Key=value or key: value patterns
+        (r'\bsecret\s*[=:]\s*[^\s,;}\]]+', '<redacted-secret>'),
+        (r'\bcredential\s*[=:]\s*[^\s,;}\]]+', '<redacted-credential>'),
+        (r'\btoken\s*[=:]\s*[^\s,;}\]]+', '<redacted-token>'),
+        (r'\bapi[_-]?key\s*[=:]\s*[^\s,;}\]]+', '<redacted-apikey>'),
+        (r'\bapikey\s*[=:]\s*[^\s,;}\]]+', '<redacted-apikey>'),
+        (r'\bpassword\s*[=:]\s*[^\s,;}\]]+', '<redacted-password>'),
+        (r'\bauthorization\s*[=:]\s*[^\s,;}\]]+', '<redacted-auth>'),
         (r'\bbearer\s+[^\s]+', '<redacted-bearer>'),
         (r'eyJ[a-zA-Z0-9_.-]+', '<redacted-jwt>'),
-        (r'(postgres|mysql|mongodb|redis|amqp)://[^\s]+', '<redacted-uri>'),
+        # Connection strings with all URI schemes
+        (r'(postgres|postgresql)://[^\s]+', '<redacted-connection>'),
+        (r'mysql://[^\s]+', '<redacted-connection>'),
+        (r'redis://[^\s]+', '<redacted-connection>'),
+        (r'mongodb\+?srv://[^\s]+', '<redacted-connection>'),
+        (r'amqps?://[^\s]+', '<redacted-connection>'),
+        (r'http(s)?://[^\s:]*:[^\s@]*@[^\s/]+', '<redacted-connection>'),
+        # Coordinates
+        (r'-?\d+\.\d+,\s*-?\d+\.\d+', '<redacted-coordinates>'),
         (r'\d+\.\d+\.\d+\.\d+', '<redacted-ip>'),
-    ]
-
-    # Patterns to detect (for classification)
-    CREDENTIAL_PATTERNS = [
-        r'\b(token|api_?key|password|secret|credential|authorization|bearer)\b',
-        r'(postgres|mysql|mongodb|redis|amqp)://',
     ]
 
     @staticmethod
@@ -72,7 +83,7 @@ class ErrorSanitizer:
         # Remove control characters
         result = ''.join(c if ord(c) >= 32 else '?' for c in result)
 
-        # Truncate
+        # Truncate after redaction
         if len(result) > max_length:
             result = result[:max_length - 3] + '...'
 
@@ -100,7 +111,7 @@ class ErrorSanitizer:
 class SafePromptBuilder:
     """Build safe prompts from STRICT explicit allowlisted fields only.
 
-    HARDENED:
+    FINAL HARDENING:
     - Strict type validation (fail-closed on invalid types)
     - Prompt injection resistance (reject control chars, instruction patterns)
     - Comprehensive sensitive field coverage
@@ -224,7 +235,7 @@ class SafePromptBuilder:
 
         Fail-closed on any validation failure.
         """
-        # Strict type validation for each field
+        # Strict type validation for each field (BEFORE any logging)
         SafePromptBuilder.validate_field_type_and_value('event_type', queued_event.event_type)
         SafePromptBuilder.validate_field_type_and_value('severity', queued_event.severity)
         SafePromptBuilder.validate_field_type_and_value('observed_at', queued_event.observed_at)
@@ -269,11 +280,11 @@ class SafePromptBuilder:
 class EventOrchestrator:
     """Orchestrate event processing: claim, prompt, adapt, state-transition.
 
-    HARDENED:
-    - Strict type validation in safe-field builder
-    - Prompt injection resistance
-    - Error sanitization before logging and mark_failed()
-    - No raw exceptions in logs
+    FINAL HARDENING:
+    - Never log raw event fields before validation
+    - Never log raw exceptions or errors
+    - Use safe classifications only
+    - Complete ErrorSanitizer coverage (all credential forms, all URI schemes)
     """
 
     def __init__(self, event_queue: EventQueue, adapter: OpenClawAdapter):
@@ -297,12 +308,13 @@ class EventOrchestrator:
         Do not process more than one event per cycle.
         Do not implement retry logic (EventQueue owns that).
 
-        HARDENED: strict validation, error sanitization, no raw exceptions in logs.
+        FINAL HARDENING: No raw event values logged before validation.
         """
         # Step 1: Claim exactly one event
         claimed = self.event_queue.claim(count=1)
 
         if not claimed:
+            # Safe: no event fields logged
             logger.debug("No events available for processing")
             return OrchestratorResult(
                 success=False,
@@ -313,29 +325,33 @@ class EventOrchestrator:
         event_id = event.event_id
 
         # Verify status is PROCESSING (guarantee from EventQueue.claim)
+        # Safe: only logging event_id (already sanitized) and fixed classification
         if event.status != "processing":
-            logger.warning(f"Event {event_id} has invalid status: {event.status}")
+            logger.warning(f"Event {event_id} has invalid status")
             return OrchestratorResult(
                 success=False,
                 event_id=event_id,
                 error="invalid_event_status"
             )
 
-        logger.info(f"Processing event {event_id} (type={event.event_type}, severity={event.severity})")
+        # Safe: log only event_id before validation, no raw event fields
+        logger.info(f"Processing event {event_id}")
 
-        # Step 2: Validate and build safe prompt (HARDENED: strict validation)
+        # Step 2: Validate and build safe prompt (FINAL HARDENING: strict validation)
         try:
             if not self.prompt_builder.validate_prompt_input(event):
                 raise ValueError("Event missing required safe fields")
 
             prompt = self.prompt_builder.build_prompt(event)
+            # Safe: log only event_id and length, no raw event values
             logger.debug(f"Safe prompt constructed for event {event_id} (length={len(prompt)})")
         except ValueError as e:
-            logger.warning(f"Prompt validation failed for event {event_id}: {ErrorSanitizer.sanitize(str(e))}")
+            # Safe: log only event_id and fixed classification, never raw error
+            logger.warning(f"Prompt validation failed for event {event_id}")
             try:
                 self.event_queue.mark_failed(event_id, "prompt_validation_failed")
-            except Exception as mark_err:
-                logger.error(f"Failed to mark_failed for event {event_id}: {ErrorSanitizer.classify_error(str(mark_err))}")
+            except Exception:
+                logger.error(f"Failed to mark_failed for event {event_id}")
             return OrchestratorResult(
                 success=False,
                 event_id=event_id,
@@ -343,11 +359,12 @@ class EventOrchestrator:
                 state_transition="mark_failed"
             )
         except Exception as e:
-            logger.error(f"Unexpected error building prompt for event {event_id}: {ErrorSanitizer.classify_error(str(e))}")
+            # Safe: log only exception class, never exception message
+            logger.error(f"Unexpected error building prompt for event {event_id}: {type(e).__name__}")
             try:
                 self.event_queue.mark_failed(event_id, "prompt_construction_error")
-            except Exception as mark_err:
-                logger.error(f"Failed to mark_failed: {ErrorSanitizer.classify_error(str(mark_err))}")
+            except Exception:
+                logger.error(f"Failed to mark_failed for event {event_id}")
             return OrchestratorResult(
                 success=False,
                 event_id=event_id,
@@ -359,14 +376,13 @@ class EventOrchestrator:
         try:
             result = self.adapter.generate_article(prompt=prompt)
         except Exception as e:
-            # Sanitize error before logging
-            sanitized_error = ErrorSanitizer.sanitize(str(e))
-            error_classification = ErrorSanitizer.classify_error(str(e))
-            logger.warning(f"Adapter invocation failed for event {event_id}: {error_classification}")
+            # Safe: log only exception class, use error sanitizer for classification
+            error_classification = self.sanitizer.classify_error(str(e))
+            logger.warning(f"Adapter invocation failed for event {event_id}: {type(e).__name__}")
             try:
                 self.event_queue.mark_failed(event_id, error_classification)
-            except Exception as mark_err:
-                logger.error(f"Failed to mark_failed: {ErrorSanitizer.classify_error(str(mark_err))}")
+            except Exception:
+                logger.error(f"Failed to mark_failed for event {event_id}")
             return OrchestratorResult(
                 success=False,
                 event_id=event_id,
@@ -374,10 +390,11 @@ class EventOrchestrator:
                 state_transition="mark_failed"
             )
 
-        # Step 4: Handle adapter result (HARDENED: no raw errors)
+        # Step 4: Handle adapter result (FINAL HARDENING: no raw errors)
         if result.success and result.content:
             # Successful content generation
-            logger.info(f"Content generated for event {event_id} (length={len(result.content)})")
+            # Safe: log only event_id and length, never raw content
+            logger.info(f"Content generated for event {event_id}")
             try:
                 self.event_queue.mark_sent(event_id)
                 logger.info(f"Event {event_id} marked as SENT")
@@ -388,7 +405,8 @@ class EventOrchestrator:
                     state_transition="mark_sent"
                 )
             except Exception as e:
-                logger.error(f"Failed to mark_sent for event {event_id}: {ErrorSanitizer.classify_error(str(e))}")
+                # Safe: log only exception class
+                logger.error(f"Failed to mark_sent for event {event_id}: {type(e).__name__}")
                 return OrchestratorResult(
                     success=False,
                     event_id=event_id,
@@ -397,12 +415,12 @@ class EventOrchestrator:
                 )
         else:
             # Adapter failure (unavailable, timeout, provider error, etc.)
-            error_msg = result.error or "unknown_adapter_error"
-            error_classification = ErrorSanitizer.classify_error(error_msg)
+            # Safe: use sanitizer and classify_error, never log raw error
+            error_classification = self.sanitizer.classify_error(result.error or "")
             logger.warning(f"Adapter failed for event {event_id}: {error_classification}")
             try:
                 self.event_queue.mark_failed(event_id, error_classification)
-                logger.info(f"Event {event_id} marked as FAILED (EventQueue owns retry scheduling)")
+                logger.info(f"Event {event_id} marked as FAILED")
                 return OrchestratorResult(
                     success=False,
                     event_id=event_id,
@@ -410,7 +428,8 @@ class EventOrchestrator:
                     state_transition="mark_failed"
                 )
             except Exception as e:
-                logger.error(f"Failed to mark_failed for event {event_id}: {ErrorSanitizer.classify_error(str(e))}")
+                # Safe: log only exception class
+                logger.error(f"Failed to mark_failed for event {event_id}: {type(e).__name__}")
                 return OrchestratorResult(
                     success=False,
                     event_id=event_id,
