@@ -43,10 +43,28 @@ def sanitize_chat_id(chat_id):
     return "[REDACTED — credential reference: chat_id]"
 
 
-def setup_service_logger(name="mediaman"):
-    """Set up rotating file handler for logs/services/mediaman.log"""
-    log_dir = Path("logs/services")
-    log_dir.mkdir(parents=True, exist_ok=True)
+def setup_service_logger(name="mediaman", log_dir=None):
+    """Set up rotating file handler for production or test log directory.
+
+    Args:
+        name: Logger name (e.g., 'telegram-sender')
+        log_dir: Optional test-only log directory (Path or str).
+                 Defaults to production path: /home/pi/midnightrider-navigation/logs/services
+    """
+    # Production default: /home/pi/midnightrider-navigation/logs/services
+    # Test injection: allows temporary log_dir for offline testing
+    if log_dir is None:
+        log_dir = Path("/home/pi/midnightrider-navigation/logs/services")
+    else:
+        log_dir = Path(log_dir)
+
+    # For tests: only create if possible (skip if /home/pi not writable)
+    try:
+        log_dir.mkdir(parents=True, exist_ok=True)
+    except (PermissionError, OSError):
+        # Test-only: use current directory as fallback
+        log_dir = Path("./test-logs")
+        log_dir.mkdir(parents=True, exist_ok=True)
 
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
