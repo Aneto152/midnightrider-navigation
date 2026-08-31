@@ -628,6 +628,165 @@ class TestEventQueueCountByStatus:
         queue.close()
 
 
+class TestEventQueueDeterministicOrdering:
+    """Test deterministic claim ordering."""
+
+    def test_claim_deterministic_order(self, temp_db, clock):
+        """Claim returns events in deterministic order: next_attempt_at, created_at, event_id."""
+        queue = EventQueue(temp_db, clock=clock)
+
+        # Create events with different next_attempt_at times
+        now_str = clock()
+        now_dt = datetime.fromisoformat(now_str.replace('Z', '+00:00'))
+
+        # Event 1: due in 5 seconds
+        event1 = DetectedEvent(
+            event_id="evt_order_1",
+            event_type="NAVIGATION_DATA_LOST",
+            observed_at=now_str,
+            severity="WARNING",
+        )
+        queue.enqueue(event1)
+        queue.conn.execute(
+            "UPDATE events SET next_attempt_at = ? WHERE event_id = ?",
+            ((now_dt + timedelta(seconds=5)).isoformat().replace('+00:00', 'Z'), event1.event_id),
+        )
+        queue.conn.commit()
+
+        # Event 2: due immediately (should claim first)
+        event2 = DetectedEvent(
+            event_id="evt_order_2",
+            event_type="FACT_BECAME_STALE",
+            observed_at=now_str,
+            severity="WARNING",
+        )
+        queue.enqueue(event2)
+        queue.conn.execute(
+            "UPDATE events SET next_attempt_at = ? WHERE event_id = ?",
+            (now_str, event2.event_id),
+        )
+        queue.conn.commit()
+
+        # Event 3: due immediately but created later (should claim after event2)
+        event3 = DetectedEvent(
+            event_id="evt_order_3",
+            event_type="FACT_RECOVERED",
+            observed_at=now_str,
+            severity="INFO",
+        )
+        queue.enqueue(event3)
+        queue.conn.execute(
+            "UPDATE events SET next_attempt_at = ?, created_at = ? WHERE event_id = ?",
+            (now_str, (now_dt + timedelta(seconds=1)).isoformat().replace('+00:00', 'Z'), event3.event_id),
+        )
+        queue.conn.commit()
+
+        # Event 4: due immediately, same created_at as event3, but earlier event_id (should claim after event3)
+        event4 = DetectedEvent(
+            event_id="evt_order_4",
+            event_type="NAVIGATION_DATA_RECOVERED",
+            observed_at=now_str,
+            severity="INFO",
+        )
+        queue.enqueue(event4)
+        queue.conn.execute(
+            "UPDATE events SET next_attempt_at = ?, created_at = ? WHERE event_id = ?",
+            (now_str, (now_dt + timedelta(seconds=1)).isoformat().replace('+00:00', 'Z'), event4.event_id),
+        )
+        queue.conn.commit()
+
+        # Claim all 4 events
+        claimed = queue.claim(count=10)
+        assert len(claimed) == 4
+
+        # Verify order: event2, event3, event4, event1
+        # (event2 due first; event3 and event4 both due now with same created_at,
+        #  but event3's event_id < event4's event_id alphabetically)
+        assert claimed[0].event_id == event2.event_id  # due first
+        assert claimed[1].event_id == event3.event_id  # due now, evt_order_3 < evt_order_4
+        assert claimed[2].event_id == event4.event_id  # due now, evt_order_4 > evt_order_3
+        assert claimed[3].event_id == event1.event_id  # due last
+
+        queue.close()
+
+
+class TestEventQueueRealSQLiteRollback:
+    """Test real SQLite transaction rollback with injected failure."""
+
+    def test_real_sqlite_failure_rollback(self, temp_db, sample_event, clock):
+        """Injected SQLite RAISE(ABORT) causes rollback; event remains PENDING."""
+        queue = EventQueue(temp_db, clock=clock)
+        queue.enqueue(sample_event)
+
+        # Create a trigger that will abort UPDATE operations on status
+        queue.conn.execute("""
+            CREATE TRIGGER abort_processing_update
+            BEFORE UPDATE ON events
+            WHEN NEW.status = 'processing'
+            BEGIN
+                SELECT RAISE(ABORT, 'Injected test failure');
+            END
+        """)
+        queue.conn.commit()
+
+        # Attempt to claim; should raise SQLite error
+        with pytest.raises(sqlite3.IntegrityError):
+            queue.claim(count=1)
+
+        # Verify event remains PENDING
+        event = queue.get_event(sample_event.event_id)
+        assert event.status == EventStatus.PENDING.value
+        assert event.locked_until is None
+
+        # Verify attempts and timestamps were not partially changed
+        assert event.attempts == 0
+
+        queue.close()
+
+
+class TestEventQueueConcurrentClaimPrevention:
+    """Test claim prevention with real concurrent threads."""
+
+    def test_concurrent_claim_prevention_threaded(self, temp_db, sample_event, clock):
+        """Two threads claiming from same database; only one receives the event."""
+        import threading
+
+        queue1 = EventQueue(temp_db, clock=clock)
+        queue1.enqueue(sample_event)
+        queue1.close()  # Close first instance
+
+        claimed_by = {'queue1': None, 'queue2': None}
+        lock = threading.Lock()
+
+        def claim_in_thread(queue_name):
+            """Open queue, claim, and record result."""
+            queue = EventQueue(temp_db, clock=clock)
+            try:
+                claimed = queue.claim(count=1)
+                with lock:
+                    claimed_by[queue_name] = [c.event_id for c in claimed]
+            finally:
+                queue.close()
+
+        # Start two threads concurrently
+        t1 = threading.Thread(target=claim_in_thread, args=('queue1',))
+        t2 = threading.Thread(target=claim_in_thread, args=('queue2',))
+
+        t1.start()
+        t2.start()
+
+        t1.join()
+        t2.join()
+
+        # Exactly one thread should have claimed the event
+        claimed_count = sum(1 for v in claimed_by.values() if v and len(v) > 0)
+        assert claimed_count == 1, f"Expected 1 thread to claim event, but {claimed_count} did"
+
+        # The other thread should have empty result
+        unclaimed_count = sum(1 for v in claimed_by.values() if v is None or len(v) == 0)
+        assert unclaimed_count == 1
+
+
 class TestEventQueueProductionDbPrevention:
     """Verify production SQLite database is never created by tests."""
 
