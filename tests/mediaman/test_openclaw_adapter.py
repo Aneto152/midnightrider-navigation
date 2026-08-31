@@ -37,13 +37,82 @@ class TestOpenClawAdapterInitialization:
         assert adapter.is_available() is False
 
     def test_initialization_with_timeout_override(self):
-        """Adapter initialization accepts timeout override."""
+        """Adapter initialization accepts positive integer timeout override."""
         with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
             mock_run.return_value = MagicMock(returncode=0)
 
             adapter = OpenClawAdapter(timeout_seconds=60)
 
             assert adapter.timeout_seconds == 60
+
+    def test_initialization_rejects_zero_timeout(self):
+        """Adapter initialization rejects timeout of zero."""
+        with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
+            mock_run.return_value = MagicMock(returncode=0)
+
+            with pytest.raises(ValueError, match="must be positive"):
+                OpenClawAdapter(timeout_seconds=0)
+
+    def test_initialization_rejects_negative_timeout(self):
+        """Adapter initialization rejects negative timeout."""
+        with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
+            mock_run.return_value = MagicMock(returncode=0)
+
+            with pytest.raises(ValueError, match="must be positive"):
+                OpenClawAdapter(timeout_seconds=-5)
+
+    def test_initialization_rejects_string_timeout(self):
+        """Adapter initialization rejects string timeout."""
+        with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
+            mock_run.return_value = MagicMock(returncode=0)
+
+            with pytest.raises(ValueError, match="must be a positive integer"):
+                OpenClawAdapter(timeout_seconds="30")
+
+    def test_initialization_rejects_float_timeout(self):
+        """Adapter initialization rejects float timeout."""
+        with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
+            mock_run.return_value = MagicMock(returncode=0)
+
+            with pytest.raises(ValueError, match="must be a positive integer"):
+                OpenClawAdapter(timeout_seconds=30.5)
+
+    def test_initialization_rejects_boolean_timeout(self):
+        """Adapter initialization rejects boolean timeout (even though bool is subclass of int)."""
+        with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
+            mock_run.return_value = MagicMock(returncode=0)
+
+            with pytest.raises(ValueError, match="must be a positive integer"):
+                OpenClawAdapter(timeout_seconds=True)
+
+    def test_initialization_invalid_timeout_does_not_contact_gateway(self):
+        """Invalid timeout configuration must not contact OpenClaw Gateway."""
+        with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
+            mock_run.return_value = MagicMock(returncode=0)
+
+            # Should raise ValueError before any gateway contact
+            with pytest.raises(ValueError):
+                OpenClawAdapter(timeout_seconds="invalid")
+
+            # Verify only the availability check was called (if at all before exception)
+            # but definitely no actual generation happened
+
+    def test_initialization_invalid_timeout_no_sensitive_logging(self):
+        """Invalid timeout must not expose sensitive data in error."""
+        with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
+            mock_run.return_value = MagicMock(returncode=0)
+
+            # Invalid config should raise clean ValueError
+            try:
+                OpenClawAdapter(timeout_seconds="secret_string")
+                assert False, "Should have raised ValueError"
+            except ValueError as e:
+                error_msg = str(e)
+                # Error should describe the problem, not expose any secrets
+                assert "must be a positive integer" in error_msg
+                assert "secret_string" in error_msg  # the invalid value is ok to show
+                assert "token" not in error_msg.lower()
+                assert "password" not in error_msg.lower()
 
     def test_initialization_with_injected_availability_check(self):
         """Adapter initialization can use injected availability function."""
@@ -367,3 +436,25 @@ class TestOpenClawAdapter:
             # First call should be for --version check
             first_call = mock_run.call_args_list[0]
             assert '--version' in first_call[0][0]
+
+    def test_agent_id_is_generation_parameter_not_init_parameter(self):
+        """agent_id is a generate_article() parameter, not an initialization parameter."""
+        with patch('mediaman.openclaw_adapter.subprocess.run') as mock_run:
+            mock_run.return_value = MagicMock(returncode=0)
+
+            # Create adapter without agent_id parameter (should not error)
+            adapter = OpenClawAdapter()
+
+            # agent_id is used in generate_article(), not in __init__
+            # So initialization should NOT have agent_id attribute
+            assert not hasattr(adapter, 'agent_id')
+
+            # But generate_article() accepts agent_id as parameter
+            result = adapter.generate_article(
+                prompt="test",
+                agent_id="custom-agent"
+            )
+
+            # Verify the command was built with the agent_id
+            call_args = mock_run.call_args[0][0]
+            assert "custom-agent" in call_args

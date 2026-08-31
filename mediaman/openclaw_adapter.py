@@ -66,9 +66,30 @@ class OpenClawAdapter:
 
         Args:
             timeout_seconds: Optional timeout override (default: 30)
+                - None uses DEFAULT_TIMEOUT (30 seconds)
+                - Must be positive integer if provided
+                - Rejects: 0, negative, non-integer, boolean, float
             availability_check: Optional injected availability function (for testing)
+
+        Raises:
+            ValueError: If timeout_seconds is invalid (not None and not positive integer)
         """
-        self.timeout_seconds = timeout_seconds or self.DEFAULT_TIMEOUT
+        # Validate timeout_seconds
+        if timeout_seconds is None:
+            self.timeout_seconds = self.DEFAULT_TIMEOUT
+        else:
+            # Reject non-integer types (including bool which is subclass of int)
+            if isinstance(timeout_seconds, bool) or not isinstance(timeout_seconds, int):
+                raise ValueError(
+                    f"timeout_seconds must be a positive integer, got {type(timeout_seconds).__name__}: {timeout_seconds}"
+                )
+            # Reject zero or negative
+            if timeout_seconds <= 0:
+                raise ValueError(
+                    f"timeout_seconds must be positive, got {timeout_seconds}"
+                )
+            self.timeout_seconds = timeout_seconds
+
         self.logger = logging.getLogger("mediaman.openclaw_adapter")
 
         # Determine availability (use injected function or default check)
