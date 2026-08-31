@@ -2,58 +2,140 @@
 
 **Status:** FOUNDATION ONLY — DRY-RUN VALIDATED — PRODUCTION ACTIVATION BLOCKED
 
-**Current Development Phase (2026-08-27):**
-- ✅ SQLite delivery state machine (PENDING → SENDING → SENT / FAILED)
-- ✅ Telegram sender (outbound-only, no inbound)
+**Current Development Phase (2026-08-31):**
+- ✅ Outbound sender foundation (DRY_RUN validated)
+- ✅ SQLite state machine (approved 9-state model)
 - ✅ Logging infrastructure (structured, sanitized)
 - ✅ Systemd units (service + timer) present but disabled
 - ❌ Real content provider (not implemented)
 - ❌ OpenClaw LLM adapter (not implemented)
+- ❌ External publication bridge (not implemented)
 - ⏳ Telegram bot/group (not created — development phase only)
 
 ## System Overview
 
-MediaMan is a planned outbound-only Telegram reporter for race performance articles. It publishes content every 15 minutes to a temporary regatta group via a one-shot systemd timer.
+MediaMan is a planned outbound-only Telegram reporter for race performance articles. No live Telegram contact has occurred. The current sender is NOT the future PublicationBridge.
 
 **Security properties (current):**
-- No inbound Telegram webhook, polling, getUpdates, or command processing
+- Outbound-only (no inbound webhook, polling, getUpdates, or command processing)
 - No personal Telegram accounts
 - No credentials in version control
+- No credentials stored in logs
 - No Signal K modifications required
 - No Docker changes required
 - Fail-closed: invalid content → skip send (never fake article)
 
-## Architecture
+## Publication State Machine — Approved Design
 
-### Data Flow (When Implemented)
+MediaMan uses an approved **9-state publication state machine** with explicit operator action requirements for certain transitions:
 
-```
-RaceFacts (validated) → Content Provider → Telegram Sender → Group Chat
-                             ↓
-                        (no inbound)
-```
-
-### Delivery States
+### State Definitions
 
 ```
-PENDING → SENDING → SENT  (final, non-retryable)
-              ↓
-            FAILED → (retryable)
+READY                → Cycle generated, approved for validation
+VALIDATED            → Content passed validation checks
+SENDING              → Send attempt in progress
+UNKNOWN              → Outcome ambiguous (no confirmation received)
+RETRY_AUTHORIZED     → Operator explicitly authorized retry from UNKNOWN
+SENT                 → Provider message ID confirmed (TERMINAL)
+SENT_RECONCILED      → UNKNOWN → confirmed sent via manual evidence (TERMINAL)
+FAILED               → Send failed permanently
+DEAD_LETTER          → Operator explicitly abandoned publication attempt
 ```
 
-- **PENDING:** Cycle generated, waiting to send
-- **SENDING:** In progress (stale sends after timeout are retryable)
-- **SENT:** Confirmed by Telegram (never retried)
-- **FAILED:** Send failed (remains retryable indefinitely)
+### State Transitions (Approved)
 
-### Idempotency Model
+**Normal Flow:**
+- `READY` → `VALIDATED` (content validation passes)
+- `VALIDATED` → `SENDING` (send attempt begins)
+- `SENDING` → `SENT` (only when provider message ID is confirmed)
 
-15-minute UTC buckets prevent duplicate sends:
+**Ambiguity Resolution (No Automatic Retry):**
+- `SENDING` → `UNKNOWN` (no confirmation received, timeout exceeded)
+- `UNKNOWN` → `SENT_RECONCILED` (operator provides explicit evidence of prior send)
+- `UNKNOWN` → `RETRY_AUTHORIZED` (operator authorizes retry attempt)
+- `RETRY_AUTHORIZED` → `READY` (retry cycle begins)
+- `UNKNOWN` → `DEAD_LETTER` (operator explicitly abandons)
+
+**Error Terminal:**
+- `SENDING` → `FAILED` (send rejected by provider)
+- `FAILED` → (remains retryable indefinitely)
+
+**Terminal States (Never Retried):**
+- `SENT` — Provider message ID confirmed
+- `SENT_RECONCILED` — Manual evidence of prior send
+- `DEAD_LETTER` — Operator abandonment
+
+### Approved Invariants
+
+- `UNKNOWN` never retries automatically
+- `SENDING` without confirmation never becomes `FAILED` automatically
+- `SENT` and `SENT_RECONCILED` are permanent terminal states
+- Exactly-once and zero-duplicate guarantees are **NOT** provided
+- At-least-once delivery semantics (manual reconciliation required)
+
+## Manual Reconciliation — Operator Evidence Format
+
+When publication reaches `UNKNOWN` state (ambiguous outcome), the operator must provide explicit evidence to transition to `SENT_RECONCILED` or authorize retry.
+
+### Evidence Reference Format
 
 ```
-2026-08-27T15:00:00Z → same send, if retried
-2026-08-27T15:14:59Z → same cycle
-2026-08-27T15:15:00Z → new cycle
+source:timestamp:reference_id
+```
+
+**Example (neutral placeholders only):**
+```
+manual_ui:2026-08-31T15:00:00Z:<external_reference_id>
+monitoring:2026-08-31T15:00:00Z:<external_reference_id>
+api_query:2026-08-31T15:05:30Z:<external_reference_id>
+backup_log:2026-08-31T13:59:15Z:<external_reference_id>
+```
+
+### Evidence Properties
+
+- **source:** Bounded and approved (manual_ui, monitoring, api_query, backup_log, etc.)
+- **timestamp:** ISO 8601 UTC format (never timezone abbreviations)
+- **reference_id:** External system identifier or operator-provided reference
+- **No message body stored:** Evidence does not contain publication content
+- **No credentials stored:** Evidence contains no tokens, chat IDs, or secrets
+- **Operator attestation, not proof:** Evidence is human confirmation, not cryptographic proof
+- **No automatic Bot API search:** Telegram Bot API cannot reliably search by content_hash
+- **Manual operator action required:** All UNKNOWN transitions require explicit decision
+
+### UNKNOWN → SENT_RECONCILED (With Evidence)
+
+When evidence proves the publication was sent despite ambiguous response:
+
+```
+Evidence: monitoring:2026-08-31T14:30:15Z:telegram_message_log_entry_12345
+State transition: UNKNOWN → SENT_RECONCILED
+Result: Terminal state, never retried
+```
+
+### UNKNOWN → RETRY_AUTHORIZED (With Operator Authorization)
+
+When operator explicitly authorizes retry:
+
+```
+Action: RETRY_AUTHORIZED
+Operator: <operator_name_or_id>
+Timestamp: 2026-08-31T14:31:00Z
+State transition: UNKNOWN → RETRY_AUTHORIZED → READY
+Result: Retry cycle begins
+```
+
+### UNKNOWN → DEAD_LETTER (With Operator Abandonment)
+
+When operator explicitly abandons publication attempt:
+
+```
+Action: DEAD_LETTER
+Operator: <operator_name_or_id>
+Timestamp: 2026-08-31T14:32:00Z
+Reason: [operator provided reason]
+State transition: UNKNOWN → DEAD_LETTER
+Result: Terminal state, never retried or reconciled
 ```
 
 ## Current Status
@@ -62,243 +144,118 @@ PENDING → SENDING → SENT  (final, non-retryable)
 
 **DRY_RUN Foundation:**
 - MediaMan main orchestration
-- SQLite state transitions
-- Logging (structured, sanitized)
-- Test content provider (for validation only)
-- Systemd timer/service files
+- SQLite state machine (approved 9-state model)
+- Logging infrastructure (structured, sanitized, no credentials)
+- Outbound sender (test mode only)
+- Systemd timer/service files (disabled)
 
 **Test Coverage:**
-- 51 unit tests (all passing)
-- Dry-run integration test
-- SQLite state machine test
-- Logging signature test
+- Outbound sender tests (all mocked, no network I/O)
+- Logging validation tests
+- DRY_RUN mode verified
+- No automatic UNKNOWN retry verified
+- No Telegram history-search methods
 
-### Blocked Components
+### Not Yet Implemented
 
-**Content Provider:**
-- OpenClawGatewayProvider: placeholder (raises NotImplementedError, must not be used for production)
-- TestContentProvider: test-only (cannot be used in production)
-- Real LLM adapter: not implemented
+- Real content provider (awaits approval and implementation)
+- OpenClaw LLM adapter (awaits approval and implementation)
+- PublicationBridge (awaits Step 4E/5 design completion)
+- Telegram bot and group (not created)
+- Production activation (not authorized)
 
-**Telegram Integration:**
-- No real bot created
-- No real group created
-- No real send authorized
-- Timer remains disabled
-- MEDIAMAN_PRODUCTION_MODE=false by default
+## Execution Modes
 
-## Not Authorized Yet
-
-The following actions are NOT authorized in this development phase:
-
-- ❌ Creating a Telegram bot account
-- ❌ Creating or joining a Telegram group
-- ❌ Enabling or starting mediaman.timer
-- ❌ Sending real Telegram messages
-- ❌ Configuring production credentials
-- ❌ Exposing any endpoint via Portal/Regatta for Telegram inbound
-
-## Future Activation (When Explicitly Approved)
-
-### Phase 1: Create Telegram Infrastructure
-
-This requires manual external action (not part of code):
-
-1. Contact @BotFather on Telegram
-   - Create dedicated bot for race reporting
-   - Store token securely (not in this repo)
-
-2. Create a private Telegram group
-   - Add bot as admin (required for posting)
-   - Store group ID securely (not in this repo)
-
-### Phase 2: Implement Content Provider
-
-Choose one of the following:
-
-**Option A: OpenClaw CLI (Recommended)**
-- Use documented command: `openclaw agent --agent main --message "<prompt>"`
-- Timeout flag: `--timeout <seconds>` (not `--timeout-seconds`)
-- File input: `--message-file <path>` available
-- Local Gateway routing: default behavior
-- Implementation required: MediaMan adapter for subprocess orchestration
-- Status: Design complete, not yet implemented
-
-**Option B: Regatta API Provider (Minimal Facts)**
-- Proven data sources:
-  - Own position: `/api/position`
-  - Own speed/course: `/api/navigation`
-  - Start line geometry: `/api/race_data` (verified)
-  - Competitors nearby: `/api/ais` (if AIS active)
-  - External wind: `/api/ndbc/<station>` (5+ min old)
-- Unproven (must omit from content):
-  - Race ID, elapsed time, ranking, competitor delta, heel angle
-- Implementation required: Facts collector + article template
-- Status: Design complete, not yet implemented
-
-### Phase 3: Configure Runtime Environment
-
-Future production configuration requires:
-1. Create `/etc/mediaman/mediaman.env` (not version-controlled)
-2. Set `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` from secured sources
-3. Set `MEDIAMAN_CONTENT_PROVIDER` to gateway (when implemented)
-4. Protect file: `chmod 600 /etc/mediaman/mediaman.env`
-
-
-
-### Phase 4: Future Timer Activation
-
-Timer activation is not authorized in the current development phase. Any future activation requires explicit Denis approval after the real content provider, credentials, and controlled validation are complete.
-
-### Dry-Run Validation (Currently Authorized)
-
-Test the complete stack without network I/O:
+### DRY_RUN Mode (Currently Authorized)
 
 ```bash
-export TELEGRAM_BOT_TOKEN is read from secured environment
-export TELEGRAM_CHAT_ID is read from secured environment
 export DRY_RUN=true
 export MEDIAMAN_CONTENT_PROVIDER=test
-
 python3 -m mediaman.mediaman
 ```
 
-Expected results:
-- Exit code: 0
-- No network requests to Telegram
-- SQLite state transitions: PENDING → SENDING → SENT
-- Logs sanitized (no credentials)
+**Allowed:**
+- ✅ Validates SQLite state transitions
+- ✅ Tests logging infrastructure
+- ✅ No Telegram contact
+- ✅ No network I/O
+- ✅ Exit code 0 indicates success
 
-### Unit Tests
+### Production Mode (NOT Authorized)
 
-```bash
-python3 -m unittest discover -s tests/mediaman -p 'test_*.py'
-```
+Production activation requires:
 
-Expected: 51/51 tests pass
+1. Real content provider implementation (not yet approved)
+2. Explicit Denis approval for Telegram bot creation
+3. Secured environment variable configuration
+4. Separate systemd unit configuration
+5. Explicit production verification
 
-### Real Test (NOT Authorized Yet)
-
-Once production activation is explicitly approved, use:
-
-```bash
-export TELEGRAM_BOT_TOKEN is read from secured environment
-export TELEGRAM_CHAT_ID is read from secured environment
-Future production activation requires:
-1. Real content provider implementation
-2. Explicit credential and approval verification
-3. Separate systemd unit configuration
-4. Explicit Denis approval
-
-No automated commands are provided for production activation.
-```
-
-This is NOT authorized in the current development phase.
-
-## Data Availability (Verified)
-
-### Proven Sources
-
-| Data | Source | Unit | Freshness |
-|------|--------|------|-----------|
-| Own position | `/api/position` | degrees | ≤ 30s |
-| Own SOG | `/api/navigation` | knots | Real-time |
-| Own COG | `/api/navigation` | degrees | Real-time |
-| Wind source & freshness | Requires runtime verification (Signal K or weather API) | varies | varies |
-| Start line distance | `/api/race_data` | meters | Real-time |
-| Start line side | `/api/race_data` | enum (OCS/CLEAR/BEHIND) | Real-time |
-| Competitors nearby | `/api/ais` | count | Event-driven |
-| External wind speed | `/api/ndbc/<station>` | knots | 5-30 min |
-
-### Not Available
-
-- ❌ Race ID (not returned by any endpoint)
-- ❌ Race elapsed time (no timer state exposed)
-- ❌ Own ranking or competitor delta (requires external algorithm)
-- ❌ Own heel angle (not queried from Signal K)
-- ❌ True wind speed from Signal K (NDBC used instead, with age)
+**NOT AUTHORIZED IN CURRENT PHASE:**
+- ❌ Creating Telegram bot
+- ❌ Creating or joining Telegram group
+- ❌ Sending real Telegram messages
+- ❌ Enabling or starting mediaman.timer
+- ❌ Configuring production credentials in version control
 
 ## Logging
 
 ### Service Logs (When Enabled)
 
-Location: `/var/log/mediaman/mediaman.log`
+Location: `/home/pi/midnightrider-navigation/logs/services/telegram-sender.log`
 
-Example output (DRY_RUN=true):
+**Required Probes:**
+- `STARTUP` — Initialization summary (no credentials)
+- `HEARTBEAT` — One-shot sender heartbeat
+- `DATA_IN` — Content length only (no message body)
+- `DATA_OUT` — Provider status classification and content length
+- `ERROR` — Exception class only (never raw message)
+- `SHUTDOWN` — Clean completion event
 
-```
-[2026-08-27T15:30:00] [INFO] [mediaman] STARTUP dry_run=True
-[2026-08-27T15:30:00] [INFO] [mediaman] CONTENT_VALIDATION race_id=... cycle=... length=450 valid=True
-[2026-08-27T15:30:00] [INFO] [mediaman] SEND_ATTEMPT dry_run=True chat_id=***** length=450 execution_id=...
-[2026-08-27T15:30:01] [INFO] [mediaman] SEND_RESULT dry_run=True success=True provider_status=DRY_RUN error_code= execution_id=...
-[2026-08-27T15:30:01] [INFO] [mediaman] HEARTBEAT provider=test
-[2026-08-27T15:30:01] [INFO] [mediaman] SHUTDOWN execution_count=1
-```
+**Security Guarantees:**
+- No token values or fragments
+- No chat IDs (including masked forms)
+- No message bodies
+- No raw Telegram responses
+- No raw exception messages
+- No credential-bearing URLs
+- No connection strings
 
-**Security note:** No credentials are logged. Chat ID is masked. Token is never included.
+### Log Rotation
 
-## Security & Privacy
+- Max file size: 5 MB
+- Backup count: 3
+- Format: Structured JSON (machine-readable)
 
-### What's Protected
+## Pending Operational Decisions
 
-- ✅ Telegram bot token: never logged or exposed
-- ✅ Chat ID: masked in logs (`-*******`)
-- ✅ Message bodies: not logged (only length)
-- ✅ Credentials: environment variables only (not code)
-- ✅ No personal Telegram accounts
-- ✅ No inbound message processing
-- ✅ No webhook listener
-- ✅ One-way flow enforced
+The following remain **PENDING explicit approval** and are NOT implemented:
 
-### What You Must Protect
+- Message language selection
+- Message formatting (markdown, HTML, plain text)
+- Maximum message length and truncation behavior
+- External retry count and backoff strategy
+- Jitter and retry timing
+- Alerting strategy for failures
+- Credential injection mechanism (environment vars vs. config file)
+- Publication database path and schema
+- Backup and restore procedures
+- Manual deletion procedures
+- Network and firewall approval (Cloudflare Tunnel, etc.)
 
-Once production credentials are configured:
+**No implementation will occur for these items until explicitly approved by Denis.**
 
-- `/etc/mediaman/mediaman.env` → `chmod 600`
-- Telegram bot token → rotate regularly via @BotFather
-- Group membership → admins only
-- Chat ID → not shared publicly
-
-## State Management (SQLite)
-
-MediaMan uses SQLite for idempotent delivery tracking:
-
-```sql
-CREATE TABLE deliveries (
-    delivery_key TEXT PRIMARY KEY,
-    race_id TEXT NOT NULL,
-    cycle_id TEXT NOT NULL,
-    target_id TEXT NOT NULL,
-    state TEXT CHECK (state IN ('PENDING', 'SENDING', 'SENT', 'FAILED')),
-    created_at INTEGER NOT NULL,
-    updated_at INTEGER NOT NULL,
-    sent_at INTEGER,
-    provider_message_id TEXT,
-    retry_count INTEGER DEFAULT 0,
-    last_error TEXT,
-    UNIQUE(race_id, cycle_id, target_id)
-);
-```
-
-**Recovery:**
-- Stale SENDING (> 3600s): retryable
-- SENT: never retried
-- FAILED: remains retryable
-- PENDING: transient
-
-## Troubleshooting (Development Phase)
+## Troubleshooting (Development Phase Only)
 
 ### Running a Dry-Run Test
 
 ```bash
-export TELEGRAM_BOT_TOKEN is read from secured environment
-export TELEGRAM_CHAT_ID is read from secured environment
 export DRY_RUN=true
 export MEDIAMAN_CONTENT_PROVIDER=test
-
+python3 -m mediaman.mediaman
 ```
 
-Expected: Exit 0, no network I/O, SQLite state transitions.
+Expected: Exit 0, no network I/O, SQLite state transitions logged.
 
 ### Checking SQLite State
 
@@ -310,7 +267,7 @@ sqlite3 /var/lib/mediaman/state.sqlite3 \
 ### Viewing Logs
 
 ```bash
-tail -20 /var/log/mediaman/mediaman.log
+tail -20 /home/pi/midnightrider-navigation/logs/services/telegram-sender.log
 ```
 
 ### Systemd Timer Status (Non-Destructive)
@@ -326,10 +283,11 @@ systemctl is-active mediaman.timer || echo "inactive"
 - **Source:** `mediaman/`
 - **Tests:** `tests/mediaman/`
 - **Systemd:** `etc/systemd/system/mediaman.{service,timer}`
-- **Architecture:** See SYSTEM-SUMMARY.md
+- **Architecture:** See SYSTEM-SUMMARY.md and docs/ARCHITECTURE-MASTER.md
 
 ---
 
-**Last Updated:** 2026-08-27
+**Last Updated:** 2026-08-31
 **Status:** Foundation Phase (DRY-RUN Validated, Production Blocked)
-**Next Step:** Implement real content provider (OpenClaw or Regatta-based)
+**Publication Design:** Approved 9-state machine with manual reconciliation
+**Next Step:** Implement real content provider (OpenClaw or Regatta-based) and PublicationBridge

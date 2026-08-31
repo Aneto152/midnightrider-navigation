@@ -94,7 +94,7 @@ class LocalLLMProvider(ContentProvider):
     - Fully testable with mocked subprocess
     - No real Telegram calls here
     - No production activation
-    
+
     Message length validation is PENDING operational decisions.
     No hardcoded length limits are enforced by this provider.
     """
@@ -121,12 +121,13 @@ class LocalLLMProvider(ContentProvider):
         )
 
     def validate(self, content: str) -> tuple[bool, str]:
-        """Validate article output."""
+        """Validate article output.
+
+        Note: Message length validation is PENDING operational decisions.
+        No hardcoded length limits are enforced by this provider.
+        """
         if not content:
             return False, "Content is empty"
-
-        if len(content) > self.MAX_LENGTH:
-            return False, f"Content exceeds {self.MAX_LENGTH} characters"
 
         # Check for credentials (basic patterns)
         credential_patterns = [
