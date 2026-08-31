@@ -263,27 +263,46 @@ class TestTelegramSender(unittest.TestCase):
             self.assertEqual(result.provider_status, "NETWORK_ERROR")
             self.assertNotEqual(result.error_code, "")
 
+    def test_logger_records_with_injected_logger(self):
+        """Capture actual logger records from injected test logger."""
+        with patch.dict(os.environ, {
+            "TELEGRAM_BOT_TOKEN": "test-token",
+            "TELEGRAM_CHAT_ID": "-123456789",
+            "DRY_RUN": "true"
+        }):
+            # Create custom in-memory handler to capture actual records
+            import logging
+            class ListHandler(logging.Handler):
+                def __init__(self):
+                    super().__init__()
+                    self.records = []
+                def emit(self, record):
+                    self.records.append(self.format(record))
+            
+            # Attach handler to test logger
+            handler = ListHandler()
+            handler.setLevel(logging.INFO)
+            self.test_logger.addHandler(handler)
+            
+            try:
+                # Test with injected logger
+                sender = TelegramSender(logger=self.test_logger)
+                result = sender.send("Test message")
+                
+                # Verify logger captured records
+                self.assertGreater(len(handler.records), 0, "Logger should emit actual records")
+                
+                # Verify no sensitive material in records
+                log_output = '\n'.join(handler.records)
+                self.assertNotIn("test-token", log_output, "Token must not appear in logs")
+                self.assertNotIn("123456789", log_output, "Chat ID must not appear in logs")
+                self.assertNotIn("Test message", log_output, "Message body must not appear in logs")
+            finally:
+                # Cleanup handler
+                self.test_logger.removeHandler(handler)
+                handler.close()
+
 
 if __name__ == '__main__':
     unittest.main()
-    def test_logger_records_with_assertlogs(self):
-        """Use assertLogs to capture actual logger records (real mechanism)."""
-        # assertLogs is a built-in unittest fixture for capturing logger output
-        with self.assertLogs('mediaman.telegram_sender', level='INFO') as cm:
-            with patch.dict(os.environ, {
-                "TELEGRAM_BOT_TOKEN": "test-token",
-                "TELEGRAM_CHAT_ID": "-123456789",
-                "DRY_RUN": "true"
-            }):
-                sender = TelegramSender(log_dir="./test-logs")
-                result = sender.send("Test message")
-
-        # Verify actual logger records were captured
-        self.assertGreater(len(cm.output), 0, "Logger should emit actual records")
-
-        # Verify no sensitive material in actual log output
-        log_output = '\n'.join(cm.output)
-        self.assertNotIn("test-token", log_output, "Token must not appear in logs")
-        self.assertNotIn("123456789", log_output, "Chat ID must not appear in logs")
-        self.assertNotIn("Test message", log_output, "Message body must not appear in logs")
 
