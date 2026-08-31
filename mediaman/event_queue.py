@@ -48,23 +48,26 @@ class QueuedEvent:
 class EventQueue:
     """Durable SQLite event queue."""
 
-    # Sensitive field names and patterns (fail-closed)
+    # Sensitive field names (fail-closed)
     SENSITIVE_FIELDS = {
         'latitude', 'longitude', 'lat', 'lon',
-        'token', 'api_key', 'secret', 'password',
-        'credential', 'authorization', 'connection_string',
-        'bearer', 'auth', 'apikey'
+        'token', 'api_key', 'apikey', 'secret', 'password',
+        'credential', 'authorization', 'bearer',
+        'connection_string', 'raw_mcp', 'subprocess_output'
     }
+    # Patterns for sensitive values in strings
     SENSITIVE_PATTERNS = [
-        r'token\s*=',
-        r'password\s*=',
-        r'secret\s*=',
-        r'api[_-]?key\s*=',
-        r'authorization\s*=',
-        r'credential\s*=',
-        r'bearer\s+[a-zA-Z0-9._-]+',
-        r'raw MCP envelope',
-        r'subprocess output',
+        r'\btoken\s*[=:]',
+        r'\bapi[_-]?key\s*[=:]',
+        r'\bapikey\s*[=:]',
+        r'\bpassword\s*[=:]',
+        r'\bsecret\s*[=:]',
+        r'\bcredential\s*[=:]',
+        r'\bauthorization\s*[=:]',
+        r'\bbearer\s+',
+        r'eyJ[a-zA-Z0-9_.-]+',  # JWT-like tokens
+        r'raw\s+mcp\s+envelope',
+        r'subprocess\s+output',
     ]
 
     def __init__(self, db_path: str = ":memory:", clock=None):
@@ -74,24 +77,51 @@ class EventQueue:
         self.conn = None
         self.initialize()
 
+    def _recursive_validate(self, obj, path: str = "<root>") -> None:
+        """
+        Recursively walk object tree (dicts, lists, tuples, scalars) checking for sensitive data.
+
+        Raises ValueError with path context if any sensitive field or value is detected.
+        """
+        if isinstance(obj, dict):
+            for key, value in obj.items():
+                # Normalize key to lowercase and check for sensitive field names
+                key_normalized = key.lower().replace('-', '_').replace(' ', '_')
+                for sensitive_field in self.SENSITIVE_FIELDS:
+                    if key_normalized == sensitive_field.lower().replace('-', '_').replace(' ', '_'):
+                        raise ValueError(
+                            f"Sensitive field '{key}' at {path}.{key} not allowed in event payload"
+                        )
+                # Recurse into value
+                self._recursive_validate(value, path=f"{path}.{key}")
+        elif isinstance(obj, (list, tuple)):
+            for i, item in enumerate(obj):
+                self._recursive_validate(item, path=f"{path}[{i}]")
+        elif isinstance(obj, str):
+            # Check string values themselves for sensitive field names
+            # (e.g., affected_field='latitude' should be rejected)
+            str_normalized = obj.lower().replace('-', '_').replace(' ', '_')
+            for sensitive_field in self.SENSITIVE_FIELDS:
+                if str_normalized == sensitive_field.lower().replace('-', '_').replace(' ', '_'):
+                    raise ValueError(
+                        f"Sensitive field name '{obj}' found in string value at {path}"
+                    )
+            # Check string values for sensitive patterns
+            for pattern in self.SENSITIVE_PATTERNS:
+                if re.search(pattern, obj, re.IGNORECASE):
+                    raise ValueError(
+                        f"Sensitive pattern detected at {path}: {pattern}"
+                    )
+        # For None, int, float, bool - no validation needed
+
     def _validate_payload(self, event_dict: dict) -> None:
         """
         Fail-closed validation: reject payloads containing sensitive field names or patterns.
 
+        Uses recursive structural walk to inspect all nesting levels.
         Raises ValueError if any sensitive data is detected.
         """
-        payload_str = json.dumps(event_dict, ensure_ascii=False, sort_keys=True)
-        payload_lower = payload_str.lower()
-
-        # Check for sensitive field names
-        for field in self.SENSITIVE_FIELDS:
-            if f'"{field}"' in payload_lower or f"'{field}'" in payload_lower:
-                raise ValueError(f"Sensitive field '{field}' not allowed in event payload")
-
-        # Check for sensitive patterns
-        for pattern in self.SENSITIVE_PATTERNS:
-            if re.search(pattern, payload_str, re.IGNORECASE):
-                raise ValueError(f"Sensitive pattern detected in event payload")
+        self._recursive_validate(event_dict)
 
     def _sanitize_error(self, error: str, max_length: int = 200) -> str:
         """
@@ -248,7 +278,7 @@ class EventQueue:
                        next_attempt_at, locked_until, last_error, created_at, updated_at
                 FROM events
                 WHERE status = ? AND next_attempt_at <= ?
-                ORDER BY next_attempt_at ASC
+                ORDER BY next_attempt_at ASC, created_at ASC, event_id ASC
                 LIMIT ?
             """, (EventStatus.PENDING.value, now, count))
 
@@ -282,12 +312,35 @@ class EventQueue:
         return events
 
     def mark_sent(self, event_id: str) -> bool:
-        """Mark event as SENT (idempotent). Returns True only if status changed."""
+        """
+        Mark event as SENT (idempotent).
+
+        Returns True only if status changed from non-SENT to SENT.
+        Does not modify DEAD_LETTER events (terminal state).
+        """
         now = self.clock()
+        cursor = self.conn.execute(
+            "SELECT status FROM events WHERE event_id = ?",
+            (event_id,)
+        )
+        row = cursor.fetchone()
+        if not row:
+            return False
+
+        current_status = row[0]
+
+        # Guard: do not modify DEAD_LETTER (terminal state)
+        if current_status == EventStatus.DEAD_LETTER.value:
+            return False
+
+        # Update if not already SENT
+        if current_status == EventStatus.SENT.value:
+            return False  # Already sent, no change
+
         cursor = self.conn.execute("""
             UPDATE events SET status = ?, updated_at = ?
-            WHERE event_id = ? AND status != ?
-        """, (EventStatus.SENT.value, now, event_id, EventStatus.SENT.value))
+            WHERE event_id = ?
+        """, (EventStatus.SENT.value, now, event_id))
         self.conn.commit()
         return cursor.rowcount > 0
 
@@ -295,7 +348,7 @@ class EventQueue:
         """
         Mark event failed; increment attempts; schedule retry or move to DEAD_LETTER.
 
-        Guard: cannot alter SENT events. Sanitizes and truncates error before storage.
+        Guard: cannot alter SENT or DEAD_LETTER events. Sanitizes and truncates error before storage.
         """
         now = self.clock()
         sanitized_error = self._sanitize_error(error, max_length=200)
@@ -310,8 +363,8 @@ class EventQueue:
 
         attempts, current_status = row[0], row[1]
 
-        # Guard: do not modify SENT events
-        if current_status == EventStatus.SENT.value:
+        # Guard: do not modify terminal states (SENT, DEAD_LETTER)
+        if current_status in (EventStatus.SENT.value, EventStatus.DEAD_LETTER.value):
             return False
 
         attempts = attempts + 1
