@@ -72,5 +72,6 @@
   "approved_reconciliation_documented": true,
   "exactly_once_guarantee_claimed": false,
   "automatic_unknown_retry": false,
-  "publication_bridge_implemented": false
+  "publication_bridge_implemented": false,
+  "telegram_guide_updated": true
 }

@@ -30,28 +30,28 @@ class SendResult:
 class TelegramSender:
     """
     Telegram Bot API sender.
-    
+
     Requires environment variables:
     - TELEGRAM_BOT_TOKEN: Bot token from @BotFather
     - TELEGRAM_CHAT_ID: Target group or channel ID
-    
+
     Supports DRY_RUN=true for testing without network I/O.
     """
-    
+
     API_BASE = "https://api.telegram.org/bot"
-    
+
     def __init__(self, logger=None):
         self.token = os.getenv("TELEGRAM_BOT_TOKEN", "").strip()
         self.chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip()
         self.dry_run = os.getenv("DRY_RUN", "").lower() == "true"
         self.execution_id = str(uuid.uuid4())[:8]
-        
+
         # Mandatory structured service logger
         self.logger = logger or setup_service_logger("telegram-sender")
-        
+
         # Log STARTUP probe (safe initialization summary, no credentials)
         self.logger.info(f"STARTUP dry_run={self.dry_run} execution_id={self.execution_id}")
-    
+
     def validate(self):
         """Check required configuration. Raise ValueError if missing."""
         if not self.token:
@@ -59,21 +59,21 @@ class TelegramSender:
         if not self.chat_id:
             raise ValueError("TELEGRAM_CHAT_ID not configured")
         return True
-    
+
     def send(self, content: str) -> SendResult:
         """
-        Send message to Telegram. 
-        
+        Send message to Telegram.
+
         Args:
             content: Message text (sanitized for Telegram)
-        
+
         Returns:
             SendResult with sanitized status
         """
         self.validate()
-        
+
         content_len = len(content)
-        
+
         if self.dry_run:
             # Dry-run: simulate without network I/O
             # Log DATA_IN probe (content length and safe classification only, no body)
@@ -90,27 +90,27 @@ class TelegramSender:
                 message_length=content_len,
                 execution_id=self.execution_id
             )
-        
+
         # Real send to Telegram API
         try:
             url = f"{self.API_BASE}{self.token}/sendMessage"
-            
+
             payload = {
                 "chat_id": self.chat_id,
                 "text": content,
                 "parse_mode": "Markdown"
             }
-            
+
             req = Request(
                 url,
                 data=json.dumps(payload).encode('utf-8'),
                 headers={"Content-Type": "application/json"},
                 method="POST"
             )
-            
+
             with urlopen(req, timeout=10) as response:
                 resp_data = json.loads(response.read().decode('utf-8'))
-                
+
                 if resp_data.get("ok"):
                     # Log DATA_OUT probe (provider result classification and length)
                     self.logger.info(f"DATA_OUT dry_run=false provider_status=OK content_length={content_len} execution_id={self.execution_id}")
@@ -136,11 +136,11 @@ class TelegramSender:
                         message_length=content_len,
                         execution_id=self.execution_id
                     )
-        
+
         except HTTPError as e:
             # Log ERROR probe (exception class only, not raw message)
             self.logger.error(f"ERROR exception_class=HTTPError error_code={e.code} execution_id={self.execution_id}")
-            
+
             return SendResult(
                 dry_run=False,
                 success=False,
@@ -149,11 +149,11 @@ class TelegramSender:
                 message_length=content_len,
                 execution_id=self.execution_id
             )
-        
+
         except URLError as e:
             # Log ERROR probe (safe classification, not raw reason)
             self.logger.error(f"ERROR exception_class=URLError execution_id={self.execution_id}")
-            
+
             return SendResult(
                 dry_run=False,
                 success=False,
@@ -162,11 +162,11 @@ class TelegramSender:
                 message_length=content_len,
                 execution_id=self.execution_id
             )
-        
+
         except Exception as e:
             # Log ERROR probe (exception class only, never raw message)
             self.logger.error(f"ERROR exception_class={type(e).__name__} execution_id={self.execution_id}")
-            
+
             return SendResult(
                 dry_run=False,
                 success=False,
@@ -175,11 +175,11 @@ class TelegramSender:
                 message_length=content_len,
                 execution_id=self.execution_id
             )
-        
+
         finally:
             # Log SHUTDOWN probe (clean completion event)
             self.logger.info(f"SHUTDOWN execution_id={self.execution_id}")
-    
+
     def result_dict(self) -> dict:
         """Return sender configuration (sanitized)."""
         return {

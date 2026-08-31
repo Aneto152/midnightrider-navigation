@@ -12,13 +12,13 @@ import re
 def sanitize_token(value):
     """
     Return a neutral redaction marker only. Never preserve any token fragment.
-    
+
     Partial credential masking is forbidden. Tokens are secrets and cannot be
     partially masked without exposing information.
-    
+
     Args:
         value: Token value (string, int, or other type)
-    
+
     Returns:
         Neutral redaction marker only. Never returns original input characters.
     """
@@ -29,13 +29,13 @@ def sanitize_token(value):
 def sanitize_chat_id(chat_id):
     """
     Return neutral redaction marker. Never expose chat ID value or pattern.
-    
+
     Chat IDs are sensitive identifiers and cannot be partially masked or have
     length patterns preserved without exposing information.
-    
+
     Args:
         chat_id: Chat ID (int, str, or other type)
-    
+
     Returns:
         Neutral redaction marker only. Never returns original input characters.
     """
@@ -47,14 +47,14 @@ def setup_service_logger(name="mediaman"):
     """Set up rotating file handler for logs/services/mediaman.log"""
     log_dir = Path("logs/services")
     log_dir.mkdir(parents=True, exist_ok=True)
-    
+
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
-    
+
     # Remove any existing handlers
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
-    
+
     # Rotating file handler
     log_file = log_dir / f"{name}.log"
     handler = logging.handlers.RotatingFileHandler(
@@ -62,14 +62,14 @@ def setup_service_logger(name="mediaman"):
         maxBytes=5 * 1024 * 1024,  # 5 MB
         backupCount=3
     )
-    
+
     formatter = logging.Formatter(
         "[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s",
         datefmt="%Y-%m-%dT%H:%M:%S"
     )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    
+
     return logger
 
 
@@ -77,34 +77,34 @@ def setup_debug_logger():
     """Set up data-flow logger for logs/debug/data-flow.log"""
     log_dir = Path("logs/debug")
     log_dir.mkdir(parents=True, exist_ok=True)
-    
+
     logger = logging.getLogger("mediaman.dataflow")
     logger.setLevel(logging.DEBUG)
-    
+
     # Remove any existing handlers
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
-    
+
     log_file = log_dir / "data-flow.log"
     handler = logging.handlers.RotatingFileHandler(
         log_file,
         maxBytes=5 * 1024 * 1024,
         backupCount=3
     )
-    
+
     formatter = logging.Formatter(
         "[%(asctime)s] %(message)s",
         datefmt="%Y-%m-%dT%H:%M:%S"
     )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    
+
     return logger
 
 
 class SanitizedMessage:
     """Container for sanitized log messages."""
-    
+
     @staticmethod
     def send_attempt(dry_run, chat_id, content_length, execution_id):
         """Sanitized send attempt log."""
@@ -114,7 +114,7 @@ class SanitizedMessage:
             f"length={content_length} "
             f"execution_id={execution_id}"
         )
-    
+
     @staticmethod
     def send_result(dry_run, success, provider_status, error_code, execution_id):
         """Sanitized send result log."""
@@ -125,17 +125,17 @@ class SanitizedMessage:
             f"error_code={error_code} "
             f"execution_id={execution_id}"
         )
-    
+
     @staticmethod
     def startup(dry_run):
         """MediaMan startup log."""
         return f"STARTUP dry_run={dry_run}"
-    
+
     @staticmethod
     def shutdown(execution_count):
         """MediaMan shutdown log."""
         return f"SHUTDOWN execution_count={execution_count}"
-    
+
     @staticmethod
     def content_validation(race_id, cycle_ts, content_length, valid):
         """Content validation log."""
@@ -145,7 +145,7 @@ class SanitizedMessage:
             f"length={content_length} "
             f"valid={valid}"
         )
-    
+
     @staticmethod
     def heartbeat(provider):
         """MediaMan heartbeat log."""
