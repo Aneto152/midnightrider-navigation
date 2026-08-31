@@ -1,8 +1,10 @@
 {
   "task": "mediaman-step-4c-openclaw-adapter-initialization",
   "status": "SUCCESS",
-  "timestamp": "2026-08-31T13:40:30.187442+00:00",
+  "timestamp": "2026-08-31T13:52:03.385845+00:00",
   "implementation_commit_sha": "11c95f957ec3da9085b67f5dd1662ab44325ff49",
+  "documentation_correction_commit_sha": "9852a486a45c0cd8ca6794e855817568ba54bb69",
+  "audit_commit_sha": "58997b878c7357ca8a406bdb8d08c50c900aff55",
   "audit_commit_sha_self_reference": false,
   "previous_audit_commit_sha": "d738b2d0b35bccdfe23d9c90055034cfe8a9338b",
   "corrections_applied": [
@@ -14,6 +16,8 @@
     "Dependency injection support for testing (availability_check parameter)",
     "is_available() method for adapter status queries",
     "Fail-closed behavior when CLI unavailable",
+    "Module-level docstring clarification (agent_id is NOT init parameter)",
+    "Complete audit trail with all commit SHAs",
     "No real OpenClaw Gateway contact during initialization",
     "No credential exposure in any log output"
   ],
@@ -31,13 +35,6 @@
       "passed": 290
     }
   },
-  "test_categories": {
-    "adapter_initialization": 10,
-    "timeout_validation": 8,
-    "agent_id_parameter_location": 1,
-    "cli_availability_detection": 3,
-    "safe_logging": 4
-  },
   "timeout_seconds_validation": {
     "accepts_none": true,
     "accepts_positive_integer": true,
@@ -52,8 +49,44 @@
     "is_init_parameter": false,
     "is_generate_article_parameter": true,
     "audit_claim_corrected": true,
+    "docstring_clarified": true,
     "default_value_in_generate_article": "main"
   },
+  "commit_chain": [
+    {
+      "sha": "11c95f957ec3da9085b67f5dd1662ab44325ff49",
+      "type": "implementation",
+      "message": "fix(mediaman): validate adapter initialization configuration",
+      "changes": [
+        "mediaman/openclaw_adapter.py",
+        "tests/mediaman/test_openclaw_adapter.py"
+      ]
+    },
+    {
+      "sha": "dd792d38a1d6849bafb6119d3592975f2b406f82",
+      "type": "audit",
+      "message": "chore(audit): reconcile Step 4C initialization metadata",
+      "changes": [
+        "logs/latest.json"
+      ]
+    },
+    {
+      "sha": "9852a486a45c0cd8ca6794e855817568ba54bb69",
+      "type": "documentation",
+      "message": "docs(mediaman): clarify adapter initialization contract",
+      "changes": [
+        "mediaman/openclaw_adapter.py"
+      ]
+    },
+    {
+      "sha": "58997b878c7357ca8a406bdb8d08c50c900aff55",
+      "type": "audit",
+      "message": "chore(audit): finalize Step 4C initialization metadata",
+      "changes": [
+        "logs/oc-actions.log"
+      ]
+    }
+  ],
   "cli_availability_verified": true,
   "initialization_contract": "OpenClawAdapter(timeout_seconds=None, availability_check=None)",
   "is_available_method": true,
