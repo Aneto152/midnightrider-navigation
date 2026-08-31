@@ -1,43 +1,61 @@
 {
   "task": "mediaman-step-4c-openclaw-adapter-initialization",
   "status": "SUCCESS",
-  "timestamp": "2026-08-31T13:27:55.921050+00:00",
-  "implementation_commit_sha": "78d23e60cad6229b83e7d43dd7ba7a3339dc7cca",
-  "audit_commit_sha": null,
+  "timestamp": "2026-08-31T13:40:30.187442+00:00",
+  "implementation_commit_sha": "11c95f957ec3da9085b67f5dd1662ab44325ff49",
+  "audit_commit_sha_self_reference": false,
+  "previous_audit_commit_sha": "d738b2d0b35bccdfe23d9c90055034cfe8a9338b",
   "corrections_applied": [
-    "OpenClaw adapter safe initialization with CLI availability check",
+    "OpenClaw adapter timeout_seconds validation (rejects 0, negative, non-integer, bool, float)",
+    "agent_id clarification: is generate_article() parameter, NOT initialization parameter",
+    "8 comprehensive timeout validation tests",
+    "1 agent_id parameter location clarification test",
+    "Safe initialization logging (metadata only, no payloads)",
     "Dependency injection support for testing (availability_check parameter)",
-    "Structured logging instrumentation (safe metadata only, no payloads)",
-    "Timeout configuration with defaults preserved",
     "is_available() method for adapter status queries",
-    "18 comprehensive initialization tests",
-    "No payload logging in generate_article()",
     "Fail-closed behavior when CLI unavailable",
     "No real OpenClaw Gateway contact during initialization",
     "No credential exposure in any log output"
   ],
   "test_counts": {
     "openclaw_adapter": {
-      "collected": 18,
-      "passed": 18
+      "collected": 26,
+      "passed": 26
     },
     "event_queue_plus_adapter": {
-      "collected": 97,
-      "passed": 97
+      "collected": 105,
+      "passed": 105
     },
     "full_mediaman": {
-      "collected": 282,
-      "passed": 282
+      "collected": 290,
+      "passed": 290
     }
   },
   "test_categories": {
     "adapter_initialization": 10,
+    "timeout_validation": 8,
+    "agent_id_parameter_location": 1,
     "cli_availability_detection": 3,
-    "timeout_handling": 2,
-    "safe_logging": 3
+    "safe_logging": 4
+  },
+  "timeout_seconds_validation": {
+    "accepts_none": true,
+    "accepts_positive_integer": true,
+    "rejects_zero": true,
+    "rejects_negative": true,
+    "rejects_string": true,
+    "rejects_float": true,
+    "rejects_boolean": true,
+    "error_type": "ValueError"
+  },
+  "agent_id_parameter": {
+    "is_init_parameter": false,
+    "is_generate_article_parameter": true,
+    "audit_claim_corrected": true,
+    "default_value_in_generate_article": "main"
   },
   "cli_availability_verified": true,
-  "initialization_contract": "OpenClawAdapter(timeout_seconds=None, availability_check=None) -> adapter",
+  "initialization_contract": "OpenClawAdapter(timeout_seconds=None, availability_check=None)",
   "is_available_method": true,
   "safe_logging_only": true,
   "no_payload_logging": true,
