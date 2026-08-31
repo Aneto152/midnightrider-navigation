@@ -2,6 +2,8 @@
 
 import unittest
 import os
+import tempfile
+import shutil
 from unittest.mock import patch, MagicMock
 from urllib.error import URLError, HTTPError
 
@@ -13,7 +15,28 @@ from mediaman.telegram_sender import TelegramSender, SendResult
 
 
 class TestTelegramSender(unittest.TestCase):
-    """Test Telegram sender with dry-run and mock network."""
+    def setUp(self):
+        """Create explicit temporary logger for each test."""
+        # Create temporary directory for test logs
+        self.temp_dir = tempfile.mkdtemp(prefix="test-telegram-logs-")
+        
+        # Create explicit test logger using correct API
+        from mediaman.logging_utils import setup_service_logger
+        self.test_logger = setup_service_logger(
+            "telegram-sender-test",
+            log_dir=self.temp_dir
+        )
+
+    def tearDown(self):
+        """Clean up test logger and temporary directory."""
+        # Remove handlers from test logger
+        for handler in self.test_logger.handlers[:]:
+            self.test_logger.removeHandler(handler)
+            handler.close()
+        
+        # Remove temporary directory
+        if hasattr(self, 'temp_dir') and os.path.exists(self.temp_dir):
+            shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_startup_probe_logged(self):
         """STARTUP probe must be logged without credentials."""
@@ -22,7 +45,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             # Verify sender initializes with STARTUP probe
             self.assertIsNotNone(sender)
 
@@ -33,7 +56,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             # HEARTBEAT is logged per-invocation (one-shot)
             result = sender.send("Test")
             self.assertTrue(result.success)
@@ -45,7 +68,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result = sender.send("Secret message content")
             # Message length is recorded, but never the body
             self.assertEqual(result.message_length, len("Secret message content"))
@@ -57,7 +80,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result = sender.send("Test")
             # provider_status is a safe classification, not raw response
             self.assertEqual(result.provider_status, "DRY_RUN")
@@ -65,7 +88,7 @@ class TestTelegramSender(unittest.TestCase):
     def test_error_probe_no_raw_exception(self):
         """ERROR probe must never log raw exception messages."""
         with patch.dict(os.environ, {"TELEGRAM_CHAT_ID": "-123456789"}, clear=True):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             # Missing token raises ValueError (safe classification)
             with self.assertRaises(ValueError):
                 sender.validate()
@@ -77,7 +100,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result = sender.send("Test")
             # Clean completion is indicated by success=True
             self.assertTrue(result.success)
@@ -89,7 +112,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result = sender.send("Test")
             # Token is never preserved
             self.assertNotIn("test-token", str(result))
@@ -102,7 +125,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result = sender.send("Test")
             # Chat ID never appears
             self.assertNotIn("123456789", str(result))
@@ -114,7 +137,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             secret_content = "This is a secret message with credentials"
             result = sender.send(secret_content)
             # Message body is never logged
@@ -128,14 +151,14 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             # DRY_RUN never enters UNKNOWN state
             result = sender.send("Test")
             self.assertEqual(result.provider_status, "DRY_RUN")
 
     def test_no_telegram_history_search(self):
         """No Telegram history-search method exists."""
-        sender = TelegramSender()
+        sender = TelegramSender(logger=self.test_logger)
         # Verify no get_messages() or similar exists
         self.assertFalse(hasattr(sender, 'get_messages'),
                         "No Telegram history-search method should exist")
@@ -149,7 +172,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result = sender.send("Test message")
 
             self.assertTrue(result.dry_run)
@@ -160,7 +183,7 @@ class TestTelegramSender(unittest.TestCase):
     def test_missing_token_fails(self):
         """Missing TELEGRAM_BOT_TOKEN must raise ValueError."""
         with patch.dict(os.environ, {"TELEGRAM_CHAT_ID": "-123456789"}, clear=True):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
 
             with self.assertRaises(ValueError) as cm:
                 sender.validate()
@@ -169,7 +192,7 @@ class TestTelegramSender(unittest.TestCase):
     def test_missing_chat_id_fails(self):
         """Missing TELEGRAM_CHAT_ID must raise ValueError."""
         with patch.dict(os.environ, {"TELEGRAM_BOT_TOKEN": "test-token"}, clear=True):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
 
             with self.assertRaises(ValueError) as cm:
                 sender.validate()
@@ -182,7 +205,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             message = "x" * 1234
             result = sender.send(message)
 
@@ -195,7 +218,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_CHAT_ID": "-123456789",
             "DRY_RUN": "true"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result = sender.send("Test")
 
             self.assertEqual(len(result.execution_id), 8)
@@ -207,7 +230,7 @@ class TestTelegramSender(unittest.TestCase):
             "TELEGRAM_BOT_TOKEN": "secret-token-12345",
             "TELEGRAM_CHAT_ID": "-123456789"
         }):
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result_dict = sender.result_dict()
 
             # Token should be marked as "set" not exposed
@@ -216,7 +239,7 @@ class TestTelegramSender(unittest.TestCase):
 
     def test_no_inbound_methods(self):
         """TelegramSender must not have getUpdates or webhook methods."""
-        sender = TelegramSender()
+        sender = TelegramSender(logger=self.test_logger)
 
         # Ensure no inbound processing methods exist
         self.assertFalse(hasattr(sender, 'get_updates'))
@@ -233,7 +256,7 @@ class TestTelegramSender(unittest.TestCase):
             "DRY_RUN": "false"
         }):
             mock_urlopen.side_effect = URLError("Connection refused")
-            sender = TelegramSender()
+            sender = TelegramSender(logger=self.test_logger)
             result = sender.send("Test")
 
             self.assertFalse(result.success)
