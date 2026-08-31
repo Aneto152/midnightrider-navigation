@@ -70,115 +70,151 @@ class TelegramSender:
         Returns:
             SendResult with sanitized status
         """
-        self.validate()
-
         content_len = len(content)
 
-        if self.dry_run:
-            # Dry-run: simulate without network I/O
-            # Log DATA_IN probe (content length and safe classification only, no body)
-            self.logger.info(f"DATA_IN content_length={content_len}")
-            # Log DATA_OUT probe (dry-run classification and length)
-            self.logger.info(f"DATA_OUT dry_run=true provider_status=DRY_RUN content_length={content_len} execution_id={self.execution_id}")
-            # Log HEARTBEAT probe (one-shot sender heartbeat)
-            self.logger.info(f"HEARTBEAT mode=dry_run")
-            return SendResult(
-                dry_run=True,
-                success=True,
-                provider_status="DRY_RUN",
-                error_code="",
-                message_length=content_len,
-                execution_id=self.execution_id
-            )
-
-        # Real send to Telegram API
         try:
-            url = f"{self.API_BASE}{self.token}/sendMessage"
+            self.validate()
 
-            payload = {
-                "chat_id": self.chat_id,
-                "text": content,
-                "parse_mode": "Markdown"
-            }
+            if self.dry_run:
+                # Dry-run: simulate without network I/O
+                self.logger.info(
+                    f"DATA_IN content_length={content_len}"
+                )
+                self.logger.info(
+                    "DATA_OUT "
+                    f"dry_run=true "
+                    f"provider_status=DRY_RUN "
+                    f"content_length={content_len} "
+                    f"execution_id={self.execution_id}"
+                )
+                self.logger.info("HEARTBEAT mode=dry_run")
 
-            req = Request(
-                url,
-                data=json.dumps(payload).encode('utf-8'),
-                headers={"Content-Type": "application/json"},
-                method="POST"
-            )
+                return SendResult(
+                    dry_run=True,
+                    success=True,
+                    provider_status="DRY_RUN",
+                    error_code="",
+                    message_length=content_len,
+                    execution_id=self.execution_id,
+                )
 
-            with urlopen(req, timeout=10) as response:
-                resp_data = json.loads(response.read().decode('utf-8'))
+            try:
+                url = f"{self.API_BASE}{self.token}/sendMessage"
+
+                payload = {
+                    "chat_id": self.chat_id,
+                    "text": content,
+                    "parse_mode": "Markdown",
+                }
+
+                req = Request(
+                    url,
+                    data=json.dumps(payload).encode("utf-8"),
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+
+                with urlopen(req, timeout=10) as response:
+                    resp_data = json.loads(
+                        response.read().decode("utf-8")
+                    )
 
                 if resp_data.get("ok"):
-                    # Log DATA_OUT probe (provider result classification and length)
-                    self.logger.info(f"DATA_OUT dry_run=false provider_status=OK content_length={content_len} execution_id={self.execution_id}")
-                    # Log HEARTBEAT probe
-                    self.logger.info(f"HEARTBEAT mode=live_send")
+                    self.logger.info(
+                        "DATA_OUT "
+                        f"dry_run=false "
+                        f"provider_status=OK "
+                        f"content_length={content_len} "
+                        f"execution_id={self.execution_id}"
+                    )
+                    self.logger.info("HEARTBEAT mode=live_send")
+
                     return SendResult(
                         dry_run=False,
                         success=True,
                         provider_status="OK",
                         error_code="",
                         message_length=content_len,
-                        execution_id=self.execution_id
-                    )
-                else:
-                    error_code = resp_data.get("error_code", "UNKNOWN")
-                    # Log DATA_OUT probe (safe error classification, not raw response)
-                    self.logger.info(f"DATA_OUT dry_run=false provider_status=API_ERROR error_code={error_code} content_length={content_len} execution_id={self.execution_id}")
-                    return SendResult(
-                        dry_run=False,
-                        success=False,
-                        provider_status="API_ERROR",
-                        error_code=str(error_code),
-                        message_length=content_len,
-                        execution_id=self.execution_id
+                        execution_id=self.execution_id,
                     )
 
-        except HTTPError as e:
-            # Log ERROR probe (exception class only, not raw message)
-            self.logger.error(f"ERROR exception_class=HTTPError error_code={e.code} execution_id={self.execution_id}")
+                error_code = resp_data.get(
+                    "error_code",
+                    "UNKNOWN",
+                )
 
-            return SendResult(
-                dry_run=False,
-                success=False,
-                provider_status="HTTP_ERROR",
-                error_code=str(e.code),
-                message_length=content_len,
-                execution_id=self.execution_id
-            )
+                self.logger.info(
+                    "DATA_OUT "
+                    f"dry_run=false "
+                    f"provider_status=API_ERROR "
+                    f"error_code={error_code} "
+                    f"content_length={content_len} "
+                    f"execution_id={self.execution_id}"
+                )
 
-        except URLError as e:
-            # Log ERROR probe (safe classification, not raw reason)
-            self.logger.error(f"ERROR exception_class=URLError execution_id={self.execution_id}")
+                return SendResult(
+                    dry_run=False,
+                    success=False,
+                    provider_status="API_ERROR",
+                    error_code=str(error_code),
+                    message_length=content_len,
+                    execution_id=self.execution_id,
+                )
 
-            return SendResult(
-                dry_run=False,
-                success=False,
-                provider_status="NETWORK_ERROR",
-                error_code="NETWORK_ERROR",
-                message_length=content_len,
-                execution_id=self.execution_id
-            )
+            except HTTPError as e:
+                self.logger.error(
+                    "ERROR "
+                    "exception_class=HTTPError "
+                    f"error_code={e.code} "
+                    f"execution_id={self.execution_id}"
+                )
 
-        except Exception as e:
-            # Log ERROR probe (exception class only, never raw message)
-            self.logger.error(f"ERROR exception_class={type(e).__name__} execution_id={self.execution_id}")
+                return SendResult(
+                    dry_run=False,
+                    success=False,
+                    provider_status="HTTP_ERROR",
+                    error_code=str(e.code),
+                    message_length=content_len,
+                    execution_id=self.execution_id,
+                )
 
-            return SendResult(
-                dry_run=False,
-                success=False,
-                provider_status="ERROR",
-                error_code=type(e).__name__,
-                message_length=content_len,
-                execution_id=self.execution_id
-            )
+            except URLError:
+                self.logger.error(
+                    "ERROR "
+                    "exception_class=URLError "
+                    f"execution_id={self.execution_id}"
+                )
+
+                return SendResult(
+                    dry_run=False,
+                    success=False,
+                    provider_status="NETWORK_ERROR",
+                    error_code="NETWORK_ERROR",
+                    message_length=content_len,
+                    execution_id=self.execution_id,
+                )
+
+            except Exception as e:
+                self.logger.error(
+                    "ERROR "
+                    f"exception_class={type(e).__name__} "
+                    f"execution_id={self.execution_id}"
+                )
+
+                return SendResult(
+                    dry_run=False,
+                    success=False,
+                    provider_status="ERROR",
+                    error_code=type(e).__name__,
+                    message_length=content_len,
+                    execution_id=self.execution_id,
+                )
 
         finally:
             # Log SHUTDOWN probe (clean completion event)
-            self.logger.info(f"SHUTDOWN execution_id={self.execution_id}")
+            self.logger.info(
+                f"SHUTDOWN execution_id={self.execution_id}"
+            )
 
     def result_dict(self) -> dict:
         """Return sender configuration (sanitized)."""
