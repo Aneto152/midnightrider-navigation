@@ -107,11 +107,49 @@ backup_log:2026-08-31T13:59:15Z:<external_reference_id>
 
 When evidence proves the publication was sent despite ambiguous response:
 
+**Evidence Record Structure:**
+
+Manual evidence is operator attestation.
+Manual evidence is not cryptographic proof.
+Manual evidence is not automatic Bot API verification.
+Manual evidence does not guarantee exactly-once delivery.
+Manual evidence does not prove that no duplicate was delivered.
+
+**Required Fields:**
+
+- `publication_id`: Full 64-character SHA-256 hash of publication identity
+- `transition`: State transition identifier (e.g., UNKNOWN_TO_SENT_RECONCILED)
+- `reason`: Operator-provided classification of reconciliation
+- `operator_identity`: Name or identifier of operator entering evidence
+- `evidence_reference`: Source reference in format source:timestamp:reference_id
+- `optional_telegram_message_id`: Telegram message ID if available (may be null)
+- `reconciliation_timestamp`: ISO 8601 UTC timestamp of evidence entry
+- `safe_decision_classification`: Safe classification of evidence type
+
+**Example Evidence Record:**
+
+```json
+{
+  "publication_id": "<full_64_char_sha256>",
+  "transition": "UNKNOWN_TO_SENT_RECONCILED",
+  "reason": "operator_confirmed_delivery",
+  "operator_identity": "<operator_name_or_id>",
+  "evidence_reference": "source:timestamp:reference_id",
+  "optional_telegram_message_id": null,
+  "reconciliation_timestamp": "<iso_8601_utc>",
+  "safe_decision_classification": "manual_ui_search_confirmed"
+}
 ```
-Evidence: monitoring:2026-08-31T14:30:15Z:<external_reference_id>
+
+**Safe Decision Classifications:**
+
+- `manual_ui_search_confirmed`: Operator manually searched Telegram UI and confirmed delivery
+- `api_query_confirmed`: Evidence from external API query (e.g., channel history)
+- `external_monitoring_confirmed`: Evidence from external monitoring system
+- `operator_confirmed_delivery`: Operator confirmed delivery through other means
+
 State transition: UNKNOWN → SENT_RECONCILED
 Result: Terminal state, never retried
-```
 
 ### UNKNOWN → RETRY_AUTHORIZED (With Operator Authorization)
 
