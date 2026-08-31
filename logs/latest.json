@@ -1,47 +1,69 @@
 {
-  "task": "remove-wit-attitude-yaw-publication",
+  "task": "mediaman-step-4b2-event-queue-hardening",
   "status": "SUCCESS",
-  "timestamp": "2026-08-30T02:04:56.207907+00:00",
-  "removed_path": "navigation.attitude.yaw",
-  "preserved_paths": [
-    "navigation.attitude.roll",
-    "navigation.attitude.pitch",
-    "navigation.headingMagnetic",
-    "navigation.headingTrue",
-    "navigation.acceleration.x",
-    "navigation.acceleration.y",
-    "navigation.acceleration.z",
-    "navigation.rateOfTurn"
+  "timestamp": "2026-08-31T13:09:49.246893+00:00",
+  "implementation_commit_sha": "69c0099e483a0519c077e31c5b20a508826feb0f",
+  "audit_commit_sha": null,
+  "corrections_applied": [
+    "Recursive structural validation with true tree traversal",
+    "Deterministic atomic claim ordering: next_attempt_at, created_at, event_id",
+    "Terminal state guards for SENT and DEAD_LETTER immutability",
+    "Credential-bearing connection string detection and rejection",
+    "Error sanitization with credential redaction before truncation",
+    "Real SQLite rollback injection test",
+    "Concurrent two-instance claim prevention with threading barrier",
+    "Production SQLite prevention with real file assertions"
   ],
-  "signal_k_modified": true,
-  "signal_k_server_restarted": false,
-  "n2k_bridge_modified": false,
-  "docker_modified": false,
-  "systemd_unit_modified": false,
-  "magnetic_calibration_modified": false,
-  "runtime_logs_exist": true,
-  "remote_main_verified": true,
-  "force_push_used": false,
-  "physical_vulcan_verification": "pending",
-  "credentials_logged": false,
-  "files_modified": [
-    "ble/wit-ble-direct.py",
-    "docs/INTEGRATION/WIT-INTEGRATION-GUIDE.md",
-    "docs/ARCHITECTURE-MASTER.md",
-    "ble/README.md"
-  ],
-  "verification_chain": {
-    "yaw_removal_commit": "be57c45d5a7e691ee263d90715a299f150f3611a",
-    "reconciliation_commit": "6640233904640bed41d8a5634eb590d41c9a0980",
-    "documentation_commit": "9a6c46b1ef7c8acddfb9af1b213b485cdba63e2e"
+  "test_counts": {
+    "event_queue": {
+      "collected": 79,
+      "passed": 79
+    },
+    "event_detector_plus_event_queue": {
+      "collected": 93,
+      "passed": 93
+    },
+    "full_mediaman": {
+      "collected": 271,
+      "passed": 271
+    }
   },
-  "safety_checks": {
-    "no_git_force_push": true,
-    "no_credentials_in_logs": true,
-    "no_coordinates_logged": true,
-    "no_fake_runtime_logs": true,
-    "n2k_unchanged": true,
-    "wit_source_unchanged_except_sk_publication": true,
-    "no_magnetic_correction_applied": true
-  }
+  "test_categories": {
+    "recursive_sensitive_field_validation": 21,
+    "connection_string_security": 17,
+    "error_sanitization": 10,
+    "deterministic_ordering": 3,
+    "terminal_state_guards": 4,
+    "real_sqlite_rollback": 1,
+    "concurrent_claim_prevention": 1,
+    "production_db_prevention": 1
+  },
+  "offline_unit_tests_only": true,
+  "runtime_e2e_validated": false,
+  "production_sqlite_activation": false,
+  "mcp_live_server_contacted": false,
+  "signalk_modified": false,
+  "docker_modified": false,
+  "openclaw_contacted": false,
+  "telegram_contacted": false,
+  "timer_activated": false,
+  "zombie_cleanup_status": "DEFERRED",
+  "no_credentials_logged": true,
+  "no_coordinates_logged": true,
+  "no_connection_strings_logged": true,
+  "security_checks": {
+    "gitignore_rules": "OK",
+    "suspicious_filenames": "OK",
+    "hardcoded_ips": "OK",
+    "sensitive_logs": "OK",
+    "production_sqlite_files": "OK",
+    "protected_files_unchanged": "OK",
+    "trailing_whitespace": "OK"
+  },
+  "deferred_features": [
+    "Step 4C: OpenClaw adapter initialization",
+    "Step 4D: MCP client event publishing",
+    "Step 5: End-to-end integration testing",
+    "Runtime E2E validation"
+  ]
 }

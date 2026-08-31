@@ -481,3 +481,19 @@
 [2026-08-30T02:05:02+00:00] [VALIDATION] [documentation] Verification complete: no remaining stale claims that WIT actively publishes navigation.attitude.yaw. Documentation synchronized with source behavior.
 [2026-08-30T02:05:03+00:00] [VALIDATION] [runtime_logs] Verified 33 legitimate runtime service log files under logs/services/. No fake logs created.
 [2026-08-30T02:05:04+00:00] [RESULT] [logs] SUCCESS — documentation and metadata cleanup complete. WIT Signal K publication layer changes validated and documented.
+[2026-08-31T13:02:48.540548+00:00] FILE_MODIFY mediaman/event_queue.py — recursive structural validation, deterministic ordering, terminal state guards
+[2026-08-31T13:02:48.540548+00:00] FILE_MODIFY tests/mediaman/test_event_queue.py — 62 comprehensive tests for all hardening requirements
+[2026-08-31T13:02:48.540548+00:00] TEST_RUN pytest tests/mediaman/test_event_queue.py — 62 collected, 62 passed
+[2026-08-31T13:02:48.540548+00:00] TEST_RUN pytest tests/mediaman/test_event_detector.py tests/mediaman/test_event_queue.py — 76 collected, 76 passed
+[2026-08-31T13:02:48.540548+00:00] TEST_RUN pytest tests/mediaman/ — 254 collected, 254 passed, 1 warning
+[2026-08-31T13:02:48.540548+00:00] SECURITY_CHECK gitignore rules, hardcoded IPs, production SQLite prevention — OK
+[2026-08-31T13:02:48.540548+00:00] FILE_MODIFY logs/latest.json — audit metadata reconciliation
+[2026-08-31T13:02:48.540548+00:00] COMMIT d1a5d6e2e6b4f23da99da0a2cdd2b9bfe77e7fbc fix(mediaman): complete event queue hardening
+[2026-08-31T13:09:58.176700+00:00] FILE_MODIFY mediaman/event_queue.py — credential-bearing connection string detection and redaction
+[2026-08-31T13:09:58.176700+00:00] FILE_MODIFY tests/mediaman/test_event_queue.py — 79 comprehensive tests including connection string security
+[2026-08-31T13:09:58.176700+00:00] TEST_RUN pytest tests/mediaman/test_event_queue.py — 79 collected, 79 passed
+[2026-08-31T13:09:58.176700+00:00] TEST_RUN pytest tests/mediaman/test_event_detector.py tests/mediaman/test_event_queue.py — 93 collected, 93 passed
+[2026-08-31T13:09:58.176700+00:00] TEST_RUN pytest tests/mediaman/ — 271 collected, 271 passed, 1 warning
+[2026-08-31T13:09:58.176700+00:00] SECURITY_CHECK gitignore, suspicious names, hardcoded IPs, production SQLite prevention — OK
+[2026-08-31T13:09:58.176700+00:00] COMMIT 69c0099e483a0519c077e31c5b20a508826feb0f fix(mediaman): redact credential-bearing connection strings
+[2026-08-31T13:09:58.176700+00:00] FILE_MODIFY logs/latest.json — final audit metadata with test counts and security verification
