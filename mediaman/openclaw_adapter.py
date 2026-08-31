@@ -6,7 +6,8 @@ Fails closed if the CLI is unavailable or returns invalid output.
 
 Initialization contract:
 - Determines CLI availability at adapter creation time
-- Validates configuration (timeout, agent_id) without exposing secrets
+- Validates timeout configuration without exposing secrets
+- agent_id is NOT an initialization parameter (remains a generate_article() argument)
 - Provides deterministic availability status
 - Logs safe initialization metadata only (no credentials, no payloads)
 - All subprocess calls are mockable for testing
