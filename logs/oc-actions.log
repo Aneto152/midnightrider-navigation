@@ -505,3 +505,13 @@
 [2026-08-31T13:28:06.436747+00:00] SECURITY_CHECK gitignore, suspicious names, hardcoded IPs, production SQLite prevention — OK
 [2026-08-31T13:28:06.436747+00:00] COMMIT 78d23e60cad6229b83e7d43dd7ba7a3339dc7cca feat(mediaman): initialize OpenClaw adapter safely
 [2026-08-31T13:28:06.436747+00:00] FILE_MODIFY logs/latest.json — Step 4C initialization audit metadata
+[2026-08-31T13:46:48.147110+00:00] FILE_MODIFY mediaman/openclaw_adapter.py — timeout_seconds validation (reject 0, negative, non-integer, bool, float)
+[2026-08-31T13:46:48.147110+00:00] FILE_MODIFY tests/mediaman/test_openclaw_adapter.py — 8 comprehensive timeout validation tests
+[2026-08-31T13:46:48.147110+00:00] TEST_RUN pytest tests/mediaman/test_openclaw_adapter.py — 26 collected, 26 passed
+[2026-08-31T13:46:48.147110+00:00] TEST_RUN pytest tests/mediaman/test_event_queue.py tests/mediaman/test_openclaw_adapter.py — 105 collected, 105 passed
+[2026-08-31T13:46:48.147110+00:00] TEST_RUN pytest tests/mediaman/ — 290 collected, 290 passed, 1 warning
+[2026-08-31T13:46:48.147110+00:00] SECURITY_CHECK gitignore, suspicious names, hardcoded IPs, production SQLite prevention — OK
+[2026-08-31T13:46:48.147110+00:00] COMMIT 11c95f957ec3da9085b67f5dd1662ab44325ff49 fix(mediaman): validate adapter initialization configuration
+[2026-08-31T13:46:48.147110+00:00] COMMIT dd792d38a1d6849bafb6119d3592975f2b406f82 chore(audit): reconcile Step 4C initialization metadata
+[2026-08-31T13:46:48.147110+00:00] FILE_MODIFY mediaman/openclaw_adapter.py — clarify adapter initialization contract (agent_id is generate_article parameter)
+[2026-08-31T13:46:48.147110+00:00] COMMIT 9852a486a45c0cd8ca6794e855817568ba54bb69 docs(mediaman): clarify adapter initialization contract
