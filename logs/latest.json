@@ -73,5 +73,7 @@
   "exactly_once_guarantee_claimed": false,
   "automatic_unknown_retry": false,
   "publication_bridge_implemented": false,
-  "telegram_guide_updated": true
+  "telegram_guide_updated": true,
+  "tests_logger_injection_fixed": false,
+  "runtime_status": "FIXING_LOGGER_INJECTION_TESTS"
 }
