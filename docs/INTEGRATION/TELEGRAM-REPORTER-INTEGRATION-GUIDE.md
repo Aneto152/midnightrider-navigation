@@ -59,7 +59,7 @@ DEAD_LETTER          → Operator explicitly abandoned publication attempt
 
 **Error Terminal:**
 - `SENDING` → `FAILED` (send rejected by provider)
-- `FAILED` → (remains retryable indefinitely)
+- `FAILED` → (retryable; external retry count, backoff, jitter, alerting, and terminal escalation remain PENDING operational decisions)
 
 **Terminal States (Never Retried):**
 - `SENT` — Provider message ID confirmed
@@ -108,7 +108,7 @@ backup_log:2026-08-31T13:59:15Z:<external_reference_id>
 When evidence proves the publication was sent despite ambiguous response:
 
 ```
-Evidence: monitoring:2026-08-31T14:30:15Z:telegram_message_log_entry_12345
+Evidence: monitoring:2026-08-31T14:30:15Z:<external_reference_id>
 State transition: UNKNOWN → SENT_RECONCILED
 Result: Terminal state, never retried
 ```

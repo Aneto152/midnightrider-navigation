@@ -50,21 +50,20 @@ def setup_service_logger(name="mediaman", log_dir=None):
         name: Logger name (e.g., 'telegram-sender')
         log_dir: Optional test-only log directory (Path or str).
                  Defaults to production path: /home/pi/midnightrider-navigation/logs/services
+
+    Raises:
+        PermissionError: If production directory cannot be created and no test log_dir provided.
     """
     # Production default: /home/pi/midnightrider-navigation/logs/services
-    # Test injection: allows temporary log_dir for offline testing
+    # Test injection: accepts explicit test log_dir parameter only
     if log_dir is None:
         log_dir = Path("/home/pi/midnightrider-navigation/logs/services")
     else:
         log_dir = Path(log_dir)
 
-    # For tests: only create if possible (skip if /home/pi not writable)
-    try:
-        log_dir.mkdir(parents=True, exist_ok=True)
-    except (PermissionError, OSError):
-        # Test-only: use current directory as fallback
-        log_dir = Path("./test-logs")
-        log_dir.mkdir(parents=True, exist_ok=True)
+    # Create log directory or raise controlled error
+    # Do not silently redirect production logging to test directory
+    log_dir.mkdir(parents=True, exist_ok=True)
 
     logger = logging.getLogger(name)
     logger.setLevel(logging.DEBUG)
