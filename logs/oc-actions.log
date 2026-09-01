@@ -581,8 +581,11 @@
 2026-08-31T19:47:00Z audit: Updated logs/latest.json with hardening validation status
 [2026-08-31T23:56:43.493446Z] [FILE_MODIFY] [AUDIT] Reconciled latest.json with actual MediaMan test counts
 [2026-08-31T23:56:43.493446Z] [RESULT] [AUDIT] Result: SUCCESS — all MediaMan test suites passed with zero failures
-2026-09-01T01:33:48.351794Z [FILE_CREATE] [MEDIAMAN] Added offline internal event-flow E2E tests with temporary EventQueue storage
-2026-09-01T01:33:48.351794Z [RESULT] [MEDIAMAN] Result: SUCCESS — internal E2E and full MediaMan test suites passed with zero failures
+[2026-09-01T01:33:48Z] [FILE_CREATE] [MEDIAMAN] Added offline internal event-flow E2E tests with temporary EventQueue storage
+[2026-09-01T01:33:48Z] [RESULT] [MEDIAMAN] Result: SUCCESS — internal E2E and full MediaMan test suites passed with zero failures
 [2026-09-01T01:42:09Z] [FILE_CREATE] [MEDIAMAN] Added offline internal event-flow E2E tests; verified 3 dedicated tests and the complete MediaMan suite
 [2026-09-01T01:42:09Z] [RESULT] [MEDIAMAN] Result: SUCCESS — 319 passed, 0 failed, 0 skipped, 1 pre-existing warning
 [2026-09-01T01:42:09Z] [COMMIT] SHA: 3123df79c3320ed781de211816a814d081dd5741
+[2026-09-01T01:51:57Z] [FILE_MODIFY] [AUDIT] Corrected the two non-compliant Step 5 action-log entries without changing their messages
+[2026-09-01T01:51:57Z] [RESULT] [AUDIT] Result: SUCCESS — Step 5 action-log entries now use the mandatory structured timestamp format
+[2026-09-01T01:51:57Z] [COMMIT] SHA: 4faee8183ffce420067285613fdb98d11b81cbd6
