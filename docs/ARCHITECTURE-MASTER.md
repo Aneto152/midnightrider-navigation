@@ -34,6 +34,18 @@ with operator-controlled recovery paths for ambiguous outcomes (`UNKNOWN → SEN
   Uses injected PublicationBridge. Does not instantiate TelegramSender, does not access credentials,
   does not access network, does not activate systemd. Offline-only controlled execution path.
 
+**Historical InfluxDB Dry-Run Mode (NEW):**
+
+MediaMan now supports opt-in historical test message generation from InfluxDB via MCP racing server:
+
+- **HistoricalRequest**: Strictly validated temporal parameters (as_of_utc, window_seconds, source)
+- **MCPCollector.collect_historical()**: Read-only InfluxDB queries at historical timestamp via MCP
+- **HistoricalMCPProvider**: Generates French articles from historical navigation facts
+- **racing.get_historical_snapshot**: MCP tool querying InfluxDB at as_of timestamp (read-only)
+
+Historical mode is opt-in (`MEDIAMAN_CONTENT_PROVIDER=historical_mcp`), enforces DRY_RUN=true,
+requires explicit temporal parameters, fails closed on missing facts, and never accesses N2K or P5.
+
 No live Telegram publication has been implemented. No runtime activation has occurred.
 No systemd units are enabled. No credentials are stored in code or logs.
 Runtime E2E validation remains incomplete.

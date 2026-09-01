@@ -58,6 +58,7 @@ class MCPClient:
         'racing.get_position': 'get_position',
         'racing.get_sog': 'get_sog',
         'racing.get_cog': 'get_cog',
+        'racing.get_historical_snapshot': 'get_historical_snapshot',
     }
 
     # SAFE TOOL ALLOWLIST — SOURCE-VERIFIED NAVIGATION TOOLS ONLY
@@ -85,6 +86,15 @@ class MCPClient:
             'safe': True,
             'requires_live_data': False,
             'returns_structured_data': True
+        },
+        'racing.get_historical_snapshot': {
+            'server': 'racing',
+            'wire_name': 'get_historical_snapshot',
+            'description': 'Historical navigation snapshot at as_of timestamp (InfluxDB read-only)',
+            'safe': True,
+            'requires_live_data': False,
+            'returns_structured_data': True,
+            'historical': True
         },
     }
 

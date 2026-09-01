@@ -176,6 +176,67 @@ async function handleTool(name, args) {
           unit: 'degrees (0-360)'
         };
 
+      // HISTORICAL
+      case 'get_historical_snapshot':
+        const as_of_utc = args?.as_of_utc;
+        const window_seconds = args?.window_seconds || 60;
+        
+        if (!as_of_utc) {
+          return { success: false, error: 'Missing as_of_utc parameter' };
+        }
+        
+        try {
+          // Validate as_of_utc is ISO 8601 UTC
+          const asOfDate = new Date(as_of_utc);
+          if (isNaN(asOfDate.getTime())) {
+            return { success: false, error: 'Invalid as_of_utc timestamp' };
+          }
+          
+          // Don't allow future timestamps
+          if (asOfDate > new Date()) {
+            return { success: false, error: 'as_of_utc cannot be in the future' };
+          }
+          
+          // Validate window_seconds
+          if (window_seconds < 1 || window_seconds > 3600) {
+            return { success: false, error: 'window_seconds must be between 1 and 3600' };
+          }
+          
+          // Query InfluxDB for historical data at as_of timestamp
+          const startTime = new Date(asOfDate.getTime() - (window_seconds * 1000)).toISOString();
+          const stopTime = asOfDate.toISOString();
+          
+          const latQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.position.latitude")|>last()`;
+          const lonQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.position.longitude")|>last()`;
+          const sogQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.speedOverGround")|>last()`;
+          const cogQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.courseOverGroundTrue")|>last()`;
+          
+          const [latRes, lonRes, sogRes, cogRes] = await Promise.all([
+            queryInfluxDB(latQuery).catch(() => []),
+            queryInfluxDB(lonQuery).catch(() => []),
+            queryInfluxDB(sogQuery).catch(() => []),
+            queryInfluxDB(cogQuery).catch(() => [])
+          ]);
+          
+          const latitude = latRes.length > 0 ? parseFloat(latRes[0]._value) : null;
+          const longitude = lonRes.length > 0 ? parseFloat(lonRes[0]._value) : null;
+          const sog = sogRes.length > 0 ? parseFloat(sogRes[0]._value) : null;
+          const cog_rad = cogRes.length > 0 ? parseFloat(cogRes[0]._value) : null;
+          
+          return {
+            success: true,
+            source_timestamp: as_of_utc,
+            facts: {
+              latitude: latitude,
+              longitude: longitude,
+              speed_over_ground_ms: sog,
+              course_over_ground_degrees: cog_rad ? radToDeg(cog_rad) : null
+            }
+          };
+        } catch (err) {
+          return { success: false, error: `Historical query failed: ${err.message}` };
+        }
+
       // PERFORMANCE
       case 'get_stw':
         const stw = await getLatestValue('navigation.speedThroughWater');

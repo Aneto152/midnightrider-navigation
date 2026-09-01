@@ -179,11 +179,159 @@ class OpenClawGatewayProvider(ContentProvider):
         )
 
 
+class HistoricalMCPProvider(ContentProvider):
+    """
+    Historical content provider using MCP collector and InfluxDB historical data.
+
+    Receives injected MCPCollector and HistoricalRequest, collects facts at as_of timestamp,
+    generates French article summarizing historical navigation state.
+
+    No live data fallback. No silent TestContentProvider fallback.
+    Fail-closed on missing mandatory facts.
+    """
+
+    def __init__(self, mcp_collector=None):
+        """
+        Initialize historical provider with injected MCP collector.
+
+        Args:
+            mcp_collector: MCPCollector instance (will be injected in tests)
+        """
+        self.mcp_collector = mcp_collector
+        self.call_count = 0
+
+    def get_content(self, race_id: str, cycle_timestamp: str) -> str:
+        """
+        Generate article from historical facts at cycle_timestamp.
+
+        Note: This provider requires explicit historical activation via
+        MEDIAMAN_CONTENT_PROVIDER=historical_mcp and historical request parameters.
+        Not called directly in normal flow.
+        """
+        raise NotImplementedError(
+            "HistoricalMCPProvider requires explicit historical request context. "
+            "Use get_content_for_historical() instead."
+        )
+
+    def get_content_for_historical(self, as_of_utc: str, window_seconds: int) -> str:
+        """
+        Generate article from historical facts collected at as_of timestamp.
+
+        Args:
+            as_of_utc: ISO 8601 UTC timestamp for historical snapshot
+            window_seconds: Query window in seconds
+
+        Returns:
+            French article summarizing historical navigation state
+
+        Raises:
+            ValueError: if MCP collector is not injected or collection fails
+            ValueError: if mandatory facts are missing
+        """
+        if self.mcp_collector is None:
+            raise ValueError("MCP collector not injected")
+
+        from mediaman.historical_request import HistoricalRequest
+
+        # Validate request
+        try:
+            request = HistoricalRequest(
+                race_id="historical",
+                as_of_utc=as_of_utc,
+                window_seconds=window_seconds
+            )
+        except ValueError as e:
+            raise ValueError(f"Invalid historical request: {e}") from e
+
+        # Collect historical facts
+        collection_result = self.mcp_collector.collect_historical(
+            as_of_utc=as_of_utc,
+            window_seconds=window_seconds
+        )
+
+        # Verify collection succeeded
+        from mediaman.mcp_collector import CollectionStatus
+
+        if collection_result.status == CollectionStatus.FAILED:
+            raise ValueError(
+                f"Historical collection failed: {collection_result.errors}"
+            )
+
+        # Extract facts
+        facts_dict = {}
+        for fact in collection_result.facts:
+            facts_dict[fact.field_name] = fact.value
+
+        # Verify mandatory facts present
+        mandatory_fields = ["latitude", "longitude"]
+        missing = [f for f in mandatory_fields if f not in facts_dict]
+        if missing:
+            raise ValueError(f"Historical snapshot missing mandatory facts: {missing}")
+
+        self.call_count += 1
+
+        # Generate French article
+        lat = facts_dict.get("latitude", "?")
+        lon = facts_dict.get("longitude", "?")
+        sog = facts_dict.get("speed_over_ground", "?")
+        cog = facts_dict.get("course_over_ground", "?")
+
+        article = (
+            f"🏁 *Midnight Rider* — Historique {self.call_count}\n\n"
+            f"**Nom**: Navire de course J/30 en détention à Stamford CT\n"
+            f"**État**: Navire opérationnel, tous les systèmes vérifiés\n"
+            f"**Moment**: {as_of_utc} (historique, fenêtre {window_seconds}s)\n\n"
+            f"**Position**: {lat}°, {lon}°\n"
+            f"**Cap**: {cog}° (cap au vrai)\n"
+            f"**Vitesse**: {sog} m/s (vitesse par rapport au sol)\n\n"
+            f"Article généré à partir de données historiques InfluxDB via le système MCP.\n"
+            f"Aucun message réel n'a été envoyé à Telegram."
+        )
+
+        return article
+
+    def validate(self, content: str) -> tuple[bool, str]:
+        """
+        Validate article output.
+
+        Note: Message length validation is PENDING operational decisions.
+        """
+        if not content:
+            return False, "Content is empty"
+
+        # Check for credentials (basic patterns)
+        credential_patterns = [
+            r'token',
+            r'password',
+            r'secret',
+            r'api[_-]?key',
+            r'auth',
+        ]
+
+        for pattern in credential_patterns:
+            if re.search(pattern, content, re.IGNORECASE):
+                return False, f"Content contains credential pattern: {pattern}"
+
+        # Check for French
+        french_indicators = ['é', 'è', 'ê', 'ç', 'le ', 'la ', 'et ', 'un ', 'une ']
+        has_french = any(ind in content.lower() for ind in french_indicators)
+
+        if not has_french:
+            return False, "Content does not appear to be in French"
+
+        return True, ""
+
+
 def get_content_provider() -> ContentProvider:
     """
     Factory for content providers.
 
     Reads MEDIAMAN_CONTENT_PROVIDER env var (default: test).
+
+    Supported values:
+    - test: TestContentProvider (deterministic test articles)
+    - gateway: OpenClawGatewayProvider (future)
+    - historical_mcp: HistoricalMCPProvider (requires explicit historical request params)
     """
     provider_name = os.getenv("MEDIAMAN_CONTENT_PROVIDER", "test").lower().strip()
 
@@ -191,5 +339,7 @@ def get_content_provider() -> ContentProvider:
         return TestContentProvider()
     elif provider_name == "gateway":
         return OpenClawGatewayProvider()
+    elif provider_name == "historical_mcp":
+        return HistoricalMCPProvider()
     else:
         raise ValueError(f"Unknown content provider: {provider_name}")

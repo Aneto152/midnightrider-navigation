@@ -197,15 +197,51 @@ store = IdempotencyStore()
 store.clear_for_testing()
 ```
 
+## Historical InfluxDB Dry-Run Mode (NEW)
+
+MediaMan now supports generating historical test messages from InfluxDB data via the MCP racing server.
+
+**Usage:**
+```bash
+MEDIAMAN_CONTENT_PROVIDER=historical_mcp \
+MEDIAMAN_HISTORICAL_AS_OF=2026-09-01T12:00:00Z \
+MEDIAMAN_HISTORICAL_WINDOW_SECONDS=60 \
+DRY_RUN=true \
+python3 -m mediaman.historical_entrypoint
+```
+
+**Features:**
+- Opt-in via `MEDIAMAN_CONTENT_PROVIDER=historical_mcp`
+- Explicit temporal parameters (as_of_utc, window_seconds)
+- Read-only InfluxDB queries through MCP racing server
+- Dry-run-only publication (no network calls, no Telegram)
+- Deterministic French articles from historical facts
+- Fail-closed: missing facts prevent publication
+- No P5/N2K access, no Signal K modification
+
+**Environment Variables:**
+- `MEDIAMAN_CONTENT_PROVIDER=historical_mcp`: Enable historical mode
+- `MEDIAMAN_HISTORICAL_AS_OF`: ISO 8601 UTC timestamp (required)
+- `MEDIAMAN_HISTORICAL_WINDOW_SECONDS`: Query window in seconds, 1-3600 (required)
+- `DRY_RUN=true`: Enforce no live publication (required)
+
+**Constraints:**
+- Default provider remains `test` (not changed)
+- Historical mode is opt-in only
+- No live Telegram publication
+- No P5 or N2K involvement
+- No production activation
+
 ## Status: Foundation Phase
 
 ✅ **Complete**
 - Telegram sender (no inbound)
-- Content provider (test + placeholder)
+- Content provider (test + historical MCP + placeholder gateway)
 - Idempotency tracking
 - Structured logging
 - Unit tests
 - Systemd files (not enabled)
+- Historical InfluxDB dry-run mode (opt-in)
 
 ⏳ **Pending Production**
 - Denis validation of Telegram bot account setup

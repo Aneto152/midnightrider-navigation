@@ -202,6 +202,179 @@ class MCPCollector:
         # Configure structured logging (do not overwrite with generic getLogger)
         self.logger = setup_service_logger('mediaman-mcp-collector')
 
+    def collect_historical(self, as_of_utc: str, window_seconds: int) -> CollectionResult:
+        """
+        Collect historical navigation facts at as_of timestamp via MCP historical tool.
+        
+        Args:
+            as_of_utc: ISO 8601 UTC timestamp for historical snapshot
+            window_seconds: Query window in seconds (bounded, positive)
+        
+        Returns:
+            CollectionResult with facts, provenance, and diagnostics
+        """
+        from mediaman.historical_request import HistoricalRequest
+        
+        # Validate request parameters
+        try:
+            request = HistoricalRequest(
+                race_id=self.race_id or "historical",
+                as_of_utc=as_of_utc,
+                window_seconds=window_seconds
+            )
+        except ValueError as e:
+            result = CollectionResult(
+                status=CollectionStatus.FAILED,
+                race_id=self.race_id,
+                collection_start_at=self._now_utc(),
+                collection_end_at=self._now_utc(),
+                errors=[f"Invalid historical request: {str(e)}"]
+            )
+            self.logger.error(f"Collector ERROR: Invalid historical request: {str(e)}")
+            return result
+        
+        collection_start = self._now_utc()
+        
+        self.logger.info(f"Collector STARTUP: historical mode, as_of={as_of_utc}, window={window_seconds}s")
+        
+        result = CollectionResult(
+            status=CollectionStatus.FAILED,
+            race_id=self.race_id,
+            collection_start_at=collection_start
+        )
+        
+        try:
+            self.logger.info(f"Collector DATA_IN: calling racing.get_historical_snapshot")
+            
+            response = self.client.call_tool(
+                'racing.get_historical_snapshot',
+                {
+                    'as_of_utc': as_of_utc,
+                    'window_seconds': window_seconds
+                }
+            )
+            
+            if response and response.get('result'):
+                decoded = response['result']
+                
+                # Extract historical facts from response
+                if decoded.get('success'):
+                    facts_data = decoded.get('facts', {})
+                    
+                    # Collect position
+                    if 'latitude' in facts_data and 'longitude' in facts_data:
+                        lat = facts_data['latitude']
+                        lon = facts_data['longitude']
+                        
+                        if lat is not None and lon is not None:
+                            if (-90 <= lat <= 90) and (-180 <= lon <= 180):
+                                provenance = Provenance(
+                                    tool_public_id="racing.get_historical_snapshot",
+                                    server_name="racing",
+                                    wire_tool_name="get_historical_snapshot",
+                                    source_id="mcp:racing:historical",
+                                    source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
+                                    observed_at=response.get('observed_at'),
+                                    freshness_limit_seconds=None,  # Historical data has no freshness limit
+                                    validation_status="valid"
+                                )
+                                
+                                result.facts.append(NavigationFact(
+                                    field_name="latitude",
+                                    value=lat,
+                                    unit="decimal_degrees",
+                                    provenance=provenance
+                                ))
+                                result.facts.append(NavigationFact(
+                                    field_name="longitude",
+                                    value=lon,
+                                    unit="decimal_degrees",
+                                    provenance=provenance
+                                ))
+                    
+                    # Collect speed and course if available
+                    if 'speed_over_ground_ms' in facts_data:
+                        sog = facts_data['speed_over_ground_ms']
+                        if sog is not None and isinstance(sog, (int, float)) and sog >= 0:
+                            provenance = Provenance(
+                                tool_public_id="racing.get_historical_snapshot",
+                                server_name="racing",
+                                wire_tool_name="get_historical_snapshot",
+                                source_id="mcp:racing:historical",
+                                source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
+                                observed_at=response.get('observed_at'),
+                                freshness_limit_seconds=None,
+                                validation_status="valid"
+                            )
+                            result.facts.append(NavigationFact(
+                                field_name="speed_over_ground",
+                                value=sog,
+                                unit="m/s",
+                                provenance=provenance
+                            ))
+                    
+                    if 'course_over_ground_degrees' in facts_data:
+                        cog = facts_data['course_over_ground_degrees']
+                        if cog is not None and isinstance(cog, (int, float)) and (0 <= cog <= 360):
+                            provenance = Provenance(
+                                tool_public_id="racing.get_historical_snapshot",
+                                server_name="racing",
+                                wire_tool_name="get_historical_snapshot",
+                                source_id="mcp:racing:historical",
+                                source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
+                                observed_at=response.get('observed_at'),
+                                freshness_limit_seconds=None,
+                                validation_status="valid"
+                            )
+                            result.facts.append(NavigationFact(
+                                field_name="course_over_ground",
+                                value=cog,
+                                unit="degrees_true",
+                                provenance=provenance
+                            ))
+                    
+                    if len(result.facts) > 0:
+                        result.status = CollectionStatus.COMPLETE
+                        result.tools_succeeded.append('racing.get_historical_snapshot')
+                    else:
+                        result.status = CollectionStatus.PARTIAL
+                        result.warnings.append("Historical snapshot returned no valid facts")
+                        result.tools_succeeded.append('racing.get_historical_snapshot')
+                else:
+                    result.status = CollectionStatus.FAILED
+                    result.tools_failed.append('racing.get_historical_snapshot')
+                    result.errors.append(f"Historical snapshot request failed: {decoded.get('error', 'unknown error')}")
+            else:
+                result.status = CollectionStatus.FAILED
+                result.tools_failed.append('racing.get_historical_snapshot')
+                result.errors.append("Historical snapshot returned empty or malformed response")
+        
+        except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
+            result.status = CollectionStatus.FAILED
+            result.tools_failed.append('racing.get_historical_snapshot')
+            error_msg = f"racing.get_historical_snapshot: {type(e).__name__}: {str(e)}"
+            result.errors.append(error_msg)
+            self.logger.error(f"Collector ERROR: {error_msg}")
+        except Exception as e:
+            result.status = CollectionStatus.FAILED
+            result.tools_failed.append('racing.get_historical_snapshot')
+            error_msg = f"racing.get_historical_snapshot: Unexpected error: {str(e)}"
+            result.errors.append(error_msg)
+            self.logger.error(f"Collector ERROR: {error_msg}")
+        
+        result.collection_end_at = self._now_utc()
+        result.tools_attempted.append('racing.get_historical_snapshot')
+        
+        self.logger.info(
+            f"Collector DATA_OUT: status={result.status.value}, "
+            f"facts={len(result.facts)}, "
+            f"succeeded={len(result.tools_succeeded)}, "
+            f"failed={len(result.tools_failed)}"
+        )
+        self.logger.info(f"Collector SHUTDOWN")
+        
+        return result
+
     def collect(self, tools: Optional[List[SourceVerifiedTools]] = None) -> CollectionResult:
         """
         Collect navigation facts from verified MCP tools.
