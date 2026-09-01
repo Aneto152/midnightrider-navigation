@@ -1,9 +1,9 @@
 {
-  "task": "mediaman-step-4d-event-orchestration-internal-content",
+  "task": "mediaman-step-5-internal-event-flow-e2e",
   "status": "SUCCESS",
-  "timestamp": "2026-08-31T17:26:57.127824+00:00",
+  "timestamp": "2026-09-01T01:42:01.205897Z",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
-  "parent_commit_sha": "6effa72541e888b7e9aa001c3b7f01b3b5692454",
+  "parent_commit_sha": "38954fa9bc2d4d8f9583fad42deab1e3e86197ec",
   "strict_prompt_allowlist": true,
   "prompt_injection_rejection": true,
   "raw_event_values_logged": false,
@@ -35,9 +35,9 @@
     "total_warnings": 1
   },
   "files_modified": [
-    "mediaman/event_orchestrator.py",
-    "tests/mediaman/test_event_orchestrator.py",
-    "docs/ARCHITECTURE-MASTER.md"
+    "tests/mediaman/test_internal_e2e.py",
+    "logs/latest.json",
+    "logs/oc-actions.log"
   ],
   "hardening_corrections": [
     "Removed all raw event field logging before validation",
@@ -88,7 +88,7 @@
   "internal_e2e_validated": true,
   "test_summary": {
     "internal_e2e": {
-      "timestamp": "2026-09-01T01:33:43.126639Z",
+      "timestamp": "2026-09-01T01:42:01.205975Z",
       "collected": 319,
       "passed": 319,
       "failed": 0,
@@ -97,5 +97,6 @@
       "new_internal_e2e_tests": 3,
       "status": "SUCCESS"
     }
-  }
+  },
+  "step_5_commit_sha": "3123df79c3320ed781de211816a814d081dd5741"
 }
