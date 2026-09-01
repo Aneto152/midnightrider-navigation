@@ -16,6 +16,22 @@ collectant les données de tous les instruments via trois réseaux physiques dis
 (NMEA 2000, Bluetooth LE, USB), les centralisant dans Signal K, les persistant dans
 InfluxDB et les visualisant dans Grafana.
 
+**Publication subsystem (offline only):**
+
+An internal publication subsystem manages outbound race performance reporting with a
+State-based architecture: `READY → VALIDATED → SENDING → SENT` for successful dry-run publication,
+with operator-controlled recovery paths for ambiguous outcomes (`UNKNOWN → SENT_RECONCILED`,
+`UNKNOWN → RETRY_AUTHORIZED → READY`, `UNKNOWN → DEAD_LETTER`).
+
+- **PublicationBridge**: Offline adapter accepting injected PublicationStateStore and
+  TelegramSender-compatible mock. Enforces dry-run-only publication without network calls.
+- **PublicationReconciler**: Manual evidence-based reconciliation for UNKNOWN publication outcomes.
+- **PublicationEvidenceRecord**: Immutable evidence with operator identity and source-authenticated
+  reference format (e.g., `manual_ui:2026-08-31T15:00:00Z:ref-001`).
+
+No live Telegram publication has been implemented. No runtime activation has occurred.
+No credentials are stored in code or logs.
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                    MIDNIGHT RIDER — STACK                       │

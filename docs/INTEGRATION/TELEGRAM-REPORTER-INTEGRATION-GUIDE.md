@@ -2,27 +2,47 @@
 
 **Status:** FOUNDATION ONLY — DRY-RUN VALIDATED — PRODUCTION ACTIVATION BLOCKED
 
-**Current Development Phase (2026-08-31):**
+**Current Development Phase (2026-09-01):**
 - ✅ Outbound sender foundation (DRY_RUN validated)
 - ✅ SQLite state machine (approved 9-state model)
 - ✅ Logging infrastructure (structured, sanitized)
+- ✅ Publication reconciliation (manual operator evidence)
+- ✅ Offline publication bridge (injected mocks, DRY_RUN enforced)
 - ✅ Systemd units (service + timer) present but disabled
 - ❌ Real content provider (not implemented)
 - ❌ OpenClaw LLM adapter (not implemented)
-- ❌ External publication bridge (not implemented)
+- ❌ Live Telegram publication (not implemented — offline only)
 - ⏳ Telegram bot/group (not created — development phase only)
 
 ## System Overview
 
-MediaMan is a planned outbound-only Telegram reporter for race performance articles. No live Telegram contact has occurred. The current sender is NOT the future PublicationBridge.
+MediaMan is a planned outbound-only Telegram reporter for race performance articles. No live Telegram contact has occurred.
+
+**Current Implementation Status (offline only):**
+- **PublicationBridge**: Offline adapter accepting injected PublicationStateStore and TelegramSender-compatible mock
+  - Enforces dry-run-only publication without network access
+  - Manages state transitions: READY → VALIDATED → SENDING → SENT
+  - Handles ambiguous outcomes with operator-controlled recovery paths
+  - No TelegramSender instantiation in runtime or tests
+  - No environment variables read by bridge
+- **PublicationReconciler**: Manual evidence-based reconciliation for UNKNOWN publication states
+  - Accepts operator-provided evidence with authenticated source reference
+  - Supports three explicit transitions: SENT_RECONCILED, RETRY_AUTHORIZED, DEAD_LETTER
+  - No automatic retry or external lookup
+- **PublicationEvidenceRecord**: Immutable evidence with operator identity and timestamp
+  - Eight required fields, no content field
+  - Evidence reference format: source:timestamp:reference_id
+  - Four approved sources: manual_ui, monitoring, api_query, backup_log
 
 **Security properties (current):**
 - Outbound-only (no inbound webhook, polling, getUpdates, or command processing)
+- Offline-only (no network access except when injected mock calls external services)
 - No personal Telegram accounts
 - No credentials in version control
-- No credentials stored in logs
+- No credentials stored in logs or state records
 - No Signal K modifications required
 - No Docker changes required
+- No publication content stored in state records
 - Fail-closed: invalid content → skip send (never fake article)
 
 ## Publication State Machine — Approved Design

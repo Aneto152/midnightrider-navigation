@@ -1,7 +1,7 @@
 {
-  "task": "mediaman-step-8-manual-reconciliation",
+  "task": "mediaman-step-9-publication-bridge-dry-run",
   "status": "SUCCESS",
-  "timestamp": "2026-09-01T14:04:08.936102Z",
+  "timestamp": "2026-09-01T14:49:09.009182Z",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
   "parent_commit_sha": "38954fa9bc2d4d8f9583fad42deab1e3e86197ec",
   "strict_prompt_allowlist": true,
@@ -35,8 +35,10 @@
     "total_warnings": 1
   },
   "files_modified": [
-    "mediaman/publication_reconciliation.py",
-    "tests/mediaman/test_publication_reconciliation.py",
+    "mediaman/publication_bridge.py",
+    "tests/mediaman/test_publication_bridge.py",
+    "docs/ARCHITECTURE-MASTER.md",
+    "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
@@ -73,7 +75,7 @@
   "approved_reconciliation_documented": true,
   "exactly_once_guarantee_claimed": false,
   "automatic_unknown_retry": false,
-  "publication_bridge_implemented": false,
+  "publication_bridge_implemented": true,
   "telegram_guide_updated": true,
   "tests_logger_injection_fixed": true,
   "runtime_status": "HARDENING_VALIDATED",
@@ -124,10 +126,20 @@
       "warnings": 1,
       "new_publication_reconciliation_tests": 10,
       "status": "SUCCESS"
+    },
+    "publication_bridge": {
+      "collected": 359,
+      "passed": 359,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_publication_bridge_tests": 10,
+      "status": "SUCCESS"
     }
   },
   "step_5_commit_sha": "3123df79c3320ed781de211816a814d081dd5741",
   "publication_contracts_validated": true,
   "publication_state_validated": true,
-  "publication_reconciliation_validated": true
+  "publication_reconciliation_validated": true,
+  "publication_bridge_validated": true
 }
