@@ -82,7 +82,7 @@ class PublicationStateMachine:
         Returns a new frozen PublicationStateRecord.
         Raises ValueError with safe classification on invalid transitions.
         """
-        if record is None:
+        if not isinstance(record, PublicationStateRecord):
             raise ValueError("invalid_record")
 
         if not isinstance(target_state, PublicationState):
@@ -101,15 +101,17 @@ class PublicationStateMachine:
         if record.state == PublicationState.UNKNOWN and not operator_authorized:
             raise ValueError("operator_authorization_required")
 
-        # SENDING → SENT requires provider_message_id
+        # SENDING → SENT: provider_message_id required (non-empty string), last_error must be None
         if (
             record.state == PublicationState.SENDING
             and target_state == PublicationState.SENT
         ):
             if not provider_message_id or not isinstance(provider_message_id, str):
                 raise ValueError("provider_message_id_required")
+            if last_error is not None:
+                raise ValueError("invalid_transition")
 
-        # SENDING → FAILED requires safe error classification
+        # SENDING → FAILED: last_error required (safe classification), provider_message_id must be None
         if (
             record.state == PublicationState.SENDING
             and target_state == PublicationState.FAILED
@@ -120,6 +122,29 @@ class PublicationStateMachine:
             import re
             if not re.match(r'^[a-z0-9_]{1,64}$', last_error):
                 raise ValueError("invalid_error_classification")
+            if provider_message_id is not None:
+                raise ValueError("invalid_transition")
+
+        # SENDING → UNKNOWN: both provider_message_id and last_error must be None
+        if (
+            record.state == PublicationState.SENDING
+            and target_state == PublicationState.UNKNOWN
+        ):
+            if provider_message_id is not None:
+                raise ValueError("invalid_transition")
+            if last_error is not None:
+                raise ValueError("invalid_transition")
+
+        # All other transitions: provider_message_id and last_error must be None
+        if not (
+            (record.state == PublicationState.SENDING and target_state == PublicationState.SENT) or
+            (record.state == PublicationState.SENDING and target_state == PublicationState.FAILED) or
+            (record.state == PublicationState.SENDING and target_state == PublicationState.UNKNOWN)
+        ):
+            if provider_message_id is not None:
+                raise ValueError("invalid_transition")
+            if last_error is not None:
+                raise ValueError("invalid_transition")
 
         # Create new immutable record
         return PublicationStateRecord(
@@ -172,8 +197,20 @@ class PublicationStateStore:
         Only READY state is allowed as initial state.
         Returns True on success, False if publication_id already exists.
         """
+        if not isinstance(record, PublicationStateRecord):
+            raise ValueError("invalid_record")
+
+        if not isinstance(record.state, PublicationState):
+            raise ValueError("invalid_record")
+
         if record.state != PublicationState.READY:
             raise ValueError("initial_state_must_be_ready")
+
+        if record.provider_message_id is not None:
+            raise ValueError("invalid_transition")
+
+        if record.last_error is not None:
+            raise ValueError("invalid_transition")
 
         if self.connection is None:
             raise RuntimeError("Store not initialized; call initialize() first")
