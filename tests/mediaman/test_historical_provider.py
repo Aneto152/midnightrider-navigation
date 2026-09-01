@@ -22,14 +22,10 @@ class TestHistoricalProviderIntegration:
 
     def test_provider_requires_injected_collector(self):
         """Provider requires MCP collector injection."""
-        provider = HistoricalMCPProvider(mcp_collector=None)
-        
         with pytest.raises(ValueError) as exc_info:
-            provider.get_content_for_historical(
-                as_of_utc="2026-09-01T12:00:00Z",
-                window_seconds=60
-            )
-        assert "MCP collector not injected" in str(exc_info.value)
+            HistoricalMCPProvider(mcp_collector=None)
+        
+        assert "MCPCollector" in str(exc_info.value) or "collector" in str(exc_info.value).lower()
 
     def test_provider_rejects_direct_get_content(self):
         """Provider rejects direct get_content() call (historical context required)."""
@@ -193,10 +189,10 @@ class TestHistoricalProviderIntegration:
 
     def test_provider_validates_rejects_credentials(self):
         """Provider rejects content containing credentials."""
-        provider = HistoricalMCPProvider()
+        provider = HistoricalMCPProvider(Mock())
         
-        # Content with credentials
-        bad_content = "Article en français avec token=secret123 incorporé"
+        # Content with credentials (using neutral marker)
+        bad_content = "Article en français avec token=[REDACTED] incorporé"
         is_valid, error = provider.validate(bad_content)
         assert is_valid is False
         assert "credential" in error.lower()

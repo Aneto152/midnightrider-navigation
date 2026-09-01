@@ -211,12 +211,17 @@ async function handleTool(name, args) {
           const sogQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.speedOverGround")|>last()`;
           const cogQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.courseOverGroundTrue")|>last()`;
           
-          const [latRes, lonRes, sogRes, cogRes] = await Promise.all([
-            queryInfluxDB(latQuery).catch(() => []),
-            queryInfluxDB(lonQuery).catch(() => []),
-            queryInfluxDB(sogQuery).catch(() => []),
-            queryInfluxDB(cogQuery).catch(() => [])
-          ]);
+          let latRes, lonRes, sogRes, cogRes;
+          try {
+            [latRes, lonRes, sogRes, cogRes] = await Promise.all([
+              queryInfluxDB(latQuery),
+              queryInfluxDB(lonQuery),
+              queryInfluxDB(sogQuery),
+              queryInfluxDB(cogQuery)
+            ]);
+          } catch (queryErr) {
+            return { success: false, error: 'InfluxDB query failed' };
+          }
           
           const latitude = latRes.length > 0 ? parseFloat(latRes[0]._value) : null;
           const longitude = lonRes.length > 0 ? parseFloat(lonRes[0]._value) : null;
@@ -641,6 +646,25 @@ async function handleRequest(request) {
             name: 'get_performance_trend',
             description: 'Get SOG/VMG acceleration trend over N minutes',
             inputSchema: { type: 'object', properties: { minutes: { type: 'number' } } }
+          },
+          // HISTORICAL
+          {
+            name: 'get_historical_snapshot',
+            description: 'Get historical navigation snapshot at as_of timestamp (read-only InfluxDB)',
+            inputSchema: {
+              type: 'object',
+              properties: {
+                as_of_utc: {
+                  type: 'string',
+                  description: 'ISO 8601 UTC timestamp (e.g., 2026-09-01T12:00:00Z)'
+                },
+                window_seconds: {
+                  type: 'integer',
+                  description: 'Historical window in seconds (1-3600)'
+                }
+              },
+              required: ['as_of_utc', 'window_seconds']
+            }
           }
         ]
       }

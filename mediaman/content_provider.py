@@ -188,15 +188,23 @@ class HistoricalMCPProvider(ContentProvider):
 
     No live data fallback. No silent TestContentProvider fallback.
     Fail-closed on missing mandatory facts.
+    
+    Requires explicit MCPCollector injection. Raises ValueError if collector is absent.
     """
 
-    def __init__(self, mcp_collector=None):
+    def __init__(self, mcp_collector):
         """
         Initialize historical provider with injected MCP collector.
 
         Args:
-            mcp_collector: MCPCollector instance (will be injected in tests)
+            mcp_collector: MCPCollector instance (required, not optional)
+        
+        Raises:
+            ValueError: if mcp_collector is None
         """
+        if mcp_collector is None:
+            raise ValueError("HistoricalMCPProvider requires injected MCPCollector (not None)")
+        
         self.mcp_collector = mcp_collector
         self.call_count = 0
 

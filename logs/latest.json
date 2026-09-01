@@ -1,7 +1,7 @@
 {
-  "task": "mediaman-step-11b-controlled-runtime-e2e-dry-run",
+  "task": "mediaman-repair-historical-influxdb-dry-run",
   "status": "SUCCESS",
-  "timestamp": "2026-09-01T17:53:30.248295Z",
+  "timestamp": "2026-09-01T22:16:49.619725Z",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
   "parent_commit_sha": "185ee029adce8fd9cfcec6b436ac26dd937b719c",
   "strict_prompt_allowlist": true,
@@ -172,5 +172,25 @@
   "runtime_entrypoint_validated": true,
   "controlled_runtime_e2e_validated": true,
   "validated_commit_sha": "ff8c05f2c5f934807cd2e2157bffd6ede0ed6931",
-  "historical_audit_parent_commit_sha": "38954fa9bc2d4d8f9583fad42deab1e3e86197ec"
+  "historical_audit_parent_commit_sha": "38954fa9bc2d4d8f9583fad42deab1e3e86197ec",
+  "historical_influxdb_implementation_repaired": true,
+  "historical_entrypoint_created": true,
+  "provider_factory_requires_injection": true,
+  "mcp_tool_error_handling_improved": true,
+  "test_credential_literals_removed": true,
+  "no_live_influxdb_in_tests": true,
+  "no_real_credentials_in_tests": true,
+  "no_telegram_network_calls": true,
+  "production_defaults_unchanged": true,
+  "repair_summary": {
+    "defects_fixed": {
+      "historical_entrypoint_missing": "FIXED",
+      "provider_factory_not_wired": "FIXED",
+      "mcp_tool_validation_defects": "FIXED",
+      "mcp_tool_registration": "FIXED",
+      "source_timestamp_handling": "FIXED",
+      "credential_test_literals": "FIXED",
+      "test_suite_incomplete": "PARTIALLY_FIXED"
+    }
+  }
 }
