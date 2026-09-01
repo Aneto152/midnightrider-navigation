@@ -619,3 +619,5 @@
 [2026-09-01T15:28:41Z] [COMMIT] SHA: ab088620ac66d04daed8c0357844962f6d921a9d
 [2026-09-01T17:42:10Z] [FILE_CREATE] [MEDIAMAN] Created the one-shot staging DRY_RUN runtime entrypoint with eight offline tests
 [2026-09-01T17:42:10Z] [RESULT] [MEDIAMAN] Result: SUCCESS — 375 passed, 0 failed, 0 skipped, 1 pre-existing warning
+[2026-09-01T17:53:41Z] [RUNTIME_E2E] [MEDIAMAN] Controlled two-process staging runtime completed with synthetic DRY_RUN configuration and restart recovery verified
+[2026-09-01T17:53:41Z] [RESULT] [MEDIAMAN] Result: SUCCESS — 2 processes, 0 network calls, 0 Telegram messages sent, no real credentials used
