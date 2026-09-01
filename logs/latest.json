@@ -3,7 +3,7 @@
   "status": "SUCCESS",
   "timestamp": "2026-09-01T17:53:30.248295Z",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
-  "parent_commit_sha": "38954fa9bc2d4d8f9583fad42deab1e3e86197ec",
+  "parent_commit_sha": "185ee029adce8fd9cfcec6b436ac26dd937b719c",
   "strict_prompt_allowlist": true,
   "prompt_injection_rejection": true,
   "raw_event_values_logged": false,
@@ -35,10 +35,6 @@
     "total_warnings": 1
   },
   "files_modified": [
-    "mediaman/runtime_entrypoint.py",
-    "tests/mediaman/test_runtime_entrypoint.py",
-    "docs/ARCHITECTURE-MASTER.md",
-    "SYSTEM-SUMMARY.md",
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
@@ -174,5 +170,7 @@
   "operational_activation_enabled": false,
   "production_activation_enabled": false,
   "runtime_entrypoint_validated": true,
-  "controlled_runtime_e2e_validated": true
+  "controlled_runtime_e2e_validated": true,
+  "validated_commit_sha": "ff8c05f2c5f934807cd2e2157bffd6ede0ed6931",
+  "historical_audit_parent_commit_sha": "38954fa9bc2d4d8f9583fad42deab1e3e86197ec"
 }
