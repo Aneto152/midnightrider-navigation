@@ -26,6 +26,17 @@ Midnight Rider is a J/30 sailing vessel equipped with an integrated marine navig
 
 All systems are hosted on a **Raspberry Pi 4 Model B** (4 GB RAM, microSD 64 GB) running Raspberry Pi OS (Debian 12 Bookworm).
 
+**Publication subsystem (staging validation only):**
+
+A one-shot staging activation gate provides offline validation of publication paths without daemon activation or service modification.
+- Mode: "staging" required (enforced)
+- Dry-run: True required (enforced)
+- No systemd units enabled
+- No network access permitted
+- No credentials read from environment
+- No Telegram contact
+- Runtime E2E validation: incomplete
+
 ---
 
 ## 2. Service and Port Map

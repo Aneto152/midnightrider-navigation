@@ -28,9 +28,12 @@ with operator-controlled recovery paths for ambiguous outcomes (`UNKNOWN → SEN
 - **PublicationReconciler**: Manual evidence-based reconciliation for UNKNOWN publication outcomes.
 - **PublicationEvidenceRecord**: Immutable evidence with operator identity and source-authenticated
   reference format (e.g., `manual_ui:2026-08-31T15:00:00Z:ref-001`).
+- **StagingActivation**: One-shot staging gate enforcing mode="staging" and dry_run=True only.
+  No daemon, no systemd, no scheduler. Uses injected PublicationBridge for isolated validation.
 
 No live Telegram publication has been implemented. No runtime activation has occurred.
-No credentials are stored in code or logs.
+No systemd units are enabled. No credentials are stored in code or logs.
+Runtime E2E validation remains incomplete.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐

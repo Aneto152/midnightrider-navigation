@@ -1,7 +1,7 @@
 {
-  "task": "mediaman-step-9-publication-bridge-dry-run",
+  "task": "mediaman-step-10-dry-run-staging-activation",
   "status": "SUCCESS",
-  "timestamp": "2026-09-01T14:49:09.009182Z",
+  "timestamp": "2026-09-01T15:15:04.702358Z",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
   "parent_commit_sha": "38954fa9bc2d4d8f9583fad42deab1e3e86197ec",
   "strict_prompt_allowlist": true,
@@ -35,10 +35,10 @@
     "total_warnings": 1
   },
   "files_modified": [
-    "mediaman/publication_bridge.py",
-    "tests/mediaman/test_publication_bridge.py",
+    "mediaman/staging_activation.py",
+    "tests/mediaman/test_staging_activation.py",
     "docs/ARCHITECTURE-MASTER.md",
-    "docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md",
+    "SYSTEM-SUMMARY.md",
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
@@ -135,11 +135,23 @@
       "warnings": 1,
       "new_publication_bridge_tests": 10,
       "status": "SUCCESS"
+    },
+    "staging_activation": {
+      "collected": 367,
+      "passed": 367,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_staging_activation_tests": 8,
+      "status": "SUCCESS"
     }
   },
   "step_5_commit_sha": "3123df79c3320ed781de211816a814d081dd5741",
   "publication_contracts_validated": true,
   "publication_state_validated": true,
   "publication_reconciliation_validated": true,
-  "publication_bridge_validated": true
+  "publication_bridge_validated": true,
+  "staging_activation_validated": true,
+  "operational_activation_enabled": false,
+  "production_activation_enabled": false
 }
