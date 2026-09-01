@@ -30,6 +30,9 @@ with operator-controlled recovery paths for ambiguous outcomes (`UNKNOWN → SEN
   reference format (e.g., `manual_ui:2026-08-31T15:00:00Z:ref-001`).
 - **StagingActivation**: One-shot staging gate enforcing mode="staging" and dry_run=True only.
   No daemon, no systemd, no scheduler. Uses injected PublicationBridge for isolated validation.
+- **RuntimeE2EEntrypoint**: One-shot runtime entrypoint enforcing mode="staging" and dry_run=True only.
+  Uses injected PublicationBridge. Does not instantiate TelegramSender, does not access credentials,
+  does not access network, does not activate systemd. Offline-only controlled execution path.
 
 No live Telegram publication has been implemented. No runtime activation has occurred.
 No systemd units are enabled. No credentials are stored in code or logs.

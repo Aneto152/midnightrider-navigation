@@ -28,14 +28,16 @@ All systems are hosted on a **Raspberry Pi 4 Model B** (4 GB RAM, microSD 64 GB)
 
 **Publication subsystem (staging validation only):**
 
-A one-shot staging activation gate provides offline validation of publication paths without daemon activation or service modification.
+Controlled one-shot runtime entrypoint and staging activation gate provide offline validation of publication paths without daemon activation or service modification.
 - Mode: "staging" required (enforced)
 - Dry-run: True required (enforced)
 - No systemd units enabled
 - No network access permitted
 - No credentials read from environment
 - No Telegram contact
-- Runtime E2E validation: incomplete
+- No TelegramSender instantiation
+- RuntimeE2EEntrypoint: One-shot, offline-only, no network access, no credential reads
+- Runtime E2E validation: incomplete (not executed)
 
 ---
 
