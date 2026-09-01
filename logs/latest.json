@@ -1,5 +1,5 @@
 {
-  "task": "mediaman-step-5-internal-event-flow-e2e",
+  "task": "mediaman-step-6-publication-contracts",
   "status": "SUCCESS",
   "timestamp": "2026-09-01T01:42:01.205897Z",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
@@ -35,7 +35,8 @@
     "total_warnings": 1
   },
   "files_modified": [
-    "tests/mediaman/test_internal_e2e.py",
+    "mediaman/publication_contract.py",
+    "tests/mediaman/test_publication_contract.py",
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
@@ -96,7 +97,17 @@
       "warnings": 1,
       "new_internal_e2e_tests": 3,
       "status": "SUCCESS"
+    },
+    "publication_contracts": {
+      "collected": 327,
+      "passed": 327,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_publication_contract_tests": 8,
+      "status": "SUCCESS"
     }
   },
-  "step_5_commit_sha": "3123df79c3320ed781de211816a814d081dd5741"
+  "step_5_commit_sha": "3123df79c3320ed781de211816a814d081dd5741",
+  "publication_contracts_validated": true
 }
