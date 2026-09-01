@@ -9,6 +9,12 @@ import re
 from abc import ABC, abstractmethod
 from datetime import datetime
 
+# Sentinel value to distinguish between no argument and explicit None
+class _Sentinel:
+    pass
+
+_NOT_PROVIDED = _Sentinel()
+
 
 class ContentProvider(ABC):
     """Base class for content providers."""
@@ -142,12 +148,12 @@ class LocalLLMProvider(ContentProvider):
             if re.search(pattern, content, re.IGNORECASE):
                 return False, f"Content contains credential pattern: {pattern}"
 
-        # Check for French
-        french_indicators = ['é', 'è', 'ê', 'ç', 'le ', 'la ', 'et ', 'un ', 'une ']
-        has_french = any(ind in content.lower() for ind in french_indicators)
+        # Check for French: require accented characters (much more specific to French)
+        french_accents = ['é', 'è', 'ê', 'ç', 'à', 'ù', 'û', 'ô']
+        has_accented_chars = any(char in content for char in french_accents)
 
-        if not has_french:
-            return False, "Content does not appear to be in French"
+        if not has_accented_chars:
+            return False, "Content does not appear to be in French (no accented characters found)"
 
         return True, ""
 
@@ -178,6 +184,36 @@ class OpenClawGatewayProvider(ContentProvider):
             "Awaiting Gateway API documentation."
         )
 
+    def validate(self, content: str) -> tuple[bool, str]:
+        """Validate article output.
+
+        Note: Message length validation is PENDING operational decisions.
+        """
+        if not content:
+            return False, "Content is empty"
+
+        # Check for credentials (basic patterns)
+        credential_patterns = [
+            r'token',
+            r'password',
+            r'secret',
+            r'api[_-]?key',
+            r'auth',
+        ]
+
+        for pattern in credential_patterns:
+            if re.search(pattern, content, re.IGNORECASE):
+                return False, f"Content contains credential pattern: {pattern}"
+
+        # Check for French: require accented characters (much more specific to French)
+        french_accents = ['é', 'è', 'ê', 'ç', 'à', 'ù', 'û', 'ô']
+        has_accented_chars = any(char in content for char in french_accents)
+
+        if not has_accented_chars:
+            return False, "Content does not appear to be in French (no accented characters found)"
+
+        return True, ""
+
 
 class HistoricalMCPProvider(ContentProvider):
     """
@@ -192,21 +228,38 @@ class HistoricalMCPProvider(ContentProvider):
     Requires explicit MCPCollector injection. Raises ValueError if collector is absent.
     """
 
-    def __init__(self, mcp_collector):
+    def __init__(self, mcp_collector=_NOT_PROVIDED):
         """
-        Initialize historical provider with injected MCP collector.
+        Initialize historical provider with optional injected MCP collector.
 
         Args:
-            mcp_collector: MCPCollector instance (required, not optional)
+            mcp_collector: MCPCollector instance (optional, required only for get_content_for_historical)
         
-        Raises:
-            ValueError: if mcp_collector is None
+        Behavior:
+            - HistoricalMCPProvider() → validation-only mode (no collector needed)
+            - HistoricalMCPProvider(mcp_collector=None) → raises ValueError (explicit None not allowed)
+            - HistoricalMCPProvider(mcp_collector=<obj>) → collection mode (collector provided)
+        
+        Note:
+            - validate() can be called without collector (validation-only)
+            - get_content_for_historical() requires collector; raises ValueError if absent
         """
+        # Distinguish between no argument and explicit None
         if mcp_collector is None:
-            raise ValueError("HistoricalMCPProvider requires injected MCPCollector (not None)")
+            raise ValueError(
+                "HistoricalMCPProvider: mcp_collector cannot be explicitly None. "
+                "Either omit the argument (validation-only mode) or provide a collector instance."
+            )
+        elif mcp_collector is _NOT_PROVIDED:
+            # No argument provided - validation-only mode
+            self.mcp_collector = None
+        else:
+            # Valid collector provided
+            self.mcp_collector = mcp_collector
         
-        self.mcp_collector = mcp_collector
         self.call_count = 0
+        self.snapshot_count = 0
+        self.last_snapshot_params = None
 
     def get_content(self, race_id: str, cycle_timestamp: str) -> str:
         """
@@ -236,8 +289,11 @@ class HistoricalMCPProvider(ContentProvider):
             ValueError: if MCP collector is not injected or collection fails
             ValueError: if mandatory facts are missing
         """
+        # Tracker call count (increments on every call)
+        self.call_count += 1
+
         if self.mcp_collector is None:
-            raise ValueError("MCP collector not injected")
+            raise ValueError("MCP collector not injected (required for get_content_for_historical)")
 
         from mediaman.historical_request import HistoricalRequest
 
@@ -250,6 +306,12 @@ class HistoricalMCPProvider(ContentProvider):
             )
         except ValueError as e:
             raise ValueError(f"Invalid historical request: {e}") from e
+
+        # Track unique snapshots (only increment for new parameter combinations)
+        current_params = (as_of_utc, window_seconds)
+        if current_params != self.last_snapshot_params:
+            self.snapshot_count += 1
+            self.last_snapshot_params = current_params
 
         # Collect historical facts
         collection_result = self.mcp_collector.collect_historical(
@@ -276,8 +338,6 @@ class HistoricalMCPProvider(ContentProvider):
         if missing:
             raise ValueError(f"Historical snapshot missing mandatory facts: {missing}")
 
-        self.call_count += 1
-
         # Generate French article
         lat = facts_dict.get("latitude", "?")
         lon = facts_dict.get("longitude", "?")
@@ -285,7 +345,7 @@ class HistoricalMCPProvider(ContentProvider):
         cog = facts_dict.get("course_over_ground", "?")
 
         article = (
-            f"🏁 *Midnight Rider* — Historique {self.call_count}\n\n"
+            f"🏁 *Midnight Rider* — Historique {self.snapshot_count}\n\n"
             f"**Nom**: Navire de course J/30 en détention à Stamford CT\n"
             f"**État**: Navire opérationnel, tous les systèmes vérifiés\n"
             f"**Moment**: {as_of_utc} (historique, fenêtre {window_seconds}s)\n\n"
@@ -320,34 +380,57 @@ class HistoricalMCPProvider(ContentProvider):
             if re.search(pattern, content, re.IGNORECASE):
                 return False, f"Content contains credential pattern: {pattern}"
 
-        # Check for French
-        french_indicators = ['é', 'è', 'ê', 'ç', 'le ', 'la ', 'et ', 'un ', 'une ']
-        has_french = any(ind in content.lower() for ind in french_indicators)
+        # Check for French: require accented characters (much more specific to French)
+        # Accented characters are far more reliable than word fragments like 'le ' which appear in English
+        french_accents = ['é', 'è', 'ê', 'ç', 'à', 'ù', 'û', 'ô']
+        has_accented_chars = any(char in content for char in french_accents)
 
-        if not has_french:
-            return False, "Content does not appear to be in French"
+        if not has_accented_chars:
+            return False, "Content does not appear to be in French (no accented characters found)"
 
         return True, ""
 
 
-def get_content_provider() -> ContentProvider:
+def get_content_provider(
+    provider_name: str | None = None,
+    *,
+    mcp_collector=None
+) -> ContentProvider:
     """
-    Factory for content providers.
+    Factory for content providers with explicit dependency injection.
 
-    Reads MEDIAMAN_CONTENT_PROVIDER env var (default: test).
+    Args:
+        provider_name: Provider identifier (default: reads MEDIAMAN_CONTENT_PROVIDER env var)
+        mcp_collector: Optional MCPCollector instance (required for historical_mcp)
 
     Supported values:
-    - test: TestContentProvider (deterministic test articles)
-    - gateway: OpenClawGatewayProvider (future)
-    - historical_mcp: HistoricalMCPProvider (requires explicit historical request params)
+    - test: TestContentProvider (deterministic test articles, no collector required)
+    - gateway: OpenClawGatewayProvider (future, no collector required)
+    - historical_mcp: HistoricalMCPProvider (requires explicit MCPCollector, raises ValueError if absent)
+
+    Returns:
+        ContentProvider instance
+
+    Raises:
+        ValueError: if provider_name is unknown or if historical_mcp is requested without collector
     """
-    provider_name = os.getenv("MEDIAMAN_CONTENT_PROVIDER", "test").lower().strip()
+    # Use provided name or read from environment
+    if provider_name is None:
+        provider_name = os.getenv("MEDIAMAN_CONTENT_PROVIDER", "test").lower().strip()
+    else:
+        provider_name = provider_name.lower().strip()
 
     if provider_name == "test":
         return TestContentProvider()
     elif provider_name == "gateway":
         return OpenClawGatewayProvider()
     elif provider_name == "historical_mcp":
-        return HistoricalMCPProvider()
+        # Explicit injection required: fail-closed if collector is absent
+        if mcp_collector is None:
+            raise ValueError(
+                "historical_mcp provider requires explicit mcp_collector injection (not None). "
+                "Pass mcp_collector=<MCPCollector instance> to get_content_provider()."
+            )
+        return HistoricalMCPProvider(mcp_collector)
     else:
         raise ValueError(f"Unknown content provider: {provider_name}")

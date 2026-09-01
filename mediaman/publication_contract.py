@@ -1,13 +1,15 @@
 """
-Publication contract: immutable data transfer object and validation.
+Publication contract: immutable data transfer objects and validation.
 
-Defines PublicationDTO (immutable content) and PublicationValidator (offline validation).
+Defines PublicationDTO (immutable content), SendResult (sender response),
+and PublicationValidator (offline validation).
 No state, no bridge, no network, no logging, no database access.
 """
 
 from dataclasses import dataclass
 from datetime import datetime
 import re
+from enum import Enum
 
 
 @dataclass(frozen=True)
@@ -18,6 +20,17 @@ class PublicationDTO:
     cycle_id: str
     content: str
     created_at: str
+
+
+@dataclass(frozen=True)
+class SendResult:
+    """Immutable sender result contract for dry-run and production."""
+    dry_run: bool
+    success: bool
+    provider_status: str
+    execution_id: str
+    error_code: str | None = None
+    error_message: str | None = None
 
 
 class PublicationValidator:
