@@ -187,6 +187,70 @@ class TestPublicationReconciliation:
         # Secret is not echoed
         assert "my_actual_secret_12345" not in error_code
 
+        # Invalid evidence_reference: invalid calendar date (2026-99-99)
+        invalid_date = PublicationEvidenceRecord(
+            publication_id="0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+            transition="UNKNOWN_TO_SENT_RECONCILED",
+            reason="test",
+            operator_identity="op-001",
+            evidence_reference="manual_ui:2026-99-99T10:00:00Z:ref-001",
+            optional_telegram_message_id=None,
+            reconciliation_timestamp="2026-08-31T23:00:00Z",
+            safe_decision_classification="manual_ui_search_confirmed",
+        )
+        is_valid, error_code = PublicationEvidenceValidator.validate(invalid_date)
+        assert is_valid is False
+        assert error_code == "invalid_evidence_reference"
+        assert "2026-99-99" not in error_code
+
+        # Invalid evidence_reference: invalid hour (25)
+        invalid_hour = PublicationEvidenceRecord(
+            publication_id="0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+            transition="UNKNOWN_TO_SENT_RECONCILED",
+            reason="test",
+            operator_identity="op-001",
+            evidence_reference="manual_ui:2026-08-31T25:00:00Z:ref-001",
+            optional_telegram_message_id=None,
+            reconciliation_timestamp="2026-08-31T23:00:00Z",
+            safe_decision_classification="manual_ui_search_confirmed",
+        )
+        is_valid, error_code = PublicationEvidenceValidator.validate(invalid_hour)
+        assert is_valid is False
+        assert error_code == "invalid_evidence_reference"
+        assert "T25:00:00Z" not in error_code
+
+        # Invalid evidence_reference: invalid minute (61)
+        invalid_minute = PublicationEvidenceRecord(
+            publication_id="0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+            transition="UNKNOWN_TO_SENT_RECONCILED",
+            reason="test",
+            operator_identity="op-001",
+            evidence_reference="manual_ui:2026-08-31T10:61:00Z:ref-001",
+            optional_telegram_message_id=None,
+            reconciliation_timestamp="2026-08-31T23:00:00Z",
+            safe_decision_classification="manual_ui_search_confirmed",
+        )
+        is_valid, error_code = PublicationEvidenceValidator.validate(invalid_minute)
+        assert is_valid is False
+        assert error_code == "invalid_evidence_reference"
+        assert "10:61:00" not in error_code
+
+        # Invalid evidence_reference: non-UTC timestamp (with +01:00 offset)
+        non_utc = PublicationEvidenceRecord(
+            publication_id="0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+            transition="UNKNOWN_TO_SENT_RECONCILED",
+            reason="test",
+            operator_identity="op-001",
+            evidence_reference="manual_ui:2026-08-31T10:00:00+01:00:ref-001",
+            optional_telegram_message_id=None,
+            reconciliation_timestamp="2026-08-31T23:00:00Z",
+            safe_decision_classification="manual_ui_search_confirmed",
+        )
+        is_valid, error_code = PublicationEvidenceValidator.validate(non_utc)
+        assert is_valid is False
+        assert error_code == "invalid_evidence_reference"
+        assert "+01:00" not in error_code
+
     def test_unknown_to_sent_reconciled_requires_valid_evidence(self):
         """reconcile_sent() requires valid evidence; rejects with ValueError('invalid_evidence')."""
         store = PublicationStateStore(db_path=str(self.db_path), clock=self.clock)

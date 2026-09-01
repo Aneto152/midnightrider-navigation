@@ -142,8 +142,20 @@ class PublicationEvidenceValidator:
         # source must be: manual_ui, monitoring, api_query, backup_log
         # timestamp must be ISO 8601 UTC (YYYY-MM-DDTHH:MM:SSZ with colons in time)
         # reference_id must be [A-Za-z0-9_.:/-]{1,128}
-        pattern = r'^(manual_ui|monitoring|api_query|backup_log):[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z:[A-Za-z0-9_.:/-]{1,128}$'
-        if not re.match(pattern, evidence.evidence_reference):
+        pattern = r'^(manual_ui|monitoring|api_query|backup_log):([0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z):([A-Za-z0-9_.:/-]{1,128})$'
+        match = re.match(pattern, evidence.evidence_reference)
+        if not match:
+            return (False, "invalid_evidence_reference")
+
+        # Extract and validate the timestamp component
+        timestamp_str = match.group(2)  # YYYY-MM-DDTHH:MM:SSZ
+        try:
+            from datetime import datetime
+            # Parse as UTC ISO 8601
+            parsed_ts = datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
+            # Verify it's a valid calendar date/time (fromisoformat will reject invalid dates)
+            # e.g., 2026-99-99, 2026-02-30, 2026-08-31T25:00:00Z, 2026-08-31T10:61:00Z
+        except (ValueError, AttributeError):
             return (False, "invalid_evidence_reference")
 
         # 7. reconciliation_timestamp must be ISO 8601 UTC with Z terminator
