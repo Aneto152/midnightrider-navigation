@@ -84,5 +84,18 @@
     "total_skipped": 0,
     "total_warnings": 1,
     "status": "SUCCESS"
+  },
+  "internal_e2e_validated": true,
+  "test_summary": {
+    "internal_e2e": {
+      "timestamp": "2026-09-01T01:33:43.126639Z",
+      "collected": 319,
+      "passed": 319,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_internal_e2e_tests": 3,
+      "status": "SUCCESS"
+    }
   }
 }
