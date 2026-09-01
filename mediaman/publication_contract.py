@@ -49,7 +49,7 @@ class PublicationValidator:
     ]
 
     @staticmethod
-    def validate(publication) -> tuple:
+    def validate(publication: PublicationDTO) -> tuple[bool, str]:
         """
         Validate a PublicationDTO.
 

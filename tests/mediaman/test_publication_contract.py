@@ -9,6 +9,7 @@ No network access, no Telegram contact, no credentials.
 import unittest
 from datetime import datetime
 from mediaman.publication_contract import PublicationDTO, PublicationValidator
+from dataclasses import FrozenInstanceError
 
 
 class TestPublicationContract(unittest.TestCase):
@@ -36,7 +37,7 @@ class TestPublicationContract(unittest.TestCase):
             content="Safe article content about the race.",
             created_at="2026-08-31T22:39:00Z",
         )
-        with self.assertRaises(Exception):
+        with self.assertRaises(FrozenInstanceError):
             pub.race_id = "race-002"
 
     def test_publication_id_must_be_lowercase_sha256(self):
