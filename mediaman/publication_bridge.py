@@ -110,7 +110,23 @@ class PublicationBridge:
             raise ValueError("live_publication_forbidden")
 
         # F. Sender invocation: call exactly once
-        send_result = self.sender.send(publication.content)
+        # Pass canonical parameters for deterministic cross-process identity if sender supports it
+        if hasattr(self.sender, 'send'):
+            import inspect
+            sig = inspect.signature(self.sender.send)
+            # Check if send() accepts race_id, as_of_utc, window_seconds parameters
+            if 'race_id' in sig.parameters and 'as_of_utc' in sig.parameters and 'window_seconds' in sig.parameters:
+                send_result = self.sender.send(
+                    publication.content,
+                    race_id=publication.race_id,
+                    as_of_utc=getattr(self.sender, 'as_of_utc', None),
+                    window_seconds=getattr(self.sender, 'window_seconds', None)
+                )
+            else:
+                # Fallback: old sender signature without canonical params
+                send_result = self.sender.send(publication.content)
+        else:
+            raise ValueError("invalid_sender_result")
 
         # G. Handle sender result
         # Success case: dry_run=True, success=True, provider_status="DRY_RUN"
@@ -124,8 +140,8 @@ class PublicationBridge:
             and hasattr(send_result, "execution_id")
             and send_result.execution_id
         ):
-            # SENDING → SENT with synthetic provider ID
-            synthetic_message_id = f"dry-run:{send_result.execution_id}"
+            # SENDING → SENT with provider ID (deterministic cross-process identity)
+            synthetic_message_id = send_result.execution_id
             current_record = self.state_store.transition(
                 publication.publication_id,
                 PublicationState.SENT,

@@ -45,26 +45,54 @@ from mediaman.logging_utils import setup_service_logger
 
 
 class DryRunSender:
-    """Deterministic dry-run sender with no Telegram contact."""
+    """Deterministic dry-run sender with no Telegram contact.
+
+    Produces stable cross-process provider IDs derived from canonical
+    serialization of (race_id, as_of_utc, window_seconds, content_sha256).
+    Two independent instances with same inputs → same provider ID.
+    """
 
     def __init__(self, logger=None):
         self.dry_run = True
         self.logger = logger
-        self._call_count = 0
+        self._call_count = 0  # Call counter for diagnostics only, not identity
 
-    def send(self, message: str):
-        """Simulate sending without network calls. Deterministic ID."""
+    def send(self, message: str, race_id: str = None, as_of_utc: str = None,
+             window_seconds: int = None) -> 'SendResult':
+        """Simulate sending without network calls. Deterministic cross-process ID.
+
+        Args:
+            message: Content to send
+            race_id: Race identifier (for stable ID derivation)
+            as_of_utc: Historical timestamp (for stable ID derivation)
+            window_seconds: Query window in seconds (for stable ID derivation)
+
+        Returns:
+            SendResult with stable provider ID derived from canonical inputs
+        """
         from mediaman.publication_contract import SendResult
+        import hashlib
 
         self._call_count += 1
-        # Deterministic: counter-based ID, not random UUID
-        execution_id = f"{self._call_count:08d}"
+
+        # Derive stable provider ID from canonical serialization
+        # Two independent senders with same (race_id, as_of_utc, window_seconds, content)
+        # produce identical provider IDs
+        if race_id is not None and as_of_utc is not None and window_seconds is not None:
+            # Hash canonical tuple for stable cross-process identity
+            content_sha256 = hashlib.sha256(message.encode('utf-8')).hexdigest()
+            canonical = f"{race_id}:{as_of_utc}:{window_seconds}:{content_sha256}"
+            identity_sha = hashlib.sha256(canonical.encode('utf-8')).hexdigest()[:16]
+            execution_id = f"dry-run:{identity_sha}"
+        else:
+            # Fallback for diagnostic use (not stable across processes)
+            execution_id = f"dry-run:{self._call_count:08d}"
 
         return SendResult(
             dry_run=True,
             success=True,
             provider_status="DRY_RUN",
-            execution_id=f"dry-run:{execution_id}",
+            execution_id=execution_id,
             error_code=None,
             error_message=None
         )
@@ -263,6 +291,11 @@ def main(argv: list | None = None) -> int:
             logger.info(f"DATA_IN publication created: id={publication_id}")
 
             # PHASE 12: PUBLISH VIA BRIDGE (one-shot, dry-run only)
+            # Update sender with canonical parameters for deterministic cross-process identity
+            sender.race_id = race_id
+            sender.as_of_utc = as_of_utc
+            sender.window_seconds = window_seconds
+
             try:
                 result = bridge.publish(publication)
                 logger.info(f"DATA_OUT publication published: state={result.state.value}, provider_id={result.provider_message_id}")
