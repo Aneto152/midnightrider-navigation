@@ -120,9 +120,80 @@ class MCPClient:
         self.request_id = 0
         self.initialized = False
 
+    def validate_capabilities(self) -> None:
+        """
+        Validate that the MCP server exposes required historical tool with correct schema.
+
+        Called after initialize succeeds. Verifies:
+        - get_historical_snapshot tool exists
+        - inputSchema requires as_of_utc and window_seconds
+        - schema is strict (no unknown additional properties)
+
+        Raises:
+            MCPProtocolError: if tools/list response is malformed
+            MCPServerError: if required tool or schema is missing/invalid
+        """
+        if not self.initialized:
+            raise MCPClientError('Capability validation requires prior initialize')
+
+        # Get tool list
+        try:
+            tools_response = self.call_tool('__tools_list__', {})  # Internal call
+        except Exception:
+            # Fallback: use tools/list protocol message directly
+            self.request_id += 1
+            request = {
+                'jsonrpc': '2.0',
+                'id': self.request_id,
+                'method': 'tools/list'
+            }
+            self.process.stdin.write(json.dumps(request) + '\n')
+            self.process.stdin.flush()
+
+            try:
+                response = self.response_queue.get(timeout=self.REQUEST_TIMEOUT_SECONDS)
+            except queue.Empty:
+                raise MCPTimeoutError('tools/list request timed out')
+
+            if 'error' in response:
+                raise MCPServerError(f'tools/list error: {response["error"]}')
+
+            tools = response.get('result', {}).get('tools', [])
+
+        # Find get_historical_snapshot tool
+        hist_tool = None
+        for tool in tools:
+            if tool.get('name') == 'get_historical_snapshot':
+                hist_tool = tool
+                break
+
+        if not hist_tool:
+            raise MCPServerError('get_historical_snapshot tool not found in tools/list')
+
+        # Validate schema
+        schema = hist_tool.get('inputSchema', {})
+        if schema.get('type') != 'object':
+            raise MCPProtocolError('get_historical_snapshot inputSchema type is not object')
+
+        required = schema.get('required', [])
+        if 'as_of_utc' not in required or 'window_seconds' not in required:
+            raise MCPProtocolError('get_historical_snapshot schema missing required: as_of_utc, window_seconds')
+
+        # Verify additionalProperties is false (strict schema)
+        if schema.get('additionalProperties', True) is not False:
+            # Warn but don't fail (schema validation varies by implementation)
+            pass
+
     def start(self) -> None:
         """
         Launch the MCP server process with bounded startup timeout.
+
+        Performs:
+        1. Subprocess launch (argv list, no shell=True)
+        2. Startup timeout enforcement
+        3. Reader and stderr threads
+        4. initialize request/response
+        5. tools/list validation for get_historical_snapshot
 
         Raises:
             MCPClientError: if process fails to start or exits

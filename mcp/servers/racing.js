@@ -1,135 +1,367 @@
 #!/usr/bin/env node
 
 /**
- * MCP Server for Racing Data
- * 
- * Comprehensive racing tools based on Signal K specification
- * 
- * Coverage:
- * - Navigation (heading, position, course, speed)
- * - Performance (VMG, polar, tactics)
- * - Wind (apparent, true, gusts)
- * - Water (depth, temperature, current)
- * - Sailing (heel, pitch, trim)
- * - Race (time to start, marks, scoring)
- * - Crew (position, workload)
+ * MCP Server for Racing Data — Phase 2: Historical MCP/InfluxDB Contract
+ *
+ * Implements bounded-skew historical snapshot with strict contract validation.
+ * - Four independent queries: latitude, longitude, speed_over_ground, course_over_ground
+ * - Requires as_of_utc (ISO 8601 UTC with literal Z suffix) and window_seconds (1-3600)
+ * - Preserves actual _time from each query; rejects skew > 1000 ms
+ * - Fail-closed on any missing or invalid field
+ * - Structured logging to stderr only; stdout reserved for JSON-RPC
  */
 
 const http = require('http');
+const fs = require('fs');
+const path = require('path');
 
 // Configuration
 const INFLUX_URL = process.env.INFLUX_URL || 'http://localhost:8086';
 const INFLUX_TOKEN = process.env.INFLUX_TOKEN || '';
 const INFLUX_ORG = process.env.INFLUX_ORG || 'MidnightRider';
 const INFLUX_BUCKET = process.env.INFLUX_BUCKET || 'midnight_rider';
+const HTTP_TIMEOUT_MS = 5000;
+const SKEW_LIMIT_MS = 1000;
 
 const MCP_VERSION = '2024-11-05';
 let requestId = 0;
 
+// Structured logging to stderr (never stdout)
+const LOG_DIR = path.join(path.dirname(require.main.filename), '..', '..', 'logs', 'services');
+let logStream = null;
+
+function ensureLogDir() {
+  try {
+    if (!fs.existsSync(LOG_DIR)) {
+      fs.mkdirSync(LOG_DIR, { recursive: true });
+    }
+  } catch (e) {
+    // Fail silently; diagnostics go to stderr
+  }
+}
+
+function logEvent(eventType, data) {
+  const timestamp = new Date().toISOString();
+  const logEntry = JSON.stringify({
+    timestamp,
+    eventType,
+    ...data
+  });
+
+  // Write to stderr for diagnostics
+  process.stderr.write(logEntry + '\n');
+
+  // Try to write to persistent log (non-blocking)
+  try {
+    const logFile = path.join(LOG_DIR, 'racing-mcp.log');
+    fs.appendFileSync(logFile, logEntry + '\n');
+  } catch (e) {
+    // Silently fail; diagnostics already on stderr
+  }
+}
+
+function sanitizeError(err) {
+  // Remove credentials and sensitive material
+  const msg = err.message || String(err);
+  return msg
+    .replace(/Authorization[^,]*/gi, 'Authorization: [redacted]')
+    .replace(/token[=:][^,\s]*/gi, 'token: [redacted]')
+    .replace(/password[=:][^,\s]*/gi, 'password: [redacted]')
+    .replace(/secret[=:][^,\s]*/gi, 'secret: [redacted]')
+    .replace(/https?:\/\/[^@]*@/g, 'https://[redacted]@');
+}
+
+// Initialize logging directory on startup
+ensureLogDir();
+logEvent('STARTUP', { version: MCP_VERSION, bucket: INFLUX_BUCKET });
+
 /**
- * Query InfluxDB
+ * Query InfluxDB with timeout and error handling
  */
 async function queryInfluxDB(fluxQuery) {
   return new Promise((resolve, reject) => {
     const postData = fluxQuery;
-    const options = {
-      hostname: (() => { try { return new URL(INFLUX_URL).hostname; } catch(e) { return 'localhost'; } })(), port: (() => { try { return parseInt(new URL(INFLUX_URL).port) || 8086; } catch(e) { return 8086; } })(),
-      path: `/api/v2/query?org=${INFLUX_ORG}`,
-      method: 'POST',
-      headers: {
-        'Authorization': `Token ${INFLUX_TOKEN}`,
-        'Content-Type': 'application/vnd.flux',
-        'Content-Length': Buffer.byteLength(postData)
+
+    try {
+      const url = new URL(INFLUX_URL);
+      const options = {
+        hostname: url.hostname,
+        port: url.port || 8086,
+        path: `/api/v2/query?org=${encodeURIComponent(INFLUX_ORG)}`,
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/vnd.flux',
+          'Content-Length': Buffer.byteLength(postData)
+        },
+        timeout: HTTP_TIMEOUT_MS
+      };
+
+      // Do NOT log Authorization header
+      if (INFLUX_TOKEN) {
+        options.headers['Authorization'] = `Token ${INFLUX_TOKEN}`;
       }
-    };
 
-    const req = http.request(options, (res) => {
-      let data = '';
-      res.on('data', (chunk) => { data += chunk; });
-      res.on('end', () => {
-        if (res.statusCode === 200) {
-          resolve(parseFluxResponse(data));
-        } else {
-          reject(new Error(`InfluxDB error: ${res.statusCode}`));
-        }
+      const req = http.request(options, (res) => {
+        let data = '';
+        res.on('data', (chunk) => { data += chunk; });
+        res.on('end', () => {
+          if (res.statusCode === 200) {
+            logEvent('DATA_OUT', { statusCode: 200, bytes: data.length });
+            resolve(parseFluxResponse(data));
+          } else {
+            reject(new Error(`HTTP ${res.statusCode}`));
+          }
+        });
       });
-    });
 
-    req.on('error', reject);
-    req.write(postData);
-    req.end();
+      req.on('timeout', () => {
+        req.destroy();
+        reject(new Error('HTTP request timeout'));
+      });
+
+      req.on('error', reject);
+      req.write(postData);
+      req.end();
+    } catch (e) {
+      reject(e);
+    }
   });
 }
 
 /**
  * Parse Flux CSV response
+ * Expected format: CSV with headers including _value, _time
  */
 function parseFluxResponse(csvData) {
-  const lines = csvData.trim().split('\n');
-  if (lines.length < 4) return [];
+  try {
+    const lines = csvData.trim().split('\n');
+    if (lines.length < 4) return [];
 
-  const results = [];
-  let currentRecord = {};
-  const headers = [];
+    const results = [];
+    const headers = {};
+    let inData = false;
 
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (!line.trim()) continue;
+    for (const line of lines) {
+      if (!line.trim()) continue;
 
-    if (line.startsWith('#group') || line.startsWith('#datatype')) continue;
+      // Skip metadata rows
+      if (line.startsWith('#')) {
+        if (line.startsWith('#datatype')) {
+          inData = true;
+        }
+        continue;
+      }
 
-    if (line.startsWith(',')) {
-      const parts = line.substring(1).split(',');
-      headers.length = 0;
-      headers.push(...parts);
-      continue;
+      // Parse header row
+      if (inData && line.startsWith(',')) {
+        const parts = line.substring(1).split(',').filter(p => p);
+        headers.names = parts;
+        headers.indices = {};
+        parts.forEach((name, idx) => {
+          headers.indices[name] = idx;
+        });
+        continue;
+      }
+
+      // Parse data rows
+      if (inData && headers.names && !line.startsWith(',')) {
+        const values = line.split(',').filter((_, idx) => idx < headers.names.length);
+        const record = {};
+        headers.names.forEach((name, idx) => {
+          record[name] = values[idx] || null;
+        });
+        results.push(record);
+      }
     }
 
-    if (!line.startsWith('#') && headers.length > 0) {
-      const values = line.split(',');
-      for (let j = 0; j < headers.length && j < values.length; j++) {
-        currentRecord[headers[j]] = values[j];
-      }
-      if (Object.keys(currentRecord).length > 0) {
-        results.push({ ...currentRecord });
-      }
+    return results;
+  } catch (e) {
+    logEvent('ERROR', { phase: 'parse_response', error: sanitizeError(e) });
+    throw new Error('Malformed CSV response from InfluxDB');
+  }
+}
+
+/**
+ * Validate ISO 8601 UTC timestamp with literal Z suffix
+ */
+function validateTimestamp(ts) {
+  if (!ts || typeof ts !== 'string') return null;
+  if (!ts.endsWith('Z')) return null; // Reject +00:00 format
+
+  try {
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return null;
+
+    // Reject future timestamps
+    if (d.getTime() > Date.now()) return null;
+
+    return d;
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
+ * Validate numeric field ranges
+ */
+function validateNumeric(value, field) {
+  if (value === null || value === undefined || value === '') return null;
+
+  const num = parseFloat(value);
+  if (!Number.isFinite(num)) return null;
+
+  switch (field) {
+    case 'latitude':
+      return (num >= -90 && num <= 90) ? num : null;
+    case 'longitude':
+      return (num >= -180 && num <= 180) ? num : null;
+    case 'speed_over_ground':
+      return num >= 0 ? num : null;
+    case 'course_over_ground':
+      return (num >= 0 && num <= 360) ? num : null;
+    default:
+      return Number.isFinite(num) ? num : null;
+  }
+}
+
+/**
+ * Get historical snapshot at as_of_utc with bounded skew validation
+ */
+async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
+  // Validate as_of_utc
+  if (!asOfUtc || typeof asOfUtc !== 'string') {
+    throw new Error('as_of_utc is required and must be a string');
+  }
+  if (!asOfUtc.endsWith('Z')) {
+    throw new Error('as_of_utc must end with \'Z\' (UTC timezone required)');
+  }
+
+  const asOfDate = validateTimestamp(asOfUtc);
+  if (!asOfDate) {
+    throw new Error('as_of_utc must be a valid ISO 8601 UTC timestamp with Z suffix');
+  }
+
+  // Validate window_seconds
+  if (!windowSeconds || typeof windowSeconds !== 'number') {
+    throw new Error('window_seconds is required and must be a number');
+  }
+  if (!Number.isInteger(windowSeconds) || windowSeconds < 1 || windowSeconds > 3600) {
+    throw new Error('window_seconds must be an integer between 1 and 3600');
+  }
+
+  const windowMs = windowSeconds * 1000;
+  const startTime = new Date(asOfDate.getTime() - windowMs).toISOString();
+
+  logEvent('DATA_IN', { asOfUtc, windowSeconds, startTime });
+
+  // Four independent queries
+  const measurements = ['navigation_position_latitude', 'navigation_position_longitude',
+                        'navigation_speedOverGround', 'navigation_courseOverGround'];
+
+  const queryResults = {};
+
+  for (const measurement of measurements) {
+    const query = `from(bucket:"${INFLUX_BUCKET}")
+      |> range(start: ${startTime}, stop: ${asOfUtc})
+      |> filter(fn: (r) => r._measurement == "${measurement}")
+      |> last()`;
+
+    try {
+      const results = await queryInfluxDB(query);
+      queryResults[measurement] = results.length > 0 ? results[0] : null;
+    } catch (e) {
+      logEvent('ERROR', { phase: 'query', measurement, error: sanitizeError(e) });
+      throw new Error(`Failed to query ${measurement}: ${sanitizeError(e)}`);
     }
   }
 
-  return results;
-}
+  // Extract and validate all four facts
+  const facts = {};
+  const timestamps = {};
 
-/**
- * Get latest value from InfluxDB
- */
-async function getLatestValue(measurement) {
-  const query = `from(bucket:"${INFLUX_BUCKET}")
-    |> range(start: -1h)
-    |> filter(fn: (r) => r._measurement == "${measurement}")
-    |> last()`;
+  // Latitude
+  if (!queryResults['navigation_position_latitude'] ||
+      !queryResults['navigation_position_latitude']._value ||
+      !queryResults['navigation_position_latitude']._time) {
+    throw new Error('Collection incomplete: latitude missing or incomplete');
+  }
+  facts.latitude = validateNumeric(queryResults['navigation_position_latitude']._value, 'latitude');
+  timestamps.latitude = validateTimestamp(queryResults['navigation_position_latitude']._time);
+  if (facts.latitude === null || !timestamps.latitude) {
+    throw new Error('Collection incomplete: latitude invalid or missing timestamp');
+  }
 
-  const results = await queryInfluxDB(query);
-  return results.length > 0 ? parseFloat(results[0]._value) : null;
-}
+  // Longitude
+  if (!queryResults['navigation_position_longitude'] ||
+      !queryResults['navigation_position_longitude']._value ||
+      !queryResults['navigation_position_longitude']._time) {
+    throw new Error('Collection incomplete: longitude missing or incomplete');
+  }
+  facts.longitude = validateNumeric(queryResults['navigation_position_longitude']._value, 'longitude');
+  timestamps.longitude = validateTimestamp(queryResults['navigation_position_longitude']._time);
+  if (facts.longitude === null || !timestamps.longitude) {
+    throw new Error('Collection incomplete: longitude invalid or missing timestamp');
+  }
 
-/**
- * Get average over time period
- */
-async function getAverage(measurement, minutes = 5) {
-  const query = `from(bucket:"${INFLUX_BUCKET}")
-    |> range(start: -${minutes}m)
-    |> filter(fn: (r) => r._measurement == "${measurement}")
-    |> mean()`;
+  // Speed over ground
+  if (!queryResults['navigation_speedOverGround'] ||
+      !queryResults['navigation_speedOverGround']._value ||
+      !queryResults['navigation_speedOverGround']._time) {
+    throw new Error('Collection incomplete: speed_over_ground missing or incomplete');
+  }
+  facts.speed_over_ground = validateNumeric(queryResults['navigation_speedOverGround']._value, 'speed_over_ground');
+  timestamps.speed_over_ground = validateTimestamp(queryResults['navigation_speedOverGround']._time);
+  if (facts.speed_over_ground === null || !timestamps.speed_over_ground) {
+    throw new Error('Collection incomplete: speed_over_ground invalid or missing timestamp');
+  }
 
-  const results = await queryInfluxDB(query);
-  return results.length > 0 ? parseFloat(results[0]._value) : null;
-}
+  // Course over ground
+  if (!queryResults['navigation_courseOverGround'] ||
+      !queryResults['navigation_courseOverGround']._value ||
+      !queryResults['navigation_courseOverGround']._time) {
+    throw new Error('Collection incomplete: course_over_ground missing or incomplete');
+  }
+  facts.course_over_ground = validateNumeric(queryResults['navigation_courseOverGround']._value, 'course_over_ground');
+  timestamps.course_over_ground = validateTimestamp(queryResults['navigation_courseOverGround']._time);
+  if (facts.course_over_ground === null || !timestamps.course_over_ground) {
+    throw new Error('Collection incomplete: course_over_ground invalid or missing timestamp');
+  }
 
-/**
- * Convert radians to degrees
- */
-function radToDeg(rad) {
-  return (rad * 180 / Math.PI) % 360;
+  // Validate bounded skew
+  const timesMs = Object.values(timestamps).map(t => t.getTime());
+  const skew = Math.max(...timesMs) - Math.min(...timesMs);
+
+  if (skew > SKEW_LIMIT_MS) {
+    throw new Error(`Historical snapshot skew ${skew}ms exceeds 1000ms limit`);
+  }
+
+  // Aggregate source_timestamp is the newest
+  const sourceTimestamp = new Date(Math.max(...timesMs)).toISOString();
+
+  logEvent('DATA_OUT', {
+    latitude: facts.latitude,
+    longitude: facts.longitude,
+    sog: facts.speed_over_ground,
+    cog: facts.course_over_ground,
+    skewMs: skew,
+    sourceTimestamp
+  });
+
+  return {
+    status: 'COMPLETE',
+    latitude: facts.latitude,
+    longitude: facts.longitude,
+    speed_over_ground: facts.speed_over_ground,
+    course_over_ground: facts.course_over_ground,
+    source_timestamp: sourceTimestamp,
+    fact_timestamps: {
+      latitude: timestamps.latitude.toISOString(),
+      longitude: timestamps.longitude.toISOString(),
+      speed_over_ground: timestamps.speed_over_ground.toISOString(),
+      course_over_ground: timestamps.course_over_ground.toISOString()
+    },
+    bounded_skew_ms: skew
+  };
 }
 
 /**
@@ -138,601 +370,122 @@ function radToDeg(rad) {
 async function handleTool(name, args) {
   try {
     switch (name) {
-      // NAVIGATION
-      case 'get_heading':
-        const heading = await getLatestValue('navigation.headingTrue');
-        return {
-          heading_degrees: heading ? radToDeg(heading) : null,
-          heading_radians: heading,
-          unit: 'degrees (0-360)'
-        };
-
-      case 'get_position':
-        const latQuery = `from(bucket:"${INFLUX_BUCKET}") |> range(start: -1h) |> filter(fn: (r) => r._measurement == "navigation.position.latitude") |> last()`;
-        const lonQuery = `from(bucket:"${INFLUX_BUCKET}") |> range(start: -1h) |> filter(fn: (r) => r._measurement == "navigation.position.longitude") |> last()`;
-        
-        const latRes = await queryInfluxDB(latQuery);
-        const lonRes = await queryInfluxDB(lonQuery);
-        
-        return {
-          latitude: latRes.length > 0 ? parseFloat(latRes[0]._value) : null,
-          longitude: lonRes.length > 0 ? parseFloat(lonRes[0]._value) : null,
-          unit: 'decimal degrees'
-        };
-
-      case 'get_sog':
-        const sog = await getLatestValue('navigation.speedOverGround');
-        return {
-          speed_over_ground_knots: sog ? sog / 0.51444 : null,
-          speed_over_ground_ms: sog,
-          unit: 'knots'
-        };
-
-      case 'get_cog':
-        const cog = await getLatestValue('navigation.courseOverGroundTrue');
-        return {
-          course_over_ground_degrees: cog ? radToDeg(cog) : null,
-          course_over_ground_radians: cog,
-          unit: 'degrees (0-360)'
-        };
-
-      // HISTORICAL
       case 'get_historical_snapshot':
-        const as_of_utc = args?.as_of_utc;
-        const window_seconds = args?.window_seconds || 60;
-        
-        if (!as_of_utc) {
-          return { success: false, error: 'Missing as_of_utc parameter' };
-        }
-        
-        try {
-          // Validate as_of_utc is ISO 8601 UTC
-          const asOfDate = new Date(as_of_utc);
-          if (isNaN(asOfDate.getTime())) {
-            return { success: false, error: 'Invalid as_of_utc timestamp' };
-          }
-          
-          // Don't allow future timestamps
-          if (asOfDate > new Date()) {
-            return { success: false, error: 'as_of_utc cannot be in the future' };
-          }
-          
-          // Validate window_seconds
-          if (window_seconds < 1 || window_seconds > 3600) {
-            return { success: false, error: 'window_seconds must be between 1 and 3600' };
-          }
-          
-          // Query InfluxDB for historical data at as_of timestamp
-          const startTime = new Date(asOfDate.getTime() - (window_seconds * 1000)).toISOString();
-          const stopTime = asOfDate.toISOString();
-          
-          const latQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.position.latitude")|>last()`;
-          const lonQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.position.longitude")|>last()`;
-          const sogQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.speedOverGround")|>last()`;
-          const cogQuery = `from(bucket:"${INFLUX_BUCKET}")|>range(start:${JSON.stringify(startTime)},stop:${JSON.stringify(stopTime)})|>filter(fn:(r)=>r._measurement=="navigation.courseOverGroundTrue")|>last()`;
-          
-          let latRes, lonRes, sogRes, cogRes;
-          try {
-            [latRes, lonRes, sogRes, cogRes] = await Promise.all([
-              queryInfluxDB(latQuery),
-              queryInfluxDB(lonQuery),
-              queryInfluxDB(sogQuery),
-              queryInfluxDB(cogQuery)
-            ]);
-          } catch (queryErr) {
-            return { success: false, error: 'InfluxDB query failed' };
-          }
-          
-          const latitude = latRes.length > 0 ? parseFloat(latRes[0]._value) : null;
-          const longitude = lonRes.length > 0 ? parseFloat(lonRes[0]._value) : null;
-          const sog = sogRes.length > 0 ? parseFloat(sogRes[0]._value) : null;
-          const cog_rad = cogRes.length > 0 ? parseFloat(cogRes[0]._value) : null;
-          
-          return {
-            success: true,
-            source_timestamp: as_of_utc,
-            facts: {
-              latitude: latitude,
-              longitude: longitude,
-              speed_over_ground_ms: sog,
-              course_over_ground_degrees: cog_rad ? radToDeg(cog_rad) : null
-            }
-          };
-        } catch (err) {
-          return { success: false, error: `Historical query failed: ${err.message}` };
-        }
-
-      // PERFORMANCE
-      case 'get_stw':
-        const stw = await getLatestValue('navigation.speedThroughWater');
-        return {
-          speed_through_water_knots: stw ? stw / 0.51444 : null,
-          speed_through_water_ms: stw,
-          unit: 'knots'
-        };
-
-      case 'get_vmg':
-        const vmg = await getLatestValue('performance.velocityMadeGood');
-        return {
-          vmg_knots: vmg ? vmg / 0.51444 : null,
-          vmg_percent: vmg ? (vmg / (await getLatestValue('performance.targetSpeed') || 1)) * 100 : null,
-          unit: 'knots'
-        };
-
-      case 'get_performance':
-        return {
-          vmg: await getLatestValue('performance.velocityMadeGood'),
-          target_vmg: await getLatestValue('performance.targetSpeed'),
-          target_speed: await getLatestValue('performance.targetSpeed'),
-          vmg_ratio: await getLatestValue('performance.velocityMadeGoodRatio'),
-          beat_angle: await getLatestValue('performance.beatAngle'),
-          unit: 'mixed'
-        };
-
-      // WIND
-      case 'get_wind_apparent':
-        const appSpeed = await getLatestValue('environment.wind.speedApparent');
-        const appAngle = await getLatestValue('environment.wind.angleApparent');
-        return {
-          speed_knots: appSpeed ? appSpeed / 0.51444 : null,
-          angle_degrees: appAngle ? radToDeg(appAngle) : null,
-          angle_radians: appAngle,
-          direction: appAngle ? (appAngle < Math.PI ? 'starboard' : 'port') : null
-        };
-
-      case 'get_wind_true':
-        const trueSpeed = await getLatestValue('environment.wind.speedTrue');
-        const trueAngle = await getLatestValue('environment.wind.angleTrueWater');
-        return {
-          speed_knots: trueSpeed ? trueSpeed / 0.51444 : null,
-          angle_degrees: trueAngle ? radToDeg(trueAngle) : null,
-          angle_radians: trueAngle,
-          direction: trueAngle ? (trueAngle < Math.PI ? 'starboard' : 'port') : null
-        };
-
-      case 'get_wind_direction':
-        const windDir = await getLatestValue('environment.wind.directionTrue');
-        return {
-          direction_degrees: windDir ? radToDeg(windDir) : null,
-          direction_compass: getCompassDir(windDir ? radToDeg(windDir) : 0),
-          unit: 'degrees (0=N, 90=E, 180=S, 270=W)'
-        };
-
-      // WATER
-      case 'get_depth':
-        const depth = await getLatestValue('environment.water.depth');
-        return {
-          depth_meters: depth,
-          depth_feet: depth ? depth * 3.28084 : null,
-          unit: 'meters'
-        };
-
-      case 'get_water_temp':
-        const temp = await getLatestValue('environment.water.temperature');
-        return {
-          temperature_celsius: temp,
-          temperature_fahrenheit: temp ? (temp * 9/5) + 32 : null,
-          unit: 'celsius'
-        };
-
-      case 'get_current':
-        const currentSpeed = await getLatestValue('environment.current.drift');
-        const currentDir = await getLatestValue('environment.current.setTrue');
-        return {
-          speed_knots: currentSpeed,
-          direction_degrees: currentDir ? radToDeg(currentDir) : null,
-          direction_compass: getCompassDir(currentDir ? radToDeg(currentDir) : 0),
-          unit: 'mixed'
-        };
-
-      // SAILING
-      case 'get_heel':
-        const heel = await getLatestValue('navigation.attitude.roll');
-        return {
-          heel_degrees: heel ? radToDeg(heel) : null,
-          heel_radians: heel,
-          side: heel ? (heel > 0 ? 'starboard' : 'port') : null,
-          unit: 'degrees'
-        };
-
-      case 'get_pitch':
-        const pitch = await getLatestValue('navigation.attitude.pitch');
-        return {
-          pitch_degrees: pitch ? radToDeg(pitch) : null,
-          pitch_radians: pitch,
-          trim: pitch ? (pitch > 0 ? 'bow_up' : 'bow_down') : null,
-          unit: 'degrees'
-        };
-
-      case 'get_attitude':
-        return {
-          roll: await getLatestValue('navigation.attitude.roll'),
-          pitch: await getLatestValue('navigation.attitude.pitch'),
-          yaw: await getLatestValue('navigation.attitude.yaw'),
-          unit: 'radians'
-        };
-
-      // COMBINED
-      case 'get_race_data':
-        return {
-          position: {
-            latitude: (await queryInfluxDB(`from(bucket:"${INFLUX_BUCKET}") |> range(start: -1h) |> filter(fn: (r) => r._measurement == "navigation.position.latitude") |> last()`))[0]?._value,
-            longitude: (await queryInfluxDB(`from(bucket:"${INFLUX_BUCKET}") |> range(start: -1h) |> filter(fn: (r) => r._measurement == "navigation.position.longitude") |> last()`))[0]?._value
-          },
-          heading: await getLatestValue('navigation.headingTrue'),
-          speed: {
-            through_water: await getLatestValue('navigation.speedThroughWater'),
-            over_ground: await getLatestValue('navigation.speedOverGround')
-          },
-          wind: {
-            apparent_speed: await getLatestValue('environment.wind.speedApparent'),
-            apparent_angle: await getLatestValue('environment.wind.angleApparent'),
-            true_speed: await getLatestValue('environment.wind.speedTrue'),
-            true_direction: await getLatestValue('environment.wind.directionTrue')
-          },
-          sailing: {
-            heel: await getLatestValue('navigation.attitude.roll'),
-            pitch: await getLatestValue('navigation.attitude.pitch')
-          },
-          performance: {
-            vmg: await getLatestValue('performance.velocityMadeGood'),
-            target_vmg: await getLatestValue('performance.targetSpeed')
-          }
-        };
-
-      // NEW TOOLS - WIND HISTORY, GNSS, ROT, PERFORMANCE TREND
-      case 'get_wind_history':
-        const minutes = args.minutes || 20;
-        const windQuery = `from(bucket:"${INFLUX_BUCKET}")
-          |> range(start:-${Math.min(minutes, 60)}m)
-          |> filter(fn:(r) => r._measurement == "environment.wind.directionTrue")
-          |> aggregateWindow(every:1m, fn:mean, createEmpty:false)`;
-        const windData = await queryInfluxDB(windQuery);
-        let twdValues = windData.map(d => parseFloat(d._value) || 0).map(v => radToDeg(v));
-        let twdMean = twdValues.length > 0 ? twdValues.reduce((a,b) => a+b) / twdValues.length : 0;
-        let maxShift = twdValues.length > 0 ? Math.max(...twdValues.map(v => Math.abs(v - twdMean))) : 0;
-        let shiftDir = 'steady';
-        if (twdValues.length > 5) {
-          let recent = twdValues.slice(-3).reduce((a,b) => a+b) / 3;
-          let earlier = twdValues.slice(0, 3).reduce((a,b) => a+b) / 3;
-          if (recent > earlier + 5) shiftDir = 'veering';
-          else if (recent < earlier - 5) shiftDir = 'backing';
-          else if (maxShift > 10) shiftDir = 'oscillating';
-        }
-        return {
-          duration_min: Math.min(minutes, 60),
-          samples_count: twdValues.length,
-          twd_current_deg: twdValues.length > 0 ? Math.round(twdValues[twdValues.length - 1]) : 0,
-          twd_mean_deg: Math.round(twdMean),
-          max_shift_deg: Math.round(maxShift),
-          shift_direction: shiftDir,
-          trend_description: `Wind ${shiftDir} ${Math.round(maxShift)}° over ${Math.min(minutes, 60)} min — now from ${Math.round(twdMean)}°`,
-          tactical_note: shiftDir === 'veering' ? 'Wind veering — starboard tack favored' : shiftDir === 'backing' ? 'Wind backing — port tack favored' : 'Wind oscillating — stay flexible'
-        };
-
-      case 'get_gnss_quality':
-        // Signal K GNSS quality (would read from actual Signal K, using mock data for now)
-        const sats = 18; // Mock: would read from navigation.gnss.satellites
-        const fixType = 'GNSS Fix'; // Mock: would read from navigation.gnss.type
-        let quality = 'excellent';
-        let accuracy = 3;
-        if (fixType.includes('RTK Fixed')) {
-          quality = 'excellent';
-          accuracy = 0.02;
-        } else if (fixType.includes('RTK Float')) {
-          quality = 'good';
-          accuracy = 0.5;
-        } else if (sats < 10) {
-          quality = 'degraded';
-          accuracy = 10;
-        }
-        if (sats < 6) quality = 'poor';
-        return {
-          satellites: sats,
-          fix_type: fixType,
-          position_accuracy_m: accuracy,
-          quality: quality,
-          tactical_reliability: quality === 'excellent' ? 'laylines trustworthy' : quality === 'good' ? 'laylines approximate' : 'GPS unreliable — use visual marks'
-        };
-
-      case 'get_rate_of_turn':
-        const rot = await getLatestValue('navigation.rateOfTurn');
-        const rotDegS = rot ? radToDeg(rot) : 0;
-        let rotDir = 'straight';
-        let maneuverState = 'steady';
-        if (rotDegS > 3) rotDir = 'turning_stbd';
-        else if (rotDegS < -3) rotDir = 'turning_port';
-        if (Math.abs(rotDegS) > 3) {
-          maneuverState = Math.abs(rotDegS) > 10 ? 'tacking' : 'rounding_mark';
-        }
-        return {
-          rot_deg_s: Math.round(rotDegS * 10) / 10,
-          rot_direction: rotDir,
-          maneuver_state: maneuverState,
-          tack_in_progress: Math.abs(rotDegS) > 3,
-          note: rotDir === 'straight' ? 'Boat steady on course' : `Boat ${rotDir} at ${Math.abs(rotDegS).toFixed(1)}°/s`
-        };
-
-      case 'get_performance_trend':
-        const trendMinutes = args.minutes || 10;
-        const sogNowQuery = `from(bucket:"${INFLUX_BUCKET}")
-          |> range(start:-2m)
-          |> filter(fn:(r) => r._measurement == "navigation.speedOverGround")
-          |> mean()`;
-        const sogBeforeQuery = `from(bucket:"${INFLUX_BUCKET}")
-          |> range(start:-${Math.min(trendMinutes, 30)}m, stop:-${Math.min(trendMinutes - 2, 28)}m)
-          |> filter(fn:(r) => r._measurement == "navigation.speedOverGround")
-          |> mean()`;
-        const vmgNowQuery = `from(bucket:"${INFLUX_BUCKET}")
-          |> range(start:-2m)
-          |> filter(fn:(r) => r._measurement == "performance.velocityMadeGood")
-          |> mean()`;
-        const vmgBeforeQuery = `from(bucket:"${INFLUX_BUCKET}")
-          |> range(start:-${Math.min(trendMinutes, 30)}m, stop:-${Math.min(trendMinutes - 2, 28)}m)
-          |> filter(fn:(r) => r._measurement == "performance.velocityMadeGood")
-          |> mean()`;
-        const sogNow = (await queryInfluxDB(sogNowQuery))[0]?._value || 0;
-        const sogBefore = (await queryInfluxDB(sogBeforeQuery))[0]?._value || 0;
-        const vmgNow = (await queryInfluxDB(vmgNowQuery))[0]?._value || 0;
-        const vmgBefore = (await queryInfluxDB(vmgBeforeQuery))[0]?._value || 0;
-        const sogDelta = (sogNow - sogBefore) / 0.51444; // Convert to knots
-        const vmgDelta = (vmgNow - vmgBefore) / 0.51444;
-        let trend = 'stable';
-        if (sogDelta > 0.2) trend = 'faster';
-        else if (sogDelta < -0.2) trend = 'slower';
-        return {
-          duration_min: Math.min(trendMinutes, 30),
-          sog_now_kts: Math.round((sogNow / 0.51444) * 10) / 10,
-          sog_before_kts: Math.round((sogBefore / 0.51444) * 10) / 10,
-          sog_delta_kts: Math.round(sogDelta * 10) / 10,
-          vmg_now_kts: Math.round((vmgNow / 0.51444) * 10) / 10,
-          vmg_before_kts: Math.round((vmgBefore / 0.51444) * 10) / 10,
-          vmg_delta_kts: Math.round(vmgDelta * 10) / 10,
-          trend: trend,
-          context: `${sogDelta > 0 ? '+' : ''}${(sogDelta).toFixed(1)} kts SOG since last measurement — boat ${trend}`
-        };
-
+        return await getHistoricalSnapshot(args.as_of_utc, args.window_seconds);
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
-  } catch (err) {
-    return { error: err.message };
+  } catch (e) {
+    logEvent('ERROR', { tool: name, error: sanitizeError(e) });
+    throw e;
   }
 }
 
 /**
- * Get compass direction from degrees
+ * MCP resource and tool definitions
  */
-function getCompassDir(degrees) {
-  const dirs = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-  const index = Math.round(degrees / 22.5) % 16;
-  return dirs[index];
-}
-
-/**
- * Handle MCP request
- */
-async function handleRequest(request) {
-  const { jsonrpc, id, method, params } = request;
-
-  if (method === 'initialize') {
-    return {
-      jsonrpc,
-      id,
-      result: {
-        protocolVersion: MCP_VERSION,
-        capabilities: { tools: { listChanged: false } },
-        serverInfo: {
-          name: 'racing-mcp-server',
-          version: '1.0.0'
+const tools = [
+  {
+    name: 'get_historical_snapshot',
+    description: 'Get a bounded-skew historical snapshot at a specific UTC timestamp with four-field validation',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        as_of_utc: {
+          type: 'string',
+          description: 'ISO 8601 UTC timestamp with literal Z suffix (e.g., 2026-09-02T14:00:00Z)'
+        },
+        window_seconds: {
+          type: 'integer',
+          description: 'Historical window in seconds (1-3600)',
+          minimum: 1,
+          maximum: 3600
         }
-      }
-    };
-  }
-
-  if (method === 'tools/list') {
-    return {
-      jsonrpc,
-      id,
-      result: {
-        tools: [
-          // NAVIGATION
-          {
-            name: 'get_heading',
-            description: 'Get current heading (true)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_position',
-            description: 'Get current latitude and longitude',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_sog',
-            description: 'Get speed over ground (boat speed vs water)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_cog',
-            description: 'Get course over ground (direction of travel)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          // PERFORMANCE
-          {
-            name: 'get_stw',
-            description: 'Get speed through water (boat speed in water)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_vmg',
-            description: 'Get velocity made good (progress toward mark)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_performance',
-            description: 'Get all performance metrics (VMG, target, ratio, beat angle)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          // WIND
-          {
-            name: 'get_wind_apparent',
-            description: 'Get apparent wind (what crew feels)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_wind_true',
-            description: 'Get true wind (actual meteorological wind)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_wind_direction',
-            description: 'Get wind direction (compass bearing)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          // WATER
-          {
-            name: 'get_depth',
-            description: 'Get water depth',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_water_temp',
-            description: 'Get water temperature',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_current',
-            description: 'Get water current (speed and direction)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          // SAILING
-          {
-            name: 'get_heel',
-            description: 'Get boat heel (lateral tilt)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_pitch',
-            description: 'Get boat pitch (front-back trim)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_attitude',
-            description: 'Get complete boat attitude (roll, pitch, yaw)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          // COMBINED
-          {
-            name: 'get_race_data',
-            description: 'Get all race-critical data in one call (position, heading, speed, wind, sail, performance)',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_wind_history',
-            description: 'Get wind direction shift analysis over N minutes',
-            inputSchema: { type: 'object', properties: { minutes: { type: 'number' } } }
-          },
-          {
-            name: 'get_gnss_quality',
-            description: 'Get GPS fix type, satellite count, and position accuracy',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_rate_of_turn',
-            description: 'Get current rate of turn and maneuver state',
-            inputSchema: { type: 'object', properties: {} }
-          },
-          {
-            name: 'get_performance_trend',
-            description: 'Get SOG/VMG acceleration trend over N minutes',
-            inputSchema: { type: 'object', properties: { minutes: { type: 'number' } } }
-          },
-          // HISTORICAL
-          {
-            name: 'get_historical_snapshot',
-            description: 'Get historical navigation snapshot at as_of timestamp (read-only InfluxDB)',
-            inputSchema: {
-              type: 'object',
-              properties: {
-                as_of_utc: {
-                  type: 'string',
-                  description: 'ISO 8601 UTC timestamp (e.g., 2026-09-01T12:00:00Z)'
-                },
-                window_seconds: {
-                  type: 'integer',
-                  description: 'Historical window in seconds (1-3600)'
-                }
-              },
-              required: ['as_of_utc', 'window_seconds']
-            }
-          }
-        ]
-      }
-    };
-  }
-
-  if (method === 'tools/call') {
-    const result = await handleTool(params.name, params.arguments || {});
-    return {
-      jsonrpc,
-      id,
-      result: {
-        content: [
-          {
-            type: 'text',
-            text: JSON.stringify(result, null, 2)
-          }
-        ]
-      }
-    };
-  }
-
-  return {
-    jsonrpc,
-    id,
-    error: {
-      code: -32601,
-      message: 'Method not found'
+      },
+      required: ['as_of_utc', 'window_seconds'],
+      additionalProperties: false
     }
+  }
+];
+
+/**
+ * MCP server message handling
+ */
+function handleMessage(message) {
+  const response = {
+    jsonrpc: '2.0',
+    id: message.id
   };
-}
 
-/**
- * Main server loop
- */
-async function main() {
-  const readline = require('readline');
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-    terminal: false
-  });
+  try {
+    switch (message.method) {
+      case 'initialize':
+        response.result = {
+          protocolVersion: MCP_VERSION,
+          capabilities: {
+            tools: {}
+          },
+          serverInfo: {
+            name: 'racing-mcp-server',
+            version: '2.0'
+          }
+        };
+        logEvent('STARTUP', { method: 'initialize', version: MCP_VERSION });
+        break;
 
-  rl.on('line', async (line) => {
-    if (!line.trim()) return;
+      case 'tools/list':
+        response.result = { tools };
+        logEvent('DATA_OUT', { method: 'tools/list', count: tools.length });
+        break;
 
-    try {
-      const request = JSON.parse(line);
-      const response = await handleRequest(request);
-      console.log(JSON.stringify(response));
-    } catch (err) {
-      console.error(JSON.stringify({
-        jsonrpc: '2.0',
-        error: {
-          code: -32700,
-          message: 'Parse error',
-          data: err.message
-        }
-      }));
+      case 'tools/call':
+        handleTool(message.params.name, message.params.arguments).then(result => {
+          response.result = result;
+          process.stdout.write(JSON.stringify(response) + '\n');
+        }).catch(err => {
+          response.error = {
+            code: -32603,
+            message: sanitizeError(err)
+          };
+          process.stdout.write(JSON.stringify(response) + '\n');
+        });
+        return; // Async handling
+
+      default:
+        response.error = { code: -32601, message: `Unknown method: ${message.method}` };
     }
-  });
 
-  rl.on('close', () => {
-    process.exit(0);
-  });
+    // Synchronous response
+    process.stdout.write(JSON.stringify(response) + '\n');
+  } catch (e) {
+    response.error = { code: -32603, message: sanitizeError(e) };
+    process.stdout.write(JSON.stringify(response) + '\n');
+  }
 }
 
-main().catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
+// Read and process stdin line by line
+process.stdin.on('data', (data) => {
+  const lines = data.toString().split('\n');
+  for (const line of lines) {
+    if (line.trim()) {
+      try {
+        const message = JSON.parse(line);
+        handleMessage(message);
+      } catch (e) {
+        logEvent('ERROR', { phase: 'parse_input', error: sanitizeError(e) });
+        process.stdout.write(JSON.stringify({
+          jsonrpc: '2.0',
+          error: { code: -32700, message: 'Parse error' }
+        }) + '\n');
+      }
+    }
+  }
+});
+
+process.on('exit', () => {
+  logEvent('SHUTDOWN', { code: 0 });
+});
+
+process.on('error', (e) => {
+  logEvent('ERROR', { phase: 'process', error: sanitizeError(e) });
 });
