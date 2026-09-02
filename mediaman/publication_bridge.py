@@ -43,6 +43,7 @@ class PublicationBridge:
         self,
         publication: PublicationDTO,
         *,
+        race_id: str | None = None,
         as_of_utc: str | None = None,
         window_seconds: int | None = None,
     ) -> PublicationStateRecord:
@@ -51,6 +52,7 @@ class PublicationBridge:
 
         Args:
             publication: PublicationDTO to publish
+            race_id: Optional race identifier (passed explicitly, D3)
             as_of_utc: Historical timestamp for deterministic ID derivation (optional)
             window_seconds: Historical window in seconds for deterministic ID derivation (optional)
 
@@ -61,6 +63,8 @@ class PublicationBridge:
             ValueError("publication_already_exists"): Duplicate non-terminal state
             ValueError("live_publication_forbidden"): Sender is not in dry-run mode
             ValueError("invalid_sender_result"): Result has invalid attributes
+
+        D3: Sender must support race_id, as_of_utc, window_seconds for historical publications.
         """
         # A. Validate DTO
         is_valid, error_code = PublicationValidator.validate(publication)
@@ -121,24 +125,29 @@ class PublicationBridge:
             raise ValueError("live_publication_forbidden")
 
         # F. Sender invocation: call exactly once
-        # Pass canonical parameters for deterministic cross-process identity if sender supports it
+        # Pass canonical parameters for deterministic cross-process identity if sender supports it (D3)
         if not hasattr(self.sender, 'send'):
             raise ValueError("invalid_sender_result")
 
         import inspect
         sig = inspect.signature(self.sender.send)
 
-        # Check if send() accepts race_id, as_of_utc, window_seconds parameters
-        if 'race_id' in sig.parameters and 'as_of_utc' in sig.parameters and 'window_seconds' in sig.parameters:
-            # New contract: pass canonical parameters explicitly
+        # D3: Check if send() accepts canonical parameters
+        # For historical publications, sender MUST support these parameters
+        sender_params = set(sig.parameters.keys())
+        required_canonical = {'race_id', 'as_of_utc', 'window_seconds'}
+        has_canonical_support = required_canonical.issubset(sender_params)
+
+        if has_canonical_support:
+            # New contract: pass canonical parameters explicitly (D3)
             send_result = self.sender.send(
                 publication.content,
-                race_id=publication.race_id,
+                race_id=race_id or publication.race_id,
                 as_of_utc=as_of_utc,
                 window_seconds=window_seconds
             )
         else:
-            # Fallback: old sender signature without canonical params
+            # Fallback: old sender signature without canonical params (legacy only)
             send_result = self.sender.send(publication.content)
 
         # G. Handle sender result

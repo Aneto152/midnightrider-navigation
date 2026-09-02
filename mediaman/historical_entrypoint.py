@@ -168,13 +168,22 @@ def main(argv: list | None = None) -> int:
         logger.error(f"ERROR: MEDIAMAN_HISTORICAL_WINDOW_SECONDS must be <= 3600, got: {window_seconds}")
         return 1
 
-    # Validate MEDIAMAN_MCP_SERVER_PATH (must exist)
+    # Validate MEDIAMAN_MCP_SERVER_PATH (must exist and be executable, D3)
     if not mcp_server_path:
         logger.error("ERROR: MEDIAMAN_MCP_SERVER_PATH is required")
         return 1
 
-    if not Path(mcp_server_path).exists():
+    mcp_path = Path(mcp_server_path)
+    if not mcp_path.exists():
         logger.error(f"ERROR: MEDIAMAN_MCP_SERVER_PATH does not exist: {mcp_server_path}")
+        return 1
+
+    if not mcp_path.is_file():
+        logger.error(f"ERROR: MEDIAMAN_MCP_SERVER_PATH must be a file: {mcp_server_path}")
+        return 1
+
+    if not os.access(mcp_server_path, os.X_OK):
+        logger.error(f"ERROR: MEDIAMAN_MCP_SERVER_PATH is not executable: {mcp_server_path}")
         return 1
 
     # Validate DRY_RUN=true (exact string, case-sensitive)
@@ -243,9 +252,24 @@ def main(argv: list | None = None) -> int:
 
             logger.info("DATA_IN historical provider created via factory")
 
-            # PHASE 7: INITIALIZE DETERMINISTIC DRY_RUN SENDER (no Telegram)
+            # PHASE 7: VALIDATE SENDER SUPPORT FOR CANONICAL PARAMETERS (D3)
+            # Fail-closed if sender doesn't support historical canonical params
+            import inspect
+
             sender = DryRunSender(logger=logger)
-            logger.info("DATA_IN DryRunSender initialized")
+
+            # D3: Verify sender.send() signature supports canonical parameters
+            sig = inspect.signature(sender.send)
+            sender_params = set(sig.parameters.keys())
+            required_canonical_params = {'race_id', 'as_of_utc', 'window_seconds'}
+
+            # For historical mode, sender MUST support canonical params
+            if not required_canonical_params.issubset(sender_params):
+                missing_params = required_canonical_params - sender_params
+                logger.error(f"ERROR: Sender does not support canonical params. Missing: {missing_params}")
+                return 1
+
+            logger.info("DATA_IN DryRunSender initialized with canonical parameter support")
 
             # PHASE 8: INITIALIZE PUBLICATION BRIDGE (offline, DRY_RUN=true enforced)
             bridge = PublicationBridge(
@@ -295,10 +319,11 @@ def main(argv: list | None = None) -> int:
             logger.info(f"DATA_IN publication created: id={publication_id}")
 
             # PHASE 12: PUBLISH VIA BRIDGE (one-shot, dry-run only)
-            # Pass canonical parameters to bridge for deterministic cross-process identity
+            # Pass canonical parameters to bridge for deterministic cross-process identity and sender support
             try:
                 result = bridge.publish(
                     publication,
+                    race_id=race_id,
                     as_of_utc=as_of_utc,
                     window_seconds=window_seconds
                 )

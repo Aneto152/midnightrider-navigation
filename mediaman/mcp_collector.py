@@ -108,13 +108,13 @@ class CollectionResult:
     def to_llm_context(self) -> Dict:
         """
         LLM-safe serialization without exact coordinates or credentials.
-        
+
         Omits:
         - Exact latitude and longitude values
         - Raw MCP envelopes
         - Connection credentials
         - Sensitive metadata
-        
+
         Preserves:
         - Field names and types (without exact values for coordinates)
         - Provenance summaries
@@ -128,7 +128,7 @@ class CollectionResult:
                 safe_value = f"<coordinate suppressed>"
             else:
                 safe_value = fact.value
-            
+
             safe_facts.append({
                 'field_name': fact.field_name,
                 'value': safe_value,
@@ -140,7 +140,7 @@ class CollectionResult:
                     'freshness_limit_seconds': fact.provenance.freshness_limit_seconds,
                 },
             })
-        
+
         return {
             'status': self.status.value,
             'race_id': self.race_id,
@@ -160,15 +160,15 @@ class SourceVerifiedTools(Enum):
     POSITION = ("racing.get_position", "get_position")
     SOG = ("racing.get_sog", "get_sog")
     COG = ("racing.get_cog", "get_cog")
-    
+
     @property
     def public_id(self) -> str:
         return self.value[0]
-    
+
     @property
     def wire_name(self) -> str:
         return self.value[1]
-    
+
     @property
     def server(self) -> str:
         return "racing"
@@ -179,18 +179,18 @@ class MCPCollector:
     Expanded MCP collector with verified tools, deterministic freshness,
     logging, and LLM-safe serialization.
     """
-    
+
     # Freshness limits (seconds) from source verification
     FRESHNESS_LIMITS = {
         "racing.get_position": 30,
         "racing.get_sog": 15,
         "racing.get_cog": 15,
     }
-    
+
     def __init__(self, client: MCPClient, race_id: Optional[str] = None, reference_time: Optional[str] = None):
         """
         Initialize the collector.
-        
+
         Args:
             client: Initialized MCPClient
             race_id: Optional race identifier
@@ -205,16 +205,18 @@ class MCPCollector:
     def collect_historical(self, as_of_utc: str, window_seconds: int) -> CollectionResult:
         """
         Collect historical navigation facts at as_of timestamp via MCP historical tool.
-        
+
         Args:
             as_of_utc: ISO 8601 UTC timestamp for historical snapshot
             window_seconds: Query window in seconds (bounded, positive)
-        
+
         Returns:
             CollectionResult with facts, provenance, and diagnostics
+
+        D1: COMPLETE requires exactly four distinct valid fields (latitude, longitude, SOG, COG)
         """
         from mediaman.historical_request import HistoricalRequest
-        
+
         # Validate request parameters
         try:
             request = HistoricalRequest(
@@ -232,20 +234,20 @@ class MCPCollector:
             )
             self.logger.error(f"Collector ERROR: Invalid historical request: {str(e)}")
             return result
-        
+
         collection_start = self._now_utc()
-        
+
         self.logger.info(f"Collector STARTUP: historical mode, as_of={as_of_utc}, window={window_seconds}s")
-        
+
         result = CollectionResult(
             status=CollectionStatus.FAILED,
             race_id=self.race_id,
             collection_start_at=collection_start
         )
-        
+
         try:
             self.logger.info(f"Collector DATA_IN: calling racing.get_historical_snapshot")
-            
+
             response = self.client.call_tool(
                 'racing.get_historical_snapshot',
                 {
@@ -253,93 +255,113 @@ class MCPCollector:
                     'window_seconds': window_seconds
                 }
             )
-            
+
             if response and response.get('result'):
                 decoded = response['result']
-                
+
                 # Extract historical facts from response
                 if decoded.get('success'):
                     facts_data = decoded.get('facts', {})
-                    
-                    # Collect position
-                    if 'latitude' in facts_data and 'longitude' in facts_data:
-                        lat = facts_data['latitude']
-                        lon = facts_data['longitude']
-                        
-                        if lat is not None and lon is not None:
-                            if (-90 <= lat <= 90) and (-180 <= lon <= 180):
-                                provenance = Provenance(
-                                    tool_public_id="racing.get_historical_snapshot",
-                                    server_name="racing",
-                                    wire_tool_name="get_historical_snapshot",
-                                    source_id="mcp:racing:historical",
-                                    source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
-                                    observed_at=response.get('observed_at'),
-                                    freshness_limit_seconds=None,  # Historical data has no freshness limit
-                                    validation_status="valid"
-                                )
-                                
-                                result.facts.append(NavigationFact(
-                                    field_name="latitude",
-                                    value=lat,
-                                    unit="decimal_degrees",
-                                    provenance=provenance
-                                ))
-                                result.facts.append(NavigationFact(
-                                    field_name="longitude",
-                                    value=lon,
-                                    unit="decimal_degrees",
-                                    provenance=provenance
-                                ))
-                    
-                    # Collect speed and course if available
-                    if 'speed_over_ground_ms' in facts_data:
-                        sog = facts_data['speed_over_ground_ms']
-                        if sog is not None and isinstance(sog, (int, float)) and sog >= 0:
-                            provenance = Provenance(
-                                tool_public_id="racing.get_historical_snapshot",
-                                server_name="racing",
-                                wire_tool_name="get_historical_snapshot",
-                                source_id="mcp:racing:historical",
-                                source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
-                                observed_at=response.get('observed_at'),
-                                freshness_limit_seconds=None,
-                                validation_status="valid"
-                            )
-                            result.facts.append(NavigationFact(
-                                field_name="speed_over_ground",
-                                value=sog,
-                                unit="m/s",
-                                provenance=provenance
-                            ))
-                    
-                    if 'course_over_ground_degrees' in facts_data:
-                        cog = facts_data['course_over_ground_degrees']
-                        if cog is not None and isinstance(cog, (int, float)) and (0 <= cog <= 360):
-                            provenance = Provenance(
-                                tool_public_id="racing.get_historical_snapshot",
-                                server_name="racing",
-                                wire_tool_name="get_historical_snapshot",
-                                source_id="mcp:racing:historical",
-                                source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
-                                observed_at=response.get('observed_at'),
-                                freshness_limit_seconds=None,
-                                validation_status="valid"
-                            )
-                            result.facts.append(NavigationFact(
-                                field_name="course_over_ground",
-                                value=cog,
-                                unit="degrees_true",
-                                provenance=provenance
-                            ))
-                    
-                    if len(result.facts) > 0:
-                        result.status = CollectionStatus.COMPLETE
-                        result.tools_succeeded.append('racing.get_historical_snapshot')
-                    else:
-                        result.status = CollectionStatus.PARTIAL
-                        result.warnings.append("Historical snapshot returned no valid facts")
-                        result.tools_succeeded.append('racing.get_historical_snapshot')
+
+                    # D1: Validate exact four-field set (latitude, longitude, speed_over_ground, course_over_ground)
+                    required_fields = {'latitude', 'longitude', 'speed_over_ground_ms', 'course_over_ground_degrees'}
+                    actual_fields = set(facts_data.keys())
+
+                    # Check exact field set (no missing, no extra)
+                    if actual_fields != required_fields:
+                        missing = required_fields - actual_fields
+                        extra = actual_fields - required_fields
+                        error_parts = []
+                        if missing:
+                            error_parts.append(f"Missing: {missing}")
+                        if extra:
+                            error_parts.append(f"Extra: {extra}")
+                        result.status = CollectionStatus.FAILED
+                        result.tools_failed.append('racing.get_historical_snapshot')
+                        result.errors.append(f"Historical snapshot field mismatch: {'; '.join(error_parts)}")
+                        result.collection_end_at = self._now_utc()
+                        self.logger.error(f"Collector ERROR: Field mismatch: {'; '.join(error_parts)}")
+                        return result
+
+                    # D1: Validate all four values exist, are numeric, and in valid ranges
+                    lat = facts_data.get('latitude')
+                    lon = facts_data.get('longitude')
+                    sog = facts_data.get('speed_over_ground_ms')
+                    cog = facts_data.get('course_over_ground_degrees')
+
+                    validation_errors = []
+
+                    # Validate latitude
+                    if lat is None:
+                        validation_errors.append("latitude is None")
+                    elif not isinstance(lat, (int, float)) or not (-90 <= lat <= 90):
+                        validation_errors.append(f"latitude out of range: {lat}")
+
+                    # Validate longitude
+                    if lon is None:
+                        validation_errors.append("longitude is None")
+                    elif not isinstance(lon, (int, float)) or not (-180 <= lon <= 180):
+                        validation_errors.append(f"longitude out of range: {lon}")
+
+                    # D2: Validate SOG (mandatory, must be >= 0)
+                    if sog is None:
+                        validation_errors.append("speed_over_ground is None")
+                    elif not isinstance(sog, (int, float)) or sog < 0:
+                        validation_errors.append(f"speed_over_ground invalid: {sog}")
+
+                    # D2: Validate COG (mandatory, must be 0-360, COG=0 is valid)
+                    if cog is None:
+                        validation_errors.append("course_over_ground is None")
+                    elif not isinstance(cog, (int, float)) or not (0 <= cog <= 360):
+                        validation_errors.append(f"course_over_ground out of range: {cog}")
+
+                    if validation_errors:
+                        result.status = CollectionStatus.FAILED
+                        result.tools_failed.append('racing.get_historical_snapshot')
+                        result.errors.extend(validation_errors)
+                        result.collection_end_at = self._now_utc()
+                        self.logger.error(f"Collector ERROR: Validation failures: {validation_errors}")
+                        return result
+
+                    # All four facts valid — create facts list
+                    provenance = Provenance(
+                        tool_public_id="racing.get_historical_snapshot",
+                        server_name="racing",
+                        wire_tool_name="get_historical_snapshot",
+                        source_id="mcp:racing:historical",
+                        source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
+                        observed_at=response.get('observed_at'),
+                        freshness_limit_seconds=None,  # Historical data has no freshness limit
+                        validation_status="valid"
+                    )
+
+                    result.facts.append(NavigationFact(
+                        field_name="latitude",
+                        value=lat,
+                        unit="decimal_degrees",
+                        provenance=provenance
+                    ))
+                    result.facts.append(NavigationFact(
+                        field_name="longitude",
+                        value=lon,
+                        unit="decimal_degrees",
+                        provenance=provenance
+                    ))
+                    result.facts.append(NavigationFact(
+                        field_name="speed_over_ground",
+                        value=sog,
+                        unit="m/s",
+                        provenance=provenance
+                    ))
+                    result.facts.append(NavigationFact(
+                        field_name="course_over_ground",
+                        value=cog,
+                        unit="degrees_true",
+                        provenance=provenance
+                    ))
+
+                    result.status = CollectionStatus.COMPLETE
+                    result.tools_succeeded.append('racing.get_historical_snapshot')
                 else:
                     result.status = CollectionStatus.FAILED
                     result.tools_failed.append('racing.get_historical_snapshot')
@@ -348,7 +370,7 @@ class MCPCollector:
                 result.status = CollectionStatus.FAILED
                 result.tools_failed.append('racing.get_historical_snapshot')
                 result.errors.append("Historical snapshot returned empty or malformed response")
-        
+
         except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
             result.status = CollectionStatus.FAILED
             result.tools_failed.append('racing.get_historical_snapshot')
@@ -361,10 +383,10 @@ class MCPCollector:
             error_msg = f"racing.get_historical_snapshot: Unexpected error: {str(e)}"
             result.errors.append(error_msg)
             self.logger.error(f"Collector ERROR: {error_msg}")
-        
+
         result.collection_end_at = self._now_utc()
         result.tools_attempted.append('racing.get_historical_snapshot')
-        
+
         self.logger.info(
             f"Collector DATA_OUT: status={result.status.value}, "
             f"facts={len(result.facts)}, "
@@ -372,40 +394,40 @@ class MCPCollector:
             f"failed={len(result.tools_failed)}"
         )
         self.logger.info(f"Collector SHUTDOWN")
-        
+
         return result
 
     def collect(self, tools: Optional[List[SourceVerifiedTools]] = None) -> CollectionResult:
         """
         Collect navigation facts from verified MCP tools.
-        
+
         Args:
             tools: List of tools to collect (default: position, SOG, COG)
-        
+
         Returns:
             CollectionResult with facts, provenance, and diagnostics
         """
         if tools is None:
             tools = [SourceVerifiedTools.POSITION, SourceVerifiedTools.SOG, SourceVerifiedTools.COG]
-        
+
         collection_start = self._now_utc()
-        
+
         # Log startup
         self.logger.info(f"Collector STARTUP: {len(tools)} tools attempted for race_id={self.race_id}")
-        
+
         result = CollectionResult(
             status=CollectionStatus.FAILED,
             race_id=self.race_id,
             collection_start_at=collection_start
         )
-        
+
         position = None
         sog = None
         cog = None
-        
+
         for tool in tools:
             result.tools_attempted.append(tool.public_id)
-            
+
             try:
                 if tool == SourceVerifiedTools.POSITION:
                     position = self._collect_position(result)
@@ -429,14 +451,14 @@ class MCPCollector:
                 error_msg = f"{tool.public_id}: Unexpected error: {str(e)}"
                 result.errors.append(error_msg)
                 self.logger.error(f"Collector ERROR: {error_msg}")
-        
+
         # Determine collection status
         # Check if any facts are stale — stale facts cannot contribute to COMPLETE status
         has_stale_facts = any(
-            fact.provenance.validation_status == 'stale' 
+            fact.provenance.validation_status == 'stale'
             for fact in result.facts
         )
-        
+
         if len(result.tools_succeeded) == len(result.tools_attempted) and not has_stale_facts:
             result.status = CollectionStatus.COMPLETE
         elif len(result.tools_succeeded) > 0 or has_stale_facts:
@@ -445,9 +467,9 @@ class MCPCollector:
             result.status = CollectionStatus.INVALID
         else:
             result.status = CollectionStatus.FAILED
-        
+
         result.collection_end_at = self._now_utc()
-        
+
         # Log summary (DATA_OUT)
         self.logger.info(
             f"Collector DATA_OUT: status={result.status.value}, "
@@ -456,7 +478,7 @@ class MCPCollector:
             f"failed={len(result.tools_failed)}"
         )
         self.logger.info(f"Collector SHUTDOWN")
-        
+
         return result
 
     def _collect_position(self, result: CollectionResult) -> Optional[NavigationFact]:
@@ -464,12 +486,12 @@ class MCPCollector:
         try:
             self.logger.info("Collector DATA_IN: calling racing.get_position")
             response = self.client.call_tool('racing.get_position')
-            
+
             if response and response.get('result'):
                 decoded = response['result']
                 latitude = decoded.get('latitude')
                 longitude = decoded.get('longitude')
-                
+
                 if latitude is not None and longitude is not None:
                     # Validate ranges
                     if not (-90 <= latitude <= 90):
@@ -478,7 +500,7 @@ class MCPCollector:
                     if not (-180 <= longitude <= 180):
                         result.warnings.append(f"racing.get_position: longitude out of range: {longitude}")
                         return None
-                    
+
                     provenance = Provenance(
                         tool_public_id="racing.get_position",
                         server_name="racing",
@@ -492,7 +514,7 @@ class MCPCollector:
                             self.FRESHNESS_LIMITS.get("racing.get_position")
                         )
                     )
-                    
+
                     # Create two facts: latitude and longitude (exact values preserved internally, not logged)
                     result.facts.append(NavigationFact(
                         field_name="latitude",
@@ -506,10 +528,10 @@ class MCPCollector:
                         unit="decimal_degrees",
                         provenance=provenance
                     ))
-                    
+
                     self.logger.info(f"Collector DATA_IN: racing.get_position success (2 facts: lat, lon)")
                     return result.facts[-1]
-            
+
             result.warnings.append("racing.get_position: malformed or missing fields")
             return None
         except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
@@ -520,17 +542,17 @@ class MCPCollector:
         try:
             self.logger.info("Collector DATA_IN: calling racing.get_sog")
             response = self.client.call_tool('racing.get_sog')
-            
+
             if response and response.get('result'):
                 decoded = response['result']
                 sog_ms = decoded.get('speed_over_ground_ms')
-                
+
                 if sog_ms is not None:
                     # Validate: must be numeric and non-negative
                     if not isinstance(sog_ms, (int, float)) or sog_ms < 0:
                         result.warnings.append(f"racing.get_sog: invalid speed value: {sog_ms}")
                         return None
-                    
+
                     provenance = Provenance(
                         tool_public_id="racing.get_sog",
                         server_name="racing",
@@ -544,7 +566,7 @@ class MCPCollector:
                             self.FRESHNESS_LIMITS.get("racing.get_sog")
                         )
                     )
-                    
+
                     fact = NavigationFact(
                         field_name="speed_over_ground",
                         value=sog_ms,
@@ -552,13 +574,13 @@ class MCPCollector:
                         provenance=provenance
                     )
                     result.facts.append(fact)
-                    
+
                     self.logger.info(f"Collector DATA_IN: racing.get_sog success (value={sog_ms}m/s, freshness={provenance.validation_status})")
                     return fact
                 else:
                     result.warnings.append("racing.get_sog: speed_over_ground_ms is None")
                     return None
-            
+
             result.warnings.append("racing.get_sog: malformed or missing fields")
             return None
         except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
@@ -569,17 +591,17 @@ class MCPCollector:
         try:
             self.logger.info("Collector DATA_IN: calling racing.get_cog")
             response = self.client.call_tool('racing.get_cog')
-            
+
             if response and response.get('result'):
                 decoded = response['result']
                 cog_deg = decoded.get('course_over_ground_degrees')
-                
+
                 if cog_deg is not None:
                     # Validate: must be numeric and in valid circular range
                     if not isinstance(cog_deg, (int, float)) or cog_deg < 0 or cog_deg > 360:
                         result.warnings.append(f"racing.get_cog: invalid course value: {cog_deg}")
                         return None
-                    
+
                     provenance = Provenance(
                         tool_public_id="racing.get_cog",
                         server_name="racing",
@@ -593,7 +615,7 @@ class MCPCollector:
                             self.FRESHNESS_LIMITS.get("racing.get_cog")
                         )
                     )
-                    
+
                     fact = NavigationFact(
                         field_name="course_over_ground",
                         value=cog_deg,
@@ -601,13 +623,13 @@ class MCPCollector:
                         provenance=provenance
                     )
                     result.facts.append(fact)
-                    
+
                     self.logger.info(f"Collector DATA_IN: racing.get_cog success (value={cog_deg}°, freshness={provenance.validation_status})")
                     return fact
                 else:
                     result.warnings.append("racing.get_cog: course_over_ground_degrees is None")
                     return None
-            
+
             result.warnings.append("racing.get_cog: malformed or missing fields")
             return None
         except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
@@ -616,25 +638,25 @@ class MCPCollector:
     def _validate_freshness(self, source_timestamp: Optional[str], limit_seconds: Optional[int]) -> str:
         """
         Validate freshness with deterministic ISO 8601 parsing.
-        
+
         Returns: "valid", "stale", or "missing"
         """
         if source_timestamp is None or source_timestamp == "UNKNOWN":
             return "missing"
-        
+
         if limit_seconds is None:
             return "valid"
-        
+
         try:
             # Parse ISO 8601 source timestamp (support both Z and explicit UTC offset)
             source_ts_str = source_timestamp.strip()
-            
+
             # Handle Z suffix
             if source_ts_str.endswith('Z'):
                 source_ts_str = source_ts_str[:-1] + '+00:00'
-            
+
             source_dt = datetime.fromisoformat(source_ts_str)
-            
+
             # Use injected reference time for tests, or current time
             if self.reference_time:
                 ref_ts_str = self.reference_time.strip()
@@ -643,14 +665,14 @@ class MCPCollector:
                 reference_dt = datetime.fromisoformat(ref_ts_str)
             else:
                 reference_dt = datetime.now(timezone.utc)
-            
+
             # Calculate age in seconds
             age_seconds = (reference_dt - source_dt).total_seconds()
-            
+
             # Age must be non-negative
             if age_seconds < 0:
                 return "missing"
-            
+
             # Check freshness
             if age_seconds <= limit_seconds:
                 return "valid"

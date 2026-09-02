@@ -224,8 +224,12 @@ class HistoricalMCPProvider(ContentProvider):
 
     No live data fallback. No silent TestContentProvider fallback.
     Fail-closed on missing mandatory facts.
-    
+
     Requires explicit MCPCollector injection. Raises ValueError if collector is absent.
+
+    D1: COMPLETE requires exactly four distinct valid fields.
+    D2: SOG and COG are mandatory; no '?' placeholders.
+    R5: race_id is metadata-only; propagated explicitly through call chain.
     """
 
     def __init__(self, mcp_collector=_NOT_PROVIDED):
@@ -234,12 +238,12 @@ class HistoricalMCPProvider(ContentProvider):
 
         Args:
             mcp_collector: MCPCollector instance (optional, required only for get_content_for_historical)
-        
+
         Behavior:
             - HistoricalMCPProvider() → validation-only mode (no collector needed)
             - HistoricalMCPProvider(mcp_collector=None) → raises ValueError (explicit None not allowed)
             - HistoricalMCPProvider(mcp_collector=<obj>) → collection mode (collector provided)
-        
+
         Note:
             - validate() can be called without collector (validation-only)
             - get_content_for_historical() requires collector; raises ValueError if absent
@@ -256,7 +260,7 @@ class HistoricalMCPProvider(ContentProvider):
         else:
             # Valid collector provided
             self.mcp_collector = mcp_collector
-        
+
         self.call_count = 0
         self.snapshot_count = 0
         self.last_snapshot_params = None
@@ -274,13 +278,14 @@ class HistoricalMCPProvider(ContentProvider):
             "Use get_content_for_historical() instead."
         )
 
-    def get_content_for_historical(self, as_of_utc: str, window_seconds: int) -> str:
+    def get_content_for_historical(self, as_of_utc: str, window_seconds: int, race_id: str = None) -> str:
         """
         Generate article from historical facts collected at as_of timestamp.
 
         Args:
             as_of_utc: ISO 8601 UTC timestamp for historical snapshot
             window_seconds: Query window in seconds
+            race_id: Optional race identifier (passed explicitly, not stored as state)
 
         Returns:
             French article summarizing historical navigation state
@@ -288,6 +293,7 @@ class HistoricalMCPProvider(ContentProvider):
         Raises:
             ValueError: if MCP collector is not injected or collection fails
             ValueError: if mandatory facts are missing
+            ValueError: if any required fact is invalid (D1, D2)
         """
         # Tracker call count (increments on every call)
         self.call_count += 1
@@ -300,7 +306,7 @@ class HistoricalMCPProvider(ContentProvider):
         # Validate request
         try:
             request = HistoricalRequest(
-                race_id="historical",
+                race_id=race_id or "historical",
                 as_of_utc=as_of_utc,
                 window_seconds=window_seconds
             )
@@ -327,27 +333,40 @@ class HistoricalMCPProvider(ContentProvider):
                 f"Historical collection failed: {collection_result.errors}"
             )
 
+        # D1: COMPLETE status required; PARTIAL or INVALID blocks publication
+        if collection_result.status != CollectionStatus.COMPLETE:
+            raise ValueError(
+                f"Historical collection incomplete: {collection_result.status.value}"
+            )
+
         # Extract facts
         facts_dict = {}
         for fact in collection_result.facts:
             facts_dict[fact.field_name] = fact.value
 
-        # Verify mandatory facts present
-        mandatory_fields = ["latitude", "longitude"]
-        missing = [f for f in mandatory_fields if f not in facts_dict]
+        # D1: Verify exactly four mandatory facts present
+        required_fields = ["latitude", "longitude", "speed_over_ground", "course_over_ground"]
+        missing = [f for f in required_fields if f not in facts_dict]
         if missing:
             raise ValueError(f"Historical snapshot missing mandatory facts: {missing}")
 
-        # Generate French article
-        lat = facts_dict.get("latitude", "?")
-        lon = facts_dict.get("longitude", "?")
-        sog = facts_dict.get("speed_over_ground", "?")
-        cog = facts_dict.get("course_over_ground", "?")
+        # D2: Verify no '?' placeholders; all facts must have valid values
+        # (validation already done in mcp_collector, but double-check here)
+        for field in required_fields:
+            if facts_dict[field] is None or facts_dict[field] == "?":
+                raise ValueError(f"Historical snapshot has invalid value for {field}")
 
+        # Generate French article from validated facts
+        lat = facts_dict["latitude"]
+        lon = facts_dict["longitude"]
+        sog = facts_dict["speed_over_ground"]
+        cog = facts_dict["course_over_ground"]
+
+        # Construct article from validated facts only
+        # No unsupported claims such as "all systems verified"
         article = (
             f"🏁 *Midnight Rider* — Historique {self.snapshot_count}\n\n"
-            f"**Nom**: Navire de course J/30 en détention à Stamford CT\n"
-            f"**État**: Navire opérationnel, tous les systèmes vérifiés\n"
+            f"**Nom**: Navire de course J/30\n"
             f"**Moment**: {as_of_utc} (historique, fenêtre {window_seconds}s)\n\n"
             f"**Position**: {lat}°, {lon}°\n"
             f"**Cap**: {cog}° (cap au vrai)\n"
@@ -413,6 +432,8 @@ def get_content_provider(
 
     Raises:
         ValueError: if provider_name is unknown or if historical_mcp is requested without collector
+
+    R5: race_id is metadata-only; factory does not handle race_id.
     """
     # Use provided name or read from environment
     if provider_name is None:
