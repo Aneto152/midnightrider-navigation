@@ -348,17 +348,20 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
   });
 
   return {
+    success: true,
     status: 'COMPLETE',
-    latitude: facts.latitude,
-    longitude: facts.longitude,
-    speed_over_ground: facts.speed_over_ground,
-    course_over_ground: facts.course_over_ground,
+    facts: {
+      latitude: facts.latitude,
+      longitude: facts.longitude,
+      speed_over_ground_ms: facts.speed_over_ground,
+      course_over_ground_degrees: facts.course_over_ground
+    },
     source_timestamp: sourceTimestamp,
     fact_timestamps: {
       latitude: timestamps.latitude.toISOString(),
       longitude: timestamps.longitude.toISOString(),
-      speed_over_ground: timestamps.speed_over_ground.toISOString(),
-      course_over_ground: timestamps.course_over_ground.toISOString()
+      speed_over_ground_ms: timestamps.speed_over_ground.toISOString(),
+      course_over_ground_degrees: timestamps.course_over_ground.toISOString()
     },
     bounded_skew_ms: skew
   };
