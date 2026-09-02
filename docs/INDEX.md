@@ -76,6 +76,14 @@ Complete reference guide for the Midnight Rider navigation system.
   - One-way outbound only (no inbound)
   - Setup & activation procedures
 
+- **[docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md](DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md)** — Historical DRY_RUN decision and boundaries
+  - Offline orchestration test scope
+  - Real MCP-to-InfluxDB runtime E2E status
+  - Fact completeness contract (D1-D2)
+  - Timestamp and bounded-skew strategy (R1e)
+  - Legacy sender fallback and fail-closed validation (D3)
+  - Logging and metadata boundaries
+
 ---
 
 ## 🚤 Integration Guides
