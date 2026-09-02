@@ -336,7 +336,7 @@ class HistoricalMCPProvider(ContentProvider):
         # D1: COMPLETE status required; PARTIAL or INVALID blocks publication
         if collection_result.status != CollectionStatus.COMPLETE:
             raise ValueError(
-                f"Historical collection incomplete: {collection_result.status.value}"
+                f"Historical collection missing mandatory facts (status: {collection_result.status.value})"
             )
 
         # Extract facts
@@ -348,7 +348,8 @@ class HistoricalMCPProvider(ContentProvider):
         required_fields = ["latitude", "longitude", "speed_over_ground", "course_over_ground"]
         missing = [f for f in required_fields if f not in facts_dict]
         if missing:
-            raise ValueError(f"Historical snapshot missing mandatory facts: {missing}")
+            missing_str = ", ".join(sorted(missing))
+            raise ValueError(f"Historical collection missing mandatory facts: {missing_str}")
 
         # D2: Verify no '?' placeholders; all facts must have valid values
         # (validation already done in mcp_collector, but double-check here)

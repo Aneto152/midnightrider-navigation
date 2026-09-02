@@ -42,9 +42,9 @@ class HistoricalRequest:
         if not isinstance(self.as_of_utc, str):
             raise ValueError("as_of_utc must be string")
 
-        # D4: Mandatory Z suffix (strict)
+        # D4: Mandatory Z suffix (strict) — ISO 8601 UTC
         if not self.as_of_utc.endswith('Z'):
-            raise ValueError("as_of_utc must end with 'Z' (UTC timezone required)")
+            raise ValueError("as_of_utc must be ISO 8601 UTC with literal Z suffix")
 
         try:
             # Parse ISO 8601 UTC timestamp
@@ -66,9 +66,9 @@ class HistoricalRequest:
             if age_seconds < -5:
                 raise ValueError("as_of_utc is in the future")
         except ValueError as e:
-            if "future" in str(e) or "only UTC" in str(e).lower() or "must end with" in str(e).lower():
+            if "future" in str(e) or "only UTC" in str(e).lower() or "must be ISO 8601" in str(e).lower():
                 raise
-            raise ValueError(f"as_of_utc must be valid ISO 8601 UTC: {e}") from e
+            raise ValueError(f"as_of_utc must be valid ISO 8601 UTC with Z suffix: {e}") from e
 
         # Validate window_seconds (mandatory)
         if self.window_seconds is None:

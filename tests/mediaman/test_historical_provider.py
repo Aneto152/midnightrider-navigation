@@ -224,6 +224,18 @@ class TestHistoricalProviderIntegration:
                     unit="decimal_degrees",
                     provenance=provenance
                 ),
+                NavigationFact(
+                    field_name="speed_over_ground",
+                    value=5.5,
+                    unit="m/s",
+                    provenance=provenance
+                ),
+                NavigationFact(
+                    field_name="course_over_ground",
+                    value=180.0,
+                    unit="degrees_true",
+                    provenance=provenance
+                ),
             ],
             collection_start_at="2026-09-01T12:00:00Z",
             collection_end_at="2026-09-01T12:00:01Z",

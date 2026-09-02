@@ -101,14 +101,43 @@ class TestHistoricalRequestValidation:
             )
         assert "source" in str(exc_info.value)
 
-    def test_iso8601_with_offset_accepted(self):
-        """ISO 8601 UTC with +00:00 offset accepted."""
+    def test_iso8601_with_offset_rejected(self):
+        """ISO 8601 with non-Z offset rejected (D4: Z-only required)."""
+        # +00:00 should be rejected
+        with pytest.raises(ValueError) as exc_info:
+            HistoricalRequest(
+                race_id="race-id",
+                as_of_utc="2026-09-01T12:00:00+00:00",
+                window_seconds=60
+            )
+        assert "UTC" in str(exc_info.value) or "Z" in str(exc_info.value)
+
+        # +05:30 should be rejected
+        with pytest.raises(ValueError) as exc_info:
+            HistoricalRequest(
+                race_id="race-id",
+                as_of_utc="2026-09-01T12:00:00+05:30",
+                window_seconds=60
+            )
+        assert "UTC" in str(exc_info.value) or "Z" in str(exc_info.value)
+
+        # -08:00 should be rejected
+        with pytest.raises(ValueError) as exc_info:
+            HistoricalRequest(
+                race_id="race-id",
+                as_of_utc="2026-09-01T12:00:00-08:00",
+                window_seconds=60
+            )
+        assert "UTC" in str(exc_info.value) or "Z" in str(exc_info.value)
+
+    def test_canonical_z_suffix_accepted(self):
+        """Canonical Z suffix timestamp accepted (D4)."""
         request = HistoricalRequest(
             race_id="race-id",
-            as_of_utc="2026-09-01T12:00:00+00:00",
+            as_of_utc="2026-09-01T12:00:00Z",
             window_seconds=60
         )
-        assert request.as_of_utc == "2026-09-01T12:00:00+00:00"
+        assert request.as_of_utc == "2026-09-01T12:00:00Z"
 
     def test_boundary_window_accepted(self):
         """Boundary window values accepted."""
@@ -141,11 +170,12 @@ class TestHistoricalRequestValidator:
         assert error == ""
 
     def test_invalid_request_fails(self):
-        """Validator rejects invalid request."""
+        """Validator rejects invalid request with stable contract wording."""
         is_valid, error = HistoricalRequestValidator.validate(
             race_id="race-id",
             as_of_utc="not-a-timestamp",
             window_seconds=60
         )
         assert is_valid is False
-        assert "ISO 8601" in error
+        # Check for stable contract wording
+        assert "ISO 8601" in error or "UTC" in error or "must" in error

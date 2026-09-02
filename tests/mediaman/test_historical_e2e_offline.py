@@ -113,6 +113,12 @@ class TestHistoricalOfflineE2E:
             with tempfile.NamedTemporaryFile(suffix='.js', delete=False) as tmp:
                 mcp_server_path = tmp.name
 
+            # Make the temporary file executable (required by entrypoint os.access check)
+            mcp_path = Path(mcp_server_path)
+            mcp_path.chmod(0o755)
+            assert mcp_path.is_file()
+            assert os.access(mcp_server_path, os.X_OK)
+
             try:
                 # Set environment variables for historical entrypoint
                 with patch.dict(os.environ, {
