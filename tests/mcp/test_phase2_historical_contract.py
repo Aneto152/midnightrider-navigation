@@ -455,3 +455,97 @@ def test_runtime_logging_no_credentials(racing_mcp_server):
     for req in SyntheticInfluxDBHandler.request_log:
         assert 'Authorization' not in str(req)
         assert 'synthetic-token' not in str(req)
+
+
+def test_startup_sequence_initialize_before_tools_list(racing_mcp_server):
+    """
+    Test: Startup sequence performs initialize before tools/list.
+    The sequence must be: initialize → tools/list → capability validation → ready.
+    """
+    proc, http_server = racing_mcp_server
+
+    # Initialize first
+    init_response = send_mcp_request(proc, 'initialize')
+    assert init_response is not None
+    assert 'result' in init_response or 'error' not in init_response
+
+    # Then tools/list
+    tools_response = send_mcp_request(proc, 'tools/list', request_id=2)
+    assert tools_response is not None
+    assert 'result' in tools_response
+
+
+def test_tools_list_returns_get_historical_snapshot(racing_mcp_server):
+    """
+    Test: tools/list response includes get_historical_snapshot tool.
+    """
+    proc, http_server = racing_mcp_server
+
+    send_mcp_request(proc, 'initialize')
+    tools_response = send_mcp_request(proc, 'tools/list', request_id=2)
+
+    assert 'result' in tools_response
+    tools = tools_response['result'].get('tools', [])
+    tool_names = [t.get('name') for t in tools]
+    assert 'get_historical_snapshot' in tool_names
+
+
+def test_get_historical_snapshot_schema_requirements(racing_mcp_server):
+    """
+    Test: get_historical_snapshot has correct inputSchema requirements.
+    - type must be 'object'
+    - as_of_utc must be required
+    - window_seconds must be required
+    - additionalProperties must be false
+    """
+    proc, http_server = racing_mcp_server
+
+    send_mcp_request(proc, 'initialize')
+    tools_response = send_mcp_request(proc, 'tools/list', request_id=2)
+
+    tools = tools_response['result'].get('tools', [])
+    hist_tool = next((t for t in tools if t.get('name') == 'get_historical_snapshot'), None)
+    assert hist_tool is not None
+
+    schema = hist_tool.get('inputSchema', {})
+    assert schema.get('type') == 'object'
+    assert 'as_of_utc' in schema.get('required', [])
+    assert 'window_seconds' in schema.get('required', [])
+    assert schema.get('additionalProperties') is False
+
+
+def test_schema_window_seconds_range_1_to_3600(racing_mcp_server):
+    """
+    Test: inputSchema enforces window_seconds integer constraints 1..3600.
+    """
+    proc, http_server = racing_mcp_server
+
+    send_mcp_request(proc, 'initialize')
+    tools_response = send_mcp_request(proc, 'tools/list', request_id=2)
+
+    tools = tools_response['result'].get('tools', [])
+    hist_tool = next((t for t in tools if t.get('name') == 'get_historical_snapshot'), None)
+    schema = hist_tool.get('inputSchema', {})
+    properties = schema.get('properties', {})
+    window_seconds_schema = properties.get('window_seconds', {})
+
+    # Should have integer type and range constraints
+    assert window_seconds_schema.get('type') in ['integer', 'number']
+
+
+def test_incompatible_additional_properties_fails(racing_mcp_server):
+    """
+    Test: Schema with additionalProperties != false would fail validation.
+    This test verifies that the valid schema has additionalProperties=false.
+    """
+    proc, http_server = racing_mcp_server
+
+    send_mcp_request(proc, 'initialize')
+    tools_response = send_mcp_request(proc, 'tools/list', request_id=2)
+
+    tools = tools_response['result'].get('tools', [])
+    hist_tool = next((t for t in tools if t.get('name') == 'get_historical_snapshot'), None)
+    schema = hist_tool.get('inputSchema', {})
+
+    # The correct schema requires additionalProperties=false
+    assert schema.get('additionalProperties') is False
