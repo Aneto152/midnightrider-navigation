@@ -249,6 +249,25 @@ class MCPClient:
             self.terminate()
             raise MCPClientError(f"Startup failed: {e}") from e
 
+        # Capability validation: tools/list and schema verification
+        try:
+            self.validate_capabilities()
+        except MCPProtocolError:
+            self.terminate()
+            raise
+        except MCPServerError:
+            self.terminate()
+            raise
+        except MCPClientError:
+            self.terminate()
+            raise
+        except MCPTimeoutError:
+            self.terminate()
+            raise
+        except Exception as e:
+            self.terminate()
+            raise MCPClientError(f"Capability validation failed: {e}") from e
+
     def initialize(self, timeout_seconds: float = REQUEST_TIMEOUT_SECONDS) -> Dict[str, Any]:
         """
         Send initialize request to MCP server.
