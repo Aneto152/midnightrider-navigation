@@ -35,11 +35,13 @@
     "total_warnings": 1
   },
   "files_modified": [
-    "mediaman/historical_entrypoint.py",
-    "mediaman/publication_bridge.py",
-    "tests/mediaman/test_historical_e2e_offline.py",
     "logs/latest.json",
-    "logs/oc-actions.log"
+    "logs/oc-actions.log",
+    "mediaman/content_provider.py",
+    "mediaman/historical_request.py",
+    "tests/mediaman/test_historical_e2e_offline.py",
+    "tests/mediaman/test_historical_provider.py",
+    "tests/mediaman/test_historical_request.py"
   ],
   "hardening_corrections": [
     "Removed all raw event field logging before validation",
@@ -311,7 +313,7 @@
     "no_credentials_or_ips": true,
     "status": "READY_FOR_INTEGRATION_TESTING"
   },
-  "implementation_commit_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
+  "implementation_commit_sha": "9fc884bfa48d0e2dd23904856a98d920354e2927",
   "implementation_parent_sha": "b701b6b0c6afaf82deffe4430e707b90bfc2dcf8",
   "targeted_bridge_verification": {
     "implementation_commit_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
@@ -383,10 +385,10 @@
     ]
   },
   "implementation_status": "Phase 1 contracts enforced (D1-D4); tests require updates for new validation",
-  "last_updated": "2026-09-02T14:51:13Z",
+  "last_updated": "2026-09-02T17:56:25.754677Z",
   "targeted_offline_e2e_test": "PASSING",
   "targeted_offline_e2e_execution_count": 1,
   "full_phase_a_suite": "NOT_RERUN",
-  "e2e_test_timestamp": "2026-09-02T17:42:06.489424+00:00",
+  "e2e_test_timestamp": "2026-09-02T17:42:06.489424Z",
   "e2e_test_result": "PASSED (4/4 items)"
 }
