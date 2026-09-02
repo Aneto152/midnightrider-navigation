@@ -144,7 +144,7 @@ class MCPClient:
             'id': self.request_id,
             'method': 'tools/list'
         }
-        
+
         try:
             self.process.stdin.write(json.dumps(request) + '\n')
             self.process.stdin.flush()
