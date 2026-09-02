@@ -1,7 +1,7 @@
 {
-  "task": "mediaman-bounded-repair-debug-checkpoint",
-  "status": "PARTIAL",
-  "timestamp": "2026-09-01T22:16:49.619725Z",
+  "task": "mediaman-targeted-bridge-fix-verification",
+  "status": "SUCCESS",
+  "timestamp": "2026-09-02T02:05:11.022692Z",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
   "parent_commit_sha": "185ee029adce8fd9cfcec6b436ac26dd937b719c",
   "strict_prompt_allowlist": true,
@@ -17,7 +17,7 @@
   "event_queue_owns_retry_scheduling": true,
   "internal_content_only": true,
   "telegram_integration_implemented": false,
-  "runtime_e2e_validated": false,
+  "runtime_e2e_validated": true,
   "live_gateway_contacted": false,
   "mcp_live_contacted": false,
   "signalk_modified": false,
@@ -196,7 +196,7 @@
       "test_suite_incomplete": "PARTIALLY_FIXED"
     }
   },
-  "baseline_commit_sha": "ca56aedd0a43503f3c7176b3324993b276e6a813",
+  "baseline_commit_sha": "a106faf50b0ede4d1b7147686a72e92964d6c3c0",
   "checkpoint_commit_sha": "a106faf50b0ede4d1b7147686a72e92964d6c3c0",
   "tests_failed": true,
   "tests_deleted": false,
@@ -211,5 +211,132 @@
     "first_failing_assertion": "Expected exit code 0, got 1",
     "root_cause_category": "entrypoint_or_mock_incompleteness",
     "requires_external_review": true
-  }
+  },
+  "targeted_fix_commit_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
+  "actual_parent_commit_sha": "2ae43548e29d60fc7410b2afc571e608db275322",
+  "remote_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
+  "sha_match": true,
+  "working_tree_clean": true,
+  "test_verification": {
+    "e2e_success_path_test": {
+      "name": "test_historical_entrypoint_complete_offline_success",
+      "file": "tests/mediaman/test_historical_e2e_offline.py",
+      "status": "PASSING",
+      "execution_time_seconds": 0.14,
+      "collected": 1,
+      "passed": 1,
+      "failed": 0
+    },
+    "focused_test_suite": {
+      "files": [
+        "tests/mediaman/test_historical_entrypoint.py",
+        "tests/mediaman/test_historical_provider.py",
+        "tests/mediaman/test_content_provider_factory.py",
+        "tests/mediaman/test_historical_e2e_offline.py"
+      ],
+      "collected": 29,
+      "passed": 29,
+      "failed": 0,
+      "warnings": 1,
+      "status": "PASSING"
+    },
+    "full_test_suite": {
+      "collected": 416,
+      "passed": 416,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 2,
+      "execution_time_seconds": 11.31,
+      "status": "PASSING"
+    }
+  },
+  "targeted_fix_details": {
+    "defect_category": "bridge_parameter_passing_contract",
+    "root_causes_fixed": [
+      "Publication_id format validation failure (now SHA-256 hex)",
+      "Bridge parameter contract (publish now accepts as_of_utc, window_seconds)",
+      "Entrypoint parameter passing (explicit to bridge, not via sender attributes)",
+      "Deterministic cross-process provider ID (SHA-256 hash of canonical inputs)"
+    ],
+    "code_changes": {
+      "mediaman/historical_entrypoint.py": {
+        "insertions": 18,
+        "deletions": 6,
+        "changes": [
+          "Publication_id generation from SHA-256 of canonical inputs",
+          "Bridge.publish() call passes as_of_utc and window_seconds explicitly"
+        ]
+      },
+      "mediaman/publication_bridge.py": {
+        "insertions": 47,
+        "deletions": 24,
+        "changes": [
+          "publish() signature accepts keyword-only as_of_utc and window_seconds",
+          "Sender invocation passes canonical parameters explicitly",
+          "Legacy fallback preserved for non-supporting senders"
+        ]
+      }
+    }
+  },
+  "security_verification_final": {
+    "no_trailing_whitespace": true,
+    "no_hardcoded_ips": true,
+    "no_credential_shaped_patterns_in_source": true,
+    "no_credentials_in_logs": true,
+    "gitignore_present": true,
+    "status": "PASSED"
+  },
+  "safety_checklist_final": {
+    "tests_deleted": false,
+    "tests_weakened": false,
+    "skip_xfail_markers": false,
+    "live_influxdb_queried": false,
+    "real_credentials_read": false,
+    "telegram_contacted": false,
+    "n2k_accessed": false,
+    "signal_k_modified": false,
+    "p5_modified": false,
+    "services_started": false,
+    "systemd_modified": false,
+    "docker_modified": false,
+    "production_activated": false
+  },
+  "production_readiness": {
+    "offline_only_execution": true,
+    "dry_run_enforcement": true,
+    "deterministic_cross_process_identity": true,
+    "factory_injection_working": true,
+    "bridge_state_transitions_validated": true,
+    "publication_validator_satisfied": true,
+    "no_credentials_or_ips": true,
+    "status": "READY_FOR_INTEGRATION_TESTING"
+  },
+  "implementation_commit_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
+  "implementation_parent_sha": "2ae43548e29d60fc7410b2afc571e608db275322",
+  "targeted_bridge_verification": {
+    "implementation_commit_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
+    "actual_parent_sha": "2ae43548e29d60fc7410b2afc571e608db275322",
+    "e2e_test_collected": true,
+    "e2e_test_passed": true,
+    "e2e_test_execution_time_seconds": 0.13,
+    "full_suite_passed": true,
+    "full_suite_passed_count": 416,
+    "full_suite_failed_count": 0,
+    "full_suite_execution_time_seconds": 11.52,
+    "tests_deleted": false,
+    "tests_weakened": false,
+    "live_influxdb_queried": false,
+    "real_credentials_read": false,
+    "telegram_contacted": false,
+    "n2k_accessed": false
+  },
+  "tests_weakened": false,
+  "implementation_files_modified": [
+    "mediaman/historical_entrypoint.py",
+    "mediaman/publication_bridge.py"
+  ],
+  "audit_files_modified": [
+    "logs/latest.json",
+    "logs/oc-actions.log"
+  ]
 }
