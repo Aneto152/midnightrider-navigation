@@ -127,38 +127,44 @@ class MCPClient:
         Called after initialize succeeds. Verifies:
         - get_historical_snapshot tool exists
         - inputSchema requires as_of_utc and window_seconds
-        - schema is strict (no unknown additional properties)
+        - schema is strict (additionalProperties must be exactly false)
 
         Raises:
-            MCPProtocolError: if tools/list response is malformed
+            MCPProtocolError: if tools/list response is malformed or schema is incompatible
             MCPServerError: if required tool or schema is missing/invalid
+            MCPTimeoutError: if tools/list request times out
         """
         if not self.initialized:
             raise MCPClientError('Capability validation requires prior initialize')
 
-        # Get tool list
+        # Direct tools/list protocol call (not via fake tool)
+        self.request_id += 1
+        request = {
+            'jsonrpc': '2.0',
+            'id': self.request_id,
+            'method': 'tools/list'
+        }
+        
         try:
-            tools_response = self.call_tool('__tools_list__', {})  # Internal call
-        except Exception:
-            # Fallback: use tools/list protocol message directly
-            self.request_id += 1
-            request = {
-                'jsonrpc': '2.0',
-                'id': self.request_id,
-                'method': 'tools/list'
-            }
             self.process.stdin.write(json.dumps(request) + '\n')
             self.process.stdin.flush()
+        except (BrokenPipeError, OSError) as e:
+            raise MCPClientError(f"Failed to send tools/list request: {e}") from e
 
-            try:
-                response = self.response_queue.get(timeout=self.REQUEST_TIMEOUT_SECONDS)
-            except queue.Empty:
-                raise MCPTimeoutError('tools/list request timed out')
+        try:
+            response = self.response_queue.get(timeout=self.REQUEST_TIMEOUT_SECONDS)
+        except queue.Empty:
+            raise MCPTimeoutError('tools/list request timed out')
 
-            if 'error' in response:
-                raise MCPServerError(f'tools/list error: {response["error"]}')
+        # Validate JSON-RPC response
+        self._validate_jsonrpc_response(response, self.request_id)
 
-            tools = response.get('result', {}).get('tools', [])
+        if 'error' in response:
+            raise MCPServerError(f'tools/list error: {response["error"]}')
+
+        tools = response.get('result', {}).get('tools', [])
+        if not isinstance(tools, list):
+            raise MCPProtocolError(f'tools/list result.tools is not list, got {type(tools)}')
 
         # Find get_historical_snapshot tool
         hist_tool = None
@@ -179,10 +185,9 @@ class MCPClient:
         if 'as_of_utc' not in required or 'window_seconds' not in required:
             raise MCPProtocolError('get_historical_snapshot schema missing required: as_of_utc, window_seconds')
 
-        # Verify additionalProperties is false (strict schema)
-        if schema.get('additionalProperties', True) is not False:
-            # Warn but don't fail (schema validation varies by implementation)
-            pass
+        # Verify additionalProperties is EXACTLY false (strict schema enforcement)
+        if 'additionalProperties' not in schema or schema.get('additionalProperties') is not False:
+            raise MCPProtocolError('get_historical_snapshot schema must have additionalProperties exactly false')
 
     def start(self) -> None:
         """
