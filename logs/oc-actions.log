@@ -625,3 +625,5 @@
 [2026-09-01T19:36:05Z] [RESULT] [MEDIAMAN] Result: SUCCESS — audit metadata only; validated commit ff8c05f2c5f934807cd2e2157bffd6ede0ed6931; no credentials, Telegram, runtime, or services touched
 [2026-09-01T22:16:49.619725Z] [FILE_MODIFY] [MEDIAMAN] Repaired historical InfluxDB DRY_RUN implementation: created entrypoint, fixed provider factory, improved MCP tool validation, removed credential literals
 [2026-09-01T22:16:49.619725Z] [RESULT] [MEDIAMAN] Result: SUCCESS — offline repair only; no live InfluxDB query; no credentials; no Telegram; no N2K; no production activation
+[2026-09-02T01:44:55.065075Z] [DEBUG] [MEDIAMAN] Created bounded debug checkpoint after historical DRY_RUN E2E failure; no further repair applied
+[2026-09-02T01:44:55.065075Z] [RESULT] [MEDIAMAN] Result: PARTIAL — E2E success-path test failed; code preserved for external inspection; no live InfluxDB; no credentials; no Telegram; no N2K

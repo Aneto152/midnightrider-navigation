@@ -1,6 +1,6 @@
 {
-  "task": "mediaman-repair-historical-influxdb-dry-run",
-  "status": "SUCCESS",
+  "task": "mediaman-bounded-repair-debug-checkpoint",
+  "status": "PARTIAL",
   "timestamp": "2026-09-01T22:16:49.619725Z",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
   "parent_commit_sha": "185ee029adce8fd9cfcec6b436ac26dd937b719c",
@@ -35,6 +35,9 @@
     "total_warnings": 1
   },
   "files_modified": [
+    "mediaman/historical_entrypoint.py",
+    "mediaman/publication_bridge.py",
+    "tests/mediaman/test_historical_e2e_offline.py",
     "logs/latest.json",
     "logs/oc-actions.log"
   ],
@@ -192,5 +195,21 @@
       "credential_test_literals": "FIXED",
       "test_suite_incomplete": "PARTIALLY_FIXED"
     }
+  },
+  "baseline_commit_sha": "ca56aedd0a43503f3c7176b3324993b276e6a813",
+  "checkpoint_commit_sha": "a106faf50b0ede4d1b7147686a72e92964d6c3c0",
+  "tests_failed": true,
+  "tests_deleted": false,
+  "repair_complete": false,
+  "no_live_influxdb_query": true,
+  "no_real_credentials_read": true,
+  "no_telegram_messages_sent": true,
+  "test_failure_summary": {
+    "test": "test_historical_entrypoint_complete_offline_success",
+    "return_code": 1,
+    "exception": "AssertionError",
+    "first_failing_assertion": "Expected exit code 0, got 1",
+    "root_cause_category": "entrypoint_or_mock_incompleteness",
+    "requires_external_review": true
   }
 }
