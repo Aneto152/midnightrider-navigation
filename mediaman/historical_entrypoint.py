@@ -275,7 +275,11 @@ def main(argv: list | None = None) -> int:
             logger.info("DATA_OUT content validated")
 
             # PHASE 11: CREATE IMMUTABLE PUBLICATION DTO
-            publication_id = f"hist-{datetime.now(timezone.utc).isoformat()[:19].replace(':', '')}"
+            # Generate publication_id as SHA-256 of canonical inputs (required by validator)
+            import hashlib
+            canonical_publication = f"{race_id}:{as_of_utc}:{window_seconds}:{content}"
+            publication_id = hashlib.sha256(canonical_publication.encode('utf-8')).hexdigest()
+
             try:
                 publication = PublicationDTO(
                     publication_id=publication_id,
@@ -291,13 +295,13 @@ def main(argv: list | None = None) -> int:
             logger.info(f"DATA_IN publication created: id={publication_id}")
 
             # PHASE 12: PUBLISH VIA BRIDGE (one-shot, dry-run only)
-            # Update sender with canonical parameters for deterministic cross-process identity
-            sender.race_id = race_id
-            sender.as_of_utc = as_of_utc
-            sender.window_seconds = window_seconds
-
+            # Pass canonical parameters to bridge for deterministic cross-process identity
             try:
-                result = bridge.publish(publication)
+                result = bridge.publish(
+                    publication,
+                    as_of_utc=as_of_utc,
+                    window_seconds=window_seconds
+                )
                 logger.info(f"DATA_OUT publication published: state={result.state.value}, provider_id={result.provider_message_id}")
             except ValueError as e:
                 logger.error(f"ERROR: Publication failed: {e}")

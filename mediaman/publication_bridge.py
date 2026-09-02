@@ -39,9 +39,20 @@ class PublicationBridge:
             .replace("+00:00", "Z")
         )
 
-    def publish(self, publication: PublicationDTO) -> PublicationStateRecord:
+    def publish(
+        self,
+        publication: PublicationDTO,
+        *,
+        as_of_utc: str | None = None,
+        window_seconds: int | None = None,
+    ) -> PublicationStateRecord:
         """
         Publish a publication via injected sender in dry-run mode only.
+
+        Args:
+            publication: PublicationDTO to publish
+            as_of_utc: Historical timestamp for deterministic ID derivation (optional)
+            window_seconds: Historical window in seconds for deterministic ID derivation (optional)
 
         Returns the final PublicationStateRecord after all transitions.
 
@@ -111,22 +122,24 @@ class PublicationBridge:
 
         # F. Sender invocation: call exactly once
         # Pass canonical parameters for deterministic cross-process identity if sender supports it
-        if hasattr(self.sender, 'send'):
-            import inspect
-            sig = inspect.signature(self.sender.send)
-            # Check if send() accepts race_id, as_of_utc, window_seconds parameters
-            if 'race_id' in sig.parameters and 'as_of_utc' in sig.parameters and 'window_seconds' in sig.parameters:
-                send_result = self.sender.send(
-                    publication.content,
-                    race_id=publication.race_id,
-                    as_of_utc=getattr(self.sender, 'as_of_utc', None),
-                    window_seconds=getattr(self.sender, 'window_seconds', None)
-                )
-            else:
-                # Fallback: old sender signature without canonical params
-                send_result = self.sender.send(publication.content)
-        else:
+        if not hasattr(self.sender, 'send'):
             raise ValueError("invalid_sender_result")
+
+        import inspect
+        sig = inspect.signature(self.sender.send)
+
+        # Check if send() accepts race_id, as_of_utc, window_seconds parameters
+        if 'race_id' in sig.parameters and 'as_of_utc' in sig.parameters and 'window_seconds' in sig.parameters:
+            # New contract: pass canonical parameters explicitly
+            send_result = self.sender.send(
+                publication.content,
+                race_id=publication.race_id,
+                as_of_utc=as_of_utc,
+                window_seconds=window_seconds
+            )
+        else:
+            # Fallback: old sender signature without canonical params
+            send_result = self.sender.send(publication.content)
 
         # G. Handle sender result
         # Success case: dry_run=True, success=True, provider_status="DRY_RUN"
@@ -141,7 +154,7 @@ class PublicationBridge:
             and send_result.execution_id
         ):
             # SENDING → SENT with provider ID (deterministic cross-process identity)
-            synthetic_message_id = send_result.execution_id
+            synthetic_message_id = send_result.execution_id if send_result.execution_id.startswith('dry-run:') else f'dry-run:{send_result.execution_id}'
             current_record = self.state_store.transition(
                 publication.publication_id,
                 PublicationState.SENT,
