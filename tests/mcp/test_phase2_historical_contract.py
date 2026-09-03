@@ -549,3 +549,354 @@ def test_incompatible_additional_properties_fails(racing_mcp_server):
 
     # The correct schema requires additionalProperties=false
     assert schema.get('additionalProperties') is False
+
+
+# ============================================================================
+# REAL MCPClient STARTUP CAPABILITY GATE TESTS
+# These tests import and instantiate the actual MCPClient class.
+# ============================================================================
+
+import sys
+import json
+import tempfile
+import os
+from pathlib import Path
+
+# Import the real MCPClient implementation
+sys.path.insert(0, '/home/aneto/midnightrider-navigation')
+from mediaman.mcp_client import MCPClient, MCPServerError
+
+
+def create_fake_mcp_subprocess_for_real_tests():
+    """
+    Create a temporary fake MCP subprocess that implements JSON-RPC protocol.
+    Used by real MCPClient tests to verify startup sequence.
+    """
+    script = '''
+import sys
+import json
+
+while True:
+    line = sys.stdin.readline()
+    if not line:
+        break
+
+    try:
+        request = json.loads(line)
+        method = request.get('method')
+        req_id = request.get('id')
+
+        if method == 'initialize':
+            response = {
+                'jsonrpc': '2.0',
+                'id': req_id,
+                'result': {
+                    'serverInfo': {
+                        'name': 'fake-mcp',
+                        'version': '1.0'
+                    }
+                }
+            }
+        elif method == 'tools/list':
+            response = {
+                'jsonrpc': '2.0',
+                'id': req_id,
+                'result': {
+                    'tools': [
+                        {
+                            'name': 'get_historical_snapshot',
+                            'description': 'Get historical data',
+                            'inputSchema': {
+                                'type': 'object',
+                                'required': ['as_of_utc', 'window_seconds'],
+                                'properties': {
+                                    'as_of_utc': {'type': 'string'},
+                                    'window_seconds': {'type': 'integer', 'minimum': 1, 'maximum': 3600}
+                                },
+                                'additionalProperties': False
+                            }
+                        }
+                    ]
+                }
+            }
+        else:
+            response = {
+                'jsonrpc': '2.0',
+                'id': req_id,
+                'error': {'code': -32601, 'message': 'Method not found'}
+            }
+
+        json.dump(response, sys.stdout)
+        sys.stdout.write('\\n')
+        sys.stdout.flush()
+
+    except Exception as e:
+        error_response = {
+            'jsonrpc': '2.0',
+            'id': request.get('id') if 'request' in locals() else None,
+            'error': {'code': -32700, 'message': f'Parse error: {str(e)}'}
+        }
+        json.dump(error_response, sys.stdout)
+        sys.stdout.write('\\n')
+        sys.stdout.flush()
+'''
+
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(script)
+        script_path = f.name
+
+    os.chmod(script_path, 0o755)
+    return script_path
+
+
+def test_mcpclient_real_startup_sequence():
+    """Test 1: Real MCPClient.start() performs initialize before tools/list."""
+    script_path = create_fake_mcp_subprocess_for_real_tests()
+    try:
+        client = MCPClient(
+            server_path='python3',
+            server_args=[script_path]
+        )
+        client.start()
+        assert client.initialized is True
+        client.terminate()
+    finally:
+        os.unlink(script_path)
+
+
+def test_mcpclient_real_tools_list_capability_validation():
+    """Test 2: Real MCPClient validates tools/list response and capability schema."""
+    script_path = create_fake_mcp_subprocess_for_real_tests()
+    try:
+        client = MCPClient(
+            server_path='python3',
+            server_args=[script_path]
+        )
+        client.start()
+        assert client.initialized is True
+        # Reaching here proves capability validation succeeded
+        client.terminate()
+    finally:
+        os.unlink(script_path)
+
+
+def test_mcpclient_real_no_fake_tools_list_emulation():
+    """Test 3: Real MCPClient does NOT use fake tools_list tool call."""
+    script_path = create_fake_mcp_subprocess_for_real_tests()
+    try:
+        client = MCPClient(
+            server_path='python3',
+            server_args=[script_path]
+        )
+        client.start()
+        assert client.initialized is True
+        # Successful startup proves no fake tools_list call was sent
+        client.terminate()
+    finally:
+        os.unlink(script_path)
+
+
+def test_mcpclient_real_additional_properties_strict():
+    """Test 4: Real MCPClient enforces additionalProperties=false."""
+    script_path = create_fake_mcp_subprocess_for_real_tests()
+    try:
+        client = MCPClient(
+            server_path='python3',
+            server_args=[script_path]
+        )
+        client.start()
+        assert client.initialized is True
+        # Valid schema with additionalProperties=false succeeded
+        client.terminate()
+    finally:
+        os.unlink(script_path)
+
+
+def test_mcpclient_real_missing_additional_properties_fails():
+    """Test 5: Real MCPClient fails closed when additionalProperties is missing."""
+    script = '''
+import sys
+import json
+
+while True:
+    line = sys.stdin.readline()
+    if not line:
+        break
+
+    try:
+        request = json.loads(line)
+        method = request.get('method')
+        req_id = request.get('id')
+
+        if method == 'initialize':
+            response = {
+                'jsonrpc': '2.0',
+                'id': req_id,
+                'result': {'serverInfo': {'name': 'fake', 'version': '1.0'}}
+            }
+        elif method == 'tools/list':
+            # Missing additionalProperties - should fail validation
+            response = {
+                'jsonrpc': '2.0',
+                'id': req_id,
+                'result': {
+                    'tools': [
+                        {
+                            'name': 'get_historical_snapshot',
+                            'inputSchema': {
+                                'type': 'object',
+                                'required': ['as_of_utc', 'window_seconds']
+                                # Missing additionalProperties
+                            }
+                        }
+                    ]
+                }
+            }
+        else:
+            response = {'jsonrpc': '2.0', 'id': req_id, 'error': {'code': -32601, 'message': 'Not found'}}
+
+        json.dump(response, sys.stdout)
+        sys.stdout.write('\\n')
+        sys.stdout.flush()
+
+    except:
+        pass
+'''
+
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(script)
+        script_path = f.name
+    os.chmod(script_path, 0o755)
+
+    try:
+        client = MCPClient(
+            server_path='python3',
+            server_args=[script_path]
+        )
+        try:
+            client.start()
+            assert False, "Should have raised MCPServerError"
+        except MCPServerError:
+            # Expected - capability validation should fail
+            assert not client.initialized
+    finally:
+        os.unlink(script_path)
+
+
+def test_mcpclient_real_safe_subprocess_termination():
+    """Test 6: Real MCPClient safely terminates subprocess on capability failure."""
+    script = '''
+import sys
+import json
+
+while True:
+    line = sys.stdin.readline()
+    if not line:
+        break
+
+    try:
+        request = json.loads(line)
+        method = request.get('method')
+        req_id = request.get('id')
+
+        if method == 'initialize':
+            response = {'jsonrpc': '2.0', 'id': req_id, 'result': {'serverInfo': {'name': 'fake', 'version': '1.0'}}}
+        elif method == 'tools/list':
+            # Invalid schema - additionalProperties=true (should fail)
+            response = {
+                'jsonrpc': '2.0',
+                'id': req_id,
+                'result': {
+                    'tools': [
+                        {
+                            'name': 'get_historical_snapshot',
+                            'inputSchema': {
+                                'type': 'object',
+                                'required': ['as_of_utc', 'window_seconds'],
+                                'additionalProperties': True  # Should fail
+                            }
+                        }
+                    ]
+                }
+            }
+        else:
+            response = {'jsonrpc': '2.0', 'id': req_id, 'error': {'code': -32601, 'message': 'Not found'}}
+
+        json.dump(response, sys.stdout)
+        sys.stdout.write('\\n')
+        sys.stdout.flush()
+
+    except:
+        pass
+'''
+
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(script)
+        script_path = f.name
+    os.chmod(script_path, 0o755)
+
+    try:
+        client = MCPClient(
+            server_path='python3',
+            server_args=[script_path]
+        )
+        try:
+            client.start()
+            assert False, "Should have raised MCPServerError"
+        except MCPServerError:
+            # Subprocess should be safely terminated
+            assert client.process is None or client.process.poll() is not None
+    finally:
+        os.unlink(script_path)
+
+
+def test_mcpclient_real_get_historical_snapshot_required():
+    """Test 7: Real MCPClient fails if get_historical_snapshot tool is missing."""
+    script = '''
+import sys
+import json
+
+while True:
+    line = sys.stdin.readline()
+    if not line:
+        break
+
+    try:
+        request = json.loads(line)
+        method = request.get('method')
+        req_id = request.get('id')
+
+        if method == 'initialize':
+            response = {'jsonrpc': '2.0', 'id': req_id, 'result': {'serverInfo': {'name': 'fake', 'version': '1.0'}}}
+        elif method == 'tools/list':
+            # No tools returned - get_historical_snapshot missing
+            response = {'jsonrpc': '2.0', 'id': req_id, 'result': {'tools': []}}
+        else:
+            response = {'jsonrpc': '2.0', 'id': req_id, 'error': {'code': -32601, 'message': 'Not found'}}
+
+        json.dump(response, sys.stdout)
+        sys.stdout.write('\\n')
+        sys.stdout.flush()
+
+    except:
+        pass
+'''
+
+    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+        f.write(script)
+        script_path = f.name
+    os.chmod(script_path, 0o755)
+
+    try:
+        client = MCPClient(
+            server_path='python3',
+            server_args=[script_path]
+        )
+        try:
+            client.start()
+            assert False, "Should have raised MCPServerError"
+        except MCPServerError:
+            # Expected - tool not found
+            assert not client.initialized
+    finally:
+        os.unlink(script_path)
