@@ -385,7 +385,7 @@
     ]
   },
   "implementation_status": "Phase 1 contracts enforced (D1-D4); tests require updates for new validation",
-  "last_updated": "2026-09-07T21:33:54.570173+00:00",
+  "last_updated": "2026-09-02T18:23:40.158287Z",
   "targeted_offline_e2e_test": "PASSING",
   "targeted_offline_e2e_execution_count": 1,
   "full_phase_a_suite": "PASSING",
@@ -400,31 +400,19 @@
     "execution_time_seconds": 0.49,
     "execution_count": 1
   },
-  "export_records": [
+  "exports": [
     {
-      "task": "influxdb-7-day-powerbi-usb-export",
+      "timestamp_utc": "2026-09-07T22:15:00.434833+00:00",
+      "task": "influxdb-7-day-powerbi-usb-export-clean-rebuild",
       "status": "SUCCESS",
-      "timestamp": "2026-09-07T21:33:54.570083+00:00",
-      "export_details": {
-        "window_start_utc": "2026-08-31T19:43:24Z",
-        "window_stop_utc": "2026-09-07T19:43:24Z",
-        "duration_days": 7,
-        "influxdb_bucket": "midnight_rider",
-        "raw_export_location": "/media/aneto/Lexar/MidnightRider_Influx_7d_20260907T194324Z",
-        "raw_export_sha256": "fd4c37fb01705d3b62dc23f8bf66ab069599213273f1878b90f41ea1b0d2b156",
-        "raw_export_size_gb": 13.2,
-        "powerbi_parts": 28,
-        "powerbi_total_rows": 13565555,
-        "measurements_count": 108,
-        "files": {
-          "raw_export_csv": "14GB",
-          "powerbi_data_parts": "2.4GB",
-          "measurements_summary_csv": "4.3K",
-          "manifest_json": "complete",
-          "readme_md": "complete"
-        }
-      },
-      "notes": "Complete 7-day navigation and environment data exported to USB Lexar drive for Power BI import. All measurements included. No data loss in this correction."
+      "window_start_utc": "2026-08-31T19:43:24Z",
+      "window_end_utc": "2026-09-07T19:43:24Z",
+      "raw_export_size_bytes": 14184956075,
+      "raw_export_sha256": "fd4c37fb01705d3b62dc23f8bf66ab069599213273f1878b90f41ea1b0d2b156",
+      "powerbi_partitions": 70,
+      "powerbi_total_rows": 68697714,
+      "measurements_count": 107,
+      "root_cause_fix": "header-counting-error-in-original-rebuild"
     }
   ]
 }
