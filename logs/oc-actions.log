@@ -646,3 +646,9 @@
   Location: /media/aneto/Lexar/MidnightRider_Influx_7d_20260907T194324Z
   Files: raw_export.csv (14GB), processed (2.1GB), manifest, README
   Status: Ready for Power BI import
+[2026-09-07T21:34:06.893786+00:00] [FILE_CREATE] [influx-export] Complete Power BI dataset generated from full raw export
+[2026-09-07T21:34:06.893853+00:00] [RESULT] [influx-export] Result: SUCCESS — rows=13565555, measurements=108, parts=28
+[2026-09-07T21:34:06.893863+00:00] [VALIDATION] [influx-export] Checksums and completeness validated
+[2026-09-07T21:34:06.893871+00:00] [MANIFEST] [influx-export] SHA-256 verified for raw_export.csv
+[2026-09-07T21:34:06.893878+00:00] [MANIFEST] [influx-export] Manifest contains all required metadata
+[2026-09-07T21:34:06.893885+00:00] [REPAIR] [logs-latest-json] Restored parent version, merged export record without data loss
