@@ -1,40 +1,418 @@
 {
-  "timestamp": "2026-05-22T01:00:56.460887",
-  "race_start": "2026-05-22T06:00 EDT",
-  "time_remaining": "~5 HOURS 4 MIN",
-  "DIAGNOSTIC SUMMARY": "15-MINUTE STABILITY TEST PASSED",
-  "CONNECTION TEST RESULTS": {
-    "device_discovery": "\u2705 SUCCESS",
-    "ble_handshake": "\u2705 SUCCESS (~39 seconds)",
-    "data_transmission": "\u2705 SUCCESS",
-    "wind_received": "\u2705 2.0 kts",
-    "battery_status": "\u2705 100%",
-    "disconnect_cleanup": "\u26a0\ufe0f  EOFError (non-critical)"
+  "task": "mediaman-targeted-bridge-fix-verification",
+  "status": "SUCCESS",
+  "timestamp": "2026-09-02T02:05:11.022692Z",
+  "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
+  "parent_commit_sha": "185ee029adce8fd9cfcec6b436ac26dd937b719c",
+  "strict_prompt_allowlist": true,
+  "prompt_injection_rejection": true,
+  "raw_event_values_logged": false,
+  "raw_errors_logged": false,
+  "error_redaction_before_logging": true,
+  "http_connection_string_redaction": true,
+  "https_connection_string_redaction": true,
+  "event_orchestrator_documented": true,
+  "single_event_processing": true,
+  "orchestrator_owns_state_transitions": true,
+  "event_queue_owns_retry_scheduling": true,
+  "internal_content_only": true,
+  "telegram_integration_implemented": false,
+  "runtime_e2e_validated": true,
+  "live_gateway_contacted": false,
+  "mcp_live_contacted": false,
+  "signalk_modified": false,
+  "docker_modified": false,
+  "no_credentials_logged": true,
+  "no_coordinates_logged": true,
+  "eventqueue_step_4b2_modified": false,
+  "test_counts": {
+    "event_orchestrator": 13,
+    "event_queue": 79,
+    "openclaw_adapter": 26,
+    "other": 185,
+    "total_collected": 303,
+    "total_passed": 303,
+    "total_warnings": 1
   },
-  "SIGNAL STRENGTH ANALYSIS": {
-    "rssi_reported": "-127 dBm",
-    "rssi_interpretation": "BluEZ default value (not actual measurement)",
-    "actual_signal_proof": "2.0 kts of data flowing = signal SUFFICIENT",
-    "conclusion": "Signal strength is NOT the limiting factor"
+  "files_modified": [
+    "logs/latest.json",
+    "logs/oc-actions.log",
+    "mediaman/content_provider.py",
+    "mediaman/historical_request.py",
+    "tests/mediaman/test_historical_e2e_offline.py",
+    "tests/mediaman/test_historical_provider.py",
+    "tests/mediaman/test_historical_request.py"
+  ],
+  "hardening_corrections": [
+    "Removed all raw event field logging before validation",
+    "Extended ErrorSanitizer with complete credential coverage (secret=, credential=, token=, api_key=, all URI schemes)",
+    "All URI schemes redacted: postgres, postgresql, mysql, redis, mongodb, amqp(s), http(s) with credentials",
+    "Strict type validation fail-closed on invalid types (int, list, bool, dict, float)",
+    "Prompt injection resistance: reject control characters, newlines, instruction patterns",
+    "Pre-validation logging safety proven via caplog tests",
+    "No raw exceptions in logs (class name only)",
+    "All 16 sensitive field names covered with normalization variants",
+    "Deterministic error classifications only (never raw exception messages)",
+    "EventOrchestrator documented in ARCHITECTURE-MASTER.md with complete role description"
+  ],
+  "security_verification": {
+    "gitignore_rules": "OK",
+    "suspicious_filenames": "OK",
+    "hardcoded_ips": "OK",
+    "sqlite_artifacts": "OK",
+    "protected_files_unchanged": true,
+    "step_4b2_unchanged": true
   },
-  "ROOT CAUSE OF EARLIER CRASHES": {
-    "issue": "EOFError during disconnect phase (AFTER data received)",
-    "timing": "Happens after successful transmission",
-    "impact": "Cleanup anomaly, not data loss",
-    "severity": "LOW (data already transmitted successfully)"
+  "telegram_foundation_present": true,
+  "telegram_production_publication_implemented": false,
+  "telegram_live_contacted": false,
+  "telegram_credentials_read_or_displayed": false,
+  "telegram_credentials_configured": "NOT_CHECKED",
+  "external_publication_implemented": false,
+  "telegram_foundation_remediation_completed": true,
+  "telegram_logging_instrumented": true,
+  "partial_credential_masking_removed": true,
+  "unapproved_message_length_limits_removed": true,
+  "approved_reconciliation_documented": true,
+  "exactly_once_guarantee_claimed": false,
+  "automatic_unknown_retry": false,
+  "publication_bridge_implemented": true,
+  "telegram_guide_updated": true,
+  "tests_logger_injection_fixed": true,
+  "runtime_status": "HARDENING_VALIDATED",
+  "mediaman_validation": {
+    "validated_parent_commit": "ffd29a6e96696ce98b459542f50962a5b5c66ef8",
+    "total_collected": 316,
+    "total_passed": 316,
+    "total_failed": 0,
+    "total_skipped": 0,
+    "total_warnings": 1,
+    "status": "SUCCESS"
   },
-  "CONNECTION CHARACTERISTICS": {
-    "initial_handshake": "~39 seconds (Calypso device characteristic)",
-    "data_flow": "Immediate after connection",
-    "stability": "VERIFIED (no mid-transmission drops observed)",
-    "reconnection": "Automatic via systemd restart on-failure"
+  "internal_e2e_validated": true,
+  "test_summary": {
+    "internal_e2e": {
+      "timestamp": "2026-09-01T01:42:01.205975Z",
+      "collected": 319,
+      "passed": 319,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_internal_e2e_tests": 3,
+      "status": "SUCCESS"
+    },
+    "publication_contracts": {
+      "collected": 327,
+      "passed": 327,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_publication_contract_tests": 8,
+      "status": "SUCCESS"
+    },
+    "publication_state": {
+      "collected": 339,
+      "passed": 339,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_publication_state_tests": 12,
+      "status": "SUCCESS"
+    },
+    "publication_reconciliation": {
+      "collected": 349,
+      "passed": 349,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_publication_reconciliation_tests": 10,
+      "status": "SUCCESS"
+    },
+    "publication_bridge": {
+      "collected": 359,
+      "passed": 359,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_publication_bridge_tests": 10,
+      "status": "SUCCESS"
+    },
+    "staging_activation": {
+      "collected": 367,
+      "passed": 367,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_staging_activation_tests": 8,
+      "status": "SUCCESS"
+    },
+    "runtime_entrypoint": {
+      "collected": 375,
+      "passed": 375,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 1,
+      "new_runtime_entrypoint_tests": 8,
+      "status": "SUCCESS"
+    },
+    "controlled_runtime_e2e": {
+      "processes": 2,
+      "restart_recovery": true,
+      "dry_run": true,
+      "synthetic_credentials_only": true,
+      "real_credentials_read": false,
+      "network_calls": 0,
+      "telegram_messages_sent": 0,
+      "status": "SUCCESS"
+    }
   },
-  "RACE READINESS": {
-    "calypso_status": "\u2705 STABLE AND FUNCTIONAL",
-    "wind_data": "\u2705 FLOWING RELIABLY",
-    "connection_reliability": "\u2705 VERIFIED OVER 15 MINUTES",
-    "system_ready": "\u2705 YES"
+  "step_5_commit_sha": "3123df79c3320ed781de211816a814d081dd5741",
+  "publication_contracts_validated": true,
+  "publication_state_validated": true,
+  "publication_reconciliation_validated": true,
+  "publication_bridge_validated": true,
+  "staging_activation_validated": true,
+  "operational_activation_enabled": false,
+  "production_activation_enabled": false,
+  "runtime_entrypoint_validated": true,
+  "controlled_runtime_e2e_validated": true,
+  "validated_commit_sha": "ff8c05f2c5f934807cd2e2157bffd6ede0ed6931",
+  "historical_audit_parent_commit_sha": "38954fa9bc2d4d8f9583fad42deab1e3e86197ec",
+  "historical_influxdb_implementation_repaired": true,
+  "historical_entrypoint_created": true,
+  "provider_factory_requires_injection": true,
+  "mcp_tool_error_handling_improved": true,
+  "test_credential_literals_removed": true,
+  "no_live_influxdb_in_tests": true,
+  "no_real_credentials_in_tests": true,
+  "no_telegram_network_calls": true,
+  "production_defaults_unchanged": true,
+  "repair_summary": {
+    "defects_fixed": {
+      "historical_entrypoint_missing": "FIXED",
+      "provider_factory_not_wired": "FIXED",
+      "mcp_tool_validation_defects": "FIXED",
+      "mcp_tool_registration": "FIXED",
+      "source_timestamp_handling": "FIXED",
+      "credential_test_literals": "FIXED",
+      "test_suite_incomplete": "PARTIALLY_FIXED"
+    }
   },
-  "FINAL ASSESSMENT": "Calypso is working correctly. The -127 dBm was a red herring. System is ready for outdoor validation.",
-  "NEXT ACTION": "Move outdoors to lock UM982 GNSS, then RACE with full confidence."
+  "baseline_commit_sha": "a106faf50b0ede4d1b7147686a72e92964d6c3c0",
+  "checkpoint_commit_sha": "a106faf50b0ede4d1b7147686a72e92964d6c3c0",
+  "tests_failed": true,
+  "tests_deleted": false,
+  "repair_complete": false,
+  "no_live_influxdb_query": true,
+  "no_real_credentials_read": true,
+  "no_telegram_messages_sent": true,
+  "test_failure_summary": {
+    "test": "test_historical_entrypoint_complete_offline_success",
+    "return_code": 1,
+    "exception": "AssertionError",
+    "first_failing_assertion": "Expected exit code 0, got 1",
+    "root_cause_category": "entrypoint_or_mock_incompleteness",
+    "requires_external_review": true
+  },
+  "targeted_fix_commit_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
+  "actual_parent_commit_sha": "2ae43548e29d60fc7410b2afc571e608db275322",
+  "remote_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
+  "sha_match": true,
+  "working_tree_clean": true,
+  "test_verification": {
+    "e2e_success_path_test": {
+      "name": "test_historical_entrypoint_complete_offline_success",
+      "file": "tests/mediaman/test_historical_e2e_offline.py",
+      "status": "PASSING",
+      "execution_time_seconds": 0.14,
+      "collected": 1,
+      "passed": 1,
+      "failed": 0
+    },
+    "focused_test_suite": {
+      "files": [
+        "tests/mediaman/test_historical_entrypoint.py",
+        "tests/mediaman/test_historical_provider.py",
+        "tests/mediaman/test_content_provider_factory.py",
+        "tests/mediaman/test_historical_e2e_offline.py"
+      ],
+      "collected": 29,
+      "passed": 29,
+      "failed": 0,
+      "warnings": 1,
+      "status": "PASSING"
+    },
+    "full_test_suite": {
+      "collected": 416,
+      "passed": 416,
+      "failed": 0,
+      "skipped": 0,
+      "warnings": 2,
+      "execution_time_seconds": 11.31,
+      "status": "PASSING"
+    }
+  },
+  "targeted_fix_details": {
+    "defect_category": "bridge_parameter_passing_contract",
+    "root_causes_fixed": [
+      "Publication_id format validation failure (now SHA-256 hex)",
+      "Bridge parameter contract (publish now accepts as_of_utc, window_seconds)",
+      "Entrypoint parameter passing (explicit to bridge, not via sender attributes)",
+      "Deterministic cross-process provider ID (SHA-256 hash of canonical inputs)"
+    ],
+    "code_changes": {
+      "mediaman/historical_entrypoint.py": {
+        "insertions": 18,
+        "deletions": 6,
+        "changes": [
+          "Publication_id generation from SHA-256 of canonical inputs",
+          "Bridge.publish() call passes as_of_utc and window_seconds explicitly"
+        ]
+      },
+      "mediaman/publication_bridge.py": {
+        "insertions": 47,
+        "deletions": 24,
+        "changes": [
+          "publish() signature accepts keyword-only as_of_utc and window_seconds",
+          "Sender invocation passes canonical parameters explicitly",
+          "Legacy fallback preserved for non-supporting senders"
+        ]
+      }
+    }
+  },
+  "security_verification_final": {
+    "no_trailing_whitespace": true,
+    "no_hardcoded_ips": true,
+    "no_credential_shaped_patterns_in_source": true,
+    "no_credentials_in_logs": true,
+    "gitignore_present": true,
+    "status": "PASSED"
+  },
+  "safety_checklist_final": {
+    "tests_deleted": false,
+    "tests_weakened": false,
+    "skip_xfail_markers": false,
+    "live_influxdb_queried": false,
+    "real_credentials_read": false,
+    "telegram_contacted": false,
+    "n2k_accessed": false,
+    "signal_k_modified": false,
+    "p5_modified": false,
+    "services_started": false,
+    "systemd_modified": false,
+    "docker_modified": false,
+    "production_activated": false
+  },
+  "production_readiness": {
+    "offline_only_execution": true,
+    "dry_run_enforcement": true,
+    "deterministic_cross_process_identity": true,
+    "factory_injection_working": true,
+    "bridge_state_transitions_validated": true,
+    "publication_validator_satisfied": true,
+    "no_credentials_or_ips": true,
+    "status": "READY_FOR_INTEGRATION_TESTING"
+  },
+  "implementation_commit_sha": "9fc884bfa48d0e2dd23904856a98d920354e2927",
+  "implementation_parent_sha": "b701b6b0c6afaf82deffe4430e707b90bfc2dcf8",
+  "targeted_bridge_verification": {
+    "implementation_commit_sha": "18b624760c1ef5c468dee728c815aed32dfa0f88",
+    "actual_parent_sha": "2ae43548e29d60fc7410b2afc571e608db275322",
+    "e2e_test_collected": true,
+    "e2e_test_passed": true,
+    "e2e_test_execution_time_seconds": 0.13,
+    "full_suite_passed": true,
+    "full_suite_passed_count": 416,
+    "full_suite_failed_count": 0,
+    "full_suite_execution_time_seconds": 11.52,
+    "tests_deleted": false,
+    "tests_weakened": false,
+    "live_influxdb_queried": false,
+    "real_credentials_read": false,
+    "telegram_contacted": false,
+    "n2k_accessed": false
+  },
+  "tests_weakened": false,
+  "implementation_files_modified": [
+    "mediaman/historical_entrypoint.py",
+    "mediaman/publication_bridge.py"
+  ],
+  "audit_files_modified": [
+    "logs/latest.json",
+    "logs/oc-actions.log"
+  ],
+  "audit_commit_sha": "b701b6b0c6afaf82deffe4430e707b90bfc2dcf8",
+  "offline_orchestration_validated": true,
+  "real_mcp_influxdb_runtime_e2e_validated": false,
+  "production_readiness_status": "BLOCKED \u2014 PHASE 2 PENDING",
+  "phase_status": {
+    "phase_a_orchestration": "FAILED",
+    "phase_b_mcp_protocol": "pending",
+    "phase_c_data_accuracy": "pending"
+  },
+  "phase_1_test_results": {
+    "command": "pytest -p no:cacheprovider -q tests/mediaman/test_historical_request.py tests/mediaman/test_historical_provider.py tests/mediaman/test_historical_entrypoint.py tests/mediaman/test_historical_e2e_offline.py",
+    "collected": 35,
+    "passed": 29,
+    "failed": 6,
+    "skipped": 0,
+    "execution_time_seconds": 0.41,
+    "failures": [
+      {
+        "test": "test_malformed_timestamp_rejected",
+        "reason": "D4 strict Z-suffix enforcement breaks test expecting \"ISO 8601\" message"
+      },
+      {
+        "test": "test_iso8601_with_offset_accepted",
+        "reason": "D4 rejects +00:00 format; requires Z suffix only"
+      },
+      {
+        "test": "test_invalid_request_fails",
+        "reason": "D4 error message change; test expects \"ISO 8601\" in error"
+      },
+      {
+        "test": "test_provider_fails_on_missing_mandatory_facts",
+        "reason": "D1 enforces COMPLETE status; test provides only 2 facts, triggers PARTIAL"
+      },
+      {
+        "test": "test_provider_call_counter_increments",
+        "reason": "D1 enforces all 4 facts; test mock lacks SOG/COG"
+      },
+      {
+        "test": "test_historical_entrypoint_complete_offline_success",
+        "reason": "D1 enforces all 4 facts; test mock incomplete"
+      }
+    ]
+  },
+  "implementation_status": "Phase 1 contracts enforced (D1-D4); tests require updates for new validation",
+  "last_updated": "2026-09-02T18:23:40.158287Z",
+  "targeted_offline_e2e_test": "PASSING",
+  "targeted_offline_e2e_execution_count": 1,
+  "full_phase_a_suite": "PASSING",
+  "e2e_test_timestamp": "2026-09-02T17:42:06.489424Z",
+  "e2e_test_result": "PASSED (4/4 items)",
+  "phase_a_test_results": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m pytest -p no:cacheprovider -q tests/mediaman/test_historical_request.py tests/mediaman/test_historical_provider.py tests/mediaman/test_historical_entrypoint.py tests/mediaman/test_historical_e2e_offline.py",
+    "collected": 36,
+    "passed": 36,
+    "failed": 0,
+    "skipped": 0,
+    "execution_time_seconds": 0.49,
+    "execution_count": 1
+  },
+  "exports": [
+    {
+      "timestamp_utc": "2026-09-07T22:15:00.434833+00:00",
+      "task": "influxdb-7-day-powerbi-usb-export-clean-rebuild",
+      "status": "SUCCESS",
+      "window_start_utc": "2026-08-31T19:43:24Z",
+      "window_end_utc": "2026-09-07T19:43:24Z",
+      "raw_export_size_bytes": 14184956075,
+      "raw_export_sha256": "fd4c37fb01705d3b62dc23f8bf66ab069599213273f1878b90f41ea1b0d2b156",
+      "powerbi_partitions": 70,
+      "powerbi_total_rows": 68697714,
+      "measurements_count": 107,
+      "root_cause_fix": "header-counting-error-in-original-rebuild"
+    }
+  ]
 }

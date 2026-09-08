@@ -1,0 +1,12 @@
+# udev rule for WIT WT901BLECL IMU (USB Serial Converter)
+# Creates persistent symlink so wit-ble-reader.py doesn't fallback to /dev/ttyUSB0
+# GPS uses /dev/ttyUSB0 (FTDI FT230X)
+
+# CH340 Serial Converter (common WIT device)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="7523", SYMLINK+="ttyMidnightRider_IMU"
+
+# CP2102 Serial Converter (alternative WIT device)
+SUBSYSTEM=="tty", ATTRS{idVendor}=="10c4", ATTRS{idProduct}=="ea60", SYMLINK+="ttyMidnightRider_IMU"
+
+# Prolific PL2303
+SUBSYSTEM=="tty", ATTRS{idVendor}=="067b", ATTRS{idProduct}=="2303", SYMLINK+="ttyMidnightRider_IMU"

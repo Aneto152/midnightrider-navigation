@@ -3,12 +3,44 @@
 
 from http.server import HTTPServer, BaseHTTPRequestHandler, ThreadingHTTPServer
 import json, time, urllib.parse, urllib.request, os, math
+import logging
+from logging.handlers import RotatingFileHandler
 import weather_collector
+import sys as _s
+_s.path.insert(0, '/repo/ais')
 
-INFLUX_URL = "http://localhost:8086"
+def _setup_regatta_logger():
+    log_dir = '/home/aneto/midnightrider-navigation/logs/services'
+    os.makedirs(log_dir, exist_ok=True)
+    logger = logging.getLogger('regatta-server')
+    logger.setLevel(logging.DEBUG)
+    if not logger.handlers:
+        h = RotatingFileHandler(
+            f'{log_dir}/regatta-server.log',
+            maxBytes=5*1024*1024, backupCount=3
+        )
+        h.setFormatter(logging.Formatter(
+            '[%(asctime)s] [%(levelname)s] [%(name)s] %(message)s',
+            datefmt='%Y-%m-%dT%H:%M:%S'
+        ))
+        logger.addHandler(h)
+        logger.addHandler(logging.StreamHandler())
+    return logger
+
+_log = _setup_regatta_logger()
+
+try:
+    from server_handlers import api_competitors as _AC, api_fleet_db as _AF
+    _AIS = True
+except Exception as _e:
+    _log.warning(f"[AIS] {_e}")
+    _AIS = False
+
+
+INFLUX_URL = os.getenv('INFLUX_URL', 'http://localhost:8086')
 INFLUX_TOKEN = os.getenv('INFLUX_TOKEN') or os.getenv('INFLUXDB_TOKEN', '')
-INFLUX_ORG = "MidnightRider"
-INFLUX_BUCKET = "midnight_rider"
+INFLUX_ORG = os.getenv('INFLUX_ORG', 'MidnightRider')
+INFLUX_BUCKET = os.getenv('INFLUX_BUCKET', 'midnight_rider')
 SIGNALK_URL = "http://localhost:3000"
 
 # Cache vent (TTL 5 min)
@@ -36,7 +68,7 @@ def write_influx(measurement, fields, tags={}):
         urllib.request.urlopen(req, timeout=3)
         return True
     except Exception as e:
-        print(f"InfluxDB error: {e}")
+        _log.error(f"InfluxDB write failed [{measurement}]: {e}")
         return False
 
 def get_signalk(path):
@@ -137,7 +169,7 @@ def get_ais_targets(radius_nm=10):
 
 def get_gps_position():
     import time
-    if _gps_cache["lat"] and (time.time() - _gps_cache["ts"]) < 30:
+    if _gps_cache["lat"] is not None and (time.time() - _gps_cache["ts"]) < 30:
         return {"latitude": _gps_cache["lat"], "longitude": _gps_cache["lon"]}
     try:
         url = f"{SIGNALK_URL}/signalk/v1/api/vessels/self/navigation/position"
@@ -145,9 +177,9 @@ def get_gps_position():
         pos = json.loads(res.read()).get("value", {})
         if pos.get("latitude"):
             _gps_cache.update({"lat": pos["latitude"], "lon": pos["longitude"], "ts": time.time()})
-        return pos
+        return {"latitude": pos.get("latitude"), "longitude": pos.get("longitude")}
     except:
-        if _gps_cache["lat"]:
+        if _gps_cache["lat"] is not None:
             return {"latitude": _gps_cache["lat"], "longitude": _gps_cache["lon"]}
         return {}
 
@@ -378,6 +410,21 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(pos)
         elif self.path == "/api/navigation":
             self.send_json(get_navigation())
+        elif self.path.startswith("/api/competitors"):
+            import urllib.parse as _u
+            p = _u.parse_qs(_u.urlparse(self.path).query)
+            r  = float(p.get('radius_nm',   ['20'])[0])
+            ms = float(p.get('min_sog_kts', ['0' ])[0])
+            iu = p.get('include_unknown', ['false'])[0].lower() == 'true'
+            vm = p.get('vmg_mode', ['wind'])[0]
+            # Wrap get_gps_position to return lat/lon keys that _AC expects
+            gps_data = get_gps_position()
+            gps_fn = lambda: {'lat': gps_data.get('latitude'), 'lon': gps_data.get('longitude')}
+            data = _AC(get_signalk, gps_fn, r, ms, iu, vm) if _AIS else {'error': 'unavailable'}
+            self.send_json(data)
+        elif self.path.startswith("/api/fleet_db"):
+            data = _AF(get_signalk) if _AIS else {'error': 'unavailable'}
+            self.send_json(data)
         elif self.path.startswith("/api/ais"):
             params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             radius = float(params.get('radius', ['10'])[0])
@@ -396,9 +443,43 @@ class Handler(BaseHTTPRequestHandler):
             self.serve_file("voiles.html")
         elif self.path == "/api/race_data":
             self.send_json(get_race_data())
+        elif self.path in ("/ais", "/ais/"):
+            try:
+                with open("/repo/ais/tracker.html", "rb") as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(content)))
+                self.end_headers()
+                self.wfile.write(content)
+            except:
+                self.send_response(404)
+                self.end_headers()
+        elif self.path == "/ais/fleet_db":
+            try:
+                with open("/repo/ais/fleet_db.html", "rb") as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(content)))
+                self.end_headers()
+                self.wfile.write(content)
+            except:
+                self.send_response(404)
+                self.end_headers()
         else:
             self.send_response(404)
             self.end_headers()
+
+    def _json_resp(self, d):
+        import json as _j
+        b = _j.dumps(d).encode()
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(b)))
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+        self.wfile.write(b)
 
     def do_POST(self):
         length = int(self.headers.get("Content-Length", 0))
@@ -478,7 +559,9 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers()
 
 if __name__ == "__main__":
+    _log.info(f"STARTUP regatta-server — InfluxDB={INFLUX_URL} org={INFLUX_ORG} bucket={INFLUX_BUCKET}")
+    _log.info(f"STARTUP token_set={'YES' if INFLUX_TOKEN else 'NO (MISSING!)'}")
     load_start_line_from_signalk()
     server = ThreadingHTTPServer(("0.0.0.0", 5000), Handler)
-    print("Regatta server on :5000")
+    _log.info("Regatta server listening on :5000")
     server.serve_forever()

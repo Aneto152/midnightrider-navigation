@@ -17,8 +17,8 @@ lsusb | grep -i yacht
 # Should show: Yacht Devices YDNU-02
 
 # Check device file:
-ls -la /dev/ttyUSB*
-# Likely /dev/ttyUSB0
+ls -la /dev/ttyACM*
+# Likely /dev/ttyACM0
 ```
 
 ### NMEA 2000 Connection
@@ -48,7 +48,7 @@ Signal K includes `signalk-to-nmea2000` by default.
   "plugins": {
     "signalk-to-nmea2000": {
       "enabled": true,
-      "interface": "/dev/ttyUSB0",
+      "interface": "/dev/ttyACM0",
       "baudrate": 250000,
       "sendPGNs": [
         127250,    // Vessel Heading
@@ -95,28 +95,15 @@ curl -s http://localhost:3000/signalk/v1/api/vessels/self | jq '.environment.wat
 
 ---
 
-## EXPECTED PGNs
+## PGNs (System-Level Flow)
 
-### Sent (Signal K → Vulcan)
+> **📌 SSOT:** For complete PGN flow diagram and specifications:
+> - Network system view: [`docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md`](N2K-NETWORK-ARCHITECTURE.md)
+> - Per-device specs: [`docs/HARDWARE/YDNU-02-DATASHEET.md`](../HARDWARE/YDNU-02-DATASHEET.md)
 
-| PGN | Data | Source |
-|-----|------|--------|
-| 127250 | True Heading | UM982 GPS |
-| 127257 | Attitude (roll/pitch/yaw) | WIT IMU |
-| 129025 | GNSS Position | UM982 GPS |
-| 129026 | COG & SOG | UM982 GPS |
-| 130306 | Wind Speed/Direction | Calypso (optional) |
+The YDNU-02 acts as a transparent bridge — it receives N2K frames from the bus
+and relays them to Signal K, and receives Signal K deltas and transmits them as N2K PGNs.
 
-### Received (Other devices → Signal K)
-
-| PGN | Data | Source |
-|-----|------|--------|
-| 128259 | Speed Water | Loch (when installed) |
-| 128267 | Water Depth | Loch (when installed) |
-| 129038 | AIS Position | AIS Transponder (if installed) |
-| 130311 | Environmental Data | Environmental sensors |
-
----
 
 ## TROUBLESHOOTING
 

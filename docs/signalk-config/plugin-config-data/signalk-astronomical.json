@@ -1,8 +1,0 @@
-{
-  "configuration": {
-    "enabled": true,
-    "debug": false,
-    "noaaStation": "8518750"
-  },
-  "enabled": true
-}

@@ -3,7 +3,7 @@
     "astronomical": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/astronomical-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/astronomical.js"
       ],
       "description": "Sun/moon position, tides, twilight calculations (local)",
       "env": {
@@ -16,7 +16,7 @@
     "weather": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/weather-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/weather.js"
       ],
       "description": "Weather forecasts, wind trends, gust warnings (Open-Meteo API)",
       "env": {
@@ -29,7 +29,7 @@
     "racing": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/racing-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/racing.js"
       ],
       "description": "Racing performance: heading accuracy, SOG, VMG, wind optimization",
       "env": {
@@ -42,7 +42,7 @@
     "polar": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/polar-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/polar.js"
       ],
       "description": "Polar performance analysis: efficiency, target speed, delta",
       "env": {
@@ -55,7 +55,7 @@
     "race": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/race-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/race.js"
       ],
       "description": "Race management: start timer, mark distance, layline calculations",
       "env": {
@@ -68,7 +68,7 @@
     "buoy": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/buoy-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/buoy.js"
       ],
       "description": "NOAA buoy observations: wind comparison, pressure trends (requires noaa_collector.py running)",
       "env": {
@@ -81,7 +81,7 @@
     "competitor": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/competitor-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/competitor.js"
       ],
       "description": "AIS competitor fleet tracking: nearby boats, tactical pressure, distance trends",
       "env": {
@@ -95,7 +95,7 @@
     "imu": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/imu-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/imu.js"
       ],
       "description": "IMU data: sea state, motion, heel angle, acceleration trends",
       "env": {
@@ -108,7 +108,7 @@
     "electrical": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/electrical-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/electrical.js"
       ],
       "description": "Battery monitoring: SOC%, voltage, autonomy, alerts (SOK BMS via InfluxDB)",
       "env": {
@@ -121,7 +121,7 @@
     "crew": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/crew-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/crew.js"
       ],
       "description": "Crew management: watch rotation, helmsman status, performance brief (requires regatta.crew data)",
       "disabled": true,
@@ -143,7 +143,7 @@
     "system": {
       "command": "node",
       "args": [
-        "/home/aneto/.openclaw/workspace/mcp/system-server.js"
+        "/home/aneto/.openclaw/workspace/mcp/system.js"
       ],
       "description": "RPi system health: CPU, RAM, disk, temp, all services status",
       "env": {

@@ -1,0 +1,5 @@
+# Midnight Rider — Utility Scripts
+# Used by: enable_gnhpr.py (UM982 GNSS serial configuration)
+# Install: pip3 install -r scripts/requirements.txt
+
+pyserial>=3.5

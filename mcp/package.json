@@ -1,33 +1,26 @@
 {
-  "name": "@aneto/astronomical-mcp-server",
-  "version": "1.0.0",
-  "description": "MCP server for accessing astronomical data (sun/moon/tides) from InfluxDB",
-  "main": "astronomical-server.js",
+  "name": "midnight-rider-mcp",
+  "version": "2.0.0",
+  "description": "MCP servers for Midnight Rider (J/30)",
   "type": "commonjs",
-  "bin": {
-    "astronomical-mcp-server": "./astronomical-server.js"
+  "engines": {
+    "node": ">=18"
   },
   "scripts": {
-    "start": "node astronomical-server.js",
-    "test": "echo 'MCP server - no tests yet'"
+    "test": "node tests/test-all-mcp.js"
   },
-  "keywords": [
-    "mcp",
-    "model-context-protocol",
-    "astronomical",
-    "sun",
-    "moon",
-    "tides",
-    "influxdb",
-    "signalk"
-  ],
-  "author": "Aneto",
-  "license": "MIT",
-  "engines": {
-    "node": ">=18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Aneto152/midnightrider-navigation"
+  "dependencies": {},
+  "servers": {
+    "astronomical": "servers/astronomical.js",
+    "buoy": "servers/buoy.js",
+    "competitor": "servers/competitor.js",
+    "crew": "servers/crew.js",
+    "electrical": "servers/electrical.js",
+    "imu": "servers/imu.js",
+    "polar": "servers/polar.js",
+    "race": "servers/race.js",
+    "racing": "servers/racing.js",
+    "system": "servers/system.js",
+    "weather": "servers/weather.js"
   }
 }

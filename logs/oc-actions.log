@@ -1,0 +1,11 @@
+[
+  {
+    "timestamp_utc": "2026-09-07T23:04:58.944385+00:00",
+    "action": "usb-storage-unmount",
+    "device": "/dev/sdb1",
+    "mount_point": "/media/aneto/Lexar",
+    "label": "Lexar",
+    "status": "SUCCESS",
+    "description": "Lexar safely unmounted; physical removal authorized"
+  }
+]

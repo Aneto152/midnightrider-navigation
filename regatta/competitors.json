@@ -3,12 +3,21 @@
     "description": "Midnight Rider Competitor Library",
     "vessel": "J/30 hull 511",
     "fleet": "Block Island Race Week 2026",
-    "updated": "2026-05-13",
+    "updated": "2026-07-22",
     "format_version": "1.0",
-    "total_boats": 69,
-    "mmsi_verified": 16,
-    "mmsi_probable": 41,
-    "mmsi_not_found": 12
+    "total_boats": 114,
+    "mmsi_verified": 19,
+    "mmsi_probable": 48,
+    "mmsi_not_found": 46,
+    "events": [
+      "ALIR2026",
+      "BIRW2026"
+    ],
+    "alir2026_boats": 44,
+    "phrf_source": "ALIR2026 official class lists (Spinnaker, Double-Handed, Around the Islands, Multihull NEMA, Non-Spinnaker)",
+    "phrf_updated": "2026-07-22",
+    "phrf_set_total": 66,
+    "orc_aph_total": 21
   },
   "self": {
     "id": "c040",
@@ -21,7 +30,7 @@
     "mmsi": "338554109",
     "mmsi_confidence": "verified",
     "ratings": {
-      "PHRF_LIS": null,
+      "PHRF_LIS": 141.0,
       "IRC": {
         "TCC": null
       },
@@ -48,7 +57,7 @@
       "mmsi": "368042460",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 39.0,
         "IRC": {
           "TCC": null
         },
@@ -59,9 +68,11 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
-      "notes": ""
+      "notes": "",
+      "race_class": "Double-Handed"
     },
     {
       "id": "c002",
@@ -80,6 +91,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 508.6
         }
       },
       "active": true,
@@ -100,7 +114,7 @@
       "mmsi": "338447497",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -39.0,
         "IRC": {
           "TCC": null
         },
@@ -132,6 +146,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 506.8
         }
       },
       "active": true,
@@ -152,7 +169,7 @@
       "mmsi": "368234250",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 33.0,
         "IRC": {
           "TCC": null
         },
@@ -210,6 +227,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 527.5
         }
       },
       "active": false,
@@ -230,7 +250,7 @@
       "mmsi": "338249654",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 81.0,
         "IRC": {
           "TCC": null
         },
@@ -282,7 +302,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 51.0,
         "IRC": {
           "TCC": null
         },
@@ -308,12 +328,15 @@
       "mmsi": "338324718",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 45.0,
         "IRC": {
           "TCC": null
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 526.2
         }
       },
       "active": true,
@@ -334,7 +357,7 @@
       "mmsi": "338507533",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 78.0,
         "IRC": {
           "TCC": null
         },
@@ -366,6 +389,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 466.5
         }
       },
       "active": true,
@@ -392,6 +418,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 464.2
         }
       },
       "active": false,
@@ -418,6 +447,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 508.4
         }
       },
       "active": true,
@@ -438,7 +470,7 @@
       "mmsi": "368367990",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 45.0,
         "IRC": {
           "TCC": null
         },
@@ -449,9 +481,12 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "LIS Weekend Race 2026-06-21",
+        "ALIR2026"
       ],
-      "notes": ""
+      "notes": "",
+      "race_class": "Spinnaker ToD/ToT"
     },
     {
       "id": "c017",
@@ -475,7 +510,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "LIS Weekend Race 2026-06-21"
       ],
       "notes": ""
     },
@@ -516,7 +552,7 @@
       "mmsi": "368298420",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 60.0,
         "IRC": {
           "TCC": null
         },
@@ -542,7 +578,7 @@
       "mmsi": "368327540",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 69.0,
         "IRC": {
           "TCC": null
         },
@@ -568,7 +604,7 @@
       "mmsi": "338349417",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 24.0,
         "IRC": {
           "TCC": null
         },
@@ -594,7 +630,7 @@
       "mmsi": "367481990",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 63.0,
         "IRC": {
           "TCC": null
         },
@@ -620,7 +656,7 @@
       "mmsi": "368372710",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -15.0,
         "IRC": {
           "TCC": null
         },
@@ -646,7 +682,7 @@
       "mmsi": "338173639",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 69.0,
         "IRC": {
           "TCC": null
         },
@@ -704,6 +740,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 523.5
         }
       },
       "active": true,
@@ -724,7 +763,7 @@
       "mmsi": "338413878",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 15.0,
         "IRC": {
           "TCC": null
         },
@@ -735,7 +774,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -750,7 +790,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -48.0,
         "IRC": {
           "TCC": null
         },
@@ -776,7 +816,7 @@
       "mmsi": "338153506",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 90.0,
         "IRC": {
           "TCC": null
         },
@@ -787,7 +827,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -808,6 +849,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 537.8
         }
       },
       "active": true,
@@ -834,6 +878,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 528.2
         }
       },
       "active": true,
@@ -854,7 +901,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -18.0,
         "IRC": {
           "TCC": null
         },
@@ -865,7 +912,8 @@
       "active": false,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": "CAY flag"
     },
@@ -906,7 +954,7 @@
       "mmsi": "338160808",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 24.0,
         "IRC": {
           "TCC": null
         },
@@ -917,7 +965,8 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -938,6 +987,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 511.3
         }
       },
       "active": true,
@@ -984,7 +1036,7 @@
       "mmsi": "367704280",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 42.0,
         "IRC": {
           "TCC": null
         },
@@ -1036,7 +1088,7 @@
       "mmsi": "368420440",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -18.0,
         "IRC": {
           "TCC": null
         },
@@ -1047,7 +1099,8 @@
       "active": true,
       "priority": "high",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -1088,7 +1141,7 @@
       "mmsi": "368447410",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 123.0,
         "IRC": {
           "TCC": null
         },
@@ -1114,7 +1167,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -6.0,
         "IRC": {
           "TCC": null
         },
@@ -1140,7 +1193,7 @@
       "mmsi": null,
       "mmsi_confidence": "not_found",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": -6.0,
         "IRC": {
           "TCC": null
         },
@@ -1172,6 +1225,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 322.3
         }
       },
       "active": false,
@@ -1198,6 +1254,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 497.9
         }
       },
       "active": true,
@@ -1218,7 +1277,7 @@
       "mmsi": "368077430",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 87.0,
         "IRC": {
           "TCC": null
         },
@@ -1229,7 +1288,8 @@
       "active": true,
       "priority": "high",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -1276,6 +1336,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 511.2
         }
       },
       "active": false,
@@ -1302,6 +1365,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 523.2
         }
       },
       "active": true,
@@ -1328,6 +1394,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 480.8
         }
       },
       "active": true,
@@ -1380,6 +1449,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 546.1
         }
       },
       "active": true,
@@ -1400,7 +1472,7 @@
       "mmsi": "367328930",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 15.0,
         "IRC": {
           "TCC": null
         },
@@ -1432,6 +1504,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 504.4
         }
       },
       "active": true,
@@ -1449,8 +1524,8 @@
         "make": "Intensity",
         "model": "IMX 40"
       },
-      "mmsi": null,
-      "mmsi_confidence": "not_found",
+      "mmsi": "338334462",
+      "mmsi_confidence": "probable",
       "ratings": {
         "PHRF_LIS": null,
         "IRC": {
@@ -1458,14 +1533,17 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 517.1
         }
       },
-      "active": false,
+      "active": true,
       "priority": "medium",
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": "MMSI not found"
+      "notes": "MMSI IMX 40, 12×4, Long Island Sound, 2026-05-23 — Dust/VesselTracker 2026-07-22 — verify before 'verified'"
     },
     {
       "id": "c057",
@@ -1504,7 +1582,7 @@
       "mmsi": "338147636",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 27.0,
         "IRC": {
           "TCC": null
         },
@@ -1530,7 +1608,7 @@
       "mmsi": "338187885",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 66.0,
         "IRC": {
           "TCC": null
         },
@@ -1556,7 +1634,7 @@
       "mmsi": "338406561",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 102.0,
         "IRC": {
           "TCC": null
         },
@@ -1582,7 +1660,7 @@
       "mmsi": "368114910",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 72.0,
         "IRC": {
           "TCC": null
         },
@@ -1593,7 +1671,9 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Block Island Race Week 2026"
+        "Block Island Race Week 2026",
+        "LIS Weekend Race 2026-06-21",
+        "ALIR2026"
       ],
       "notes": ""
     },
@@ -1614,6 +1694,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 490.4
         }
       },
       "active": true,
@@ -1634,7 +1717,7 @@
       "mmsi": "367775510",
       "mmsi_confidence": "verified",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 120.0,
         "IRC": {
           "TCC": null
         },
@@ -1686,7 +1769,7 @@
       "mmsi": "367685320",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 93.0,
         "IRC": {
           "TCC": null
         },
@@ -1738,7 +1821,7 @@
       "mmsi": "338093016",
       "mmsi_confidence": "probable",
       "ratings": {
-        "PHRF_LIS": null,
+        "PHRF_LIS": 87.0,
         "IRC": {
           "TCC": null
         },
@@ -1796,6 +1879,9 @@
         },
         "ORR": {
           "GPH": null
+        },
+        "ORC": {
+          "APH": 503.9
         }
       },
       "active": true,
@@ -1804,6 +1890,1384 @@
         "Block Island Race Week 2026"
       ],
       "notes": ""
+    },
+    {
+      "id": "c070",
+      "boat_name": "Deviation YCC",
+      "skipper": "Iris Vogel",
+      "sail_number": "USA 24",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/88"
+      },
+      "mmsi": "368358170",
+      "mmsi_confidence": "low",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "Only US DEVIATION in AIS. AIS LOA=16m vs actual 8.84m (likely entry error). Last pos: Nanny Cay BVI May 2026. FCC callsign WDP4845."
+    },
+    {
+      "id": "c071",
+      "boat_name": "El Diablo",
+      "skipper": "Robert Fryer",
+      "sail_number": "USA 56600",
+      "vessel": {
+        "make": "Bolt",
+        "model": "Bolt 37"
+      },
+      "mmsi": "338554674",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 12x4m. Last pos 40.94N/73.71W (Cos Cob CT area, near American YC) May 31 2026."
+    },
+    {
+      "id": "c072",
+      "boat_name": "First Rate",
+      "skipper": "Marek Antkowiak",
+      "sail_number": "40819",
+      "vessel": {
+        "make": "Tartan",
+        "model": "Tartan 34-2"
+      },
+      "mmsi": "338442426",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": 138.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21",
+        "ALIR2026"
+      ],
+      "notes": "US flag, sailing vessel, 10x3m, callsign WRXE775. Active Jun 17 2026. Last pos 40.83N/73.79W (City Island LIS area)."
+    },
+    {
+      "id": "c073",
+      "boat_name": "Flying Circus",
+      "skipper": "Stuart Markowitz",
+      "sail_number": "USA 52695",
+      "vessel": {
+        "make": "C&C",
+        "model": "C&C 115"
+      },
+      "mmsi": "338562447",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 12x4m. Active Jun 17-18 2026. Renamed from Godspeed (hull #58) Sep 2025 — MMSI recently registered."
+    },
+    {
+      "id": "c074",
+      "boat_name": "Impulse",
+      "skipper": "Len Di Iorio",
+      "sail_number": "USA 52463",
+      "vessel": {
+        "make": "O'Day",
+        "model": "O'Day 39"
+      },
+      "mmsi": "338193854",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": 138.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 13x4m. Last pos 41.18N/71.81W (Block Island Sound) Jun 7 2026 at 6.9kts. Port calls: Greenport NY (LIS)."
+    },
+    {
+      "id": "c075",
+      "boat_name": "Inessa II",
+      "skipper": "Nikolas Grubecki",
+      "sail_number": "11379",
+      "vessel": {
+        "make": "Jeanneau",
+        "model": "Jeanneau 44"
+      },
+      "mmsi": "338509299",
+      "mmsi_confidence": "verified",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "Confirmed on MarineTraffic + VesselFinder + MyShipTracking. Departed Port Jefferson (LIS) May 29 2026."
+    },
+    {
+      "id": "c076",
+      "boat_name": "New Freedom",
+      "skipper": "Michael Mullan",
+      "sail_number": "73",
+      "vessel": {
+        "make": "Catalina",
+        "model": "Catalina 34"
+      },
+      "mmsi": "338501741",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "US flag, sailing vessel, 10x4m (perfect Catalina 34 match). Last pos 40.88N/73.73W (City Island area LIS) Sep 2025."
+    },
+    {
+      "id": "c077",
+      "boat_name": "Palomino",
+      "skipper": "Eugenio Silvestrini",
+      "sail_number": "USA 61107",
+      "vessel": {
+        "make": "C&C",
+        "model": "C&C 37"
+      },
+      "mmsi": "338469505",
+      "mmsi_confidence": "verified",
+      "ratings": {
+        "PHRF_LIS": 129.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21",
+        "ALIR2026"
+      ],
+      "notes": "GPS Jun 14 2026 at 40.85735N/73.65644W = exact coordinates of Hempstead Harbour Club (<15m error)."
+    },
+    {
+      "id": "c078",
+      "boat_name": "Sanguine",
+      "skipper": "Steven Landy / Derek Soohoo",
+      "sail_number": "USA 100",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/100"
+      },
+      "mmsi": "368387130",
+      "mmsi_confidence": "verified",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "VesselFinder photo Oct 2023 at 40.93N/73.59W captioned 'Sanguine Sailing on Long Island Sound'. Last pos 40.84N/73.78W Sep 2025."
+    },
+    {
+      "id": "c079",
+      "boat_name": "Tantara",
+      "skipper": "Sam Boyer",
+      "sail_number": "1588",
+      "vessel": {
+        "make": "Sparkman & Stephens",
+        "model": "Custom 44"
+      },
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "1975 S&S aluminum racer built at Minneford Yard, City Island. No AIS signal found in MarineTraffic, VesselFinder, MyShipTracking. Likely no AIS transponder."
+    },
+    {
+      "id": "c080",
+      "boat_name": "Tenebrae",
+      "skipper": "William Ingraham",
+      "sail_number": "USA 52400",
+      "vessel": {
+        "make": "J/Boats",
+        "model": "J/124"
+      },
+      "mmsi": "368034190",
+      "mmsi_confidence": "verified",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "LIS Weekend Race 2026-06-21"
+      ],
+      "notes": "Confirmed MarineTraffic. Last departed Harbor Island Park, Mamaroneck NY (= Larchmont YC area). LOA 12m matches J/124 12.4m."
+    },
+    {
+      "id": "c081",
+      "boat_name": "Cool Change",
+      "sail_number": "121",
+      "skipper": "James Sheed",
+      "yacht_club": "Shore and Country Club",
+      "home_port": "Darien, CT",
+      "vessel": {
+        "make": "Hunter",
+        "model": "39"
+      },
+      "length_ft": 39,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 144,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c082",
+      "boat_name": "Dolcezza",
+      "sail_number": "53",
+      "skipper": "Neill Parker Jr",
+      "yacht_club": "Manhasset Bay YC",
+      "home_port": "Port Washington, NY",
+      "vessel": {
+        "make": "Hunter",
+        "model": "Legend 37.5"
+      },
+      "length_ft": 37,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 150,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c084",
+      "boat_name": "Java",
+      "sail_number": "279",
+      "skipper": "Marc Grill",
+      "yacht_club": "Port Washington YC",
+      "home_port": "Port Washington, NY",
+      "vessel": {
+        "make": "Jeanneau",
+        "model": "36.2 SO"
+      },
+      "length_ft": 36,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 183,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c085",
+      "boat_name": "MARA",
+      "sail_number": "none",
+      "skipper": "Alexander Malochka",
+      "yacht_club": "none",
+      "home_port": "Brooklyn, NY",
+      "vessel": {
+        "make": "Pearson",
+        "model": "39-2"
+      },
+      "length_ft": 39,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 120.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c087",
+      "boat_name": "Shooting Star",
+      "sail_number": "USA 20802",
+      "skipper": "David Kingsbury",
+      "yacht_club": "Housatonic Boat Club",
+      "home_port": "Orange, CT",
+      "vessel": {
+        "make": "Peterson",
+        "model": "34"
+      },
+      "length_ft": 33.9,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 117,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c088",
+      "boat_name": "Veronique",
+      "sail_number": "60141",
+      "skipper": "Bert Rubin de Cervens",
+      "yacht_club": "Ketewomoke YC",
+      "home_port": "Huntington, NY",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "First 345"
+      },
+      "length_ft": 34.5,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 135,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c089",
+      "boat_name": "YES 4X",
+      "sail_number": "393",
+      "skipper": "Henryk Walerys",
+      "yacht_club": "CPYC",
+      "home_port": "Katonah, NY",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "Oceanis 46.1"
+      },
+      "length_ft": 47.9,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 135,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Non-Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c090",
+      "boat_name": "Beagle",
+      "sail_number": "USA 44007",
+      "skipper": "Willets Meyer",
+      "yacht_club": "Seawanhaka Corinthian YC",
+      "home_port": "Oyster Bay, NY",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/44"
+      },
+      "length_ft": 44,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ORC",
+      "notes": ""
+    },
+    {
+      "id": "c091",
+      "boat_name": "Ohana",
+      "sail_number": "435",
+      "skipper": "Ken Wisdom",
+      "yacht_club": "CPYC/NYYC/RORC",
+      "home_port": "Wilton, CT",
+      "vessel": {
+        "make": "Arcona",
+        "model": "435 MkII"
+      },
+      "length_ft": 44.7,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "ORC_APH": 483.8,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ORC",
+      "notes": ""
+    },
+    {
+      "id": "c092",
+      "boat_name": "Surface Tension",
+      "sail_number": "Uni 52556",
+      "skipper": "Lou Melillo / Mike Bermann",
+      "yacht_club": "Atlantic Highlands YC / Storm Trysail Club",
+      "home_port": "Middletown, NJ",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "First 44.7"
+      },
+      "length_ft": 44,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": null,
+        "ORC_APH": 505.4,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ORC",
+      "notes": ""
+    },
+    {
+      "id": "c093",
+      "boat_name": "ACTAEA",
+      "sail_number": "USA 3815",
+      "skipper": "Michael M Cone",
+      "yacht_club": "EYC / CCA / NYYC",
+      "home_port": "Philadelphia, PA",
+      "vessel": {
+        "make": "Alden",
+        "model": "Bermuda 40"
+      },
+      "length_ft": 40.75,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 153.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "Newport-Bermuda Race winner 2014"
+    },
+    {
+      "id": "c094",
+      "boat_name": "Avalanche",
+      "sail_number": "GBR 20",
+      "skipper": "Craig Albrecht / Alexis Gesualdo",
+      "yacht_club": "Storm Trysail Club / Northport YC",
+      "home_port": "Glen Cove, NY",
+      "vessel": {
+        "make": "Soto",
+        "model": "40"
+      },
+      "length_ft": 40,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": -33.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "British flag (GBR). Fast boat, negative PHRF"
+    },
+    {
+      "id": "c095",
+      "boat_name": "Avatar",
+      "sail_number": "USA 61971",
+      "skipper": "Janusz Kedzierski",
+      "yacht_club": "Mill Basin Club",
+      "home_port": "New York, NY",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "First 42"
+      },
+      "length_ft": 42,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 42.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c096",
+      "boat_name": "BETELGEUSE YCC",
+      "sail_number": "43392",
+      "skipper": "Ben Cohen",
+      "yacht_club": "YCC",
+      "home_port": "Brooklyn, NY",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/36"
+      },
+      "length_ft": 36,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 81.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c097",
+      "boat_name": "Crocodile",
+      "sail_number": "USA 61150",
+      "skipper": "Scott Ward",
+      "yacht_club": "STC / CCA",
+      "home_port": "Hollywood, MD",
+      "vessel": {
+        "make": "Beneteau",
+        "model": "First 50"
+      },
+      "length_ft": 49,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 9.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c098",
+      "boat_name": "Elizabeth",
+      "sail_number": "46294",
+      "skipper": "Tom Hurter",
+      "yacht_club": "St Petersburg YC",
+      "home_port": "St Petersburg, FL",
+      "vessel": {
+        "make": "Catalina",
+        "model": "42"
+      },
+      "length_ft": 42,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 111.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c099",
+      "boat_name": "Gup E",
+      "sail_number": "USA 61759",
+      "skipper": "Nathaniel Beachum",
+      "yacht_club": "Raritan YC",
+      "home_port": "Madison, NJ",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/99"
+      },
+      "length_ft": 32.61,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 72.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c103",
+      "boat_name": "MARIE",
+      "sail_number": "42832",
+      "skipper": "Paul Eliea",
+      "yacht_club": "Ketewomoke YC / Lloyd Harbor YC",
+      "home_port": "South Huntington, NY",
+      "vessel": {
+        "make": "Tartan",
+        "model": "372"
+      },
+      "length_ft": 37,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 135.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c105",
+      "boat_name": "Mayhem",
+      "sail_number": "18",
+      "skipper": "Mark May",
+      "yacht_club": "Shattemuc YC",
+      "home_port": "Ossining, NY",
+      "vessel": {
+        "make": "German Frers",
+        "model": "Frers 30"
+      },
+      "length_ft": 29.5,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 132.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c106",
+      "boat_name": "Peggy-O",
+      "sail_number": "43895",
+      "skipper": "Pedro Escandon",
+      "yacht_club": "Metedeconk River YC",
+      "home_port": "Brick, NJ",
+      "vessel": {
+        "make": "Sabre",
+        "model": "38"
+      },
+      "length_ft": 38,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 129.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c108",
+      "boat_name": "Poseidon",
+      "sail_number": "USA 52059",
+      "skipper": "Nico Martinez",
+      "yacht_club": "US Navy",
+      "home_port": "Annapolis, MD",
+      "vessel": {
+        "make": "Swan",
+        "model": "45"
+      },
+      "length_ft": 45,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": -24.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c109",
+      "boat_name": "Random",
+      "sail_number": "USA 51362",
+      "skipper": "Robert Millstein",
+      "yacht_club": "Shattemuc YC",
+      "home_port": "Briarcliff Manor, NY",
+      "vessel": {
+        "make": "Sabre",
+        "model": "362"
+      },
+      "length_ft": 36,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 126.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c110",
+      "boat_name": "Ripple",
+      "sail_number": "USA 32685",
+      "skipper": "Michael Colucci",
+      "yacht_club": "Chelsea YC / STC",
+      "home_port": "Fishkill, NY",
+      "vessel": {
+        "make": "S2",
+        "model": "9.1"
+      },
+      "length_ft": 29.9,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 135.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c111",
+      "boat_name": "Scarlett",
+      "sail_number": "USA 332",
+      "skipper": "David Wightman",
+      "yacht_club": "Kingston Sailing Club",
+      "home_port": "New Paltz, NY",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/30"
+      },
+      "length_ft": 30,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 147.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "⚠️ DIRECT COMPETITOR — Same class: J/30 Spinnaker ToD/ToT"
+    },
+    {
+      "id": "c112",
+      "boat_name": "The Rover",
+      "sail_number": "USA 93310",
+      "skipper": "S. Steven Yang",
+      "yacht_club": "NYYC",
+      "home_port": "New York, NY",
+      "vessel": {
+        "make": "Swan",
+        "model": "44 MKII"
+      },
+      "length_ft": 44,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 75.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "NYYC"
+    },
+    {
+      "id": "c113",
+      "boat_name": "Tynaje",
+      "sail_number": "USA 2222",
+      "skipper": "Daniel Fisher",
+      "yacht_club": "Sachems Head YC",
+      "home_port": "Guilford, CT",
+      "vessel": {
+        "make": "Ohlson",
+        "model": "38"
+      },
+      "length_ft": 38,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 144.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c114",
+      "boat_name": "Valiant YCC",
+      "sail_number": "508",
+      "skipper": "Stamford YC Juniors",
+      "yacht_club": "Stamford YC Junior Big Boat Program",
+      "home_port": "Stamford, CT",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/105"
+      },
+      "length_ft": 34.5,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 75.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "Junior program"
+    },
+    {
+      "id": "c115",
+      "boat_name": "Velocita",
+      "sail_number": "USA 319",
+      "skipper": "Marc De Souter",
+      "yacht_club": "Liberty YC",
+      "home_port": "Wayne, NJ",
+      "vessel": {
+        "make": "J Boats",
+        "model": "J/109"
+      },
+      "length_ft": 35,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 69.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c116",
+      "boat_name": "WANDERER",
+      "sail_number": "181",
+      "skipper": "Stefano Basilico",
+      "yacht_club": "Port Jefferson YC / Bellport Bay YC",
+      "home_port": "Brooklyn, NY",
+      "vessel": {
+        "make": "Hanse",
+        "model": "458"
+      },
+      "length_ft": 44.5,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 60.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": ""
+    },
+    {
+      "id": "c117",
+      "boat_name": "Zammermoos",
+      "sail_number": "Uni 4224",
+      "skipper": "David Fass",
+      "yacht_club": "New York Yacht Club",
+      "home_port": "Mamaroneck, NY",
+      "vessel": {
+        "make": "ClubSwan",
+        "model": "42"
+      },
+      "length_ft": 42,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": -15.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "high",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Spinnaker ToD/ToT",
+      "notes": "NYYC. Fast boat, negative PHRF."
+    },
+    {
+      "id": "c118",
+      "boat_name": "Halve Maen",
+      "sail_number": "USA 075",
+      "skipper": "Walther van Stipriaan",
+      "yacht_club": "Unqua Corinthian YC",
+      "home_port": "Amityville, NY",
+      "vessel": {
+        "make": "Tartan",
+        "model": "33"
+      },
+      "length_ft": 34,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 156.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Double-Handed",
+      "notes": ""
+    },
+    {
+      "id": "c120",
+      "boat_name": "Three Little Birds",
+      "sail_number": "USA 52985",
+      "skipper": "Peter Malloy",
+      "yacht_club": "Orient YC",
+      "home_port": "Orient, NY",
+      "vessel": {
+        "make": "Farrier",
+        "model": "PT11 Trimaran"
+      },
+      "length_ft": 36,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": -25,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Multihull",
+      "notes": "Trimaran"
+    },
+    {
+      "id": "c122",
+      "boat_name": "Nomad",
+      "sail_number": "USA 52968",
+      "skipper": "Shane Haas",
+      "yacht_club": "Poughkeepsie YC",
+      "home_port": "West Shokan, NY",
+      "vessel": {
+        "make": "Hunter",
+        "model": "41DS"
+      },
+      "length_ft": 40.4,
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 174.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "race_class": "Around Islands - Spinnaker",
+      "notes": ""
+    },
+    {
+      "id": "c123",
+      "boat_name": "Kitli",
+      "skipper": "Darshan Patel",
+      "vessel": {
+        "make": "Sabre",
+        "model": "34-2"
+      },
+      "mmsi": "338072036",
+      "mmsi_confidence": "probable",
+      "ratings": {
+        "PHRF_LIS": 156.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": true,
+      "priority": "medium",
+      "events": [
+        "ALIR2026"
+      ],
+      "notes": "MMSI 338072036 — VesselTracker/Dust 2026-07-22 — verify before 'verified'. Execution Rocks Non-Spin.",
+      "race_class": "Non-Spinnaker"
+    },
+    {
+      "id": "c124",
+      "boat_name": "Yopo",
+      "skipper": "Artur Jasinski",
+      "vessel": {
+        "make": "Contest",
+        "model": "30"
+      },
+      "mmsi": null,
+      "mmsi_confidence": "not_found",
+      "ratings": {
+        "PHRF_LIS": 222.0,
+        "IRC": {
+          "TCC": null
+        },
+        "ORR": {
+          "GPH": null
+        }
+      },
+      "active": false,
+      "priority": "low",
+      "events": [
+        "ALIR2026"
+      ],
+      "notes": "MMSI not found. Polish Sailing Club, Queens NY. Execution Rocks Non-Spin.",
+      "race_class": "Non-Spinnaker"
     }
   ]
 }

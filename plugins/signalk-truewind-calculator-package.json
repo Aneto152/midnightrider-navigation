@@ -1,0 +1,14 @@
+{
+  "name": "signalk-truewind-calculator",
+  "version": "1.0.0",
+  "main": "signalk-truewind-calculator.js",
+  "license": "MIT",
+  "keywords": [
+    "signalk",
+    "signalk-node-server-plugin",
+    "wind",
+    "truewind",
+    "TWD",
+    "TWS"
+  ]
+}

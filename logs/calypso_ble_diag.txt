@@ -1,0 +1,258 @@
+=== CALYPSO BLE DIAGNOSTIC — Fri 22 May 00:12:37 EDT 2026 ===
+
+=== A. CALYPSO SERVICE FILE ===
+[Unit]
+Description=Calypso Anemometer BLE Reader
+After=network.target bluetooth.target
+Wants=bluetooth.target
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto
+ExecStart=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_8 --target=udp+signalk+delta://localhost:4122
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
+=== B. WATCHDOG SERVICE FILE ===
+[Unit]
+Description=Calypso UP10 Robust BLE Watchdog (L1/L2/L3 escalating recovery)
+After=network.target bluetooth.target
+Wants=bluetooth.target
+
+[Service]
+Type=simple
+User=root
+ExecStart=/usr/bin/python3 /home/aneto/calypso_robust_watchdog.py
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+
+=== C. SYSTEMD RESTART CONFIG ===
+Restart=on-failure
+RestartMode=normal
+RestartUSec=10s
+RestartSteps=0
+RestartMaxDelayUSec=infinity
+RestartUSecNext=10s
+RemainAfterExit=no
+NRestarts=0
+ExecStart={ path=/home/aneto/.local/bin/calypso-anemometer ; argv[]=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_8 --target=udp+signalk+delta://localhost:4122 ; ignore_errors=no ; start_time=[Thu 2026-05-21 23:56:41 EDT] ; stop_time=[n/a] ; pid=61896 ; code=(null) ; status=0/0 }
+ExecStartEx={ path=/home/aneto/.local/bin/calypso-anemometer ; argv[]=/home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_8 --target=udp+signalk+delta://localhost:4122 ; flags= ; start_time=[Thu 2026-05-21 23:56:41 EDT] ; stop_time=[n/a] ; pid=61896 ; code=(null) ; status=0/0 }
+StateDirectoryMode=0755
+RestartKillSignal=15
+Wants=bluetooth.target
+After=system.slice basic.target network.target bluetooth.target sysinit.target systemd-journald.socket -.mount
+LoadState=loaded
+ActiveState=active
+FreezerState=running
+SubState=running
+UnitFileState=disabled
+StateChangeTimestamp=Thu 2026-05-21 23:56:41 EDT
+StateChangeTimestampMonotonic=9464220609
+StartLimitIntervalUSec=10s
+StartLimitBurst=5
+StartLimitAction=none
+
+=== D. CALYPSO JOURNAL — LAST 100 LINES ===
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "heading": 360
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: }
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_speed": 1.9,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_direction": 140,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "battery_level": 100,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "temperature": 0,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "roll": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "pitch": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "heading": 360
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: }
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_speed": 2.1,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_direction": 131,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "battery_level": 100,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "temperature": 0,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "roll": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "pitch": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "heading": 360
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: }
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_speed": 1.8,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_direction": 136,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "battery_level": 100,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "temperature": 0,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "roll": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "pitch": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "heading": 360
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: }
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_speed": 1.9,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_direction": 131,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "battery_level": 100,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "temperature": 0,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "roll": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "pitch": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "heading": 360
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: }
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_speed": 2.0,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_direction": 131,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "battery_level": 100,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "temperature": 0,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "roll": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "pitch": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "heading": 360
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: }
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_speed": 2.0,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "wind_direction": 126,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "battery_level": 100,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "temperature": 0,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "roll": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "pitch": -90,
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]:   "heading": 360
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: }2026-05-22 00:02:14,722 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.199114857512855}, {"path": "environment.wind.speedApparent", "value": 2.0}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:14,728 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.199114857512855}, {"path": "environment.wind.speedApparent", "value": 2.0}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:14,734 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:14 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.199114857512855}, {"path": "environment.wind.speedApparent", "value": 1.9}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:15 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:15,106 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:15 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.2165681500327987}, {"path": "environment.wind.speedApparent", "value": 1.9}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:16 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:16,299 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:16 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.2165681500327987}, {"path": "environment.wind.speedApparent", "value": 1.8}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:16 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:16,301 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:16 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.321287905152458}, {"path": "environment.wind.speedApparent", "value": 1.8}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:18 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:18,684 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:18 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.356194490192345}, {"path": "environment.wind.speedApparent", "value": 1.8}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:18 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:18,688 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:18 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.356194490192345}, {"path": "environment.wind.speedApparent", "value": 1.7}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:18 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:18,691 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:18 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.356194490192345}, {"path": "environment.wind.speedApparent", "value": 1.7}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:18 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:18,695 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:18 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.356194490192345}, {"path": "environment.wind.speedApparent", "value": 1.7}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:19,280 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.426007660272118}, {"path": "environment.wind.speedApparent", "value": 1.6}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:19,284 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.443460952792061}, {"path": "environment.wind.speedApparent", "value": 1.5}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:19,287 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.6179938779914944}, {"path": "environment.wind.speedApparent", "value": 1.4}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:19,291 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.6179938779914944}, {"path": "environment.wind.speedApparent", "value": 1.3}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:19,294 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.6179938779914944}, {"path": "environment.wind.speedApparent", "value": 1.2}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:19 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:19,295 [calypso_anemometer.engine] INFO    : Processed readings: 1175
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:20,474 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.6179938779914944}, {"path": "environment.wind.speedApparent", "value": 1.2}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:20,672 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.5656340004316647}, {"path": "environment.wind.speedApparent", "value": 1.1}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:20,678 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.5132741228718345}, {"path": "environment.wind.speedApparent", "value": 1.2}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:20,681 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.478367537831948}, {"path": "environment.wind.speedApparent", "value": 1.2}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:20,683 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:20 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.443460952792061}, {"path": "environment.wind.speedApparent", "value": 1.2}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:21 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:21,866 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:21 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.3387411976724013}, {"path": "environment.wind.speedApparent", "value": 1.2}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+May 22 00:02:21 MidnightRider calypso-anemometer[61896]: 2026-05-22 00:02:21,869 [calypso_anemometer.telemetry.network] INFO    : Sending message to udp://localhost:4122
+May 22 00:02:21 MidnightRider calypso-anemometer[61896]: {"updates": [{"$source": "calypso-up10", "values": [{"path": "environment.outside.temperature", "value": 273.15}, {"path": "environment.wind.angleApparent", "value": 2.3387411976724013}, {"path": "environment.wind.speedApparent", "value": 1.2}, {"path": "navigation.attitude.roll", "value": -1.5707963267948966}, {"path": "navigation.attitude.pitch", "value": -1.5707963267948966}, {"path": "navigation.attitude.yaw", "value": 6.283185307179586}, {"path": "navigation.headingMagnetic", "value": 6.283185307179586}, {"path": "electrical.batteries.99.name", "value": "Calypso UP10"}, {"path": "electrical.batteries.99.location", "value": "Mast"}, {"path": "electrical.batteries.99.capacity.stateOfCharge", "value": 1.0}]}]}
+
+=== E. BLUETOOTH DAEMON JOURNAL — LAST 40 ===
+May 21 23:55:48 MidnightRider systemd[1]: Stopping bluetooth.service - Bluetooth service...
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Endpoint unregistered: sender=:1.649 path=/MediaEndpoint/A2DPSource/aptx_ll_duplex_0
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Endpoint unregistered: sender=:1.649 path=/MediaEndpoint/A2DPSource/faststream
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Endpoint unregistered: sender=:1.649 path=/MediaEndpoint/A2DPSource/faststream_duplex
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Endpoint unregistered: sender=:1.649 path=/MediaEndpoint/A2DPSink/opus_05
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Endpoint unregistered: sender=:1.649 path=/MediaEndpoint/A2DPSource/opus_05
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Endpoint unregistered: sender=:1.649 path=/MediaEndpoint/A2DPSink/opus_05_duplex
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Endpoint unregistered: sender=:1.649 path=/MediaEndpoint/A2DPSource/opus_05_duplex
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Battery Provider Manager destroyed
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Stopping SDP server
+May 21 23:55:48 MidnightRider bluetoothd[37473]: Exit
+May 21 23:55:48 MidnightRider systemd[1]: bluetooth.service: Deactivated successfully.
+May 21 23:55:48 MidnightRider systemd[1]: Stopped bluetooth.service - Bluetooth service.
+May 21 23:55:48 MidnightRider systemd[1]: bluetooth.service: Consumed 3.106s CPU time.
+May 21 23:55:48 MidnightRider systemd[1]: Starting bluetooth.service - Bluetooth service...
+May 21 23:55:48 MidnightRider (uetoothd)[61169]: bluetooth.service: ConfigurationDirectory 'bluetooth' already exists but the mode is different. (File system: 755 ConfigurationDirectoryMode: 555)
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Bluetooth daemon 5.82
+May 21 23:55:48 MidnightRider systemd[1]: Started bluetooth.service - Bluetooth service.
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Starting SDP server
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Bluetooth management interface 1.23 initialized
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Battery Provider Manager created
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/ldac
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSink/aptx_hd
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/aptx_hd
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSink/aptx
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/aptx
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSink/opus_g
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/opus_g
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSink/sbc
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/sbc
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/aptx_ll_1
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/aptx_ll_0
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/aptx_ll_duplex_1
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/aptx_ll_duplex_0
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/faststream
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/faststream_duplex
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSink/opus_05
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/opus_05
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSink/opus_05_duplex
+May 21 23:55:48 MidnightRider bluetoothd[61169]: Endpoint registered: sender=:1.649 path=/MediaEndpoint/A2DPSource/opus_05_duplex
+
+=== F. BLUETOOTHCTL KNOWN DEVICES ===
+Device F8:5F:12:9D:D2:EE ULTRASONIC
+
+=== G. CALYPSO DEVICE INFO ===
+Device F8:5F:12:9D:D2:EE (random)
+	Name: ULTRASONIC
+	Alias: ULTRASONIC
+	Paired: no
+	Bonded: no
+	Trusted: yes
+	Blocked: no
+	Connected: no
+	LegacyPairing: no
+	UUID: Generic Access Profile    (00001800-0000-1000-8000-00805f9b34fb)
+	UUID: Generic Attribute Profile (00001801-0000-1000-8000-00805f9b34fb)
+	UUID: Device Information        (0000180a-0000-1000-8000-00805f9b34fb)
+	UUID: Heart Rate                (0000180d-0000-1000-8000-00805f9b34fb)
+	UUID: Battery Service           (0000180f-0000-1000-8000-00805f9b34fb)
+	UUID: Environmental Sensing     (0000181a-0000-1000-8000-00805f9b34fb)
+	UUID: Nordic Semiconductor AS.. (0000fe59-0000-1000-8000-00805f9b34fb)
+	UUID: Nordic UART Service       (6e400001-b5a3-f393-e0a9-e50e24dcca9e)
+	UUID: Vendor specific           (8ec90001-f315-4f60-9fb8-838830daea50)
+
+=== H. PROCESSES USING BLUETOOTH ===
+aneto      60289  0.0  0.1  19576 12116 ?        Ss   May21   0:00 /usr/bin/python3 /home/aneto/calypso_filter_proxy.py
+root       61169  0.0  0.0  13680  6556 ?        Ss   May21   0:00 /usr/libexec/bluetooth/bluetoothd
+aneto      61896  0.2  0.3  40492 26228 ?        Ss   May21   0:02 /usr/bin/python3 /home/aneto/.local/bin/calypso-anemometer read --subscribe --ble-address=F8:5F:12:9D:D2:EE --rate=hz_8 --target=udp+signalk+delta://localhost:4122
+
+=== I. HCI0 STATUS ===
+hci0:	Type: Primary  Bus: UART
+	BD Address: D8:3A:DD:F1:26:B7  ACL MTU: 1021:8  SCO MTU: 64:1
+	UP RUNNING 
+	RX bytes:1518142 acl:24089 sco:0 events:27861 errors:0
+	TX bytes:231243 acl:2369 sco:0 commands:7895 errors:0
+	Features: 0xbf 0xfe 0xcf 0xfe 0xdb 0xff 0x7b 0x87
+	Packet type: DM1 DM3 DM5 DH1 DH3 DH5 HV1 HV2 HV3 
+	Link policy: RSWITCH SNIFF 
+	Link mode: PERIPHERAL ACCEPT 
+	Name: 'MidnightRider'
+	Class: 0x6c0000
+	Service Classes: Rendering, Capturing, Audio, Telephony
+	Device Class: Miscellaneous, 
+	HCI Version: 5.0 (0x9)  Revision: 0x17e
+	LMP Version: 5.0 (0x9)  Subversion: 0x6119
+	Manufacturer: Cypress Semiconductor (305)
+
+
+Connections:
+
+=== J. CURRENT WIND DATA ===
+NO WIND DATA

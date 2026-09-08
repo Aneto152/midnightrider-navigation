@@ -11,7 +11,7 @@ Complete reference guide for the Midnight Rider navigation system.
 - **[CONTRIBUTING.md](../CONTRIBUTING.md)** — How to contribute
 
 ### System Architecture
-- **[ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md](ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md)** — Full system design
+- **[docs/ARCHITECTURE-MASTER.md](docs/ARCHITECTURE-MASTER.md)** — Full system design
 - **[System Summary](SYSTEM-SUMMARY.md)** — High-level overview
 
 ---
@@ -24,10 +24,34 @@ Complete reference guide for the Midnight Rider navigation system.
 |--------|-----------|-------------------|
 | **Unicore UM982** | [HARDWARE/UM982-GNSS-DATASHEET.md](HARDWARE/UM982-GNSS-DATASHEET.md) | [INTEGRATION/UM982-INTEGRATION-GUIDE.md](INTEGRATION/UM982-INTEGRATION-GUIDE.md) |
 | **WIT WT901BLECL** | [HARDWARE/WIT-WT901BLECL-DATASHEET.md](HARDWARE/WIT-WT901BLECL-DATASHEET.md) | [INTEGRATION/WIT-INTEGRATION-GUIDE.md](INTEGRATION/WIT-INTEGRATION-GUIDE.md) |
-| **Calypso UP10** | [HARDWARE/CALYPSO-UP10-DATASHEET.md](HARDWARE/CALYPSO-UP10-DATASHEET.md) | [INTEGRATION/CALYPSO-INTEGRATION-GUIDE.md](INTEGRATION/CALYPSO-INTEGRATION-GUIDE.md) |
+| **Calypso UP10** | [HARDWARE/CALYPSO-UP10-DATASHEET.md](HARDWARE/CALYPSO-UP10-DATASHEET.md) | [INTEGRATION/CALYPSO-UP10-INTEGRATION-GUIDE.md](INTEGRATION/CALYPSO-UP10-INTEGRATION-GUIDE.md) |
 | **SOK 12V 100Ah** | [HARDWARE/SOK-BMS-BLE-PROTOCOL.md](HARDWARE/SOK-BMS-BLE-PROTOCOL.md) | [INTEGRATION/SOK-BMS-INTEGRATION.md](INTEGRATION/SOK-BMS-INTEGRATION.md) |
-| **Vulcan 7 FS** | [HARDWARE/VULCAN-7-FS-DATASHEET.md](HARDWARE/VULCAN-7-FS-DATASHEET.md) | [INTEGRATION/VULCAN-SIGNALK-INTEGRATION.md](INTEGRATION/VULCAN-SIGNALK-INTEGRATION.md) |
+| **Vulcan 7 FS (×2)** | [HARDWARE/AIRMAR-DST810-DATASHEET.md — Loch + sonde + temp eau (N2K)
+- `VULCAN-7-FS-DATASHEET.md`](HARDWARE/VULCAN-7-FS-DATASHEET.md) | [INTEGRATION/VULCAN-SIGNALK-INTEGRATION.md](INTEGRATION/VULCAN-SIGNALK-INTEGRATION.md) |
 | **Raspberry Pi 4** | [HARDWARE/RASPBERRY-PI4-DATASHEET.md](HARDWARE/RASPBERRY-PI4-DATASHEET.md) | — |
+| **YDNU-02 Gateway** | [HARDWARE/YDNU-02-DATASHEET.md](HARDWARE/YDNU-02-DATASHEET.md) | [INTEGRATION/YDNU-02-INTEGRATION-GUIDE.md](INTEGRATION/YDNU-02-INTEGRATION-GUIDE.md) |
+| **YDBC-05 Barometer** | [HARDWARE/YDBC-05-DATASHEET.md](HARDWARE/YDBC-05-DATASHEET.md) | [INTEGRATION/YDBC-05-INTEGRATION-GUIDE.md](INTEGRATION/YDBC-05-INTEGRATION-GUIDE.md) |
+| **B&G WS320** | [HARDWARE/BG-WS320-DATASHEET.md](HARDWARE/BG-WS320-DATASHEET.md) | [INTEGRATION/WS320-N2K-INTEGRATION-GUIDE.md](INTEGRATION/WS320-N2K-INTEGRATION-GUIDE.md) |
+| **AIS700 Class B** | [HARDWARE/AIS700-DATASHEET.md](HARDWARE/AIS700-DATASHEET.md) | [INTEGRATION/AIS700-INTEGRATION-GUIDE.md](INTEGRATION/AIS700-INTEGRATION-GUIDE.md) |
+
+---
+
+## 🌐 N2K Network Architecture (SSOT)
+
+> **📌 Single Source of Truth** for NMEA 2000 bus design, topology, and system PGN flows.
+
+- **[N2K-NETWORK-ARCHITECTURE.md](INTEGRATION/N2K-NETWORK-ARCHITECTURE.md)** — Complete system-level reference
+  - Network topology (7 devices, 7 LEN / 50 max)
+  - PGN flow matrix (N2K ↔ Signal K)
+  - YDNU-02 bridge configuration
+  - Data source priorities
+  - Failure modes & troubleshooting
+
+- **[SK-TO-N2K-BRIDGE.md](INTEGRATION/SK-TO-N2K-BRIDGE.md)** — Signal K → NMEA 2000 plugin details
+  - signalk-to-nmea2000 plugin (v2.24.0, Plugin ID: `sk-to-nmea2000`)
+  - 7 active conversions (TRUE_HEADING, WINDv2, WIND_TRUE_GROUND, WIND_TRUE, ATTITUDE, LEEWAY, SetDrift)
+  - Heading & wind data flows (critical paths)
+  - Plugin configuration & troubleshooting
 
 ---
 
@@ -44,13 +68,21 @@ Complete reference guide for the Midnight Rider navigation system.
 | **Scripts Catalog** | [SOFTWARE/SCRIPTS-CATALOG.md](SOFTWARE/SCRIPTS-CATALOG.md) |
 | **Wave Analyzer v1.1** | [SOFTWARE/WAVE-ANALYZER-V1.1-GUIDE.md](SOFTWARE/WAVE-ANALYZER-V1.1-GUIDE.md) |
 
-### Race Reporting (Media Man)
+### Race Reporting (MediaMan)
 
-- **[WHATSAPP_REPORTER.md](WHATSAPP_REPORTER.md)** — Media Man agent documentation
-  - WhatsApp group messaging
-  - Message templates
-  - Queue & offline mode
-  - Testing procedures
+- **[TELEGRAM-REPORTER-INTEGRATION-GUIDE.md](INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md)** — Telegram outbound reporter (foundation phase)
+  - DRY-RUN validated, production blocked
+  - SQLite delivery state machine
+  - One-way outbound only (no inbound)
+  - Setup & activation procedures
+
+- **[docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md](DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md)** — Historical DRY_RUN decision and boundaries
+  - Offline orchestration test scope
+  - Real MCP-to-InfluxDB runtime E2E status
+  - Fact completeness contract (D1-D2)
+  - Timestamp and bounded-skew strategy (R1e)
+  - Legacy sender fallback and fail-closed validation (D3)
+  - Logging and metadata boundaries
 
 ---
 
@@ -66,6 +98,9 @@ Complete step-by-step integration for each hardware component:
 | **SOK Battery BMS** | [INTEGRATION/SOK-BMS-INTEGRATION.md](INTEGRATION/SOK-BMS-INTEGRATION.md) |
 | **Vulcan 7 FS MFD** | [INTEGRATION/VULCAN-SIGNALK-INTEGRATION.md](INTEGRATION/VULCAN-SIGNALK-INTEGRATION.md) |
 | **YDNU-02 Gateway** | [INTEGRATION/YDNU-02-INTEGRATION-GUIDE.md](INTEGRATION/YDNU-02-INTEGRATION-GUIDE.md) |
+| **YDBC-05 Barometer** | [INTEGRATION/YDBC-05-INTEGRATION-GUIDE.md](INTEGRATION/YDBC-05-INTEGRATION-GUIDE.md) |
+| **WS320 N2K** | [INTEGRATION/WS320-N2K-INTEGRATION-GUIDE.md](INTEGRATION/WS320-N2K-INTEGRATION-GUIDE.md) |
+| **AIS700 N2K** | [INTEGRATION/AIS700-INTEGRATION-GUIDE.md](INTEGRATION/AIS700-INTEGRATION-GUIDE.md) |
 
 ---
 
@@ -112,6 +147,46 @@ Alert categories:
 - **Crew:** Watch duration, rest, fatigue tracking
 
 ---
+
+
+
+---
+
+
+---
+
+## 🌐 Portal (port 8888)
+
+Main web interface — serves HTML pages and proxies API calls.
+
+| File | Route | Description |
+|------|-------|-------------|
+| **[portal/README.md](../portal/README.md)** | — | Portal documentation |
+| `portal/server.py` | — | HTTP server: threaded, proxy, security |
+| `portal/index.html` | `/` | Dashboard grid |
+| `portal/viewer.html` | `/viewer.html?dashboard=X` | Grafana iframe |
+| `portal/reporter.html` | `/reporter` | Family flash generator |
+| `portal/static/css/night-mode.css` | `/static/css/night-mode.css` | Shared CSS |
+
+## ⚙️ System Configuration Backup
+
+Reference copies of all RPi system configuration files.
+
+| File | Live path | Purpose |
+|------|-----------|---------|
+| **[config/README.md](../config/README.md)** | — | Inventory + sync/restore procedures |
+| `config/docker-daemon.json` | `/etc/docker/daemon.json` | Docker data root |
+| `config/grafana-custom.ini` | Docker volume | Grafana: iframes + 1s refresh |
+| `config/signalk-package.json` | `.signalk/package.json` | Installed SK plugins |
+| `config/signalk-to-influxdb2.json` | SK plugin-config/ | InfluxDB config (token via env) |
+| `config/ufw-rules.txt` | Reference only | Firewall rules snapshot |
+| `config/signalk/settings-sanitized.json` | `.signalk/settings.json` | SK settings (sanitized) |
+| `config/system/avahi-daemon.conf` | `/etc/avahi/avahi-daemon.conf` | mDNS → midnightrider.local |
+| `config/system/dhcpcd.conf` | `/etc/dhcpcd.conf` | Static IP on eth0 |
+| `config/system/hostname` | `/etc/hostname` | Hostname: midnightrider |
+| `config/system/hosts` | `/etc/hosts` | Local DNS |
+| `config/system/rfkill-wifi-block.sh` | `/usr/local/bin/` | Disable WiFi at boot |
+| `config/system/90-NM-*.yaml` | NetworkManager/ | Static IP profile |
 
 ## 🔐 Security & Configuration
 
@@ -168,10 +243,9 @@ Alert categories:
 ```
 docs/
 ├── INDEX.md (this file)
-├── ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md
+├── docs/ARCHITECTURE-MASTER.md
 ├── SYSTEM-SUMMARY.md
 ├── SYSTEM-CHECKLIST.md
-├── WHATSAPP_REPORTER.md
 ├── HARDWARE/
 │   ├── UM982-GNSS-DATASHEET.md
 │   ├── WIT-WT901BLECL-DATASHEET.md
@@ -208,10 +282,27 @@ docs/
 1. **New to the project?** Start with [README.md](../README.md)
 2. **Setting up hardware?** Go to [INTEGRATION/](INTEGRATION/)
 3. **Running the system?** Check [OPERATIONS/](OPERATIONS/)
-4. **Understanding architecture?** Read [ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md](ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md)
+4. **Understanding architecture?** Read [docs/ARCHITECTURE-MASTER.md](docs/ARCHITECTURE-MASTER.md)
 5. **Need help?** See [OPERATIONS/TROUBLESHOOTING.md](OPERATIONS/TROUBLESHOOTING.md)
 
 ---
 
-**Last updated:** 2026-05-12  
-**Status:** Production-ready for Block Island Race 2026 (May 22)
+**Last updated:** 2026-06-15  
+**Status:** ✅ Production v1.0 — All phases A-E complete, SSOT enforced
+
+---
+
+## 🧭 AIS Competitor Tracker
+
+| File | Role |
+|------|------|
+| **[ais/README.md](../ais/README.md)** | Module documentation |
+| `ais/ais_lib.py` | Math: haversine, bearing, TWA, VMG, delta, color |
+| `ais/competitors_db.py` | CompetitorDB: load/enrich/search, TTL 5min |
+| `ais/ais_watch.py` | Daemon: SK → InfluxDB every 30s |
+| `ais/server_handlers.py` | API: `/api/competitors` + `/api/fleet_db` |
+
+**| `ais/tracker.html` | Live competitor tracker UI — accessible at `/ais/` on portal |
+| `ais/fleet_db.html` | Fleet database browser — accessible at `/ais/fleet_db` on portal |
+
+Unit tests:** `tests/test_ais_lib.py` (34) · `tests/test_competitors_db.py` (23) · `tests/test_server_handlers.py` (18) · `tests/test_ais_html.py` (35) — **110 total**

@@ -1,0 +1,2 @@
+_time,mmsi,vessel_name,mark_id,bearing_from_self_deg,distance_nm,sog_kts,cog_deg,twa_deg,vmg_wind_kts,vmg_mark_kts
+2026-07-31T18:12:00Z,338042460,Example_Vessel,mark1,045.5,2.35,8.5,090.0,035.5,4.2,3.1

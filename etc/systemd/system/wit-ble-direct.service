@@ -1,0 +1,34 @@
+[Unit]
+Description=WIT WT901BLECL IMU — BLE Quaternion Driver (unified daemon)
+After=network.target bluetooth.target
+Wants=bluetooth.target
+Documentation=See ble/wit-ble-direct.py
+
+[Service]
+Type=simple
+User=aneto
+WorkingDirectory=/home/aneto/midnightrider-navigation
+EnvironmentFile=-/home/aneto/midnightrider-navigation/.env
+StartLimitBurst=0
+StartLimitIntervalSec=0
+# Service always restarts — no start-limit-hit when WIT is off at boot
+
+# Prevent BLE conflicts: kill any zombie instances before start
+ExecStartPre=-/bin/bash -c 'pkill -SIGKILL -f wit-ble-direct.py 2>/dev/null; sleep 1; true'
+ExecStartPre=-/bin/rm -f /tmp/wit-ble-direct.pid
+
+ExecStart=/usr/bin/python3 /home/aneto/midnightrider-navigation/ble/wit-ble-direct.py
+
+# Cleanup on stop
+ExecStopPost=-/bin/rm -f /tmp/wit-ble-direct.pid
+ExecStopPost=-/bin/bash -c 'pkill -SIGKILL -f wit-ble-direct.py 2>/dev/null; true'
+
+# systemd handles L3 recovery (script exits after repeated BLE failures)
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=wit-ble-direct
+
+[Install]
+WantedBy=multi-user.target

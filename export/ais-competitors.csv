@@ -1,0 +1,115 @@
+id,boat_name,skipper,vessel_make,vessel_model,mmsi,mmsi_confidence,phrf_lis,phrf_orc_aph,events,active,race_class
+c001,Abilyn,Josh Reisberg,J/Boats,J/120,368042460,verified,39.0,,"Block Island Race Week 2026,ALIR2026",YES,Double-Handed
+c002,Alibi,John Sartorius,J/Boats,J/120,366821680,probable,,508.6,Block Island Race Week 2026,YES,
+c003,ARMA,Dubois/Eaves/Krow,Grand Prix,GP42,338447497,probable,-39.0,,Block Island Race Week 2026,YES,
+c004,BANTER,Matthew Gimple,Andrews,A40RC,368317270,probable,,506.8,Block Island Race Week 2026,YES,
+c005,Blitzen,John Storck Jr,J/Boats,J/130,368234250,probable,33.0,,Block Island Race Week 2026,YES,
+c006,Blitzkrieg,Matthew Schaedler,J/Boats,J/122,,not_found,,,Block Island Race Week 2026,NO,
+c007,Blue Skies,William Gunther,Alden,Alden Skye 50,,not_found,,527.5,Block Island Race Week 2026,NO,
+c008,Cathexis,Bryan & Kara Schapperle,X-Yachts,X-38,338249654,verified,81.0,,Block Island Race Week 2026,YES,
+c009,Celeritas,William Beery,Soverel,Soverel 33,338407434,probable,,,Block Island Race Week 2026,YES,
+c010,Charlotte,Richard West,J/Boats,J/120,,not_found,51.0,,Block Island Race Week 2026,NO,
+c011,Christopher Dragon XII,Linda & Andrew Weiss,Italia Yachts,Italia 11.98,338324718,probable,45.0,526.2,Block Island Race Week 2026,YES,
+c012,Co-Conspirator,Matt Roleke & Trace Dittenhofer,J/Boats,J/33,338507533,verified,78.0,,Block Island Race Week 2026,YES,
+c013,Cool Breeze,USCGA,Mills,Mills 43,338124724,probable,,466.5,Block Island Race Week 2026,YES,
+c014,Cougar,Leonard Sitar,J/Boats,J/160,,not_found,,464.2,Block Island Race Week 2026,NO,
+c015,Dire Wolf,Constantine Baris,J/Boats,J/122,368257390,probable,,508.4,Block Island Race Week 2026,YES,
+c016,DUET,Andrian Lubimov,J/Boats,J/120,368367990,probable,45.0,,"Block Island Race Week 2026,LIS Weekend Race 2026-06-21,ALIR2026",YES,Spinnaker ToD/ToT
+c017,Eagle,Steven Levy,J/Boats,J/121,368040250,probable,,,"Block Island Race Week 2026,LIS Weekend Race 2026-06-21",YES,
+c018,Eclipse,Marc Berkowitz,Sabre,Sabre 386,338189907,probable,,,Block Island Race Week 2026,YES,
+c019,Elan,US Coast Guard Academy,Nautor,Swan 53,368298420,probable,60.0,,Block Island Race Week 2026,YES,
+c020,Eventyr,Michael Kohler,J/Boats,J/99,368327540,probable,69.0,,Block Island Race Week 2026,YES,
+c021,Fireball,Bill & Jackie Baxter,J/Boats,J/111,338349417,probable,24.0,,Block Island Race Week 2026,YES,
+c022,Flying Lady,Phillip Dickey,Nautor,Swan 46 Mk 1,367481990,probable,63.0,,Block Island Race Week 2026,YES,
+c023,Fortissimo,USMMA,Ionic,IC37,368372710,probable,-15.0,,Block Island Race Week 2026,YES,
+c024,FULL TILT,Jonathan Thomson,J/Boats,J/109,338173639,probable,69.0,,Block Island Race Week 2026,YES,
+c025,Good News,Macrae Sykes,J/Boats,J/125,368131030,probable,,,Block Island Race Week 2026,YES,
+c026,Groupe 5,NEKA Sailing,Beneteau,Figaro 2,368255480,probable,,523.5,Block Island Race Week 2026,YES,
+c027,Habiru,Steve Losik,J/Boats,J/121,338413878,verified,15.0,,"Block Island Race Week 2026,ALIR2026",YES,
+c028,Hunter,USMMA,Mills,Mills 41,,not_found,-48.0,,Block Island Race Week 2026,NO,
+c029,Imagine,Matt Blake,X-Yachts,X-38,338153506,probable,90.0,,"Block Island Race Week 2026,ALIR2026",YES,
+c030,Inisharon,Jim Murphy,Lyman Morse,Seguin 49,367517840,verified,,537.8,Block Island Race Week 2026,YES,
+c031,In Theory,Peter McWhinnie,JPK,JPK 1080,368070090,verified,,528.2,Block Island Race Week 2026,YES,
+c032,Katara56,Daniel Griffin,X-Yachts,X-Yacht 56,,not_found,-18.0,,"Block Island Race Week 2026,ALIR2026",NO,
+c033,Kent Racing,Tim Kent,IMOCA/Open,Class 40,368198940,verified,,,Block Island Race Week 2026,YES,
+c034,Lioness,Lion Sailing Sailmakers,Davidson,Sydney 38,338160808,probable,24.0,,"Block Island Race Week 2026,ALIR2026",YES,
+c035,Loki,David Rosow,J/Boats,J/122,368006960,probable,,511.3,Block Island Race Week 2026,YES,
+c036,Lucky,Bryon Ehrhart,Juan K,Juan K 88,368277850,probable,,,Block Island Race Week 2026,YES,
+c037,Madison,Brian Spears,J/Boats,J/120,367704280,probable,42.0,,Block Island Race Week 2026,YES,
+c038,Masquerade,Andrew Burton,Baltic Yachts,Baltic 47,368036080,probable,,,Block Island Race Week 2026,YES,
+c039,Max,Moritz Hilf,Structures,Pogo 50,368420440,probable,-18.0,,"Block Island Race Week 2026,ALIR2026",YES,
+c041,Monhegan,Martinus van Breems,J/Boats,J/44,368258390,probable,,,Block Island Race Week 2026,YES,
+c042,MXM,Roman Brushtein,Custom,Sailboat 36,368447410,verified,123.0,,Block Island Race Week 2026,YES,
+c043,Oakcliff Farr 40 Blue,Oakcliff Sailing,Farr,Farr 40,,not_found,-6.0,,Block Island Race Week 2026,NO,
+c044,Oakcliff Farr 40 Red,Oakcliff Sailing,Farr,Farr 40,,not_found,-6.0,,Block Island Race Week 2026,NO,
+c045,OC-86,Oakcliff Sailing,RP,RP 86,,not_found,,322.3,Block Island Race Week 2026,NO,
+c046,Palantir 5,June & Amanda Kendrick,J/Boats,J/44,367559290,verified,,497.9,Block Island Race Week 2026,YES,
+c047,Phantom,Chris Schoen,X-Yachts,XP 44,368077430,probable,87.0,,"Block Island Race Week 2026,ALIR2026",YES,
+c048,Pterodactyl,Scott Weisman,Custom,Custom 45,368253380,verified,,,Block Island Race Week 2026,YES,
+c049,Quickdraw,Martin Zonnenberg,J/Boats,J/111,,not_found,,511.2,Block Island Race Week 2026,NO,
+c050,Ragana,Darius Peleda,Cape Fear,Cape Fear 38R,367613230,probable,,523.2,Block Island Race Week 2026,YES,
+c051,Rocksteady,Baudoin Lorans,X-Yachts,XP 44,368255120,probable,,480.8,Block Island Race Week 2026,YES,
+c052,Rumba,Ove Haxthausen,J/Boats,J/133,368057260,probable,,,Block Island Race Week 2026,YES,
+c053,Save the Sound,Douglas McKeige,J/Boats,J/99,338535733,verified,,546.1,Block Island Race Week 2026,YES,
+c054,Scylla,Markus Lahrkamp,Dehler,Dehler 46,367328930,probable,15.0,,Block Island Race Week 2026,YES,
+c055,Skye,Ty Anderson,Farr,Farr 39,338497531,probable,,504.4,Block Island Race Week 2026,YES,
+c056,SqueeZeplay,Gregg Brinegar,Intensity,IMX 40,338334462,probable,,517.1,Block Island Race Week 2026,YES,
+c057,Stratos,Marcus Wunderlich,Jeanneau,Sun Fast 3300,368404820,probable,,,Block Island Race Week 2026,YES,
+c058,Summer Grace,Kevin Kelley,J/Boats,J/122,338147636,verified,27.0,,Block Island Race Week 2026,YES,
+c059,Sunny Side,Cary James,J/Boats,J/109,338187885,probable,66.0,,Block Island Race Week 2026,YES,
+c060,Tacktile,Jeffrey Wilson,Sabre,Sabre 42,338406561,verified,102.0,,Block Island Race Week 2026,YES,
+c061,Thin Man,Todd Aven & Todd Diffee,J/Boats,J/99,368114910,verified,72.0,,"Block Island Race Week 2026,LIS Weekend Race 2026-06-21,ALIR2026",YES,
+c062,Touch of Grey,Trevor Roach,J/Boats,J/121,368350350,probable,,490.4,Block Island Race Week 2026,YES,
+c063,Towhee,Paul Jennings,Custom,Cal 40,367775510,verified,120.0,,Block Island Race Week 2026,YES,
+c064,Velocity2,Kevin Marks,J/Boats,J/99,,not_found,,,Block Island Race Week 2026,NO,
+c065,Windfall,Shawn Bay,Beneteau,Beneteau 46.1,367685320,probable,93.0,,Block Island Race Week 2026,YES,
+c066,Wizard,Adam Zakka & Jonathan Krumeich,J/Boats,J/99,338169141,probable,,,Block Island Race Week 2026,YES,
+c067,Young American,Peter Becker & Adrien Blanc,J/Boats,J/105,338093016,probable,87.0,,Block Island Race Week 2026,YES,
+c068,Zelee,Lindsey Lind,JPK,JPK 1030,368453450,probable,,,Block Island Race Week 2026,YES,
+c069,Zig Zag,Andrew Clark,J/Boats,J/122,368384440,probable,,503.9,Block Island Race Week 2026,YES,
+c070,Deviation YCC,Iris Vogel,J/Boats,J/88,368358170,low,,,LIS Weekend Race 2026-06-21,YES,
+c071,El Diablo,Robert Fryer,Bolt,Bolt 37,338554674,probable,,,LIS Weekend Race 2026-06-21,YES,
+c072,First Rate,Marek Antkowiak,Tartan,Tartan 34-2,338442426,probable,138.0,,"LIS Weekend Race 2026-06-21,ALIR2026",YES,
+c073,Flying Circus,Stuart Markowitz,C&C,C&C 115,338562447,probable,,,LIS Weekend Race 2026-06-21,YES,
+c074,Impulse,Len Di Iorio,O'Day,O'Day 39,338193854,probable,138.0,,LIS Weekend Race 2026-06-21,YES,
+c075,Inessa II,Nikolas Grubecki,Jeanneau,Jeanneau 44,338509299,verified,,,LIS Weekend Race 2026-06-21,YES,
+c076,New Freedom,Michael Mullan,Catalina,Catalina 34,338501741,probable,,,LIS Weekend Race 2026-06-21,YES,
+c077,Palomino,Eugenio Silvestrini,C&C,C&C 37,338469505,verified,129.0,,"LIS Weekend Race 2026-06-21,ALIR2026",YES,
+c078,Sanguine,Steven Landy / Derek Soohoo,J/Boats,J/100,368387130,verified,,,LIS Weekend Race 2026-06-21,YES,
+c079,Tantara,Sam Boyer,Sparkman & Stephens,Custom 44,,not_found,,,LIS Weekend Race 2026-06-21,YES,
+c080,Tenebrae,William Ingraham,J/Boats,J/124,368034190,verified,,,LIS Weekend Race 2026-06-21,YES,
+c081,Cool Change,James Sheed,Hunter,39,,not_found,144,,ALIR2026,YES,Non-Spinnaker
+c082,Dolcezza,Neill Parker Jr,Hunter,Legend 37.5,,not_found,150,,ALIR2026,YES,Non-Spinnaker
+c084,Java,Marc Grill,Jeanneau,36.2 SO,,not_found,183,,ALIR2026,YES,Non-Spinnaker
+c085,MARA,Alexander Malochka,Pearson,39-2,,not_found,120.0,,ALIR2026,YES,Non-Spinnaker
+c087,Shooting Star,David Kingsbury,Peterson,34,,not_found,117,,ALIR2026,YES,Non-Spinnaker
+c088,Veronique,Bert Rubin de Cervens,Beneteau,First 345,,not_found,135,,ALIR2026,YES,Non-Spinnaker
+c089,YES 4X,Henryk Walerys,Beneteau,Oceanis 46.1,,not_found,135,,ALIR2026,YES,Non-Spinnaker
+c090,Beagle,Willets Meyer,J Boats,J/44,,not_found,,,ALIR2026,YES,Spinnaker ORC
+c091,Ohana,Ken Wisdom,Arcona,435 MkII,,not_found,,,ALIR2026,YES,Spinnaker ORC
+c092,Surface Tension,Lou Melillo / Mike Bermann,Beneteau,First 44.7,,not_found,,,ALIR2026,YES,Spinnaker ORC
+c093,ACTAEA,Michael M Cone,Alden,Bermuda 40,,not_found,153.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c094,Avalanche,Craig Albrecht / Alexis Gesualdo,Soto,40,,not_found,-33.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c095,Avatar,Janusz Kedzierski,Beneteau,First 42,,not_found,42.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c096,BETELGEUSE YCC,Ben Cohen,J Boats,J/36,,not_found,81.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c097,Crocodile,Scott Ward,Beneteau,First 50,,not_found,9.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c098,Elizabeth,Tom Hurter,Catalina,42,,not_found,111.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c099,Gup E,Nathaniel Beachum,J Boats,J/99,,not_found,72.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c103,MARIE,Paul Eliea,Tartan,372,,not_found,135.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c105,Mayhem,Mark May,German Frers,Frers 30,,not_found,132.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c106,Peggy-O,Pedro Escandon,Sabre,38,,not_found,129.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c108,Poseidon,Nico Martinez,Swan,45,,not_found,-24.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c109,Random,Robert Millstein,Sabre,362,,not_found,126.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c110,Ripple,Michael Colucci,S2,9.1,,not_found,135.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c111,Scarlett,David Wightman,J Boats,J/30,,not_found,147.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c112,The Rover,S. Steven Yang,Swan,44 MKII,,not_found,75.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c113,Tynaje,Daniel Fisher,Ohlson,38,,not_found,144.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c114,Valiant YCC,Stamford YC Juniors,J Boats,J/105,,not_found,75.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c115,Velocita,Marc De Souter,J Boats,J/109,,not_found,69.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c116,WANDERER,Stefano Basilico,Hanse,458,,not_found,60.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c117,Zammermoos,David Fass,ClubSwan,42,,not_found,-15.0,,ALIR2026,YES,Spinnaker ToD/ToT
+c118,Halve Maen,Walther van Stipriaan,Tartan,33,,not_found,156.0,,ALIR2026,YES,Double-Handed
+c120,Three Little Birds,Peter Malloy,Farrier,PT11 Trimaran,,not_found,-25,,ALIR2026,YES,Multihull
+c122,Nomad,Shane Haas,Hunter,41DS,,not_found,174.0,,ALIR2026,YES,Around Islands - Spinnaker
+c123,Kitli,Darshan Patel,Sabre,34-2,338072036,probable,156.0,,ALIR2026,YES,Non-Spinnaker
+c124,Yopo,Artur Jasinski,Contest,30,,not_found,222.0,,ALIR2026,NO,Non-Spinnaker

@@ -1,0 +1,32 @@
+{
+  "name": "signalk-heading-true-calculator",
+  "version": "1.0.0",
+  "description": "Derives navigation.headingTrue from headingMagnetic + magneticVariation",
+  "main": "signalk-heading-true-calculator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Midnight Rider Navigation",
+  "license": "MIT",
+  "signalkPlugin": {
+    "id": "signalk-heading-true-calculator",
+    "name": "True Heading Calculator",
+    "description": "Derives navigation.headingTrue from headingMagnetic + magneticVariation",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "debug": { "type": "boolean", "title": "Debug logging", "default": false },
+        "staleSecs": { "type": "number", "title": "Stale threshold (seconds)", "default": 10 },
+        "maxHMAgeSecs": { "type": "number", "title": "Max headingMagnetic age (seconds)", "default": 5 }
+      }
+    }
+  },
+  "keywords": [
+    "signalk",
+    "plugin",
+    "heading",
+    "magnetic",
+    "variation",
+    "navigation"
+  ]
+}

@@ -72,7 +72,7 @@ grafana-dashboards/
 ### Step 3: Test on iPad (5 min)
 
 1. Connect iPad to RPi WiFi AP: `MidnightRider`
-2. Open Safari: `http://192.168.1.1:3001` (or RPi IP)
+2. Open Safari: `http://midnightrider.local:3001` (or RPi IP)
 3. Click **COCKPIT** dashboard
 4. Verify:
    - Panels load without errors

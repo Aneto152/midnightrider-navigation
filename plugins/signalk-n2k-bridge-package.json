@@ -1,0 +1,14 @@
+{
+  "name": "signalk-n2k-bridge",
+  "version": "1.0.0",
+  "description": "Modular Signal K → NMEA 2000 bridge — P5 — Midnight Rider J/30",
+  "main": "signalk-n2k-bridge.js",
+  "author": "MidnightRider Navigation System",
+  "license": "MIT",
+  "keywords": ["signalk-node-server-plugin", "nmea2000", "n2k", "performance", "polar"],
+  "signalk-plugin": {
+    "id": "signalk-n2k-bridge",
+    "name": "N2K Bridge (P5)"
+  },
+  "dependencies": {}
+}

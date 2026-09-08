@@ -1,0 +1,7 @@
+Jun 21 15:14:22 MidnightRider signalk-server[1182]: POST /skServer/plugins/signalk-truewind-calculator/config 200 4.210 ms - 60
+Jun 21 15:14:22 MidnightRider signalk-server[1182]: POST /skServer/plugins/signalk-truewind-calculator/config 200 2.811 ms - 60
+Jun 21 15:14:22 MidnightRider signalk-server[1182]: POST /skServer/plugins/signalk-truewind-calculator/config 200 2.346 ms - 60
+Jun 21 15:14:23 MidnightRider signalk-server[1182]: POST /skServer/plugins/signalk-truewind-calculator/config 200 1.812 ms - 60
+Jun 21 15:14:30 MidnightRider signalk-server[1182]: POST /skServer/plugins/signalk-truewind-calculator/config 200 4.993 ms - 60
+Jun 21 15:14:32 MidnightRider signalk-server[1182]: POST /skServer/plugins/signalk-truewind-calculator/config 200 1.894 ms - 60
+Jun 21 15:15:03 MidnightRider signalk-server[1182]: POST /skServer/plugins/signalk-truewind-calculator/restart 404 1.432 ms - 192

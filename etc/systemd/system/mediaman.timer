@@ -1,0 +1,17 @@
+[Unit]
+Description=Midnight Rider MediaMan Timer (15-minute intervals)
+Documentation=file:///home/aneto/midnightrider-navigation/mediaman/README.md
+Requires=mediaman.service
+
+[Timer]
+# Run every 15 minutes
+OnBootSec=5min
+OnUnitActiveSec=15min
+
+# Randomize by up to 30 seconds to avoid thundering herd
+RandomizedDelaySec=30s
+
+Unit=mediaman.service
+
+[Install]
+WantedBy=timers.target
