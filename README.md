@@ -12,12 +12,13 @@
 **Midnight Rider** is a complete, self-contained navigation and race analytics system for sailboats:
 
 - **Real-time data collection** via Signal K (GNSS, IMU, instruments)
-- **Time-series storage** in InfluxDB
+- **Time-series storage** in InfluxDB (with Docker-internal secure authentication)
 - **Live dashboards** in Grafana (9 custom dashboards)
 - **AI race coaching** via Claude integration (MCP tools)
 - **WhatsApp race reporting** ("Media Man" agent for family & friends)
 - **Battery monitoring** for LiFePO4 via Bluetooth BLE
 - **Offline queue** with automatic reconnect
+- **Secure credential management** - tokens never exposed on command line
 
 Perfect for racing, cruising, or research.
 
