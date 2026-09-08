@@ -9,3 +9,20 @@
     "description": "Lexar safely unmounted; physical removal authorized"
   }
 ]
+[2026-09-08T14:08 EDT] FILE_MODIFY: tools/influx_powerbi_export/docker_provider.py
+[2026-09-08T14:08 EDT] SECURITY_CHECK: Concurrent stdout/stderr draining via selectors.DefaultSelector
+[2026-09-08T14:08 EDT] SECURITY_CHECK: Monotonic timeout covering full lifecycle (start+query+cleanup)
+[2026-09-08T14:08 EDT] SECURITY_CHECK: Process group termination with graceful→forceful escalation
+[2026-09-08T14:08 EDT] SECURITY_CHECK: No --token in docker compose exec command
+[2026-09-08T14:08 EDT] SECURITY_CHECK: No influx auth list in command
+[2026-09-08T14:08 EDT] SECURITY_CHECK: Compose file discovery validates repo root
+[2026-09-08T14:08 EDT] SECURITY_CHECK: Docker auth test before fallback selection
+[2026-09-08T14:08 EDT] SECURITY_CHECK: Token-file fallback uses environment only, not argv
+[2026-09-08T14:08 EDT] SECURITY_CHECK: Token file path not logged (category only)
+[2026-09-08T14:08 EDT] TEST_RUN: tests/test_docker_provider_hardening.py
+[2026-09-08T14:08 EDT] RESULT: 18/18 tests PASSED
+[2026-09-08T14:08 EDT] RESULT: Concurrent stream draining verified
+[2026-09-08T14:08 EDT] RESULT: Process cleanup verified
+[2026-09-08T14:08 EDT] RESULT: Auth method fallback verified
+[2026-09-08T14:08 EDT] RESULT: No token extraction detected
+[2026-09-08T14:08 EDT] RESULT: No token in argv verified

@@ -440,5 +440,65 @@
       "provider_initialized": true,
       "auth_test_passed": true
     }
-  }
+  },
+  "recent_tasks": [
+    {
+      "task": "influxdb-docker-internal-auth-hardening",
+      "baseline_commit": "622ef8d0fb7d614b2e3a25e71dfe43f321a91021",
+      "status": "COMPLETED",
+      "timestamp": "2026-09-08T18:11:55.227229+00:00",
+      "implementation": {
+        "phase_1_preserved_state": true,
+        "phase_2_concurrent_streaming": true,
+        "phase_3_monotonic_timeout": true,
+        "phase_4_compose_discovery": true,
+        "phase_5_provider_fallback": true,
+        "phase_6_query_command": true
+      },
+      "security_checks": {
+        "no_token_in_argv": true,
+        "no_auth_list_in_command": true,
+        "no_token_extraction": true,
+        "no_token_logging": true,
+        "docker_auth_first": true,
+        "fallback_only_on_failure": true,
+        "env_only_token_handling": true,
+        "usb_only_runtime": true
+      },
+      "auth_method_category": "DOCKER_INTERNAL_CLI_CONTEXT",
+      "fallback_auth_category": "TOKEN_FILE_FALLBACK",
+      "tests": {
+        "concurrent_stream_draining": 1,
+        "stderr_buffer_pressure": 1,
+        "timeout_during_stdout": 1,
+        "timeout_during_stderr": 1,
+        "process_group_cleanup": 2,
+        "command_sanitization": 2,
+        "auth_methods": 4,
+        "credential_security": 2,
+        "compose_discovery": 2,
+        "pipeline_integration": 2,
+        "total": 18,
+        "passed": 18
+      },
+      "files_modified": [
+        "tools/influx_powerbi_export/docker_provider.py",
+        "tests/test_docker_provider_hardening.py",
+        "docs/ARCHITECTURE-MASTER.md",
+        "docs/SYSTEM-SUMMARY.md",
+        "docs/DATA-SCHEMA-MASTER.md",
+        "docs/INDEX.md",
+        "docs/INTEGRATION/INFLUXDB-POWERBI-EXPORT-GUIDE.md",
+        "tools/influx_powerbi_export/README.md"
+      ],
+      "hardening_details": {
+        "concurrent_stream_handling": "selectors.DefaultSelector with concurrent stdout/stderr draining",
+        "timeout_mechanism": "time.monotonic() deadline covering startup+query+cleanup+child termination",
+        "process_cleanup": "SIGTERM\u2192wait(5)\u2192SIGKILL\u2192verify with start_new_session=True",
+        "compose_discovery": "walk upward from package root with repo-root validation",
+        "fallback_behavior": "Docker auth test first\u2192fallback only on failure\u2192env-only token",
+        "query_safety": "read-only Flux, no --token argv, no influx auth list, no credential extraction"
+      }
+    }
+  ]
 }

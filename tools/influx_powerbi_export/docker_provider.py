@@ -14,6 +14,9 @@ No tokens in:
 import os
 import subprocess
 import logging
+import time
+import selectors
+import signal
 from typing import Iterator, Optional, Tuple
 from pathlib import Path
 
@@ -87,12 +90,120 @@ class DockerInternalCliQueryProvider:
             flux_query
         ]
     
+    def _drain_concurrent_streams(self, process: subprocess.Popen, deadline: float) -> Tuple[list, str]:
+        """
+        Concurrently drain stdout and stderr to avoid deadlock.
+        Uses selectors for non-blocking I/O.
+        
+        Returns:
+            (stdout_lines, stderr_text) - all output drained
+        """
+        stdout_lines = []
+        stderr_lines = []
+        sel = selectors.DefaultSelector()
+        
+        # Register both pipes as ready-to-read
+        sel.register(process.stdout, selectors.EVENT_READ)
+        sel.register(process.stderr, selectors.EVENT_READ)
+        
+        try:
+            while True:
+                remaining = max(0, deadline - time.monotonic())
+                if remaining <= 0:
+                    raise TimeoutError(f"Stream draining timeout (deadline exceeded)")
+                
+                # Wait for either stream to have data, or timeout
+                events = sel.select(timeout=min(remaining, 0.1))
+                
+                if not events:
+                    # Check if process completed
+                    if process.poll() is not None:
+                        break
+                    continue
+                
+                # Process available streams
+                for key, mask in events:
+                    try:
+                        line = key.fileobj.readline()
+                        if line:
+                            if key.fileobj == process.stdout:
+                                stdout_lines.append(line.rstrip('\n'))
+                            elif key.fileobj == process.stderr:
+                                stderr_lines.append(line.rstrip('\n'))
+                        else:
+                            # EOF on this stream
+                            sel.unregister(key.fileobj)
+                    except IOError:
+                        # Stream closed
+                        sel.unregister(key.fileobj)
+                
+                # Check if both streams are closed
+                if not sel.get_map():
+                    break
+        
+        finally:
+            sel.close()
+        
+        # Read any remaining buffered data
+        if process.stdout:
+            remaining_out = process.stdout.read()
+            if remaining_out:
+                stdout_lines.extend(remaining_out.rstrip('\n').split('\n'))
+        if process.stderr:
+            remaining_err = process.stderr.read()
+            if remaining_err:
+                stderr_lines.extend(remaining_err.rstrip('\n').split('\n'))
+        
+        stderr_text = '\n'.join(stderr_lines)
+        return stdout_lines, stderr_text
+    
+    def _terminate_process_group(self, process: subprocess.Popen, timeout: int = 5) -> bool:
+        """
+        Cleanly terminate process group, escalate if necessary.
+        Returns True if process stopped, False if force-kill was needed.
+        """
+        if process.poll() is not None:
+            return True  # Already terminated
+        
+        try:
+            # Send SIGTERM to process group (on Unix)
+            if hasattr(signal, 'SIGTERM'):
+                os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+        except:
+            # Fallback: terminate single process
+            try:
+                process.terminate()
+            except:
+                pass
+        
+        # Wait for graceful termination
+        try:
+            process.wait(timeout=timeout)
+            logger.debug(f"Process {process.pid} terminated gracefully")
+            return True
+        except subprocess.TimeoutExpired:
+            pass
+        
+        # Force-kill if graceful termination failed
+        try:
+            if hasattr(signal, 'SIGKILL'):
+                os.killpg(os.getpgid(process.pid), signal.SIGKILL)
+            else:
+                process.kill()
+            process.wait(timeout=2)
+            logger.warning(f"Process {process.pid} force-killed")
+            return False
+        except:
+            logger.error(f"Failed to kill process {process.pid}")
+            return False
+    
     def query_flux(self, flux_query: str) -> Iterator[str]:
         """
         Execute read-only Flux query, stream annotated CSV output.
         
         Yields lines of CSV as they arrive from container.
-        Handles subprocess lifecycle, timeout, and stderr sanitization.
+        Handles subprocess lifecycle with true monotonic timeout,
+        concurrent stream draining, and process cleanup.
         
         Raises:
             DockerComposeError: If service not running or query fails
@@ -100,63 +211,68 @@ class DockerInternalCliQueryProvider:
         """
         cmd = self._build_docker_exec_cmd(flux_query)
         process = None
+        deadline = time.monotonic() + self.timeout
         
         try:
             logger.debug(f"Executing Flux query (timeout={self.timeout}s)")
             
-            process = subprocess.Popen(
-                cmd,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                text=True
-            )
+            # Start process in new session on Unix to handle group termination
+            popen_kwargs = {
+                'stdout': subprocess.PIPE,
+                'stderr': subprocess.PIPE,
+                'text': True,
+            }
+            if hasattr(os, 'setsid'):
+                popen_kwargs['preexec_fn'] = os.setsid
             
-            # Stream stdout line-by-line
-            for line in iter(process.stdout.readline, ''):
+            process = subprocess.Popen(cmd, **popen_kwargs)
+            
+            # Concurrently drain both stdout and stderr
+            stdout_lines, stderr_text = self._drain_concurrent_streams(process, deadline)
+            
+            # Wait for process completion with remaining timeout
+            remaining = max(0, deadline - time.monotonic())
+            try:
+                process.wait(timeout=remaining)
+            except subprocess.TimeoutExpired:
+                logger.error("Process still running after stream drain, terminating...")
+                self._terminate_process_group(process)
+                raise TimeoutError(f"Query timeout after {self.timeout}s")
+            
+            # Yield all stdout lines
+            for line in stdout_lines:
                 if line:
-                    yield line.rstrip('\n')
+                    yield line
             
-            # Wait for process completion
-            process.wait(timeout=self.timeout)
-            
+            # Check exit code
             if process.returncode != 0:
-                stderr_lines = []
-                if process.stderr:
-                    for line in process.stderr:
-                        stderr_lines.append(line.strip())
-                
-                # Sanitize stderr (no token extraction)
-                stderr_summary = " ".join(stderr_lines[:5])  # First 5 lines
+                # Sanitize stderr (no token extraction, first 5 lines max)
+                stderr_summary = " ".join(stderr_text.split('\n')[:5])
                 raise DockerComposeError(
                     f"Query failed (exit {process.returncode}): {stderr_summary[:200]}"
                 )
         
         except subprocess.TimeoutExpired:
+            logger.error("Query execution timeout")
             if process:
-                process.kill()
-                try:
-                    process.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    process.terminate()
+                self._terminate_process_group(process)
             raise TimeoutError(f"Query timeout after {self.timeout}s")
         
+        except TimeoutError:
+            # Re-raise timeout errors as-is
+            raise
+        
         except Exception as e:
+            # Cleanup on any other exception
             if process and process.poll() is None:
-                process.kill()
-                try:
-                    process.wait(timeout=5)
-                except:
-                    pass
+                self._terminate_process_group(process)
             raise
         
         finally:
-            # Ensure process cleanup
+            # Final safety: ensure no orphan process
             if process and process.poll() is None:
-                process.terminate()
-                try:
-                    process.wait(timeout=5)
-                except subprocess.TimeoutExpired:
-                    process.kill()
+                logger.warning("Process still running in finally block, force-terminating")
+                self._terminate_process_group(process, timeout=2)
     
     def test_auth(self) -> bool:
         """
@@ -232,7 +348,12 @@ def get_or_fallback_provider() -> DockerInternalCliQueryProvider:
     """
     try:
         provider = DockerInternalCliQueryProvider()
-        logger.info("Docker-internal CLI provider initialized")
+        
+        # Test authentication
+        if not provider.test_auth():
+            raise DockerComposeError("Docker provider auth test failed")
+        
+        logger.info("Docker-internal CLI provider initialized and authenticated")
         return provider
     
     except DockerComposeError as e:
@@ -241,16 +362,16 @@ def get_or_fallback_provider() -> DockerInternalCliQueryProvider:
         # Try token-file fallback
         token_file = Path.home() / ".config" / "midnightrider" / "influxdb-read-token"
         if token_file.exists():
-            logger.info(f"Attempting token-file fallback: {token_file}")
+            logger.info(f"Attempting token-file fallback")
             try:
                 token = token_file.read_text().strip()
                 if token:
                     # Set as env variable for subprocess, NOT in logs/argv
                     os.environ["INFLUX_TOKEN"] = token
-                    logger.info("Token loaded from fallback file (env only)")
+                    logger.info("AUTH_METHOD_CATEGORY: TOKEN_FILE_FALLBACK (env only)")
                     # Return Docker provider which will use env var
                     return DockerInternalCliQueryProvider()
             except Exception as e:
-                logger.error(f"Token-file fallback failed: {e}")
+                logger.error(f"Token-file fallback failed: {type(e).__name__}")
         
         raise

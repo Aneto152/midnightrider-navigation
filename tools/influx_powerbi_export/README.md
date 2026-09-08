@@ -305,8 +305,112 @@ Tests include:
 - No live InfluxDB access in tests
 - No local temp files created
 
+## Streaming Architecture (Docker-Internal CLI Hardening)
+
+### Concurrent Stream Draining
+
+The Docker-internal InfluxDB CLI provider uses **selectors-based concurrent draining** to safely handle large query results without deadlock:
+
+```python
+# Safe concurrent handling of stdout + stderr
+sel = selectors.DefaultSelector()
+sel.register(process.stdout, selectors.EVENT_READ)
+sel.register(process.stderr, selectors.EVENT_READ)
+
+while sel.get_map():
+    events = sel.select(timeout=deadline_remaining)
+    for key, _ in events:
+        if key.fileobj == process.stdout:
+            yield line  # Stream to caller
+        elif key.fileobj == process.stderr:
+            collect(line)  # Buffer for error reporting
+```
+
+**Benefits:**
+- ✅ No sequential read (all stdout, then stderr)
+- ✅ Stderr never blocks stdout streaming
+- ✅ Unbounded stderr buffer prevented
+- ✅ Full query results available for error reporting
+
+### Monotonic Timeout with Process Group Cleanup
+
+Query timeout covers the **entire lifecycle** using `time.monotonic()` deadline:
+
+1. **Startup** — Process launch
+2. **Query Execution** — All I/O with subprocess
+3. **Stream Draining** — Concurrent stdout/stderr read
+4. **Process Termination** — Graceful→forceful escalation
+
+Cleanup uses process groups (`start_new_session=True` on Unix):
+
+```python
+# SIGTERM → wait 5s → SIGKILL → verify
+os.killpg(os.getpgid(process.pid), signal.SIGTERM)  # Graceful
+process.wait(timeout=5)
+# → escalate to SIGKILL if timeout
+os.killpg(os.getpgid(process.pid), signal.SIGKILL)
+```
+
+**No orphan processes**: Full process group terminated together.
+
+### Command Safety (No Token Extraction)
+
+The Docker exec command is strictly read-only and never contains credentials:
+
+```bash
+docker compose -f <repo-validated-path> exec -T influxdb influx query --raw <flux>
+```
+
+**Rejected:**
+- `--token` flag
+- `influx auth list` command
+- Token environment output
+- Credential extraction
+
+**Allowed:**
+- Read-only Flux queries
+- Standard InfluxDB parameters (`--org`, `--host`)
+
+### Provider Fallback (Docker-First, Token-File Backup)
+
+**Primary (Default):**
+```python
+provider = DockerInternalCliQueryProvider()
+if not provider.test_auth():  # Minimal read-only auth test
+    raise  # Fail immediately if Docker unavailable
+```
+
+**Fallback (Only if Docker Fails):**
+```python
+# Docker failed; try token file
+token_file = Path.home() / ".config/midnightrider/influxdb-read-token"
+if token_file.exists():
+    token = token_file.read_text().strip()
+    os.environ["INFLUX_TOKEN"] = token  # Environment only, never logged
+```
+
+**Safeguards:**
+- ✅ Docker auth test ALWAYS runs first
+- ✅ Fallback triggered ONLY after failure
+- ✅ Token set as environment variable (not argv)
+- ✅ Token file path never logged (category only: `TOKEN_FILE_FALLBACK`)
+- ✅ No global environment pollution unless necessary
+
+### Signal K & InfluxDB Boundaries
+
+**Signal K Boundary** — Query provider does NOT:
+- Modify Signal K objects
+- Access Signal K self API
+- Cache credentials across sessions
+
+**InfluxDB Boundary** — Query provider only:
+- Streams read-only Flux results
+- Uses container-internal auth context
+- Reports errors without credential exposure
+- Handles large CSV outputs with concurrent draining
+
 ---
 
 **Last Updated:** 2026-09-08  
-**Version:** 1.0.0  
+**Version:** 1.1.0 (Hardened)  
 **Author:** Midnight Rider Navigation
