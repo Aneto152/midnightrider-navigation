@@ -1483,3 +1483,247 @@ Always published (water-referenced):
 > Note: At STW = 0 (dock/unavailable), water-ref output defaults to 0 for speed.
 > Angle calculations always work (STW factor is just a magnitude scale).
 > Values diverge from ground-ref once the boat is moving through water (STW > 0).
+
+---
+
+## APPENDIX A: Docker-Internal CLI Authentication (InfluxDB Power BI Exporter)
+
+**Date Added**: 2026-09-08
+**Status**: ✅ Implemented
+
+### A.1 Overview
+
+The InfluxDB Power BI exporter uses **Docker-internal CLI context** for authentication instead of token extraction. This approach:
+
+- ✅ Streams Flux queries directly from the running InfluxDB container
+- ✅ Never extracts, logs, or passes tokens via command-line arguments
+- ✅ Uses container-internal authentication context (`docker compose exec -T influxdb influx query`)
+- ✅ Provides secure token-file fallback (env-only, never in argv)
+- ✅ Streams results directly to USB without intermediate local storage
+
+### A.2 Architecture
+
+**Primary Path: Docker-Internal CLI**
+
+```
+┌──────────────────────────────────────┐
+│  InfluxClient (Python)               │
+│  └─ DockerInternalCliQueryProvider   │
+│     ├─ docker compose -f ... exec -T │
+│     ├─ influxdb influx query --raw   │
+│     └─ NO --token in argv            │
+│        NO influx auth list           │
+└──────────────────────────────────────┘
+        │
+        ▼
+┌──────────────────────────────────────┐
+│  Container (Running)                 │
+│  ├─ InfluxDB :8086 (auth context)    │
+│  └─ influx CLI (authenticated)       │
+└──────────────────────────────────────┘
+        │
+        ▼
+┌──────────────────────────────────────┐
+│  Subprocess Stream                   │
+│  └─ Annotated CSV (line-by-line)     │
+│     └─ USB Writer (no local storage) │
+└──────────────────────────────────────┘
+```
+
+**Fallback Path: Token File (if Docker unavailable)**
+
+- Path: `~/.config/midnightrider/influxdb-read-token`
+- Access: Environment variable only (never in logs/argv)
+- Trigger: Only if Docker provider fails to initialize
+
+### A.3 No Token Extraction
+
+The implementation **strictly avoids**:
+
+- ❌ `influx auth list` (never called)
+- ❌ `--token` flag in `docker compose exec` command
+- ❌ Token JSON extraction
+- ❌ Token in command-line arguments
+- ❌ Token in logs or exception messages
+- ❌ Token in Git history or manifests
+
+**Verification**:
+
+```bash
+# Confirm no influx auth list
+git log --all --oneline --grep="auth list" | wc -l  # Should be 0
+
+# Confirm no --token in provider
+grep -r "\--token" tools/influx_powerbi_export/docker_provider.py | wc -l  # Should be 0
+
+# Confirm no get_token extraction
+grep -r "get_token\|influx auth list" tools/influx_powerbi_export/ | wc -l  # Should be 0
+```
+
+### A.4 Docker Compose Context
+
+**Compose File Discovery** (in priority order):
+
+1. `COMPOSE_FILE` environment variable (if set)
+2. `/home/aneto/midnightrider-navigation/docker-compose.yml` (repo canonical)
+3. `./docker-compose.yml` (current working directory)
+4. `./docker-compose.yaml` (current working directory)
+
+**Service Configuration**:
+
+```yaml
+services:
+  influxdb:
+    image: influxdb:2.8
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - 8086:8086
+    volumes:
+      - influxdb-data:/var/lib/influxdb2
+      - influxdb-config:/etc/influxdb2
+```
+
+**Execution Command**:
+
+```bash
+docker compose -f <path> exec -T influxdb influx query --raw "<flux_query>"
+```
+
+- `-T`: Disables pseudo-TTY (required for streaming in scripts)
+- `exec`: Runs command in running container
+- `influx query`: InfluxDB's internal Flux query CLI
+- `--raw`: Outputs annotated CSV format
+
+### A.5 Streaming & USB Output
+
+**Streaming Process**:
+
+```python
+# No temporary files, no full result in memory
+for line in provider.query_flux(flux_query):
+    usb_writer.write(line)  # Stream to USB
+```
+
+**Properties**:
+
+- ✅ Subprocess `Popen()` for streaming
+- ✅ `stdout.readline()` line-by-line iteration
+- ✅ USB writer accepts generator (no buffering)
+- ✅ Timeout handling (kills process, cleans up)
+- ✅ Stderr sanitization (truncated, no token leakage)
+- ✅ No orphan processes (finally block cleanup)
+
+### A.6 Failure Modes
+
+| Scenario | Behavior | Recovery |
+|----------|----------|----------|
+| Docker service not running | `FileNotFoundError` | Start container via `docker compose up` |
+| Compose file missing | `DockerComposeError` | Ensure `/home/aneto/midnightrider-navigation/docker-compose.yml` exists |
+| Query authorization fails (401) | Exit code 1, exception raised | Verify InfluxDB user has read access to bucket |
+| Query timeout | `TimeoutError` after 300s default | Increase `timeout` parameter or optimize query |
+| Bucket empty | No error, 0 lines streamed | Normal; exporter handles empty buckets |
+| Stderr output (warnings, etc.) | Captured, first 5 lines logged (truncated) | Check logs for query syntax errors |
+
+### A.7 Testing
+
+**Unit Tests**: `tests/influx_powerbi_export/test_docker_provider.py`
+
+18 comprehensive tests covering:
+
+1. Docker command construction (no --token)
+2. Authenticated internal CLI success
+3. Unauthorized responses (401)
+4. Missing Docker service
+5. Missing Compose file
+6. Streaming to iterable
+7. Stderr sanitization
+8. Timeout handling
+9. Process cleanup
+10. No orphan processes
+11. Multiple annotated CSV tables
+12. USB-only output (no local temp)
+13. Secure token-file fallback
+14. No credentials in logs
+15. No raw data in /tmp paths
+16. Full exporter integration
+17. ... (18 total)
+
+**Test Execution**:
+
+```bash
+cd /home/aneto/midnightrider-navigation
+python -m pytest tests/influx_powerbi_export/test_docker_provider.py -v
+```
+
+### A.8 Diagnostic Commands
+
+**Check Provider Health**:
+
+```bash
+cd /home/aneto/midnightrider-navigation
+python3 -c "
+from tools.influx_powerbi_export.docker_provider import DockerInternalCliQueryProvider
+p = DockerInternalCliQueryProvider()
+print('✓ Provider initialized:', p.compose_file)
+print('✓ Testing auth...', 'OK' if p.test_auth() else 'FAILED')
+"
+```
+
+**Verify No Token Extraction**:
+
+```bash
+# Search for auth list calls
+grep -r "auth list" tools/influx_powerbi_export/ | wc -l  # Should be 0
+
+# Search for --token flag
+grep -r "\--token" tools/influx_powerbi_export/ | wc -l  # Should be 0
+
+# Search for token extraction patterns
+grep -r "get_token\|extract.*token\|parse.*json.*token" tools/influx_powerbi_export/ | wc -l  # Should be 0
+```
+
+**Manual Query Test**:
+
+```bash
+cd /home/aneto/midnightrider-navigation
+docker compose exec -T influxdb influx query --raw 'from(bucket: "midnight_rider") |> range(start: -1h) |> limit(n: 1)'
+```
+
+### A.9 Boundaries & Limitations
+
+**Signal K Boundary**: InfluxDB exporter is completely separate from Signal K server. No Signal K data flows through this component; it's independent historical data extraction.
+
+**InfluxDB Boundary**: Exporter only reads (`query` command). Never writes, never deletes, never modifies buckets. Read-only by design.
+
+**USB Boundary**: All output goes to USB mount (`Lexar` label by default). No local repository storage of raw exports.
+
+**Authentication Boundary**: Token never escapes the container's auth context. Fallback file is loaded as environment variable only (never in subprocess argv).
+
+### A.10 Security Checklist (Pre-Staging)
+
+- ✅ No `influx auth list` in production code
+- ✅ No `get_token()` function used by Docker provider
+- ✅ No `--token` in Docker provider commands
+- ✅ No token extracted from JSON payloads
+- ✅ Stderr truncated in exceptions (no credential leakage)
+- ✅ Process cleanup in finally block (no orphans)
+- ✅ Token file fallback uses env var, not argv
+- ✅ Tests use mock responses (no real credentials)
+- ✅ No raw export data in /tmp, /home/aneto, repository
+- ✅ CSV/manifest files written to USB only
+- ✅ Compose file auto-discovery doesn't include private IPs
+- ✅ No hardcoded paths outside /home/aneto/midnightrider-navigation
+
+**Validation**:
+
+```bash
+# Pre-commit checklist
+cd /home/aneto/midnightrider-navigation
+git diff --cached --name-only | xargs grep -l "token" | grep -v "tests/" | grep -v ".gitignore"  # Should output nothing
+git diff --cached | grep "\--token" | wc -l  # Should be 0
+git diff --cached | grep "auth list" | wc -l  # Should be 0
+```
+
+---
+

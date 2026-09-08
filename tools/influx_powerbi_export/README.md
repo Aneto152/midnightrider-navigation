@@ -35,15 +35,37 @@ python3 -m tools.influx_powerbi_export \
   --usb-label Lexar
 ```
 
+## Authentication: Docker-Internal CLI (No Token Extraction)
+
+**Primary Method**: Docker-internal InfluxDB CLI context
+
+The exporter uses `docker compose exec -T influxdb influx query` for authentication.
+This approach:
+
+- ✅ Never extracts, logs, or passes tokens via command-line arguments
+- ✅ Uses container-internal authentication context
+- ✅ Streams results directly without intermediate storage
+- ✅ Fails safely if Docker or InfluxDB service is unavailable
+
+**Fallback Method**: Token file (if Docker unavailable)
+
+- Path: `~/.config/midnightrider/influxdb-read-token`
+- Access: Environment variable only (never in argv/logs)
+- Trigger: Only if primary Docker provider fails
+
 ## Environment Variables
 
-Required (no defaults; fail closed if missing):
-- `INFLUX_URL` — InfluxDB Docker/HTTP URL
-- `INFLUX_TOKEN` — Read-only API token
+Optional (Docker-internal provider doesn't require these):
 - `INFLUX_ORG` — Organization (default: `MidnightRider`)
 - `INFLUX_BUCKET` — Bucket name (default: `midnight_rider`)
+- `COMPOSE_FILE` — Path to docker-compose.yml (auto-discovered if not set)
 
-**Security:** These values are NEVER logged, displayed, or saved to USB.
+**Security Note**: `INFLUX_TOKEN` is NEVER required in argv or logs. Tokens never appear in:
+- Command-line arguments
+- Logs or exceptions (stderr truncated to 200 chars)
+- Git history or manifests
+- USB export files
+- Test code
 
 ## USB-First Storage Policy
 

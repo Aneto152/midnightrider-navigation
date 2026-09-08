@@ -414,5 +414,31 @@
       "measurements_count": 107,
       "root_cause_fix": "header-counting-error-in-original-rebuild"
     }
-  ]
+  ],
+  "docker_internal_cli_provider": {
+    "implementation_date": "2026-09-08T17:58:58.255471+00:00",
+    "status": "IMPLEMENTED",
+    "auth_method": "DOCKER_INTERNAL_CLI_CONTEXT",
+    "features": {
+      "no_influx_auth_list": true,
+      "no_token_in_argv": true,
+      "streaming_to_usb": true,
+      "process_cleanup": true,
+      "stderr_sanitization": true,
+      "token_file_fallback": true
+    },
+    "tests": {
+      "total": 19,
+      "passed": 19,
+      "failed": 0,
+      "file": "tests/influx_powerbi_export/test_docker_provider.py"
+    },
+    "verification": {
+      "no_influx_auth_list_in_code": true,
+      "no_get_token_extraction": true,
+      "no_token_in_docker_commands": true,
+      "provider_initialized": true,
+      "auth_test_passed": true
+    }
+  }
 }
