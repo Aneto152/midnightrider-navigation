@@ -121,6 +121,31 @@ OpenClaw Gateway is local-only and listens on port 18789. Do not expose it direc
 
 ---
 
+## Service Logging & Heartbeat Visibility
+
+**Current System Status:** DEGRADED ⚠️
+
+The seven documented services (SignalK, InfluxDB, Grafana, OpenClaw-Gateway, Regatta Server, NMEA Parser, Portal) currently lack verified real-time heartbeat visibility within a 5-minute window.
+
+**What is known:**
+- ✅ Portal has a local runtime log (logs/services/portal.log), but most recent entry is 218+ minutes old
+- ✅ Six services use Docker or systemd; managers are identified and verified
+- ⚠️ OpenClaw-Gateway manager, startup location, and logging infrastructure remain UNKNOWN
+- ⚠️ No service has current heartbeat data accessible in the workspace
+
+**Current evidence limitations:**
+- Systemd journals (journalctl) not audited for real-time heartbeat signals
+- Docker container logs not currently monitored or accessible from workspace
+- Six of seven services lack dedicated runtime log evidence in the workspace
+
+**Strategic guidance:**
+- See [docs/LOGGING-VISIBILITY-STRATEGY.md](docs/LOGGING-VISIBILITY-STRATEGY.md) — Strategic approach to improving heartbeat visibility
+- See [docs/SERVICE-LOGGING-LOCATIONS.md](docs/SERVICE-LOGGING-LOCATIONS.md) — Service-by-service logging evidence reference
+
+**Implementation status:** Analysis complete. No logging visibility improvements have been authorized or implemented.
+
+---
+
 ## 4. Main Data Flows
 
 **Instrument → Signal K → Storage & Visualization:**
