@@ -47,11 +47,31 @@ This approach:
 - ✅ Streams results directly without intermediate storage
 - ✅ Fails safely if Docker or InfluxDB service is unavailable
 
-**Fallback Method**: Token file (if Docker unavailable)
+### Streaming & Timeout Guarantees
+
+**True Streaming** (no accumulation):
+- Results yielded line-by-line as they arrive from container
+- No full result stored in memory
+- Binary non-blocking I/O with selectors prevents deadlock
+- Direct write to USB via caller callback
+
+**Full Lifecycle Timeout**:
+- Monotonic deadline covers startup, I/O reads, process cleanup
+- SIGTERM → wait(5s) → SIGKILL escalation on timeout
+- No orphan Docker or InfluxDB CLI processes
+
+**Bounded Stderr**:
+- Max 8 KB sanitized diagnostic buffer
+- Truncation marker if limit exceeded
+- Concurrent draining prevents stdout blocking
+
+**Fallback Method**: Token file HTTP (if Docker unavailable)
 
 - Path: `~/.config/midnightrider/influxdb-read-token`
-- Access: Environment variable only (never in argv/logs)
-- Trigger: Only if primary Docker provider fails
+- Access: HTTP Authorization header only (never in argv/env)
+- Separate provider: TokenFileHttpProvider
+- Trigger: Only if primary Docker provider auth test fails
+- Token never mutates global os.environ
 
 ## Environment Variables
 

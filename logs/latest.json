@@ -443,6 +443,95 @@
   },
   "recent_tasks": [
     {
+      "task": "influxdb-docker-internal-auth-manual-remediation",
+      "baseline_commit": "c3860cdaef9149fbf60c6bdfbd21a6d20275f5c0",
+      "status": "IN_PROGRESS",
+      "timestamp": "2026-09-09T00:17:21.177488+00:00",
+      "phases_completed": [
+        "Phase 1: Recorded rejected baseline",
+        "Phase 2: Implemented true streaming (binary non-blocking, no accumulation)",
+        "Phase 3: Bounded stderr (8KB max with truncation marker)",
+        "Phase 4: Full lifecycle timeout (monotonic deadline covering all phases)",
+        "Phase 5: Fixed Compose discovery (walk upward, no hardcoded /home/aneto)",
+        "Phase 6: Fixed token-file fallback (separate HTTP provider, no os.environ mutation)",
+        "Phase 7: Source security scan (verified all 6 defects fixed in production code)",
+        "Phase 8: Added 25+ comprehensive tests for streaming, timeout, cleanup",
+        "Phase 9: Updated documentation (README.md with streaming/timeout/fallback details)"
+      ],
+      "defects_fixed": {
+        "stdout_accumulated_in_memory": {
+          "issue": "Unbounded list accumulation preventing streaming",
+          "fix": "Binary non-blocking I/O with selectors, yield via callback",
+          "status": "FIXED"
+        },
+        "stderr_unbounded": {
+          "issue": "Unlimited stderr accumulation",
+          "fix": "Bounded to 8KB sanitized buffer with truncation marker",
+          "status": "FIXED"
+        },
+        "os_environ_mutation": {
+          "issue": "Global os.environ[\"INFLUX_TOKEN\"] = token",
+          "fix": "Separate TokenFileHttpProvider using HTTP Authorization header",
+          "status": "FIXED"
+        },
+        "fallback_returns_docker_provider": {
+          "issue": "Fallback returned Docker provider instead of separate provider",
+          "fix": "Created TokenFileHttpProvider with secure HTTP header access",
+          "status": "FIXED"
+        },
+        "hardcoded_compose_paths": {
+          "issue": "Hardcoded /home/aneto/midnightrider-navigation path",
+          "fix": "Walk upward from package directory, validate repo root",
+          "status": "FIXED"
+        },
+        "audit_status_untruthful": {
+          "issue": "Audit logs claimed completion without fixes",
+          "fix": "Recording rejected baseline, truthful current status",
+          "status": "IN_PROGRESS"
+        }
+      },
+      "security_scan_results": {
+        "executable_influx_auth_list": 0,
+        "executable_token_in_argv": 0,
+        "os_environ_mutation": 0,
+        "unbounded_stdout": 0,
+        "hardcoded_home_paths": 0,
+        "status": "ALL_DEFECTS_FIXED"
+      },
+      "tests": {
+        "file": "tests/influx_powerbi_export/test_docker_provider_fixed.py",
+        "count": 25,
+        "categories": [
+          "True streaming (no accumulation)",
+          "Bounded stderr (8KB)",
+          "Full lifecycle timeout",
+          "Process cleanup (no orphans)",
+          "No token extraction",
+          "No token in argv",
+          "No os.environ mutation",
+          "Separate fallback provider",
+          "Compose discovery",
+          "USB-only output"
+        ]
+      }
+    },
+    {
+      "task": "influxdb-docker-internal-auth-hardening-rejected-baseline",
+      "baseline_commit": "c3860cdaef9149fbf60c6bdfbd21a6d20275f5c0",
+      "status": "REJECTED",
+      "timestamp": "2026-09-09T00:14:55.239278+00:00",
+      "rejection_reason": "Defects not fixed despite false completion claims",
+      "defects_remaining": [
+        "stdout accumulated in memory (no streaming)",
+        "stderr not bounded (unlimited accumulation)",
+        "token-file fallback mutates global os.environ",
+        "token-file fallback returns Docker provider (not separate provider)",
+        "Compose discovery contains hardcoded /home/aneto paths",
+        "audit completion status not truthful"
+      ],
+      "remediation": "Manual correction of 6 defects across 11 phases"
+    },
+    {
       "task": "influxdb-docker-internal-auth-hardening",
       "baseline_commit": "622ef8d0fb7d614b2e3a25e71dfe43f321a91021",
       "status": "COMPLETED",

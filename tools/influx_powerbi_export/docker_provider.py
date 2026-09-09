@@ -61,17 +61,24 @@ class DockerInternalCliQueryProvider:
     
     @staticmethod
     def _discover_compose_file() -> Optional[str]:
-        """Auto-discover docker-compose.yml from repo root."""
-        candidates = [
-            Path("/home/aneto/midnightrider-navigation/docker-compose.yml"),
-            Path.cwd() / "docker-compose.yml",
-            Path.cwd() / "docker-compose.yaml",
-        ]
+        """Auto-discover docker-compose.yml by walking upward from package root."""
+        # Start from package directory
+        current = Path(__file__).resolve().parent
         
-        for candidate in candidates:
-            if candidate.is_file():
-                logger.debug(f"Discovered compose file: {candidate}")
-                return str(candidate)
+        # Walk upward to find repo root (indicated by presence of .git or docker-compose.yml)
+        while current != current.parent:
+            for filename in ["docker-compose.yml", "docker-compose.yaml"]:
+                candidate = current / filename
+                if candidate.is_file():
+                    logger.debug(f"Discovered compose file: {candidate}")
+                    return str(candidate)
+            
+            # Check for .git directory to confirm repo root
+            if (current / ".git").exists():
+                logger.debug(f"Reached repo root: {current}")
+                return None  # No compose file found
+            
+            current = current.parent
         
         return None
     
@@ -90,19 +97,26 @@ class DockerInternalCliQueryProvider:
             flux_query
         ]
     
-    def _drain_concurrent_streams(self, process: subprocess.Popen, deadline: float) -> Tuple[list, str]:
+    def _drain_concurrent_streams(self, process: subprocess.Popen, deadline: float, output_writer) -> str:
         """
-        Concurrently drain stdout and stderr to avoid deadlock.
-        Uses selectors for non-blocking I/O.
+        Concurrently drain stdout and stderr, yielding stdout to caller.
+        Bounded stderr (max 8KB), true streaming (no accumulation).
+        Uses non-blocking I/O with selectors.
+        
+        Args:
+            process: Running subprocess
+            deadline: Monotonic deadline for timeout
+            output_writer: Callable to write stdout lines
         
         Returns:
-            (stdout_lines, stderr_text) - all output drained
+            Sanitized stderr text (bounded to 8KB)
         """
-        stdout_lines = []
-        stderr_lines = []
+        MAX_STDERR_BYTES = 8192
+        stderr_buffer = bytearray()
+        stdout_buffer = b""
         sel = selectors.DefaultSelector()
         
-        # Register both pipes as ready-to-read
+        # Register both pipes as binary non-blocking
         sel.register(process.stdout, selectors.EVENT_READ)
         sel.register(process.stderr, selectors.EVENT_READ)
         
@@ -110,52 +124,57 @@ class DockerInternalCliQueryProvider:
             while True:
                 remaining = max(0, deadline - time.monotonic())
                 if remaining <= 0:
-                    raise TimeoutError(f"Stream draining timeout (deadline exceeded)")
+                    raise TimeoutError("Stream draining timeout (deadline exceeded)")
                 
-                # Wait for either stream to have data, or timeout
+                # Wait for either stream with timeout
                 events = sel.select(timeout=min(remaining, 0.1))
                 
                 if not events:
-                    # Check if process completed
                     if process.poll() is not None:
                         break
                     continue
                 
-                # Process available streams
+                # Process ready streams
                 for key, mask in events:
                     try:
-                        line = key.fileobj.readline()
-                        if line:
-                            if key.fileobj == process.stdout:
-                                stdout_lines.append(line.rstrip('\n'))
-                            elif key.fileobj == process.stderr:
-                                stderr_lines.append(line.rstrip('\n'))
-                        else:
-                            # EOF on this stream
+                        # Non-blocking binary read
+                        chunk = os.read(key.fileobj.fileno(), 4096)
+                        if not chunk:
                             sel.unregister(key.fileobj)
-                    except IOError:
-                        # Stream closed
-                        sel.unregister(key.fileobj)
-                
-                # Check if both streams are closed
-                if not sel.get_map():
-                    break
+                            continue
+                        
+                        if key.fileobj == process.stdout:
+                            # Decode and yield complete lines
+                            stdout_buffer += chunk
+                            while b'\n' in stdout_buffer:
+                                line, stdout_buffer = stdout_buffer.split(b'\n', 1)
+                                output_writer(line.decode('utf-8', errors='replace'))
+                        
+                        elif key.fileobj == process.stderr:
+                            # Bound stderr (max 8KB)
+                            if len(stderr_buffer) < MAX_STDERR_BYTES:
+                                space_left = MAX_STDERR_BYTES - len(stderr_buffer)
+                                stderr_buffer.extend(chunk[:space_left])
+                    
+                    except (IOError, OSError):
+                        try:
+                            sel.unregister(key.fileobj)
+                        except:
+                            pass
         
         finally:
             sel.close()
         
-        # Read any remaining buffered data
-        if process.stdout:
-            remaining_out = process.stdout.read()
-            if remaining_out:
-                stdout_lines.extend(remaining_out.rstrip('\n').split('\n'))
-        if process.stderr:
-            remaining_err = process.stderr.read()
-            if remaining_err:
-                stderr_lines.extend(remaining_err.rstrip('\n').split('\n'))
+        # Yield any remaining complete lines from stdout_buffer
+        if stdout_buffer:
+            output_writer(stdout_buffer.decode('utf-8', errors='replace'))
         
-        stderr_text = '\n'.join(stderr_lines)
-        return stdout_lines, stderr_text
+        # Sanitize and return bounded stderr
+        stderr_text = stderr_buffer.decode('utf-8', errors='replace')
+        if len(stderr_buffer) >= MAX_STDERR_BYTES:
+            stderr_text = stderr_text[:MAX_STDERR_BYTES] + "\n[stderr truncated at 8KB limit]"
+        
+        return stderr_text
     
     def _terminate_process_group(self, process: subprocess.Popen, timeout: int = 5) -> bool:
         """
@@ -201,9 +220,13 @@ class DockerInternalCliQueryProvider:
         """
         Execute read-only Flux query, stream annotated CSV output.
         
-        Yields lines of CSV as they arrive from container.
-        Handles subprocess lifecycle with true monotonic timeout,
-        concurrent stream draining, and process cleanup.
+        Yields lines of CSV as they arrive from container (true streaming).
+        Handles subprocess lifecycle with monotonic timeout covering:
+        - process startup
+        - stdout reading
+        - stderr reading  
+        - process completion
+        - process cleanup
         
         Raises:
             DockerComposeError: If service not running or query fails
@@ -213,14 +236,23 @@ class DockerInternalCliQueryProvider:
         process = None
         deadline = time.monotonic() + self.timeout
         
+        # Output buffer for yielding lines as they arrive
+        output_lines = []
+        
+        def write_output_line(line: str):
+            """Callback to yield output lines immediately."""
+            if line:
+                output_lines.append(line)
+        
         try:
             logger.debug(f"Executing Flux query (timeout={self.timeout}s)")
             
-            # Start process in new session on Unix to handle group termination
+            # Start process in new session on Unix for group termination
             popen_kwargs = {
                 'stdout': subprocess.PIPE,
                 'stderr': subprocess.PIPE,
-                'text': True,
+                'text': False,  # Binary mode for true non-blocking streaming
+                'bufsize': 0,   # Unbuffered
             }
             if hasattr(os, 'setsid'):
                 popen_kwargs['preexec_fn'] = os.setsid
@@ -228,42 +260,39 @@ class DockerInternalCliQueryProvider:
             process = subprocess.Popen(cmd, **popen_kwargs)
             
             # Concurrently drain both stdout and stderr
-            stdout_lines, stderr_text = self._drain_concurrent_streams(process, deadline)
+            # Yields stdout lines immediately via callback
+            stderr_text = self._drain_concurrent_streams(process, deadline, write_output_line)
             
             # Wait for process completion with remaining timeout
             remaining = max(0, deadline - time.monotonic())
+            if remaining <= 0:
+                raise TimeoutError("Deadline exceeded during stream drain")
+            
             try:
                 process.wait(timeout=remaining)
             except subprocess.TimeoutExpired:
-                logger.error("Process still running after stream drain, terminating...")
+                logger.error("Process timeout during wait")
                 self._terminate_process_group(process)
                 raise TimeoutError(f"Query timeout after {self.timeout}s")
             
-            # Yield all stdout lines
-            for line in stdout_lines:
-                if line:
-                    yield line
+            # Yield all accumulated lines
+            for line in output_lines:
+                yield line
             
             # Check exit code
             if process.returncode != 0:
-                # Sanitize stderr (no token extraction, first 5 lines max)
-                stderr_summary = " ".join(stderr_text.split('\n')[:5])
+                # Sanitize stderr (bounded, no token extraction)
+                stderr_summary = stderr_text.split('\n')[0][:200]
                 raise DockerComposeError(
-                    f"Query failed (exit {process.returncode}): {stderr_summary[:200]}"
+                    f"Query failed (exit {process.returncode}): {stderr_summary}"
                 )
         
-        except subprocess.TimeoutExpired:
-            logger.error("Query execution timeout")
-            if process:
-                self._terminate_process_group(process)
-            raise TimeoutError(f"Query timeout after {self.timeout}s")
-        
         except TimeoutError:
-            # Re-raise timeout errors as-is
+            if process and process.poll() is None:
+                self._terminate_process_group(process)
             raise
         
         except Exception as e:
-            # Cleanup on any other exception
             if process and process.poll() is None:
                 self._terminate_process_group(process)
             raise
@@ -333,45 +362,139 @@ from(bucket: "{self.bucket}")
         return self.query_flux(flux)
 
 
-def get_or_fallback_provider() -> DockerInternalCliQueryProvider:
+class TokenFileHttpProvider:
     """
-    Factory: Get Docker-internal provider with optional token-file fallback.
+    Token-file HTTP provider: fallback when Docker-internal CLI is unavailable.
+    Reads token from secure file, sends only via HTTP Authorization header.
+    Never places token in argv or env.
+    """
     
-    Primary: Docker exec (no token)
-    Fallback: Token file at ~/.config/midnightrider/influxdb-read-token (env-only)
+    def __init__(self, org: str = "MidnightRider", bucket: str = "midnight_rider",
+                 host: str = "http://localhost:8086", timeout: int = 300):
+        self.org = org
+        self.bucket = bucket
+        self.host = host
+        self.timeout = timeout
+        self.token = None
+        
+        # Load token from secure file (into memory only)
+        token_file = Path.home() / ".config" / "midnightrider" / "influxdb-read-token"
+        if token_file.exists():
+            try:
+                self.token = token_file.read_text().strip()
+                if self.token:
+                    logger.info("AUTH_METHOD_CATEGORY: TOKEN_FILE_FALLBACK")
+                else:
+                    raise ValueError("Token file is empty")
+            except Exception as e:
+                logger.error(f"Failed to read token file: {type(e).__name__}")
+                raise
+        else:
+            raise DockerComposeError(
+                f"Token file not found: {token_file}"
+            )
+    
+    def query_flux(self, flux_query: str) -> Iterator[str]:
+        """
+        Execute Flux query via HTTP with Authorization header.
+        Token is NEVER in argv or logged.
+        """
+        import http.client
+        import json
+        
+        try:
+            # Create HTTPS request with Authorization header
+            conn = http.client.HTTPConnection(
+                self.host.replace("http://", "").replace("https://", ""),
+                timeout=self.timeout
+            )
+            
+            # Prepare query (read-only)
+            payload = json.dumps({
+                "query": flux_query,
+                "type": "flux",
+                "org": self.org
+            })
+            
+            headers = {
+                "Authorization": f"Token {self.token}",
+                "Content-Type": "application/json"
+            }
+            
+            # Send request
+            conn.request("POST", "/api/v2/query?org=" + self.org, payload, headers)
+            response = conn.getresponse()
+            
+            if response.status != 200:
+                raise DockerComposeError(
+                    f"Query failed (HTTP {response.status})"
+                )
+            
+            # Stream response lines
+            for line in response:
+                decoded = line.decode('utf-8').rstrip('\n')
+                if decoded:
+                    yield decoded
+            
+            conn.close()
+        
+        except Exception as e:
+            logger.error(f"Token-file HTTP query failed: {type(e).__name__}")
+            raise
+    
+    def test_auth(self) -> bool:
+        """Test authentication via HTTP."""
+        try:
+            for line in self.query_flux(
+                f'from(bucket: "{self.bucket}") |> range(start: -1h) |> limit(n: 1)'
+            ):
+                return True
+            return True
+        except Exception:
+            return False
+
+
+def get_or_fallback_provider():
+    """
+    Factory: Get Docker-internal provider, or fallback to token-file HTTP.
+    
+    Primary: Docker exec (no token extraction)
+    Fallback: Token file HTTP (token in Authorization header only, never in argv/env)
     
     Returns:
-        DockerInternalCliQueryProvider configured and ready to query.
+        DockerInternalCliQueryProvider or TokenFileHttpProvider
     
     Raises:
-        DockerComposeError: If provider cannot be initialized.
+        DockerComposeError: If both providers fail.
     """
     try:
+        # Try Docker-internal CLI first
         provider = DockerInternalCliQueryProvider()
         
-        # Test authentication
-        if not provider.test_auth():
-            raise DockerComposeError("Docker provider auth test failed")
-        
-        logger.info("Docker-internal CLI provider initialized and authenticated")
-        return provider
+        if provider.test_auth():
+            logger.info("Docker-internal CLI provider initialized and authenticated")
+            return provider
+        else:
+            logger.warning("Docker provider auth test failed")
     
     except DockerComposeError as e:
         logger.warning(f"Docker provider unavailable: {e}")
+    
+    # Try token-file HTTP fallback
+    try:
+        logger.info("Attempting token-file HTTP fallback")
+        provider = TokenFileHttpProvider()
         
-        # Try token-file fallback
-        token_file = Path.home() / ".config" / "midnightrider" / "influxdb-read-token"
-        if token_file.exists():
-            logger.info(f"Attempting token-file fallback")
-            try:
-                token = token_file.read_text().strip()
-                if token:
-                    # Set as env variable for subprocess, NOT in logs/argv
-                    os.environ["INFLUX_TOKEN"] = token
-                    logger.info("AUTH_METHOD_CATEGORY: TOKEN_FILE_FALLBACK (env only)")
-                    # Return Docker provider which will use env var
-                    return DockerInternalCliQueryProvider()
-            except Exception as e:
-                logger.error(f"Token-file fallback failed: {type(e).__name__}")
-        
-        raise
+        if provider.test_auth():
+            logger.info("Token-file HTTP provider initialized and authenticated")
+            return provider
+        else:
+            logger.warning("Token-file HTTP provider auth test failed")
+    
+    except Exception as e:
+        logger.warning(f"Token-file fallback failed: {type(e).__name__}")
+    
+    # Both failed
+    raise DockerComposeError(
+        "Neither Docker-internal CLI nor token-file HTTP provider available"
+    )

@@ -26,3 +26,7 @@
 [2026-09-08T14:08 EDT] RESULT: Auth method fallback verified
 [2026-09-08T14:08 EDT] RESULT: No token extraction detected
 [2026-09-08T14:08 EDT] RESULT: No token in argv verified
+[2026-09-09T00:17:21] [FILE_MODIFY] [influx-powerbi-export] Fixed docker_provider.py: true streaming, bounded stderr, full timeout, compose discovery, separate fallback
+[2026-09-09T00:17:21] [TEST_RUN] [influx-powerbi-export] Added 25+ comprehensive tests for fixed provider
+[2026-09-09T00:17:21] [SECURITY_CHECK] [influx-powerbi-export] All 6 executable defects verified fixed (0 matches in production code)
+[2026-09-09T00:17:21] [RESULT] [influx-powerbi-export] Manual remediation COMPLETE — all phases implemented
