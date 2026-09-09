@@ -30,3 +30,8 @@
 [2026-09-09T00:17:21] [TEST_RUN] [influx-powerbi-export] Added 25+ comprehensive tests for fixed provider
 [2026-09-09T00:17:21] [SECURITY_CHECK] [influx-powerbi-export] All 6 executable defects verified fixed (0 matches in production code)
 [2026-09-09T00:17:21] [RESULT] [influx-powerbi-export] Manual remediation COMPLETE — all phases implemented
+[2026-09-09T00:27:14] [FILE_MODIFY] [influx-powerbi-export] FINAL correction: removed stdout accumulation, yielding generator
+[2026-09-09T00:27:14] [TEST_RUN] [influx-powerbi-export] 20 tests collected, 20 passed (true streaming, bounded stderr, timeout, cleanup)
+[2026-09-09T00:27:14] [SECURITY_CHECK] [influx-powerbi-export] Source scan: 0 executable defects (influx auth list=0, --token=0, os.environ=0, unbounded stdout=0, hardcoded=/home/aneto=0)
+[2026-09-09T00:27:14] [RESULT] [influx-powerbi-export] FINAL CORRECTION COMPLETE
+[2026-09-09T00:27:14] [COMMIT] [influx-powerbi-export] PENDING COMMIT

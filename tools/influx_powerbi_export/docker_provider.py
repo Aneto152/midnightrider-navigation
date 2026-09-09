@@ -97,19 +97,17 @@ class DockerInternalCliQueryProvider:
             flux_query
         ]
     
-    def _drain_concurrent_streams(self, process: subprocess.Popen, deadline: float, output_writer) -> str:
+    def _drain_concurrent_streams(self, process: subprocess.Popen, deadline: float):
         """
-        Concurrently drain stdout and stderr, yielding stdout to caller.
-        Bounded stderr (max 8KB), true streaming (no accumulation).
+        Concurrently drain stdout and stderr, yielding stdout lines incrementally.
+        Bounded stderr (max 8KB), true streaming (NO accumulation).
         Uses non-blocking I/O with selectors.
         
-        Args:
-            process: Running subprocess
-            deadline: Monotonic deadline for timeout
-            output_writer: Callable to write stdout lines
+        Yields:
+            Decoded stdout lines as they arrive (BEFORE process completion)
         
-        Returns:
-            Sanitized stderr text (bounded to 8KB)
+        Returns stderr text (sanitized, bounded):
+            Raises TimeoutError if deadline exceeded
         """
         MAX_STDERR_BYTES = 8192
         stderr_buffer = bytearray()
@@ -144,11 +142,11 @@ class DockerInternalCliQueryProvider:
                             continue
                         
                         if key.fileobj == process.stdout:
-                            # Decode and yield complete lines
+                            # Decode and YIELD complete lines immediately
                             stdout_buffer += chunk
                             while b'\n' in stdout_buffer:
                                 line, stdout_buffer = stdout_buffer.split(b'\n', 1)
-                                output_writer(line.decode('utf-8', errors='replace'))
+                                yield line.decode('utf-8', errors='replace')
                         
                         elif key.fileobj == process.stderr:
                             # Bound stderr (max 8KB)
@@ -165,11 +163,11 @@ class DockerInternalCliQueryProvider:
         finally:
             sel.close()
         
-        # Yield any remaining complete lines from stdout_buffer
+        # Yield any remaining complete lines from stdout_buffer (BEFORE returning stderr)
         if stdout_buffer:
-            output_writer(stdout_buffer.decode('utf-8', errors='replace'))
+            yield stdout_buffer.decode('utf-8', errors='replace')
         
-        # Sanitize and return bounded stderr
+        # Return stderr (bounded, sanitized) after all stdout yielded
         stderr_text = stderr_buffer.decode('utf-8', errors='replace')
         if len(stderr_buffer) >= MAX_STDERR_BYTES:
             stderr_text = stderr_text[:MAX_STDERR_BYTES] + "\n[stderr truncated at 8KB limit]"
@@ -220,7 +218,8 @@ class DockerInternalCliQueryProvider:
         """
         Execute read-only Flux query, stream annotated CSV output.
         
-        Yields lines of CSV as they arrive from container (true streaming).
+        Yields lines of CSV as they arrive from container (TRUE STREAMING).
+        Lines are yielded BEFORE process completion (no accumulation).
         Handles subprocess lifecycle with monotonic timeout covering:
         - process startup
         - stdout reading
@@ -235,14 +234,7 @@ class DockerInternalCliQueryProvider:
         cmd = self._build_docker_exec_cmd(flux_query)
         process = None
         deadline = time.monotonic() + self.timeout
-        
-        # Output buffer for yielding lines as they arrive
-        output_lines = []
-        
-        def write_output_line(line: str):
-            """Callback to yield output lines immediately."""
-            if line:
-                output_lines.append(line)
+        stderr_text = None
         
         try:
             logger.debug(f"Executing Flux query (timeout={self.timeout}s)")
@@ -260,8 +252,26 @@ class DockerInternalCliQueryProvider:
             process = subprocess.Popen(cmd, **popen_kwargs)
             
             # Concurrently drain both stdout and stderr
-            # Yields stdout lines immediately via callback
-            stderr_text = self._drain_concurrent_streams(process, deadline, write_output_line)
+            # _drain_concurrent_streams() is a generator that YIELDS stdout lines
+            # and RETURNS stderr text
+            stream_gen = self._drain_concurrent_streams(process, deadline)
+            
+            # Yield stdout lines as they arrive (BEFORE process completion)
+            # This is TRUE STREAMING - no accumulation
+            try:
+                while True:
+                    try:
+                        line = next(stream_gen)
+                        yield line  # Yield immediately, don't accumulate
+                    except StopIteration as e:
+                        # Generator exhausted, stderr is in e.value
+                        stderr_text = e.value
+                        break
+            except TimeoutError:
+                # Re-raise timeout during streaming
+                if process and process.poll() is None:
+                    self._terminate_process_group(process)
+                raise
             
             # Wait for process completion with remaining timeout
             remaining = max(0, deadline - time.monotonic())
@@ -275,14 +285,13 @@ class DockerInternalCliQueryProvider:
                 self._terminate_process_group(process)
                 raise TimeoutError(f"Query timeout after {self.timeout}s")
             
-            # Yield all accumulated lines
-            for line in output_lines:
-                yield line
-            
             # Check exit code
             if process.returncode != 0:
                 # Sanitize stderr (bounded, no token extraction)
-                stderr_summary = stderr_text.split('\n')[0][:200]
+                if stderr_text:
+                    stderr_summary = stderr_text.split('\n')[0][:200]
+                else:
+                    stderr_summary = "(stderr unavailable)"
                 raise DockerComposeError(
                     f"Query failed (exit {process.returncode}): {stderr_summary}"
                 )

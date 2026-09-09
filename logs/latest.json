@@ -445,7 +445,7 @@
     {
       "task": "influxdb-docker-internal-auth-manual-remediation",
       "baseline_commit": "c3860cdaef9149fbf60c6bdfbd21a6d20275f5c0",
-      "status": "IN_PROGRESS",
+      "status": "COMPLETE",
       "timestamp": "2026-09-09T00:17:21.177488+00:00",
       "phases_completed": [
         "Phase 1: Recorded rejected baseline",
@@ -513,7 +513,20 @@
           "Compose discovery",
           "USB-only output"
         ]
-      }
+      },
+      "final_validation": {
+        "true_streaming_verified": true,
+        "stdout_no_accumulation": true,
+        "bounded_stderr_8kb": true,
+        "lifecycle_timeout": true,
+        "process_cleanup": true,
+        "fallback_no_environ_mutation": true,
+        "compose_discovery_safe": true,
+        "tests_collected": 20,
+        "tests_passed": 20,
+        "security_scan_all_zeros": true
+      },
+      "timestamp_completed": "2026-09-09T00:27:01.149323+00:00"
     },
     {
       "task": "influxdb-docker-internal-auth-hardening-rejected-baseline",
