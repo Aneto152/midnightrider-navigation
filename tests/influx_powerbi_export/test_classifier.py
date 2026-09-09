@@ -182,21 +182,21 @@ def test_offPosition_boundary_safe(classifier):
     assert classifier.classify(record) == "ais"
 
 def test_missing_measurement(classifier):
-    """Missing measurement + self=true → Midnight Rider (measurement defaults to empty string)
+    """Missing measurement + self=true → Unclassified (measurement defaults to empty string)
     
-    When _measurement is missing, it defaults to empty string "".
-    Empty string doesn't match any AIS measurement or Midnight Rider measurement.
-    With self=true and no AIS detection, classifier returns midnight_rider.
+    CORRECTED: When _measurement is missing, it defaults to empty string "".
+    Empty string doesn't match any Midnight Rider measurement prefix.
+    With self=true but invalid measurement, classifier returns unclassified.
     
     Note: This reflects the corrected logic:
-    measurement absence doesn't prevent self-vessel classification.
+    self=true REQUIRES a valid measurement family; empty/missing measurement alone is insufficient.
     """
     record = {
         "self": "true",
         "context": "",
     }
-    # self=true with no AIS detection returns midnight_rider
-    assert classifier.classify(record) == "midnight_rider"
+    # self=true with invalid/missing measurement returns unclassified
+    assert classifier.classify(record) == "unclassified"
 
 def test_self_true_mmsi_ais_precedence(classifier):
     """self=true + MMSI context → AIS (AIS precedence enforced)
@@ -211,18 +211,20 @@ def test_self_true_mmsi_ais_precedence(classifier):
     assert classifier.classify(record) == "ais"
 
 def test_empty_measurement_with_self_true(classifier):
-    """Empty _measurement + self=true → Midnight Rider
+    """Empty _measurement + self=true → Unclassified
     
-    CORRECTED: Empty measurement (0-length string) doesn't match any prefix,
-    but self=true passes, so returns midnight_rider.
-    Note: Differs from missing_measurement test (both result in midnight_rider).
+    CORRECTED: Empty measurement (0-length string) doesn't match any Midnight Rider prefix.
+    Even with self=true, empty measurement is insufficient for self-vessel classification.
+    Returns unclassified.
+    
+    This ensures that self=true requires BOTH explicit self tag AND valid measurement family.
     """
     record = {
         "_measurement": "",
         "self": "true",
         "context": "",
     }
-    assert classifier.classify(record) == "midnight_rider"
+    assert classifier.classify(record) == "unclassified"
 
 def test_valid_aton_context_with_mmsi_urn(classifier):
     """AToN with explicit MMSI URN → AIS

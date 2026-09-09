@@ -38,8 +38,8 @@ class Classifier:
         if self._is_ais(measurement, context_tag):
             return "ais"
         
-        # STEP 2: Explicit self=="true" ONLY (not empty, not missing)
-        if self_tag == "true":
+        # STEP 2: Explicit self-vessel validation (only after AIS check fails)
+        if self._is_midnight_rider(measurement, self_tag):
             return "midnight_rider"
         
         # STEP 3: Confirmed self-vessel context (future: schema-validated allowlist)
