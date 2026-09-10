@@ -13,6 +13,8 @@ Complete reference guide for the Midnight Rider navigation system.
 ### System Architecture
 - **[docs/ARCHITECTURE-MASTER.md](docs/ARCHITECTURE-MASTER.md)** — Full system design
 - **[System Summary](SYSTEM-SUMMARY.md)** — High-level overview
+- **[Service Logging Visibility Strategy](docs/LOGGING-VISIBILITY-STRATEGY.md)** — Heartbeat visibility analysis & planning
+- **[Service Logging Locations](docs/SERVICE-LOGGING-LOCATIONS.md)** — Evidence reference table
 
 ---
 
@@ -145,6 +147,13 @@ Alert categories:
 - **Systems:** Battery, charger, comms, GPS, storage
 - **Racing:** Mark rounding, start line, finish, fleet position
 - **Crew:** Watch duration, rest, fatigue tracking
+
+**Alert Provisioning Guide:**
+- **[Grafana Alert Provisioning Guide](INTEGRATION/GRAFANA-ALERTING-PROVISIONING-GUIDE.md)** — Schema structure, validation checklist, troubleshooting, and rollback procedures for Grafana 12.3.1
+  - Relative time range placement rules (must be under data[*], not at rule root)
+  - Built-in folder conflict prevention
+  - Time window mapping (60, 120, 180, 300 seconds)
+  - Grafana 12.3.1 strict validation requirements
 
 ---
 

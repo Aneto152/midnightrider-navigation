@@ -16,58 +16,128 @@ class Classifier:
     
     def classify(self, record: Dict) -> Literal["midnight_rider", "ais", "unclassified"]:
         """
-        Classify a single InfluxDB record.
+        Classify a single InfluxDB record into category: midnight_rider, ais, or unclassified.
         
-        Rules:
-        1. Midnight Rider: self="true" OR self=(empty) AND measurement in navigation/sensors/etc.
-        2. AIS: context contains MMSI URN OR measurement in sensors.ais/virtual/offPosition
-        3. Unclassified: neither rule matches
+        Precedence (highest to lowest):
+        1. Explicit AIS context (MMSI URN, AToN, shore contexts, AIS measurements)
+        2. Explicit self=="true" ONLY (no empty or missing self accepted)
+        3. Confirmed self-vessel context (future: schema-validated allowlist)
+        4. Unclassified (default for ambiguous records)
+        
+        Safety rules:
+        - Missing self is NOT treated as empty/valid.
+        - Empty self="" does NOT prove self-vessel identity.
+        - Generic measurement families (navigation, environment, etc.) do NOT prove self-vessel.
+        - AIS precedence is enforced even when self=="true".
         """
         measurement = record.get("_measurement", "")
-        self_tag = record.get("self", "")
+        self_tag = record.get("self", None)  # Preserve None to distinguish from empty string
         context_tag = record.get("context", "")
         
-        # Check AIS first (more specific)
+        # STEP 1: Explicit AIS context detection (highest precedence)
         if self._is_ais(measurement, context_tag):
             return "ais"
         
-        # Check Midnight Rider
+        # STEP 2: Explicit self-vessel validation (only after AIS check fails)
         if self._is_midnight_rider(measurement, self_tag):
             return "midnight_rider"
         
+        # STEP 3: Confirmed self-vessel context (future: schema-validated allowlist)
+        # TODO: Implement schema-validated self-vessel context after validation
+        # if self._is_confirmed_self_vessel_context(context_tag):
+        #     return "midnight_rider"
+        
+        # STEP 4: Default for all ambiguous cases (missing/empty self, missing context, etc.)
         return "unclassified"
     
     def _is_ais(self, measurement: str, context: str) -> bool:
-        """Check if record is AIS."""
-        # AIS measurements
-        for ais_meas in self.AIS_MEASUREMENTS:
-            if measurement.startswith(ais_meas):
-                return True
+        """
+        Check if record is AIS.
         
-        # MMSI URN in context
+        Uses boundary-safe pattern matching to avoid false positives:
+        - MMSI URN: Specific substring (low false-positive risk)
+        - sensors.ais: Exact prefix or with dot boundary
+        - virtual: Disabled pending schema validation (too broad)
+        - offPosition: Exact prefix or with dot boundary
+        - AToN/shore: Disabled pending schema validation (URN format not confirmed)
+        """
+        # AIS measurements with boundary-safe checks
+        if self._is_ais_measurement(measurement):
+            return True
+        
+        # MMSI URN in context (specific URN; low false-positive risk)
         if context and "urn:mrn:imo:mmsi" in context:
             return True
         
-        # atons/shore context
-        if context and ("atons" in context or "shore" in context):
-            return True
+        # AToN/shore context disabled pending schema validation
+        # Previous substring matching ("atons" in context, "shore" in context)
+        # caused false positives on non-URN strings (atonscope, shorebased, lakeshore).
+        # TODO: Re-enable after validating exact URN schema:
+        # if context and self._matches_aton_urn(context):
+        #     return True
+        # if context and self._matches_shore_urn(context):
+        #     return True
+        
+        return False
+    
+    def _is_ais_measurement(self, measurement: str) -> bool:
+        """
+        Check if measurement is a known AIS measurement family.
+        
+        Uses exact prefix or boundary-safe matching to avoid false positives:
+        - sensors.ais: Match exact or with dot boundary (e.g., sensors.ais.target)
+        - offPosition: Match exact or with dot boundary
+        - virtual: DISABLED — startswith("virtual") too broad; catches non-AIS virtual.* records
+        - notifications.ais: Match exact or with dot boundary
+        
+        Note: "virtual" is in AIS_MEASUREMENTS but disabled here due to ambiguity.
+        """
+        if measurement.startswith("sensors.ais"):
+            # Exact match or followed by dot (e.g., sensors.ais.target)
+            if measurement == "sensors.ais" or measurement.startswith("sensors.ais."):
+                return True
+        
+        if measurement.startswith("offPosition"):
+            # Exact match or followed by dot
+            if measurement == "offPosition" or measurement.startswith("offPosition."):
+                return True
+        
+        if measurement.startswith("notifications.ais"):
+            # Exact match or followed by dot
+            if measurement == "notifications.ais" or measurement.startswith("notifications.ais."):
+                return True
+        
+        # virtual: DISABLED pending schema validation
+        # Previous rule: startswith("virtual") matches too many non-AIS records.
+        # Re-enable only after confirming exact allowed virtual subdomains (e.g., virtual.ais.*)
+        # if measurement.startswith("virtual.ais"):
+        #     if measurement == "virtual.ais" or measurement.startswith("virtual.ais."):
+        #         return True
         
         return False
     
     def _is_midnight_rider(self, measurement: str, self_tag: str) -> bool:
-        """Check if record is Midnight Rider."""
-        # Must have self tag (true or empty)
-        if self_tag is None or self_tag == "":
-            self_ok = True
-        elif self_tag == "true":
-            self_ok = True
-        else:
-            self_ok = False
+        """
+        Check if record is Midnight Rider.
         
-        if not self_ok:
+        CORRECTED LOGIC:
+        - Explicit self=="true" is REQUIRED (not empty, not missing).
+        - Empty self or missing self are treated as ambiguous; return False.
+        - Generic measurement families ALONE do NOT prove self-vessel identity.
+        - This method is called ONLY after AIS detection fails, so AIS precedence is preserved.
+        
+        Note: A future confirmed self-vessel context (schema-validated) may be added
+        as an additional proof mechanism, but is NOT implemented in this version.
+        """
+        # CORRECTED: Only accept explicit self=="true" (not None, not empty string)
+        if self_tag != "true":
             return False
         
-        # Must be navigation/sensors/environment measurement
+        # Generic measurement family check (kept for documentation)
+        # Note: Measurement family alone is NOT sufficient proof of self-vessel without
+        # explicit self=="true" AND potential future validated context.
+        # This check is retained only because self_tag=="true" passed above,
+        # AND AIS detection already failed (called only after AIS check).
         for prefix in self.MIDNIGHT_RIDER_MEASUREMENTS:
             if measurement.startswith(prefix):
                 return True
