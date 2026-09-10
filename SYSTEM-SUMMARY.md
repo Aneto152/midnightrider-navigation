@@ -115,6 +115,28 @@ curl http://midnightrider.local:3001/api/health
 # Expected response: HTTP 200 + {"status":"ok"}
 ```
 
+**⚠️ Alert Provisioning (Grafana 12.3.1 Schema Requirement):**
+
+Grafana 12.3.1 enforces strict validation of alert rule provisioning files. The provisioning file (`grafana-provisioning/alerting/midnight-rider-rules.yaml`) must follow specific structural requirements to avoid restart-loop failures:
+
+**Critical Rules:**
+1. **`relativeTimeRange` placement:** Must be inside the data[*] query entry (refId A), NOT at the rule root level
+   - ❌ WRONG: `relativeTimeRange` after `condition: B` at rule level
+   - ✅ RIGHT: `relativeTimeRange` inside `data[*]` under refId A query entry
+
+2. **Built-in folder conflict:** Do NOT provision the folder named `General` — it conflicts with Grafana's built-in folder
+   - Use a custom folder name such as `Midnight Rider Alerts`
+
+3. **Time range format:** Use integer seconds (e.g., `from: 120`), not strings (e.g., `from: "120s"`)
+
+**Symptom of structural error:**
+```
+Invalid alert rule query A: invalid relative time range [From: 0s, To: 0s]
+```
+This indicates misplaced or missing `relativeTimeRange` fields, not a query error.
+
+**For complete provisioning guidance:** See [docs/INTEGRATION/GRAFANA-ALERTING-PROVISIONING-GUIDE.md](docs/INTEGRATION/GRAFANA-ALERTING-PROVISIONING-GUIDE.md)
+
 ### OpenClaw Gateway
 
 OpenClaw Gateway is local-only and listens on port 18789. Do not expose it directly to the Internet.

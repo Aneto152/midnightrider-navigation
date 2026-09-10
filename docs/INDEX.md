@@ -148,6 +148,13 @@ Alert categories:
 - **Racing:** Mark rounding, start line, finish, fleet position
 - **Crew:** Watch duration, rest, fatigue tracking
 
+**Alert Provisioning Guide:**
+- **[Grafana Alert Provisioning Guide](INTEGRATION/GRAFANA-ALERTING-PROVISIONING-GUIDE.md)** — Schema structure, validation checklist, troubleshooting, and rollback procedures for Grafana 12.3.1
+  - Relative time range placement rules (must be under data[*], not at rule root)
+  - Built-in folder conflict prevention
+  - Time window mapping (60, 120, 180, 300 seconds)
+  - Grafana 12.3.1 strict validation requirements
+
 ---
 
 
