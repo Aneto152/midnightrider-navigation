@@ -20,7 +20,7 @@ class InfluxClient:
     Streams queries via container without token extraction.
     """
     
-    def __init__(self, org: Optional[str] = None, bucket: Optional[str] = None,
+    def __init__(self, org: Optional[str] = None, bucket: Optional[str] = None, query_timeout_seconds: int = 1200,
                  compose_file: Optional[str] = None):
         """
         Initialize client with Docker-internal provider.
@@ -37,6 +37,7 @@ class InfluxClient:
         self.bucket = bucket or os.environ.get("INFLUX_BUCKET", "midnight_rider")
         
         # Initialize Docker-internal provider (with token-file fallback)
+        self.query_timeout_seconds = query_timeout_seconds
         try:
             self.provider = DockerInternalCliQueryProvider(
                 org=self.org,
@@ -47,7 +48,7 @@ class InfluxClient:
             # Try fallback provider (may load token file)
             self.provider = get_or_fallback_provider()
     
-    def query_flux(self, flux_query: str, timeout: int = 300) -> Iterator[str]:
+    def query_flux(self, flux_query: str) -> Iterator[str]:
         """
         Execute read-only Flux query, stream annotated CSV output.
         Yields lines of CSV as they arrive from Docker container.

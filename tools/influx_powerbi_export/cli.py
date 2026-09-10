@@ -65,6 +65,13 @@ def create_parser() -> argparse.ArgumentParser:
         help="Logging level (default: INFO)"
     )
     
+    parser.add_argument(
+        "--query-timeout-seconds",
+        type=int,
+        default=1200,
+        help="Total timeout for historical InfluxDB queries (seconds). Default: 1200s (20 min). "
+             "For large historical exports, use 3600s (1 hour) or more. Must be positive."
+    )
     return parser
 
 def validate_output_dir(output_dir: str, usb_mount: str) -> Path:

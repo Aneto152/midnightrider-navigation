@@ -52,7 +52,7 @@ def main(args=None):
         
         # Initialize InfluxDB client
         try:
-            client = InfluxClient()
+            client = InfluxClient(query_timeout_seconds=args.query_timeout_seconds)
         except ValueError as e:
             usb_logger.error(str(e))
             usb_logger.shutdown("FAILED")
