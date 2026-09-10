@@ -152,7 +152,14 @@ def main(args=None):
         return 1
 
 def discover_usb(label: str = "Lexar") -> Path:
-    """Discover USB by filesystem label."""
+    """Discover USB by filesystem label.
+    
+    Searches findmnt JSON output for a filesystem matching:
+    - fstype == "exfat"
+    - label == requested label
+    
+    Returns the target mount path, or None if not found.
+    """
     import subprocess
     try:
         result = subprocess.run(
@@ -162,11 +169,19 @@ def discover_usb(label: str = "Lexar") -> Path:
         if result.returncode == 0:
             import json
             mounts = json.loads(result.stdout)
-            # Search for matching mount
+            # Search for matching mount in JSON tree
             def find_mount(node):
                 if isinstance(node, dict):
+                    # Check if this node matches the criteria
                     if node.get("fstype") == "exfat" and node.get("label") == label:
                         return node.get("target")
+                    # Recursively search top-level "filesystems" array
+                    if "filesystems" in node:
+                        for item in node["filesystems"]:
+                            result = find_mount(item)
+                            if result:
+                                return result
+                    # Recursively search nested "children" arrays
                     if "children" in node:
                         for child in node["children"]:
                             result = find_mount(child)
@@ -181,7 +196,7 @@ def discover_usb(label: str = "Lexar") -> Path:
             
             mount = find_mount(mounts)
             return Path(mount) if mount else None
-    except:
+    except Exception:
         pass
     return None
 
