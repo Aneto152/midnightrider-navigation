@@ -602,5 +602,20 @@
         "query_safety": "read-only Flux, no --token argv, no influx auth list, no credential extraction"
       }
     }
-  ]
+  ],
+  "historical_export": {
+    "status": "FAILURE",
+    "window_start_utc": "2026-09-04T16:00:00Z",
+    "window_end_utc": "2026-09-06T16:30:00Z",
+    "output_sampling": "10 seconds",
+    "output_medium": "Lexar USB",
+    "usb_fix_commit_sha": "f616347de72acfd53024e370c291082730468f7e",
+    "run_directory_basename": "20260910T015915Z",
+    "midnight_rider_rows": "0 (export failed)",
+    "ais_rows": "0 (export failed)",
+    "unclassified_rows": "0 (export failed)",
+    "failure_reason": "Stream draining timeout (deadline exceeded) after 4,900,000 rows processed",
+    "credentials_logged": false,
+    "raw_navigation_data_logged": false
+  }
 }

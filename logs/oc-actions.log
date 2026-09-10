@@ -35,3 +35,8 @@
 [2026-09-09T00:27:14] [SECURITY_CHECK] [influx-powerbi-export] Source scan: 0 executable defects (influx auth list=0, --token=0, os.environ=0, unbounded stdout=0, hardcoded=/home/aneto=0)
 [2026-09-09T00:27:14] [RESULT] [influx-powerbi-export] FINAL CORRECTION COMPLETE
 [2026-09-09T00:27:14] [COMMIT] [influx-powerbi-export] PENDING COMMIT
+[2026-09-10T02:05:17Z] [FILE_MODIFY] [influx-powerbi-export] Synchronized targeted Lexar discovery fix from workspace
+[2026-09-10T02:05:17Z] [COMMIT] [influx-powerbi-export] USB discovery fix SHA: f616347de72acfd53024e370c291082730468f7e
+[2026-09-10T02:05:17Z] [TEST] [influx-powerbi-export] 15/15 USB discovery tests PASSED
+[2026-09-10T02:05:17Z] [DRY_RUN] [influx-powerbi-export] Dry-run export PASSED
+[2026-09-10T02:05:17Z] [RESULT] [influx-powerbi-export] Real export FAILED: Stream draining timeout (deadline exceeded); 4,900,000 rows processed before failure
