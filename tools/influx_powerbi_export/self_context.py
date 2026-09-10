@@ -1,9 +1,13 @@
 """
-Validated self-vessel context classification.
+Runtime self-vessel context classification.
 
-Loads canonical self-vessel identity from Signal K runtime configuration.
+Loads self-vessel context directly from Signal K runtime app.selfId.
+Signal K plugin (signalk-to-influxdb2) writes delta.context directly to InfluxDB.
+The operative context source is delta.context in the live stream, not static configuration.
+
+Derivation: self_context = vessels.<app.selfId>
+
 Provides exact-match classification without exposing raw identity values.
-
 Never prints, logs, or persists raw context values.
 """
 
@@ -16,58 +20,92 @@ logger = logging.getLogger(__name__)
 
 
 class SelfContextValidator:
-    """Load and validate canonical self-vessel contexts from Signal K baseDeltas.json."""
+    """Load and validate self-vessel context from Signal K runtime.
     
-    def __init__(self, source_path: Optional[Path] = None):
+    The operative context source is the live Signal K delta.context field.
+    The signalk-to-influxdb2 plugin computes:
+        selfContext = 'vessels.' + app.selfId
+    
+    This validator loads the runtime app.selfId and constructs the exact context.
+    """
+    
+    def __init__(self, self_contexts: Optional[Set[str]] = None):
         """
-        Initialize validator with canonical identity source.
+        Initialize validator with self-vessel contexts.
         
         Args:
-            source_path: Path to Signal K baseDeltas.json.
-                         If None, uses standard Signal K home location.
+            self_contexts: Pre-loaded set of self contexts (for testing).
+                          If None, loads from Signal K runtime at runtime.
         
         Raises:
-            ValueError: If source cannot be loaded or parsed.
+            ValueError: If contexts cannot be loaded or are empty.
         """
-        self.source_path = source_path or Path.home() / ".signalk" / "baseDeltas.json"
+        # For tests: accept pre-loaded contexts
+        if self_contexts is not None:
+            if not self_contexts:
+                raise ValueError("self_contexts set cannot be empty")
+            self.canonical_contexts: Set[str] = self_contexts
+            logger.debug(f"Initialized with {len(self.canonical_contexts)} test context(s)")
+            return
+        
+        # For production: load from Signal K runtime
         self.canonical_contexts: Set[str] = set()
-        
-        self._load_canonical_contexts()
+        self._load_runtime_self_context()
     
-    def _load_canonical_contexts(self) -> None:
-        """Load canonical self-vessel contexts from Signal K configuration."""
-        if not self.source_path.exists():
-            raise ValueError(f"Source not found: {self.source_path}")
+    def _load_runtime_self_context(self) -> None:
+        """Load self-vessel context from Signal K runtime.
         
-        try:
-            with open(self.source_path, 'r') as f:
-                signal_k_config = json.load(f)
-            
-            # Extract canonical contexts from vessels.self entries
-            for entry in signal_k_config:
-                if entry.get("context") == "vessels.self":
-                    for update in entry.get("updates", []):
-                        for value in update.get("values", []):
-                            if value.get("path") == "":
-                                vessel_data = value.get("value", {})
-                                # Use UUID as canonical identifier (primary)
-                                if "uuid" in vessel_data:
-                                    identity = vessel_data.get("uuid", "").strip()
-                                    if identity:
-                                        self.canonical_contexts.add(identity)
-                                # Use name as fallback
-                                elif "name" in vessel_data:
-                                    identity = vessel_data.get("name", "").strip()
-                                    if identity:
-                                        self.canonical_contexts.add(identity)
-            
-            if not self.canonical_contexts:
-                raise ValueError("No canonical contexts extracted from source")
-            
-            logger.debug(f"Loaded {len(self.canonical_contexts)} canonical context(s)")
+        The operative source is the live Signal K app.selfId.
+        Never use baseDeltas.json; it is not the operative context source.
+        """
+        # Signal K stores app.selfId in multiple possible locations
+        # Try standard Signal K configuration first
+        possible_sources = [
+            Path.home() / ".signalk" / "settings.json",
+            Path.home() / ".signalk" / "engine.json",
+        ]
         
-        except json.JSONDecodeError as e:
-            raise ValueError(f"JSON parse error in {self.source_path}: {e}")
+        self_id = None
+        
+        for source_path in possible_sources:
+            if not source_path.exists():
+                continue
+            
+            try:
+                with open(source_path, 'r') as f:
+                    config = json.load(f)
+                
+                # Try to extract selfId or app.selfId
+                if isinstance(config, dict):
+                    # Try direct selfId key
+                    if "selfId" in config:
+                        self_id = config.get("selfId")
+                    # Try nested app.selfId
+                    elif "app" in config and isinstance(config.get("app"), dict):
+                        self_id = config["app"].get("selfId")
+                    # Try settings.selfId structure
+                    elif "settings" in config and isinstance(config.get("settings"), dict):
+                        self_id = config["settings"].get("selfId")
+                
+                if self_id and isinstance(self_id, str) and self_id.strip():
+                    break
+            
+            except (json.JSONDecodeError, IOError):
+                continue
+        
+        # If not found in configuration files, fail closed
+        if not self_id:
+            raise ValueError(
+                "app.selfId not found in Signal K runtime configuration. "
+                "Cannot derive self-vessel context."
+            )
+        
+        # Construct runtime self context exactly as plugin does:
+        # selfContext = 'vessels.' + app.selfId
+        runtime_context = f"vessels.{self_id.strip()}"
+        self.canonical_contexts.add(runtime_context)
+        
+        logger.debug(f"Loaded runtime self context (1 context)")
     
     def is_self_vessel(self, context_value: Optional[str]) -> bool:
         """

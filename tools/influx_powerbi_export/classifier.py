@@ -2,10 +2,13 @@
 Classification rules for Midnight Rider vs. AIS events.
 
 Supports:
-1. Exact AIS classification (highest precedence)
-2. Validated self-vessel context matching (Signal K baseDeltas.json)
+1. Exact AIS classification (highest precedence, absolute)
+2. Exact runtime self-vessel context match (vessels.<app.selfId>)
 3. Explicit self=="true" tag (backward compatibility)
 4. Unclassified (default for ambiguous records)
+
+The operative context source is the live Signal K delta.context stream.
+The signalk-to-influxdb2 plugin computes: selfContext = 'vessels.' + app.selfId
 """
 from typing import Dict, Optional, Literal, Set
 from pathlib import Path
@@ -14,7 +17,11 @@ from .self_context import SelfContextValidator
 
 
 class Classifier:
-    """Classify InfluxDB records into Midnight Rider or AIS categories."""
+    """Classify InfluxDB records into Midnight Rider or AIS categories.
+    
+    Uses runtime-derived self context: vessels.<app.selfId>
+    NOT static baseDeltas.json (which is not the operative context source).
+    """
     
     MIDNIGHT_RIDER_MEASUREMENTS = {
         "navigation", "environment", "sensors", "electrical", "performance"
@@ -29,15 +36,15 @@ class Classifier:
         Initialize classifier with optional self-context validator.
         
         Args:
-            self_context_validator: Validator for canonical self-vessel contexts.
-                                   If None, will be initialized with default Signal K path.
+            self_context_validator: Validator for runtime-derived self-vessel contexts.
+                                   If None, will be initialized with runtime app.selfId.
         """
         if self_context_validator is None:
-            # Load canonical contexts from Signal K baseDeltas.json at runtime
+            # Load runtime self context (vessels.<app.selfId>) at runtime
             try:
                 self.self_context_validator = SelfContextValidator()
             except ValueError:
-                # Canonical source unavailable; exact context matching disabled
+                # Runtime context unavailable; exact context matching disabled
                 self.self_context_validator = None
         else:
             self.self_context_validator = self_context_validator
