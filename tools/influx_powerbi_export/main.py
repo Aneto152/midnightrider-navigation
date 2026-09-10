@@ -12,12 +12,12 @@ import hashlib
 from pathlib import Path
 
 # Import our modules
-from influx_client import InfluxClient
-from annotated_csv import AnnotatedCSVParser
-from classifier import Classifier
-from writers import CSVWriter, ManifestWriter, RawAISEventWriter
-from schema import MidnightRiderSchema, AISSchema
-from normalizer import Normalizer
+from .influx_client import InfluxClient
+from .annotated_csv import AnnotatedCSVParser
+from .classifier import Classifier
+from .writers import CSVWriter, ManifestWriter, RawAISEventWriter
+from .schema import get_midnight_rider_headers, get_ais_headers
+from .normalizer import Normalizer
 
 
 def export_records(output_dir, start=None, stop=None):
