@@ -64,3 +64,78 @@ class ManifestWriter:
             checksum = hashlib.sha256(f.read()).hexdigest()
         
         return checksum
+
+
+"""
+Raw AIS event streaming writer.
+"""
+import csv
+import os
+import tempfile
+from pathlib import Path
+
+
+class RawAISEventWriter:
+    """Write raw AIS events to CSV without aggregation."""
+    
+    COLUMNS = ["_time", "_measurement", "_field", "_value", "context", "source"]
+    
+    def __init__(self, output_path):
+        """Initialize writer.
+        
+        Args:
+            output_path: Final output file path
+        """
+        self.output_path = output_path
+        self.temp_fd, self.temp_path = tempfile.mkstemp(suffix='.csv', text=True)
+        self.temp_file = os.fdopen(self.temp_fd, 'w', newline='', encoding='utf-8')
+        self.writer = csv.DictWriter(self.temp_file, fieldnames=self.COLUMNS)
+        self.row_count = 0
+        self._header_written = False
+    
+    def write_header(self):
+        """Write CSV header once."""
+        if not self._header_written:
+            self.writer.writeheader()
+            self._header_written = True
+    
+    def write_row(self, record):
+        """Write a single raw AIS event.
+        
+        Args:
+            record: Dict with parsed record data
+        """
+        if not self._header_written:
+            self.write_header()
+        
+        # Extract and preserve raw values
+        row = {
+            "_time": record.get("_time", ""),
+            "_measurement": record.get("_measurement", ""),
+            "_field": record.get("_field", ""),
+            "_value": record.get("_value", ""),
+            "context": record.get("context", ""),
+            "source": record.get("source", ""),
+        }
+        
+        self.writer.writerow(row)
+        self.row_count += 1
+    
+    def close(self):
+        """Close file and atomically rename to final location."""
+        self.temp_file.flush()
+        self.temp_file.close()
+        
+        # Atomic rename
+        os.replace(self.temp_path, self.output_path)
+        return self.output_path
+    
+    def abort(self):
+        """Close file without renaming (failure cleanup)."""
+        self.temp_file.close()
+        if os.path.exists(self.temp_path):
+            os.remove(self.temp_path)
+    
+    def get_row_count(self):
+        """Return number of rows written."""
+        return self.row_count
