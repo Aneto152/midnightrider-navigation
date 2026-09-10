@@ -1,108 +1,173 @@
 import pytest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import Mock, patch
 from tools.influx_powerbi_export.influx_client import InfluxClient
 from tools.influx_powerbi_export.docker_provider import DockerInternalCliQueryProvider
 
 
-class TestQueryTimeoutDefaults:
-    """Test default timeout configuration."""
-    
-    def test_client_default_timeout(self):
-        """InfluxClient should default to 1200 seconds."""
-        client = InfluxClient()
-        assert hasattr(client, 'query_timeout_seconds')
-        assert client.query_timeout_seconds >= 1200
-    
-    def test_client_explicit_timeout(self):
-        """InfluxClient should accept explicit timeout."""
-        client = InfluxClient(query_timeout_seconds=3600)
-        assert client.query_timeout_seconds == 3600
-    
-    def test_provider_default_timeout(self):
-        """DockerInternalCliQueryProvider should accept timeout."""
-        provider = DockerInternalCliQueryProvider(timeout=1200)
+class TestProviderTimeoutConfiguration:
+    """Test provider timeout configuration and parameter passing."""
+
+    def test_provider_default_timeout_1200(self):
+        """Provider should default to 1200 seconds (not 300)."""
+        provider = DockerInternalCliQueryProvider()
         assert provider.timeout == 1200
-    
-    def test_provider_explicit_timeout(self):
-        """DockerInternalCliQueryProvider should use explicit timeout."""
+
+    def test_provider_explicit_timeout_3600(self):
+        """Provider should accept explicit 3600 seconds."""
         provider = DockerInternalCliQueryProvider(timeout=3600)
         assert provider.timeout == 3600
 
-
-class TestTimeoutValidation:
-    """Test timeout parameter validation."""
-    
-    def test_zero_timeout_rejected(self):
-        """Zero timeout should be invalid."""
-        # Validation happens at CLI level
-        with pytest.raises(ValueError):
-            if 0 <= 0:
-                raise ValueError("Timeout must be positive")
-    
-    def test_negative_timeout_rejected(self):
-        """Negative timeout should be invalid."""
-        with pytest.raises(ValueError):
-            if -100 <= 0:
-                raise ValueError("Timeout must be positive")
+    def test_provider_timeout_stored(self):
+        """Provider should store timeout for deadline calculation."""
+        provider = DockerInternalCliQueryProvider(timeout=3600)
+        assert hasattr(provider, 'timeout')
+        assert provider.timeout == 3600
 
 
-class TestTimeoutPropagation:
-    """Test timeout propagates through call chain."""
-    
-    def test_timeout_in_client_flux_call(self):
-        """Timeout should be used in query_flux calls."""
+class TestDockerExecCommandGeneration:
+    """Test that docker exec command is generated (not docker compose)."""
+
+    def test_command_uses_docker_exec(self):
+        """Command should use docker exec, not docker compose."""
+        provider = DockerInternalCliQueryProvider()
+        cmd = provider._build_docker_exec_cmd("test_query")
+
+        # Verify structure: docker exec -i <service> influx query --raw <query>
+        assert 'docker' in cmd
+        assert 'exec' in cmd
+        assert '-i' in cmd
+        assert 'influx' in cmd
+        assert 'query' in cmd
+        assert '--raw' in cmd
+        # Should NOT contain compose
+        assert 'compose' not in cmd
+        assert '-f' not in cmd
+
+    def test_command_no_token_in_argv(self):
+        """No token should appear in command arguments."""
+        provider = DockerInternalCliQueryProvider()
+        cmd = provider._build_docker_exec_cmd("from(bucket: \"test\")")
+        cmd_str = ' '.join(cmd)
+
+        assert 'INFLUX_TOKEN' not in cmd_str
+        assert 'token=' not in cmd_str
+
+
+class TestClientTimeoutPropagation:
+    """Test that InfluxClient passes timeout to provider."""
+
+    @patch('tools.influx_powerbi_export.influx_client.DockerInternalCliQueryProvider')
+    def test_client_passes_timeout_to_provider(self, mock_provider_class):
+        """InfluxClient should pass timeout to DockerInternalCliQueryProvider."""
+        mock_provider = Mock()
+        mock_provider_class.return_value = mock_provider
+
+        # Create client with explicit timeout
         client = InfluxClient(query_timeout_seconds=3600)
-        # The timeout is passed to the provider which uses it for deadline calculation
-        assert client.query_timeout_seconds == 3600
-    
-    def test_provider_deadline_calculation(self):
-        """Provider should calculate deadline from timeout."""
+
+        # Verify provider was instantiated with timeout parameter
+        assert mock_provider_class.called
+        call_kwargs = mock_provider_class.call_args[1]
+        assert 'timeout' in call_kwargs
+        assert call_kwargs['timeout'] == 3600
+
+    @patch('tools.influx_powerbi_export.influx_client.DockerInternalCliQueryProvider')
+    def test_client_default_timeout_1200(self, mock_provider_class):
+        """InfluxClient should default to 1200 seconds."""
+        mock_provider = Mock()
+        mock_provider_class.return_value = mock_provider
+
+        client = InfluxClient()
+        assert client.query_timeout_seconds == 1200
+
+    @patch('tools.influx_powerbi_export.influx_client.DockerInternalCliQueryProvider')
+    def test_client_passes_default_timeout_to_provider(self, mock_provider_class):
+        """InfluxClient should pass default 1200s timeout to provider."""
+        mock_provider = Mock()
+        mock_provider_class.return_value = mock_provider
+
+        client = InfluxClient()
+        call_kwargs = mock_provider_class.call_args[1]
+        assert call_kwargs['timeout'] == 1200
+
+
+class TestTimeoutBoundedness:
+    """Test timeout properties (finite, positive, bounded)."""
+
+    def test_timeout_is_positive_integer(self):
+        """Timeout must be positive integer."""
         provider = DockerInternalCliQueryProvider(timeout=3600)
-        # Verify timeout is stored and would be used in deadline calculation
-        assert provider.timeout == 3600
+        assert isinstance(provider.timeout, int)
+        assert provider.timeout > 0
+
+    def test_timeout_is_finite(self):
+        """Timeout must be finite (not inf)."""
+        provider = DockerInternalCliQueryProvider(timeout=3600)
+        assert provider.timeout < float('inf')
+
+    def test_multiple_timeout_values(self):
+        """Provider should handle various timeout values."""
+        for timeout in [1200, 1800, 3600, 7200]:
+            provider = DockerInternalCliQueryProvider(timeout=timeout)
+            assert provider.timeout == timeout
+            assert provider.timeout > 0
 
 
-class TestTimeoutBehavior:
-    """Test timeout behavior under load."""
-    
-    def test_timeout_remains_bounded(self):
-        """Timeout should always be finite and positive."""
-        timeouts = [1200, 3600, 7200]
-        for timeout in timeouts:
-            assert timeout > 0
-            assert timeout < float('inf')
-    
-    def test_stderr_bounded_with_timeout(self):
-        """Provider should maintain bounded stderr even with timeout."""
-        # The provider has STDERR_MAX_BYTES = 8192 which is enforced
-        STDERR_MAX_BYTES = 8192
-        assert STDERR_MAX_BYTES > 0
-        assert STDERR_MAX_BYTES <= 16384  # Reasonable bound
+class TestProcessLifecycle:
+    """Test process termination and timeout infrastructure."""
+
+    def test_provider_has_terminate_method(self):
+        """Provider should have process termination capability."""
+        provider = DockerInternalCliQueryProvider()
+        assert hasattr(provider, '_terminate_process_group')
+        assert callable(provider._terminate_process_group)
+
+    def test_provider_has_stream_drain_method(self):
+        """Provider should have concurrent stream draining."""
+        provider = DockerInternalCliQueryProvider()
+        assert hasattr(provider, '_drain_concurrent_streams')
+        assert callable(provider._drain_concurrent_streams)
+
+    def test_provider_has_query_flux_method(self):
+        """Provider should have query_flux execution method."""
+        provider = DockerInternalCliQueryProvider()
+        assert hasattr(provider, 'query_flux')
+        assert callable(provider.query_flux)
 
 
 class TestCredentialSafety:
-    """Test that credentials are never exposed in timeout handling."""
-    
-    def test_no_token_in_timeout_args(self):
-        """Timeout arguments should never contain tokens."""
-        client = InfluxClient(query_timeout_seconds=3600)
-        # Verify no token attributes are added
-        attrs = dir(client)
-        token_attrs = [a for a in attrs if 'token' in a.lower() and 'timeout' not in a.lower()]
-        # This is OK - we don't expect token attributes in timeout context
-    
-    def test_no_influx_url_added(self):
-        """Timeout implementation should not require INFLUX_URL."""
-        client = InfluxClient(query_timeout_seconds=3600)
-        # Client uses Docker-internal provider which doesn't need HTTP URL
-        assert not hasattr(client, 'url')
+    """Test that no credentials are exposed in timeout implementation."""
+
+    def test_no_influx_url_attribute(self):
+        """Provider should not have INFLUX_URL attribute."""
+        provider = DockerInternalCliQueryProvider(timeout=3600)
+        assert not hasattr(provider, 'url')
+        assert not hasattr(provider, 'influx_url')
+        assert not hasattr(provider, 'http_url')
+
+    def test_command_no_http_headers(self):
+        """Command should not contain Authorization headers."""
+        provider = DockerInternalCliQueryProvider()
+        cmd = provider._build_docker_exec_cmd("test")
+        cmd_str = ' '.join(cmd)
+
+        assert 'Authorization:' not in cmd_str
+        assert 'Bearer ' not in cmd_str
 
 
-class TestUSBDiscoveryIntegration:
-    """Verify USB discovery still works with timeout."""
-    
-    def test_usb_discovery_independent_of_timeout(self):
-        """USB discovery should be independent of query timeout."""
-        # This is verified by separate USB discovery tests
-        # Timeout only affects query execution, not mount discovery
-        pass
+class TestContainerNamePreservation:
+    """Test that container service name is preserved."""
+
+    def test_provider_has_service_name(self):
+        """Provider should store container service name."""
+        provider = DockerInternalCliQueryProvider(timeout=3600)
+        assert hasattr(provider, 'service')
+        assert provider.service == 'influxdb'
+
+    def test_docker_exec_uses_service_name(self):
+        """docker exec command should use the service name."""
+        provider = DockerInternalCliQueryProvider(timeout=3600)
+        cmd = provider._build_docker_exec_cmd("test")
+
+        # Should contain the service name (influxdb)
+        assert 'influxdb' in cmd

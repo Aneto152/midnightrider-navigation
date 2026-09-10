@@ -34,7 +34,7 @@ class DockerInternalCliQueryProvider:
     
     def __init__(self, org: str = "MidnightRider", bucket: str = "midnight_rider",
                  compose_file: Optional[str] = None, service: str = "influxdb",
-                 timeout: int = 300):
+                 timeout: int = 1200):
         """
         Initialize Docker-internal provider.
         
@@ -84,15 +84,17 @@ class DockerInternalCliQueryProvider:
     
     def _build_docker_exec_cmd(self, flux_query: str) -> list:
         """
-        Build docker compose exec command.
+        Build docker exec command for running container.
         
+        Uses direct docker exec (not compose) to avoid requiring .env.
+        Container-internal auth is preserved via established CLI context.
         NO --token in argv.
         Returns command ready for subprocess.Popen().
         """
+        # Use the running container directly via docker exec
+        # This avoids needing .env or docker-compose.yml
         return [
-            "docker", "compose",
-            "-f", self.compose_file,
-            "exec", "-T", self.service,
+            "docker", "exec", "-i", self.service,
             "influx", "query", "--raw",
             flux_query
         ]
@@ -379,7 +381,7 @@ class TokenFileHttpProvider:
     """
     
     def __init__(self, org: str = "MidnightRider", bucket: str = "midnight_rider",
-                 host: str = "http://localhost:8086", timeout: int = 300):
+                 host: str = "http://localhost:8086", timeout: int = 1200):
         self.org = org
         self.bucket = bucket
         self.host = host

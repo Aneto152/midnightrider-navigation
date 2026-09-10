@@ -42,11 +42,11 @@ class InfluxClient:
             self.provider = DockerInternalCliQueryProvider(
                 org=self.org,
                 bucket=self.bucket,
-                compose_file=compose_file
+                timeout=self.query_timeout_seconds
             )
         except DockerComposeError:
             # Try fallback provider (may load token file)
-            self.provider = get_or_fallback_provider()
+            self.provider = get_or_fallback_provider(timeout=self.query_timeout_seconds)
     
     def query_flux(self, flux_query: str) -> Iterator[str]:
         """
