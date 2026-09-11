@@ -123,32 +123,34 @@ def export_records(output_dir, start=None, stop=None, usb_label="Lexar", query_t
             if measurement == "navigation.position" and timestamp and value_str:
                 try:
                     position_data = json.loads(value_str)
-                    # Extract latitude
-                    lat = position_data.get('latitude') or position_data.get('lat')
-                    if lat is not None:
-                        try:
-                            lat_val = float(lat)
-                            if math.isfinite(lat_val):
-                                midnight_rider_normalizer.add_point(
-                                    timestamp_utc=timestamp,
-                                    field_name="latitude",
-                                    value=lat_val
-                                )
-                        except (ValueError, TypeError):
-                            pass
-                    # Extract longitude
-                    lon = position_data.get('longitude') or position_data.get('lon')
-                    if lon is not None:
-                        try:
-                            lon_val = float(lon)
-                            if math.isfinite(lon_val):
-                                midnight_rider_normalizer.add_point(
-                                    timestamp_utc=timestamp,
-                                    field_name="longitude",
-                                    value=lon_val
-                                )
-                        except (ValueError, TypeError):
-                            pass
+                    # Handle both dict (JSON object) and float (raw value) cases
+                    if isinstance(position_data, dict):
+                        # Extract latitude
+                        lat = position_data.get('latitude') or position_data.get('lat')
+                        if lat is not None:
+                            try:
+                                lat_val = float(lat)
+                                if math.isfinite(lat_val):
+                                    midnight_rider_normalizer.add_point(
+                                        timestamp_utc=timestamp,
+                                        field_name="latitude",
+                                        value=lat_val
+                                    )
+                            except (ValueError, TypeError):
+                                pass
+                        # Extract longitude
+                        lon = position_data.get('longitude') or position_data.get('lon')
+                        if lon is not None:
+                            try:
+                                lon_val = float(lon)
+                                if math.isfinite(lon_val):
+                                    midnight_rider_normalizer.add_point(
+                                        timestamp_utc=timestamp,
+                                        field_name="longitude",
+                                        value=lon_val
+                                    )
+                            except (ValueError, TypeError):
+                                pass
                 except (json.JSONDecodeError, ValueError, TypeError):
                     pass
             # Special handling: Battery percent to voltage conversion
