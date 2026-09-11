@@ -113,21 +113,69 @@ def export_records(output_dir, start=None, stop=None, usb_label="Lexar", query_t
             ais_rows += 1
 
         elif classification == "midnight_rider":
-            # Map Signal K measurement to CSV schema field and convert value
             timestamp = record.get("_time")
             measurement = record.get("_measurement")
             value_str = record.get("_value")
 
-            # Use field mapper to get target CSV field and converted value
-            mapped_result = field_mapper.map_and_convert(measurement, value_str)
+            # Special handling: Extract latitude/longitude from JSON position data
+            if measurement == "navigation.position" and timestamp and value_str:
+                try:
+                    position_data = json.loads(value_str)
+                    # Extract latitude
+                    lat = position_data.get('latitude') or position_data.get('lat')
+                    if lat is not None:
+                        try:
+                            lat_val = float(lat)
+                            if math.isfinite(lat_val):
+                                midnight_rider_normalizer.add_point(
+                                    timestamp_utc=timestamp,
+                                    field_name="latitude",
+                                    value=lat_val
+                                )
+                        except (ValueError, TypeError):
+                            pass
+                    # Extract longitude
+                    lon = position_data.get('longitude') or position_data.get('lon')
+                    if lon is not None:
+                        try:
+                            lon_val = float(lon)
+                            if math.isfinite(lon_val):
+                                midnight_rider_normalizer.add_point(
+                                    timestamp_utc=timestamp,
+                                    field_name="longitude",
+                                    value=lon_val
+                                )
+                        except (ValueError, TypeError):
+                            pass
+                except (json.JSONDecodeError, ValueError, TypeError):
+                    pass
+            # Special handling: Battery percent to voltage conversion
+            elif measurement == "electrical.batteries.calypso.percent" and timestamp and value_str:
+                try:
+                    percent = float(value_str)
+                    # Convert percent (0-100) to nominal 12V system (9.6-14.4V)
+                    # voltage = 9.6 + percent * 4.8 / 100
+                    voltage = 9.6 + (percent * 4.8 / 100)
+                    if math.isfinite(voltage):
+                        midnight_rider_normalizer.add_point(
+                            timestamp_utc=timestamp,
+                            field_name="battery_voltage",
+                            value=voltage
+                        )
+                except (ValueError, TypeError):
+                    pass
+            # Standard field mapping
+            else:
+                # Map Signal K measurement to CSV schema field and convert value
+                mapped_result = field_mapper.map_and_convert(measurement, value_str)
 
-            if mapped_result and timestamp:
-                target_field, converted_value = mapped_result
-                midnight_rider_normalizer.add_point(
-                    timestamp_utc=timestamp,
-                    field_name=target_field,
-                    value=converted_value
-                )
+                if mapped_result and timestamp:
+                    target_field, converted_value = mapped_result
+                    midnight_rider_normalizer.add_point(
+                        timestamp_utc=timestamp,
+                        field_name=target_field,
+                        value=converted_value
+                    )
 
             midnight_rider_rows += 1
 
