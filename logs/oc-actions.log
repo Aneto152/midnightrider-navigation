@@ -45,3 +45,8 @@
 [2026-09-11T16:22:02Z] [FILE_CREATE] [influx-powerbi-export] Created one-hour sample outputs: AIS_EVENTS_RAW.csv (206318 rows), MIDNIGHT_RIDER_10S_AGGREGATES.csv (360 windows), EXPORT_MANIFEST.json
 [2026-09-11T16:22:02Z] [RESULT] [influx-powerbi-export] Result: SUCCESS — Comprehensive validation: CSV structure PASS, angle audit (4/4) PASS, manifest reconciliation (19/19 keys) PASS, completeness gates PASS
 [2026-09-11T16:22:02Z] [COMMIT] [influx-powerbi-export] Runtime fix commit SHA: 4ff136c028d3a4ba55b0b39210ae8e4d32ea5094
+
+2026-09-11T18:28:51.040525Z [DOCKER_ACTION] [influx-powerbi-export] Executed fresh one-hour 23-field sample from daee2f7
+2026-09-11T18:28:51.040525Z [FILE_CREATE] [influx-powerbi-export] Created fresh AIS (206318 rows), Midnight Rider aggregate (360 windows), and manifest outputs on validated USB storage
+2026-09-11T18:28:51.040525Z [TEST] [influx-powerbi-export] Focused test suite: 99/99 PASSED (classifier, CSV parser, schema mapping, measurement mapping, AIS writer, filesystem, writers, CLI)
+2026-09-11T18:28:51.040525Z [RESULT] [influx-powerbi-export] SUCCESS — All 23 aggregate fields validated: latitude/longitude (360/360), source_count (360/360), 100% population, 0 unclassified, 0 NaN/infinity violations
