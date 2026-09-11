@@ -95,24 +95,11 @@ class SignalKFieldMapper:
         
         target_field, source_unit, target_unit, is_angular = self.MEASUREMENT_MAPPINGS[measurement]
         
-        # Special handling: JSON-encoded position (extract latitude/longitude)
+        # Special handling: JSON-encoded position is handled in main.py
+        # Skip it here to avoid conflicts
         if measurement == "navigation.position" and source_unit == "json":
-            try:
-                import json
-                position_data = json.loads(value_str)
-                # Try both longitude/latitude (standard) and lat/lon aliases
-                lat = position_data.get('latitude') or position_data.get('lat')
-                lon = position_data.get('longitude') or position_data.get('lon')
-                if lat is not None and lon is not None:
-                    # Return both latitude and longitude as separate mappings
-                    # Note: This is a limitation - we can only return one value
-                    # So we return latitude here and rely on the data being in both
-                    # For now, just skip position extraction - needs different handling
-                    self.unmapped_count += 1
-                    return None
-            except (json.JSONDecodeError, ValueError, TypeError):
-                self.unmapped_count += 1
-                return None
+            self.unmapped_count += 1
+            return None
         
         # Convert value string to float
         try:
