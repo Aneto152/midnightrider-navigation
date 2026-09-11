@@ -11,20 +11,22 @@ from typing import Optional, Tuple
 class SignalKFieldMapper:
     """Map Signal K measurement paths to CSV schema fields with unit conversion."""
     
-    # Signal K path → (target_csv_field, source_unit, target_unit, is_angular)
+    # Signal K path → (target_csv_field, source_unit, target_unit, is_angular, is_circular)
     # NOTE: These paths are actual measurements in InfluxDB, not Signal K paths
+    # is_angular: True if value is in radians and needs degree conversion
+    # is_circular: True if field should be [0, 360), False for signed [-180, 180] or [-90, 90]
     MEASUREMENT_MAPPINGS = {
         # Navigation - speed
         "navigation.speedOverGround": ("sog_knots", "m/s", "knots", False),
         "navigation.speedOverGroundTrue": ("sog_knots", "m/s", "knots", False),
 
-        # Navigation - course (circular mean required)
-        "navigation.courseOverGroundTrue": ("cog_deg", "radians", "degrees", True),
-        "navigation.courseOverGround": ("cog_deg", "radians", "degrees", True),
+        # Navigation - course (circular field: 0-360)
+        "navigation.courseOverGroundTrue": ("cog_deg", "radians", "degrees", True, True),
+        "navigation.courseOverGround": ("cog_deg", "radians", "degrees", True, True),
 
-        # Navigation - heading (circular mean required)
-        "navigation.headingTrue": ("true_heading_deg", "radians", "degrees", True),
-        "navigation.headingMagnetic": ("true_heading_deg", "radians", "degrees", True),
+        # Navigation - heading (circular field: 0-360)
+        "navigation.headingTrue": ("true_heading_deg", "radians", "degrees", True, True),
+        "navigation.headingMagnetic": ("true_heading_deg", "radians", "degrees", True, True),
 
         # Navigation - position (JSON-encoded sub-fields, handled separately)
         "navigation.position": ("position", "json", "degrees", False),  # Special handling
@@ -36,13 +38,13 @@ class SignalKFieldMapper:
         "navigation.position.longitude": ("longitude", "degrees", "degrees", False),
 
         # Wind - apparent
-        "environment.wind.angleApparent": ("awa_deg", "radians", "degrees", True),
-        "environment.wind.speedApparent": ("aws_knots", "m/s", "knots", False),
+        "environment.wind.angleApparent": ("awa_deg", "radians", "degrees", True, True),
+        "environment.wind.speedApparent": ("aws_knots", "m/s", "knots", False, False),
 
         # Wind - true
-        "environment.wind.angleTrue": ("twa_deg", "radians", "degrees", True),
-        "environment.wind.angleTrueWater": ("twa_deg", "radians", "degrees", True),
-        "environment.wind.directionTrue": ("twa_deg", "radians", "degrees", True),
+        "environment.wind.angleTrue": ("twa_deg", "radians", "degrees", True, True),
+        "environment.wind.angleTrueWater": ("twa_deg", "radians", "degrees", True, True),
+        "environment.wind.directionTrue": ("twa_deg", "radians", "degrees", True, True),
         "environment.wind.speedTrue": ("tws_knots", "m/s", "knots", False),
         "environment.wind.speedOverGround": ("tws_knots", "m/s", "knots", False),
 
@@ -56,14 +58,14 @@ class SignalKFieldMapper:
         "performance.speedThroughWater": ("stw_knots", "m/s", "knots", False),
 
         # Tidal
-        "environment.tide.setTrue": ("tide_set_deg", "radians", "degrees", True),
-        "environment.current.setTrue": ("tide_set_deg", "radians", "degrees", True),
+        "environment.tide.setTrue": ("tide_set_deg", "radians", "degrees", True, True),
+        "environment.current.setTrue": ("tide_set_deg", "radians", "degrees", True, True),
         "environment.tide.rate": ("tide_rate_knots", "m/s", "knots", False),
         "environment.current.drift": ("tide_rate_knots", "m/s", "knots", False),
 
-        # Attitude (radians → degrees requires is_angular=True for proper conversion)
-        "navigation.attitude.roll": ("roll_deg", "radians", "degrees", True),
-        "navigation.attitude.pitch": ("pitch_deg", "radians", "degrees", True),
+        # Attitude (signed fields: preserve sign, do not normalize to [0, 360))
+        "navigation.attitude.roll": ("roll_deg", "radians", "degrees", True, False),
+        "navigation.attitude.pitch": ("pitch_deg", "radians", "degrees", True, False),
 
         # Electrical - battery voltage (use calypso percent and House voltage)
         "electrical.batteries.House.voltage": ("battery_voltage", "volts", "volts", False),
@@ -99,7 +101,9 @@ class SignalKFieldMapper:
             self.unmapped_count += 1
             return None
         
-        target_field, source_unit, target_unit, is_angular = self.MEASUREMENT_MAPPINGS[measurement]
+        mapping = self.MEASUREMENT_MAPPINGS[measurement]
+        target_field, source_unit, target_unit, is_angular = mapping[:4]
+        is_circular = mapping[4] if len(mapping) > 4 else True  # Default to circular for backward compat
         
         # Special handling: JSON-encoded position is handled in main.py
         # Skip it here to avoid conflicts
@@ -119,7 +123,7 @@ class SignalKFieldMapper:
         
         # Apply unit conversion
         try:
-            converted_value = self._convert_units(value, source_unit, target_unit, is_angular)
+            converted_value = self._convert_units(value, source_unit, target_unit, is_angular, is_circular)
             if converted_value is not None:
                 self.mapped_count += 1
                 return (target_field, converted_value)
@@ -130,18 +134,30 @@ class SignalKFieldMapper:
         self.unmapped_count += 1
         return None
     
-    def _convert_units(self, value: float, source_unit: str, target_unit: str, is_angular: bool) -> Optional[float]:
-        """Convert value from source unit to target unit."""
+    def _convert_units(self, value: float, source_unit: str, target_unit: str, is_angular: bool, is_circular: bool = True) -> Optional[float]:
+        """Convert value from source unit to target unit.
+
+        Args:
+            value: The value to convert
+            source_unit: Source unit (e.g., "radians", "m/s")
+            target_unit: Target unit (e.g., "degrees", "knots")
+            is_angular: True if this is an angular conversion
+            is_circular: True if field should be [0, 360), False if signed [-180,180] or [-90,90]
+        """
         if source_unit == target_unit:
             return value
-        
+
         # Angular conversions
         if is_angular:
             if source_unit == "radians" and target_unit == "degrees":
-                # Convert radians to degrees (0-360)
                 degrees = math.degrees(value)
-                # Normalize to 0-360 range
-                return degrees % 360 if degrees >= 0 else (degrees % 360) + 360
+                # For circular fields (headings, wind angles), normalize to [0, 360)
+                # For signed fields (roll, pitch), preserve the sign
+                if is_circular:
+                    return degrees % 360
+                else:
+                    # Preserve sign for attitude angles
+                    return degrees
             elif source_unit == "degrees" and target_unit == "radians":
                 return math.radians(value)
         
