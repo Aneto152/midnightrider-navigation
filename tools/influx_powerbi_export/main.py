@@ -38,8 +38,7 @@ def export_records(output_dir, start=None, stop=None):
     classifier = Classifier()
     ais_writer = RawAISEventWriter(os.path.join(output_dir, "AIS_EVENTS_RAW.csv"))
     midnight_rider_writer = CSVWriter(
-        os.path.join(output_dir, "MIDNIGHT_RIDER_10S_AGGREGATES.csv"),
-        schema=MidnightRiderSchema()
+        os.path.join(output_dir, "MIDNIGHT_RIDER_10S_AGGREGATES.csv")
     )
     midnight_rider_normalizer = Normalizer()
     
@@ -73,7 +72,25 @@ def export_records(output_dir, start=None, stop=None):
         
         elif classification == "midnight_rider":
             # Send to normalizer for aggregation
-            midnight_rider_normalizer.add_record(record)
+            # Use _measurement (Signal K path) as field name, _value as numeric payload, _time as timestamp
+            timestamp = record.get("_time")
+            measurement = record.get("_measurement")
+            value_str = record.get("_value")
+            
+            # Convert value to float
+            try:
+                value = float(value_str) if value_str else None
+            except (ValueError, TypeError):
+                value = None
+            
+            # Add to normalizer if we have a valid measurement and value
+            if timestamp and measurement and value is not None:
+                midnight_rider_normalizer.add_point(
+                    timestamp_utc=timestamp,
+                    field_name=measurement,
+                    value=value
+                )
+            
             midnight_rider_rows += 1
         
         else:
@@ -83,11 +100,19 @@ def export_records(output_dir, start=None, stop=None):
     # Close AIS writer
     ais_writer.close()
     
-    # Finalize Midnight Rider aggregates
-    midnight_rider_normalizer.finalize()
+    # Aggregate Midnight Rider windows
+    aggregated_windows = midnight_rider_normalizer.aggregate_windows()
+    
+    # Get headers from schema
+    from .schema import MIDNIGHT_RIDER_SCHEMA
+    midnight_rider_headers = [h[0] for h in MIDNIGHT_RIDER_SCHEMA]
     
     # Write aggregated Midnight Rider CSV
-    midnight_rider_writer.write(midnight_rider_normalizer.get_records())
+    if aggregated_windows:
+        midnight_rider_writer.write_csv(aggregated_windows, midnight_rider_headers)
+    else:
+        # Create empty CSV with headers only
+        midnight_rider_writer.write_csv([], midnight_rider_headers)
     
     # Calculate file sizes and hashes
     ais_csv_path = os.path.join(output_dir, "AIS_EVENTS_RAW.csv")
