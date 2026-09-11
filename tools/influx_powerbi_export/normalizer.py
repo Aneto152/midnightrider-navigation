@@ -16,8 +16,23 @@ class Normalizer:
         self.windows = defaultdict(lambda: defaultdict(list))
     
     def add_point(self, timestamp_utc: str, field_name: str, value: Optional[float]):
-        """Add a data point to its 10-second window."""
-        if value is None or timestamp_utc is None:
+        """Add a data point to its 10-second window.
+        
+        Rejects invalid inputs before creating or modifying windows:
+        - field_name must be non-empty, non-whitespace string
+        - value must be finite (not None, NaN, or infinity)
+        - timestamp_utc must be valid ISO format
+        """
+        # Validate field_name: must be non-empty, non-whitespace string
+        if not field_name or not isinstance(field_name, str) or not field_name.strip():
+            return
+        
+        # Validate value: must be finite (not None, NaN, or infinity)
+        if value is None or not math.isfinite(value):
+            return
+        
+        # Validate timestamp_utc: must be non-None
+        if timestamp_utc is None:
             return
         
         try:

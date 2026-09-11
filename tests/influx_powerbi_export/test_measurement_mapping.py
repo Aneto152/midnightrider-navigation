@@ -192,6 +192,86 @@ class TestMeasurementMapping:
         # This test verifies classifier policy: non-AIS → "midnight_rider"
         # (Tested through classifier tests, not measurement mapping)
         pass
+    
+    def test_empty_field_name_rejected(self):
+        """Normalizer rejects records with empty field_name."""
+        normalizer = Normalizer()
+        
+        normalizer.add_point(
+            timestamp_utc="2026-09-04T16:00:03Z",
+            field_name="",  # Empty field_name — should be rejected
+            value=5.0
+        )
+        
+        windows = normalizer.aggregate_windows()
+        assert len(windows) == 0
+    
+    def test_whitespace_field_name_rejected(self):
+        """Normalizer rejects records with whitespace-only field_name."""
+        normalizer = Normalizer()
+        
+        normalizer.add_point(
+            timestamp_utc="2026-09-04T16:00:03Z",
+            field_name="   ",  # Whitespace-only field_name — should be rejected
+            value=5.0
+        )
+        
+        windows = normalizer.aggregate_windows()
+        assert len(windows) == 0
+    
+    def test_nan_value_rejected(self):
+        """Normalizer rejects NaN values."""
+        normalizer = Normalizer()
+        
+        normalizer.add_point(
+            timestamp_utc="2026-09-04T16:00:03Z",
+            field_name="sog_knots",
+            value=float("nan")  # NaN — should be rejected
+        )
+        
+        windows = normalizer.aggregate_windows()
+        assert len(windows) == 0
+    
+    def test_positive_infinity_rejected(self):
+        """Normalizer rejects positive infinity."""
+        normalizer = Normalizer()
+        
+        normalizer.add_point(
+            timestamp_utc="2026-09-04T16:00:03Z",
+            field_name="sog_knots",
+            value=float("inf")  # +inf — should be rejected
+        )
+        
+        windows = normalizer.aggregate_windows()
+        assert len(windows) == 0
+    
+    def test_negative_infinity_rejected(self):
+        """Normalizer rejects negative infinity."""
+        normalizer = Normalizer()
+        
+        normalizer.add_point(
+            timestamp_utc="2026-09-04T16:00:03Z",
+            field_name="sog_knots",
+            value=float("-inf")  # -inf — should be rejected
+        )
+        
+        windows = normalizer.aggregate_windows()
+        assert len(windows) == 0
+    
+    def test_valid_field_creates_window(self):
+        """Valid mapped field still creates exactly one window."""
+        normalizer = Normalizer()
+        
+        normalizer.add_point(
+            timestamp_utc="2026-09-04T16:00:03Z",
+            field_name="sog_knots",
+            value=5.0
+        )
+        
+        windows = normalizer.aggregate_windows()
+        assert len(windows) == 1
+        assert "sog_knots" in windows[0]
+        assert windows[0]["sog_knots"] == 5.0
 
 
 class TestMeasurementAggregation:
