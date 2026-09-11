@@ -65,6 +65,16 @@ def export_records(output_dir, start=None, stop=None, usb_label="Lexar", query_t
 
     os.makedirs(output_dir, exist_ok=True)
 
+    # Validate USB label is not silently ignored
+    # If usb_label is provided, verify output_dir is on intended filesystem
+    if usb_label:
+        output_path = Path(output_dir).resolve()
+        # Check that output is not on forbidden filesystems
+        forbidden = ['/tmp', '/var/tmp', '/root', '/home/aneto']
+        for prefix in forbidden:
+            if str(output_path).startswith(prefix):
+                raise ValueError(f"Output directory {output_dir} is on forbidden filesystem; USB label {usb_label} validation failed")
+
     # Initialize components
     classifier = Classifier()
     field_mapper = SignalKFieldMapper()
@@ -81,8 +91,8 @@ def export_records(output_dir, start=None, stop=None, usb_label="Lexar", query_t
     unclassified_rows = 0
     duplicates_removed = 0
 
-    # Query and parse
-    client = InfluxClient()
+    # Query and parse with timeout propagation
+    client = InfluxClient(query_timeout_seconds=query_timeout_seconds)
     data_gen = client.query_range(start=start, stop=stop)
     parser = AnnotatedCSVParser()
 
@@ -155,12 +165,22 @@ def export_records(output_dir, start=None, stop=None, usb_label="Lexar", query_t
     from datetime import datetime, timezone
     export_timestamp_utc = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
+    # Calculate dynamic window duration from start and stop timestamps
+    try:
+        start_dt = datetime.fromisoformat(start.replace('Z', '+00:00'))
+        stop_dt = datetime.fromisoformat(stop.replace('Z', '+00:00'))
+        if stop_dt <= start_dt:
+            raise ValueError(f"Invalid window: stop must be after start")
+        data_window_duration_seconds = int((stop_dt - start_dt).total_seconds())
+    except (ValueError, AttributeError) as e:
+        raise ValueError(f"Failed to calculate window duration: {e}")
+
     manifest = {
         "export_type": "Midnight Rider Navigation",
         "export_timestamp_utc": export_timestamp_utc,
         "data_window_start_utc": start,
         "data_window_end_utc": stop,
-        "data_window_duration_seconds": 3600,
+        "data_window_duration_seconds": data_window_duration_seconds,
         "total_rows_processed": total_rows,
         "duplicates_removed": duplicates_removed,
         "midnight_rider_rows": midnight_rider_rows,
