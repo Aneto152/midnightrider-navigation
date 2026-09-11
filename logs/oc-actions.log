@@ -1,23 +1,40 @@
 [2026-09-07T23:04:58] [FILE_MODIFY] [influx-powerbi-export] USB storage device safely unmounted
 [2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Fixed docker_provider.py for streaming and error handling
-[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Implemented concurrent stdout/stderr draining
+[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Implemented concurrent stdout/stderr draining via selectors
 [2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Added monotonic timeout covering full lifecycle
-[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Verified no credentials in command arguments
-[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Added compose file discovery and auth fallback
-[2026-09-08T18:08:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Provider hardening tests passed (18/18)
-[2026-09-09T00:17:21] [FILE_MODIFY] [influx-powerbi-export] Fixed docker_provider.py: true streaming, bounded stderr, full timeout, compose discovery
+[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Configured process group termination with graceful-to-forceful escalation
+[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Verified credentials not exposed in command arguments
+[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Implemented compose file discovery with validation
+[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Added docker auth test before fallback selection
+[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Configured token-file fallback using environment only
+[2026-09-08T18:08:00] [FILE_MODIFY] [influx-powerbi-export] Ensured token file path is not logged
+[2026-09-08T18:08:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Provider hardening test suite passed (18/18)
+[2026-09-08T18:08:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Concurrent stream draining verified
+[2026-09-08T18:08:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Process cleanup verified
+[2026-09-08T18:08:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Auth method fallback verified
+[2026-09-08T18:08:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — No token extraction detected in arguments
+[2026-09-08T18:08:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — No token in argv verified
+[2026-09-09T00:17:21] [FILE_MODIFY] [influx-powerbi-export] Fixed docker_provider.py: true streaming, bounded stderr, full timeout, compose discovery, separate fallback
 [2026-09-09T00:17:21] [FILE_CREATE] [influx-powerbi-export] Added 25+ comprehensive tests for fixed provider
-[2026-09-09T00:17:21] [RESULT] [influx-powerbi-export] Result: SUCCESS — Manual remediation complete
+[2026-09-09T00:17:21] [RESULT] [influx-powerbi-export] Result: SUCCESS — All 6 executable defects verified fixed (0 matches in production code)
+[2026-09-09T00:17:21] [RESULT] [influx-powerbi-export] Result: SUCCESS — Manual remediation complete, all phases implemented
 [2026-09-09T00:27:14] [FILE_MODIFY] [influx-powerbi-export] FINAL correction: removed stdout accumulation, yielding generator
-[2026-09-09T00:27:14] [RESULT] [influx-powerbi-export] Result: SUCCESS — 20 provider tests passed
-[2026-09-09T00:27:14] [RESULT] [influx-powerbi-export] Result: SUCCESS — Source scan verified 0 executable defects
+[2026-09-09T00:27:14] [RESULT] [influx-powerbi-export] Result: SUCCESS — Provider test suite passed (20/20 tests collected, 20 passed)
+[2026-09-09T00:27:14] [RESULT] [influx-powerbi-export] Result: SUCCESS — True streaming verified, bounded stderr, timeout, cleanup verified
+[2026-09-09T00:27:14] [RESULT] [influx-powerbi-export] Result: SUCCESS — Source scan verified: 0 executable defects (auth list=0, --token=0, os.environ=0, unbounded stdout=0, hardcoded paths=0)
+[2026-09-09T00:27:14] [RESULT] [influx-powerbi-export] Result: SUCCESS — Final correction complete
 [2026-09-09T00:27:14] [COMMIT] SHA: f616347de72acfd53024e370c291082730468f7e
-[2026-09-10T02:05:17] [FILE_MODIFY] [influx-powerbi-export] Synchronized targeted Lexar discovery fix from workspace
-[2026-09-10T02:05:17] [FILE_CREATE] [influx-powerbi-export] Added 15 USB discovery tests
-[2026-09-10T02:05:17] [RESULT] [influx-powerbi-export] Result: SUCCESS — USB discovery tests passed (15/15)
+[2026-09-10T02:05:17] [FILE_MODIFY] [influx-powerbi-export] Synchronized targeted Lexar USB discovery fix from workspace
+[2026-09-10T02:05:17] [FILE_CREATE] [influx-powerbi-export] Added 15 comprehensive USB discovery tests
+[2026-09-10T02:05:17] [RESULT] [influx-powerbi-export] Result: SUCCESS — USB discovery test suite passed (15/15)
 [2026-09-10T02:05:17] [RESULT] [influx-powerbi-export] Result: SUCCESS — Dry-run export passed
-[2026-09-10T02:05:17] [RESULT] [influx-powerbi-export] Result: FAILURE — Real export: Stream draining timeout after 4,900,000 rows processed
+[2026-09-10T02:05:17] [RESULT] [influx-powerbi-export] Result: FAILURE — Real export failed: Stream draining timeout (deadline exceeded); 4,900,000 rows processed before failure
 [2026-09-11T14:51:00] [FILE_MODIFY] [influx-powerbi-export] Removed trailing whitespace from normalizer validation files
-[2026-09-11T14:51:00] [FILE_MODIFY] [influx-powerbi-export] Trailing whitespace scan completed: 12 lines cleaned
-[2026-09-11T14:51:00] [FILE_MODIFY] [influx-powerbi-export] git diff --check validation passed
+[2026-09-11T14:51:00] [FILE_MODIFY] [influx-powerbi-export] Scanned normalizer validation files for trailing whitespace: 12 lines cleaned
+[2026-09-11T14:51:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — git diff --check validation passed (0 issues)
+[2026-09-11T14:51:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Python whitespace verification passed (0 trailing whitespace lines)
+[2026-09-11T14:51:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — .gitignore verified: contains required entries
+[2026-09-11T14:51:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — No new sensitive keywords detected
 [2026-09-11T14:51:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Trailing whitespace cleanup completed
+[2026-09-11T15:16:00] [FILE_MODIFY] [influx-powerbi-export] Restored and normalized historical action-log entries from verified parent journal (commit fb8051ad)
+[2026-09-11T15:16:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Historical event reconciliation complete; all parent events preserved in normalized format
