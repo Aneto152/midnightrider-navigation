@@ -12,7 +12,29 @@ class Classifier:
     
     def __init__(self):
         """Initialize classifier with AIS detection patterns."""
-        pass
+        # AIS measurement families (boundary-safe matching)
+        self.ais_measurement_prefixes = [
+            "sensors.ais",      # sensors.ais.*
+            "offposition",      # offPosition.* (case-insensitive)
+        ]
+    
+    def _is_ais_measurement(self, measurement):
+        """Check if measurement matches any AIS measurement family with boundary-safe matching.
+        
+        Boundary-safe: exact match OR match followed by dot separator.
+        Examples:
+            - "sensors.ais.target" matches "sensors.ais" (has dot after prefix)
+            - "sensors.aiscope" does NOT match "sensors.ais" (no dot after prefix)
+            - "offposition.record" matches "offposition" (has dot after prefix)
+        """
+        measurement_lower = measurement.lower()
+        
+        for prefix in self.ais_measurement_prefixes:
+            # Exact match or match with dot separator (boundary-safe)
+            if measurement_lower == prefix or measurement_lower.startswith(prefix + "."):
+                return True
+        
+        return False
     
     def classify(self, record):
         """
@@ -37,13 +59,17 @@ class Classifier:
         measurement = record.get("_measurement", "").lower()
         
         # AIS detection (highest precedence - checked first)
+        
+        # Check source for AIS substring
         if "ais" in source:
             return "ais"
         
-        if "ais" in context:
+        # Check context for MMSI URN pattern (valid AIS identifier)
+        if "mmsi" in context and "urn" in context:
             return "ais"
         
-        if "ais" in measurement:
+        # Check measurement for AIS measurement families (boundary-safe)
+        if self._is_ais_measurement(measurement):
             return "ais"
         
         # All non-AIS records are Midnight Rider onboard data

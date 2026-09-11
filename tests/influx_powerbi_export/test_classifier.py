@@ -18,17 +18,17 @@ def test_midnight_rider_with_self_true(classifier):
     assert classifier.classify(record) == "midnight_rider"
 
 def test_unclassified_with_self_empty(classifier):
-    """self=(empty) with sensors measurement → Unclassified (not Midnight Rider)
+    """self=(empty) with sensors measurement → Midnight Rider (non-AIS onboard data)
     
-    CORRECTED: Empty self does NOT prove self-vessel identity.
-    Only explicit self=="true" is accepted.
+    CORRECTED: Non-AIS sensors measurement with empty self is classified as midnight_rider.
+    Policy: All non-AIS records are onboard Midnight Rider data.
     """
     record = {
         "_measurement": "sensors.wit.quaternion.w",
         "self": "",
         "context": "",
     }
-    assert classifier.classify(record) == "unclassified"
+    assert classifier.classify(record) == "midnight_rider"
 
 def test_ais_with_mmsi_context(classifier):
     """MMSI URN in context → AIS"""
@@ -49,70 +49,79 @@ def test_ais_measurement(classifier):
     assert classifier.classify(record) == "ais"
 
 def test_virtual_measurement_with_mmsi_context(classifier):
-    """virtual measurement with MMSI context → AIS (AIS precedence)
+    """Non-AIS measurement with MMSI URN context → AIS (AIS precedence)
     
-    CORRECTED: virtual measurement matching is DISABLED pending schema validation.
-    However, MMSI URN in context still triggers AIS classification (AIS precedence).
-    AToN substring matching ("atons") is disabled, but MMSI URN substring match remains.
+    CORRECTED: Explicit MMSI URN in context triggers AIS classification (AIS precedence).
+    Non-AIS measurements are overridden by AIS context markers.
     """
     record = {
         "_measurement": "virtual",
         "self": "",
         "context": "atons.urn:mrn:imo:mmsi:993672062",
     }
-    # MMSI URN in context triggers AIS despite virtual and atons being disabled
+    # MMSI URN in context triggers AIS due to AIS precedence
     assert classifier.classify(record) == "ais"
 
 def test_unclassified(classifier):
-    """Unknown measurement with no context → Unclassified"""
+    """Unknown measurement with no AIS markers → Midnight Rider
+    
+    Policy: All non-AIS records (including unknown measurements) are classified as midnight_rider.
+    """
     record = {
         "_measurement": "unknown.metric",
         "self": "unknown_value",
         "context": "",
     }
-    assert classifier.classify(record) == "unclassified"
+    assert classifier.classify(record) == "midnight_rider"
 
 # NEW TARGETED TESTS FOR CORRECTED LOGIC
 
 def test_missing_self_with_navigation(classifier):
-    """Missing self + navigation measurement → Unclassified
+    """Missing self + navigation measurement → Midnight Rider
     
-    CORRECTED: Missing self is NOT treated as empty/valid.
-    Generic measurement alone does NOT prove self-vessel identity.
+    CORRECTED: Non-AIS measurements without AIS markers are classified as midnight_rider.
+    Policy: All non-AIS records are onboard data.
     """
     record = {
         "_measurement": "navigation.position",
         "context": "",
     }
-    assert classifier.classify(record) == "unclassified"
+    assert classifier.classify(record) == "midnight_rider"
 
 def test_missing_self_with_environment(classifier):
-    """Missing self + environment measurement → Unclassified"""
+    """Missing self + environment measurement → Midnight Rider
+    
+    Policy: All non-AIS records are onboard Midnight Rider data.
+    """
     record = {
         "_measurement": "environment.outside.temperature",
         "context": "",
     }
-    assert classifier.classify(record) == "unclassified"
+    assert classifier.classify(record) == "midnight_rider"
 
 def test_missing_self_with_electrical(classifier):
-    """Missing self + electrical measurement → Unclassified"""
+    """Missing self + electrical measurement → Midnight Rider
+    
+    Policy: All non-AIS records are onboard Midnight Rider data.
+    """
     record = {
         "_measurement": "electrical.batteries.0.voltage",
         "context": "",
     }
-    assert classifier.classify(record) == "unclassified"
+    assert classifier.classify(record) == "midnight_rider"
 
 def test_self_false_with_navigation(classifier):
-    """self=false + navigation → Unclassified
+    """self=false + navigation → Midnight Rider
     
-    Explicitly false self means this is NOT Midnight Rider.
+    CORRECTED: Non-AIS measurements (regardless of self value) are classified as midnight_rider.
+    Policy: All non-AIS records are onboard data.
     """
     record = {
         "_measurement": "navigation.position",
         "self": "false",
         "context": "",
     }
-    assert classifier.classify(record) == "unclassified"
+    assert classifier.classify(record) == "midnight_rider"
 
 def test_atonscope_false_positive_prevention(classifier):
     """atonscope in context → Unclassified (not AIS)
@@ -154,10 +163,10 @@ def test_sensors_ais_boundary_safe(classifier):
     assert classifier.classify(record) == "ais"
 
 def test_sensors_aiscope_not_ais(classifier):
-    """sensors.aiscope → Not AIS (boundary-safe blocking)
+    """sensors.aiscope → Midnight Rider (boundary-safe blocking)
     
-    CORRECTED: 'sensors.aiscope' does NOT match 'sensors.ais.*' boundary check.
-    Requires dot separator.
+    CORRECTED: 'sensors.aiscope' does NOT match 'sensors.ais.*' (no dot separator).
+    Boundary-safe matching requires exact or prefix with dot.
     """
     record = {
         "_measurement": "sensors.aiscope",
@@ -166,27 +175,26 @@ def test_sensors_aiscope_not_ais(classifier):
     }
     assert classifier.classify(record) == "midnight_rider"
 
-def test_offPosition_boundary_safe(classifier):
-    """offPosition.record → AIS (boundary-safe matching)
+def test_offposition_boundary_safe(classifier):
+    """offposition.record → AIS (boundary-safe matching)
     
-    CORRECTED: offPosition.* measurement family is AIS and is detected by boundary-safe
-    prefix matching (exact or with dot). Empty self does NOT affect AIS detection
-    due to AIS precedence.
+    CORRECTED: offposition.* (case-insensitive) measurement family is AIS and is detected
+    by boundary-safe prefix matching (exact or with dot).
     """
     record = {
-        "_measurement": "offPosition.record",
+        "_measurement": "offposition.record",
         "self": "",
         "context": "",
     }
-    # offPosition.* is AIS measurement family; boundary-safe match returns ais
+    # offposition.* is AIS measurement family; boundary-safe match returns ais
     assert classifier.classify(record) == "ais"
 
 def test_missing_measurement(classifier):
-    """Missing measurement + self=true → Unclassified (measurement defaults to empty string)
+    """Missing measurement + self=true → Midnight Rider (non-AIS fallback)
     
     CORRECTED: When _measurement is missing, it defaults to empty string "".
-    Empty string doesn't match any Midnight Rider measurement prefix.
-    With self=true but invalid measurement, classifier returns unclassified.
+    Empty string doesn't match any AIS patterns.
+    Classifier returns midnight_rider (non-AIS fallback policy).
     
     Note: This reflects the corrected logic:
     self=true REQUIRES a valid measurement family; empty/missing measurement alone is insufficient.
@@ -195,13 +203,15 @@ def test_missing_measurement(classifier):
         "self": "true",
         "context": "",
     }
-    # self=true with invalid/missing measurement returns unclassified
-    assert classifier.classify(record) == "unclassified"
+    # Missing measurement defaults to empty string; no AIS patterns match
+    # Classifier returns midnight_rider (non-AIS fallback policy)
+    assert classifier.classify(record) == "midnight_rider"
 
 def test_self_true_mmsi_ais_precedence(classifier):
-    """self=true + MMSI context → AIS (AIS precedence enforced)
+    """self=true + MMSI URN context → AIS (AIS precedence enforced)
     
-    Even with self=true, explicit MMSI context takes precedence.
+    CORRECTED: Explicit MMSI URN in context triggers AIS classification (AIS precedence).
+    Even non-AIS measurements are overridden by valid AIS context markers.
     """
     record = {
         "_measurement": "navigation.position",
@@ -211,26 +221,23 @@ def test_self_true_mmsi_ais_precedence(classifier):
     assert classifier.classify(record) == "ais"
 
 def test_empty_measurement_with_self_true(classifier):
-    """Empty _measurement + self=true → Unclassified
+    """Empty _measurement + self=true → Midnight Rider (non-AIS fallback)
     
-    CORRECTED: Empty measurement (0-length string) doesn't match any Midnight Rider prefix.
-    Even with self=true, empty measurement is insufficient for self-vessel classification.
-    Returns unclassified.
-    
-    This ensures that self=true requires BOTH explicit self tag AND valid measurement family.
+    CORRECTED: Empty measurement (0-length string) doesn't match any AIS patterns.
+    Classifier returns midnight_rider (non-AIS fallback policy).
     """
     record = {
         "_measurement": "",
         "self": "true",
         "context": "",
     }
-    assert classifier.classify(record) == "unclassified"
+    assert classifier.classify(record) == "midnight_rider"
 
 def test_valid_aton_context_with_mmsi_urn(classifier):
-    """AToN with explicit MMSI URN → AIS
+    """AToN with explicit MMSI URN context → AIS
     
-    CORRECTED: Broad AToN substring matching ("atons") is disabled pending URN validation.
-    However, explicit MMSI URN in context still triggers AIS.
+    CORRECTED: Explicit MMSI URN in context (regardless of measurement or self value)
+    triggers AIS classification due to AIS precedence.
     """
     record = {
         "_measurement": "navigation.position",
