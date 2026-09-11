@@ -50,3 +50,11 @@
 2026-09-11T18:28:51.040525Z [FILE_CREATE] [influx-powerbi-export] Created fresh AIS (206318 rows), Midnight Rider aggregate (360 windows), and manifest outputs on validated USB storage
 2026-09-11T18:28:51.040525Z [TEST] [influx-powerbi-export] Focused test suite: 99/99 PASSED (classifier, CSV parser, schema mapping, measurement mapping, AIS writer, filesystem, writers, CLI)
 2026-09-11T18:28:51.040525Z [RESULT] [influx-powerbi-export] SUCCESS — All 23 aggregate fields validated: latitude/longitude (360/360), source_count (360/360), 100% population, 0 unclassified, 0 NaN/infinity violations
+[2026-09-11T16:23:00] [FILE_MODIFY] [influx-powerbi-export] Implemented signed attitude angle conversion fix (is_circular flag)
+[2026-09-11T16:23:00] [FILE_CREATE] [influx-powerbi-export] Added comprehensive unit tests for signed vs circular angle distinction
+[2026-09-11T16:24:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Focused test suite passed (108/108)
+[2026-09-11T16:25:00] [DOCKER_ACTION] [influx-powerbi-export] Executed fresh one-hour sample (2026-09-04T16:00:00Z to 17:00:00Z) from verified attitude-fix commit
+[2026-09-11T16:26:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — roll_deg: 360/360 valid within [-180,180], pitch_deg: 360/360 valid within [-90,90]
+[2026-09-11T16:26:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — All 5 circular fields in [0,360), all 23 aggregate fields populated, manifest reconciliation passed
+[2026-09-11T16:26:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Unclassified rows = 0, schema_validated = true
+[2026-09-11T16:27:00] [COMMIT] SHA: bc54fcde9c64b6fce1de20ffac8791f845cfd13d — Signed attitude angle conversion fix (is_circular distinction, preserve sign for roll/pitch)
