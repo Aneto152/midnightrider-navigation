@@ -16,8 +16,9 @@ from .influx_client import InfluxClient
 from .annotated_csv import AnnotatedCSVParser
 from .classifier import Classifier
 from .writers import CSVWriter, ManifestWriter, RawAISEventWriter
-from .schema import get_midnight_rider_headers, get_ais_headers
+from .schema import get_midnight_rider_headers, get_ais_headers, MIDNIGHT_RIDER_SCHEMA
 from .normalizer import Normalizer
+from .field_mapper import SignalKFieldMapper
 
 
 def export_records(output_dir, start=None, stop=None):
@@ -36,6 +37,7 @@ def export_records(output_dir, start=None, stop=None):
     
     # Initialize components
     classifier = Classifier()
+    field_mapper = SignalKFieldMapper()
     ais_writer = RawAISEventWriter(os.path.join(output_dir, "AIS_EVENTS_RAW.csv"))
     midnight_rider_writer = CSVWriter(
         os.path.join(output_dir, "MIDNIGHT_RIDER_10S_AGGREGATES.csv")
@@ -71,24 +73,20 @@ def export_records(output_dir, start=None, stop=None):
             ais_rows += 1
         
         elif classification == "midnight_rider":
-            # Send to normalizer for aggregation
-            # Use _measurement (Signal K path) as field name, _value as numeric payload, _time as timestamp
+            # Map Signal K measurement to CSV schema field and convert value
             timestamp = record.get("_time")
             measurement = record.get("_measurement")
             value_str = record.get("_value")
             
-            # Convert value to float
-            try:
-                value = float(value_str) if value_str else None
-            except (ValueError, TypeError):
-                value = None
+            # Use field mapper to get target CSV field and converted value
+            mapped_result = field_mapper.map_and_convert(measurement, value_str)
             
-            # Add to normalizer if we have a valid measurement and value
-            if timestamp and measurement and value is not None:
+            if mapped_result and timestamp:
+                target_field, converted_value = mapped_result
                 midnight_rider_normalizer.add_point(
                     timestamp_utc=timestamp,
-                    field_name=measurement,
-                    value=value
+                    field_name=target_field,
+                    value=converted_value
                 )
             
             midnight_rider_rows += 1
@@ -103,11 +101,10 @@ def export_records(output_dir, start=None, stop=None):
     # Aggregate Midnight Rider windows
     aggregated_windows = midnight_rider_normalizer.aggregate_windows()
     
-    # Get headers from schema
-    from .schema import MIDNIGHT_RIDER_SCHEMA
+    # Get CSV schema headers
     midnight_rider_headers = [h[0] for h in MIDNIGHT_RIDER_SCHEMA]
     
-    # Write aggregated Midnight Rider CSV
+    # Write aggregated Midnight Rider CSV with final schema fields
     if aggregated_windows:
         midnight_rider_writer.write_csv(aggregated_windows, midnight_rider_headers)
     else:
