@@ -41,3 +41,7 @@
 [2026-09-11T15:16:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Historical event reconciliation complete; all parent events preserved in normalized format
 [2026-09-11T15:33:00] [FILE_MODIFY] [influx-powerbi-export] Restored the explicit pending-commit history event and sanitized credential-related descriptions
 [2026-09-11T15:33:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Final journal history reconciliation passed with zero unmatched parent events
+[2026-09-11T16:22:02Z] [DOCKER_ACTION] [influx-powerbi-export] Executed authorized one-hour sample query (2026-09-04T16:00-17:00 UTC)
+[2026-09-11T16:22:02Z] [FILE_CREATE] [influx-powerbi-export] Created one-hour sample outputs: AIS_EVENTS_RAW.csv (206318 rows), MIDNIGHT_RIDER_10S_AGGREGATES.csv (360 windows), EXPORT_MANIFEST.json
+[2026-09-11T16:22:02Z] [RESULT] [influx-powerbi-export] Result: SUCCESS — Comprehensive validation: CSV structure PASS, angle audit (4/4) PASS, manifest reconciliation (19/19 keys) PASS, completeness gates PASS
+[2026-09-11T16:22:02Z] [COMMIT] [influx-powerbi-export] Runtime fix commit SHA: 4ff136c028d3a4ba55b0b39210ae8e4d32ea5094
