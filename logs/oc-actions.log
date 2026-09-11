@@ -58,3 +58,7 @@
 [2026-09-11T16:26:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — All 5 circular fields in [0,360), all 23 aggregate fields populated, manifest reconciliation passed
 [2026-09-11T16:26:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Unclassified rows = 0, schema_validated = true
 [2026-09-11T16:27:00] [COMMIT] SHA: bc54fcde9c64b6fce1de20ffac8791f845cfd13d — Signed attitude angle conversion fix (is_circular distinction, preserve sign for roll/pitch)
+[2026-09-11T21:15:50Z] [EXPORT_COMPLETE] [influx-powerbi-export] Full historical export completed successfully (2026-09-04T00:00:00Z to 2026-09-07T23:59:59Z, 48.5 hours, 38 minutes runtime)
+[2026-09-11T21:26:00Z] [RESULT] [influx-powerbi-export] Result: SUCCESS — Full export validation passed all gates: attitude angles valid, all 23 fields populated, manifest reconciled, unclassified = 0
+[2026-09-11T21:26:00Z] [EXPORT_MANIFEST] [influx-powerbi-export] Output: AIS_EVENTS_RAW.csv (1,013 MB), MIDNIGHT_RIDER_10S_AGGREGATES.csv (7.4 MB), EXPORT_MANIFEST.json (992 bytes)
+[2026-09-11T21:26:00Z] [METRICS] [influx-powerbi-export] AIS vessels: 10,295,015 rows | Midnight Rider aggregates: 58,398,861 rows | Unclassified: 0 | Midnight Rider windows: 21,038
