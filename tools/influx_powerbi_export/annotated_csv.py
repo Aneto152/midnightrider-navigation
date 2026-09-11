@@ -22,6 +22,13 @@ class AnnotatedCSVParser:
         """
         Parse annotated CSV stream, yield data rows as dicts.
         Skips annotation headers, handles multiple tables.
+        
+        Correctly detects Flux table boundaries:
+        - csv.reader() splits on commas, so "result" marker row becomes:
+          ["", "result", "table", "_start", "_stop", "_time", "_value", "_field", ...]
+        - When detected, install this row as the active headers
+        - Do NOT skip the row; it is the new header row for the next table
+        - The following row will be the first actual data row
         """
         reader = csv.reader(lines)
         headers = None
@@ -44,18 +51,28 @@ class AnnotatedCSVParser:
                 # Skip default row
                 continue
             
-            # First data row sets headers
-            if headers is None:
-                headers = row
-                continue
+            # Check for table boundary (Flux result marker)
+            # After csv.reader(), a row starting with ",result" becomes:
+            # ["", "result", "table", "_start", "_stop", "_time", "_value", "_field", ...]
+            is_table_header = (
+                len(row) > 1 
+                and row[0] == "" 
+                and row[1] == "result"
+            )
             
-            # Check for table boundary (empty result marker or schema change)
-            if row[0] == ',result':
-                # New table marker
+            if is_table_header:
+                # New Flux table: install this row as the active headers
                 table_count += 1
-                headers = None
+                headers = row
                 self.group_headers = []
                 self.datatype_headers = []
+                # Do NOT skip; this row IS the header row for the next table
+                # The following row will be the first actual data row
+                continue
+            
+            # First data row (non-header, non-annotation) sets headers
+            if headers is None:
+                headers = row
                 continue
             
             # Data row: convert to dict
