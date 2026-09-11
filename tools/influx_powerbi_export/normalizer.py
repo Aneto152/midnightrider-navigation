@@ -14,6 +14,7 @@ class Normalizer:
 
     def __init__(self):
         self.windows = defaultdict(lambda: defaultdict(list))
+        self.source_counts = defaultdict(int)  # Track number of source records per window
 
     def add_point(self, timestamp_utc: str, field_name: str, value: Optional[float]):
         """Add a data point to its 10-second window.
@@ -44,6 +45,7 @@ class Normalizer:
             window_key = (window_start, window_start + 10)
 
             self.windows[window_key][field_name].append(value)
+            self.source_counts[window_key] += 1  # Track number of source records per window
         except:
             pass
 
@@ -57,6 +59,7 @@ class Normalizer:
                 "window_end_utc": self._epoch_to_iso(window_end),
                 "timestamp_utc": self._epoch_to_iso((window_start + window_end) / 2),
                 "sample_count": sum(len(v) for v in fields.values()),
+                "source_count": self.source_counts.get((window_start, window_end), 0),
             }
 
             for field_name, values in fields.items():

@@ -29,6 +29,12 @@ class SignalKFieldMapper:
         # Navigation - position (JSON-encoded sub-fields, handled separately)
         "navigation.position": ("position", "json", "degrees", False),  # Special handling
 
+        # Navigation - position individual fields (direct measurements)
+        "navigation.latitude": ("latitude", "degrees", "degrees", False),
+        "navigation.longitude": ("longitude", "degrees", "degrees", False),
+        "navigation.position.latitude": ("latitude", "degrees", "degrees", False),
+        "navigation.position.longitude": ("longitude", "degrees", "degrees", False),
+
         # Wind - apparent
         "environment.wind.angleApparent": ("awa_deg", "radians", "degrees", True),
         "environment.wind.speedApparent": ("aws_knots", "m/s", "knots", False),
