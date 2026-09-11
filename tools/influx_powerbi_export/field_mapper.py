@@ -55,9 +55,9 @@ class SignalKFieldMapper:
         "environment.tide.rate": ("tide_rate_knots", "m/s", "knots", False),
         "environment.current.drift": ("tide_rate_knots", "m/s", "knots", False),
 
-        # Attitude
-        "navigation.attitude.roll": ("roll_deg", "radians", "degrees", False),
-        "navigation.attitude.pitch": ("pitch_deg", "radians", "degrees", False),
+        # Attitude (radians → degrees requires is_angular=True for proper conversion)
+        "navigation.attitude.roll": ("roll_deg", "radians", "degrees", True),
+        "navigation.attitude.pitch": ("pitch_deg", "radians", "degrees", True),
 
         # Electrical - battery voltage (use calypso percent and House voltage)
         "electrical.batteries.House.voltage": ("battery_voltage", "volts", "volts", False),
