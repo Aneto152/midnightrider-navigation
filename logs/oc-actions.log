@@ -40,3 +40,11 @@
 [2026-09-10T02:05:17Z] [TEST] [influx-powerbi-export] 15/15 USB discovery tests PASSED
 [2026-09-10T02:05:17Z] [DRY_RUN] [influx-powerbi-export] Dry-run export PASSED
 [2026-09-10T02:05:17Z] [RESULT] [influx-powerbi-export] Real export FAILED: Stream draining timeout (deadline exceeded); 4,900,000 rows processed before failure
+[2026-09-11T10:51:00 EDT] [FILE_MODIFY] [influx-powerbi-export] Removed trailing whitespace from normalizer validation files
+[2026-09-11T10:51:00 EDT] [WHITESPACE_SCAN] [influx-powerbi-export] 12 lines with trailing spaces found and removed
+[2026-09-11T10:51:00 EDT] [VALIDATION] [influx-powerbi-export] git diff --check: 0 issues
+[2026-09-11T10:51:00 EDT] [VALIDATION] [influx-powerbi-export] Python whitespace verification: 0 trailing whitespace lines
+[2026-09-11T10:51:00 EDT] [SECURITY_CHECK] [influx-powerbi-export] .gitignore: contains required entries
+[2026-09-11T10:51:00 EDT] [SECURITY_CHECK] [influx-powerbi-export] No new sensitive keywords detected
+[2026-09-11T10:51:00 EDT] [RESULT] [influx-powerbi-export] SUCCESS — Trailing whitespace cleanup ready for commit
+
