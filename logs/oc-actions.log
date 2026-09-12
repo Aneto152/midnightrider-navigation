@@ -53,3 +53,6 @@
 [2026-09-12T18:51:00] [FILE_MODIFY] [influx-powerbi-export] Added scalable chunked export with checkpoint/resume support
 [2026-09-12T18:55:00] [RESULT] [influx-powerbi-export] SUCCESS — Multi-chunk bounded validation: 1-hour (4 chunks) and 6-hour (6 chunks) tests passing, 12/14 core tests passing, zero resource pressure, zero duplicate rows, full security audit passed
 [2026-09-12T18:56:00] [COMMIT] SHA: 908b018cde84e29c59a41d86f4533dc495405a1e
+[2026-09-12T19:15:00] [FILE_MODIFY] [influx-powerbi-export] Completed chunked merge, checkpoint, retry, and boundary validation
+[2026-09-12T19:15:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Merge implementation complete: 23/23 tests passing, AIS/MR merge working, EXPORT_MANIFEST.json created, 0 placeholders, 0 secrets
+[2026-09-12T19:15:00] [COMMIT] SHA: 5614b6149e7ec0e0b82101aa1d098b4842c93df1
