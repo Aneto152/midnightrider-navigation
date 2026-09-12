@@ -41,15 +41,7 @@
 [2026-09-11T15:16:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Historical event reconciliation complete; all parent events preserved in normalized format
 [2026-09-11T15:33:00] [FILE_MODIFY] [influx-powerbi-export] Restored the explicit pending-commit history event and sanitized credential-related descriptions
 [2026-09-11T15:33:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Final journal history reconciliation passed with zero unmatched parent events
-[2026-09-11T16:22:02Z] [DOCKER_ACTION] [influx-powerbi-export] Executed authorized one-hour sample query (2026-09-04T16:00-17:00 UTC)
-[2026-09-11T16:22:02Z] [FILE_CREATE] [influx-powerbi-export] Created one-hour sample outputs: AIS_EVENTS_RAW.csv (206318 rows), MIDNIGHT_RIDER_10S_AGGREGATES.csv (360 windows), EXPORT_MANIFEST.json
-[2026-09-11T16:22:02Z] [RESULT] [influx-powerbi-export] Result: SUCCESS — Comprehensive validation: CSV structure PASS, angle audit (4/4) PASS, manifest reconciliation (19/19 keys) PASS, completeness gates PASS
-[2026-09-11T16:22:02Z] [COMMIT] [influx-powerbi-export] Runtime fix commit SHA: 4ff136c028d3a4ba55b0b39210ae8e4d32ea5094
 
-2026-09-11T18:28:51.040525Z [DOCKER_ACTION] [influx-powerbi-export] Executed fresh one-hour 23-field sample from daee2f7
-2026-09-11T18:28:51.040525Z [FILE_CREATE] [influx-powerbi-export] Created fresh AIS (206318 rows), Midnight Rider aggregate (360 windows), and manifest outputs on validated USB storage
-2026-09-11T18:28:51.040525Z [TEST] [influx-powerbi-export] Focused test suite: 99/99 PASSED (classifier, CSV parser, schema mapping, measurement mapping, AIS writer, filesystem, writers, CLI)
-2026-09-11T18:28:51.040525Z [RESULT] [influx-powerbi-export] SUCCESS — All 23 aggregate fields validated: latitude/longitude (360/360), source_count (360/360), 100% population, 0 unclassified, 0 NaN/infinity violations
 [2026-09-11T16:23:00] [FILE_MODIFY] [influx-powerbi-export] Implemented signed attitude angle conversion fix (is_circular flag)
 [2026-09-11T16:23:00] [FILE_CREATE] [influx-powerbi-export] Added comprehensive unit tests for signed vs circular angle distinction
 [2026-09-11T16:24:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Focused test suite passed (108/108)
@@ -58,10 +50,6 @@
 [2026-09-11T16:26:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — All 5 circular fields in [0,360), all 23 aggregate fields populated, manifest reconciliation passed
 [2026-09-11T16:26:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Unclassified rows = 0, schema_validated = true
 [2026-09-11T16:27:00] [COMMIT] SHA: bc54fcde9c64b6fce1de20ffac8791f845cfd13d — Signed attitude angle conversion fix (is_circular distinction, preserve sign for roll/pitch)
-[2026-09-11T21:15:50Z] [EXPORT_COMPLETE] [influx-powerbi-export] Full historical export completed successfully (2026-09-04T00:00:00Z to 2026-09-07T23:59:59Z, 48.5 hours, 38 minutes runtime)
-[2026-09-11T21:26:00Z] [RESULT] [influx-powerbi-export] Result: SUCCESS — Full export validation passed all gates: attitude angles valid, all 23 fields populated, manifest reconciled, unclassified = 0
-[2026-09-11T21:26:00Z] [EXPORT_MANIFEST] [influx-powerbi-export] Output: AIS_EVENTS_RAW.csv (1,013 MB), MIDNIGHT_RIDER_10S_AGGREGATES.csv (7.4 MB), EXPORT_MANIFEST.json (992 bytes)
-[2026-09-11T21:26:00Z] [METRICS] [influx-powerbi-export] AIS vessels: 10,295,015 rows | Midnight Rider aggregates: 58,398,861 rows | Unclassified: 0 | Midnight Rider windows: 21,038
 [2026-09-12T18:51:00] [FILE_MODIFY] [influx-powerbi-export] Added scalable chunked export with checkpoint/resume support
 [2026-09-12T18:55:00] [RESULT] [influx-powerbi-export] SUCCESS — Multi-chunk bounded validation: 1-hour (4 chunks) and 6-hour (6 chunks) tests passing, 12/14 core tests passing, zero resource pressure, zero duplicate rows, full security audit passed
 [2026-09-12T18:56:00] [COMMIT] SHA: 908b018cde84e29c59a41d86f4533dc495405a1e

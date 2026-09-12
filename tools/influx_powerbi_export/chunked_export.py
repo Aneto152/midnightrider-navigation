@@ -21,6 +21,8 @@ from .classifier import Classifier
 from .normalizer import Normalizer
 from .writers import CSVWriter, ManifestWriter, RawAISEventWriter
 from .schema import MIDNIGHT_RIDER_SCHEMA
+from .merge import FinalMerger
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +30,7 @@ logger = logging.getLogger(__name__)
 class ChunkedExportEngine:
     """
     Scalable export engine for bounded time-window chunking.
-    
+
     Design:
     - Each chunk runs independently with separated timeout scopes
     - Completed chunks are recorded in checkpoint and not re-queried
@@ -36,7 +38,7 @@ class ChunkedExportEngine:
     - Final output is merged and deduplicated deterministically
     - No single global deadline covering entire export
     """
-    
+
     def __init__(
         self,
         output_dir: Path,
@@ -49,7 +51,7 @@ class ChunkedExportEngine:
     ):
         """
         Initialize chunked export engine.
-        
+
         Args:
             output_dir: Root output directory
             chunk_hours: Hours per chunk
@@ -66,16 +68,16 @@ class ChunkedExportEngine:
         self.max_chunk_retries = max_chunk_retries
         self.consolidation_period_seconds = consolidation_period_seconds
         self.window_mode = window_mode
-        
+
         self.output_dir.mkdir(parents=True, exist_ok=True)
-        
+
         logger.info(
             f"ChunkedExportEngine initialized: "
             f"chunk_hours={chunk_hours}, "
             f"query_timeout={query_timeout_seconds}s, "
             f"stream_idle_timeout={stream_idle_timeout_seconds}s"
         )
-    
+
     def export_bounded(
         self,
         start: str,
@@ -85,13 +87,13 @@ class ChunkedExportEngine:
     ) -> Dict:
         """
         Execute bounded chunked export (production-ready).
-        
+
         Args:
             start: ISO 8601 UTC start
             stop: ISO 8601 UTC stop
             resume: Resume from checkpoint if exists
             checkpoint_path: Explicit checkpoint path
-        
+
         Returns:
             Export manifest with metadata
         """
@@ -105,18 +107,18 @@ class ChunkedExportEngine:
             ).strip()
         except:
             code_sha = "unknown"
-        
+
         # Calculate chunks
         strategy = ChunkingStrategy(chunk_hours=self.chunk_hours)
         chunks = strategy.calculate_chunks(start, stop)
         strategy.validate_chunks(chunks)
-        
+
         logger.info(f"Calculated {len(chunks)} chunks for export")
-        
+
         # Initialize or load checkpoint
         if checkpoint_path is None:
             checkpoint_path = self.output_dir / "CHECKPOINT.json"
-        
+
         if resume and checkpoint_path.exists():
             checkpoint = ExportCheckpoint.load(checkpoint_path)
             is_valid, error = checkpoint.validate_for_resume(code_sha)
@@ -133,51 +135,51 @@ class ChunkedExportEngine:
                 output_dir=self.output_dir,
                 code_commit_sha=code_sha
             )
-        
+
         # Get list of chunks to process
         pending_chunks = checkpoint.get_pending_chunks(len(chunks))
         completed_chunks = checkpoint.get_completed_chunks()
         failed_chunks = checkpoint.get_failed_chunks()
-        
+
         logger.info(
             f"Chunk status: "
             f"pending={len(pending_chunks)}, "
             f"completed={len(completed_chunks)}, "
             f"failed={len(failed_chunks)}"
         )
-        
+
         # Process each pending chunk
         total_ais_rows = 0
         total_mr_rows = 0
         total_source_rows = 0
         all_chunk_results = []
-        
+
         for chunk_idx in pending_chunks:
             chunk = chunks[chunk_idx]
             logger.info(f"Processing {chunk}")
-            
+
             # Process with retries
             retry_count = 0
             success = False
-            
+
             while retry_count < self.max_chunk_retries and not success:
                 try:
                     chunk_result = self._process_chunk(chunk, checkpoint)
                     success = True
                     all_chunk_results.append(chunk_result)
-                    
+
                     total_ais_rows += chunk_result['ais_rows']
                     total_mr_rows += chunk_result['midnight_rider_rows']
                     total_source_rows += chunk_result['source_rows']
-                    
+
                     logger.info(f"Chunk {chunk_idx} SUCCESS: {chunk_result}")
-                
+
                 except Exception as e:
                     retry_count += 1
                     logger.warning(
                         f"Chunk {chunk_idx} failed (attempt {retry_count}/{self.max_chunk_retries}): {e}"
                     )
-                    
+
                     if retry_count >= self.max_chunk_retries:
                         # Mark as permanently failed
                         checkpoint.mark_chunk_failed(
@@ -193,10 +195,37 @@ class ChunkedExportEngine:
                         # Retry
                         logger.info(f"Retrying chunk {chunk_idx}...")
                         time.sleep(5)  # Wait before retry
-            
+
             # Save checkpoint after each chunk
             checkpoint.save()
-        
+
+        # Perform final merge (only if chunks succeeded)
+        completed_count = len(completed_chunks) + len([c for c in all_chunk_results if c.get('success')])
+        failed_count = len(failed_chunks)
+
+        logger.info(
+            f"Chunk processing complete: {completed_count} completed, {failed_count} failed"
+        )
+
+        merge_result = None
+        if failed_count == 0:
+            # All chunks successful, perform final merge
+            logger.info("All chunks successful, performing final merge...")
+            final_merger = FinalMerger(self.output_dir, len(chunks))
+            merge_result = final_merger.merge_all_chunks()
+
+            total_ais_rows = merge_result.get('ais_rows', 0)
+            total_mr_rows = merge_result.get('mr_rows', 0)
+
+            logger.info(
+                f"Final merge complete: {total_ais_rows} AIS rows, {total_mr_rows} MR rows"
+            )
+        else:
+            logger.error(
+                f"Cannot perform final merge: {failed_count} chunks failed. "
+                f"Fix failed chunks and retry."
+            )
+
         # Build final manifest
         manifest = {
             "export_timestamp_utc": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
@@ -204,35 +233,55 @@ class ChunkedExportEngine:
             "data_window_end_utc": stop,
             "chunk_hours": self.chunk_hours,
             "chunk_count": len(chunks),
-            "completed_chunk_count": len(completed_chunks) + len([c for c in all_chunk_results if c.get('success')]),
-            "failed_chunk_count": len(failed_chunks),
+            "completed_chunk_count": completed_count,
+            "failed_chunk_count": failed_count,
             "total_source_rows": total_source_rows,
-            "ais_rows": total_ais_rows,
-            "midnight_rider_source_rows": total_mr_rows,
+            "ais_rows": total_ais_rows if merge_result else 0,
+            "midnight_rider_source_rows": total_mr_rows if merge_result else 0,
+            "midnight_rider_windows_observed": total_mr_rows if merge_result else 0,
             "unclassified_rows": 0,
-            "duplicates_removed": 0,
+            "duplicates_removed": (
+                (merge_result.get('ais_duplicates_removed', 0) if merge_result else 0) +
+                (merge_result.get('mr_duplicates_removed', 0) if merge_result else 0)
+            ),
+            "schema_validated": failed_count == 0,
             "code_commit_sha": code_sha
         }
-        
+
+        # Add file metadata if merge succeeded
+        if merge_result:
+            manifest['ais_file'] = merge_result.get('ais_file')
+            manifest['ais_hash'] = merge_result.get('ais_hash')
+            manifest['ais_size'] = merge_result.get('ais_size')
+            manifest['mr_file'] = merge_result.get('mr_file')
+            manifest['mr_hash'] = merge_result.get('mr_hash')
+            manifest['mr_size'] = merge_result.get('mr_size')
+
+            # Write EXPORT_MANIFEST.json ONLY after successful merge
+            manifest_path = self.output_dir / "EXPORT_MANIFEST.json"
+            with open(manifest_path, 'w') as f:
+                json.dump(manifest, f, indent=2)
+            logger.info(f"EXPORT_MANIFEST.json written: {manifest_path}")
+
         checkpoint.save()
-        
-        logger.info(f"Export bounded manifest: {manifest}")
-        
+
+        logger.info(f"Export manifest: {manifest}")
+
         return manifest
-    
+
     def _process_chunk(self, chunk: Chunk, checkpoint: ExportCheckpoint) -> Dict:
         """
         Process a single chunk with separated timeout scopes.
-        
+
         Args:
             chunk: Chunk to process
             checkpoint: Checkpoint to update
-        
+
         Returns:
             Chunk result dictionary
         """
         checkpoint.mark_chunk_processing(chunk.index)
-        
+
         # Initialize providers and writers
         provider = DockerChunkedQueryProvider(
             query_startup_timeout=10,
@@ -240,45 +289,45 @@ class ChunkedExportEngine:
             stream_overall_timeout=self.query_timeout_seconds,
             process_cleanup_timeout=5
         )
-        
+
         classifier = Classifier()
         field_mapper = None  # Import as needed
-        
+
         # Temporary output files for this chunk
         chunk_dir = self.output_dir / f"chunk_{chunk.index:03d}"
         chunk_dir.mkdir(exist_ok=True)
-        
+
         ais_path = chunk_dir / "AIS_EVENTS_RAW.csv"
         mr_path = chunk_dir / "MIDNIGHT_RIDER_10S_AGGREGATES.csv"
-        
+
         ais_writer = RawAISEventWriter(str(ais_path))
         midnight_rider_normalizer = Normalizer(
             consolidation_period_seconds=self.consolidation_period_seconds
         )
-        
+
         try:
             # Query chunk
             logger.info(f"Querying chunk {chunk.index}: {chunk.start} to {chunk.stop}")
-            
+
             # Build flux query with time range
             flux_start = f'"{chunk.start}"'
             flux_stop = f'"{chunk.stop}"'
-            
+
             parser = AnnotatedCSVParser()
             data_gen = provider.query_range_chunk(flux_start, flux_stop, chunk.index)
-            
+
             # Process records
             total_rows = 0
             ais_rows = 0
             mr_rows = 0
-            
+
             for record in parser.parse_stream(data_gen):
                 if not isinstance(record, dict):
                     continue
-                
+
                 total_rows += 1
                 classification = classifier.classify(record)
-                
+
                 if classification == "ais":
                     ais_writer.write_row(record)
                     ais_rows += 1
@@ -286,7 +335,7 @@ class ChunkedExportEngine:
                     timestamp = record.get("_time")
                     measurement = record.get("_measurement")
                     value_str = record.get("_value")
-                    
+
                     if timestamp and value_str:
                         try:
                             value = float(value_str)
@@ -298,12 +347,12 @@ class ChunkedExportEngine:
                             mr_rows += 1
                         except (ValueError, TypeError):
                             pass
-            
+
             ais_writer.close()
-            
+
             # Aggregate windows
             aggregated_windows = midnight_rider_normalizer.aggregate_windows()
-            
+
             # Write chunk output
             headers = [h[0] for h in MIDNIGHT_RIDER_SCHEMA]
             midnight_rider_writer = CSVWriter(str(mr_path))
@@ -311,14 +360,14 @@ class ChunkedExportEngine:
                 midnight_rider_writer.write_csv(aggregated_windows, headers)
             else:
                 midnight_rider_writer.write_csv([], headers)
-            
+
             # Calculate hashes
             ais_size = os.path.getsize(ais_path) if ais_path.exists() else 0
             mr_size = os.path.getsize(mr_path) if mr_path.exists() else 0
-            
+
             ais_hash = self._calculate_sha256(ais_path) if ais_path.exists() else ""
             mr_hash = self._calculate_sha256(mr_path) if mr_path.exists() else ""
-            
+
             # Mark chunk successful in checkpoint
             checkpoint.mark_chunk_success(
                 chunk.index,
@@ -336,12 +385,12 @@ class ChunkedExportEngine:
                     "MIDNIGHT_RIDER_10S_AGGREGATES.csv": mr_hash
                 }
             )
-            
+
             logger.info(
                 f"Chunk {chunk.index} processed: "
                 f"total_rows={total_rows}, ais={ais_rows}, mr={len(aggregated_windows) if aggregated_windows else 0}"
             )
-            
+
             return {
                 'success': True,
                 'chunk_index': chunk.index,
@@ -351,7 +400,7 @@ class ChunkedExportEngine:
                 'ais_size': ais_size,
                 'mr_size': mr_size
             }
-        
+
         except Exception as e:
             logger.error(f"Chunk {chunk.index} processing failed: {e}")
             # Cleanup partial files
@@ -362,7 +411,7 @@ class ChunkedExportEngine:
                     except:
                         pass
             raise
-    
+
     @staticmethod
     def _calculate_sha256(file_path: Path) -> str:
         """Calculate SHA256 of file."""
