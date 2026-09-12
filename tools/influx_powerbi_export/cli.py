@@ -69,8 +69,56 @@ def create_parser() -> argparse.ArgumentParser:
         "--query-timeout-seconds",
         type=int,
         default=1200,
-        help="Total timeout for historical InfluxDB queries (seconds). Default: 1200s (20 min). "
-             "For large historical exports, use 3600s (1 hour) or more. Must be positive."
+        help="Query execution timeout per chunk in seconds (default: 1200s / 20 min). "
+             "Covers InfluxDB query startup and execution. Must be positive."
+    )
+    
+    parser.add_argument(
+        "--stream-idle-timeout-seconds",
+        type=int,
+        default=60,
+        help="Stream idle timeout in seconds (default: 60s). "
+             "If no data arrives for this duration, stream reading times out."
+    )
+    
+    parser.add_argument(
+        "--chunk-hours",
+        type=float,
+        default=6.0,
+        help="Duration of each chunk in hours (default: 6.0). "
+             "Smaller chunks = more restarts but quicker recovery. "
+             "Larger chunks = fewer restarts but longer per-chunk processing."
+    )
+    
+    parser.add_argument(
+        "--max-chunk-retries",
+        type=int,
+        default=3,
+        help="Maximum number of retries per failed chunk (default: 3). "
+             "After this many failures, the chunk is marked as permanently failed."
+    )
+    
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Resume from checkpoint (if one exists in output directory). "
+             "Completed chunks are skipped; failed chunks can be retried."
+    )
+    
+    parser.add_argument(
+        "--checkpoint-path",
+        type=str,
+        help="Explicit path to checkpoint manifest (CHECKPOINT.json). "
+             "If not provided, defaults to <output_dir>/CHECKPOINT.json"
+    )
+    
+    parser.add_argument(
+        "--window-mode",
+        type=str,
+        choices=["fixed", "rolling"],
+        default="fixed",
+        help="Windowing mode for aggregation: 'fixed' (non-overlapping 10s windows) "
+             "or 'rolling' (overlapping 1-second step). Default: fixed."
     )
     return parser
 
