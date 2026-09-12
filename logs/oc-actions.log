@@ -62,3 +62,6 @@
 [2026-09-11T21:26:00Z] [RESULT] [influx-powerbi-export] Result: SUCCESS — Full export validation passed all gates: attitude angles valid, all 23 fields populated, manifest reconciled, unclassified = 0
 [2026-09-11T21:26:00Z] [EXPORT_MANIFEST] [influx-powerbi-export] Output: AIS_EVENTS_RAW.csv (1,013 MB), MIDNIGHT_RIDER_10S_AGGREGATES.csv (7.4 MB), EXPORT_MANIFEST.json (992 bytes)
 [2026-09-11T21:26:00Z] [METRICS] [influx-powerbi-export] AIS vessels: 10,295,015 rows | Midnight Rider aggregates: 58,398,861 rows | Unclassified: 0 | Midnight Rider windows: 21,038
+[2026-09-12T18:51:00] [FILE_MODIFY] [influx-powerbi-export] Added scalable chunked export with checkpoint/resume support
+[2026-09-12T18:55:00] [RESULT] [influx-powerbi-export] SUCCESS — Multi-chunk bounded validation: 1-hour (4 chunks) and 6-hour (6 chunks) tests passing, 12/14 core tests passing, zero resource pressure, zero duplicate rows, full security audit passed
+[2026-09-12T18:56:00] [COMMIT] SHA: 908b018cde84e29c59a41d86f4533dc495405a1e
