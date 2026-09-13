@@ -52,20 +52,64 @@ a{color:#7bb8f0;text-decoration:none}
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(0,212,255,0.3);border-top-color:#00d4ff;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px}
 .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center;padding:20px}
 .modal.active{display:flex}
-.modal-content{background:#0a1628;border:1px solid rgba(0,212,255,0.3);border-radius:12px;padding:20px;max-width:500px;max-height:80vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8)}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid rgba(0,212,255,0.15);padding-bottom:12px}
-.modal-title{font-size:1.2em;font-weight:700}
-.modal-close{background:none;border:none;color:#7bb8f0;cursor:pointer;font-size:1.5em;padding:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center}
+.modal-content{background:#0a1628;border:1px solid rgba(0,212,255,0.3);border-radius:12px;padding:20px;max-width:calc(100vw - 24px);max-height:calc(100dvh - 24px);overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8)}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;border-bottom:1px solid rgba(0,212,255,0.15);padding-bottom:12px;gap:12px}
+.modal-title{font-size:1.2em;font-weight:700;min-width:0;overflow-wrap:anywhere;flex:1}
+.modal-close{background:none;border:none;color:#7bb8f0;cursor:pointer;font-size:1.5em;padding:0;width:30px;height:30px;min-width:30px;min-height:30px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .modal-close:hover{color:#e0e8f0}
 .modal-section{margin-bottom:16px}
 .modal-section-title{font-size:0.8em;text-transform:uppercase;opacity:0.5;margin-bottom:8px;letter-spacing:0.05em}
-.modal-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85em}
-.modal-row .label{opacity:0.6}
-.modal-row .value{font-weight:600;text-align:right}
+.modal-row{display:grid;grid-template-columns:minmax(0,38%) minmax(0,62%);gap:12px;align-items:start;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85em}
+.modal-row .label{opacity:0.6;min-width:0;overflow-wrap:anywhere}
+.modal-row .value{font-weight:600;text-align:right;min-width:0;overflow-wrap:anywhere;word-break:break-word}
 @media(max-width:600px){
-  .boat-header,.boat-row{grid-template-columns:20px 1fr 60px 60px 60px 60px 16px;gap:6px}
-  .modal-content{max-width:90vw}
-  .cell{font-size:0.72em}
+  .boat-header{display:none}
+  .boat-row{display:grid;grid-template-columns:1fr;gap:8px;padding:12px;margin:8px 0}
+  .boat-row > :nth-child(1){grid-column:1;order:1}
+  .boat-row > :nth-child(2){grid-column:1;order:2}
+  .boat-row > :nth-child(3),.boat-row > :nth-child(4),.boat-row > :nth-child(5),.boat-row > :nth-child(6){grid-column:1;font-size:0.75em}
+  .boat-row > :nth-child(7){grid-column:1;order:3}
+  .cell{font-size:0.72em;text-align:left}
+  .cell.dim{opacity:0.6;font-size:0.72em}
+  .modal-content{max-width:calc(100vw - 16px);padding:16px}
+  .modal-header{flex-direction:column;align-items:stretch}
+  .modal-title{text-align:center;font-size:1.1em}
+  .modal-close{position:absolute;top:12px;right:12px}
+  .modal-row{grid-template-columns:minmax(0,35%) minmax(0,65%);gap:8px;padding:4px 0}
+  .nav a{font-size:0.75em;padding:4px 8px}
+  .controls{padding:6px 8px;gap:4px;flex-wrap:wrap}
+  .btn{padding:4px 8px;font-size:0.7em}
+  .summary{gap:6px;padding:8px}
+  .sum-item{min-width:60px;padding:6px}
+  .sum-num{font-size:1.2em}
+  .sum-lbl{font-size:0.6em}
+}
+
+@media(max-width:480px){
+  .boat-row{grid-template-columns:1fr;gap:6px;padding:10px}
+  .cell{font-size:0.68em}
+  .modal-content{max-width:calc(100vw - 12px);padding:12px}
+  .modal-row{gap:6px;padding:3px 0}
+  .btn{padding:3px 6px;font-size:0.65em}
+  .controls{padding:4px 6px}
+  .summary{padding:6px}
+}
+
+@media(max-width:375px){
+  .boat-row{gap:4px;padding:8px}
+  .cell{font-size:0.65em}
+  .modal-row{grid-template-columns:minmax(0,30%) minmax(0,70%);gap:4px}
+  .btn{padding:2px 4px;font-size:0.6em}
+  .nav a{font-size:0.7em;padding:2px 4px}
+}
+
+@media(max-width:320px){
+  .boat-row{gap:2px;padding:6px}
+  .cell{font-size:0.6em}
+  .modal-row{grid-template-columns:minmax(0,25%) minmax(0,75%);gap:2px}
+  .modal-content{padding:8px}
+  .btn{padding:2px 3px;font-size:0.55em}
+  .nav-title{font-size:0.75em}
 }
 </style>
 </head>
@@ -186,12 +230,60 @@ a{color:#7bb8f0;text-decoration:none}
 </div>
 
 <script>
-// Local storage for starred boats
-const STORAGE_KEY = 'fleet_db_starred';
+// Local storage for starred boats — versioned to fix MMSI identity collision
+const STORAGE_KEY = 'fleet_db_starred_v2';
+const LEGACY_STORAGE_KEY = 'fleet_db_starred';
+
+// Helper: Generate unique, stable identity key for a boat
+// Prevents collisions when multiple boats have no MMSI
+function getBoatStarKey(boat) {
+  if (
+    boat &&
+    boat.id !== undefined &&
+    boat.id !== null &&
+    String(boat.id).trim() !== ''
+  ) {
+    return `id:${String(boat.id)}`;
+  }
+
+  if (
+    boat &&
+    boat.mmsi !== undefined &&
+    boat.mmsi !== null &&
+    String(boat.mmsi).trim() !== ''
+  ) {
+    return `mmsi:${String(boat.mmsi)}`;
+  }
+
+  const name = String((boat && boat.name) || '').trim().toLowerCase();
+  const sail = String((boat && boat.sail_num) || '').trim().toLowerCase();
+
+  return `fallback:${name}|${sail}`;
+}
 
 function getStarred() {
   try {
-    return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+    // Load new versioned key
+    const newStarred = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+    
+    // Migrate valid favorites from legacy key (non-empty keys only)
+    try {
+      const legacyData = JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY) || '[]');
+      for (const legacyKey of legacyData) {
+        // Only migrate non-empty keys; discard empty MMSI collisions
+        if (legacyKey && String(legacyKey).trim() !== '') {
+          newStarred.add(legacyKey);
+        }
+      }
+      // Clean up legacy key after migration
+      if (legacyData.length > 0) {
+        localStorage.removeItem(LEGACY_STORAGE_KEY);
+      }
+    } catch {
+      // Ignore legacy migration errors
+    }
+    
+    return newStarred;
   } catch {
     return new Set();
   }
@@ -201,13 +293,15 @@ function saveStarred(starred) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify([...starred]));
 }
 
-function toggleStar(mmsi, event) {
+function toggleStar(boat, event) {
   event.stopPropagation();
   const starred = getStarred();
-  if (starred.has(mmsi)) {
-    starred.delete(mmsi);
+  const key = getBoatStarKey(boat);
+  
+  if (starred.has(key)) {
+    starred.delete(key);
   } else {
-    starred.add(mmsi);
+    starred.add(key);
   }
   saveStarred(starred);
   updateStarredCount();
@@ -241,7 +335,7 @@ function getFilteredBoats() {
   let result = boats;
   
   if (filter === 'starred') {
-    result = result.filter(b => starred.has(b.mmsi));
+    result = result.filter(b => starred.has(getBoatStarKey(b)));
   }
   
   if (sort === 'name') {
@@ -301,11 +395,11 @@ function render() {
   
   list.innerHTML = filtered.map(boat => {
     const aisInfo = getAISStatus(boat.ais_age_s);
-    const isStarred = starred.has(boat.mmsi);
+    const isStarred = starred.has(getBoatStarKey(boat));
     
     return `
       <div class="boat-row ${aisInfo.status}" ondblclick="showModal(${JSON.stringify(boat).replace(/"/g, '&quot;')})">
-        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="toggleStar('${boat.mmsi}', event)">${isStarred ? '★' : '☆'}</button>
+        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="toggleStar(${JSON.stringify(boat).replace(/"/g, '&quot;')}, event)">${isStarred ? '★' : '☆'}</button>
         <div class="boat-info">
           <div class="boat-name">${boat.name || boat.mmsi}</div>
           <div class="boat-class">${boat.boat_class || '—'}</div>

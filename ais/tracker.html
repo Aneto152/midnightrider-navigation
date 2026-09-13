@@ -55,9 +55,61 @@ a{color:#7bb8f0;text-decoration:none}
 .loading{text-align:center;padding:30px;opacity:0.4;font-size:0.85em}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(0,212,255,0.3);border-top-color:#00d4ff;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px}
-@media(max-width:400px){
-  .comp-header,.comp-row{grid-template-columns:1fr 38px 46px 46px 40px 48px 44px 44px 16px}
-  .cell{font-size:0.78em}
+@media(max-width:768px){
+  .comp-header{display:none}
+  .comp-row{display:grid;grid-template-columns:1fr;gap:8px;padding:12px;margin:8px 0;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-left:3px solid rgba(0,212,255,0.3)}
+  .boat-name{font-size:0.9em;font-weight:600;margin-bottom:4px}
+  .sail{font-size:0.75em;opacity:0.6;margin-bottom:8px}
+  .cell{font-size:0.82em;text-align:left;display:inline-block;padding:2px 8px;background:rgba(255,255,255,0.02);border-radius:4px;margin:2px 2px;white-space:nowrap;min-width:0;overflow:hidden;text-overflow:ellipsis}
+  .cell.dim{opacity:0.6}
+  .color-dot{display:none}
+  .refresh-info{margin-left:0;margin-top:4px}
+  .controls{flex-direction:column;align-items:stretch;gap:6px}
+  .ctrl-group{width:100%;justify-content:space-between;flex-wrap:wrap}
+  .btn{flex:1;min-width:45px}
+}
+
+@media(max-width:480px){
+  .comp-row{grid-template-columns:1fr;gap:6px;padding:10px;margin:6px 0}
+  .cell{font-size:0.75em;padding:2px 6px;margin:2px 1px}
+  .boat-name{font-size:0.85em;margin-bottom:3px}
+  .sail{font-size:0.7em;margin-bottom:6px}
+  .self-card{gap:8px;padding:8px;margin:8px 12px;flex-direction:column}
+  .self-item{min-width:50px}
+  .self-card .value{font-size:0.95em}
+  .nav a{font-size:0.75em;padding:4px 8px}
+  .status-bar{gap:6px;padding:6px 8px;flex-wrap:wrap}
+  .stat{font-size:0.7em;padding:2px 6px}
+  .controls{padding:6px 8px;gap:4px}
+  .btn{padding:4px 8px;font-size:0.7em}
+}
+
+@media(max-width:390px){
+  .comp-row{gap:4px;padding:8px}
+  .cell{font-size:0.7em;padding:2px 4px;margin:1px 1px}
+  .boat-name{font-size:0.8em}
+  .sail{font-size:0.65em}
+  .self-card{padding:6px;margin:6px 10px}
+  .nav a{font-size:0.7em;padding:3px 6px}
+}
+
+@media(max-width:375px){
+  .comp-row{gap:3px;padding:7px}
+  .cell{font-size:0.68em;padding:1px 3px;margin:1px}
+  .boat-name{font-size:0.78em}
+  .sail{font-size:0.63em}
+  .btn{padding:3px 6px;font-size:0.65em}
+  .stat{font-size:0.65em;padding:2px 4px}
+}
+
+@media(max-width:320px){
+  .comp-row{gap:2px;padding:6px}
+  .cell{font-size:0.63em;padding:1px 2px;margin:0.5px}
+  .boat-name{font-size:0.75em}
+  .sail{font-size:0.6em}
+  .self-card{padding:4px;margin:4px 8px}
+  .nav-title{font-size:0.75em}
+  .btn{padding:2px 4px;font-size:0.6em}
 }
 .badge-db{display:inline-block;background:#00d4ff22;border:1px solid #00d4ff66;color:#00d4ff;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px;letter-spacing:0.5px;vertical-align:middle}
 .badge-ais{display:inline-block;background:#ffffff0a;border:1px solid #ffffff22;color:#999;font-size:9px;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle}
