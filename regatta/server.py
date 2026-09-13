@@ -183,6 +183,9 @@ def get_gps_position():
             return {"latitude": _gps_cache["lat"], "longitude": _gps_cache["lon"]}
         return {}
 
+# Import pure source URL helpers
+from regatta.wind_sources import ndbc_source_url, asos_source_url
+
 def fetch_ndbc(station_id):
     """Fetch NDBC buoy data from realtime2 text file"""
     key = f"ndbc_{station_id}"

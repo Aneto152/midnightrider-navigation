@@ -7,6 +7,12 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, sans-serif; background: #0a1628; color: #fff; padding: 12px; }
+.nav { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; padding: 8px 4px 12px; margin-bottom: 8px; }
+.nav a { color: #90caf9; text-decoration: none; font-size: 0.8em; padding: 6px 8px; border-radius: 6px; cursor: pointer; }
+.nav a:hover, .nav a:focus-visible { background: rgba(144, 202, 249, 0.12); outline: none; }
+.nav-title { color: #4fc3f7; font-size: 1.3em; font-weight: 700; text-align: center; flex: 1; min-width: 0; }
+.measurement-source { border-bottom: 1px dotted #90caf9; cursor: help; transition: opacity 0.2s; }
+.measurement-source:hover { opacity: 0.8; }
 h1 { text-align: center; font-size: 1.3em; color: #4fc3f7; margin-bottom: 4px; }
 .updated { text-align: center; font-size: 0.75em; color: #546e7a; margin-bottom: 12px; }
 .zone-title { font-size: 0.75em; color: #4fc3f7; text-transform: uppercase; letter-spacing: 1px; margin: 12px 0 6px; padding-left: 4px; border-left: 3px solid #4fc3f7; }
@@ -58,6 +64,10 @@ h1 { text-align: center; font-size: 1.3em; color: #4fc3f7; margin-bottom: 4px; }
 </head>
 <body>
 
+<div class="nav">
+  <a href="/">← Portal</a>
+  <div class="nav-title">⛵ Vent LIS</div>
+</div>
 <h1>⛵ Vent LIS</h1>
 <div class="updated" id="updated">Chargement...</div>
 
@@ -238,6 +248,48 @@ async function loadAll() {
 
   document.getElementById('content').innerHTML = html;
   document.getElementById('updated').textContent = 'Mis à jour: ' + new Date().toLocaleTimeString('fr-FR');
+  attachSourceLinkHandlers();
+}
+
+// Source URL allowlist validation
+var ALLOWED_ORIGINS = [
+  'https://www.ndbc.noaa.gov/',
+  'https://api.weather.gov/'
+];
+
+function isAllowedSourceUrl(url) {
+  if (!url || typeof url !== 'string') return false;
+  for (var i = 0; i < ALLOWED_ORIGINS.length; i++) {
+    if (url.indexOf(ALLOWED_ORIGINS[i]) === 0) return true;
+  }
+  return false;
+}
+
+// Attach double-click handlers for source links
+function attachSourceLinkHandlers() {
+  var content = document.getElementById('content');
+  if (!content) return;
+
+  content.addEventListener('dblclick', function(e) {
+    var card = e.target.closest('.card');
+    if (!card) return;
+
+    // Extract source URL from card (passed via data attribute or internal mapping)
+    var nameEl = card.querySelector('.card-name span');
+    if (!nameEl) return;
+    var text = nameEl.textContent || '';
+    var match = text.match(/\((.*?)\)/);
+    if (!match) return;
+
+    var stationId = match[1];
+    // Retrieve cached source URL for this station
+    if (cache[stationId] && cache[stationId].source_url) {
+      var sourceUrl = cache[stationId].source_url;
+      if (isAllowedSourceUrl(sourceUrl)) {
+        window.open(sourceUrl, '_blank', 'noopener,noreferrer');
+      }
+    }
+  }, false);
 }
 
 loadAll();
