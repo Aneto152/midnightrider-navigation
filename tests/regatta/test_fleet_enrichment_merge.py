@@ -43,10 +43,15 @@ class TestFleetEnrichmentMerge(unittest.TestCase):
         cls.historical = {b['id']: b for b in cls.enriched.get('historical_competitors', [])}
     
     def test_01_current_active_ids_preserved(self):
-        """Verify current active IDs exist and count is 114."""
+        """Verify current active IDs exist and count is 114 (102 active + 12 inactive)."""
+        # Total competitors (active + inactive)
         self.assertEqual(len(self.competitors), 114)
+        # Verify key active IDs exist
         self.assertIn('c001', self.competitors)
-        self.assertIn('c040', self.competitors)
+        self.assertIn('c002', self.competitors)
+        # Verify sample inactive IDs exist
+        inactive = [c for c in self.competitors.values() if c.get('active') == False]
+        self.assertEqual(len(inactive), 12, f"Expected 12 inactive, got {len(inactive)}")
     
     def test_02_existing_verified_mmsis_preserved(self):
         """Verify all original non-empty MMSIs are preserved."""
