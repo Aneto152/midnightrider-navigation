@@ -11,6 +11,7 @@ a{color:#7bb8f0;text-decoration:none}
 .nav{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid rgba(0,212,255,0.15);background:rgba(0,0,0,0.3)}
 .nav-title{font-size:0.85em;font-weight:600;opacity:0.9}
 .nav a{font-size:0.8em;opacity:0.7;padding:6px 10px}
+.nav a:hover{opacity:1}
 .summary{display:flex;gap:8px;padding:10px 12px;flex-wrap:wrap;border-bottom:1px solid rgba(0,212,255,0.1)}
 .sum-item{flex:1;min-width:70px;text-align:center;padding:8px;background:rgba(255,255,255,0.04);border-radius:8px;border:1px solid rgba(0,212,255,0.1)}
 .sum-num{font-size:1.5em;font-weight:700;display:block}
@@ -18,30 +19,29 @@ a{color:#7bb8f0;text-decoration:none}
 .sum-item.live .sum-num{color:#22c55e}
 .sum-item.stale .sum-num{color:#eab308}
 .sum-item.absent .sum-num{color:rgba(255,255,255,0.3)}
-.controls{padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.search{flex:1;min-width:140px;padding:8px 12px;background:rgba(255,255,255,0.07);border:1px solid rgba(0,212,255,0.2);border-radius:8px;color:#e0e8f0;font-size:0.85em;outline:none}
-.search::placeholder{opacity:0.4}
-.search:focus{border-color:rgba(0,212,255,0.5);background:rgba(255,255,255,0.1)}
-.filter-group{display:flex;gap:4px;flex-wrap:wrap}
-.fbtn{padding:5px 10px;border:1px solid rgba(0,212,255,0.2);border-radius:6px;background:rgba(255,255,255,0.04);color:#e0e8f0;cursor:pointer;font-size:0.75em;transition:all 0.15s}
-.fbtn:hover,.fbtn.active{background:rgba(0,212,255,0.12);border-color:rgba(0,212,255,0.45)}
-.fbtn.active{font-weight:600}
-.fbtn.live.active{background:rgba(34,197,94,0.15);border-color:#22c55e}
-.fbtn.stale.active{background:rgba(234,179,8,0.15);border-color:#eab308}
-.fbtn.absent.active{background:rgba(255,255,255,0.07)}
-.result-count{padding:2px 12px 6px;font-size:0.72em;opacity:0.4}
+.controls{padding:8px 12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ctrl-group{display:flex;gap:4px}
+.btn{padding:6px 12px;border:1px solid rgba(0,212,255,0.25);border-radius:8px;background:rgba(255,255,255,0.05);color:#e0e8f0;cursor:pointer;font-size:0.78em;transition:all 0.15s}
+.btn:hover,.btn.active{background:rgba(0,212,255,0.15);border-color:rgba(0,212,255,0.5)}
+.btn.active{font-weight:600}
+.sort-group{display:flex;gap:4px;margin-left:auto}
+.boat-header{padding:8px 12px;display:grid;grid-template-columns:24px 1fr 80px 80px 80px 80px 20px;gap:8px;font-size:0.68em;opacity:0.45;text-transform:uppercase;letter-spacing:0.04em;border-bottom:1px solid rgba(255,255,255,0.06)}
 .boat-list{padding:0 12px}
-.boat-row{display:grid;grid-template-columns:1fr 72px 60px 52px 40px;gap:6px;padding:9px 10px;margin:3px 0;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.05);align-items:center}
+.boat-row{display:grid;grid-template-columns:24px 1fr 80px 80px 80px 80px 20px;gap:8px;padding:10px 10px;margin:4px 0;border-radius:8px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);align-items:center;cursor:pointer;transition:background 0.1s}
+.boat-row:hover{background:rgba(255,255,255,0.07)}
 .boat-row.live{border-left:3px solid #22c55e}
 .boat-row.stale{border-left:3px solid #eab308}
 .boat-row.old{border-left:3px solid rgba(255,165,0,0.4)}
 .boat-row.absent{border-left:3px solid rgba(255,255,255,0.1);opacity:0.65}
-.boat-row:hover{background:rgba(255,255,255,0.07)}
-.boat-name{font-size:0.84em;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.boat-class{font-size:0.68em;opacity:0.5;margin-top:1px}
+.star-btn{background:none;border:none;color:#eab308;cursor:pointer;font-size:1.2em;padding:0;width:24px;height:24px;display:flex;align-items:center;justify-content:center;transition:transform 0.1s}
+.star-btn:hover{transform:scale(1.2)}
+.star-btn.starred{color:#ffd700}
+.boat-info{display:flex;flex-direction:column;gap:2px}
+.boat-name{font-size:0.85em;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.boat-class{font-size:0.68em;opacity:0.5}
 .cell{font-size:0.78em;text-align:right;font-weight:500}
 .cell.dim{opacity:0.45;font-size:0.72em}
-.badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:0.68em;font-weight:600;text-transform:uppercase;letter-spacing:0.04em}
+.badge{display:inline-block;padding:2px 6px;border-radius:4px;font-size:0.64em;font-weight:600;text-transform:uppercase;letter-spacing:0.03em}
 .badge.live{background:rgba(34,197,94,0.2);color:#22c55e}
 .badge.stale{background:rgba(234,179,8,0.2);color:#eab308}
 .badge.old{background:rgba(255,165,0,0.15);color:rgba(255,165,0,0.8)}
@@ -50,8 +50,22 @@ a{color:#7bb8f0;text-decoration:none}
 .loading{text-align:center;padding:30px;opacity:0.4;font-size:0.85em}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid rgba(0,212,255,0.3);border-top-color:#00d4ff;border-radius:50%;animation:spin 0.8s linear infinite;vertical-align:middle;margin-right:8px}
-@media(max-width:380px){
-  .boat-row{grid-template-columns:1fr 64px 54px 44px 36px}
+.modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;justify-content:center;align-items:center;padding:20px}
+.modal.active{display:flex}
+.modal-content{background:#0a1628;border:1px solid rgba(0,212,255,0.3);border-radius:12px;padding:20px;max-width:500px;max-height:80vh;overflow-y:auto;box-shadow:0 10px 40px rgba(0,0,0,0.8)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-bottom:1px solid rgba(0,212,255,0.15);padding-bottom:12px}
+.modal-title{font-size:1.2em;font-weight:700}
+.modal-close{background:none;border:none;color:#7bb8f0;cursor:pointer;font-size:1.5em;padding:0;width:30px;height:30px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{color:#e0e8f0}
+.modal-section{margin-bottom:16px}
+.modal-section-title{font-size:0.8em;text-transform:uppercase;opacity:0.5;margin-bottom:8px;letter-spacing:0.05em}
+.modal-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.85em}
+.modal-row .label{opacity:0.6}
+.modal-row .value{font-weight:600;text-align:right}
+@media(max-width:600px){
+  .boat-header,.boat-row{grid-template-columns:20px 1fr 60px 60px 60px 60px 16px;gap:6px}
+  .modal-content{max-width:90vw}
+  .cell{font-size:0.72em}
 }
 </style>
 </head>
@@ -60,40 +74,283 @@ a{color:#7bb8f0;text-decoration:none}
 <div class="nav">
   <span class="nav-title">⛵ Fleet Database</span>
   <div>
-    <a href="/ais/">← Tracker</a>
-    <a href="/">Portal</a>
+    <a href="/">← Portal</a>
+    <a href="/ais/">Live Tracker →</a>
   </div>
 </div>
 
 <div class="summary" id="summary">
-  <div class="sum-item"><span class="sum-num" id="sumTotal">—</span><span class="sum-lbl">Total</span></div>
-  <div class="sum-item"><span class="sum-num" id="sumActive">—</span><span class="sum-lbl">Active</span></div>
-  <div class="sum-item live"><span class="sum-num" id="sumLive">—</span><span class="sum-lbl">Live AIS</span></div>
-  <div class="sum-item stale"><span class="sum-num" id="sumStale">—</span><span class="sum-lbl">Stale</span></div>
-  <div class="sum-item absent"><span class="sum-num" id="sumAbsent">—</span><span class="sum-lbl">Absent</span></div>
+  <div class="sum-item live">
+    <span class="sum-num" id="totalBoats">—</span>
+    <span class="sum-lbl">Total</span>
+  </div>
+  <div class="sum-item live">
+    <span class="sum-num" id="activeBoats">—</span>
+    <span class="sum-lbl">Active</span>
+  </div>
+  <div class="sum-item">
+    <span class="sum-num" id="starredBoats">0</span>
+    <span class="sum-lbl">Starred</span>
+  </div>
+  <div class="sum-item">
+    <span class="sum-num" id="liveCount">—</span>
+    <span class="sum-lbl">Live AIS</span>
+  </div>
 </div>
 
 <div class="controls">
-  <input class="search" id="search" type="text" placeholder="Search name, sail #, MMSI…" oninput="applyFilters()">
-  <div class="filter-group">
-    <button class="fbtn active" onclick="setFilter('all')">All</button>
-    <button class="fbtn live" onclick="setFilter('live')">Live</button>
-    <button class="fbtn stale" onclick="setFilter('stale')">Stale</button>
-    <button class="fbtn absent" onclick="setFilter('absent')">Absent</button>
+  <div class="ctrl-group">
+    <button class="btn" id="filterAll" onclick="setFilter('all')">All</button>
+    <button class="btn active" id="filterStarred" onclick="setFilter('starred')">⭐ Starred</button>
+  </div>
+  <div class="sort-group">
+    <button class="btn" id="sortName" onclick="setSort('name')">Name A–Z</button>
+    <button class="btn" id="sortDist" onclick="setSort('distance')">Distance</button>
   </div>
 </div>
-<div class="result-count" id="resultCount"></div>
+
+<div class="boat-header">
+  <span></span>
+  <span>Boat / Class</span>
+  <span style="text-align:right">PHRF</span>
+  <span style="text-align:right">IRC TCC</span>
+  <span style="text-align:right">Skipper</span>
+  <span style="text-align:right">AIS Status</span>
+  <span></span>
+</div>
 
 <div class="boat-list" id="boatList">
-  <div class="loading"><span class="spinner"></span>Loading fleet…</div>
+  <div class="loading"><span class="spinner"></span>Loading...</div>
+</div>
+
+<!-- Detail Modal -->
+<div class="modal" id="detailModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div id="modalTitle" class="modal-title">—</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">Boat Info</div>
+      <div class="modal-row">
+        <span class="label">Name</span>
+        <span class="value" id="modalName">—</span>
+      </div>
+      <div class="modal-row">
+        <span class="label">Sail Number</span>
+        <span class="value" id="modalSail">—</span>
+      </div>
+      <div class="modal-row">
+        <span class="label">Class</span>
+        <span class="value" id="modalClass">—</span>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">Contact</div>
+      <div class="modal-row">
+        <span class="label">Skipper</span>
+        <span class="value" id="modalSki">—</span>
+      </div>
+      <div class="modal-row">
+        <span class="label">MMSI</span>
+        <span class="value" id="modalMMSI">—</span>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">Ratings</div>
+      <div class="modal-row">
+        <span class="label">PHRF LIS</span>
+        <span class="value" id="modalPHRF">—</span>
+      </div>
+      <div class="modal-row">
+        <span class="label">IRC TCC</span>
+        <span class="value" id="modalIRC">—</span>
+      </div>
+    </div>
+    
+    <div class="modal-section">
+      <div class="modal-section-title">AIS Status</div>
+      <div class="modal-row">
+        <span class="label">Status</span>
+        <span class="value" id="modalAIS">—</span>
+      </div>
+      <div class="modal-row">
+        <span class="label">Last Seen</span>
+        <span class="value" id="modalAge">—</span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-let allBoats=[],filterStatus='all';
-function setFilter(f){filterStatus=f;document.querySelectorAll('.fbtn').forEach(b=>{b.classList.toggle('active',b.textContent.toLowerCase()===f||(f==='all'&&b.textContent==='All'))});applyFilters()}
-function applyFilters(){const q=document.getElementById('search').value.toLowerCase().trim();let boats=allBoats;if(filterStatus!=='all'){boats=boats.filter(b=>{if(filterStatus==='absent')return b.ais_status==='absent';if(filterStatus==='stale')return b.ais_status==='stale'||b.ais_status==='old';return b.ais_status===filterStatus})}if(q){boats=boats.filter(b=>(b.name||'').toLowerCase().includes(q)||(b.sail_num||'').toLowerCase().includes(q)||(b.mmsi||'').includes(q)||(b.boat_class||'').toLowerCase().includes(q)||(b.skipper||'').toLowerCase().includes(q))}const order={live:0,stale:1,old:2,absent:3};boats.sort((a,b)=>{const d=(order[a.ais_status]||3)-(order[b.ais_status]||3);return d||(a.name||'').localeCompare(b.name||'')});document.getElementById('resultCount').textContent=boats.length+' of '+allBoats.length+' boats';const list=document.getElementById('boatList');if(!boats.length){list.innerHTML='<div class="empty">No boats match your filter</div>';return}list.innerHTML=boats.map(b=>{const phrf=b.phrf_lis!=null?b.phrf_lis:'—';const irc=b.irc_tcc!=null?b.irc_tcc.toFixed(3):'—';const mmsiShort=b.mmsi?b.mmsi.slice(-4):'—';return `<div class="boat-row ${b.ais_status}"><div><div class="boat-name">${b.name||'Unknown'}</div><div class="boat-class">${b.sail_num||''} ${b.boat_class?'· '+b.boat_class:''}</div></div><div class="cell"><span class="badge ${b.ais_status}">${b.ais_status}</span></div><div class="cell">${phrf}<span class="dim"> phrf</span></div><div class="cell dim">···${mmsiShort}</div><div class="cell dim">${b.priority||''}</div></div>`}).join('')}
-async function load(){try{const r=await fetch('/api/fleet_db');const d=await r.json();allBoats=d.competitors||[];document.getElementById('sumTotal').textContent=d.total||0;document.getElementById('sumActive').textContent=d.active||0;const live=allBoats.filter(b=>b.ais_status==='live').length;const stale=allBoats.filter(b=>b.ais_status==='stale'||b.ais_status==='old').length;const absent=allBoats.filter(b=>b.ais_status==='absent').length;document.getElementById('sumLive').textContent=live;document.getElementById('sumStale').textContent=stale;document.getElementById('sumAbsent').textContent=absent;applyFilters()}catch(e){document.getElementById('boatList').innerHTML=`<div class="empty">Error loading fleet: ${e.message}</div>`}}
+// Local storage for starred boats
+const STORAGE_KEY = 'fleet_db_starred';
+
+function getStarred() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
+  } catch {
+    return new Set();
+  }
+}
+
+function saveStarred(starred) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify([...starred]));
+}
+
+function toggleStar(mmsi, event) {
+  event.stopPropagation();
+  const starred = getStarred();
+  if (starred.has(mmsi)) {
+    starred.delete(mmsi);
+  } else {
+    starred.add(mmsi);
+  }
+  saveStarred(starred);
+  updateStarredCount();
+  render();
+}
+
+function updateStarredCount() {
+  document.getElementById('starredBoats').textContent = getStarred().size;
+}
+
+let boats = [];
+let filter = 'all';
+let sort = 'name';
+
+function setFilter(f) {
+  filter = f;
+  document.getElementById('filterAll').classList.toggle('active', f === 'all');
+  document.getElementById('filterStarred').classList.toggle('active', f === 'starred');
+  render();
+}
+
+function setSort(s) {
+  sort = s;
+  document.getElementById('sortName').classList.toggle('active', s === 'name');
+  document.getElementById('sortDist').classList.toggle('active', s === 'distance');
+  render();
+}
+
+function getFilteredBoats() {
+  const starred = getStarred();
+  let result = boats;
+  
+  if (filter === 'starred') {
+    result = result.filter(b => starred.has(b.mmsi));
+  }
+  
+  if (sort === 'name') {
+    result.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  } else if (sort === 'distance') {
+    result.sort((a, b) => {
+      const aisA = a.ais_age_s !== undefined && a.ais_age_s !== null ? a.ais_age_s : 999;
+      const aisB = b.ais_age_s !== undefined && b.ais_age_s !== null ? b.ais_age_s : 999;
+      return aisA - aisB;
+    });
+  }
+  
+  return result;
+}
+
+function getAISStatus(ageSeconds) {
+  if (ageSeconds === null || ageSeconds === undefined || ageSeconds >= 999) return { status: 'absent', label: 'Absent' };
+  if (ageSeconds < 60) return { status: 'live', label: 'Live' };
+  if (ageSeconds < 300) return { status: 'stale', label: 'Stale' };
+  return { status: 'old', label: 'Old' };
+}
+
+function showModal(boat) {
+  const aisInfo = getAISStatus(boat.ais_age_s);
+  
+  document.getElementById('modalTitle').textContent = boat.name || boat.mmsi;
+  document.getElementById('modalName').textContent = boat.name || '—';
+  document.getElementById('modalSail').textContent = boat.sail_num || '—';
+  document.getElementById('modalClass').textContent = boat.boat_class || '—';
+  document.getElementById('modalSki').textContent = boat.skipper || '—';
+  document.getElementById('modalMMSI').textContent = boat.mmsi || '—';
+  document.getElementById('modalPHRF').textContent = boat.phrf_lis !== null && boat.phrf_lis !== undefined ? boat.phrf_lis : '—';
+  document.getElementById('modalIRC').textContent = boat.irc_tcc !== null && boat.irc_tcc !== undefined ? boat.irc_tcc : '—';
+  document.getElementById('modalAIS').textContent = aisInfo.label;
+  
+  const age = boat.ais_age_s !== undefined && boat.ais_age_s !== null && boat.ais_age_s < 999 
+    ? `${Math.floor(boat.ais_age_s / 60)} min ago`
+    : 'Never';
+  document.getElementById('modalAge').textContent = age;
+  
+  document.getElementById('detailModal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('detailModal').classList.remove('active');
+}
+
+function render() {
+  const filtered = getFilteredBoats();
+  const starred = getStarred();
+  const list = document.getElementById('boatList');
+  
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty">No boats in this view</div>';
+    return;
+  }
+  
+  list.innerHTML = filtered.map(boat => {
+    const aisInfo = getAISStatus(boat.ais_age_s);
+    const isStarred = starred.has(boat.mmsi);
+    
+    return `
+      <div class="boat-row ${aisInfo.status}" ondblclick="showModal(${JSON.stringify(boat).replace(/"/g, '&quot;')})">
+        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="toggleStar('${boat.mmsi}', event)">${isStarred ? '★' : '☆'}</button>
+        <div class="boat-info">
+          <div class="boat-name">${boat.name || boat.mmsi}</div>
+          <div class="boat-class">${boat.boat_class || '—'}</div>
+        </div>
+        <div class="cell">${boat.phrf_lis !== null && boat.phrf_lis !== undefined ? boat.phrf_lis : '—'}</div>
+        <div class="cell">${boat.irc_tcc !== null && boat.irc_tcc !== undefined ? boat.irc_tcc : '—'}</div>
+        <div class="cell dim">${boat.skipper || '—'}</div>
+        <div class="cell"><span class="badge ${aisInfo.status}">${aisInfo.label}</span></div>
+        <div></div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function load() {
+  try {
+    const response = await fetch('/api/fleet_db');
+    const data = await response.json();
+    
+    boats = data.competitors || [];
+    
+    document.getElementById('totalBoats').textContent = data.total || 0;
+    document.getElementById('activeBoats').textContent = data.active || 0;
+    
+    const liveCount = boats.filter(b => b.ais_age_s !== undefined && b.ais_age_s !== null && b.ais_age_s < 60).length;
+    document.getElementById('liveCount').textContent = liveCount;
+    
+    updateStarredCount();
+    render();
+  } catch (e) {
+    document.getElementById('boatList').innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+// Close modal on escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeModal();
+});
+
+// Initial load
 load();
+
+// Reload every 30 seconds
+setInterval(load, 30000);
 </script>
+
 </body>
 </html>
