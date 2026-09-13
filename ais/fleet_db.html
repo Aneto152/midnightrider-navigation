@@ -129,16 +129,12 @@ a{color:#7bb8f0;text-decoration:none}
     <span class="sum-lbl">Total</span>
   </div>
   <div class="sum-item live">
-    <span class="sum-num" id="activeBoats">—</span>
-    <span class="sum-lbl">Active</span>
+    <span class="sum-num" id="liveCount">—</span>
+    <span class="sum-lbl">Live AIS</span>
   </div>
   <div class="sum-item">
     <span class="sum-num" id="starredBoats">0</span>
     <span class="sum-lbl">Starred</span>
-  </div>
-  <div class="sum-item">
-    <span class="sum-num" id="liveCount">—</span>
-    <span class="sum-lbl">Live AIS</span>
   </div>
 </div>
 
@@ -422,10 +418,7 @@ async function load() {
     boats = data.competitors || [];
     
     document.getElementById('totalBoats').textContent = data.total || 0;
-    document.getElementById('activeBoats').textContent = data.active || 0;
-    
-    const liveCount = boats.filter(b => b.ais_age_s !== undefined && b.ais_age_s !== null && b.ais_age_s < 60).length;
-    document.getElementById('liveCount').textContent = liveCount;
+    document.getElementById('liveCount').textContent = data.live_ais || 0;
     
     updateStarredCount();
     render();
