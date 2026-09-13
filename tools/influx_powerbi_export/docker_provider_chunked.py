@@ -381,7 +381,14 @@ class DockerChunkedQueryProvider:
                 self._terminate_process_group(process)
     
     def query_range_chunk(self, start: str, stop: str, chunk_index: int) -> Iterator[str]:
-        """Query raw data for a chunk time range."""
+        """Query raw data for a chunk time range.
+        
+        NOTE: start and stop parameters MUST be unquoted ISO 8601 timestamps.
+        The range() function expects TIME values, not STRING values.
+        Example: start="2026-09-04T16:00:00Z" (not start='"2026-09-04T16:00:00Z"')
+        """
+        # Ensure timestamps are not quoted (they're passed as strings from chunked_export)
+        # but used unquoted in the Flux query to represent TIME values
         flux = f'''
 from(bucket: "{self.bucket}")
   |> range(start: {start}, stop: {stop})

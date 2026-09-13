@@ -349,9 +349,7 @@ class ChunkedExportEngine:
         mr_path = chunk_dir / "MIDNIGHT_RIDER_10S_AGGREGATES.csv"
 
         ais_writer = RawAISEventWriter(str(ais_path))
-        midnight_rider_normalizer = Normalizer(
-            consolidation_period_seconds=self.consolidation_period_seconds
-        )
+        midnight_rider_normalizer = Normalizer()
 
         try:
             # Query chunk
