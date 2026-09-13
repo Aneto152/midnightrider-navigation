@@ -33,7 +33,7 @@ def resolve_regatta_path(request_path):
     """
     Resolve /regatta URLs to files under the regatta directory.
     Handles extensionless routes by appending .html if needed.
-    Returns None for invalid paths.
+    Accepts explicit .html paths. Returns None for invalid/non-existent paths.
     """
     from urllib.parse import urlsplit, unquote
     
@@ -48,11 +48,10 @@ def resolve_regatta_path(request_path):
         relative = unquote(raw_path[len(prefix) + 1:]).strip("/")
         if not relative:
             relative = "index.html"
-        # Add .html extension if no extension present
+        # Add .html extension if no extension present (preserve explicit .html)
         elif "." not in Path(relative).name:
             relative = relative + ".html"
-        else:
-            return None
+        # else: keep explicit .html paths as-is
     else:
         return None
     
@@ -62,6 +61,9 @@ def resolve_regatta_path(request_path):
         resolved = candidate.resolve()
         # Ensure the resolved path is within REGATTA directory
         if not resolved.is_relative_to(REGATTA.resolve()):
+            return None
+        # Ensure the file actually exists
+        if not resolved.exists():
             return None
     except (OSError, RuntimeError):
         return None
@@ -84,7 +86,11 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         elif path in ("/ais", "/ais/"): self._serve(AIS / "tracker.html")
         elif path in ("/ais/fleet_db", "/ais/fleet_db/"): self._serve(AIS / "fleet_db.html")
         elif path.startswith("/ais/"): self._serve(AIS / path[5:])
-        elif path.startswith("/regatta"):
+        elif path in ("/regatta", "/regatta/"):
+            # Explicit root route: /regatta and /regatta/ → regatta/index.html
+            self._serve(REGATTA / "index.html")
+        elif path.startswith("/regatta/"):
+            # Extensionless child routes: /regatta/<name> → <name>.html
             resolved = resolve_regatta_path(path)
             if resolved:
                 self._serve(resolved)
