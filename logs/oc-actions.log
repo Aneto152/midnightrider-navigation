@@ -59,3 +59,8 @@
 [2026-09-13T11:33:00] [DOCKER_ACTION] [influx-powerbi-export] Executed bounded one-hour and six-hour live validations after Flux provider fix
 [2026-09-13T11:33:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — One-hour (360 windows, 206318 AIS rows) and six-hour (2160 windows, 1188025 AIS rows) bounded validations passed; all 23 fields valid; 0 unclassified; 0 duplicates; hashes verified
 [2026-09-13T11:33:00] [COMMIT] SHA: 066acbe5bcdd519cec04fe7de7f779324351017f
+[2026-09-13T14:14:12] [DEPLOYMENT] [PHASE_4_START] Production deployment initialized: Fleet enrichment correction verified on GitHub
+[2026-09-13T14:14:12] [DEPLOYMENT] [PHASE_4_CHECKOUT] Production working tree synchronized with commit 5a6257e (all 114 competitors with 68 MMSI preserved)
+[2026-09-13T14:14:12] [DEPLOYMENT] [PHASE_4_VALIDATION] JSON files validated: regatta/competitors.json (1.4M), fleet_enrichment_changes.json (3.3K), fleet_enrichment_changes.md (3.2K)
+[2026-09-13T14:14:12] [DEPLOYMENT] [PHASE_4_PORTAL_STATUS] Portal service verified: MainPID=2813, ActiveState=active, WorkingDirectory=/home/aneto/midnightrider-navigation
+[2026-09-13T14:14:12] [DEPLOYMENT] [PHASE_4_FLEET_DB] Fleet DB endpoint verified: HTTP 200, stable serving (two consecutive requests identical), no error patterns detected
