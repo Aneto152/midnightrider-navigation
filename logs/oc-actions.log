@@ -64,3 +64,7 @@
 [2026-09-13T14:14:12] [DEPLOYMENT] [PHASE_4_VALIDATION] JSON files validated: regatta/competitors.json (1.4M), fleet_enrichment_changes.json (3.3K), fleet_enrichment_changes.md (3.2K)
 [2026-09-13T14:14:12] [DEPLOYMENT] [PHASE_4_PORTAL_STATUS] Portal service verified: MainPID=2813, ActiveState=active, WorkingDirectory=/home/aneto/midnightrider-navigation
 [2026-09-13T14:14:12] [DEPLOYMENT] [PHASE_4_FLEET_DB] Fleet DB endpoint verified: HTTP 200, stable serving (two consecutive requests identical), no error patterns detected
+[2026-09-13T14:40:00] [PORTAL_RELOAD] [PHASE_3_RESTART] Portal service restarted: midnightrider-portal.service (loaded corrected Fleet database from commit 5a6257e)
+[2026-09-13T14:40:00] [PORTAL_RELOAD] [PHASE_3_VERIFY] Portal service active and running: MainPID=159438, start_time=2026-09-13T14:38:58 EDT
+[2026-09-13T14:40:00] [PORTAL_RELOAD] [PHASE_4_HTTP] Fleet DB endpoint verified HTTP 200: both requests stable and returning Fleet/MMSI/competitor/regatta content
+[2026-09-13T14:40:00] [PORTAL_RELOAD] [PHASE_5_COMPLETION] Portal reload & live verification complete: Fleet enrichment correction live in production
