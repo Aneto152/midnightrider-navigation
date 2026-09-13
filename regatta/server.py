@@ -184,7 +184,7 @@ def get_gps_position():
         return {}
 
 # Import pure source URL helpers
-from regatta.wind_sources import ndbc_source_url, asos_source_url
+from wind_sources import ndbc_source_url, asos_source_url
 
 def fetch_ndbc(station_id):
     """Fetch NDBC buoy data from realtime2 text file"""
