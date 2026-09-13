@@ -47,7 +47,7 @@ class ChunkCheckpoint:
     file_hashes: Dict[str, str] = None  # {filename: sha256}
     failure_category: Optional[str] = None  # e.g., "TIMEOUT", "DATA_ERROR", etc.
     completion_timestamp: Optional[str] = None  # ISO 8601 UTC
-    
+
     def __post_init__(self):
         """Ensure output_files and file_hashes are initialized."""
         if self.output_files is None:
@@ -59,13 +59,13 @@ class ChunkCheckpoint:
 class ExportCheckpoint:
     """
     Checkpoint manifest for bounded export runs.
-    
+
     Records only sanitized metadata:
     - run_id, requested start/stop, chunk config
     - chunk status, row counts, file metadata
     - NO raw rows, coordinates, MMSI, vessel names, credentials
     """
-    
+
     def __init__(
         self,
         run_id: str,
@@ -77,7 +77,7 @@ class ExportCheckpoint:
     ):
         """
         Initialize export checkpoint.
-        
+
         Args:
             run_id: Unique run identifier (e.g., timestamp-based)
             export_start_utc: Requested export start (ISO 8601 UTC)
@@ -92,28 +92,28 @@ class ExportCheckpoint:
         self.chunk_hours = chunk_hours
         self.output_dir = Path(output_dir)
         self.code_commit_sha = code_commit_sha
-        
+
         # Checkpoint state
         self.creation_timestamp = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
         self.last_update_timestamp = self.creation_timestamp
         self.chunks: Dict[int, ChunkCheckpoint] = {}
-        
+
         logger.info(f"Checkpoint created: run_id={run_id}, chunks_dir={self.output_dir}")
-    
+
     def checkpoint_path(self) -> Path:
         """Return path to checkpoint manifest file."""
         return self.output_dir / "CHECKPOINT.json"
-    
+
     def get_chunk(self, chunk_index: int) -> Optional[ChunkCheckpoint]:
         """Retrieve checkpoint for a specific chunk."""
         return self.chunks.get(chunk_index)
-    
+
     def add_chunk(self, chunk: ChunkCheckpoint) -> None:
         """Add or update chunk checkpoint."""
         self.chunks[chunk.chunk_index] = chunk
         self.last_update_timestamp = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
         logger.debug(f"Checkpoint updated: chunk {chunk.chunk_index} -> {chunk.status}")
-    
+
     def mark_chunk_processing(self, chunk_index: int) -> None:
         """Mark chunk as currently processing."""
         if chunk_index not in self.chunks:
@@ -126,7 +126,7 @@ class ExportCheckpoint:
         else:
             self.chunks[chunk_index].status = ChunkStatus.PROCESSING.value
         self.last_update_timestamp = datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z')
-    
+
     def mark_chunk_success(
         self,
         chunk_index: int,
@@ -153,7 +153,7 @@ class ExportCheckpoint:
         )
         self.add_chunk(checkpoint)
         logger.info(f"Chunk {chunk_index} SUCCESS: {source_rows} source rows, {ais_rows} AIS, {midnight_rider_rows} MR")
-    
+
     def mark_chunk_failed(
         self,
         chunk_index: int,
@@ -174,26 +174,38 @@ class ExportCheckpoint:
         )
         self.add_chunk(checkpoint)
         logger.warning(f"Chunk {chunk_index} FAILED: {failure_category} (retry_count={retry_count})")
-    
+
     def get_completed_chunks(self) -> List[int]:
         """Return list of successfully completed chunk indices."""
         return [
             idx for idx, chunk in self.chunks.items()
             if chunk.status == ChunkStatus.SUCCESS.value
         ]
-    
+
     def get_failed_chunks(self) -> List[int]:
         """Return list of failed chunk indices."""
         return [
             idx for idx, chunk in self.chunks.items()
             if chunk.status == ChunkStatus.FAILED.value
         ]
-    
+
     def get_pending_chunks(self, total_chunks: int) -> List[int]:
-        """Return list of chunk indices that haven't been started yet."""
-        processed_indices = set(self.chunks.keys())
-        return [i for i in range(total_chunks) if i not in processed_indices]
-    
+        """
+        Return list of chunk indices that need processing.
+
+        Includes PENDING and PROCESSING (from interrupted run).
+        """
+        pending = []
+        for i in range(total_chunks):
+            chunk = self.chunks.get(i)
+            if chunk is None:
+                # Never started
+                pending.append(i)
+            elif chunk.status in (ChunkStatus.PENDING.value, ChunkStatus.PROCESSING.value):
+                # Pending or interrupted
+                pending.append(i)
+        return pending
+
     def save(self) -> None:
         """Save checkpoint manifest to disk."""
         manifest: Dict[str, Any] = {
@@ -206,7 +218,7 @@ class ExportCheckpoint:
             "code_commit_sha": self.code_commit_sha,
             "chunks": {}
         }
-        
+
         for idx, chunk in self.chunks.items():
             manifest["chunks"][str(idx)] = {
                 "chunk_index": chunk.chunk_index,
@@ -222,35 +234,35 @@ class ExportCheckpoint:
                 "failure_category": chunk.failure_category,
                 "completion_timestamp": chunk.completion_timestamp
             }
-        
+
         checkpoint_path = self.checkpoint_path()
         checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
-        
+
         with open(checkpoint_path, 'w') as f:
             json.dump(manifest, f, indent=2)
-        
+
         logger.info(f"Checkpoint saved: {checkpoint_path}")
-    
+
     @staticmethod
     def load(checkpoint_path: Path) -> "ExportCheckpoint":
         """
         Load checkpoint from disk.
-        
+
         Args:
             checkpoint_path: Path to CHECKPOINT.json
-        
+
         Returns:
             ExportCheckpoint instance
-        
+
         Raises:
             ValueError: If checkpoint is invalid or incompatible
         """
         if not checkpoint_path.exists():
             raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
-        
+
         with open(checkpoint_path, 'r') as f:
             manifest = json.load(f)
-        
+
         # Validate required fields
         required_fields = [
             "run_id", "export_start_utc", "export_stop_utc",
@@ -259,7 +271,7 @@ class ExportCheckpoint:
         for field in required_fields:
             if field not in manifest:
                 raise ValueError(f"Checkpoint missing required field: {field}")
-        
+
         # Create checkpoint
         checkpoint = ExportCheckpoint(
             run_id=manifest["run_id"],
@@ -269,10 +281,10 @@ class ExportCheckpoint:
             output_dir=checkpoint_path.parent,
             code_commit_sha=manifest["code_commit_sha"]
         )
-        
+
         checkpoint.creation_timestamp = manifest.get("creation_timestamp", checkpoint.creation_timestamp)
         checkpoint.last_update_timestamp = manifest.get("last_update_timestamp", checkpoint.last_update_timestamp)
-        
+
         # Load chunks
         for chunk_idx_str, chunk_data in manifest.get("chunks", {}).items():
             chunk = ChunkCheckpoint(
@@ -290,29 +302,38 @@ class ExportCheckpoint:
                 completion_timestamp=chunk_data.get("completion_timestamp")
             )
             checkpoint.chunks[int(chunk_idx_str)] = chunk
-        
+
         logger.info(f"Checkpoint loaded: {checkpoint_path} ({len(checkpoint.chunks)} chunks)")
-        
+
         return checkpoint
-    
+
     def validate_for_resume(self, current_code_sha: str) -> Tuple[bool, Optional[str]]:
         """
         Validate checkpoint is compatible for resume.
-        
+
+        STRICT VALIDATION:
+        - Code SHA must match (REJECT if different)
+        - PROCESSING chunks flagged for reprocessing
+        - FAILED chunks can be retried explicitly
+
         Args:
             current_code_sha: Current git commit SHA
-        
+
         Returns:
             (is_valid, error_message_if_invalid)
         """
+        # STRICT: Reject checkpoint with different code SHA
         if self.code_commit_sha != current_code_sha:
             return False, (
                 f"Checkpoint code SHA {self.code_commit_sha[:8]} "
-                f"differs from current {current_code_sha[:8]}. "
-                f"Resume may produce incompatible results."
+                f"differs from current {current_code_sha[:8]}. Reject."
             )
-        
-        # Validate no stale temporary files
-        # (stale temp files should not be treated as completed chunks)
-        
+
+        # Mark PROCESSING chunks for reprocessing (interrupted run)
+        for chunk_idx, chunk in self.chunks.items():
+            if chunk.status == ChunkStatus.PROCESSING.value:
+                logger.warning(f"Chunk {chunk_idx} PROCESSING from prior run; will reprocess")
+                chunk.status = ChunkStatus.PENDING.value
+                chunk.retry_count += 1
+
         return True, None

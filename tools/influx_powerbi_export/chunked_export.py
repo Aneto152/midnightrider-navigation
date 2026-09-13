@@ -96,6 +96,9 @@ class ChunkedExportEngine:
 
         Returns:
             Export manifest with metadata
+
+        Raises:
+            ValueError: If chunks failed or validation prerequisites not met
         """
         # Get current code SHA for checkpoint validation
         import subprocess
@@ -123,8 +126,9 @@ class ChunkedExportEngine:
             checkpoint = ExportCheckpoint.load(checkpoint_path)
             is_valid, error = checkpoint.validate_for_resume(code_sha)
             if not is_valid:
-                logger.warning(f"Checkpoint validation issue: {error}")
-                # Continue anyway, but log the issue
+                # REJECT checkpoint with different code SHA or config mismatch
+                logger.error(f"Checkpoint rejected: {error}")
+                raise ValueError(f"Stale checkpoint (code mismatch): {error}")
         else:
             run_id = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
             checkpoint = ExportCheckpoint(
@@ -139,21 +143,19 @@ class ChunkedExportEngine:
         # Get list of chunks to process
         pending_chunks = checkpoint.get_pending_chunks(len(chunks))
         completed_chunks = checkpoint.get_completed_chunks()
-        failed_chunks = checkpoint.get_failed_chunks()
+        failed_chunks_before = checkpoint.get_failed_chunks()
 
         logger.info(
             f"Chunk status: "
             f"pending={len(pending_chunks)}, "
             f"completed={len(completed_chunks)}, "
-            f"failed={len(failed_chunks)}"
+            f"failed_before_this_run={len(failed_chunks_before)}"
         )
 
-        # Process each pending chunk
-        total_ais_rows = 0
-        total_mr_rows = 0
-        total_source_rows = 0
-        all_chunk_results = []
+        # Track failures created DURING this run
+        failed_chunks_this_run = []
 
+        # Process each pending chunk
         for chunk_idx in pending_chunks:
             chunk = chunks[chunk_idx]
             logger.info(f"Processing {chunk}")
@@ -166,11 +168,6 @@ class ChunkedExportEngine:
                 try:
                     chunk_result = self._process_chunk(chunk, checkpoint)
                     success = True
-                    all_chunk_results.append(chunk_result)
-
-                    total_ais_rows += chunk_result['ais_rows']
-                    total_mr_rows += chunk_result['midnight_rider_rows']
-                    total_source_rows += chunk_result['source_rows']
 
                     logger.info(f"Chunk {chunk_idx} SUCCESS: {chunk_result}")
 
@@ -189,6 +186,7 @@ class ChunkedExportEngine:
                             failure_category=type(e).__name__,
                             retry_count=retry_count
                         )
+                        failed_chunks_this_run.append(chunk.index)
                         logger.error(f"Chunk {chunk_idx} permanently failed after {retry_count} retries")
                         success = False
                     else:
@@ -199,34 +197,79 @@ class ChunkedExportEngine:
             # Save checkpoint after each chunk
             checkpoint.save()
 
-        # Perform final merge (only if chunks succeeded)
-        completed_count = len(completed_chunks) + len([c for c in all_chunk_results if c.get('success')])
-        failed_count = len(failed_chunks)
+        # CRITICAL: Recompute failed_count from COMPLETE checkpoint after all chunk attempts
+        # This includes both pre-existing failures and failures from this run
+        final_completed_chunks = checkpoint.get_completed_chunks()
+        final_failed_chunks = checkpoint.get_failed_chunks()
+
+        failed_count = len(final_failed_chunks)
+        completed_count = len(final_completed_chunks)
 
         logger.info(
-            f"Chunk processing complete: {completed_count} completed, {failed_count} failed"
+            f"Chunk processing complete: {completed_count} completed, {failed_count} failed "
+            f"(including {len(failed_chunks_this_run)} failed in this run)"
         )
 
-        merge_result = None
-        if failed_count == 0:
-            # All chunks successful, perform final merge
-            logger.info("All chunks successful, performing final merge...")
-            final_merger = FinalMerger(self.output_dir, len(chunks))
-            merge_result = final_merger.merge_all_chunks()
+        # VALIDATION: Do NOT perform final merge if ANY chunk is not SUCCESS
+        # Check for:
+        # 1. FAILED chunks
+        # 2. PROCESSING chunks (incomplete)
+        # 3. PENDING chunks (not started)
+        # 4. Missing output files
 
-            total_ais_rows = merge_result.get('ais_rows', 0)
-            total_mr_rows = merge_result.get('mr_rows', 0)
+        chunks_with_issues = []
 
-            logger.info(
-                f"Final merge complete: {total_ais_rows} AIS rows, {total_mr_rows} MR rows"
+        for chunk_idx in range(len(chunks)):
+            chunk_cp = checkpoint.get_chunk(chunk_idx)
+
+            if chunk_cp is None:
+                # Chunk never started
+                chunks_with_issues.append((chunk_idx, "PENDING"))
+                continue
+
+            if chunk_cp.status != ChunkStatus.SUCCESS.value:
+                chunks_with_issues.append((chunk_idx, chunk_cp.status))
+                continue
+
+            # Check output files exist for SUCCESS chunks
+            for filename, file_hash in chunk_cp.file_hashes.items():
+                chunk_dir = self.output_dir / f"chunk_{chunk_idx:03d}"
+                file_path = chunk_dir / filename
+
+                if not file_path.exists():
+                    chunks_with_issues.append((chunk_idx, f"MISSING_FILE:{filename}"))
+                    logger.error(f"Chunk {chunk_idx} marked SUCCESS but file missing: {filename}")
+                    # Mark chunk as PENDING to force reprocessing
+                    checkpoint.chunks[chunk_idx].status = ChunkStatus.PENDING.value
+                    chunks_with_issues.append((chunk_idx, "REGRESSED_TO_PENDING"))
+
+        if chunks_with_issues:
+            logger.error(f"Chunks with validation issues: {chunks_with_issues}")
+            checkpoint.save()
+
+            error_msg = (
+                f"Cannot perform final merge: {len(chunks_with_issues)} chunks have validation issues. "
+                f"Issues: {chunks_with_issues}"
             )
-        else:
-            logger.error(
-                f"Cannot perform final merge: {failed_count} chunks failed. "
-                f"Fix failed chunks and retry."
-            )
+            logger.error(error_msg)
+            raise ValueError(error_msg)
 
-        # Build final manifest
+        # All chunks must be SUCCESS
+        logger.info("All chunks validated as SUCCESS with output files present")
+
+        # Perform final merge
+        logger.info("Performing final merge...")
+        final_merger = FinalMerger(self.output_dir, len(chunks))
+        merge_result = final_merger.merge_all_chunks()
+
+        total_ais_rows = merge_result.get('ais_rows', 0)
+        total_mr_rows = merge_result.get('mr_rows', 0)
+
+        logger.info(
+            f"Final merge complete: {total_ais_rows} AIS rows, {total_mr_rows} MR rows"
+        )
+
+        # Build final manifest (ONLY written on successful merge)
         manifest = {
             "export_timestamp_utc": datetime.now(timezone.utc).isoformat().replace('+00:00', 'Z'),
             "data_window_start_utc": start,
@@ -235,39 +278,41 @@ class ChunkedExportEngine:
             "chunk_count": len(chunks),
             "completed_chunk_count": completed_count,
             "failed_chunk_count": failed_count,
-            "total_source_rows": total_source_rows,
-            "ais_rows": total_ais_rows if merge_result else 0,
-            "midnight_rider_source_rows": total_mr_rows if merge_result else 0,
-            "midnight_rider_windows_observed": total_mr_rows if merge_result else 0,
+            "total_source_rows": merge_result.get('total_source_rows', 0),
+            "ais_rows": total_ais_rows,
+            "midnight_rider_source_rows": total_mr_rows,
+            "midnight_rider_windows_observed": total_mr_rows,
             "unclassified_rows": 0,
             "duplicates_removed": (
-                (merge_result.get('ais_duplicates_removed', 0) if merge_result else 0) +
-                (merge_result.get('mr_duplicates_removed', 0) if merge_result else 0)
+                merge_result.get('ais_duplicates_removed', 0) +
+                merge_result.get('mr_duplicates_removed', 0)
             ),
-            "schema_validated": failed_count == 0,
+            "schema_validated": True,  # Only true if we got here
             "code_commit_sha": code_sha
         }
 
-        # Add file metadata if merge succeeded
-        if merge_result:
-            manifest['ais_file'] = merge_result.get('ais_file')
-            manifest['ais_hash'] = merge_result.get('ais_hash')
-            manifest['ais_size'] = merge_result.get('ais_size')
-            manifest['mr_file'] = merge_result.get('mr_file')
-            manifest['mr_hash'] = merge_result.get('mr_hash')
-            manifest['mr_size'] = merge_result.get('mr_size')
+        # Add file metadata
+        manifest['ais_file'] = merge_result.get('ais_file')
+        manifest['ais_hash'] = merge_result.get('ais_hash')
+        manifest['ais_size'] = merge_result.get('ais_size')
+        manifest['mr_file'] = merge_result.get('mr_file')
+        manifest['mr_hash'] = merge_result.get('mr_hash')
+        manifest['mr_size'] = merge_result.get('mr_size')
 
-            # Write EXPORT_MANIFEST.json ONLY after successful merge
-            manifest_path = self.output_dir / "EXPORT_MANIFEST.json"
-            with open(manifest_path, 'w') as f:
-                json.dump(manifest, f, indent=2)
-            logger.info(f"EXPORT_MANIFEST.json written: {manifest_path}")
+        # Write EXPORT_MANIFEST.json ONLY after successful merge with all validations
+        manifest_path = self.output_dir / "EXPORT_MANIFEST.json"
+        with open(manifest_path, 'w') as f:
+            json.dump(manifest, f, indent=2)
+        logger.info(f"EXPORT_MANIFEST.json written: {manifest_path}")
 
         checkpoint.save()
 
         logger.info(f"Export manifest: {manifest}")
 
-        return manifest
+        return {
+            "status": "SUCCESS",
+            "manifest": manifest
+        }
 
     def _process_chunk(self, chunk: Chunk, checkpoint: ExportCheckpoint) -> Dict:
         """
@@ -279,6 +324,9 @@ class ChunkedExportEngine:
 
         Returns:
             Chunk result dictionary
+
+        Raises:
+            Exception: On any chunk processing failure
         """
         checkpoint.mark_chunk_processing(chunk.index)
 
@@ -295,7 +343,7 @@ class ChunkedExportEngine:
 
         # Temporary output files for this chunk
         chunk_dir = self.output_dir / f"chunk_{chunk.index:03d}"
-        chunk_dir.mkdir(exist_ok=True)
+        chunk_dir.mkdir(exist_ok=True, parents=True)
 
         ais_path = chunk_dir / "AIS_EVENTS_RAW.csv"
         mr_path = chunk_dir / "MIDNIGHT_RIDER_10S_AGGREGATES.csv"
