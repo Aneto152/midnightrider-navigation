@@ -29,6 +29,45 @@ def _setup_logger():
 
 log = _setup_logger()
 
+def resolve_regatta_path(request_path):
+    """
+    Resolve /regatta URLs to files under the regatta directory.
+    Handles extensionless routes by appending .html if needed.
+    Returns None for invalid paths.
+    """
+    from urllib.parse import urlsplit, unquote
+    
+    raw_path = urlsplit(request_path).path
+    prefix = "/regatta"
+    
+    # Handle /regatta and /regatta/ → index.html
+    if raw_path == prefix or raw_path == prefix + "/":
+        relative = "index.html"
+    # Handle /regatta/<path>
+    elif raw_path.startswith(prefix + "/"):
+        relative = unquote(raw_path[len(prefix) + 1:]).strip("/")
+        if not relative:
+            relative = "index.html"
+        # Add .html extension if no extension present
+        elif "." not in Path(relative).name:
+            relative = relative + ".html"
+        else:
+            return None
+    else:
+        return None
+    
+    candidate = REGATTA / relative
+    
+    try:
+        resolved = candidate.resolve()
+        # Ensure the resolved path is within REGATTA directory
+        if not resolved.is_relative_to(REGATTA.resolve()):
+            return None
+    except (OSError, RuntimeError):
+        return None
+    
+    return resolved
+
 class PortalHandler(http.server.BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         msg = fmt % args
@@ -45,7 +84,12 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         elif path in ("/ais", "/ais/"): self._serve(AIS / "tracker.html")
         elif path in ("/ais/fleet_db", "/ais/fleet_db/"): self._serve(AIS / "fleet_db.html")
         elif path.startswith("/ais/"): self._serve(AIS / path[5:])
-        elif path.startswith("/regatta/"): self._serve(REGATTA / path[9:])
+        elif path.startswith("/regatta"):
+            resolved = resolve_regatta_path(path)
+            if resolved:
+                self._serve(resolved)
+            else:
+                self.send_error(404)
         elif path.startswith("/static/"): self._serve(PORTAL / "static" / path[8:])
         else:
             try: self._serve(PORTAL / path.lstrip("/"))
@@ -56,7 +100,7 @@ class PortalHandler(http.server.BaseHTTPRequestHandler):
         else: self.send_error(404)
 
     def _serve(self, filepath):
-        filepath = Path(filepath)
+        filepath = Path(filepath) if not isinstance(filepath, Path) else filepath
         try:
             if not any(filepath.resolve().is_relative_to(root) for root in ALLOWED):
                 self.send_error(403)
