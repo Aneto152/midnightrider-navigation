@@ -56,3 +56,6 @@
 [2026-09-12T19:15:00] [FILE_MODIFY] [influx-powerbi-export] Completed chunked merge, checkpoint, retry, and boundary validation
 [2026-09-12T19:15:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — Merge implementation complete: 23/23 tests passing, AIS/MR merge working, EXPORT_MANIFEST.json created, 0 placeholders, 0 secrets
 [2026-09-12T19:15:00] [COMMIT] SHA: 5614b6149e7ec0e0b82101aa1d098b4842c93df1
+[2026-09-13T11:33:00] [DOCKER_ACTION] [influx-powerbi-export] Executed bounded one-hour and six-hour live validations after Flux provider fix
+[2026-09-13T11:33:00] [RESULT] [influx-powerbi-export] Result: SUCCESS — One-hour (360 windows, 206318 AIS rows) and six-hour (2160 windows, 1188025 AIS rows) bounded validations passed; all 23 fields valid; 0 unclassified; 0 duplicates; hashes verified
+[2026-09-13T11:33:00] [COMMIT] SHA: 066acbe5bcdd519cec04fe7de7f779324351017f
