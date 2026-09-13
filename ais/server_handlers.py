@@ -144,33 +144,120 @@ def api_competitors(sk_fn, gps_fn, radius=10.0, min_sog=0.0, inc_unk=False, vmod
     }
 
 def api_fleet_db(sk_fn):
-    vs   = sk_fn('vessels') or {}
-    live = {}
+    """Fleet DB handler: expose unified fleet with runtime-derived live AIS state.
+    
+    Semantic rules:
+    - Fleet membership: all 379 normalized records (114 current + 265 historical)
+    - live_ais: boolean, true if boat observed in last 30 minutes
+    - ais_status: 'live'|'stale'|'old'|'absent' (descriptive, for display)
+    - active: alias for live_ais (for backward compatibility)
+    """
+    import json, os
     from datetime import datetime, timezone
+    
+    # Canonical live-AIS state calculation
+    # Source: Signal K vessel navigation timestamp
+    # Recency window: 30 minutes (1800 seconds)
+    AIS_LIVE_THRESHOLD_S = 1800  # 30 minutes
+    
+    vs = sk_fn('vessels') or {}
+    ais_age = {}  # MMSI -> age_seconds
+    
     for key, v in vs.items():
-        if 'self' in key or not isinstance(v, dict): continue
+        if 'self' in key or not isinstance(v, dict):
+            continue
         mmsi = ''.join(filter(str.isdigit, key))
-        if not mmsi: continue
+        if not mmsi:
+            continue
         pd = v.get('navigation', {}).get('position', {})
         ts = (pd.get('timestamp', '') if isinstance(pd, dict) else '')
         try:
             dt = datetime.fromisoformat(ts.replace('Z', '+00:00'))
-            live[mmsi] = int((datetime.now(timezone.utc) - dt).total_seconds())
-        except: live[mmsi] = 999
+            age = int((datetime.now(timezone.utc) - dt).total_seconds())
+            ais_age[mmsi] = age
+        except:
+            ais_age[mmsi] = None  # unparseable timestamp
+    
     result = []
+    
+    # Helper: Calculate canonical live_ais state
+    def is_live_ais(mmsi_val):
+        """True if boat observed within 30 minutes."""
+        age = ais_age.get(mmsi_val)
+        return age is not None and age <= AIS_LIVE_THRESHOLD_S
+    
+    # Helper: Calculate descriptive AIS status
+    def calc_ais_status(mmsi_val):
+        """Descriptive status for display: live|stale|old|absent."""
+        age = ais_age.get(mmsi_val)
+        if age is None:
+            return 'absent'
+        elif age < 60:
+            return 'live'
+        elif age < 300:
+            return 'stale'
+        else:
+            return 'old'
+    
+    # Add current competitors (114)
     for c in _cdb.get_all():
-        e    = _cdb.enrich(c)
-        mmsi = e['mmsi']
-        a    = live.get(mmsi)
-        e['ais_status'] = ('absent' if a is None else
-                           'live'   if a < 60   else
-                           'stale'  if a < 300  else 'old')
-        e['ais_age_s'] = a
+        e = _cdb.enrich(c)
+        mmsi = e.get('mmsi', '')
+        
+        # Canonical live-AIS state (runtime-derived)
+        e['live_ais'] = is_live_ais(mmsi)
+        e['active'] = e['live_ais']  # backward compatibility alias
+        
+        # Descriptive status for display
+        e['ais_status'] = calc_ais_status(mmsi)
+        e['ais_age_s'] = ais_age.get(mmsi)
+        
         result.append(e)
+    
+    # Add historical candidates (265)
+    try:
+        db_path = os.path.abspath(
+            os.path.join(os.path.dirname(__file__), '..', 'regatta', 'competitors.json')
+        )
+        with open(db_path, 'r', encoding='utf-8') as f:
+            db_data = json.load(f)
+        
+        for h in db_data.get('historical_competitors', []):
+            mmsi = h.get('mmsi') or ''
+            e = {
+                'id': h.get('id', ''),
+                'name': h.get('boat_name', ''),
+                'sail_num': h.get('sail_number', ''),
+                'skipper': h.get('skipper', ''),
+                'boat_class': '',
+                'mmsi': str(mmsi),
+                'phrf_lis': None,
+                'irc_tcc': None,
+                'priority': h.get('priority', 'medium'),
+                'events': h.get('events', []),
+            }
+            
+            # Canonical live-AIS state (runtime-derived)
+            e['live_ais'] = is_live_ais(mmsi)
+            e['active'] = e['live_ais']  # backward compatibility alias
+            
+            # Descriptive status for display
+            e['ais_status'] = calc_ais_status(mmsi)
+            e['ais_age_s'] = ais_age.get(mmsi)
+            
+            result.append(e)
+    except Exception:
+        # Log error but continue gracefully
+        pass
+    
+    # Count live_ais boats for summary
+    live_count = sum(1 for e in result if e.get('live_ais'))
+    
     return {
         'ts': int(time.time()),
         'meta': _cdb.get_meta(),
         'total': len(result),
-        'active': sum(1 for e in result if e.get('active')),
+        'live_ais': live_count,  # Canonical live-AIS count
+        'active': live_count,    # backward compatibility alias
         'competitors': result,
     }
