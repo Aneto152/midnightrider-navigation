@@ -296,37 +296,8 @@ function getBoatStarKey(boat) {
   return `fallback:${name}|${sail}`;
 }
 
-function getLocalStarred() {
-  try {
-    // Load new versioned key
-    const newStarred = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
-    
-    // Migrate valid favorites from legacy key (non-empty keys only)
-    try {
-      const legacyData = JSON.parse(localStorage.getItem(LEGACY_STORAGE_KEY) || '[]');
-      for (const legacyKey of legacyData) {
-        // Only migrate non-empty keys; discard empty MMSI collisions
-        if (legacyKey && String(legacyKey).trim() !== '') {
-          newStarred.add(legacyKey);
-        }
-      }
-      // Clean up legacy key after migration
-      if (legacyData.length > 0) {
-        localStorage.removeItem(LEGACY_STORAGE_KEY);
-      }
-    } catch {
-      // Ignore legacy migration errors
-    }
-    
-    return newStarred;
-  } catch {
-    return new Set();
-  }
-}
-
-function saveStarred(starred) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...starred]));
-}
+// getLocalStarred() is defined in fleet_stars.js (authoritative source)
+// Do not duplicate here; use fleet_stars.js version instead
 
 function toggleFleetStar(boat, event) {
   event.stopPropagation();
