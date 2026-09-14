@@ -88,3 +88,7 @@
 [2026-09-14T13:55:16] [FILE_MODIFY] [fleet-stars] Added UI refresh hook at end of initializeFleetStarSync() - async sync could complete after first render, delaying cross-device star propagation by one reload
 [2026-09-14T13:55:16] [FILE_MODIFY] [fleet-stars] Hardened merge log against undefined starred_ids
 [2026-09-14T13:55:16] [RESULT] [fleet-ui] Result: SUCCESS - race history renders on double-click, star sync refreshes UI
+[2026-09-14T18:15:32] [FILE_MODIFY] [fleet-ui] Race history ranks: denominator cascade finishers -> participants -> none, with tooltip stating which one is displayed. Previous code read finishers only and printed '?' while participants was populated in the same object
+[2026-09-14T18:15:32] [FILE_MODIFY] [fleet-ui] Closed AIS Status modal-section before raceHistorySection (was nested inside it). Div balance verified 29/29
+[2026-09-14T18:15:32] [DEBUG] [tests] Baseline bcdadba measured: 5 failed / 254 passed. Current: 11 failed / 248 passed. Lot A1 introduced 0 failures. The 6 new failures are assertions pinning the pre-fix broken architecture
+[2026-09-14T18:15:32] [RESULT] [fleet-ui] Result: SUCCESS

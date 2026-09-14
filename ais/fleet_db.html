@@ -222,6 +222,8 @@ a{color:#7bb8f0;text-decoration:none}
         <span class="value" id="modalAge">—</span>
       </div>
     
+    </div>
+
     <!-- RACE HISTORY SECTION -->
     <div class="modal-section" id="raceHistorySection" style="display:none;">
       <div class="modal-section-title">Race History</div>
@@ -260,7 +262,6 @@ a{color:#7bb8f0;text-decoration:none}
       </div>
     </div>
 
-</div>
   </div>
 </div>
 
@@ -447,6 +448,27 @@ setInterval(load, 30000);
 
 
 <script>
+/**
+ * Format a ranking without inventing data.
+ * Denominator cascade: finishers -> participants -> none.
+ * The two are NOT equivalent, so the distinction is carried in the tooltip.
+ */
+function formatRank(entry) {
+  if (!entry || entry.position === null || entry.position === undefined) {
+    return { text: '\u2014', title: 'No ranking recorded' };
+  }
+  if (entry.finishers !== null && entry.finishers !== undefined) {
+    return { text: entry.position + '/' + entry.finishers,
+             title: 'Position ' + entry.position + ' of ' + entry.finishers + ' finishers' };
+  }
+  if (entry.participants !== null && entry.participants !== undefined) {
+    return { text: entry.position + '/' + entry.participants,
+             title: 'Position ' + entry.position + ' of ' + entry.participants + ' entrants (finisher count not recorded)' };
+  }
+  return { text: String(entry.position),
+           title: 'Position ' + entry.position + ' (fleet size not recorded)' };
+}
+
 function populateRaceHistory(boat) {
   const raceSection = document.getElementById('raceHistorySection');
   
@@ -490,14 +512,16 @@ function populateRaceHistory(boat) {
     yearCell.textContent = result.year || '—';
     yearCell.style.cssText = 'padding:6px;text-align:center;';
     
-    const overallPos = result.overall ? `${result.overall.position || '—'}/${result.overall.finishers || '?'}` : '—';
+    const overallRank = formatRank(result.overall);
     const overallCell = document.createElement('td');
-    overallCell.textContent = overallPos;
+    overallCell.textContent = overallRank.text;
+    overallCell.title = overallRank.title;
     overallCell.style.cssText = 'padding:6px;text-align:center;font-size:0.9em;';
     
-    const classPos = result.class ? `${result.class.position || '—'}/${result.class.finishers || '?'}` : '—';
+    const classRank = formatRank(result.class);
     const classCell = document.createElement('td');
-    classCell.textContent = classPos;
+    classCell.textContent = classRank.text;
+    classCell.title = classRank.title;
     classCell.style.cssText = 'padding:6px;text-align:center;font-size:0.9em;';
     
     const statusCell = document.createElement('td');
