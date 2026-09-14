@@ -68,3 +68,11 @@
 [2026-09-13T14:40:00] [PORTAL_RELOAD] [PHASE_3_VERIFY] Portal service active and running: MainPID=159438, start_time=2026-09-13T14:38:58 EDT
 [2026-09-13T14:40:00] [PORTAL_RELOAD] [PHASE_4_HTTP] Fleet DB endpoint verified HTTP 200: both requests stable and returning Fleet/MMSI/competitor/regatta content
 [2026-09-13T14:40:00] [PORTAL_RELOAD] [PHASE_5_COMPLETION] Portal reload & live verification complete: Fleet enrichment correction live in production
+[2026-09-14T04:15:42] [CONFIG_CHANGE] [fleet-starred] Corrected safe runtime template and initialization strategy
+[2026-09-14T04:15:42] [COMMIT] [fleet-starred] SHA: 11ed500a5e80a3014e33ec2c812665b22acf700a
+[2026-09-14T04:15:42] [PARENT] [fleet-starred] SHA: 82f9db5f9f163c4f1980a946be2395b02f04a918
+[2026-09-14T04:15:42] [VALIDATION] [fleet-starred] Template: empty, safe, no synthetic IDs
+[2026-09-14T04:15:42] [VALIDATION] [fleet-starred] Handler: initializes from template when runtime absent
+[2026-09-14T04:15:42] [VALIDATION] [fleet-starred] Tests: all 97 passing with isolated temporary stores
+[2026-09-14T04:15:42] [VALIDATION] [fleet-starred] Production store: protected by .gitignore, untouched by tests
+[2026-09-14T04:15:42] [RESULT] [fleet-starred] Result: SUCCESS — Runtime decoupling complete

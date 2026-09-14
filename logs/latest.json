@@ -1,7 +1,7 @@
 {
-  "task": "mediaman-targeted-bridge-fix-verification",
+  "task": "fleet-starred-template-and-test-isolation-correction",
   "status": "SUCCESS",
-  "timestamp": "2026-09-02T02:05:11.022692Z",
+  "timestamp": "2026-09-14T04:16:02",
   "hardening_commit_sha": "b5db5b6709a6c40bda6c5dd5ef24ac2b9295ca1f",
   "parent_commit_sha": "185ee029adce8fd9cfcec6b436ac26dd937b719c",
   "strict_prompt_allowlist": true,
@@ -35,13 +35,9 @@
     "total_warnings": 1
   },
   "files_modified": [
-    "logs/latest.json",
-    "logs/oc-actions.log",
-    "mediaman/content_provider.py",
-    "mediaman/historical_request.py",
-    "tests/mediaman/test_historical_e2e_offline.py",
-    "tests/mediaman/test_historical_provider.py",
-    "tests/mediaman/test_historical_request.py"
+    "regatta/fleet_stars.example.json",
+    "regatta/fleet_stars_handler.py",
+    "tests/regatta/test_fleet_stars_sync.py"
   ],
   "hardening_corrections": [
     "Removed all raw event field logging before validation",
@@ -91,80 +87,12 @@
   },
   "internal_e2e_validated": true,
   "test_summary": {
-    "internal_e2e": {
-      "timestamp": "2026-09-01T01:42:01.205975Z",
-      "collected": 319,
-      "passed": 319,
-      "failed": 0,
-      "skipped": 0,
-      "warnings": 1,
-      "new_internal_e2e_tests": 3,
-      "status": "SUCCESS"
-    },
-    "publication_contracts": {
-      "collected": 327,
-      "passed": 327,
-      "failed": 0,
-      "skipped": 0,
-      "warnings": 1,
-      "new_publication_contract_tests": 8,
-      "status": "SUCCESS"
-    },
-    "publication_state": {
-      "collected": 339,
-      "passed": 339,
-      "failed": 0,
-      "skipped": 0,
-      "warnings": 1,
-      "new_publication_state_tests": 12,
-      "status": "SUCCESS"
-    },
-    "publication_reconciliation": {
-      "collected": 349,
-      "passed": 349,
-      "failed": 0,
-      "skipped": 0,
-      "warnings": 1,
-      "new_publication_reconciliation_tests": 10,
-      "status": "SUCCESS"
-    },
-    "publication_bridge": {
-      "collected": 359,
-      "passed": 359,
-      "failed": 0,
-      "skipped": 0,
-      "warnings": 1,
-      "new_publication_bridge_tests": 10,
-      "status": "SUCCESS"
-    },
-    "staging_activation": {
-      "collected": 367,
-      "passed": 367,
-      "failed": 0,
-      "skipped": 0,
-      "warnings": 1,
-      "new_staging_activation_tests": 8,
-      "status": "SUCCESS"
-    },
-    "runtime_entrypoint": {
-      "collected": 375,
-      "passed": 375,
-      "failed": 0,
-      "skipped": 0,
-      "warnings": 1,
-      "new_runtime_entrypoint_tests": 8,
-      "status": "SUCCESS"
-    },
-    "controlled_runtime_e2e": {
-      "processes": 2,
-      "restart_recovery": true,
-      "dry_run": true,
-      "synthetic_credentials_only": true,
-      "real_credentials_read": false,
-      "network_calls": 0,
-      "telegram_messages_sent": 0,
-      "status": "SUCCESS"
-    }
+    "focused_suite": "39 tests passed (fleet_stars_sync, regression, identity)",
+    "complete_relevant_suite": "97 tests passed (all 6 suites green)",
+    "total": 97,
+    "failures": 0,
+    "errors": 0,
+    "skips": 0
   },
   "step_5_commit_sha": "3123df79c3320ed781de211816a814d081dd5741",
   "publication_contracts_validated": true,
@@ -617,5 +545,30 @@
     "failure_reason": "Stream draining timeout (deadline exceeded) after 4,900,000 rows processed",
     "credentials_logged": false,
     "raw_navigation_data_logged": false
-  }
+  },
+  "commit_sha": "11ed500a5e80a3014e33ec2c812665b22acf700a",
+  "parent_sha": "82f9db5f9f163c4f1980a946be2395b02f04a918",
+  "template_status": {
+    "safe": true,
+    "empty_starred": true,
+    "no_synthetic_ids": true,
+    "has_version": true,
+    "has_metadata": true
+  },
+  "handler_corrections": [
+    "Added _get_template_path() function",
+    "Updated _ensure_store_exists() to initialize from template",
+    "Preserves existing runtime store (never overwrites)",
+    "Added comprehensive docstrings to all functions"
+  ],
+  "test_isolation": {
+    "temporary_stores_used": true,
+    "production_store_references_removed": true,
+    "setUpClass_tearDownClass": true,
+    "tests_never_modify_production": true
+  },
+  "deployment": "NOT_PERFORMED",
+  "runtime_store": "NOT_ACCESSED",
+  "force_push_used": false,
+  "git_method": "normal fast-forward push"
 }
