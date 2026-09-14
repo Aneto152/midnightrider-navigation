@@ -40,7 +40,10 @@ except Exception as _e:
 INFLUX_URL = os.getenv('INFLUX_URL', 'http://localhost:8086')
 
 try:
-    from regatta.fleet_stars_handler import get_starred, add_starred, remove_starred, toggle_starred, merge_starred, is_starred
+    try:
+        from fleet_stars_handler import get_starred, add_starred, remove_starred, toggle_starred, merge_starred, is_starred
+    except Exception:
+        from regatta.fleet_stars_handler import get_starred, add_starred, remove_starred, toggle_starred, merge_starred, is_starred
     _STARS = True
 except Exception as _e:
     _log.warning(f"[STARS] {_e}")
@@ -436,7 +439,7 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path.startswith("/api/fleet_db"):
             data = _AF(get_signalk) if _AIS else {'error': 'unavailable'}
             self.send_json(data)
-                elif self.path == "/api/fleet_stars":
+        elif self.path == "/api/fleet_stars":
             data = {'starred_ids': get_starred()} if _STARS else {'error': 'unavailable'}
             self.send_json(data)
         elif self.path.startswith("/api/ais"):
@@ -541,7 +544,7 @@ class Handler(BaseHTTPRequestHandler):
                 {"note": body.get("note",""), "value": 1},
                 {"type": body.get("type","note")})
             self.send_json({"ok": ok})
-                elif self.path == "/api/fleet_stars":
+        elif self.path == "/api/fleet_stars":
             if _STARS:
                 new_starred = body.get('starred_ids', [])
                 merged = merge_starred(new_starred)
