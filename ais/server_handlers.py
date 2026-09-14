@@ -235,6 +235,7 @@ def api_fleet_db(sk_fn):
                 'irc_tcc': None,
                 'priority': h.get('priority', 'medium'),
                 'events': h.get('events', []),
+            'palmares': h.get('palmares', {}),
             }
             
             # Canonical live-AIS state (runtime-derived)
