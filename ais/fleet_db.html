@@ -448,12 +448,39 @@ setInterval(load, 30000);
 
 
 <script>
+const NON_FINISH = {
+  'RET': 'RET', 'DNF': 'DNF', 'DNS': 'DNS', 'DNC': 'DNC', 'DSQ': 'DSQ',
+  'SCP': 'SCP', 'NSC': 'NSC', 'OCS': 'OCS', 'RAF': 'RAF', 'TLE': 'TLE',
+  'ENTRY ONLY': 'ENT'
+};
+
 /**
  * Format a ranking without inventing data.
- * Denominator cascade: finishers -> participants -> none.
- * The two are NOT equivalent, so the distinction is carried in the tooltip.
+ *
+ * A boat that did not finish has no position, but it does have a fleet it was
+ * measured against. Showing a dash threw that away: Denis asked for RET/30
+ * rather than nothing. For a non-finisher the denominator is participants, the
+ * entry list, never finishers: a boat that retired is compared to who started,
+ * not to who arrived.
+ *
+ * Finisher denominator cascade stays finishers -> participants -> none. The two
+ * are NOT equivalent, so the distinction is carried in the tooltip.
  */
-function formatRank(entry) {
+function formatRank(entry, status) {
+  const code = NON_FINISH[String(status || '').toUpperCase().trim()];
+
+  if (code) {
+    const entrants = entry && entry.participants !== null && entry.participants !== undefined
+      ? entry.participants : null;
+    const ranked = entry && entry.position !== null && entry.position !== undefined
+      ? ' Source lists position ' + entry.position + '.' : '';
+    if (entrants !== null) {
+      return { text: code + '/' + entrants,
+               title: status + ' - ' + entrants + ' entrants.' + ranked };
+    }
+    return { text: code, title: status + ' - entry list size not recorded.' + ranked };
+  }
+
   if (!entry || entry.position === null || entry.position === undefined) {
     return { text: '\u2014', title: 'No ranking recorded' };
   }
@@ -512,13 +539,13 @@ function populateRaceHistory(boat) {
     yearCell.textContent = result.year || '—';
     yearCell.style.cssText = 'padding:6px;text-align:center;';
     
-    const overallRank = formatRank(result.overall);
+    const overallRank = formatRank(result.overall, result.status);
     const overallCell = document.createElement('td');
     overallCell.textContent = overallRank.text;
     overallCell.title = overallRank.title;
     overallCell.style.cssText = 'padding:6px;text-align:center;font-size:0.9em;';
     
-    const classRank = formatRank(result.class);
+    const classRank = formatRank(result.class, result.status);
     const classCell = document.createElement('td');
     classCell.textContent = classRank.text;
     classCell.title = classRank.title;
