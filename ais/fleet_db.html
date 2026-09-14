@@ -296,7 +296,7 @@ function getBoatStarKey(boat) {
   return `fallback:${name}|${sail}`;
 }
 
-function getStarred() {
+function getLocalStarred() {
   try {
     // Load new versioned key
     const newStarred = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'));
@@ -328,9 +328,9 @@ function saveStarred(starred) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify([...starred]));
 }
 
-function toggleStar(boat, event) {
+function toggleFleetStar(boat, event) {
   event.stopPropagation();
-  const starred = getStarred();
+  const starred = Array.from(getLocalStarred());
   const key = getBoatStarKey(boat);
   
   if (starred.has(key)) {
@@ -344,7 +344,7 @@ function toggleStar(boat, event) {
 }
 
 function updateStarredCount() {
-  document.getElementById('starredBoats').textContent = getStarred().size;
+  document.getElementById('starredBoats').textContent = Array.from(getLocalStarred()).size;
 }
 
 let boats = [];
@@ -366,7 +366,7 @@ function setSort(s) {
 }
 
 function getFilteredBoats() {
-  const starred = getStarred();
+  const starred = Array.from(getLocalStarred());
   let result = boats;
   
   if (filter === 'starred') {
@@ -420,7 +420,7 @@ function closeModal() {
 
 function render() {
   const filtered = getFilteredBoats();
-  const starred = getStarred();
+  const starred = Array.from(getLocalStarred());
   const list = document.getElementById('boatList');
   
   if (!filtered.length) {
@@ -430,11 +430,11 @@ function render() {
   
   list.innerHTML = filtered.map(boat => {
     const aisInfo = getAISStatus(boat.ais_age_s);
-    const isStarred = starred.has(getBoatStarKey(boat));
+    const isStarred = isFleetStarred(getBoatStarKey(boat));
     
     return `
       <div class="boat-row ${aisInfo.status}" ondblclick="showModal(${JSON.stringify(boat).replace(/"/g, '&quot;')})">
-        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="toggleStar(${JSON.stringify(boat).replace(/"/g, '&quot;')}, event)">${isStarred ? '★' : '☆'}</button>
+        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="toggleFleetStar(${JSON.stringify(boat).replace(/"/g, '&quot;')}, event)">${isStarred ? '★' : '☆'}</button>
         <div class="boat-info">
           <div class="boat-name">${boat.name || boat.mmsi}</div>
           <div class="boat-class">${boat.boat_class || '—'}</div>
@@ -548,5 +548,7 @@ function populateRaceHistory(boat) {
 }
 </script>
 
+
+<script src="fleet_stars.js"></script>
 </body>
 </html>

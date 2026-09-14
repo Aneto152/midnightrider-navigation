@@ -38,6 +38,14 @@ except Exception as _e:
 
 
 INFLUX_URL = os.getenv('INFLUX_URL', 'http://localhost:8086')
+
+try:
+    from regatta.fleet_stars_handler import get_starred, add_starred, remove_starred, toggle_starred, merge_starred, is_starred
+    _STARS = True
+except Exception as _e:
+    _log.warning(f"[STARS] {_e}")
+    _STARS = False
+
 INFLUX_TOKEN = os.getenv('INFLUX_TOKEN') or os.getenv('INFLUXDB_TOKEN', '')
 INFLUX_ORG = os.getenv('INFLUX_ORG', 'MidnightRider')
 INFLUX_BUCKET = os.getenv('INFLUX_BUCKET', 'midnight_rider')
@@ -428,6 +436,9 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path.startswith("/api/fleet_db"):
             data = _AF(get_signalk) if _AIS else {'error': 'unavailable'}
             self.send_json(data)
+                elif self.path == "/api/fleet_stars":
+            data = {'starred': get_starred()} if _STARS else {'error': 'unavailable'}
+            self.send_json(data)
         elif self.path.startswith("/api/ais"):
             params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
             radius = float(params.get('radius', ['10'])[0])
@@ -530,6 +541,30 @@ class Handler(BaseHTTPRequestHandler):
                 {"note": body.get("note",""), "value": 1},
                 {"type": body.get("type","note")})
             self.send_json({"ok": ok})
+                elif self.path == "/api/fleet_stars":
+            if _STARS:
+                new_starred = body.get('starred', [])
+                merged = merge_starred(new_starred)
+                self.send_json({'starred': merged})
+            else:
+                self.send_json({'error': 'unavailable'}, 500)
+        elif self.path == "/api/fleet_stars/toggle":
+            if _STARS:
+                boat_key = body.get('boat_key', '')
+                if not boat_key:
+                    self.send_json({'error': 'boat_key required'}, 400)
+                    return
+                new_state = toggle_starred(boat_key)
+                self.send_json({'boat_key': boat_key, 'starred': new_state})
+            else:
+                self.send_json({'error': 'unavailable'}, 500)
+        elif self.path == "/api/fleet_stars/merge":
+            if _STARS:
+                local_keys = body.get('starred', [])
+                merged = merge_starred(local_keys)
+                self.send_json({'starred': merged})
+            else:
+                self.send_json({'error': 'unavailable'}, 500)
         elif self.path == "/api/timer":
             seconds = body.get("seconds_to_start", 0)
             label = body.get("label", "")  # "J-5min", "J-3min", etc

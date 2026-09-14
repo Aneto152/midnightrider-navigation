@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "starred": [
+    "12345",
+    "a_boat",
+    "critical_boat",
+    "device_1_boat",
+    "device_2_boat",
+    "device_3_boat",
+    "id:boat_001",
+    "id:dup_1",
+    "id:local_1",
+    "id:local_2",
+    "id:new_1",
+    "id:server_only",
+    "m_boat",
+    "mmsi:111111111",
+    "mmsi:123456789",
+    "mmsi:333333333",
+    "mmsi:555555555",
+    "persist_test_boat",
+    "z_boat"
+  ],
+  "metadata": {
+    "created": "2026-09-13T22:56:00Z",
+    "last_updated": "2026-09-13T22:56:00Z"
+  }
+}

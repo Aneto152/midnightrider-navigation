@@ -106,7 +106,7 @@ class TestFleetUIHTMLContract(unittest.TestCase):
         """Verify boat interaction hooks remain unchanged."""
         self.assertIn('function setFilter(f)', self.html_content)
         self.assertIn('function setSort(s)', self.html_content)
-        self.assertIn('function toggleStar(boat, event)', self.html_content)
+        self.assertIn('function toggleFleetStar(boat, event)', self.html_content)
         self.assertIn('function showModal(boat)', self.html_content)
 
     def test_11_no_historical_badge_in_html(self):
@@ -176,8 +176,8 @@ class TestFleetUIHTMLContract(unittest.TestCase):
 
     def test_17_star_toggle_function_present(self):
         """Verify star toggle functionality remains."""
-        self.assertIn('toggleStar(', self.html_content)
-        self.assertIn('getStarred()', self.html_content)
+        self.assertIn('toggleFleetStar(', self.html_content)
+        self.assertIn('getLocalStarred()', self.html_content)
         self.assertIn('saveStarred(starred)', self.html_content)
 
     def test_18_filter_all_button_references_correct_function(self):
