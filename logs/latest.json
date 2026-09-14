@@ -75,7 +75,8 @@
     "tools/influx_powerbi_export/main.py does not expose discover_usb; its test is skipped at module level",
     "regatta container starts with token_set=NO, so InfluxDB writes fail silently",
     "tests/mediaman, tests/portal, tests/mcp never measured to completion",
-    "Plugin P5 signalk-n2k-bridge still has 0 PGN mappings; Vulcan 7 receives no heading/attitude from Signal K"
+    "Plugin P5 signalk-n2k-bridge still has 0 PGN mappings; Vulcan 7 receives no heading/attitude from Signal K",
+    "SEC-2026-09-14-01: an active InfluxDB write token is exposed in git history since 2026-06-28; rotation deferred by Denis"
   ],
   "pending_arbitration_by_denis": [
     "Deviation / Deviation YCC and Valiant / Valiant YCC are the same boats under two names, with contradictory fleet sizes in the source. Kept as 4 distinct records.",
@@ -86,5 +87,34 @@
     "C2 - expose ratings, phrf_history, vessel, times, yacht_club, home_port through the API",
     "D  - enriched modal, and formatRank rendering RET/30 instead of a dash for retired boats"
   ],
-  "secrets_logged": "none - no token, credential or .env content appears in any log"
+  "secrets_logged": "none - no token, credential or .env content appears in any log",
+  "security_incidents": [
+    {
+      "id": "SEC-2026-09-14-01",
+      "severity": "HIGH",
+      "discovered": "2026-09-14T21:10:00Z",
+      "summary": "InfluxDB 2.x write token of the signalk-to-influxdb2 plugin is committed in clear text in two git-tracked files",
+      "files": [
+        "logs/debug/crash-capture-2026-06-28T190455Z.log",
+        "logs/diagnostic_raw.txt"
+      ],
+      "occurrences": 3,
+      "value_sha256_prefix": "e80a47801529a25c",
+      "value_length": 88,
+      "exposed_since": "2026-06-28",
+      "public_repository": true,
+      "token_status": "not rotated, presumed still active",
+      "blast_radius": "write access to InfluxDB buckets feeding the 13 Grafana dashboards",
+      "decision_by_denis": "2026-09-14 - defer remediation, continue with lot C2",
+      "remediation_plan": [
+        "generate a new InfluxDB token",
+        "update ~/.signalk/plugin-config-data/signalk-to-influxdb2.json with python3, never sed",
+        "restart Signal K with systemctl, never docker",
+        "revoke the exposed token in InfluxDB",
+        "remove both files from the working tree, add logs/debug/crash-capture-*.log to .gitignore",
+        "add a static guard rejecting token value patterns under logs/"
+      ],
+      "history_rewrite": "deliberately excluded - force-push is prohibited on this repo and rotation is the only retroactively effective remedy"
+    }
+  ]
 }

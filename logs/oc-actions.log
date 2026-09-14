@@ -107,3 +107,6 @@
 [2026-09-14T20:03:10] [RESULT]      [regatta] Result: SUCCESS - API /api/fleet_db returns total 379, 370 with palmares
 [2026-09-14T20:03:40] [DEBUG]       [tests] 277 passed 0 failed on ais+regatta+static guards; full tree still blocked by influx_powerbi_export docker timeouts
 [2026-09-14T20:04:17] [COMMIT]      SHA: 422a30dd6240663818c987a5c7ac69ba62a2c427
+[2026-09-14T21:10:00] [DEBUG] [security] Audit of git-tracked logs: 3 credential values found, single distinct token, sha256 prefix e80a47801529a25c, length 88, owner plugin signalk-to-influxdb2
+[2026-09-14T21:10:00] [DEBUG] [security] Files: logs/debug/crash-capture-2026-06-28T190455Z.log, logs/diagnostic_raw.txt — [REDACTED — credential reference: signalk-to-influxdb2 write token]
+[2026-09-14T21:12:00] [RESULT] [security] Result: INCIDENT RECORDED as SEC-2026-09-14-01 — remediation deferred on Denis decision, token not rotated
