@@ -110,3 +110,13 @@
 [2026-09-14T21:10:00] [DEBUG] [security] Audit of git-tracked logs: 3 credential values found, single distinct token, sha256 prefix e80a47801529a25c, length 88, owner plugin signalk-to-influxdb2
 [2026-09-14T21:10:00] [DEBUG] [security] Files: logs/debug/crash-capture-2026-06-28T190455Z.log, logs/diagnostic_raw.txt — [REDACTED — credential reference: signalk-to-influxdb2 write token]
 [2026-09-14T21:12:00] [RESULT] [security] Result: INCIDENT RECORDED as SEC-2026-09-14-01 — remediation deferred on Denis decision, token not rotated
+[2026-09-14T21:30:00] [FILE_MODIFY] [ais] competitors_db.py: enrich() exposes 31 keys instead of 12 (lot C2)
+[2026-09-14T21:30:00] [RESULT]      [ais] Result: SUCCESS - API payload 1071839 -> 1527954 bytes
+[2026-09-14T21:34:00] [COMMIT]      SHA: 25e3f8dffa58bbd74de1ab52d0495c2aa8a8e855
+[2026-09-14T21:36:00] [FILE_MODIFY] [ais] fleet_db.html: formatRank receives status, non-finishers show RET/entrants (lot D1)
+[2026-09-14T21:36:00] [COMMIT]      SHA: 83431a5bd495c5fd665fe80b5984727a8b23e6a9
+[2026-09-14T21:41:00] [FILE_MODIFY] [ais] fleet_db.html: 5 modal sections, empty rows hidden (lot D2)
+[2026-09-14T21:41:00] [COMMIT]      SHA: 204cd94e27171b5d063188f4d8158656db779526
+[2026-09-14T21:44:00] [FILE_MODIFY] [ais] fleet_db.html: row handlers carry the boat id, 2982 KB of duplicated JSON removed (lot D3)
+[2026-09-14T21:44:00] [RESULT]      [ais] Result: SUCCESS - 292 passed 0 failed on the measured scope
+[2026-09-14T21:44:00] [COMMIT]      SHA: eac167aa76d24d0ff12be8597a09edfd599470ba

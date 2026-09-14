@@ -1,8 +1,8 @@
 {
-  "task": "Lot B + C1 - lossless Excel reimport, unified fleet pool, UI filter fix",
-  "date": "2026-09-14T20:04:17Z",
+  "task": "Lots A to D - pytest collection repair, lossless Excel reimport, unified fleet pool, API field transport, complete boat modal",
+  "date": "2026-09-14T21:45:00Z",
   "status": "SUCCESS",
-  "commit": "422a30dd6240663818c987a5c7ac69ba62a2c427",
+  "commit": "eac167aa76d24d0ff12be8597a09edfd599470ba",
   "parent": "a515c734e22315ea8930fc7e044cf3972b222bbc",
   "previous_commits": [
     "a515c734e22315ea8930fc7e044cf3972b222bbc  test: repair pytest collection + static guards",
@@ -66,7 +66,8 @@
   },
   "test_summary": {
     "measured_scope": "tests/ais + tests/regatta + tests/test_repo_static_guards.py",
-    "result": "277 passed, 0 failed",
+    "result": "292 passed, 0 failed",
+    "starting_point": "the day started on a reported 97/97 OK that had measured nothing, because pytest collection was interrupted by two committed SyntaxErrors",
     "full_tree_collected": 1074,
     "honest_note": "the full tree has still never completed a run; see known_gaps"
   },
@@ -116,5 +117,21 @@
       ],
       "history_rewrite": "deliberately excluded - force-push is prohibited on this repo and rotation is the only retroactively effective remedy"
     }
+  ],
+  "commit_chain": [
+    "a515c73  test: repair pytest collection (2 SyntaxError) + 5 static guards",
+    "422a30d  feat: lossless Excel reimport unifying 379 boats, schema_version 3",
+    "02e5827  logs: publish lot B execution record, 4 false assertions removed",
+    "7d3d666  logs: record security incident SEC-2026-09-14-01",
+    "25e3f8d  feat: transport 31 fields per boat to the browser, was 12",
+    "83431a5  fix: RET/34 instead of a dash for non-finishers",
+    "204cd94  feat: complete boat detail modal, 5 sections",
+    "eac167a  perf: row handlers carry the id, 2982 KB of duplicated JSON removed"
+  ],
+  "ui_verified_by_denis": [
+    "379 boats in one list, no historical badge or filter",
+    "All button active at load",
+    "RET/34 and RET/7 on Condor ALIR 2024",
+    "complete modal: yacht club, home port, vessel, rating history, AIS, provenance"
   ]
 }
