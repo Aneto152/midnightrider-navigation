@@ -21,7 +21,7 @@ async function initializeFleetStarSync() {
     }
     
     const serverData = await serverResponse.json();
-    const serverStarred = new Set(serverData.starred || []);
+    const serverStarred = new Set(serverData.starred_ids || []);
     
     // Merge by union if local has content (avoid overwriting server with empty list)
     if (localStarred.size > 0) {
@@ -29,13 +29,13 @@ async function initializeFleetStarSync() {
       const mergeResponse = await fetch(`${FLEET_STARS_API}/merge`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ starred: Array.from(localStarred) })
+        body: JSON.stringify({ starred_ids: Array.from(localStarred) })
       });
       
       if (mergeResponse.ok) {
         const merged = await mergeResponse.json();
         localStorage.setItem(STORAGE_KEY, JSON.stringify(merged.starred || []));
-        console.log('[Fleet Stars] Merged:', merged.starred.length, 'total');
+        console.log('[Fleet Stars] Merged:', merged.starred_ids.length, 'total');
       }
     } else {
       // Local is empty, use server state

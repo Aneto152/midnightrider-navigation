@@ -437,7 +437,7 @@ class Handler(BaseHTTPRequestHandler):
             data = _AF(get_signalk) if _AIS else {'error': 'unavailable'}
             self.send_json(data)
                 elif self.path == "/api/fleet_stars":
-            data = {'starred': get_starred()} if _STARS else {'error': 'unavailable'}
+            data = {'starred_ids': get_starred()} if _STARS else {'error': 'unavailable'}
             self.send_json(data)
         elif self.path.startswith("/api/ais"):
             params = urllib.parse.parse_qs(urllib.parse.urlparse(self.path).query)
@@ -543,9 +543,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({"ok": ok})
                 elif self.path == "/api/fleet_stars":
             if _STARS:
-                new_starred = body.get('starred', [])
+                new_starred = body.get('starred_ids', [])
                 merged = merge_starred(new_starred)
-                self.send_json({'starred': merged})
+                self.send_json({'starred_ids': merged})
             else:
                 self.send_json({'error': 'unavailable'}, 500)
         elif self.path == "/api/fleet_stars/toggle":
@@ -560,9 +560,9 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({'error': 'unavailable'}, 500)
         elif self.path == "/api/fleet_stars/merge":
             if _STARS:
-                local_keys = body.get('starred', [])
+                local_keys = body.get('starred_ids', [])
                 merged = merge_starred(local_keys)
-                self.send_json({'starred': merged})
+                self.send_json({'starred_ids': merged})
             else:
                 self.send_json({'error': 'unavailable'}, 500)
         elif self.path == "/api/timer":
