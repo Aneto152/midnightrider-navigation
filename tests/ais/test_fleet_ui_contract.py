@@ -106,7 +106,7 @@ class TestFleetUIHTMLContract(unittest.TestCase):
         """Verify boat interaction hooks remain unchanged."""
         self.assertIn('function setFilter(f)', self.html_content)
         self.assertIn('function setSort(s)', self.html_content)
-        self.assertIn('function toggleFleetStar(boat, event)', self.html_content)
+        self.assertIn('function onStarClick(boat, event)', self.html_content)
         self.assertIn('function showModal(boat)', self.html_content)
 
     def test_11_no_historical_badge_in_html(self):
@@ -176,9 +176,13 @@ class TestFleetUIHTMLContract(unittest.TestCase):
 
     def test_17_star_toggle_function_present(self):
         """Verify star toggle functionality remains."""
+        # This test used to assert the presence of 'saveStarred(starred)'.
+        # saveStarred was defined NOWHERE: the assertion required a call to a
+        # phantom function, and stayed green for as long as the bug existed.
+        self.assertIn('onStarClick(', self.html_content)
         self.assertIn('toggleFleetStar(', self.html_content)
         self.assertIn('getLocalStarred()', self.html_content)
-        self.assertIn('saveStarred(starred)', self.html_content)
+        self.assertNotIn('saveStarred(', self.html_content)
 
     def test_18_filter_all_button_references_correct_function(self):
         """Verify filter buttons call setFilter correctly."""

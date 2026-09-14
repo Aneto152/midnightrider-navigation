@@ -23,8 +23,18 @@ class TestFleetStarsRegressions(unittest.TestCase):
 
     def test_01_no_array_from_has_pattern(self):
         """Verify no Array.from(...).has() calls that would crash at runtime"""
-        self.assertNotIn('Array.from(', self.fleet_db_html.split('toggleFleetStar')[1]
-                        if 'toggleFleetStar' in self.fleet_db_html else '')
+        # The implementation moved to fleet_stars.js on 2026-09-14: the inline
+        # copy in fleet_db.html was a duplicate global definition.
+        # Array.from(...) is legitimate here: a Set must be converted to an
+        # Array to be JSON-serialised into localStorage. The 7e232fc defect was
+        # calling SET methods on the resulting Array, which always fails.
+        toggle_body = self.fleet_stars_js.split('function toggleFleetStar')[-1]
+        for bad in ('Array.from(getLocalStarred()).has(',
+                    'Array.from(getLocalStarred()).size',
+                    'Array.from(starred).has(',
+                    'Array.from(starred).size'):
+            self.assertNotIn(bad, toggle_body,
+                             'Set method called on an Array: ' + bad)
 
     def test_02_no_array_from_size_pattern(self):
         """Verify no Array.from(...).size calls (Arrays don't have .size)"""
@@ -32,8 +42,16 @@ class TestFleetStarsRegressions(unittest.TestCase):
 
     def test_03_exactly_one_toggle_fleet_star(self):
         """Verify exactly one toggleFleetStar implementation (no duplicates)"""
-        count = self.fleet_db_html.count('function toggleFleetStar')
-        self.assertEqual(count, 1, f"Expected 1 toggleFleetStar, found {count}")
+        # Was: exactly one definition in fleet_db.html. That definition was the
+        # defect - a second, incompatible (boat, event) signature silently
+        # overriding the async (boatKey) implementation. Canonical owner is now
+        # fleet_stars.js; fleet_db.html only holds the onStarClick adapter.
+        html_count = self.fleet_db_html.count('function toggleFleetStar')
+        js_count = self.fleet_stars_js.count('function toggleFleetStar')
+        self.assertEqual(html_count, 0,
+                         f"toggleFleetStar must not be redefined in fleet_db.html, found {html_count}")
+        self.assertEqual(js_count, 1,
+                         f"Expected 1 toggleFleetStar in fleet_stars.js, found {js_count}")
 
     def test_04_exactly_one_get_local_starred(self):
         """Verify exactly one getLocalStarred implementation"""
@@ -53,7 +71,7 @@ class TestFleetStarsRegressions(unittest.TestCase):
 
     def test_06_toggle_uses_set_methods(self):
         """Verify toggleFleetStar uses Set methods (.has, .add, .delete)"""
-        toggle_func = self.fleet_db_html.split('function toggleFleetStar')[1].split('function ')[0]
+        toggle_func = self.fleet_stars_js.split('function toggleFleetStar')[1].split('function ')[0]
         self.assertIn('.has(', toggle_func, "toggleFleetStar must use Set.has()")
         self.assertIn('.add(', toggle_func, "toggleFleetStar must use Set.add()")
         self.assertIn('.delete(', toggle_func, "toggleFleetStar must use Set.delete()")

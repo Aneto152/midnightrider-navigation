@@ -114,22 +114,6 @@ function isFleetStarred(boatKey) {
   return getLocalStarred().has(boatKey);
 }
 
-/**
- * Refresh starred state from server (for offline → online transitions)
- */
-async function refreshFleetStarState() {
-  try {
-    const response = await fetch(FLEET_STARS_API);
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data.starred_ids || []));
-      return true;
-    }
-  } catch (e) {
-    console.warn('[Fleet Stars] Refresh failed:', e.message);
-  }
-  return false;
-}
 
 // Initialize on page load
 if (document.readyState === 'loading') {

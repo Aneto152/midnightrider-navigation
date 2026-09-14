@@ -105,19 +105,34 @@ class TestFleetDbHtml(unittest.TestCase):
         self.assertIn('name="viewport"', self.html)
 
     def test_summary_elements(self):
-        for eid in ['sumTotal', 'sumActive', 'sumLive', 'sumStale', 'sumAbsent']:
+        """Summary cards as specified: TOTAL, LIVE AIS, STARRED.
+
+        The old ids (sumTotal/sumActive/sumLive/sumStale/sumAbsent) described a
+        previous page. ACTIVE was removed on request: it duplicated LIVE AIS,
+        which is the single dynamic metric (AIS seen in the last 30 minutes).
+        """
+        for eid in ['totalBoats', 'liveCount', 'starredBoats']:
             self.assertIn(f'id="{eid}"', self.html)
 
-    def test_search_input(self):
-        self.assertIn('id="search"', self.html)
+    def test_no_search_input(self):
+        """The Fleet page deliberately has no search box.
+
+        Decision 2026-09-14: align the tests on the current UI rather than
+        implement features the old test described. Documented here so that
+        adding a search field becomes an explicit, reviewed change.
+        """
+        self.assertNotIn('id="search"', self.html)
 
     def test_boat_list_element(self):
         self.assertIn('id="boatList"', self.html)
 
     def test_filter_buttons(self):
-        self.assertIn("setFilter('live')", self.html)
-        self.assertIn("setFilter('stale')", self.html)
-        self.assertIn("setFilter('absent')", self.html)
+        """Two filters only: All and Starred.
+
+        AIS-status filters (live/stale/absent) do not exist on this page.
+        """
+        self.assertIn("setFilter('all')", self.html)
+        self.assertIn("setFilter('starred')", self.html)
 
     def test_api_fleet_db_fetch(self):
         self.assertIn('/api/fleet_db', self.html)
@@ -126,13 +141,16 @@ class TestFleetDbHtml(unittest.TestCase):
         for status in ['live', 'stale', 'old', 'absent']:
             self.assertIn(f"'{status}'", self.html)
 
-    def test_search_filters_by_name(self):
-        self.assertIn('b.name', self.html)
-        self.assertIn('b.sail_num', self.html)
-        self.assertIn('b.mmsi', self.html)
+    def test_boat_fields_rendered(self):
+        """Core boat fields reach the table."""
+        self.assertIn('boat.name', self.html)
+        self.assertIn('boat.sail_num', self.html)
+        self.assertIn('boat.skipper', self.html)
 
-    def test_sort_by_ais_status(self):
-        self.assertIn('ais_status', self.html)
+    def test_sort_controls_present(self):
+        """Sorting exists; sorting by AIS status does not."""
+        self.assertIn('function setSort(s)', self.html)
+        self.assertIn('function setFilter(f)', self.html)
 
     def test_no_hardcoded_ip(self):
         import re

@@ -20,6 +20,7 @@ class TestFleetDBStarIdentity(unittest.TestCase):
         cls.base_dir = Path(__file__).parent.parent.parent
         cls.competitors_path = cls.base_dir / 'regatta' / 'competitors.json'
         cls.fleet_db_path = cls.base_dir / 'ais' / 'fleet_db.html'
+        cls.fleet_stars_path = cls.base_dir / 'ais' / 'fleet_stars.js'
 
     def test_actaea_no_mmsi(self):
         """Verify ACTAEA (c093) has no MMSI"""
@@ -67,11 +68,23 @@ class TestFleetDBStarIdentity(unittest.TestCase):
         self.assertIn("boat.id !== undefined", html)
         self.assertIn("id:${String(boat.id)}", html)
 
-    def test_storage_key_versioned(self):
-        """Verify localStorage key is versioned"""
+    def test_storage_key_owned_by_fleet_stars_js(self):
+        """The localStorage key must be declared in exactly one place.
+
+        Was: assert fleet_db.html contains 'fleet_db_starred_v2'. That very
+        declaration was the defect. fleet_db.html declared
+        `const STORAGE_KEY = 'fleet_db_starred_v2'` while fleet_stars.js
+        declared `const STORAGE_KEY = 'fleet_stars_local'`. Both are global:
+        the duplicate `const` threw a SyntaxError that annulled an entire
+        script block and left the page without a boat list. fleet_stars.js is
+        now the single owner of the key.
+        """
         with open(self.fleet_db_path) as f:
             html = f.read()
-        self.assertIn("'fleet_db_starred_v2'", html)
+        with open(self.fleet_stars_path) as f:
+            js = f.read()
+        self.assertIn("STORAGE_KEY = 'fleet_stars_local'", js)
+        self.assertNotIn('const STORAGE_KEY', html)
 
     def test_filter_uses_getboatstarkey(self):
         """Verify starred filter uses getBoatStarKey()"""
@@ -79,11 +92,22 @@ class TestFleetDBStarIdentity(unittest.TestCase):
             html = f.read()
         self.assertIn("getBoatStarKey(b)", html)
 
-    def test_toggle_receives_boat_object(self):
-        """Verify toggleFleetStar receives full boat object"""
+    def test_star_click_adapter_receives_boat_object(self):
+        """The inline handler still receives the full boat object.
+
+        Was: assert fleet_db.html contains 'toggleFleetStar(boat, event)'.
+        That was a second definition of a global already defined in
+        fleet_stars.js with the incompatible signature (boatKey). The inline
+        entry point is now onStarClick(boat, event), which derives the key with
+        getBoatStarKey(boat) and delegates to the async toggleFleetStar(boatKey).
+        """
         with open(self.fleet_db_path) as f:
             html = f.read()
-        self.assertIn("toggleFleetStar(boat, event)", html)
+        with open(self.fleet_stars_path) as f:
+            js = f.read()
+        self.assertIn('function onStarClick(boat, event)', html)
+        self.assertIn('getBoatStarKey(boat)', html)
+        self.assertIn('async function toggleFleetStar(boatKey)', js)
 
 
 if __name__ == '__main__':
