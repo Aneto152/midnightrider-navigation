@@ -35,7 +35,7 @@
         "Vineyard Race",
         "Around Long Island Regatta",
         "Block Island Race Week 2026",
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Storm Trysail Club Block Island Race"
       ],
       "notes": "",
@@ -201,7 +201,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -243,10 +243,11 @@
             "Storm Trysail Club Block Island Race",
             "Vineyard Race",
             "Edlu Distance Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c002",
@@ -485,7 +486,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c003",
@@ -799,7 +801,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c004",
@@ -908,7 +911,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c005",
@@ -1040,7 +1044,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c006",
@@ -1066,7 +1071,8 @@
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": "MMSI not found"
+      "notes": "MMSI not found",
+      "phrf_history": []
     },
     {
       "id": "c007",
@@ -1176,7 +1182,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c008",
@@ -1387,7 +1394,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c009",
@@ -1520,7 +1528,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c010",
@@ -1808,7 +1817,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c011",
@@ -2177,7 +2187,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c012",
@@ -2464,7 +2475,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c013",
@@ -2624,7 +2636,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c014",
@@ -2993,7 +3006,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c015",
@@ -3232,7 +3246,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c016",
@@ -3499,7 +3514,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c017",
@@ -3633,7 +3649,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c018",
@@ -3869,7 +3886,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c019",
@@ -3949,7 +3967,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c020",
@@ -3976,7 +3995,7 @@
         "Edlu Distance Race",
         "Vineyard Race",
         "Block Island Race Week 2026",
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Execution Rocks Race",
         "Storm Trysail Club Block Island Race"
       ],
@@ -4141,7 +4160,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -4183,10 +4202,11 @@
             "Vineyard Race",
             "Edlu Distance Race",
             "Execution Rocks Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c021",
@@ -4448,7 +4468,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c022",
@@ -4528,7 +4549,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c023",
@@ -4686,7 +4708,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c024",
@@ -4819,7 +4842,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c025",
@@ -5055,7 +5079,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c026",
@@ -5295,7 +5320,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c027",
@@ -5326,7 +5352,7 @@
         "Storm Trysail Club Block Island Race",
         "Vineyard Race",
         "Block Island Race Week 2026",
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Around Long Island Regatta"
       ],
       "notes": "",
@@ -5564,7 +5590,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -5610,10 +5636,11 @@
             "Edlu Distance Race",
             "Larchmont Race Week",
             "Larchmont Race Week",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c028",
@@ -5720,7 +5747,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c029",
@@ -5880,7 +5908,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c030",
@@ -6040,7 +6069,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c031",
@@ -6070,7 +6100,7 @@
         "Edlu Distance Race",
         "Vineyard Race",
         "Block Island Race Week 2026",
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Storm Trysail Club Block Island Race"
       ],
       "notes": "",
@@ -6210,7 +6240,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -6251,10 +6281,11 @@
             "Vineyard Race",
             "Vineyard Race",
             "Edlu Distance Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c032",
@@ -6362,7 +6393,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c033",
@@ -6388,7 +6420,8 @@
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": ""
+      "notes": "",
+      "phrf_history": []
     },
     {
       "id": "c034",
@@ -6601,7 +6634,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c035",
@@ -6815,7 +6849,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c036",
@@ -6895,7 +6930,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c037",
@@ -7106,7 +7142,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c038",
@@ -7132,7 +7169,8 @@
       "events": [
         "Block Island Race Week 2026"
       ],
-      "notes": "Verified via photo"
+      "notes": "Verified via photo",
+      "phrf_history": []
     },
     {
       "id": "c039",
@@ -7499,7 +7537,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c041",
@@ -7579,7 +7618,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c042",
@@ -7659,7 +7699,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c043",
@@ -7844,7 +7885,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c044",
@@ -7951,7 +7993,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c045",
@@ -8060,7 +8103,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c046",
@@ -8247,7 +8291,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c047",
@@ -8617,7 +8662,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c048",
@@ -8750,7 +8796,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c049",
@@ -8833,7 +8880,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c050",
@@ -9021,7 +9069,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c051",
@@ -9261,7 +9310,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c052",
@@ -9497,7 +9547,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c053",
@@ -9528,7 +9579,7 @@
         "Vineyard Race",
         "Block Island Race Week 2026",
         "AYC Fall Regatta",
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Storm Trysail Club Block Island Race"
       ],
       "notes": "",
@@ -9716,7 +9767,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -9759,10 +9810,11 @@
             "AYC Fall Regatta",
             "Edlu Distance Race",
             "Edlu Distance Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c054",
@@ -10049,7 +10101,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c055",
@@ -10286,7 +10339,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c056",
@@ -10316,7 +10370,7 @@
         "Storm Trysail Club Block Island Race",
         "Block Island Race Week 2026"
       ],
-      "notes": "MMSI IMX 40, 12×4, Long Island Sound, 2026-05-23 — Dust/VesselTracker 2026-07-22 — verify before 'verified'",
+      "notes": "MMSI IMX 40, 12\u00d74, Long Island Sound, 2026-05-23 \u2014 Dust/VesselTracker 2026-07-22 \u2014 verify before 'verified'",
       "palmares": {
         "participations": 3,
         "finished": 3,
@@ -10421,7 +10475,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c057",
@@ -10450,7 +10505,7 @@
         "Block Island Race Week 2026",
         "AYC Spring Regatta",
         "AYC Fall Regatta",
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Storm Trysail Club Block Island Race"
       ],
       "notes": "",
@@ -10662,7 +10717,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -10706,10 +10761,11 @@
             "AYC Spring Regatta",
             "Edlu Distance Race",
             "Edlu Distance Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c058",
@@ -10841,7 +10897,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c059",
@@ -10869,7 +10926,7 @@
         "Edlu Distance Race",
         "Vineyard Race",
         "Block Island Race Week 2026",
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Larchmont Race Week",
         "Storm Trysail Club Block Island Race"
       ],
@@ -11081,7 +11138,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -11125,10 +11182,11 @@
             "Larchmont Race Week",
             "Larchmont Race Week",
             "Execution Rocks Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c060",
@@ -11339,7 +11397,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c061",
@@ -11810,7 +11869,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c062",
@@ -12050,7 +12110,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c063",
@@ -12183,7 +12244,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c064",
@@ -12368,7 +12430,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c065",
@@ -12474,7 +12537,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c066",
@@ -12606,7 +12670,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c067",
@@ -12817,7 +12882,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c068",
@@ -12897,7 +12963,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c069",
@@ -13059,7 +13126,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c070",
@@ -13086,7 +13154,8 @@
       "events": [
         "LIS Weekend Race 2026-06-21"
       ],
-      "notes": "Only US DEVIATION in AIS. AIS LOA=16m vs actual 8.84m (likely entry error). Last pos: Nanny Cay BVI May 2026. FCC callsign WDP4845."
+      "notes": "Only US DEVIATION in AIS. AIS LOA=16m vs actual 8.84m (likely entry error). Last pos: Nanny Cay BVI May 2026. FCC callsign WDP4845.",
+      "phrf_history": []
     },
     {
       "id": "c071",
@@ -13346,7 +13415,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c072",
@@ -13481,7 +13551,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c073",
@@ -13508,7 +13579,8 @@
       "events": [
         "LIS Weekend Race 2026-06-21"
       ],
-      "notes": "US flag, sailing vessel, 12x4m. Active Jun 17-18 2026. Renamed from Godspeed (hull #58) Sep 2025 — MMSI recently registered."
+      "notes": "US flag, sailing vessel, 12x4m. Active Jun 17-18 2026. Renamed from Godspeed (hull #58) Sep 2025 \u2014 MMSI recently registered.",
+      "phrf_history": []
     },
     {
       "id": "c074",
@@ -13640,7 +13712,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c075",
@@ -13747,7 +13820,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c076",
@@ -13774,7 +13848,8 @@
       "events": [
         "LIS Weekend Race 2026-06-21"
       ],
-      "notes": "US flag, sailing vessel, 10x4m (perfect Catalina 34 match). Last pos 40.88N/73.73W (City Island area LIS) Sep 2025."
+      "notes": "US flag, sailing vessel, 10x4m (perfect Catalina 34 match). Last pos 40.88N/73.73W (City Island area LIS) Sep 2025.",
+      "phrf_history": []
     },
     {
       "id": "c077",
@@ -13856,7 +13931,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c078",
@@ -14094,7 +14170,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c079",
@@ -14121,7 +14198,8 @@
       "events": [
         "LIS Weekend Race 2026-06-21"
       ],
-      "notes": "1975 S&S aluminum racer built at Minneford Yard, City Island. No AIS signal found in MarineTraffic, VesselFinder, MyShipTracking. Likely no AIS transponder."
+      "notes": "1975 S&S aluminum racer built at Minneford Yard, City Island. No AIS signal found in MarineTraffic, VesselFinder, MyShipTracking. Likely no AIS transponder.",
+      "phrf_history": []
     },
     {
       "id": "c080",
@@ -14409,7 +14487,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c081",
@@ -14519,7 +14598,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c082",
@@ -14655,7 +14735,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c084",
@@ -14791,7 +14872,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c085",
@@ -14875,7 +14957,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c087",
@@ -15090,7 +15173,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c088",
@@ -15201,7 +15285,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c089",
@@ -15285,7 +15370,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c090",
@@ -15473,7 +15559,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c091",
@@ -15742,7 +15829,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c092",
@@ -16011,7 +16099,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c093",
@@ -16147,7 +16236,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c094",
@@ -16362,7 +16452,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c095",
@@ -16446,7 +16537,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c096",
@@ -16556,7 +16648,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c097",
@@ -16640,7 +16733,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c098",
@@ -16724,7 +16818,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c099",
@@ -16755,7 +16850,8 @@
         "ALIR2026"
       ],
       "race_class": "Spinnaker ToD/ToT",
-      "notes": ""
+      "notes": "",
+      "phrf_history": []
     },
     {
       "id": "c103",
@@ -16865,7 +16961,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c105",
@@ -16949,7 +17046,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c106",
@@ -17060,7 +17158,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c108",
@@ -17144,7 +17243,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c109",
@@ -17280,7 +17380,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c110",
@@ -17391,7 +17492,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c111",
@@ -17423,7 +17525,7 @@
         "Around Long Island Regatta"
       ],
       "race_class": "Spinnaker ToD/ToT",
-      "notes": "⚠️ DIRECT COMPETITOR — Same class: J/30 Spinnaker ToD/ToT",
+      "notes": "\u26a0\ufe0f DIRECT COMPETITOR \u2014 Same class: J/30 Spinnaker ToD/ToT",
       "palmares": {
         "participations": 2,
         "finished": 1,
@@ -17501,7 +17603,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c112",
@@ -17638,7 +17741,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c113",
@@ -17722,7 +17826,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c114",
@@ -17753,7 +17858,8 @@
         "ALIR2026"
       ],
       "race_class": "Spinnaker ToD/ToT",
-      "notes": "Junior program"
+      "notes": "Junior program",
+      "phrf_history": []
     },
     {
       "id": "c115",
@@ -17890,7 +17996,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c116",
@@ -17918,7 +18025,7 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "ALIR2026",
         "Storm Trysail Club Block Island Race",
         "Around Long Island Regatta"
@@ -18037,7 +18144,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -18076,10 +18183,11 @@
             "Around Long Island Regatta",
             "Around Long Island Regatta",
             "Storm Trysail Club Block Island Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c117",
@@ -18319,7 +18427,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c118",
@@ -18347,7 +18456,7 @@
       "active": true,
       "priority": "medium",
       "events": [
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "ALIR2026",
         "Vineyard Race",
         "Around Long Island Regatta"
@@ -18466,7 +18575,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -18505,10 +18614,11 @@
             "Around Long Island Regatta",
             "Around Long Island Regatta",
             "Vineyard Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c120",
@@ -18618,7 +18728,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c122",
@@ -18754,7 +18865,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c123",
@@ -18782,7 +18894,7 @@
         "Execution Rocks Race",
         "Around Long Island Regatta"
       ],
-      "notes": "MMSI 338072036 — VesselTracker/Dust 2026-07-22 — verify before 'verified'. Execution Rocks Non-Spin.",
+      "notes": "MMSI 338072036 \u2014 VesselTracker/Dust 2026-07-22 \u2014 verify before 'verified'. Execution Rocks Non-Spin.",
       "race_class": "Non-Spinnaker",
       "palmares": {
         "participations": 2,
@@ -18861,7 +18973,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "c124",
@@ -18968,7 +19081,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     }
   ],
   "historical_competitors": [
@@ -19066,7 +19180,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-3cheers",
@@ -19213,7 +19328,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-3cheersexrock",
@@ -19282,7 +19398,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-aboysdream",
@@ -19352,7 +19469,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-acadia",
@@ -19499,7 +19617,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-aftermidnight",
@@ -19620,7 +19739,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-agent99",
@@ -19689,7 +19809,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-albondigas",
@@ -19835,7 +19956,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-alice",
@@ -19904,7 +20026,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-allegroexrocks",
@@ -19973,7 +20096,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-alliance",
@@ -20043,7 +20167,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-andante",
@@ -20163,7 +20288,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-antidote",
@@ -20284,7 +20410,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-apavarga",
@@ -20353,7 +20480,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-argos",
@@ -20450,7 +20578,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-armaexrx",
@@ -20519,7 +20648,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-assarainiv",
@@ -20641,7 +20771,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-atalanta",
@@ -20841,7 +20972,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-ataraxis",
@@ -20910,7 +21042,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-athena",
@@ -20980,7 +21113,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-attractivenuisance",
@@ -21152,7 +21286,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-avalancheorc",
@@ -21222,7 +21357,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-avalon",
@@ -21319,7 +21455,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-avanti",
@@ -21416,7 +21553,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-badger",
@@ -21536,7 +21674,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-bavaria",
@@ -21606,7 +21745,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-bayretriever",
@@ -21676,7 +21816,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-blackcombvalour",
@@ -21745,7 +21886,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-bluefin",
@@ -21865,7 +22007,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-bluefire",
@@ -21935,7 +22078,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-bolide",
@@ -22030,11 +22174,12 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-bonnesant",
-      "boat_name": "Bonne Santé",
+      "boat_name": "Bonne Sant\u00e9",
       "active": false,
       "priority": "low",
       "source_status": "historical_candidate",
@@ -22126,7 +22271,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-borderline",
@@ -22195,7 +22341,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-bounce",
@@ -22265,7 +22412,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-brizo",
@@ -22334,7 +22482,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-byte",
@@ -22562,7 +22711,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-bytex",
@@ -22630,7 +22780,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-caliente",
@@ -22700,7 +22851,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-callisto",
@@ -22796,7 +22948,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-camelot",
@@ -22865,7 +23018,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-carina",
@@ -22935,7 +23089,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-cayuga",
@@ -23030,7 +23185,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-celebrationii",
@@ -23177,7 +23333,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-checkmate",
@@ -23271,7 +23428,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-chikara",
@@ -23367,7 +23525,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-ciaobaby",
@@ -23489,7 +23648,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-cleolycjuniorbigboat",
@@ -23558,7 +23718,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-comet",
@@ -23812,7 +23973,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-condor",
@@ -23935,7 +24097,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-coolbreezeuscga",
@@ -24005,7 +24168,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-coquetta",
@@ -24074,7 +24238,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-coucou",
@@ -24197,7 +24362,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-cyclops",
@@ -24213,7 +24379,7 @@
       "mmsi_confidence": "unverified",
       "events": [
         "Stamford Overnight Race",
-        "Haustblót Shorthanded Regatta"
+        "Haustbl\u00f3t Shorthanded Regatta"
       ],
       "palmares": {
         "participations": 2,
@@ -24251,7 +24417,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -24289,10 +24455,11 @@
           "mmsi": [],
           "palmares": [
             "Stamford Overnight Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-daffodil",
@@ -24415,7 +24582,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-darkstar",
@@ -24485,7 +24653,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-dawgzout",
@@ -24500,7 +24669,7 @@
       "mmsi": null,
       "mmsi_confidence": "unverified",
       "events": [
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Edlu Distance Race"
       ],
       "palmares": {
@@ -24539,7 +24708,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -24577,10 +24746,11 @@
           "mmsi": [],
           "palmares": [
             "Edlu Distance Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-daysofmiracleandwonder",
@@ -24649,7 +24819,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-delirium",
@@ -24718,7 +24889,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-dellaaurora",
@@ -24893,7 +25065,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-desperado",
@@ -24963,7 +25136,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-deviation",
@@ -25084,7 +25258,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-dreadknot",
@@ -25154,7 +25329,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-easyred",
@@ -25325,7 +25501,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-echo",
@@ -25394,7 +25571,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-eclipsex",
@@ -25462,7 +25640,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-emily",
@@ -25532,7 +25711,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-encore",
@@ -25601,7 +25781,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-expresso",
@@ -25723,7 +25904,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-exuberance",
@@ -25846,7 +26028,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-fairamerican",
@@ -25941,7 +26124,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-falcon",
@@ -26036,7 +26220,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-falkor",
@@ -26106,7 +26291,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-firstlight",
@@ -26175,7 +26361,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-freedom",
@@ -26295,7 +26482,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-frequentflyer",
@@ -26443,7 +26631,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-frolic",
@@ -26513,7 +26702,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-fun",
@@ -26582,7 +26772,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-gadzooks",
@@ -26705,7 +26896,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-gambit",
@@ -26775,7 +26967,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-geminiii",
@@ -26976,7 +27169,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-geronimoscadillac",
@@ -27045,7 +27239,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-ghost",
@@ -27114,7 +27309,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-goldeneye",
@@ -27263,7 +27459,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-greatscott",
@@ -27332,7 +27529,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-gremlin",
@@ -27401,7 +27599,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-greyowl",
@@ -27470,7 +27669,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-growthspurt",
@@ -27695,7 +27895,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-hamburgii",
@@ -28000,7 +28201,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-harvestmoon",
@@ -28070,7 +28272,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-havoc",
@@ -28220,7 +28423,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-havocx",
@@ -28290,7 +28494,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-hideaway",
@@ -28359,7 +28564,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-honeybadger",
@@ -28428,7 +28634,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-hotspur",
@@ -28497,7 +28704,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-hounddog",
@@ -28620,7 +28828,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-inception",
@@ -28690,7 +28899,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-intime",
@@ -28759,7 +28969,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-iris",
@@ -28881,7 +29092,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-jamala",
@@ -28951,7 +29163,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-jules",
@@ -29178,7 +29391,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-jungleland",
@@ -29248,7 +29462,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-justplainnutz",
@@ -29317,7 +29532,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-katana",
@@ -29386,7 +29602,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-katara",
@@ -29456,7 +29673,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-kate",
@@ -29526,7 +29744,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-katherine",
@@ -29620,7 +29839,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-katsu",
@@ -29743,7 +29963,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-kekoa",
@@ -29839,7 +30060,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-kenai",
@@ -29909,7 +30131,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-kiwiblue",
@@ -29978,7 +30201,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-kp025",
@@ -30048,7 +30272,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-lady",
@@ -30142,7 +30367,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-lapin",
@@ -30212,7 +30438,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-leadingedge",
@@ -30334,7 +30561,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-liberty",
@@ -30511,7 +30739,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-littlefish",
@@ -30580,7 +30809,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-littletexas",
@@ -30598,7 +30828,7 @@
         "Stamford Overnight Race",
         "AYC Fall Regatta",
         "Vineyard Race",
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Execution Rocks Race",
         "Around Long Island Regatta"
       ],
@@ -30785,7 +31015,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -30833,10 +31063,11 @@
             "Execution Rocks Race",
             "Stamford Overnight Race",
             "Stamford Overnight Race",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-loblolly",
@@ -30906,7 +31137,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-loulou",
@@ -31053,7 +31285,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-lowprofile",
@@ -31149,7 +31382,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-lowprofilex",
@@ -31217,7 +31451,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-luckyluke",
@@ -31340,7 +31575,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-luckylukex",
@@ -31408,7 +31644,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-lure",
@@ -31528,7 +31765,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-lycjuniors",
@@ -31597,7 +31835,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-maddogsandenglishmen",
@@ -31666,7 +31905,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-maddogsandenglishmenexrock",
@@ -31735,7 +31975,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-maestrale",
@@ -31831,7 +32072,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-maggie",
@@ -31927,7 +32169,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-markus",
@@ -31997,7 +32240,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-maxine",
@@ -32117,7 +32361,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-mayniac",
@@ -32212,7 +32457,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-midnightrider",
@@ -32440,7 +32686,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-mischief",
@@ -32537,7 +32784,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-moneyball",
@@ -32659,7 +32907,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-morningglory",
@@ -32729,7 +32978,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-msquared",
@@ -32798,7 +33048,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-muskoka",
@@ -32892,7 +33143,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nantucket",
@@ -33141,7 +33393,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-navigo",
@@ -33210,7 +33463,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nemesis",
@@ -33279,7 +33533,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nemo",
@@ -33375,7 +33630,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nereus",
@@ -33445,7 +33701,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nevermore",
@@ -33514,7 +33771,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-newmoon",
@@ -33584,7 +33842,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nextboat",
@@ -33654,7 +33913,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nightwatch",
@@ -33774,7 +34034,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nordlys",
@@ -33894,7 +34155,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-nostromino",
@@ -33963,7 +34225,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-oakclifffarr40black",
@@ -34033,7 +34296,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-oakclifffarr40blackhforracing",
@@ -34103,7 +34367,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-oakcliffker50",
@@ -34173,7 +34438,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-ohjee",
@@ -34293,7 +34559,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-onetoomany",
@@ -34388,7 +34655,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-orsamaggiore",
@@ -34458,7 +34726,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-orzeliii",
@@ -34528,7 +34797,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-osprey",
@@ -34625,7 +34895,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-papillon",
@@ -34695,7 +34966,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-pathfinder",
@@ -34765,7 +35037,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-pazuzu",
@@ -34861,7 +35134,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-pegasus",
@@ -34931,7 +35205,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-peregrina",
@@ -35051,7 +35326,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-petra",
@@ -35120,7 +35396,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-phoenix",
@@ -35214,7 +35491,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-pincoya",
@@ -35284,7 +35562,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-piragua",
@@ -35380,7 +35659,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-polaris",
@@ -35450,7 +35730,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-poppy",
@@ -35547,7 +35828,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-quicksilver",
@@ -35748,7 +36030,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-quintessence",
@@ -35817,7 +36100,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-ranger",
@@ -35887,7 +36171,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-rascal",
@@ -35982,7 +36267,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-rascall",
@@ -36051,7 +36337,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-redemption",
@@ -36120,7 +36407,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-redline",
@@ -36215,7 +36503,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-redshift",
@@ -36285,7 +36574,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-resolute",
@@ -36409,7 +36699,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-resonance",
@@ -36479,7 +36770,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-revolution",
@@ -36549,7 +36841,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-rhiannon",
@@ -36645,7 +36938,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-rickybobby",
@@ -36741,7 +37035,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-rikki",
@@ -36837,7 +37132,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-roo",
@@ -36959,7 +37255,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-rumble",
@@ -37029,7 +37326,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-ruse",
@@ -37098,7 +37396,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-saltire",
@@ -37167,7 +37466,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-salty",
@@ -37237,7 +37537,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-sapphire",
@@ -37307,7 +37608,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-savethesoundx",
@@ -37375,7 +37677,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-sawtooth",
@@ -37576,7 +37879,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-scapegoat",
@@ -37698,7 +38002,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-scorpios",
@@ -37794,7 +38099,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-scowlingdragon",
@@ -37864,7 +38170,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-scowlingdragonx",
@@ -37932,7 +38239,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-searabbit",
@@ -38027,7 +38335,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-secretaffair",
@@ -38096,7 +38405,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-shakennotstirred",
@@ -38244,7 +38554,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-siblingrivalry",
@@ -38339,7 +38650,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-silentpartner",
@@ -38408,7 +38720,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-silverlining",
@@ -38504,7 +38817,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-sirenoakcliff",
@@ -38574,7 +38888,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-skyfall",
@@ -38644,7 +38959,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-sleeper",
@@ -38872,7 +39188,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-slingshot",
@@ -38968,7 +39285,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-smile",
@@ -39064,7 +39382,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-smokemirrors",
@@ -39134,7 +39453,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-snowgoose",
@@ -39203,7 +39523,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-solution",
@@ -39323,7 +39644,8 @@
             "AYC Spring Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-sonar3",
@@ -39392,7 +39714,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-soundsgreat",
@@ -39515,7 +39838,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-spacemonkey",
@@ -39612,7 +39936,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-speck",
@@ -39787,7 +40112,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-spectra",
@@ -39857,7 +40183,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-spectre",
@@ -39927,7 +40254,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-spiritof76",
@@ -39996,7 +40324,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-starbuck",
@@ -40091,7 +40420,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-stormypetrel",
@@ -40239,7 +40569,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-strangebrew",
@@ -40333,7 +40664,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-stratosx",
@@ -40401,7 +40733,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-summerstorm52",
@@ -40498,7 +40831,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-summerstormclemsontigers",
@@ -40568,7 +40902,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-sur",
@@ -40637,7 +40972,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-surfacetensionorc",
@@ -40707,7 +41043,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-surprise",
@@ -40777,7 +41114,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-swampfox",
@@ -40898,7 +41236,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-sweetcaroline",
@@ -40968,7 +41307,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-sweetlorraine",
@@ -41063,7 +41403,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-swell",
@@ -41133,7 +41474,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-synergy",
@@ -41203,7 +41545,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-tango",
@@ -41272,7 +41615,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-teal",
@@ -41419,7 +41763,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-tempest",
@@ -41513,7 +41858,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-tempestii",
@@ -41660,7 +42006,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-temptationoakcliff",
@@ -41730,7 +42077,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-temptationoakcliffjv66",
@@ -41826,7 +42174,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-terranova",
@@ -41975,7 +42324,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-texasrose",
@@ -42147,7 +42497,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-therocc",
@@ -42217,7 +42568,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-theroost",
@@ -42392,7 +42744,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-thinmanx",
@@ -42460,7 +42813,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-tobala",
@@ -42529,7 +42883,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-trifecta",
@@ -42544,7 +42899,7 @@
       "mmsi": null,
       "mmsi_confidence": "unverified",
       "events": [
-        "Haustblót Shorthanded Regatta"
+        "Haustbl\u00f3t Shorthanded Regatta"
       ],
       "palmares": {
         "participations": 1,
@@ -42558,7 +42913,7 @@
         "results": [
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -42595,10 +42950,11 @@
           ],
           "mmsi": [],
           "palmares": [
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-triton",
@@ -42694,7 +43050,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-truenorth",
@@ -42764,7 +43121,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-unbreakable",
@@ -42779,7 +43137,7 @@
       "mmsi": null,
       "mmsi_confidence": "unverified",
       "events": [
-        "Haustblót Shorthanded Regatta",
+        "Haustbl\u00f3t Shorthanded Regatta",
         "Around Long Island Regatta"
       ],
       "palmares": {
@@ -42819,7 +43177,7 @@
           },
           {
             "regatta_id": "50930",
-            "regatta": "Haustblót Shorthanded Regatta",
+            "regatta": "Haustbl\u00f3t Shorthanded Regatta",
             "year": 2026,
             "event_dates": "Not shown on scratch-sheet page",
             "status": "ENTRY ONLY",
@@ -42857,10 +43215,11 @@
           "mmsi": [],
           "palmares": [
             "Around Long Island Regatta",
-            "Haustblót Shorthanded Regatta"
+            "Haustbl\u00f3t Shorthanded Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-uprising",
@@ -42955,7 +43314,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-valiant",
@@ -43078,7 +43438,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-vamonos",
@@ -43148,7 +43509,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-varuna",
@@ -43294,7 +43656,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-venturesome",
@@ -43364,7 +43727,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-vicitan",
@@ -43461,7 +43825,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-wahoo",
@@ -43531,7 +43896,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-wanderlust",
@@ -43600,7 +43966,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-warlock",
@@ -43694,7 +44061,8 @@
             "AYC Fall Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-whirlwind",
@@ -43789,7 +44157,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-whistler",
@@ -43858,7 +44227,8 @@
             "Edlu Distance Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-wildthing",
@@ -44030,7 +44400,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-windancer",
@@ -44126,7 +44497,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-windsong",
@@ -44196,7 +44568,8 @@
             "Around Long Island Regatta"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-wizardx",
@@ -44264,7 +44637,8 @@
             "Storm Trysail Club Block Island Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-xcellent",
@@ -44386,7 +44760,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-xenios",
@@ -44455,7 +44830,8 @@
             "Execution Rocks Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-yankeeboy",
@@ -44710,7 +45086,8 @@
             "Stamford Overnight Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-youngamerican146",
@@ -44807,7 +45184,8 @@
             "Vineyard Race"
           ]
         }
-      }
+      },
+      "phrf_history": []
     },
     {
       "id": "hist-youngamericanexrocks",
@@ -44876,7 +45254,8 @@
             "Larchmont Race Week"
           ]
         }
-      }
+      },
+      "phrf_history": []
     }
   ]
 }
