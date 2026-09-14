@@ -389,9 +389,18 @@ class DockerChunkedQueryProvider:
         """
         # Ensure timestamps are not quoted (they're passed as strings from chunked_export)
         # but used unquoted in the Flux query to represent TIME values
+        # NOTE: sort() is intentionally NOT used here.
+        # sort() is a BLOCKING Flux operation: it materialises the whole
+        # result set in memory before emitting any row. One minute of this
+        # bucket already holds ~1687 distinct series (mostly AIS targets and
+        # virtual AtoNs), so a 15-minute chunk forced the engine to merge
+        # tens of thousands of series at once. That exhausted RPi memory and
+        # killed the InfluxDB container (exitCode=137 SIGKILL, exitCode=2),
+        # which surfaced as DockerComposeError on every chunk.
+        # range() already returns rows time-ordered per table, and
+        # deterministic global ordering is applied downstream in merge.py.
         flux = f'''
 from(bucket: "{self.bucket}")
   |> range(start: {start}, stop: {stop})
-  |> sort(columns: ["_time"])
 '''
         return self.query_flux_chunk(flux, chunk_index, start, stop)
