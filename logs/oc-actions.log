@@ -76,3 +76,6 @@
 [2026-09-14T04:15:42] [VALIDATION] [fleet-starred] Tests: all 97 passing with isolated temporary stores
 [2026-09-14T04:15:42] [VALIDATION] [fleet-starred] Production store: protected by .gitignore, untouched by tests
 [2026-09-14T04:15:42] [RESULT] [fleet-starred] Result: SUCCESS — Runtime decoupling complete
+[2026-09-14T15:33:29] [COMMIT] [fleet-starred] SHA: ab2ad3ee1d012d134376d43c5f5967c3fd672bb8
+[2026-09-14T15:33:29] [CONFIG_CHANGE] [fleet-starred] Runtime starred store reset to empty from tracked template (19 synthetic test IDs removed, backup created outside repository)
+[2026-09-14T15:33:29] [RESULT] [fleet-starred] Result: SUCCESS — local synced to origin/main, complete suite green
