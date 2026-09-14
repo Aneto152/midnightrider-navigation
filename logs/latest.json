@@ -1,7 +1,7 @@
 {
-  "task": "fleet-starred-modal-verification-and-store-reset",
+  "task": "Fleet UI repair - lot A0: wire race history modal + star sync refresh",
   "status": "SUCCESS",
-  "timestamp": "2026-09-14T15:33:29",
+  "timestamp": "2026-09-14T13:55:17",
   "verified_main_sha": "ab2ad3ee1d012d134376d43c5f5967c3fd672bb8",
   "test_summary": {
     "collected": 97,
@@ -16,5 +16,12 @@
   "removed_store_count": 19,
   "race_history_modal_verified": true,
   "phrf_label_correct": true,
-  "deployment": "NOT_PERFORMED"
+  "deployment": "NOT_PERFORMED",
+  "commit_sha": "6ee8724dfc4a31c29600d1136cc6b56b3170f1bc",
+  "files_modified": [
+    "ais/fleet_db.html",
+    "ais/fleet_stars.js",
+    "logs/oc-actions.log"
+  ],
+  "notes": "populateRaceHistory() was dead code - defined but never invoked by showModal(). Race history was therefore never visible for any boat. Current boats still show no race history: their palmares is present in competitors.json but not exposed by ais/server_handlers.py (pending lot B)."
 }
