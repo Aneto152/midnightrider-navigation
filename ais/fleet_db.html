@@ -330,7 +330,7 @@ function saveStarred(starred) {
 
 function toggleFleetStar(boat, event) {
   event.stopPropagation();
-  const starred = Array.from(getLocalStarred());
+  const starred = getLocalStarred();  // Keep as Set for .has(), .add(), .delete()
   const key = getBoatStarKey(boat);
   
   if (starred.has(key)) {
@@ -344,7 +344,7 @@ function toggleFleetStar(boat, event) {
 }
 
 function updateStarredCount() {
-  document.getElementById('starredBoats').textContent = Array.from(getLocalStarred()).size;
+  document.getElementById('starredBoats').textContent = getLocalStarred().size;
 }
 
 let boats = [];
@@ -366,7 +366,7 @@ function setSort(s) {
 }
 
 function getFilteredBoats() {
-  const starred = Array.from(getLocalStarred());
+  const starred = getLocalStarred();  // Keep as Set for .has() method
   let result = boats;
   
   if (filter === 'starred') {
@@ -420,7 +420,7 @@ function closeModal() {
 
 function render() {
   const filtered = getFilteredBoats();
-  const starred = Array.from(getLocalStarred());
+  const starred = getLocalStarred();  // Keep as Set for efficient .has() checks
   const list = document.getElementById('boatList');
   
   if (!filtered.length) {
