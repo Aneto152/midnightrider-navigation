@@ -422,6 +422,33 @@ function showModal(boat) {
   document.getElementById('detailModal').classList.add('active');
 }
 
+/**
+ * Resolve a boat by id from the array already held in memory.
+ *
+ * render() used to serialise the entire boat record, palmares included, into
+ * the ondblclick and onclick attributes of every row. With 31 keys per boat
+ * after lot C2 that put roughly 3 MB of duplicated JSON inside the page HTML,
+ * on top of the API payload itself, for data the page already had in `boats`.
+ *
+ * It was also an escaping hazard: a boat name containing a double quote would
+ * break the whole row, and the fleet holds names like "A Boy's Dream".
+ * Passing the id avoids both problems and keeps showModal and onStarClick
+ * unchanged, still receiving a full boat object.
+ */
+function findBoat(id) {
+  return (boats || []).find(b => String(b.id) === String(id)) || null;
+}
+
+function showModalById(id) {
+  const boat = findBoat(id);
+  if (boat) showModal(boat);
+}
+
+function onStarClickById(id, event) {
+  const boat = findBoat(id);
+  if (boat) onStarClick(boat, event);
+}
+
 function closeModal() {
   document.getElementById('detailModal').classList.remove('active');
 }
@@ -441,8 +468,8 @@ function render() {
     const isStarred = isFleetStarred(getBoatStarKey(boat));
     
     return `
-      <div class="boat-row ${aisInfo.status}" ondblclick="showModal(${JSON.stringify(boat).replace(/"/g, '&quot;')})">
-        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="onStarClick(${JSON.stringify(boat).replace(/"/g, '&quot;')}, event)">${isStarred ? '★' : '☆'}</button>
+      <div class="boat-row ${aisInfo.status}" ondblclick="showModalById('${boat.id}')">
+        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="onStarClickById('${boat.id}', event)">${isStarred ? '★' : '☆'}</button>
         <div class="boat-info">
           <div class="boat-name">${boat.name || boat.mmsi}</div>
           <div class="boat-class">${boat.boat_class || '—'}</div>
