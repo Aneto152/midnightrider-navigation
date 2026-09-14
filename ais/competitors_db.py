@@ -73,6 +73,7 @@ class CompetitorDB:
             'phrf_lis': phrf, 'irc_tcc': tcc,
             'priority': c.get('priority', 'medium'),
             'events': c.get('events', []),
+            'palmares': c.get('palmares', {}),
         }
 
     def get_meta(self):

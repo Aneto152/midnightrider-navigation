@@ -15,19 +15,25 @@ class TestRaceHistoryExposure(unittest.TestCase):
             cls.db = json.load(f)
     
     def test_01_api_exposes_palmares_historical(self):
-        """API response includes palmares for historical competitors"""
-        historical = self.db.get('historical_competitors', [])
-        self.assertGreater(len(historical), 0, "Historical competitors exist")
-        
-        # Find a boat with palmares
+        """Palmares reaches the API through the single unified pool.
+
+        Was: read self.db['historical_competitors'] and require it non-empty.
+        That array no longer exists (schema_version 3). The 265 historical boats
+        now live in competitors[] with a 'hist-' id prefix, and their palmares
+        travels through CompetitorDB.enrich(), which is the only enrichment path.
+        """
+        self.assertNotIn('historical_competitors', self.db)
+        boats = self.db.get('competitors', [])
+        historical = [b for b in boats if str(b.get('id', '')).startswith('hist-')]
+        self.assertEqual(len(historical), 265, "265 historical boats in the unified pool")
+
         boat_with_palmares = next((b for b in historical if b.get('palmares')), None)
         self.assertIsNotNone(boat_with_palmares, "At least one historical boat has palmares")
-        
-        # Verify structure
+
         palmares = boat_with_palmares['palmares']
         self.assertIn('results', palmares, "Palmares has results array")
         self.assertGreater(len(palmares['results']), 0, "Results are populated")
-    
+
     def test_02_api_exposes_palmares_active(self):
         """API response includes palmares for active competitors"""
         active = self.db.get('competitors', [])
@@ -141,7 +147,10 @@ class TestRaceHistoryExposure(unittest.TestCase):
             if boat.get('mmsi'):
                 mmsis.add(str(boat['mmsi']))
         
-        self.assertEqual(len(mmsis), 68, f"68 non-empty MMSIs preserved, got {len(mmsis)}")
+        # Was: exactly 68. The 2026-09-14 reimport added 66 unambiguous MMSIs
+        # from the source. The invariant is that none is ever lost, not that the
+        # total is frozen.
+        self.assertGreaterEqual(len(mmsis), 68, f"at least 68 MMSIs, got {len(mmsis)}")
 
 if __name__ == '__main__':
     unittest.main()

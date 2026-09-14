@@ -147,12 +147,11 @@ def api_fleet_db(sk_fn):
     """Fleet DB handler: expose unified fleet with runtime-derived live AIS state.
     
     Semantic rules:
-    - Fleet membership: all 379 normalized records (114 current + 265 historical)
+    - Fleet membership: all 379 records of the unified competitors array
     - live_ais: boolean, true if boat observed in last 30 minutes
     - ais_status: 'live'|'stale'|'old'|'absent' (descriptive, for display)
     - active: alias for live_ais (for backward compatibility)
     """
-    import json, os
     from datetime import datetime, timezone
     
     # Canonical live-AIS state calculation
@@ -199,7 +198,7 @@ def api_fleet_db(sk_fn):
         else:
             return 'old'
     
-    # Add current competitors (114)
+    # All competitors (379, unified pool)
     for c in _cdb.get_all():
         e = _cdb.enrich(c)
         mmsi = e.get('mmsi', '')
@@ -214,43 +213,11 @@ def api_fleet_db(sk_fn):
         
         result.append(e)
     
-    # Add historical candidates (265)
-    try:
-        db_path = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), '..', 'regatta', 'competitors.json')
-        )
-        with open(db_path, 'r', encoding='utf-8') as f:
-            db_data = json.load(f)
-        
-        for h in db_data.get('historical_competitors', []):
-            mmsi = h.get('mmsi') or ''
-            e = {
-                'id': h.get('id', ''),
-                'name': h.get('boat_name', ''),
-                'sail_num': h.get('sail_number', ''),
-                'skipper': h.get('skipper', ''),
-                'boat_class': '',
-                'mmsi': str(mmsi),
-                'phrf_lis': None,
-                'irc_tcc': None,
-                'priority': h.get('priority', 'medium'),
-                'events': h.get('events', []),
-            'palmares': h.get('palmares', {}),
-            }
-            
-            # Canonical live-AIS state (runtime-derived)
-            e['live_ais'] = is_live_ais(mmsi)
-            e['active'] = e['live_ais']  # backward compatibility alias
-            
-            # Descriptive status for display
-            e['ais_status'] = calc_ais_status(mmsi)
-            e['ais_age_s'] = ais_age.get(mmsi)
-            
-            result.append(e)
-    except Exception:
-        # Log error but continue gracefully
-        pass
-    
+    # Historical candidates are no longer a separate pool. The 2026-09-14
+    # lossless reimport unified them into competitors[] (schema_version 3),
+    # so the loop above covers all 379 boats. palmares now travels through
+    # CompetitorDB.enrich(), which is the single enrichment path.
+
     # Count live_ais boats for summary
     live_count = sum(1 for e in result if e.get('live_ais'))
     
