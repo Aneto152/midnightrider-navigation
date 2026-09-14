@@ -148,23 +148,24 @@ class TestFleetStarsGlobalSync(unittest.TestCase):
         self.assertGreaterEqual(len(starred), 3)
 
     def test_17_store_persistence(self):
-        """Store is persisted across handler calls"""
+        """Store is persisted across handler calls (via temp isolated store)"""
         add_starred('persist_test_boat')
 
-        # Verify by checking store file
-        store_path = Path('regatta/fleet_stars.json')
-        self.assertTrue(store_path.exists())
+        # Verify via handler (which uses the temp store set in setUpClass)
+        starred = get_starred()
+        self.assertIn('persist_test_boat', starred)
 
-        with open(store_path, 'r') as f:
-            store_data = json.load(f)
-
-        self.assertIn('persist_test_boat', store_data.get('starred', []))
+        # Verify temp store file exists (not production store)
+        self.assertTrue(self.temp_store.exists(), f"Temp store should exist at {self.temp_store}")
 
     def test_18_store_format_valid_json(self):
-        """Store file is valid JSON"""
-        store_path = Path('regatta/fleet_stars.json')
+        """Store file is valid JSON (via temp isolated store)"""
+        # Add data to ensure store is created
+        add_starred('format_test_boat')
 
-        with open(store_path, 'r') as f:
+        # Verify temp store file is valid JSON
+        self.assertTrue(self.temp_store.exists())
+        with open(self.temp_store, 'r') as f:
             store_data = json.load(f)
 
         # Should have expected structure
@@ -173,10 +174,10 @@ class TestFleetStarsGlobalSync(unittest.TestCase):
         self.assertIn('metadata', store_data)
 
     def test_19_store_has_version(self):
-        """Store includes version field"""
-        store_path = Path('regatta/fleet_stars.json')
-
-        with open(store_path, 'r') as f:
+        """Store includes version field (via temp isolated store)"""
+        # Verify temp store has version
+        self.assertTrue(self.temp_store.exists())
+        with open(self.temp_store, 'r') as f:
             store_data = json.load(f)
 
         self.assertEqual(store_data['version'], '1.0')
