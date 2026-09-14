@@ -34,12 +34,12 @@ async function initializeFleetStarSync() {
       
       if (mergeResponse.ok) {
         const merged = await mergeResponse.json();
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged.starred || []));
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(merged.starred_ids || []));
         console.log('[Fleet Stars] Merged:', merged.starred_ids.length, 'total');
       }
     } else {
       // Local is empty, use server state
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(serverStarred));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(serverStarred)));
       console.log('[Fleet Stars] Synced from server:', serverStarred.size, 'starred');
     }
   } catch (e) {
@@ -117,7 +117,7 @@ async function refreshFleetStarState() {
     const response = await fetch(FLEET_STARS_API);
     if (response.ok) {
       const data = await response.json();
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data.starred || []));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data.starred_ids || []));
       return true;
     }
   } catch (e) {

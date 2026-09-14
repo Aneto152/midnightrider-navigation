@@ -264,10 +264,9 @@ a{color:#7bb8f0;text-decoration:none}
   </div>
 </div>
 
+<script src="fleet_stars.js"></script>
 <script>
 // Local storage for starred boats — versioned to fix MMSI identity collision
-const STORAGE_KEY = 'fleet_db_starred_v2';
-const LEGACY_STORAGE_KEY = 'fleet_db_starred';
 
 // Helper: Generate unique, stable identity key for a boat
 // Prevents collisions when multiple boats have no MMSI
@@ -299,19 +298,13 @@ function getBoatStarKey(boat) {
 // getLocalStarred() is defined in fleet_stars.js (authoritative source)
 // Do not duplicate here; use fleet_stars.js version instead
 
-function toggleFleetStar(boat, event) {
+function onStarClick(boat, event) {
   event.stopPropagation();
-  const starred = getLocalStarred();  // Keep as Set for .has(), .add(), .delete()
   const key = getBoatStarKey(boat);
-  
-  if (starred.has(key)) {
-    starred.delete(key);
-  } else {
-    starred.add(key);
-  }
-  saveStarred(starred);
-  updateStarredCount();
-  render();
+  Promise.resolve(toggleFleetStar(key)).then(() => {
+    updateStarredCount();
+    render();
+  });
 }
 
 function updateStarredCount() {
@@ -405,7 +398,7 @@ function render() {
     
     return `
       <div class="boat-row ${aisInfo.status}" ondblclick="showModal(${JSON.stringify(boat).replace(/"/g, '&quot;')})">
-        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="toggleFleetStar(${JSON.stringify(boat).replace(/"/g, '&quot;')}, event)">${isStarred ? '★' : '☆'}</button>
+        <button class="star-btn ${isStarred ? 'starred' : ''}" onclick="onStarClick(${JSON.stringify(boat).replace(/"/g, '&quot;')}, event)">${isStarred ? '★' : '☆'}</button>
         <div class="boat-info">
           <div class="boat-name">${boat.name || boat.mmsi}</div>
           <div class="boat-class">${boat.boat_class || '—'}</div>
@@ -520,6 +513,5 @@ function populateRaceHistory(boat) {
 </script>
 
 
-<script src="fleet_stars.js"></script>
 </body>
 </html>
