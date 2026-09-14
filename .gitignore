@@ -103,3 +103,7 @@ venv/
 yarn-error.log
 logs/calypso-*.log
 logs/*.txt
+
+# Fleet Starred Runtime State (DO NOT TRACK)
+# Production store is user favorites; protect it from reset/deployment
+regatta/fleet_stars.json
