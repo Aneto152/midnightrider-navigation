@@ -79,3 +79,12 @@
 [2026-09-14T15:33:29] [COMMIT] [fleet-starred] SHA: ab2ad3ee1d012d134376d43c5f5967c3fd672bb8
 [2026-09-14T15:33:29] [CONFIG_CHANGE] [fleet-starred] Runtime starred store reset to empty from tracked template (19 synthetic test IDs removed, backup created outside repository)
 [2026-09-14T15:33:29] [RESULT] [fleet-starred] Result: SUCCESS — local synced to origin/main, complete suite green
+[2026-09-14T13:47:03] [FILE_MODIFY] [fleet-ui] Removed duplicate global const STORAGE_KEY/LEGACY_STORAGE_KEY from ais/fleet_db.html (collision with ais/fleet_stars.js caused SyntaxError annulling inline script block)
+[2026-09-14T13:47:03] [FILE_MODIFY] [fleet-ui] Replaced duplicate inline toggleFleetStar(boat,event) with onStarClick adapter delegating to async toggleFleetStar(boatKey)
+[2026-09-14T13:47:03] [FILE_MODIFY] [fleet-ui] Moved <script src=fleet_stars.js> before inline script blocks (load order fix)
+[2026-09-14T13:47:03] [FILE_MODIFY] [fleet-ui] Aligned ais/fleet_stars.js on starred_ids API contract
+[2026-09-14T13:47:03] [RESULT] [fleet-ui] Result: SUCCESS - Fleet page renders 379 boats, All filter operational, no residual symbol collision
+[2026-09-14T13:55:16] [FILE_MODIFY] [fleet-ui] Wired populateRaceHistory() into showModal() - function was defined but never called, race history section stayed display:none for every boat since de8d682
+[2026-09-14T13:55:16] [FILE_MODIFY] [fleet-stars] Added UI refresh hook at end of initializeFleetStarSync() - async sync could complete after first render, delaying cross-device star propagation by one reload
+[2026-09-14T13:55:16] [FILE_MODIFY] [fleet-stars] Hardened merge log against undefined starred_ids
+[2026-09-14T13:55:16] [RESULT] [fleet-ui] Result: SUCCESS - race history renders on double-click, star sync refreshes UI

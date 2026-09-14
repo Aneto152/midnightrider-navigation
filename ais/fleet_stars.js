@@ -35,7 +35,7 @@ async function initializeFleetStarSync() {
       if (mergeResponse.ok) {
         const merged = await mergeResponse.json();
         localStorage.setItem(STORAGE_KEY, JSON.stringify(merged.starred_ids || []));
-        console.log('[Fleet Stars] Merged:', merged.starred_ids.length, 'total');
+        console.log('[Fleet Stars] Merged:', (merged.starred_ids || []).length, 'total');
       }
     } else {
       // Local is empty, use server state
@@ -45,6 +45,11 @@ async function initializeFleetStarSync() {
   } catch (e) {
     console.warn('[Fleet Stars] Sync failed, using local cache:', e.message);
   }
+
+  // Sync is async: the first render may already have run with stale state.
+  // Refresh the UI once the server state is known (cross-device propagation).
+  if (typeof updateStarredCount === 'function') updateStarredCount();
+  if (typeof render === 'function') render();
 }
 
 /**

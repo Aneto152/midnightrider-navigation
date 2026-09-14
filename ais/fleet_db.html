@@ -375,6 +375,9 @@ function showModal(boat) {
     : 'Never';
   document.getElementById('modalAge').textContent = age;
   
+  // Race history is rendered by the second script block
+  if (typeof populateRaceHistory === 'function') populateRaceHistory(boat);
+
   document.getElementById('detailModal').classList.add('active');
 }
 
