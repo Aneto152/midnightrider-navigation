@@ -1,27 +1,90 @@
 {
-  "task": "Fleet UI repair - lot A0: wire race history modal + star sync refresh",
+  "task": "Lot B + C1 - lossless Excel reimport, unified fleet pool, UI filter fix",
+  "date": "2026-09-14T20:04:17Z",
   "status": "SUCCESS",
-  "timestamp": "2026-09-14T13:55:17",
-  "verified_main_sha": "ab2ad3ee1d012d134376d43c5f5967c3fd672bb8",
-  "test_summary": {
-    "collected": 97,
-    "passed": 97,
-    "failed": 0,
-    "errors": 0,
-    "skipped": 0,
-    "status": "OK"
-  },
-  "runtime_store": "RESET_TO_EMPTY_FROM_TEMPLATE",
-  "runtime_store_backup": "/tmp/fleet-stars-store-backup-20260914T153245Z",
-  "removed_store_count": 19,
-  "race_history_modal_verified": true,
-  "phrf_label_correct": true,
-  "deployment": "NOT_PERFORMED",
-  "commit_sha": "6ee8724dfc4a31c29600d1136cc6b56b3170f1bc",
-  "files_modified": [
-    "ais/fleet_db.html",
-    "ais/fleet_stars.js",
-    "logs/oc-actions.log"
+  "commit": "422a30dd6240663818c987a5c7ac69ba62a2c427",
+  "parent": "a515c734e22315ea8930fc7e044cf3972b222bbc",
+  "previous_commits": [
+    "a515c734e22315ea8930fc7e044cf3972b222bbc  test: repair pytest collection + static guards",
+    "d0c091fda0a26211a5d8dbaaca4995c860156fb7  fix: real fleet size in race history"
   ],
-  "notes": "populateRaceHistory() was dead code - defined but never invoked by showModal(). Race history was therefore never visible for any boat. Current boats still show no race history: their palmares is present in competitors.json but not exposed by ais/server_handlers.py (pending lot B)."
+  "deployment": "DEPLOYED_TO_PRODUCTION",
+  "deployed_by": "Denis, manual SSH session",
+  "validated_by_denis": "visual check of /ais/fleet_db and boat modals, 2026-09-14",
+  "requested_by_denis": [
+    "no data loss from the Excel database into the internal database",
+    "remove the current/historical distinction, one single ranking",
+    "All button selected on page load, not Starred"
+  ],
+  "steps": [
+    {
+      "step": "B1",
+      "action": "run regatta/import_race_database.py",
+      "result": "SUCCESS",
+      "detail": "379 boats, 1052 results, schema_version 3, historical_competitors removed"
+    },
+    {
+      "step": "B2",
+      "action": "expose palmares through CompetitorDB.enrich()",
+      "result": "SUCCESS",
+      "detail": "indissociable from B1: palmares reached the API only via the historical branch"
+    },
+    {
+      "step": "B3",
+      "action": "derive palmares aggregates from deduplicated results",
+      "result": "SUCCESS",
+      "detail": "test_16 was right, the importer was wrong; 2 records corrected"
+    },
+    {
+      "step": "C1",
+      "action": "align active button markup with JS initial state",
+      "result": "SUCCESS",
+      "detail": "filterAll and sortName now active at load"
+    },
+    {
+      "step": "B4",
+      "action": "docker restart regatta",
+      "result": "SUCCESS",
+      "detail": "Signal K untouched, systemctl not used for containers"
+    }
+  ],
+  "data_measurements": {
+    "boats": 379,
+    "results": 1052,
+    "json_bytes": 2297646,
+    "skipper": "114 -> 379",
+    "sail_number": "44 -> 376",
+    "yacht_club": "33 -> 351",
+    "home_port": "33 -> 372",
+    "mmsi": "68 -> 134",
+    "ratings_phrf_lis": "68 -> 278",
+    "phrf_history": "0 -> 344",
+    "overall_finishers": "488 wrong -> 1052 correct",
+    "times": "0 -> 516 corrected / 600 elapsed / 567 finish",
+    "source_keys_unmatched": 0,
+    "duplicate_targets": 0
+  },
+  "test_summary": {
+    "measured_scope": "tests/ais + tests/regatta + tests/test_repo_static_guards.py",
+    "result": "277 passed, 0 failed",
+    "full_tree_collected": 1074,
+    "honest_note": "the full tree has still never completed a run; see known_gaps"
+  },
+  "known_gaps": [
+    "tests/influx_powerbi_export/test_docker_provider.py and test_classifier_self_context.py hang on real Docker/network calls; the full suite cannot complete. 3 tests in 6 minutes measured. Not introduced by this work, revealed by repairing collection.",
+    "tools/influx_powerbi_export/main.py does not expose discover_usb; its test is skipped at module level",
+    "regatta container starts with token_set=NO, so InfluxDB writes fail silently",
+    "tests/mediaman, tests/portal, tests/mcp never measured to completion",
+    "Plugin P5 signalk-n2k-bridge still has 0 PGN mappings; Vulcan 7 receives no heading/attitude from Signal K"
+  ],
+  "pending_arbitration_by_denis": [
+    "Deviation / Deviation YCC and Valiant / Valiant YCC are the same boats under two names, with contradictory fleet sizes in the source. Kept as 4 distinct records.",
+    "8 mmsi_conflict cases: existing value kept, source value recorded",
+    "17 mmsi_review cases: several source MMSIs, none written"
+  ],
+  "next_lots": [
+    "C2 - expose ratings, phrf_history, vessel, times, yacht_club, home_port through the API",
+    "D  - enriched modal, and formatRank rendering RET/30 instead of a dash for retired boats"
+  ],
+  "secrets_logged": "none - no token, credential or .env content appears in any log"
 }

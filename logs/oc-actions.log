@@ -92,3 +92,18 @@
 [2026-09-14T18:15:32] [FILE_MODIFY] [fleet-ui] Closed AIS Status modal-section before raceHistorySection (was nested inside it). Div balance verified 29/29
 [2026-09-14T18:15:32] [DEBUG] [tests] Baseline bcdadba measured: 5 failed / 254 passed. Current: 11 failed / 248 passed. Lot A1 introduced 0 failures. The 6 new failures are assertions pinning the pre-fix broken architecture
 [2026-09-14T18:15:32] [RESULT] [fleet-ui] Result: SUCCESS
+[2026-09-14T19:23:15] [FILE_MODIFY] [tests] Lot A: repaired 2 SyntaxError blocking pytest collection repo-wide since d6a3107
+[2026-09-14T19:23:15] [FILE_CREATE] [tests] tests/test_repo_static_guards.py: 5 static guards derived from real shipped defects
+[2026-09-14T19:23:15] [RESULT]      [tests] Result: SUCCESS - collection restored, 1074 tests collected
+[2026-09-14T19:23:15] [COMMIT]      SHA: a515c734e22315ea8930fc7e044cf3972b222bbc
+[2026-09-14T20:00:12] [FILE_CREATE] [regatta] regatta/sources/race_database_consolidated.csv: 1054-row Excel source versioned
+[2026-09-14T20:00:12] [FILE_CREATE] [regatta] regatta/import_race_database.py: stdlib-only lossless importer, idempotent
+[2026-09-14T20:00:40] [FILE_MODIFY] [regatta] competitors.json: schema_version 3, 379 boats unified, 1052 results, ~10000 values recovered
+[2026-09-14T20:00:40] [RESULT]      [regatta] Result: SUCCESS - source_keys_unmatched 0, duplicate_targets 0
+[2026-09-14T20:01:05] [FILE_MODIFY] [ais] competitors_db.py: enrich() exposes palmares - required, the historical branch no longer feeds it
+[2026-09-14T20:01:05] [FILE_MODIFY] [ais] server_handlers.py: dead historical branch removed, docstring and imports aligned
+[2026-09-14T20:02:30] [FILE_MODIFY] [ais] fleet_db.html: active button markup aligned with JS initial state (All and Name A-Z)
+[2026-09-14T20:02:50] [DOCKER_ACTION] [regatta] docker restart regatta - Signal K untouched
+[2026-09-14T20:03:10] [RESULT]      [regatta] Result: SUCCESS - API /api/fleet_db returns total 379, 370 with palmares
+[2026-09-14T20:03:40] [DEBUG]       [tests] 277 passed 0 failed on ais+regatta+static guards; full tree still blocked by influx_powerbi_export docker timeouts
+[2026-09-14T20:04:17] [COMMIT]      SHA: 422a30dd6240663818c987a5c7ac69ba62a2c427
