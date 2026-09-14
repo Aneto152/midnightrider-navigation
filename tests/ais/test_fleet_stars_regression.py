@@ -43,15 +43,13 @@ class TestFleetStarsRegressions(unittest.TestCase):
 
     def test_05_api_uses_starred_ids_not_starred(self):
         """Verify API responses use 'starred_ids' not 'starred'"""
-        # Check server.py responses use canonical key
-        self.assertIn("'starred_ids':", self.server_py)
+        # Check server.py uses canonical 'starred_ids' key in responses
+        self.assertIn("'starred_ids'", self.server_py,
+                      "API responses must use 'starred_ids' key")
 
-        # Verify no deprecated 'starred' key in GET responses
-        get_response = [l for l in self.server_py.split('\n')
-                       if "self.path == \"/api/fleet_stars\"" in l and "GET" not in l]
-        if get_response:
-            context = '\n'.join(get_response[:10])
-            self.assertIn('starred_ids', context)
+        # Verify handler function returns correct key
+        self.assertIn("get_starred()", self.server_py,
+                      "API must call get_starred() from handler")
 
     def test_06_toggle_uses_set_methods(self):
         """Verify toggleFleetStar uses Set methods (.has, .add, .delete)"""

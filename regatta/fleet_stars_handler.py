@@ -6,32 +6,48 @@ from pathlib import Path
 from threading import Lock
 from typing import List, Dict, Set
 
-STORE_PATH = Path(__file__).parent / "fleet_stars.json"
+_STORE_PATH_OVERRIDE = None  # For test isolation
 STORE_LOCK = Lock()
+
+def _get_store_path():
+    """Get the active store path (production or test override)"""
+    global _STORE_PATH_OVERRIDE
+    if _STORE_PATH_OVERRIDE:
+        return Path(_STORE_PATH_OVERRIDE)
+    return Path(__file__).parent / "fleet_stars.json"
+
+def set_store_path(path):
+    """Override store path for testing (call with None to reset)"""
+    global _STORE_PATH_OVERRIDE
+    _STORE_PATH_OVERRIDE = path
 
 def _ensure_store_exists():
     """Ensure store file exists with proper initial structure"""
-    if not STORE_PATH.exists():
+    store_path = _get_store_path()
+    if not store_path.exists():
         initial = {"version": "1.0", "starred": [], "metadata": {"created": "2026-09-13T22:56:00Z"}}
-        with open(STORE_PATH, 'w') as f:
+        store_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(store_path, 'w') as f:
             json.dump(initial, f, indent=2)
 
 def _read_store() -> Dict:
     """Thread-safe read of starred boats store"""
     _ensure_store_exists()
+    store_path = _get_store_path()
     with STORE_LOCK:
-        with open(STORE_PATH, 'r') as f:
+        with open(store_path, 'r') as f:
             return json.load(f)
 
 def _write_store(data: Dict) -> None:
     """Thread-safe atomic write of starred boats store"""
     _ensure_store_exists()
+    store_path = _get_store_path()
     with STORE_LOCK:
         # Write to temp, then atomic rename
-        temp_path = STORE_PATH.with_suffix('.json.tmp')
+        temp_path = store_path.with_suffix('.json.tmp')
         with open(temp_path, 'w') as f:
             json.dump(data, f, indent=2)
-        temp_path.replace(STORE_PATH)
+        temp_path.replace(store_path)
 
 def get_starred() -> List[str]:
     """Get all currently starred boat keys"""

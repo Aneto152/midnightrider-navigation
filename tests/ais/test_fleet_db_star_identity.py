@@ -80,10 +80,10 @@ class TestFleetDBStarIdentity(unittest.TestCase):
         self.assertIn("getBoatStarKey(b)", html)
 
     def test_toggle_receives_boat_object(self):
-        """Verify toggleStar receives full boat object"""
+        """Verify toggleFleetStar receives full boat object"""
         with open(self.fleet_db_path) as f:
             html = f.read()
-        self.assertIn("toggleStar(boat, event)", html)
+        self.assertIn("toggleFleetStar(boat, event)", html)
 
 
 if __name__ == '__main__':
