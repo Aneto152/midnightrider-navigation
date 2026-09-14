@@ -224,6 +224,45 @@ a{color:#7bb8f0;text-decoration:none}
     
     </div>
 
+    <div class="modal-section" id="sectionOwner">
+      <div class="modal-section-title">Owner &amp; Port</div>
+      <div class="modal-row"><span class="label">Yacht Club</span><span class="value" id="modalYachtClub">-</span></div>
+      <div class="modal-row"><span class="label">Home Port</span><span class="value" id="modalHomePort">-</span></div>
+    </div>
+
+    <div class="modal-section" id="sectionVessel">
+      <div class="modal-section-title">Vessel</div>
+      <div class="modal-row"><span class="label">Model</span><span class="value" id="modalVesselModel">-</span></div>
+      <div class="modal-row"><span class="label">Length</span><span class="value" id="modalVesselLength">-</span></div>
+      <div class="modal-row"><span class="label">Race Class</span><span class="value" id="modalRaceClass">-</span></div>
+      <div class="modal-row"><span class="label">Other Sail Numbers</span><span class="value" id="modalSailNumbers">-</span></div>
+    </div>
+
+    <div class="modal-section" id="sectionRatingHistory">
+      <div class="modal-section-title">Rating History</div>
+      <div class="modal-row"><span class="label">All Systems</span><span class="value" id="modalAllRatings">-</span></div>
+      <div id="modalRatingHistory" style="font-size:0.8em;margin-top:8px;"></div>
+    </div>
+
+    <div class="modal-section" id="sectionIdent">
+      <div class="modal-section-title">AIS Identity</div>
+      <div class="modal-row"><span class="label">MMSI Confidence</span><span class="value" id="modalMmsiConfidence">-</span></div>
+      <div class="modal-row"><span class="label">Data Warning</span><span class="value" id="modalMmsiWarning">-</span></div>
+      <div class="modal-row"><span class="label">AIS Name</span><span class="value" id="modalAisName">-</span></div>
+      <div class="modal-row"><span class="label">Ship Type</span><span class="value" id="modalAisType">-</span></div>
+      <div class="modal-row"><span class="label">Reported Size</span><span class="value" id="modalAisDims">-</span></div>
+      <div class="modal-row"><span class="label">Observations</span><span class="value" id="modalAisObs">-</span></div>
+      <div class="modal-row"><span class="label">First Seen</span><span class="value" id="modalAisFirst">-</span></div>
+      <div class="modal-row"><span class="label">Last Seen (AIS DB)</span><span class="value" id="modalAisLast">-</span></div>
+    </div>
+
+    <div class="modal-section" id="sectionProvenance">
+      <div class="modal-section-title">Data Source</div>
+      <div class="modal-row"><span class="label">Source File</span><span class="value" id="modalProvFile">-</span></div>
+      <div class="modal-row"><span class="label">Source Rows</span><span class="value" id="modalProvRows">-</span></div>
+      <div class="modal-row"><span class="label">Match Basis</span><span class="value" id="modalProvBasis">-</span></div>
+    </div>
+
     <!-- RACE HISTORY SECTION -->
     <div class="modal-section" id="raceHistorySection" style="display:none;">
       <div class="modal-section-title">Race History</div>
@@ -377,6 +416,7 @@ function showModal(boat) {
   document.getElementById('modalAge').textContent = age;
   
   // Race history is rendered by the second script block
+  if (typeof populateDetails === 'function') populateDetails(boat);
   if (typeof populateRaceHistory === 'function') populateRaceHistory(boat);
 
   document.getElementById('detailModal').classList.add('active');
@@ -494,6 +534,119 @@ function formatRank(entry, status) {
   }
   return { text: String(entry.position),
            title: 'Position ' + entry.position + ' (fleet size not recorded)' };
+}
+
+const NOT_RECORDED = ['not provided in export', 'not provided', 'unknown', 'n/a', 'none'];
+
+/**
+ * Render any value as a readable string, or null when there is nothing to show.
+ * The source marks missing AIS fields with the literal text "Not provided in
+ * export", which must be treated as absence and not printed as if it were data.
+ */
+function briefly(value) {
+  if (value === null || value === undefined || value === '') return null;
+  if (Array.isArray(value)) return value.length ? value.join(', ') : null;
+  if (typeof value === 'object') {
+    const parts = Object.keys(value).map(k => k + ': ' + value[k]);
+    return parts.length ? parts.join(', ') : null;
+  }
+  if (NOT_RECORDED.indexOf(String(value).trim().toLowerCase()) !== -1) return null;
+  return value;
+}
+
+/**
+ * Fill one modal row, hiding it entirely when there is no value.
+ * On a fleet where 28 boats have no yacht club and 9 have no palmares, a modal
+ * full of dashes reads worse than a short modal. Returns true when filled, so
+ * the caller can hide a whole section that turned out empty.
+ */
+function setRow(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return false;
+  const shown = briefly(value);
+  el.textContent = shown === null ? '\u2014' : shown;
+  const row = el.parentElement;
+  if (row && row.classList.contains('modal-row')) {
+    row.style.display = shown === null ? 'none' : '';
+  }
+  return shown !== null;
+}
+
+function setSection(id, filled) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = filled ? 'block' : 'none';
+}
+
+/**
+ * Populate the sections added in lot D2 (2026-09-14).
+ *
+ * Denis asked for complete boat information. The lossless Excel reimport put
+ * roughly 10000 values back into competitors.json and lot C2 transported them
+ * to the browser; this is where they finally become visible.
+ */
+function populateDetails(boat) {
+  let filled;
+
+  filled = 0;
+  filled += setRow('modalYachtClub', boat.yacht_club) ? 1 : 0;
+  filled += setRow('modalHomePort', boat.home_port) ? 1 : 0;
+  setSection('sectionOwner', filled > 0);
+
+  const vessel = boat.vessel || {};
+  const lengthFt = vessel.length_ft || boat.length_ft;
+  const others = (boat.sail_numbers || []).filter(s => s && s !== boat.sail_num);
+  filled = 0;
+  filled += setRow('modalVesselModel', vessel.model) ? 1 : 0;
+  filled += setRow('modalVesselLength', lengthFt ? lengthFt + ' ft' : null) ? 1 : 0;
+  filled += setRow('modalRaceClass', boat.race_class) ? 1 : 0;
+  filled += setRow('modalSailNumbers', others) ? 1 : 0;
+  setSection('sectionVessel', filled > 0);
+
+  const ratings = boat.ratings || {};
+  const labels = Object.keys(ratings)
+    .filter(k => ratings[k] !== null && ratings[k] !== undefined)
+    .map(k => k.replace(/_/g, ' ') + ' ' + ratings[k]);
+  filled = setRow('modalAllRatings', labels) ? 1 : 0;
+  const history = boat.phrf_history || [];
+  const box = document.getElementById('modalRatingHistory');
+  if (box) {
+    box.innerHTML = history.map(h => {
+      const pub = (h.published === null || h.published === undefined) ? '?' : h.published;
+      const late = (h.latest === null || h.latest === undefined) ? '?' : h.latest;
+      return '<div style="padding:2px 0;color:#9ab;">' + (h.year || '') + '  ' +
+             (h.event || '') + ' - ' + (h.system || '') +
+             ' published ' + pub + ', latest ' + late + '</div>';
+    }).join('');
+    if (history.length) filled += 1;
+  }
+  setSection('sectionRatingHistory', filled > 0);
+
+  const ais = boat.ais || {};
+  const warning = boat.mmsi_conflict
+    ? 'Source MMSI differs from the stored one, stored value kept - ' + briefly(boat.mmsi_conflict)
+    : (boat.mmsi_review
+        ? 'Several MMSI candidates in source, none applied - ' + briefly(boat.mmsi_review)
+        : null);
+  const dims = (ais.reported_length || ais.reported_beam)
+    ? (ais.reported_length || '?') + ' x ' + (ais.reported_beam || '?') + ' m'
+    : null;
+  filled = 0;
+  filled += setRow('modalMmsiConfidence', boat.mmsi_confidence) ? 1 : 0;
+  filled += setRow('modalMmsiWarning', warning) ? 1 : 0;
+  filled += setRow('modalAisName', ais.name) ? 1 : 0;
+  filled += setRow('modalAisType', ais.ship_type) ? 1 : 0;
+  filled += setRow('modalAisDims', dims) ? 1 : 0;
+  filled += setRow('modalAisObs', ais.observation_count) ? 1 : 0;
+  filled += setRow('modalAisFirst', ais.first_seen_utc) ? 1 : 0;
+  filled += setRow('modalAisLast', ais.last_seen_utc) ? 1 : 0;
+  setSection('sectionIdent', filled > 0);
+
+  const prov = boat.provenance || {};
+  filled = 0;
+  filled += setRow('modalProvFile', prov.source_file) ? 1 : 0;
+  filled += setRow('modalProvRows', prov.source_rows) ? 1 : 0;
+  filled += setRow('modalProvBasis', prov.match_basis) ? 1 : 0;
+  setSection('sectionProvenance', filled > 0);
 }
 
 function populateRaceHistory(boat) {
