@@ -492,7 +492,20 @@ function handleMessage(message) {
 
       case 'tools/call':
         handleTool(message.params.name, message.params.arguments).then(result => {
-          response.result = result;
+          // MCP 2024-11-05 tools/call contract: the tool payload must travel
+          // inside the result content envelope, as a JSON string in a text
+          // block, and NOT as a bare result object. The Python consumer
+          // (mediaman/mcp_client.py, _decode_mcp_result) implements the
+          // specification strictly and rejected the bare object with
+          // "MCP result missing 'content' field", which broke the whole
+          // MediaMan historical chain on 2026-09-15 even though the snapshot
+          // itself was already correct.
+          response.result = {
+            content: [
+              { type: 'text', text: JSON.stringify(result) }
+            ],
+            isError: false
+          };
           process.stdout.write(JSON.stringify(response) + '\n');
         }).catch(err => {
           response.error = {

@@ -49,15 +49,21 @@ def setup_service_logger(name="mediaman", log_dir=None):
     Args:
         name: Logger name (e.g., 'telegram-sender')
         log_dir: Optional test-only log directory (Path or str).
-                 Defaults to production path: /home/pi/midnightrider-navigation/logs/services
+                 Defaults to the logs/services directory of this
+                 repository, derived from the module location.
 
     Raises:
         PermissionError: If production directory cannot be created and no test log_dir provided.
     """
-    # Production default: /home/pi/midnightrider-navigation/logs/services
-    # Test injection: accepts explicit test log_dir parameter only
+    # Production default: the logs/services directory of THIS repository,
+    # derived from the module location so that it stays correct whatever the
+    # user account is. The previous hardcoded
+    # /home/pi/midnightrider-navigation path was wrong on Midnight Rider,
+    # where the repository lives under /home/aneto: mkdir raised
+    # PermissionError and no service could initialise its logger at all.
+    # Test injection: accepts an explicit test log_dir parameter only
     if log_dir is None:
-        log_dir = Path("/home/pi/midnightrider-navigation/logs/services")
+        log_dir = Path(__file__).resolve().parent.parent / "logs" / "services"
     else:
         log_dir = Path(log_dir)
 
@@ -91,8 +97,12 @@ def setup_service_logger(name="mediaman", log_dir=None):
 
 
 def setup_debug_logger():
-    """Set up data-flow logger for logs/debug/data-flow.log"""
-    log_dir = Path("logs/debug")
+    """Set up the data-flow logger for logs/debug/data-flow.log.
+
+    The directory is resolved from the module location, not from the
+    current working directory, so the file always lands in this repository.
+    """
+    log_dir = Path(__file__).resolve().parent.parent / "logs" / "debug"
     log_dir.mkdir(parents=True, exist_ok=True)
 
     logger = logging.getLogger("mediaman.dataflow")
