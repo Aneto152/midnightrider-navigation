@@ -213,3 +213,109 @@ Those strings are now inert, but they must still be removed, the ignore
 rules added, and a barrier put on `scripts/commit-logs.sh`, which commits
 anything under `logs/` with no check at all.
 
+
+
+## Corrections et nettoyage du dépôt — H3b — 20260915T223349Z
+
+Cette section corrige par ajout quatre inexactitudes des sections
+précédentes. L'historique n'est pas réécrit : ce qui a été écrit reste
+lisible, avec sa correction en regard.
+
+**Défaut 16 — un fait faux dans le rapport de H3a.** La section de
+révocation affirme que la lecture refusée après désactivation a répondu
+*HTTP 401*. Elle a répondu **HTTP 404**, avec le message
+`could not find bucket "midnight_rider"`. Le script annonçait 401 en dur
+au lieu d'inscrire le code réellement observé. La preuve reste valide, et
+pour une raison vérifiable : quelques secondes plus tard, le token du
+`.env` a lu ce même bucket en HTTP 200. Le bucket existe donc ; seule
+l'identité qui demande a changé. Pour une autorisation désactivée,
+InfluxDB ne résout plus le bucket et répond « introuvable » au lieu de
+« non autorisé ». Lecture refusée dans les deux cas, et la vérification
+qui fait foi — `status=inactive` relu dans InfluxDB — était passée.
+
+**Défaut 18 — une affirmation fausse sur `.gitignore`.** La section de
+révocation dit que les deux fichiers fautifs ne sont couverts par aucune
+règle. Faux : `.gitignore` contient `*.log`, `logs/debug/*.log` et
+`logs/*.txt`, qui les couvrent tous les deux. Mais `.gitignore` est sans
+effet sur un fichier **déjà suivi** : ce qui manquait était le dé-suivi,
+fait ici.
+
+**Défaut 17 — deux faux positifs présentés comme des erreurs Grafana.**
+Le comptage des lignes de journal mentionnant 401/403 attrapait les
+chiffres à l'intérieur des horodatages à la nanoseconde
+(`21:54:21.0**401**9142`). Les deux lignes remontées étaient de plus
+antérieures au démarrage du script : elles ne pouvaient pas venir de la
+désactivation.
+
+**Défaut 14 — une ligne de journal coupée en deux.** La ligne `[DEBUG]`
+de H2b v2 dans `logs/oc-actions.log` est scindée : un `grep -c … || echo
+0` imprimait `0` deux fois, la seconde moitié de la ligne se retrouvant
+sans horodatage. Le contenu est lisible, la structure ne l'est pas. Les
+scripts suivants utilisent `|| true`.
+
+**Défaut 15** avait déjà été corrigé par une ligne `CORRECTION` dans
+`logs/oc-actions.log` lors de H3a.
+
+### Nettoyage effectué
+
+Les deux fichiers qui portaient encore la valeur publiée ont été retirés
+du suivi git. Ils restent sur le disque du Pi, intacts, pour l'analyse ;
+ils cessent d'être publiés. Occurrences retirées du dépôt :
+
+| fichier | occurrences | traitement |
+|---|---|---|
+| `logs/debug/crash-capture-2026-06-28T190455Z.log` | 1 | `git rm --cached` |
+| `logs/diagnostic_raw.txt` | 2 | `git rm --cached` |
+
+Avant de les retirer, la valeur a été retrouvée dans ces fichiers par son
+empreinte (jamais par sa valeur en clair) et son inertie prouvée : une
+lecture réelle du bucket avec cette valeur répond HTTP 404.
+
+Un balayage de **tous** les fichiers suivis du dépôt, contre la liste
+complète des valeurs de tokens existantes, confirme que ces deux fichiers
+étaient les seuls concernés et que plus aucune valeur de token vivant ne
+figure dans le dépôt.
+
+La valeur reste présente dans l'historique git. Ce n'est pas corrigé, et
+c'est délibéré : réécrire l'historique d'un dépôt public — donc déjà
+cloné, déjà indexé — pour une chaîne désormais morte casse tous les clones
+existants sans rien protéger.
+
+### Barrière anti-fuite
+
+C'est `scripts/commit-logs.sh`, lancé toutes les 15 minutes par
+`midnight-logs-commit.timer`, qui a publié ce token : il faisait
+`git add logs/debug/` en bloc, sans aucun contrôle. Il appelle désormais
+`scripts/check-staged-secrets.py`, qui refuse le commit si un fichier
+indexé porte un identifiant — chaîne opaque longue, affectation du type
+`token=`, `password:`, clé privée PEM. Le scanner ne montre jamais une
+valeur : il rapporte une règle, une position et un extrait masqué. Son
+rapport de refus est écrit **hors de** `logs/`, sinon le passage suivant
+committerait le rapport du refus précédent, extrait de secret compris.
+
+Le scanner porte un autotest (`--self-test`) qui vérifie les deux
+propriétés qui comptent : il attrape un token, et il n'aboie pas sur une
+empreinte, un SHA git, une référence `${VAR}` ou de la prose. H3b exige
+que cet autotest passe avant d'installer la barrière, et refuse un faux
+token planté pour preuve fonctionnelle.
+
+### Découvertes conservées
+
+- Le token publié déclarait `write` sur `authorizations`. La valeur exposée
+  pendant 79 jours permettait donc aussi de **créer ou désactiver des
+  tokens**, y compris ceux du bord. Fermé depuis H3a.
+- `influx auth list` affiche les valeurs de tous les tokens en clair. Toute
+  personne capable de `docker exec` sur le conteneur InfluxDB lit donc tous
+  les identifiants du système. Exposition permanente, à traiter dans le
+  durcissement.
+- Une règle d'alerte Grafana (`mr-safety-network`) interroge un bucket
+  `weather_lis` qui n'existe pas : une alerte de sécurité du bateau est
+  muette. Sans lien avec cet incident, antérieur, à traiter à part.
+
+### Reste ouvert après H3b
+
+- suppression définitive des deux autorisations désactivées (H3d, après un
+  jour d'observation), et des trois tokens `Grafana-*` devenus inutiles ;
+- mot de passe admin Grafana par défaut, et `GF_AUTH_ANONYMOUS_ENABLED=true` ;
+- `sudo` sans mot de passe pour `aneto` ;
+- token en lecture seule pour Grafana (une ligne de `docker-compose.yml`).

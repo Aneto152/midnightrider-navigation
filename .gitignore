@@ -107,3 +107,9 @@ logs/*.txt
 # Fleet Starred Runtime State (DO NOT TRACK)
 # Production store is user favorites; protect it from reset/deployment
 regatta/fleet_stars.json
+
+# H3b / SEC-2026-09-14-01 — ces deux familles de fichiers ont publié un
+# token InfluxDB dans un dépôt public. Déjà couvertes par *.log et
+# logs/*.txt ; nommées ici pour que la raison reste lisible.
+logs/debug/crash-capture-*.log
+logs/diagnostic_raw*

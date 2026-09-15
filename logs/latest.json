@@ -1,110 +1,48 @@
 {
-  "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
-  "date": "2026-09-15T19:44:23Z",
+  "task": "Phase H security - incident SEC-2026-09-14-01, an InfluxDB token published in a public repository: audit, rotation of the consumers, deactivation, repository cleanup and anti-leak barrier",
+  "date": "2026-09-15T22:33:51Z",
   "status": "SUCCESS",
-  "session_mode": "Denis working directly over SSH, scripts written by Dust, no OpenClaw delegation",
-  "documented_commit": "43faf7685431c322911dc449cf296745926b7f1c",
-  "documented_commit_parent": "50ee12d77c46415157378a2361363d4b2428f8ed",
-  "note_on_this_record": "written before its own commit existed, so it cannot contain its own SHA; that SHA is appended to logs/oc-actions.log by the same script",
-  "previous_record": {
-    "task": "Lots A to D - pytest collection repair, lossless Excel reimport, unified fleet pool, API field transport, complete boat modal",
-    "date": "2026-09-14T21:45:00Z",
-    "commit": "eac167aa76d24d0ff12be8597a09edfd599470ba"
+  "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
+  "incident": {
+    "id": "SEC-2026-09-14-01",
+    "what": "an organisation-wide InfluxDB authorization was readable in this public repository, published by the 15-minute log auto-commit",
+    "exposed_since": "2026-06-28",
+    "closed_influxdb_side": "2026-09-15, authorization deactivated - the published value no longer authenticates anything",
+    "aggravating_factor": "the exposed authorization declared write access on authorizations, so it could also create or deactivate tokens",
+    "note_on_values": "this file never contains a token value; tokens are referenced by the first 16 hex characters of their sha256 only"
   },
-  "deployment": "NOT_DEPLOYED_TO_PRODUCTION - dry-run only, no Telegram publication, no container or service restarted",
+  "note_on_this_record": "written before its own commit existed, so it cannot contain its own SHA; that SHA is appended to logs/oc-actions.log by the same script",
+  "deployment": "no service restarted, no container restarted, no data written to the production bucket by this phase",
   "commit_chain": [
-    "bb96a04dade965f219b330cf31d40fd74999728a  A  test: add missing imports and the mandatory server_name argument (2 failed, 21 passed)",
-    "c89e5eb002c2a072dab85a2aea5addd94f3ee0c9  B1 test: expect MCPProtocolError on a malformed envelope (23 passed)",
-    "3d944b379f9b6833ee5c3735e8692717cb08efea  C1 test: real contract assertions and an annotated Flux CSV fixture (expected failure, 2 failed, 21 passed)",
-    "b0ff05b436a2d3dada0d3996a9ae9277a1fa4660  C2 fix: rewrite parseFluxResponse for the annotated and production CSV dialects (23 passed)",
-    "b0f2162127c2e8498ae2b9062f46d1aee31820d9  --  logs-only auto-commit by midnight-logs-commit.timer",
-    "f79abaf5ba1553c0f063033c41ce9a79a634b729  F3 fix: correct the InfluxDB fact selectors and sanitize DATA_OUT (23 passed, first real snapshot)",
-    "50ee12d77c46415157378a2361363d4b2428f8ed  --  logs-only auto-commit by midnight-logs-commit.timer, carrying the G1 audit lines",
-    "43faf7685431c322911dc449cf296745926b7f1c  G2 fix: MCP content envelope and module-relative log path, full dry-run PASS (23 passed)"
+    "265bb857e1e2  H1b read-only audit of the InfluxDB authorizations and their consumers",
+    "fb73946746ff  H2a rotate the signalk-to-influxdb2 token away from the exposed one",
+    "548ee128e63d  H2b recreate the grafana container so the provisioned datasource gets a real token (health ERROR -> OK)",
+    "860120398157  H3a deactivate the exposed authorization and the orphan token, nothing deleted, reversible",
+    "this commit    H3b untrack the two files carrying the value, install the anti-leak barrier, correct the written record"
   ],
   "defects_closed": [
-    "1  tests/mcp: missing tempfile import",
-    "2  tests/mcp: MCPClient and MCPServerError not imported",
-    "3  tests/mcp: mandatory server_name argument omitted",
-    "4  racing.js: zero-value truthiness discarded SOG=0, COG=0 and null island coordinates",
-    "5  racing.js: parseFluxResponse could not parse the annotated Flux CSV dialect",
-    "6  tests/mcp: two vacuous tests asserting True and an identifier",
-    "8  racing.js: wrong measurement and field selectors, no field filter, and results[0] picked an arbitrary record among tens of thousands of tag series",
-    "9  racing.js: DATA_OUT logged latitude and longitude",
-    "10 logging_utils.py: hardcoded /home/pi log directory, PermissionError on this machine",
-    "11 racing.js: tools/call returned a bare result object instead of the MCP 2024-11-05 content envelope"
+    "12 the exposed value remained in two tracked files - files untracked in H3b",
+    "13 the H2b v1 Flux probe used count() on a time column - rewritten without aggregate",
+    "15 the H2b v2 RESULT line over-claimed that Grafana never held the exposed token - corrected by addition in H3a",
+    "16 the H3a report printed a hardcoded HTTP 401 instead of the observed HTTP 404 - corrected by addition in H3b",
+    "17 the 401/403 log grep matched digits inside nanosecond timestamps - corrected by addition in H3b",
+    "18 the claim that the two files were not covered by .gitignore was false - corrected by addition in H3b"
   ],
   "defects_open": [
-    "7  tests/mcp/test_phase2_historical_contract.py claims 24 scenarios for 23 functions, and the core Phase 2 guarantees have no test at all"
-  ],
-  "measurements": {
-    "dry_run_exit_code": 0,
-    "facts_returned": 4,
-    "status": "COMPLETE",
-    "bounded_skew_ms": 1,
-    "source_timestamp": "2026-09-07T14:36:24.298Z",
-    "as_of_utc": "2026-09-07T14:36:26Z",
-    "window_seconds": 60,
-    "content_bytes": 370,
-    "publication_state": "SENT, provider_id prefixed dry-run:",
-    "contract_suite": "23 passed, 0 failed, 19.82 s",
-    "fact_values_recorded": "no, deliberately masked everywhere"
-  },
-  "flux_cost_measured": {
-    "filter_plus_last_over_120_days": "200, 18456 rows, 4.40 s",
-    "keep_group_sort_last_over_120_days": "timed out above 25 s",
-    "bounded_60_second_window": "slowest of the four queries 0.06 s",
-    "conclusion": "the current query shape is safe inside a bounded window; a pre-reduction hardening is optional and not urgent"
-  },
-  "known_gaps": [
-    "mediaman/mcp_collector.py ignores fact_timestamps and bounded_skew_ms and never calls math.isfinite",
-    "the contract suite docstring is dishonest and the skew, timestamp, finiteness and timeout guarantees are untested",
-    "the other MCP servers under mcp/servers/ still return a bare result object and would break any specification-compliant client",
-    "InfluxDB holds no measurement after 2026-09-07T14:36:24Z, so no live run is possible without fresh data",
-    "the 18456 tag series returned by last() on navigation.position are still unexplained; the cardinality probe used an empty time window and proved nothing",
-    "etc/systemd/system/midnight-logsync.service is obsolete, runs as user pi and uses git add -f on gitignored service logs",
-    "SEC-2026-09-14-01: the exposed InfluxDB token is still not revoked",
-    "Plugin P5 signalk-n2k-bridge still has 0 PGN mappings",
-    "the regatta container still starts with token_set=NO"
-  ],
-  "process_incidents": [
-    "a security gate of my own design produced four consecutive false positives, the last one blocking a legitimate commit on the fractional second of an ISO timestamp already committed; the gate now scans only added lines, strips timestamps and durations, and prints the offending line",
-    "a transfer loop was detected when Windows saved a re-downloaded homonymous script under a new name and scp re-sent the old one; deliverables now carry distinct names and a version marker checked before execution",
-    "an earlier probe reported a skew of 3769470221 ms because it kept the last iterated row instead of the newest; the real measured skew is 1 ms and the correction was appended, never rewritten"
+    "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
+    "19 the exposed value remains in the git history, deliberately not rewritten",
+    "20 Grafana still accepts its default admin password and anonymous access is enabled",
+    "21 influx auth list prints every token value in clear to anyone who can docker exec",
+    "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent"
   ],
   "next_steps": [
-    "G  collector Phase 2C: consume fact_timestamps and bounded_skew_ms, apply math.isfinite",
-    "H  security: clean the exposed files, revoke the old InfluxDB tokens, neutralise midnight-logsync.service",
-    "I  honest docstring and the seven missing guarantee tests"
+    "H3d, after a day of observation: permanently delete the two deactivated authorizations and the three unused Grafana-* org-wide tokens",
+    "harden Grafana: admin password, anonymous access",
+    "give Grafana a read-only token instead of the shared read+write one"
   ],
-  "secrets_logged": "none - no token, credential or .env content appears in any log or document produced by this session",
-  "security_incidents": [
-    {
-      "id": "SEC-2026-09-14-01",
-      "severity": "HIGH",
-      "discovered": "2026-09-14T21:10:00Z",
-      "summary": "InfluxDB 2.x write token of the signalk-to-influxdb2 plugin is committed in clear text in two git-tracked files",
-      "files": [
-        "logs/debug/crash-capture-2026-06-28T190455Z.log",
-        "logs/diagnostic_raw.txt"
-      ],
-      "occurrences": 3,
-      "value_sha256_prefix": "e80a47801529a25c",
-      "value_length": 88,
-      "exposed_since": "2026-06-28",
-      "public_repository": true,
-      "token_status": "still NOT revoked and presumed active. A narrowly scoped replacement authorization was created on 2026-09-15, read and write on the midnight_rider bucket only, and wired into an untracked .env file with mode 600. Revocation of the exposed token remains to be done.",
-      "blast_radius": "write access to InfluxDB buckets feeding the 13 Grafana dashboards",
-      "decision_by_denis": "2026-09-14 defer remediation; 2026-09-15 create the replacement token first, revoke later in a dedicated step",
-      "remediation_plan": [
-        "generate a new InfluxDB token",
-        "update ~/.signalk/plugin-config-data/signalk-to-influxdb2.json with python3, never sed",
-        "restart Signal K with systemctl, never docker",
-        "revoke the exposed token in InfluxDB",
-        "remove both files from the working tree, add logs/debug/crash-capture-*.log to .gitignore",
-        "add a static guard rejecting token value patterns under logs/"
-      ],
-      "history_rewrite": "deliberately excluded - force-push is prohibited on this repo and rotation is the only retroactively effective remedy"
-    }
-  ]
+  "previous_record": {
+    "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
+    "date": "2026-09-15T19:44:23Z",
+    "commit": "43faf7685431c322911dc449cf296745926b7f1c"
+  }
 }
