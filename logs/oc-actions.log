@@ -126,3 +126,6 @@
 [2026-09-14T23:32:31] [FILE_MODIFY] [influx-powerbi-export] Removed blocking Flux sort(columns:["_time"]) from docker_provider.query_range; aggregate _value sorts preserved
 [2026-09-14T23:32:31] [RESULT] [influx-powerbi-export] Result: SUCCESS - explains truncated PARTIAL export of 20260911T160615Z
 [2026-09-14T23:32:31] [COMMIT] SHA: 46f0f5ffb0b44153434da36f6d6e1305fffe9f35
+[2026-09-14T23:52:15] [FILE_MODIFY] [influx-powerbi-export] MR schema 23 to 22 columns: removed completeness_ratio and quality_flag (both structurally unable to report a missing instrument), added water_temp_c, removed dead self_context module and obsolete classifier tests
+[2026-09-14T23:52:15] [RESULT] [influx-powerbi-export] Result: SUCCESS - 8 files changed, sample_count preserved as merge weight
+[2026-09-14T23:52:15] [COMMIT] SHA: c95c8687963405c21a298b33f1055aeed8303723
