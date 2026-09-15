@@ -411,7 +411,6 @@ from(bucket: "{self.bucket}")
         flux = f'''
 from(bucket: "{self.bucket}")
   |> range(start: {start}, stop: {stop})
-  |> sort(columns: ["_time"])
 '''
         return self.query_flux(flux)
 
