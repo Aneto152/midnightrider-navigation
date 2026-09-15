@@ -112,3 +112,50 @@ The signalk-to-influxdb2 plugin no longer uses the exposed token.
 Honest limit: no instrument is connected and the data flow stopped on
 2026-09-07, so the end-to-end write path cannot be observed today.
 
+
+## Repair — Grafana token wiring — 20260915T212534Z
+
+The Grafana InfluxDB datasource held **no secret at all**: the API reported
+`secure fields set: (none)` and its health endpoint answered
+`ERROR`. The dashboards had therefore stopped reading InfluxDB.
+
+Root cause, read in the repository and not guessed:
+`grafana-provisioning/datasources/datasource-influxdb.yaml` declares the
+datasource with `token: ${INFLUX_TOKEN}`, `docker-compose.yml` forwards
+`INFLUX_TOKEN=${INFLUX_TOKEN}` to the container, and that variable was
+EMPTY in the running container. Because provisioning is re-applied at every
+Grafana start, a fix through the Grafana API would have been erased at the
+next restart. The durable fix is to give the container a non-empty value,
+then recreate it.
+
+- container recreated with `up -d --no-deps --force-recreate grafana`
+  (project `midnightrider-navigation`); influxdb, regatta and start-line-worker verified to be
+  the exact same containers before and after
+- token handed to the container: the one already in `.env`, fingerprint
+  `3e83dfafb0f92009`; observed in the new container: `3e83dfafb0f92009`
+- **accepted trade-off**: that authorization is bucket-scoped but carries a
+  write permission, while Grafana only ever needs to read. Hardening it to
+  least privilege is one line of `docker-compose.yml` plus one new token,
+  deliberately postponed.
+- datasource `efifgp8jvgj5sf` secure fields after: token
+- health: ERROR -> OK
+- bounded 60 s probe: 3 row(s) read directly from InfluxDB, 0
+0 row(s)
+  through the Grafana proxy (HTTP 400)
+- dashboards listed by Grafana: 20 before, 20 after
+- verdict: **REPAIRED**
+- authorizations created: 0, revoked: 0
+
+Two side facts recorded for H3: the read-only authorization
+`1155b5f81bb3c000`, created by the aborted first attempt, is orphaned and
+should be revoked; and `logs/debug/crash-capture-2026-06-28T190455Z.log`
+and `logs/diagnostic_raw.txt` still contain the exposed token, which an
+earlier version of this report failed to list.
+
+Honest limits: no dashboard panel was rendered by this step. Only the
+datasource health endpoint and one bounded query were exercised, and the
+data window is the last one the boat produced, on 2026-09-07.
+
+**Security finding**: the Grafana API still accepts its default admin
+password, and `GF_AUTH_ANONYMOUS_ENABLED=true`. Out of scope here, H3.
+
