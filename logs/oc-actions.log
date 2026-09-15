@@ -120,3 +120,6 @@
 [2026-09-14T21:44:00] [FILE_MODIFY] [ais] fleet_db.html: row handlers carry the boat id, 2982 KB of duplicated JSON removed (lot D3)
 [2026-09-14T21:44:00] [RESULT]      [ais] Result: SUCCESS - 292 passed 0 failed on the measured scope
 [2026-09-14T21:44:00] [COMMIT]      SHA: eac167aa76d24d0ff12be8597a09edfd599470ba
+[2026-09-14T23:10:38] [FILE_MODIFY] [influx-powerbi-export] Repaired 7 provider tests that mocked a phantom readline() API; streaming path now covered via real OS pipes
+[2026-09-14T23:10:38] [RESULT] [influx-powerbi-export] Result: SUCCESS - Ran 22 tests, OK, 2.676s
+[2026-09-14T23:10:38] [COMMIT] SHA: 7b8265c78296b35f30c2b0c88c74708eb1bc7c15
