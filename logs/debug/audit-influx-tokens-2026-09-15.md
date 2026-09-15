@@ -159,3 +159,57 @@ data window is the last one the boat produced, on 2026-09-07.
 **Security finding**: the Grafana API still accepts its default admin
 password, and `GF_AUTH_ANONYMOUS_ENABLED=true`. Out of scope here, H3.
 
+
+## Revocation — deactivation of the exposed token — 20260915T215645Z
+
+SEC-2026-09-14-01 is closed on the InfluxDB side. The authorization whose
+value was published in this public repository no longer authenticates
+anything.
+
+**Deactivated, not deleted.** InfluxDB distinguishes `auth inactive`, which
+stops the token from opening anything while keeping the record, from
+`auth delete`, which is final. The first neutralises the leak just as
+completely and leaves a way back if an unknown consumer — a cron job, a
+notebook, a Power BI refresh, something on another machine — turns out to
+depend on it. Deletion is a separate, later step.
+
+| target | id | scope | fingerprint | result |
+|---|---|---|---|---|
+| exposed token | `10a814629358f000` | organisation-wide | `e80a47801529a25c` | yes |
+| orphan from the aborted H2b v1 | `1155b5f81bb3c000` | read-only, one bucket | `b6ed642b97ec282a` | yes |
+
+Identity was established by fingerprint before acting, not by id alone, and
+each deactivation was proven end to end: the token read the bucket with
+HTTP 200 before, and the same request returned HTTP 401 after.
+
+Consumers verified immediately after, and unaffected:
+
+- MediaMan `.env` token: HTTP 200, 3 row(s) on the bounded 60 s probe
+- `signalk` service: active
+- Grafana datasource health: OK before, OK after
+- signalk journal lines mentioning 401/403/unauthorized in the following
+  minutes: 0
+
+Operational finding worth keeping: inside the `influxdb` container,
+`influx auth list` works but `influx auth inactive` answers *401
+Unauthorized*. The credential the CLI is configured with can read
+authorizations and not write them. The deactivation therefore went through
+the HTTP API, `PATCH /api/v2/authorizations/{id}`, with a credential that
+declares write access on authorizations, injected through a curl config
+file so that no secret ever reached the process table.
+
+To put everything back, at any time, an undo script was generated next to
+the credential it needs:
+
+```
+bash /tmp/h3a-raw-20260915T215645Z/undo.sh
+```
+
+What remains open, and is NOT addressed here: the token value is still
+readable in the git history and in two tracked files,
+`logs/debug/crash-capture-2026-06-28T190455Z.log` and
+`logs/diagnostic_raw.txt`, neither of which is covered by `.gitignore`.
+Those strings are now inert, but they must still be removed, the ignore
+rules added, and a barrier put on `scripts/commit-logs.sh`, which commits
+anything under `logs/` with no check at all.
+
