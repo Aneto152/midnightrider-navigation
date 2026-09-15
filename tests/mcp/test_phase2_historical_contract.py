@@ -319,21 +319,76 @@ def test_out_of_range_window_seconds_rejected(racing_mcp_server):
     assert 'error' in response or ('result' in response and 'error' in response['result'])
 
 
+def _find_snapshot(obj):
+    """Locate the snapshot payload anywhere inside an MCP tools/call response.
+
+    racing.js returns its JSON contract wrapped in the MCP result envelope,
+    normally as a JSON string inside result.content[0].text. Walking the
+    response instead of hardcoding the envelope keeps these assertions focused
+    on the data contract rather than on the transport wrapping.
+    """
+    if isinstance(obj, dict):
+        if 'facts' in obj and 'source_timestamp' in obj:
+            return obj
+        for value in obj.values():
+            found = _find_snapshot(value)
+            if found is not None:
+                return found
+    elif isinstance(obj, list):
+        for value in obj:
+            found = _find_snapshot(value)
+            if found is not None:
+                return found
+    elif isinstance(obj, str):
+        candidate = obj.strip()
+        if candidate.startswith('{'):
+            try:
+                return _find_snapshot(json.loads(candidate))
+            except (ValueError, TypeError):
+                return None
+    return None
+
+
+def _annotated_flux_csv(sample_time, value, field, measurement,
+                        window_start, window_stop):
+    """Build a realistic InfluxDB 2.x annotated Flux CSV payload.
+
+    Mirrors what /api/v2/query actually returns for Content-Type
+    application/vnd.flux: three annotation rows, one header row, then data
+    rows that all begin with the empty annotation column. Rows are CRLF
+    terminated and _time carries a literal Z suffix, exactly as InfluxDB
+    emits them.
+    """
+    return (
+        "#group,false,false,true,true,false,false,true,true\r\n"
+        "#datatype,string,long,dateTime:RFC3339,dateTime:RFC3339,"
+        "dateTime:RFC3339Nano,double,string,string\r\n"
+        "#default,_result,,,,,,,\r\n"
+        ",result,table,_start,_stop,_time,_value,_field,_measurement\r\n"
+        ",,0," + window_start + "," + window_stop + "," + sample_time + ","
+        + value + "," + field + "," + measurement + "\r\n"
+        "\r\n"
+    )
+
+
 def test_four_synthetic_queries_return_valid_values(racing_mcp_server):
-    """Test 10: all four synthetic InfluxDB queries return valid values."""
+    """Test 10: all four synthetic InfluxDB queries return valid values.
+
+    Asserts the actual data contract: four finite numeric facts, four per-fact
+    timestamps, a Z-suffixed aggregate source_timestamp and a bounded skew.
+    The previous version asserted only that the JSON-RPC id was echoed, so it
+    passed even when the snapshot failed outright.
+    """
     proc, http_server = racing_mcp_server
 
-    # Configure synthetic InfluxDB with valid Flux CSV response
     now = datetime.now(timezone.utc)
-    csv_response = """#group,false,false,false,false,false,false
-#datatype,string,long,dateTime:RFC3339Nano,double,string,string
-#default,_result,,,,
-,result,table,_time,_value,_field,_measurement
-,_result,0,{},45.5,latitude,navigation_position_latitude
-,_result,0,{},45.5,latitude,navigation_position_latitude
-""".replace('{}', now.isoformat())
+    as_of = now.isoformat().replace('+00:00', 'Z')
+    sample_time = (now - timedelta(seconds=2)).isoformat().replace('+00:00', 'Z')
+    window_start = (now - timedelta(seconds=60)).isoformat().replace('+00:00', 'Z')
 
-    SyntheticInfluxDBHandler.response_data = csv_response
+    SyntheticInfluxDBHandler.response_data = _annotated_flux_csv(
+        sample_time, '45.5', 'latitude', 'navigation_position_latitude',
+        window_start, as_of)
     SyntheticInfluxDBHandler.response_status = 200
 
     send_mcp_request(proc, 'initialize')
@@ -341,29 +396,85 @@ def test_four_synthetic_queries_return_valid_values(racing_mcp_server):
     response = send_mcp_request(proc, 'tools/call', {
         'name': 'get_historical_snapshot',
         'arguments': {
-            'as_of_utc': now.isoformat().replace('+00:00', 'Z'),
+            'as_of_utc': as_of,
             'window_seconds': 60
         }
     }, request_id=2)
 
-    # Should succeed or fail gracefully (depending on response config)
-    assert response.get('id') == 2
+    print('RAW MCP RESPONSE:')
+    print(json.dumps(response, indent=2, default=str))
+
+    assert response.get('id') == 2, response
+
+    snapshot = _find_snapshot(response)
+    assert snapshot is not None, (
+        'no snapshot payload found in MCP response: '
+        + json.dumps(response, default=str))
+
+    assert snapshot.get('success') is True, (
+        'snapshot did not succeed: ' + json.dumps(snapshot, default=str))
+
+    facts = snapshot['facts']
+    assert 'latitude' in facts, facts
+    assert 'longitude' in facts, facts
+    assert [k for k in facts if 'speed' in k], facts
+    assert [k for k in facts if 'course' in k], facts
+
+    for key, value in facts.items():
+        assert isinstance(value, (int, float)) and not isinstance(value, bool), (
+            'fact ' + key + ' is not a number: ' + repr(value))
+
+    assert str(snapshot['source_timestamp']).endswith('Z'), snapshot
+    assert len(snapshot['fact_timestamps']) == 4, snapshot
+    assert snapshot['bounded_skew_ms'] <= 1000, snapshot
 
 
 def test_cog_zero_preserved(racing_mcp_server):
-    """Test 16: COG = 0 is preserved."""
+    """Test 16: COG = 0 is preserved.
+
+    A course over ground of exactly 0 means due north and a speed of exactly 0
+    means stopped; neither may be reported as missing data. The synthetic
+    backend answers every query with the same payload, so all four facts are
+    expected to come back as exactly 0. The previous version of this test was
+    a literal 'assert True' placeholder.
+    """
     proc, http_server = racing_mcp_server
 
-    # This test verifies that the MCP server accepts COG=0 as valid
-    # (not confusing it with falsy value)
+    now = datetime.now(timezone.utc)
+    as_of = now.isoformat().replace('+00:00', 'Z')
+    sample_time = (now - timedelta(seconds=2)).isoformat().replace('+00:00', 'Z')
+    window_start = (now - timedelta(seconds=60)).isoformat().replace('+00:00', 'Z')
+
+    SyntheticInfluxDBHandler.response_data = _annotated_flux_csv(
+        sample_time, '0', 'course_over_ground', 'navigation_courseOverGround',
+        window_start, as_of)
+    SyntheticInfluxDBHandler.response_status = 200
 
     send_mcp_request(proc, 'initialize')
 
-    # A proper test would require the synthetic InfluxDB to return COG=0
-    # and verify it's preserved. For now, we test that the server doesn't
-    # reject COG=0 outright.
+    response = send_mcp_request(proc, 'tools/call', {
+        'name': 'get_historical_snapshot',
+        'arguments': {
+            'as_of_utc': as_of,
+            'window_seconds': 60
+        }
+    }, request_id=2)
 
-    assert True  # Placeholder for full integration
+    print('RAW MCP RESPONSE:')
+    print(json.dumps(response, indent=2, default=str))
+
+    snapshot = _find_snapshot(response)
+    assert snapshot is not None, (
+        'no snapshot payload found in MCP response: '
+        + json.dumps(response, default=str))
+
+    assert snapshot.get('success') is True, (
+        'a value of 0 was treated as missing data: '
+        + json.dumps(snapshot, default=str))
+
+    facts = snapshot['facts']
+    for key, value in facts.items():
+        assert value == 0, 'fact ' + key + ' should be 0, got ' + repr(value)
 
 
 def test_http_non_200_response_fails(racing_mcp_server):
