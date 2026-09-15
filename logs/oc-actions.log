@@ -123,3 +123,6 @@
 [2026-09-14T23:10:38] [FILE_MODIFY] [influx-powerbi-export] Repaired 7 provider tests that mocked a phantom readline() API; streaming path now covered via real OS pipes
 [2026-09-14T23:10:38] [RESULT] [influx-powerbi-export] Result: SUCCESS - Ran 22 tests, OK, 2.676s
 [2026-09-14T23:10:38] [COMMIT] SHA: 7b8265c78296b35f30c2b0c88c74708eb1bc7c15
+[2026-09-14T23:32:31] [FILE_MODIFY] [influx-powerbi-export] Removed blocking Flux sort(columns:["_time"]) from docker_provider.query_range; aggregate _value sorts preserved
+[2026-09-14T23:32:31] [RESULT] [influx-powerbi-export] Result: SUCCESS - explains truncated PARTIAL export of 20260911T160615Z
+[2026-09-14T23:32:31] [COMMIT] SHA: 46f0f5ffb0b44153434da36f6d6e1305fffe9f35
