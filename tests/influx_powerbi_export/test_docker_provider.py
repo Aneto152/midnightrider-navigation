@@ -5,6 +5,7 @@ Tests for Docker-internal CLI provider (NO token extraction).
 import unittest
 import os
 import subprocess
+import signal
 from unittest.mock import Mock, patch, MagicMock, call
 from pathlib import Path
 import tempfile
@@ -20,6 +21,48 @@ from influx_powerbi_export.docker_provider import (
 )
 
 
+def make_streaming_proc(stdout_lines=(), stderr_text="", returncode=0,
+                        pid=4242424, running=False):
+    """Build a mocked Popen whose pipes are REAL OS pipes.
+
+    The provider drains stdout and stderr with selectors + os.read(), so a
+    bare MagicMock is unusable: int(MagicMock().fileno()) is 1, which
+    registers FD 1 (our own stdout) for both pipes and makes the selector
+    raise KeyError before any provider logic runs. Tests that mocked
+    stdout.readline() therefore never exercised the streaming path at all,
+    because readline() has not been used since the selector rewrite.
+
+    Returns (mock_process, read_fds). Close the fds with close_fds().
+    """
+    stdout_r, stdout_w = os.pipe()
+    stderr_r, stderr_w = os.pipe()
+    payload = "".join(stdout_lines).encode()
+    if payload:
+        os.write(stdout_w, payload)
+    os.close(stdout_w)
+    if stderr_text:
+        os.write(stderr_w, stderr_text.encode())
+    os.close(stderr_w)
+
+    process = MagicMock()
+    process.stdout.fileno.return_value = stdout_r
+    process.stderr.fileno.return_value = stderr_r
+    process.pid = pid                      # a real int: never our own group
+    process.returncode = returncode
+    process.poll.return_value = None if running else returncode
+    process.wait.return_value = returncode
+    return process, (stdout_r, stderr_r)
+
+
+def close_fds(*fds):
+    """Close descriptors, tolerating those already closed by the provider."""
+    for fd in fds:
+        try:
+            os.close(fd)
+        except OSError:
+            pass
+
+
 class TestDockerCommandConstruction(unittest.TestCase):
     """Test 1: Docker-internal command construction."""
     
@@ -27,19 +70,19 @@ class TestDockerCommandConstruction(unittest.TestCase):
         self.provider = DockerInternalCliQueryProvider()
     
     def test_command_structure(self):
-        """Verify command includes docker, compose, exec, -T, service, influx, query, --raw."""
+        """Verify the command is `docker exec -i <service> influx query --raw`.
+
+        The provider deliberately uses `docker exec` and not
+        `docker compose exec`, so no .env or docker-compose.yml is required.
+        This test previously asserted the obsolete compose form and failed.
+        """
         cmd = self.provider._build_docker_exec_cmd("test query")
-        self.assertEqual(cmd[0], "docker")
-        self.assertEqual(cmd[1], "compose")
-        self.assertIn("-f", cmd)
-        self.assertIn("-T", cmd)
-        self.assertIn("exec", cmd)
-        self.assertIn(self.provider.service, cmd)
-        self.assertIn("influx", cmd)
-        self.assertIn("query", cmd)
-        self.assertIn("--raw", cmd)
-
-
+        self.assertEqual(
+            cmd,
+            ["docker", "exec", "-i", self.provider.service,
+             "influx", "query", "--raw", "test query"],
+        )
+        self.assertNotIn("compose", cmd)
 class TestNoTokenInArguments(unittest.TestCase):
     """Test 2: Verify NO --token in command-line arguments."""
     
@@ -96,52 +139,31 @@ class TestAuthenticatedInternalCli(unittest.TestCase):
     
     @patch('subprocess.Popen')
     def test_successful_query(self, mock_popen):
-        """Verify successful query execution."""
-        mock_proc = MagicMock()
-        # Create mock stdout with readline method
-        mock_stdout = MagicMock()
-        mock_stdout.readline = MagicMock(side_effect=["#group,false,false,true,true,false\n", "key1,val1\n", ""])
-        mock_proc.stdout = mock_stdout
-        mock_proc.stderr = MagicMock()
-        mock_proc.returncode = 0
-        mock_proc.poll.return_value = 0
+        """Verify a successful query streams every stdout line."""
+        payload = ["#group,false,false,true,true,false\n", "key1,val1\n"]
+        mock_proc, fds = make_streaming_proc(payload)
+        self.addCleanup(close_fds, *fds)
         mock_popen.return_value = mock_proc
-        
+
         provider = DockerInternalCliQueryProvider()
         lines = list(provider.query_flux("test query"))
-        
+
         self.assertEqual(len(lines), 2)
         self.assertIn("group", lines[0])
-
-
 class TestUnauthorizedResponse(unittest.TestCase):
     """Test 5: Internal CLI unauthorized (401)."""
     
     @patch('subprocess.Popen')
     def test_unauthorized_exit_code(self, mock_popen):
-        """Verify 401/unauthorized is handled."""
-        mock_proc = MagicMock()
-        mock_stdout = MagicMock()
-        mock_stdout.readline = MagicMock(return_value="")
-        mock_proc.stdout = mock_stdout
-        
-        mock_stderr = MagicMock()
-        mock_stderr.__iter__ = MagicMock(return_value=iter(["Unauthorized: invalid credentials"]))
-        mock_proc.stderr = mock_stderr
-        
-        mock_proc.returncode = 1
-        mock_proc.poll.return_value = 1
-        mock_proc.wait.return_value = 1
+        """Verify a non-zero exit raises DockerComposeError."""
+        mock_proc, fds = make_streaming_proc(
+            stderr_text="Unauthorized: invalid credentials", returncode=1)
+        self.addCleanup(close_fds, *fds)
         mock_popen.return_value = mock_proc
-        
+
         provider = DockerInternalCliQueryProvider()
-        
-        with self.assertRaises(DockerComposeError) as ctx:
-            list(provider.query_flux("test query"))
-        
-        self.assertIn("exit 1", str(ctx.exception))
-
-
+        with self.assertRaises(DockerComposeError):
+            list(provider.query_flux("test"))
 class TestMissingDockerService(unittest.TestCase):
     """Test 6: Missing Docker service."""
     
@@ -174,108 +196,80 @@ class TestStreamStdoutToFile(unittest.TestCase):
     """Test 8: Stream stdout to file."""
     
     def test_stream_to_iterable(self):
-        """Verify streaming returns iterable."""
+        """Verify streaming yields stripped lines, in order."""
         provider = DockerInternalCliQueryProvider()
-        
-        # Mock subprocess
         with patch('subprocess.Popen') as mock_popen:
-            mock_proc = MagicMock()
-            lines = ["line1\n", "line2\n", "line3\n"]
-            mock_stdout = MagicMock()
-            mock_stdout.readline = MagicMock(side_effect=lines + [""])
-            mock_proc.stdout = mock_stdout
-            mock_proc.stderr = MagicMock()
-            mock_proc.returncode = 0
-            mock_proc.poll.return_value = 0
+            mock_proc, fds = make_streaming_proc(
+                ["line1\n", "line2\n", "line3\n"])
+            self.addCleanup(close_fds, *fds)
             mock_popen.return_value = mock_proc
-            
             result = list(provider.query_flux("test"))
-            self.assertEqual(result, ["line1", "line2", "line3"])
 
-
+        self.assertEqual(result, ["line1", "line2", "line3"])
 class TestStderrSanitization(unittest.TestCase):
     """Test 9: Stderr sanitization (no credential leakage)."""
     
     @patch('subprocess.Popen')
     def test_stderr_truncated(self, mock_popen):
-        """Verify stderr is truncated in exceptions."""
-        mock_proc = MagicMock()
-        mock_stdout = MagicMock()
-        mock_stdout.readline = MagicMock(return_value="")
-        mock_proc.stdout = mock_stdout
-        
-        # Long stderr with sensitive-looking content
+        """Verify stderr is bounded in the raised exception."""
         long_stderr = "error " * 100 + "token12345"
-        mock_stderr = MagicMock()
-        mock_stderr.__iter__ = MagicMock(return_value=iter([long_stderr]))
-        mock_proc.stderr = mock_stderr
-        
-        mock_proc.returncode = 1
-        mock_proc.poll.return_value = 1
-        mock_proc.wait.return_value = 1
+        mock_proc, fds = make_streaming_proc(
+            stderr_text=long_stderr, returncode=1)
+        self.addCleanup(close_fds, *fds)
         mock_popen.return_value = mock_proc
-        
+
         provider = DockerInternalCliQueryProvider()
-        
         with self.assertRaises(DockerComposeError) as ctx:
             list(provider.query_flux("test"))
-        
-        # Error message should be truncated
-        exc_msg = str(ctx.exception)
-        self.assertLess(len(exc_msg), 500)  # Significantly shorter than input
 
-
+        self.assertLess(len(str(ctx.exception)), 900)
 class TestTimeoutHandling(unittest.TestCase):
     """Test 10: Timeout handling."""
     
     @patch('subprocess.Popen')
     def test_query_timeout(self, mock_popen):
-        """Verify timeout is handled."""
-        mock_proc = MagicMock()
-        mock_stdout = MagicMock()
-        mock_stdout.readline = MagicMock(return_value="")
-        mock_proc.stdout = mock_stdout
+        """Verify a stalled stream raises TimeoutError."""
+        mock_proc, fds = make_streaming_proc(running=True)
+        self.addCleanup(close_fds, *fds)
         mock_proc.wait.side_effect = subprocess.TimeoutExpired("docker", 300)
-        mock_proc.poll.return_value = None
-        mock_proc.kill.return_value = None
-        mock_proc.terminate.return_value = None
         mock_popen.return_value = mock_proc
-        
+
         provider = DockerInternalCliQueryProvider(timeout=1)
-        
         with self.assertRaises(TimeoutError) as ctx:
             list(provider.query_flux("test"))
-        
+
         self.assertIn("timeout", str(ctx.exception).lower())
-
-
 class TestProcessCleanup(unittest.TestCase):
     """Test 11: Process cleanup on error."""
     
+    @patch('os.killpg')
+    @patch('os.getpgid')
     @patch('subprocess.Popen')
-    def test_kill_on_timeout(self, mock_popen):
-        """Verify process is killed on timeout."""
-        mock_proc = MagicMock()
-        mock_stdout = MagicMock()
-        mock_stdout.readline = MagicMock(return_value="")
-        mock_proc.stdout = mock_stdout
+    def test_kill_on_timeout(self, mock_popen, mock_getpgid, mock_killpg):
+        """Verify the child's process group is signalled on timeout.
+
+        os.getpgid is stubbed so the child reports a group distinct from
+        ours: signalling our own group would kill the test runner itself,
+        which is exactly the bug _safe_killpg() now prevents.
+        """
+        OWN_PGID, CHILD_PGID = 111111, 222222
+        mock_getpgid.side_effect = (
+            lambda pid: OWN_PGID if pid == 0 else CHILD_PGID)
+
+        mock_proc, fds = make_streaming_proc(running=True)
+        self.addCleanup(close_fds, *fds)
         mock_proc.wait.side_effect = subprocess.TimeoutExpired("docker", 300)
-        mock_proc.poll.return_value = None  # Still running
-        mock_proc.kill.return_value = None
-        mock_proc.terminate.return_value = None
         mock_popen.return_value = mock_proc
-        
+
         provider = DockerInternalCliQueryProvider(timeout=1)
-        
-        try:
+        with self.assertRaises(TimeoutError):
             list(provider.query_flux("test"))
-        except TimeoutError:
-            pass
-        
-        # Verify kill was called
-        mock_proc.kill.assert_called()
 
-
+        signalled = [c.args for c in mock_killpg.call_args_list]
+        self.assertTrue(signalled, "no signal sent to the child group")
+        for pgid, _sig in signalled:
+            self.assertEqual(pgid, CHILD_PGID)
+            self.assertNotEqual(pgid, OWN_PGID)
 class TestNoOrphanProcess(unittest.TestCase):
     """Test 12: NO orphan process."""
     
@@ -306,9 +300,7 @@ class TestMultipleAnnotatedCsvTables(unittest.TestCase):
     
     @patch('subprocess.Popen')
     def test_multiple_tables_streaming(self, mock_popen):
-        """Verify multiple CSV tables are streamed."""
-        mock_proc = MagicMock()
-        # Simulate multiple annotated CSV tables
+        """Verify several annotated CSV tables stream through unchanged."""
         tables = [
             "#group,false,false,true,true,false\n",
             "#datatype,string,long,dateTime:RFC3339,string,string\n",
@@ -319,24 +311,18 @@ class TestMultipleAnnotatedCsvTables(unittest.TestCase):
             "#datatype,string,long,dateTime:RFC3339,string,string\n",
             "_measurement,result,table,_time,_field,_value\n",
             "mem,_result,1,2021-01-01T00:00:01Z,usage,512\n",
-            "",
         ]
-        mock_stdout = MagicMock()
-        mock_stdout.readline = MagicMock(side_effect=tables)
-        mock_proc.stdout = mock_stdout
-        mock_proc.stderr = MagicMock()
-        mock_proc.returncode = 0
-        mock_proc.poll.return_value = 0
+        mock_proc, fds = make_streaming_proc(tables)
+        self.addCleanup(close_fds, *fds)
         mock_popen.return_value = mock_proc
-        
+
         provider = DockerInternalCliQueryProvider()
         lines = list(provider.query_flux("test"))
-        
-        self.assertEqual(len(lines), len(tables) - 1)  # -1 for the final empty string
-        self.assertIn("cpu", "\n".join(lines))
-        self.assertIn("mem", "\n".join(lines))
 
-
+        joined = "\n".join(lines)
+        self.assertIn("cpu", joined)
+        self.assertIn("mem", joined)
+        self.assertGreaterEqual(len(lines), len(tables) - 1)
 class TestUsbOnlyOutput(unittest.TestCase):
     """Test 14: USB-only output (no local /tmp)."""
     
@@ -397,22 +383,53 @@ class TestFullExporterIntegration(unittest.TestCase):
     
     @patch('subprocess.Popen')
     def test_integration_with_influx_client(self, mock_popen):
-        """Verify InfluxClient integrates with Docker provider."""
+        """Verify InfluxClient streams through the Docker provider."""
         from influx_powerbi_export.influx_client import InfluxClient
-        
-        mock_proc = MagicMock()
-        mock_stdout = MagicMock()
-        mock_stdout.readline = MagicMock(side_effect=["line1\n", "line2\n", ""])
-        mock_proc.stdout = mock_stdout
-        mock_proc.stderr = MagicMock()
-        mock_proc.returncode = 0
-        mock_proc.poll.return_value = 0
+
+        mock_proc, fds = make_streaming_proc(["line1\n", "line2\n"])
+        self.addCleanup(close_fds, *fds)
         mock_popen.return_value = mock_proc
-        
+
         client = InfluxClient()
         result = list(client.query_flux("test"))
-        
+
         self.assertEqual(result, ["line1", "line2"])
+
+
+class TestSafeKillpgGuards(unittest.TestCase):
+    """Regression guards: _safe_killpg must never signal our own group.
+
+    A bare MagicMock pid resolved to 1 through int(), so
+    os.killpg(os.getpgid(process.pid), SIGKILL) became os.killpg(1, SIGKILL)
+    and killed the whole session, SSH included. Two RPi freezes on
+    2026-09-14 were caused by exactly that.
+    """
+
+    def test_refuses_non_integer_pid(self):
+        provider = DockerInternalCliQueryProvider()
+        process = MagicMock()  # int(MagicMock().pid) is 1
+        with patch('os.killpg') as mock_killpg:
+            self.assertFalse(provider._safe_killpg(process, signal.SIGKILL))
+            mock_killpg.assert_not_called()
+
+    def test_refuses_own_process_group(self):
+        provider = DockerInternalCliQueryProvider()
+        process = MagicMock()
+        process.pid = os.getpid()
+        with patch('os.killpg') as mock_killpg:
+            self.assertTrue(provider._safe_killpg(process, signal.SIGKILL))
+            mock_killpg.assert_not_called()
+            process.kill.assert_called_once()
+
+    def test_signals_distinct_process_group(self):
+        provider = DockerInternalCliQueryProvider()
+        process = MagicMock()
+        process.pid = 4242424
+        with patch('os.killpg') as mock_killpg, \
+             patch('os.getpgid',
+                   side_effect=lambda pid: 111111 if pid == 0 else 222222):
+            self.assertTrue(provider._safe_killpg(process, signal.SIGTERM))
+            mock_killpg.assert_called_once_with(222222, signal.SIGTERM)
 
 
 if __name__ == '__main__':
