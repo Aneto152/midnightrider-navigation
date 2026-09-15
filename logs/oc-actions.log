@@ -133,3 +133,7 @@
 [2026-09-15T00:03:23] [FILE_MODIFY] [influx-powerbi-export] chunked_export.py now instantiates the field mapper, keeps navigation.position, sends unquoted Flux time literals, reconciles each chunk against an independent count query, and reports real routing counters instead of hardcoded zeros
 [2026-09-15T00:03:23] [RESULT] [influx-powerbi-export] Result: SUCCESS - schema_validated now verifies the merged header fail-closed
 [2026-09-15T00:03:23] [COMMIT] SHA: 04f1e9e3e9e29a2ecbae511481e6d7b1a8ed4ff1
+[2026-09-15T08:19:48] [FILE_MODIFY] [influx-powerbi-export] AIS dedup key read timestamp_utc and mmsi, absent from the raw record shape, so 52101 rows collapsed to 1 and the loss was logged as duplicates removed. Key now uses time plus series identity and fails closed on a missing column
+[2026-09-15T08:19:48] [FILE_MODIFY] [influx-powerbi-export] Final MR header now comes from schema.py: the duplicate hardcoded list held the same 22 names in a different order
+[2026-09-15T08:19:48] [RESULT] [influx-powerbi-export] Result: SUCCESS - single real chunk already reconciled 277164 rows with all 16 instrument columns populated
+[2026-09-15T08:19:48] [COMMIT] SHA: 414be5af8e3ecdf1fa8922ebfa8607d71710b381
