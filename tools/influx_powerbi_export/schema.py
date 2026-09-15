@@ -10,7 +10,6 @@ MIDNIGHT_RIDER_SCHEMA = [
     ("window_end_utc", "datetime", "Window end (UTC)"),
     ("sample_count", "int", "Number of data points in window"),
     ("source_count", "int", "Number of distinct sources"),
-    ("completeness_ratio", "float", "Observed samples / expected samples"),
     ("sog_knots", "float", "Speed over ground (arithmetic mean)"),
     ("cog_deg", "float", "Course over ground (circular mean)"),
     ("latitude", "float", "Latitude (latest or mean) — DO NOT LOG"),
@@ -25,9 +24,9 @@ MIDNIGHT_RIDER_SCHEMA = [
     ("roll_deg", "float", "Roll angle (arithmetic mean)"),
     ("pitch_deg", "float", "Pitch angle (arithmetic mean)"),
     ("depth_m", "float", "Depth below transducer (arithmetic mean)"),
+    ("water_temp_c", "float", "Water temperature, degrees Celsius (arithmetic mean)"),
     ("stw_knots", "float", "Speed through water (arithmetic mean)"),
     ("battery_voltage", "float", "Battery voltage (arithmetic mean)"),
-    ("quality_flag", "string", "GOOD|POOR|MISSING based on completeness"),
 ]
 
 # AIS vessels events schema
@@ -106,9 +105,9 @@ def describe_schema() -> Dict:
             "description": "One logical row per observed 10-second UTC window",
             "fields": {name: desc for name, _, desc in MIDNIGHT_RIDER_SCHEMA},
             "aggregations": {
-                "linear": ["sog_knots", "aws_knots", "tide_rate_knots", "roll_deg", "pitch_deg", "depth_m", "stw_knots", "battery_voltage"],
+                "linear": ["sog_knots", "aws_knots", "tide_rate_knots", "roll_deg", "pitch_deg", "depth_m", "water_temp_c", "stw_knots", "battery_voltage"],
                 "circular": ["cog_deg", "awa_deg", "twa_deg", "true_heading_deg", "tide_set_deg"],
-                "latest": ["latitude", "longitude", "quality_flag"],
+                "latest": ["latitude", "longitude"],
             },
         },
         "ais_vessels": {

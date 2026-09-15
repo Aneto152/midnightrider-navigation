@@ -189,7 +189,6 @@ class MidnightRiderAggregatesMerger:
         For duplicate windows (from chunk boundaries), perform weighted merge:
         - sample_count: SUM
         - source_count: SUM
-        - completeness_ratio: RECOMPUTE from merged counts
         - circular fields: weighted circular mean
         - signed attitude: signed arithmetic mean
         - measurements: weighted mean using sample_count
@@ -207,11 +206,9 @@ class MidnightRiderAggregatesMerger:
 
             # Merge strategy:
             # 1. Sum sample_count and source_count
-            # 2. Recompute completeness_ratio
-            # 3. Weighted mean for measurements
-            # 4. Circular mean for bearing/heading
-            # 5. Signed mean for attitude
-            # 6. Deterministic quality_flag
+            # 2. Weighted mean for measurements
+            # 3. Circular mean for bearing/heading
+            # 4. Signed mean for attitude
 
             try:
                 existing_sample_count = float(existing.get('sample_count', 0))
@@ -223,11 +220,6 @@ class MidnightRiderAggregatesMerger:
                 new_source_count = float(row.get('source_count', 0))
                 merged_source_count = existing_source_count + new_source_count
                 existing['source_count'] = str(int(merged_source_count))
-
-                # Recompute completeness_ratio
-                if merged_source_count > 0:
-                    completeness = merged_sample_count / merged_source_count
-                    existing['completeness_ratio'] = str(min(1.0, completeness))
             except (ValueError, TypeError):
                 pass
 
@@ -286,16 +278,6 @@ class MidnightRiderAggregatesMerger:
                             existing[field] = str(merged_val)
                     except (ValueError, TypeError):
                         pass
-
-            # Merge quality_flag deterministically (retain worse quality)
-            if 'quality_flag' in row and 'quality_flag' in existing:
-                existing_quality = str(existing.get('quality_flag', '')).upper()
-                new_quality = str(row.get('quality_flag', '')).upper()
-
-                # Quality hierarchy: GOOD > FAIR > POOR
-                quality_order = {'GOOD': 3, 'FAIR': 2, 'POOR': 1, '': 0}
-                if quality_order.get(new_quality, 0) < quality_order.get(existing_quality, 0):
-                    existing['quality_flag'] = new_quality
 
     @staticmethod
     def _weighted_circular_mean(angles: List[float], weights: Optional[List[float]] = None) -> float:
@@ -500,14 +482,14 @@ class FinalMerger:
         """Write final MIDNIGHT_RIDER_10S_AGGREGATES.csv."""
         output_path = self.output_dir / "MIDNIGHT_RIDER_10S_AGGREGATES.csv"
 
-        # Expected 23 fields
+        # Expected 22 fields
         expected_fields = [
             'timestamp_utc', 'window_start_utc', 'window_end_utc',
-            'sample_count', 'source_count', 'completeness_ratio', 'quality_flag',
+            'sample_count', 'source_count',
             'sog_knots', 'cog_deg', 'true_heading_deg',
             'latitude', 'longitude',
             'awa_deg', 'aws_knots', 'twa_deg', 'tws_knots',
-            'depth_m', 'stw_knots',
+            'depth_m', 'water_temp_c', 'stw_knots',
             'tide_set_deg', 'tide_rate_knots',
             'roll_deg', 'pitch_deg', 'battery_voltage'
         ]

@@ -20,12 +20,12 @@ class TestAISSeparation:
     
     def test_ais_context_detected(self, classifier):
         """AIS in context → ais"""
-        record = {"source": "n2k", "context": "ais_vessel_123", "_measurement": "navigation"}
+        record = {"source": "n2k", "context": "vessels.urn:mrn:imo:mmsi:000000000", "_measurement": "navigation"}
         assert classifier.classify(record) == "ais"
     
     def test_ais_measurement_detected(self, classifier):
         """AIS in measurement → ais"""
-        record = {"source": "n2k", "context": "vessels.abc", "_measurement": "ais_position"}
+        record = {"source": "n2k", "context": "vessels.abc", "_measurement": "sensors.ais.target"}
         assert classifier.classify(record) == "ais"
     
     # Non-AIS Onboard Data Tests

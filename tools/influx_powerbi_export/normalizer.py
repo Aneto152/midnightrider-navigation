@@ -70,9 +70,6 @@ class Normalizer:
                 else:
                     row[field_name] = sum(values) / len(values)
 
-            row["completeness_ratio"] = row["sample_count"] / (len(fields) * 10) if fields else 0
-            row["quality_flag"] = self._quality_flag(row["completeness_ratio"])
-
             results.append(row)
 
         return results
@@ -92,15 +89,6 @@ class Normalizer:
 
         # Convert back to 0-360 range
         return mean_deg if mean_deg >= 0 else mean_deg + 360
-
-    def _quality_flag(self, completeness: float) -> str:
-        """Generate quality flag based on completeness."""
-        if completeness >= 0.75:
-            return "GOOD"
-        elif completeness >= 0.50:
-            return "POOR"
-        else:
-            return "MISSING"
 
     def _epoch_to_iso(self, seconds: float) -> str:
         """Convert Unix timestamp to ISO8601."""

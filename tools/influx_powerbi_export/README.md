@@ -166,8 +166,7 @@ Records matching neither rule. Counted in manifest but not in output CSVs (unles
 | window_start_utc | datetime | — | 10s boundary |
 | window_end_utc | datetime | — | 10s boundary |
 | sample_count | int | Sum | Rows in window |
-| source_count | int | Distinct sources | — |
-| completeness_ratio | float | Observed / expected | 0.0–1.0 |
+| source_count | int | Sum | Source records in window |
 | sog_knots | float | Arithmetic mean | Speed over ground |
 | cog_deg | float | **Circular mean** | Course over ground (0–360°) |
 | latitude | float | Latest or mean | Present in CSV; REDACTED from logs |
@@ -182,9 +181,9 @@ Records matching neither rule. Counted in manifest but not in output CSVs (unles
 | roll_deg | float | Arithmetic mean | IMU roll angle |
 | pitch_deg | float | Arithmetic mean | IMU pitch angle |
 | depth_m | float | Arithmetic mean | Depth below transducer |
+| water_temp_c | float | Arithmetic mean | Water temperature (°C) |
 | stw_knots | float | Arithmetic mean | Speed through water |
 | battery_voltage | float | Arithmetic mean | Battery voltage |
-| quality_flag | string | — | GOOD (≥75%) / POOR (50–75%) / MISSING (<50%) |
 
 ### AIS_VESSELS_EVENTS.csv
 
