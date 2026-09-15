@@ -43,7 +43,7 @@ from pathlib import Path
 import os
 import tempfile
 
-from mediaman.mcp_client import MCPClient, MCPServerError
+from mediaman.mcp_client import MCPClient, MCPProtocolError, MCPServerError
 
 
 class SyntheticInfluxDBHandler(BaseHTTPRequestHandler):
@@ -777,8 +777,9 @@ def test_mcpclient_real_missing_additional_properties_fails():
         client = MCPClient(server_path=script_path, server_name='racing-test')
         try:
             client.start()
-            assert False, "Should have raised MCPServerError"
-        except MCPServerError:
+            assert False, "Should have raised MCPProtocolError"
+        except MCPProtocolError as exc:
+            assert 'additionalProperties' in str(exc)
             assert not client.initialized
     finally:
         os.unlink(script_path)
@@ -791,8 +792,9 @@ def test_mcpclient_real_additional_properties_true_fails():
         client = MCPClient(server_path=script_path, server_name='racing-test')
         try:
             client.start()
-            assert False, "Should have raised MCPServerError"
-        except MCPServerError:
+            assert False, "Should have raised MCPProtocolError"
+        except MCPProtocolError as exc:
+            assert 'additionalProperties' in str(exc)
             assert not client.initialized
     finally:
         os.unlink(script_path)

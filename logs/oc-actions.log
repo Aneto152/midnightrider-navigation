@@ -142,3 +142,5 @@
 [2026-09-15T08:25:31] [COMMIT] SHA: ee8ad13da02d8473bb6d63eafb54484727928536
 [2026-09-15T15:49:22] [FILE_MODIFY] [mediaman-tests] Denis via direct SSH: added missing module imports (tempfile, MCPClient, MCPServerError) and the required server_name argument to 4 MCPClient constructor calls in tests/mcp/test_phase2_historical_contract.py; corrected the inaccurate API comment
 [2026-09-15T15:49:22] [RESULT] [mediaman-tests] Result: FAILURE - pytest executions: 1, retries: 0 - ======================== 2 failed, 21 passed in 19.96s =========================
+[2026-09-15T15:55:23] [FILE_MODIFY] [mediaman-tests] Denis via direct SSH: the two schema-incompatibility capability-gate tests expected MCPServerError while validate_capabilities raises MCPProtocolError as documented. Corrected the test expectations (production code unchanged) and added an assertion that the error message names additionalProperties
+[2026-09-15T15:55:23] [RESULT] [mediaman-tests] Result: SUCCESS - pytest executions: 1, retries: 0 - ============================= 23 passed in 19.83s ==============================
