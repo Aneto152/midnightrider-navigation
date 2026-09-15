@@ -286,36 +286,58 @@ class TestFinalMerger(unittest.TestCase):
     def tearDown(self):
         self.tmpdir.cleanup()
 
+    @staticmethod
+    def _ais_record(time, measurement="sensors.ais.class", field="value",
+                    value="A", context="vessels.urn:mrn:imo:mmsi:000000000",
+                    source="n2k.1"):
+        """One raw AIS record, in the shape the export actually writes."""
+        return {
+            "_time": time, "_measurement": measurement, "_field": field,
+            "_value": value, "context": context, "source": source,
+        }
+
     def test_ais_events_deduplication(self):
-        """Test AIS events deduplication (Test #11: AIS chunk merge)."""
+        """Test AIS events deduplication (Test #11: AIS chunk merge).
+
+        The earlier version of this test used keys named timestamp_utc and
+        mmsi, which the raw AIS output does not carry. It therefore passed
+        while the merger was collapsing an entire chunk into one row.
+        """
         merger = AISEventsMerger()
 
-        # Add same event twice
-        event1 = {'timestamp_utc': '2026-09-04T00:00:00Z', 'mmsi': '123456'}
-        event2 = {'timestamp_utc': '2026-09-04T00:00:00Z', 'mmsi': '123456'}
+        # The same observation twice: one survivor.
+        merger.add_event(self._ais_record('2026-09-04T00:00:00Z'))
+        merger.add_event(self._ais_record('2026-09-04T00:00:00Z'))
 
-        merger.add_event(event1)
-        merger.add_event(event2)
-
-        # Should have only 1 event
         merged = merger.get_merged_events()
         self.assertEqual(len(merged), 1)
         self.assertEqual(merger.dedup_count, 1)
 
+        # Two different vessels at the same instant are two events, and a
+        # different field of the same vessel is a third.
+        merger.add_event(self._ais_record('2026-09-04T00:00:00Z',
+                                          context='vessels.other'))
+        merger.add_event(self._ais_record('2026-09-04T00:00:00Z',
+                                          field='lat'))
+        self.assertEqual(len(merger.get_merged_events()), 3)
+        self.assertEqual(merger.dedup_count, 1)
+
     def test_ais_events_deterministic_ordering(self):
-        """Test AIS events are sorted by timestamp (Test #10: no duplicate boundary output)."""
+        """Test AIS events are sorted by time (Test #10: no duplicate boundary output).
+
+        Ordering used to be computed on the absent timestamp_utc column, so
+        the sort was a no-op and the real order was the insertion order,
+        which Flux emits series by series rather than chronologically.
+        """
         merger = AISEventsMerger()
 
-        # Add events out of order
-        merger.add_event({'timestamp_utc': '2026-09-04T00:00:02Z', 'mmsi': '111'})
-        merger.add_event({'timestamp_utc': '2026-09-04T00:00:00Z', 'mmsi': '222'})
-        merger.add_event({'timestamp_utc': '2026-09-04T00:00:01Z', 'mmsi': '333'})
+        merger.add_event(self._ais_record('2026-09-04T00:00:02Z'))
+        merger.add_event(self._ais_record('2026-09-04T00:00:00Z'))
+        merger.add_event(self._ais_record('2026-09-04T00:00:01Z'))
 
-        merged = merger.get_merged_events()
-
-        # Verify sorted order
-        timestamps = [e.get('timestamp_utc') for e in merged]
-        self.assertEqual(timestamps, sorted(timestamps))
+        times = [e['_time'] for e in merger.get_merged_events()]
+        self.assertEqual(times, sorted(times))
+        self.assertEqual(times[0], '2026-09-04T00:00:00Z')
 
     def test_midnight_rider_aggregates_deduplication(self):
         """Test Midnight Rider aggregates deduplication (Test #12: MR aggregate merge)."""
