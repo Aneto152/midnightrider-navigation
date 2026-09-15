@@ -229,6 +229,49 @@ class DockerChunkedQueryProvider:
         
         return stderr_text
     
+    def _safe_killpg(self, process, sig) -> bool:
+        """Signal the child's process group, never our own.
+
+        Guards two failure modes:
+
+        1. process.pid is not a real OS pid (e.g. a test double). int() of a
+           MagicMock is 1, so os.getpgid(process.pid) resolved to process
+           group 1 and os.killpg() then signalled essentially every process
+           of the session, killing the exporter, its shell and the SSH
+           session with it.
+        2. The child shares our own process group, which happens whenever
+           preexec_fn=os.setsid did not take effect. Signalling that group
+           would kill this exporter and all of its siblings.
+
+        In both cases we fall back to signalling the child alone.
+        """
+        pid = getattr(process, "pid", None)
+        if not isinstance(pid, int) or isinstance(pid, bool) or pid <= 1:
+            logger.error(f"Refusing killpg: invalid child pid {pid!r}")
+            return False
+        try:
+            pgid = os.getpgid(pid)
+            own_pgid = os.getpgid(0)
+        except OSError as e:
+            logger.warning(f"Cannot resolve process group for pid {pid}: {type(e).__name__}")
+            return False
+        if pgid <= 1 or pgid == own_pgid:
+            logger.warning(
+                f"Child pid {pid} shares our process group (pgid={pgid}); "
+                "signalling the child only"
+            )
+            try:
+                if sig == signal.SIGKILL:
+                    process.kill()
+                else:
+                    process.terminate()
+                return True
+            except Exception as e:
+                logger.error(f"Child-only signal failed: {type(e).__name__}")
+                return False
+        os.killpg(pgid, sig)
+        return True
+
     def _terminate_process_group(self, process: subprocess.Popen) -> bool:
         """
         Cleanly terminate process group.
@@ -241,7 +284,7 @@ class DockerChunkedQueryProvider:
         
         try:
             if hasattr(signal, 'SIGTERM'):
-                os.killpg(os.getpgid(process.pid), signal.SIGTERM)
+                self._safe_killpg(process, signal.SIGTERM)
         except:
             try:
                 process.terminate()
@@ -257,7 +300,7 @@ class DockerChunkedQueryProvider:
         
         try:
             if hasattr(signal, 'SIGKILL'):
-                os.killpg(os.getpgid(process.pid), signal.SIGKILL)
+                self._safe_killpg(process, signal.SIGKILL)
             else:
                 process.kill()
             process.wait(timeout=2)
