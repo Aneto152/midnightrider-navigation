@@ -23,6 +23,7 @@ from datetime import datetime, timezone
 from collections import defaultdict
 import math
 from tools.influx_powerbi_export.checkpoint import ChunkStatus
+from tools.influx_powerbi_export.schema import get_midnight_rider_headers
 
 logger = logging.getLogger(__name__)
 
@@ -68,17 +69,26 @@ class AISEventsMerger:
         self.events: Dict[str, Dict] = {}  # key -> event dict
         self.dedup_count = 0
 
+    # The raw AIS output carries the InfluxDB record shape, not a flattened
+    # vessel report. The previous key read timestamp_utc and mmsi, neither of
+    # which exists in that shape, so every row produced the key "_" and a
+    # whole chunk collapsed into a single event.
+    DEDUP_COLUMNS = ("_time", "context", "source", "_measurement", "_field")
+
     def _dedup_key(self, row: Dict) -> str:
-        """
-        Generate deterministic deduplication key for AIS event.
+        """Identity of one AIS point: its series plus its timestamp.
 
-        Uses: timestamp + MMSI (if present) to avoid duplicate AIS reports
+        That is exactly what makes a point unique in InfluxDB, so two rows
+        sharing this key are the same observation. Missing key columns raise
+        rather than silently collapsing unrelated rows together.
         """
-        timestamp = row.get('timestamp_utc', '')
-        mmsi = row.get('mmsi', '')
-
-        # Key is timestamp + MMSI; ensures same event isn't recorded twice
-        return f"{timestamp}_{mmsi}"
+        missing = [c for c in self.DEDUP_COLUMNS if c not in row]
+        if missing:
+            raise ValueError(
+                "AIS deduplication cannot run: the chunk CSV is missing "
+                f"{missing}. Refusing to collapse rows on an incomplete key."
+            )
+        return "\x1f".join(str(row[c]) for c in self.DEDUP_COLUMNS)
 
     def add_event(self, row: Dict) -> None:
         """Add or skip AIS event (skip if duplicate)."""
@@ -94,7 +104,9 @@ class AISEventsMerger:
         # Sort by timestamp
         sorted_events = sorted(
             self.events.values(),
-            key=lambda r: r.get('timestamp_utc', '')
+            key=lambda r: tuple(
+                str(r.get(c, '')) for c in self.DEDUP_COLUMNS
+            )
         )
         return sorted_events
 
@@ -482,17 +494,10 @@ class FinalMerger:
         """Write final MIDNIGHT_RIDER_10S_AGGREGATES.csv."""
         output_path = self.output_dir / "MIDNIGHT_RIDER_10S_AGGREGATES.csv"
 
-        # Expected 22 fields
-        expected_fields = [
-            'timestamp_utc', 'window_start_utc', 'window_end_utc',
-            'sample_count', 'source_count',
-            'sog_knots', 'cog_deg', 'true_heading_deg',
-            'latitude', 'longitude',
-            'awa_deg', 'aws_knots', 'twa_deg', 'tws_knots',
-            'depth_m', 'water_temp_c', 'stw_knots',
-            'tide_set_deg', 'tide_rate_knots',
-            'roll_deg', 'pitch_deg', 'battery_voltage'
-        ]
+        # schema.py owns the column list and its order. A second copy
+        # here held the same names in a different order, which is why the
+        # header check reported "missing=[] unexpected=[]".
+        expected_fields = get_midnight_rider_headers()
 
         if not aggregates:
             logger.warning("No Midnight Rider aggregates to write")

@@ -360,10 +360,16 @@ class ChunkedExportEngine:
         if actual != expected:
             missing = [c for c in expected if c not in actual]
             unexpected = [c for c in actual if c not in expected]
+            if not missing and not unexpected:
+                detail = (
+                    "the column names are right but their order differs; "
+                    f"expected {expected}, got {actual}"
+                )
+            else:
+                detail = f"missing={missing} unexpected={unexpected}"
             raise ValueError(
                 "schema validation FAILED: the merged header does not match "
-                f"the {len(expected)}-column contract. "
-                f"missing={missing} unexpected={unexpected}"
+                f"the {len(expected)}-column contract. {detail}"
             )
         return True
 
