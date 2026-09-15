@@ -295,77 +295,82 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
 
   logEvent('DATA_IN', { asOfUtc, windowSeconds, startTime });
 
-  // Four independent queries
-  const measurements = ['navigation_position_latitude', 'navigation_position_longitude',
-                        'navigation_speedOverGround', 'navigation_courseOverGround'];
+  // Four independent queries, one per fact.
+  //
+  // Each fact is addressed by the measurement AND the field key that actually
+  // exists in the bucket, verified against production InfluxDB on 2026-09-15:
+  // navigation.position carries the field keys 'lat' and 'lon', while
+  // navigation.speedOverGround and navigation.courseOverGroundTrue each carry
+  // a single 'value' field. Signal K publishes dotted paths as measurement
+  // names; the previous underscore names matched nothing at all.
+  //
+  // keep() reduces every input table to the same two columns so that tables
+  // carrying different tag sets can be merged; group() collapses them into a
+  // single table; sort() then last() returns exactly one record, the newest of
+  // the whole window. Without this, last() returns one record per tag series
+  // and the code would silently pick an arbitrary one.
+  const FACT_SELECTORS = [
+    { fact: 'latitude', measurement: 'navigation.position', field: 'lat' },
+    { fact: 'longitude', measurement: 'navigation.position', field: 'lon' },
+    { fact: 'speed_over_ground', measurement: 'navigation.speedOverGround', field: 'value' },
+    { fact: 'course_over_ground', measurement: 'navigation.courseOverGroundTrue', field: 'value' }
+  ];
 
   const queryResults = {};
 
-  for (const measurement of measurements) {
+  for (const selector of FACT_SELECTORS) {
     const query = `from(bucket:"${INFLUX_BUCKET}")
       |> range(start: ${startTime}, stop: ${asOfUtc})
-      |> filter(fn: (r) => r._measurement == "${measurement}")
-      |> last()`;
+      |> filter(fn: (r) => r._measurement == "${selector.measurement}")
+      |> filter(fn: (r) => r._field == "${selector.field}")
+      |> keep(columns: ["_time", "_value"])
+      |> group()
+      |> sort(columns: ["_time"])
+      |> last(column: "_time")`;
 
     try {
       const results = await queryInfluxDB(query);
-      queryResults[measurement] = results.length > 0 ? results[0] : null;
+      queryResults[selector.fact] = results.length > 0 ? results[0] : null;
     } catch (e) {
-      logEvent('ERROR', { phase: 'query', measurement, error: sanitizeError(e) });
-      throw new Error(`Failed to query ${measurement}: ${sanitizeError(e)}`);
+      logEvent('ERROR', {
+        phase: 'query',
+        fact: selector.fact,
+        measurement: selector.measurement,
+        field: selector.field,
+        error: sanitizeError(e)
+      });
+      throw new Error(`Failed to query ${selector.fact}: ${sanitizeError(e)}`);
     }
   }
 
-  // Extract and validate all four facts
+  // Extract and validate all four facts.
+  //
+  // Completeness is decided by explicit null / undefined / empty-string checks,
+  // never by truthiness: a course over ground of exactly 0 means due north, a
+  // speed of exactly 0 means stopped, and latitude or longitude can legitimately
+  // be 0. Under `if (!value)` all four of those would be reported as missing.
   const facts = {};
   const timestamps = {};
 
-  // Latitude
-  if (!queryResults['navigation_position_latitude'] ||
-      !queryResults['navigation_position_latitude']._value ||
-      !queryResults['navigation_position_latitude']._time) {
-    throw new Error('Collection incomplete: latitude missing or incomplete');
-  }
-  facts.latitude = validateNumeric(queryResults['navigation_position_latitude']._value, 'latitude');
-  timestamps.latitude = validateTimestamp(queryResults['navigation_position_latitude']._time);
-  if (facts.latitude === null || !timestamps.latitude) {
-    throw new Error('Collection incomplete: latitude invalid or missing timestamp');
-  }
+  for (const selector of FACT_SELECTORS) {
+    const row = queryResults[selector.fact];
+    const missing = !row
+      || row._value === null || row._value === undefined || row._value === ''
+      || row._time === null || row._time === undefined || row._time === '';
 
-  // Longitude
-  if (!queryResults['navigation_position_longitude'] ||
-      !queryResults['navigation_position_longitude']._value ||
-      !queryResults['navigation_position_longitude']._time) {
-    throw new Error('Collection incomplete: longitude missing or incomplete');
-  }
-  facts.longitude = validateNumeric(queryResults['navigation_position_longitude']._value, 'longitude');
-  timestamps.longitude = validateTimestamp(queryResults['navigation_position_longitude']._time);
-  if (facts.longitude === null || !timestamps.longitude) {
-    throw new Error('Collection incomplete: longitude invalid or missing timestamp');
-  }
+    if (missing) {
+      throw new Error(`Collection incomplete: ${selector.fact} missing or incomplete`);
+    }
 
-  // Speed over ground
-  if (!queryResults['navigation_speedOverGround'] ||
-      !queryResults['navigation_speedOverGround']._value ||
-      !queryResults['navigation_speedOverGround']._time) {
-    throw new Error('Collection incomplete: speed_over_ground missing or incomplete');
-  }
-  facts.speed_over_ground = validateNumeric(queryResults['navigation_speedOverGround']._value, 'speed_over_ground');
-  timestamps.speed_over_ground = validateTimestamp(queryResults['navigation_speedOverGround']._time);
-  if (facts.speed_over_ground === null || !timestamps.speed_over_ground) {
-    throw new Error('Collection incomplete: speed_over_ground invalid or missing timestamp');
-  }
+    const value = validateNumeric(row._value, selector.fact);
+    const stamp = validateTimestamp(row._time);
 
-  // Course over ground
-  if (!queryResults['navigation_courseOverGround'] ||
-      !queryResults['navigation_courseOverGround']._value ||
-      !queryResults['navigation_courseOverGround']._time) {
-    throw new Error('Collection incomplete: course_over_ground missing or incomplete');
-  }
-  facts.course_over_ground = validateNumeric(queryResults['navigation_courseOverGround']._value, 'course_over_ground');
-  timestamps.course_over_ground = validateTimestamp(queryResults['navigation_courseOverGround']._time);
-  if (facts.course_over_ground === null || !timestamps.course_over_ground) {
-    throw new Error('Collection incomplete: course_over_ground invalid or missing timestamp');
+    if (value === null || !stamp) {
+      throw new Error(`Collection incomplete: ${selector.fact} invalid or missing timestamp`);
+    }
+
+    facts[selector.fact] = value;
+    timestamps[selector.fact] = stamp;
   }
 
   // Validate bounded skew
@@ -379,11 +384,14 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
   // Aggregate source_timestamp is the newest
   const sourceTimestamp = new Date(Math.max(...timesMs)).toISOString();
 
+  // The boat's actual position is deliberately NOT logged. logEvent writes to
+  // stderr and to logs/services/racing-mcp.log, and neither is an appropriate
+  // place for coordinates; only non-locating metadata is emitted here.
   logEvent('DATA_OUT', {
-    latitude: facts.latitude,
-    longitude: facts.longitude,
-    sog: facts.speed_over_ground,
-    cog: facts.course_over_ground,
+    factsReturned: Object.keys(facts).length,
+    positionPresent: facts.latitude !== null && facts.longitude !== null,
+    sogPresent: facts.speed_over_ground !== null,
+    cogPresent: facts.course_over_ground !== null,
     skewMs: skew,
     sourceTimestamp
   });
