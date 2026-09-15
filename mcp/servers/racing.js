@@ -130,48 +130,89 @@ async function queryInfluxDB(fluxQuery) {
 
 /**
  * Parse Flux CSV response
- * Expected format: CSV with headers including _value, _time
+ * Accepts both dialects returned by /api/v2/query: annotated CSV
+ * (#group / #datatype / #default rows plus a leading empty column)
+ * and plain CSV (dialect.annotations = []). Requires _value and _time.
  */
 function parseFluxResponse(csvData) {
   try {
-    const lines = csvData.trim().split('\n');
-    if (lines.length < 4) return [];
+    if (typeof csvData !== 'string' || csvData.trim() === '') {
+      return [];
+    }
 
+    // Normalise line endings before anything else. InfluxDB terminates CSV
+    // rows with CRLF; a surviving '\r' would stay glued to the last column of
+    // every row and break the literal 'Z' suffix check on _time.
+    const lines = csvData
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .split('\n');
+
+    let header = null;
     const results = [];
-    const headers = {};
-    let inData = false;
 
-    for (const line of lines) {
-      if (!line.trim()) continue;
+    for (const rawLine of lines) {
+      const line = rawLine.replace(/\s+$/, '');
 
-      // Skip metadata rows
+      // Blank line: table separator in a multi-table Flux result.
+      if (line === '') {
+        continue;
+      }
+
+      // Annotation row: #group, #datatype, #default.
       if (line.startsWith('#')) {
-        if (line.startsWith('#datatype')) {
-          inData = true;
+        continue;
+      }
+
+      // Header and data rows are split identically and never filtered, so the
+      // leading empty annotation column of annotated CSV keeps every column
+      // aligned. Plain CSV (dialect.annotations = []) has no such column and
+      // aligns just as well. Filtering empty cells - as the previous
+      // implementation did on the header only - is what misaligned the data.
+      const cells = line.split(',');
+
+      // The first non-annotation row is the header.
+      if (header === null) {
+        header = cells;
+        continue;
+      }
+
+      // A repeated header row marks the start of another table.
+      if (cells.length === header.length &&
+          cells.every((cell, idx) => cell === header[idx])) {
+        continue;
+      }
+
+      if (cells.length !== header.length) {
+        logEvent('ERROR', {
+          phase: 'parse_response',
+          reason: 'column count mismatch',
+          expected: header.length,
+          received: cells.length
+        });
+        continue;
+      }
+
+      const record = {};
+      header.forEach((name, idx) => {
+        // The annotation column is unnamed; it carries no data.
+        if (name === '') {
+          return;
         }
-        continue;
-      }
+        // Preserve the raw cell verbatim, including '0' and ''. Coercing with
+        // '||' would turn a legitimate zero into null. Completeness is decided
+        // later by explicit checks, not by truthiness.
+        record[name] = cells[idx] === undefined ? null : cells[idx];
+      });
+      results.push(record);
+    }
 
-      // Parse header row
-      if (inData && line.startsWith(',')) {
-        const parts = line.substring(1).split(',').filter(p => p);
-        headers.names = parts;
-        headers.indices = {};
-        parts.forEach((name, idx) => {
-          headers.indices[name] = idx;
-        });
-        continue;
-      }
-
-      // Parse data rows
-      if (inData && headers.names && !line.startsWith(',')) {
-        const values = line.split(',').filter((_, idx) => idx < headers.names.length);
-        const record = {};
-        headers.names.forEach((name, idx) => {
-          record[name] = values[idx] || null;
-        });
-        results.push(record);
-      }
+    if (header === null) {
+      logEvent('ERROR', {
+        phase: 'parse_response',
+        reason: 'no header row found'
+      });
+      return [];
     }
 
     return results;
