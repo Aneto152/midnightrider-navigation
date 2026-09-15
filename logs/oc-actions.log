@@ -140,3 +140,5 @@
 [2026-09-15T08:25:31] [FILE_MODIFY] [influx-powerbi-export] Rewrote two tests that fed AISEventsMerger a record shape the export never produced (timestamp_utc, mmsi). They passed while the merger collapsed a whole chunk into one row. Now assert that two vessels at the same instant remain two events
 [2026-09-15T08:25:31] [RESULT] [influx-powerbi-export] Result: SUCCESS - 23 of 23 chunked export tests pass
 [2026-09-15T08:25:31] [COMMIT] SHA: ee8ad13da02d8473bb6d63eafb54484727928536
+[2026-09-15T15:49:22] [FILE_MODIFY] [mediaman-tests] Denis via direct SSH: added missing module imports (tempfile, MCPClient, MCPServerError) and the required server_name argument to 4 MCPClient constructor calls in tests/mcp/test_phase2_historical_contract.py; corrected the inaccurate API comment
+[2026-09-15T15:49:22] [RESULT] [mediaman-tests] Result: FAILURE - pytest executions: 1, retries: 0 - ======================== 2 failed, 21 passed in 19.96s =========================

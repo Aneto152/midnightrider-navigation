@@ -41,6 +41,9 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import os
+import tempfile
+
+from mediaman.mcp_client import MCPClient, MCPServerError
 
 
 class SyntheticInfluxDBHandler(BaseHTTPRequestHandler):
@@ -554,7 +557,8 @@ def test_incompatible_additional_properties_fails(racing_mcp_server):
 # ============================================================================
 # CORRECTED REAL MCPClient STARTUP CAPABILITY GATE TESTS
 # These tests import and instantiate the actual MCPClient class.
-# Uses proper API: MCPClient(server_path=<executable_path>) — no server_args
+# Uses the real API verified in mediaman/mcp_client.py:
+# MCPClient(server_path=<executable>, server_name=<identifier>)
 # ============================================================================
 
 def create_corrected_fake_mcp_subprocess(variant='valid'):
@@ -744,7 +748,7 @@ def test_mcpclient_real_valid_startup():
     """Test 1: Real MCPClient.start() with valid schema succeeds."""
     script_path = create_corrected_fake_mcp_subprocess('valid')
     try:
-        client = MCPClient(server_path=script_path)
+        client = MCPClient(server_path=script_path, server_name='racing-test')
         client.start()
         assert client.initialized is True
         client.terminate()
@@ -756,7 +760,7 @@ def test_mcpclient_real_missing_tool_fails():
     """Test 2: Real MCPClient.start() fails when get_historical_snapshot is missing."""
     script_path = create_corrected_fake_mcp_subprocess('missing_tool')
     try:
-        client = MCPClient(server_path=script_path)
+        client = MCPClient(server_path=script_path, server_name='racing-test')
         try:
             client.start()
             assert False, "Should have raised MCPServerError"
@@ -770,7 +774,7 @@ def test_mcpclient_real_missing_additional_properties_fails():
     """Test 3: Real MCPClient.start() fails when additionalProperties is missing."""
     script_path = create_corrected_fake_mcp_subprocess('missing_additional_props')
     try:
-        client = MCPClient(server_path=script_path)
+        client = MCPClient(server_path=script_path, server_name='racing-test')
         try:
             client.start()
             assert False, "Should have raised MCPServerError"
@@ -784,7 +788,7 @@ def test_mcpclient_real_additional_properties_true_fails():
     """Test 4: Real MCPClient.start() fails when additionalProperties=true."""
     script_path = create_corrected_fake_mcp_subprocess('additional_props_true')
     try:
-        client = MCPClient(server_path=script_path)
+        client = MCPClient(server_path=script_path, server_name='racing-test')
         try:
             client.start()
             assert False, "Should have raised MCPServerError"
