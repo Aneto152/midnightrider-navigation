@@ -1,94 +1,83 @@
 {
-  "task": "Lots A to D - pytest collection repair, lossless Excel reimport, unified fleet pool, API field transport, complete boat modal",
-  "date": "2026-09-14T21:45:00Z",
+  "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
+  "date": "2026-09-15T19:44:23Z",
   "status": "SUCCESS",
-  "commit": "eac167aa76d24d0ff12be8597a09edfd599470ba",
-  "parent": "a515c734e22315ea8930fc7e044cf3972b222bbc",
-  "previous_commits": [
-    "a515c734e22315ea8930fc7e044cf3972b222bbc  test: repair pytest collection + static guards",
-    "d0c091fda0a26211a5d8dbaaca4995c860156fb7  fix: real fleet size in race history"
-  ],
-  "deployment": "DEPLOYED_TO_PRODUCTION",
-  "deployed_by": "Denis, manual SSH session",
-  "validated_by_denis": "visual check of /ais/fleet_db and boat modals, 2026-09-14",
-  "requested_by_denis": [
-    "no data loss from the Excel database into the internal database",
-    "remove the current/historical distinction, one single ranking",
-    "All button selected on page load, not Starred"
-  ],
-  "steps": [
-    {
-      "step": "B1",
-      "action": "run regatta/import_race_database.py",
-      "result": "SUCCESS",
-      "detail": "379 boats, 1052 results, schema_version 3, historical_competitors removed"
-    },
-    {
-      "step": "B2",
-      "action": "expose palmares through CompetitorDB.enrich()",
-      "result": "SUCCESS",
-      "detail": "indissociable from B1: palmares reached the API only via the historical branch"
-    },
-    {
-      "step": "B3",
-      "action": "derive palmares aggregates from deduplicated results",
-      "result": "SUCCESS",
-      "detail": "test_16 was right, the importer was wrong; 2 records corrected"
-    },
-    {
-      "step": "C1",
-      "action": "align active button markup with JS initial state",
-      "result": "SUCCESS",
-      "detail": "filterAll and sortName now active at load"
-    },
-    {
-      "step": "B4",
-      "action": "docker restart regatta",
-      "result": "SUCCESS",
-      "detail": "Signal K untouched, systemctl not used for containers"
-    }
-  ],
-  "data_measurements": {
-    "boats": 379,
-    "results": 1052,
-    "json_bytes": 2297646,
-    "skipper": "114 -> 379",
-    "sail_number": "44 -> 376",
-    "yacht_club": "33 -> 351",
-    "home_port": "33 -> 372",
-    "mmsi": "68 -> 134",
-    "ratings_phrf_lis": "68 -> 278",
-    "phrf_history": "0 -> 344",
-    "overall_finishers": "488 wrong -> 1052 correct",
-    "times": "0 -> 516 corrected / 600 elapsed / 567 finish",
-    "source_keys_unmatched": 0,
-    "duplicate_targets": 0
+  "session_mode": "Denis working directly over SSH, scripts written by Dust, no OpenClaw delegation",
+  "documented_commit": "43faf7685431c322911dc449cf296745926b7f1c",
+  "documented_commit_parent": "50ee12d77c46415157378a2361363d4b2428f8ed",
+  "note_on_this_record": "written before its own commit existed, so it cannot contain its own SHA; that SHA is appended to logs/oc-actions.log by the same script",
+  "previous_record": {
+    "task": "Lots A to D - pytest collection repair, lossless Excel reimport, unified fleet pool, API field transport, complete boat modal",
+    "date": "2026-09-14T21:45:00Z",
+    "commit": "eac167aa76d24d0ff12be8597a09edfd599470ba"
   },
-  "test_summary": {
-    "measured_scope": "tests/ais + tests/regatta + tests/test_repo_static_guards.py",
-    "result": "292 passed, 0 failed",
-    "starting_point": "the day started on a reported 97/97 OK that had measured nothing, because pytest collection was interrupted by two committed SyntaxErrors",
-    "full_tree_collected": 1074,
-    "honest_note": "the full tree has still never completed a run; see known_gaps"
+  "deployment": "NOT_DEPLOYED_TO_PRODUCTION - dry-run only, no Telegram publication, no container or service restarted",
+  "commit_chain": [
+    "bb96a04dade965f219b330cf31d40fd74999728a  A  test: add missing imports and the mandatory server_name argument (2 failed, 21 passed)",
+    "c89e5eb002c2a072dab85a2aea5addd94f3ee0c9  B1 test: expect MCPProtocolError on a malformed envelope (23 passed)",
+    "3d944b379f9b6833ee5c3735e8692717cb08efea  C1 test: real contract assertions and an annotated Flux CSV fixture (expected failure, 2 failed, 21 passed)",
+    "b0ff05b436a2d3dada0d3996a9ae9277a1fa4660  C2 fix: rewrite parseFluxResponse for the annotated and production CSV dialects (23 passed)",
+    "b0f2162127c2e8498ae2b9062f46d1aee31820d9  --  logs-only auto-commit by midnight-logs-commit.timer",
+    "f79abaf5ba1553c0f063033c41ce9a79a634b729  F3 fix: correct the InfluxDB fact selectors and sanitize DATA_OUT (23 passed, first real snapshot)",
+    "50ee12d77c46415157378a2361363d4b2428f8ed  --  logs-only auto-commit by midnight-logs-commit.timer, carrying the G1 audit lines",
+    "43faf7685431c322911dc449cf296745926b7f1c  G2 fix: MCP content envelope and module-relative log path, full dry-run PASS (23 passed)"
+  ],
+  "defects_closed": [
+    "1  tests/mcp: missing tempfile import",
+    "2  tests/mcp: MCPClient and MCPServerError not imported",
+    "3  tests/mcp: mandatory server_name argument omitted",
+    "4  racing.js: zero-value truthiness discarded SOG=0, COG=0 and null island coordinates",
+    "5  racing.js: parseFluxResponse could not parse the annotated Flux CSV dialect",
+    "6  tests/mcp: two vacuous tests asserting True and an identifier",
+    "8  racing.js: wrong measurement and field selectors, no field filter, and results[0] picked an arbitrary record among tens of thousands of tag series",
+    "9  racing.js: DATA_OUT logged latitude and longitude",
+    "10 logging_utils.py: hardcoded /home/pi log directory, PermissionError on this machine",
+    "11 racing.js: tools/call returned a bare result object instead of the MCP 2024-11-05 content envelope"
+  ],
+  "defects_open": [
+    "7  tests/mcp/test_phase2_historical_contract.py claims 24 scenarios for 23 functions, and the core Phase 2 guarantees have no test at all"
+  ],
+  "measurements": {
+    "dry_run_exit_code": 0,
+    "facts_returned": 4,
+    "status": "COMPLETE",
+    "bounded_skew_ms": 1,
+    "source_timestamp": "2026-09-07T14:36:24.298Z",
+    "as_of_utc": "2026-09-07T14:36:26Z",
+    "window_seconds": 60,
+    "content_bytes": 370,
+    "publication_state": "SENT, provider_id prefixed dry-run:",
+    "contract_suite": "23 passed, 0 failed, 19.82 s",
+    "fact_values_recorded": "no, deliberately masked everywhere"
+  },
+  "flux_cost_measured": {
+    "filter_plus_last_over_120_days": "200, 18456 rows, 4.40 s",
+    "keep_group_sort_last_over_120_days": "timed out above 25 s",
+    "bounded_60_second_window": "slowest of the four queries 0.06 s",
+    "conclusion": "the current query shape is safe inside a bounded window; a pre-reduction hardening is optional and not urgent"
   },
   "known_gaps": [
-    "tests/influx_powerbi_export/test_docker_provider.py and test_classifier_self_context.py hang on real Docker/network calls; the full suite cannot complete. 3 tests in 6 minutes measured. Not introduced by this work, revealed by repairing collection.",
-    "tools/influx_powerbi_export/main.py does not expose discover_usb; its test is skipped at module level",
-    "regatta container starts with token_set=NO, so InfluxDB writes fail silently",
-    "tests/mediaman, tests/portal, tests/mcp never measured to completion",
-    "Plugin P5 signalk-n2k-bridge still has 0 PGN mappings; Vulcan 7 receives no heading/attitude from Signal K",
-    "SEC-2026-09-14-01: an active InfluxDB write token is exposed in git history since 2026-06-28; rotation deferred by Denis"
+    "mediaman/mcp_collector.py ignores fact_timestamps and bounded_skew_ms and never calls math.isfinite",
+    "the contract suite docstring is dishonest and the skew, timestamp, finiteness and timeout guarantees are untested",
+    "the other MCP servers under mcp/servers/ still return a bare result object and would break any specification-compliant client",
+    "InfluxDB holds no measurement after 2026-09-07T14:36:24Z, so no live run is possible without fresh data",
+    "the 18456 tag series returned by last() on navigation.position are still unexplained; the cardinality probe used an empty time window and proved nothing",
+    "etc/systemd/system/midnight-logsync.service is obsolete, runs as user pi and uses git add -f on gitignored service logs",
+    "SEC-2026-09-14-01: the exposed InfluxDB token is still not revoked",
+    "Plugin P5 signalk-n2k-bridge still has 0 PGN mappings",
+    "the regatta container still starts with token_set=NO"
   ],
-  "pending_arbitration_by_denis": [
-    "Deviation / Deviation YCC and Valiant / Valiant YCC are the same boats under two names, with contradictory fleet sizes in the source. Kept as 4 distinct records.",
-    "8 mmsi_conflict cases: existing value kept, source value recorded",
-    "17 mmsi_review cases: several source MMSIs, none written"
+  "process_incidents": [
+    "a security gate of my own design produced four consecutive false positives, the last one blocking a legitimate commit on the fractional second of an ISO timestamp already committed; the gate now scans only added lines, strips timestamps and durations, and prints the offending line",
+    "a transfer loop was detected when Windows saved a re-downloaded homonymous script under a new name and scp re-sent the old one; deliverables now carry distinct names and a version marker checked before execution",
+    "an earlier probe reported a skew of 3769470221 ms because it kept the last iterated row instead of the newest; the real measured skew is 1 ms and the correction was appended, never rewritten"
   ],
-  "next_lots": [
-    "C2 - expose ratings, phrf_history, vessel, times, yacht_club, home_port through the API",
-    "D  - enriched modal, and formatRank rendering RET/30 instead of a dash for retired boats"
+  "next_steps": [
+    "G  collector Phase 2C: consume fact_timestamps and bounded_skew_ms, apply math.isfinite",
+    "H  security: clean the exposed files, revoke the old InfluxDB tokens, neutralise midnight-logsync.service",
+    "I  honest docstring and the seven missing guarantee tests"
   ],
-  "secrets_logged": "none - no token, credential or .env content appears in any log",
+  "secrets_logged": "none - no token, credential or .env content appears in any log or document produced by this session",
   "security_incidents": [
     {
       "id": "SEC-2026-09-14-01",
@@ -104,9 +93,9 @@
       "value_length": 88,
       "exposed_since": "2026-06-28",
       "public_repository": true,
-      "token_status": "not rotated, presumed still active",
+      "token_status": "still NOT revoked and presumed active. A narrowly scoped replacement authorization was created on 2026-09-15, read and write on the midnight_rider bucket only, and wired into an untracked .env file with mode 600. Revocation of the exposed token remains to be done.",
       "blast_radius": "write access to InfluxDB buckets feeding the 13 Grafana dashboards",
-      "decision_by_denis": "2026-09-14 - defer remediation, continue with lot C2",
+      "decision_by_denis": "2026-09-14 defer remediation; 2026-09-15 create the replacement token first, revoke later in a dedicated step",
       "remediation_plan": [
         "generate a new InfluxDB token",
         "update ~/.signalk/plugin-config-data/signalk-to-influxdb2.json with python3, never sed",
@@ -117,21 +106,5 @@
       ],
       "history_rewrite": "deliberately excluded - force-push is prohibited on this repo and rotation is the only retroactively effective remedy"
     }
-  ],
-  "commit_chain": [
-    "a515c73  test: repair pytest collection (2 SyntaxError) + 5 static guards",
-    "422a30d  feat: lossless Excel reimport unifying 379 boats, schema_version 3",
-    "02e5827  logs: publish lot B execution record, 4 false assertions removed",
-    "7d3d666  logs: record security incident SEC-2026-09-14-01",
-    "25e3f8d  feat: transport 31 fields per boat to the browser, was 12",
-    "83431a5  fix: RET/34 instead of a dash for non-finishers",
-    "204cd94  feat: complete boat detail modal, 5 sections",
-    "eac167a  perf: row handlers carry the id, 2982 KB of duplicated JSON removed"
-  ],
-  "ui_verified_by_denis": [
-    "379 boats in one list, no historical badge or filter",
-    "All button active at load",
-    "RET/34 and RET/7 on Condor ALIR 2024",
-    "complete modal: yacht club, home port, vessel, rating history, AIS, provenance"
   ]
 }
