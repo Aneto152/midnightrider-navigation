@@ -129,3 +129,7 @@
 [2026-09-14T23:52:15] [FILE_MODIFY] [influx-powerbi-export] MR schema 23 to 22 columns: removed completeness_ratio and quality_flag (both structurally unable to report a missing instrument), added water_temp_c, removed dead self_context module and obsolete classifier tests
 [2026-09-14T23:52:15] [RESULT] [influx-powerbi-export] Result: SUCCESS - 8 files changed, sample_count preserved as merge weight
 [2026-09-14T23:52:15] [COMMIT] SHA: c95c8687963405c21a298b33f1055aeed8303723
+[2026-09-15T00:03:23] [FILE_CREATE] [influx-powerbi-export] Added record_router.py: shared routing so chunked and non-chunked paths cannot diverge; 13 new tests
+[2026-09-15T00:03:23] [FILE_MODIFY] [influx-powerbi-export] chunked_export.py now instantiates the field mapper, keeps navigation.position, sends unquoted Flux time literals, reconciles each chunk against an independent count query, and reports real routing counters instead of hardcoded zeros
+[2026-09-15T00:03:23] [RESULT] [influx-powerbi-export] Result: SUCCESS - schema_validated now verifies the merged header fail-closed
+[2026-09-15T00:03:23] [COMMIT] SHA: 04f1e9e3e9e29a2ecbae511481e6d7b1a8ed4ff1
