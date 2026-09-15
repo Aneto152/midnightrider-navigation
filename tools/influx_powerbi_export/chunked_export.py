@@ -18,6 +18,8 @@ from .checkpoint import ExportCheckpoint, ChunkCheckpoint, ChunkStatus
 from .docker_provider_chunked import DockerChunkedQueryProvider, TimeoutError as ProviderTimeoutError
 from .annotated_csv import AnnotatedCSVParser
 from .classifier import Classifier
+from .field_mapper import SignalKFieldMapper
+from .record_router import RecordRouter
 from .normalizer import Normalizer
 from .writers import CSVWriter, ManifestWriter, RawAISEventWriter
 from .schema import MIDNIGHT_RIDER_SCHEMA
@@ -282,12 +284,22 @@ class ChunkedExportEngine:
             "ais_rows": total_ais_rows,
             "midnight_rider_source_rows": total_mr_rows,
             "midnight_rider_windows_observed": total_mr_rows,
-            "unclassified_rows": 0,
+            # Real counters, summed over the chunks routed in this run.
+            # This field used to be the constant 0 while two validation
+            # scripts asserted it was 0.
+            "influx_source_rows": self._routing_total("source_rows"),
+            "mapped_points": self._routing_total("mapped_points"),
+            "unmapped_rows": self._routing_total("unmapped_rows"),
+            "unparsable_rows": self._routing_total("unparsable_rows"),
+            "unclassified_rows": self._routing_total("unclassified_rows"),
+            "routing_counters_chunks_covered": sorted(
+                getattr(self, "_routing_chunks", [])
+            ),
             "duplicates_removed": (
                 merge_result.get('ais_duplicates_removed', 0) +
                 merge_result.get('mr_duplicates_removed', 0)
             ),
-            "schema_validated": True,  # Only true if we got here
+            "schema_validated": self._verify_merged_header(),
             "code_commit_sha": code_sha
         }
 
@@ -314,6 +326,47 @@ class ChunkedExportEngine:
             "manifest": manifest
         }
 
+    def _routing_total(self, key: str) -> int:
+        """Sum one routing counter over the chunks routed in this run.
+
+        Chunks restored from an earlier checkpoint are not included, which is
+        why the manifest also records routing_counters_chunks_covered: a
+        partial count must be visible as partial rather than look complete.
+        """
+        return int(getattr(self, "_routing_totals", {}).get(key, 0))
+
+    def _verify_merged_header(self) -> bool:
+        """Check the merged CSV header against the schema. Fail closed.
+
+        Replaces a hardcoded True whose comment read "Only true if we got
+        here", so it certified nothing at all.
+        """
+        from .schema import get_midnight_rider_headers
+
+        expected = get_midnight_rider_headers()
+        candidates = [
+            self.output_dir / "MIDNIGHT_RIDER_10S_AGGREGATES.csv",
+            self.output_dir / "output" / "MIDNIGHT_RIDER_10S_AGGREGATES.csv",
+        ]
+        path = next((p for p in candidates if p.is_file()), None)
+        if path is None:
+            raise ValueError(
+                "schema validation: the merged Midnight Rider CSV was not "
+                f"found in {self.output_dir}"
+            )
+        with open(path, newline="", encoding="utf-8") as handle:
+            header_line = handle.readline().strip()
+        actual = header_line.split(",") if header_line else []
+        if actual != expected:
+            missing = [c for c in expected if c not in actual]
+            unexpected = [c for c in actual if c not in expected]
+            raise ValueError(
+                "schema validation FAILED: the merged header does not match "
+                f"the {len(expected)}-column contract. "
+                f"missing={missing} unexpected={unexpected}"
+            )
+        return True
+
     def _process_chunk(self, chunk: Chunk, checkpoint: ExportCheckpoint) -> Dict:
         """
         Process a single chunk with separated timeout scopes.
@@ -339,7 +392,7 @@ class ChunkedExportEngine:
         )
 
         classifier = Classifier()
-        field_mapper = None  # Import as needed
+        field_mapper = SignalKFieldMapper()
 
         # Temporary output files for this chunk
         chunk_dir = self.output_dir / f"chunk_{chunk.index:03d}"
@@ -356,45 +409,86 @@ class ChunkedExportEngine:
             logger.info(f"Querying chunk {chunk.index}: {chunk.start} to {chunk.stop}")
 
             # Build flux query with time range
-            flux_start = f'"{chunk.start}"'
-            flux_stop = f'"{chunk.stop}"'
+            # query_range_chunk documents that range() needs bare
+            # RFC3339 literals: quoting them makes Flux reject the
+            # argument as a string instead of a time.
+            flux_start = chunk.start
+            flux_stop = chunk.stop
 
             parser = AnnotatedCSVParser()
             data_gen = provider.query_range_chunk(flux_start, flux_stop, chunk.index)
 
-            # Process records
-            total_rows = 0
-            ais_rows = 0
-            mr_rows = 0
+            # Routing is shared with the non-chunked path. The inline copy
+            # that used to live here passed the raw Signal K measurement name
+            # as a CSV field name, so every instrument column came out empty.
+            router = RecordRouter(
+                classifier=classifier,
+                field_mapper=field_mapper,
+                ais_writer=ais_writer,
+                normalizer=midnight_rider_normalizer,
+            )
 
             for record in parser.parse_stream(data_gen):
-                if not isinstance(record, dict):
-                    continue
+                router.route(record)
 
-                total_rows += 1
-                classification = classifier.classify(record)
-
-                if classification == "ais":
-                    ais_writer.write_row(record)
-                    ais_rows += 1
-                elif classification == "midnight_rider":
-                    timestamp = record.get("_time")
-                    measurement = record.get("_measurement")
-                    value_str = record.get("_value")
-
-                    if timestamp and value_str:
-                        try:
-                            value = float(value_str)
-                            midnight_rider_normalizer.add_point(
-                                timestamp_utc=timestamp,
-                                field_name=measurement,
-                                value=value
-                            )
-                            mr_rows += 1
-                        except (ValueError, TypeError):
-                            pass
+            total_rows = router.source_rows
+            ais_rows = router.ais_rows
+            mr_rows = router.midnight_rider_rows
+            routing_counters = router.counters()
+            logger.info(f"Chunk {chunk.index} routing: {routing_counters}")
 
             ais_writer.close()
+
+            # Independent reconciliation. Ask InfluxDB how many rows this
+            # range holds and refuse anything short of it: a truncated stream
+            # is exactly how a silently empty export was produced before.
+            count_flux = (
+                f'from(bucket: "{provider.bucket}")\n'
+                f'  |> range(start: {flux_start}, stop: {flux_stop})\n'
+                '  |> count()\n'
+                '  |> group()\n'
+                '  |> sum()\n'
+            )
+            expected_rows = None
+            for count_record in AnnotatedCSVParser().parse_stream(
+                provider.query_flux_chunk(
+                    count_flux, chunk.index, chunk.start, chunk.stop
+                )
+            ):
+                if not isinstance(count_record, dict):
+                    continue
+                raw_count = count_record.get("_value")
+                if raw_count not in (None, ""):
+                    expected_rows = int(float(raw_count))
+
+            if expected_rows is None:
+                raise ValueError(
+                    f"Chunk {chunk.index}: the reconciliation query returned "
+                    "no row count; the chunk is rejected"
+                )
+            if expected_rows != router.source_rows:
+                raise ValueError(
+                    f"Chunk {chunk.index}: RECONCILIATION FAILURE - InfluxDB "
+                    f"reports {expected_rows} rows for this range but "
+                    f"{router.source_rows} were streamed. The stream was "
+                    "truncated; the chunk is rejected."
+                )
+            logger.info(
+                f"Chunk {chunk.index} reconciled: {expected_rows} rows read, "
+                f"{router.mapped_points} values mapped, "
+                f"{router.unmapped_rows} unmapped, "
+                f"{router.unparsable_rows} unparsable"
+            )
+
+            if not hasattr(self, "_routing_totals"):
+                self._routing_totals = {}
+            if not hasattr(self, "_routing_chunks"):
+                self._routing_chunks = []
+            for counter_name, counter_value in routing_counters.items():
+                self._routing_totals[counter_name] = (
+                    self._routing_totals.get(counter_name, 0) + counter_value
+                )
+            self._routing_chunks.append(chunk.index)
 
             # Aggregate windows
             aggregated_windows = midnight_rider_normalizer.aggregate_windows()
