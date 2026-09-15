@@ -94,3 +94,21 @@ authorizations listed: 8
 Revocation order remains create -> wire -> verify -> revoke. This audit
 exists to establish, before any revocation, which consumer would lose
 access, and whether Signal K ingestion is alive at all.
+
+## Rotation 1 — Signal K plugin — 20260915T202511Z
+
+The signalk-to-influxdb2 plugin no longer uses the exposed token.
+
+- new authorization id: `1155af07b7b3c000`
+- new token fingerprint: `5c13b0b9efee7017` (value never printed, never committed)
+- scope: read+write on bucket `midnight_rider` (`bfe67dc473be4e24`) only, instead of the previous
+  organisation-wide scope
+- proven before rewiring: one point written to measurement
+  `selftest.token_rotation` (HTTP 204) and read back (HTTP 200)
+- Signal K restarted with systemctl, is-active=active
+- exposed authorization `10a814629358f000`: **still active**, revocation is
+  step H3, after the Grafana datasource is handled
+
+Honest limit: no instrument is connected and the data flow stopped on
+2026-09-07, so the end-to-end write path cannot be observed today.
+
