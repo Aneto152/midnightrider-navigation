@@ -137,3 +137,6 @@
 [2026-09-15T08:19:48] [FILE_MODIFY] [influx-powerbi-export] Final MR header now comes from schema.py: the duplicate hardcoded list held the same 22 names in a different order
 [2026-09-15T08:19:48] [RESULT] [influx-powerbi-export] Result: SUCCESS - single real chunk already reconciled 277164 rows with all 16 instrument columns populated
 [2026-09-15T08:19:48] [COMMIT] SHA: 414be5af8e3ecdf1fa8922ebfa8607d71710b381
+[2026-09-15T08:25:31] [FILE_MODIFY] [influx-powerbi-export] Rewrote two tests that fed AISEventsMerger a record shape the export never produced (timestamp_utc, mmsi). They passed while the merger collapsed a whole chunk into one row. Now assert that two vessels at the same instant remain two events
+[2026-09-15T08:25:31] [RESULT] [influx-powerbi-export] Result: SUCCESS - 23 of 23 chunked export tests pass
+[2026-09-15T08:25:31] [COMMIT] SHA: ee8ad13da02d8473bb6d63eafb54484727928536
