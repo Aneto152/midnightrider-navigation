@@ -148,3 +148,16 @@
 [2026-09-15T16:05:04] [RESULT] [mediaman-tests] Result: EXPECTED_FAILURE - pytest executions: 1, retries: 0 - ======================== 2 failed, 21 passed in 19.89s =========================
 [2026-09-15T16:10:33] [FILE_MODIFY] [racing-mcp] Denis via direct SSH: rewrote parseFluxResponse in mcp/servers/racing.js. Annotated Flux CSV data rows start with the empty annotation column and were being swallowed by the header branch, so results was always empty and every snapshot failed with 'Collection incomplete'. Header and data rows are now split identically without filtering, CRLF is normalised, and cells are preserved verbatim instead of coerced with the || operator. Test suite deliberately left unchanged from commit 3d944b3
 [2026-09-15T16:10:33] [RESULT] [racing-mcp] Result: SUCCESS - pytest executions: 1, retries: 0 - ============================= 23 passed in 20.35s ==============================
+[2026-09-15T16:38:04] [CONFIG_CHANGE] [influxdb] Commit E: created scoped authorization 115577aebd73c000 (read+write, bucket midnight_rider only, no all-access) and wrote INFLUX_URL/INFLUX_ORG/INFLUX_BUCKET/INFLUX_TOKEN into the untracked .env (mode 600). Token value [REDACTED - credential reference: INFLUX_TOKEN]. No previous token revoked. No container recreated.
+[2026-09-15T16:38:04] [RESULT] [influxdb] Result: SUCCESS - 4 keys appended to .env, .env still untracked and gitignored, backup kept outside the repo.
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ 9 read-only schema audit against live InfluxDB, every _value masked, no coordinate logged:
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ9 racing.js underscore names over -90d: navigation_position_latitude=0 rows, navigation_position_longitude=0 rows, navigation_speedOverGround=0 rows, navigation_courseOverGround=0 rows
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ9 field keys navigation.position = ['lat', 'lon']
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ9 field keys navigation.speedOverGround = ['value']
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ9 field keys navigation.courseOverGroundTrue = ['value']
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ9 field keys navigation.headingTrue = ['value']
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ9 production CSV dialect: crlf=True annotations=0 header_cells=12 leading_empty_col=True parsed_rows=36912 misaligned=469
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ9 observed skew across 5 present facts = 3769470221 ms (limit 1000, EXCEEDS)
+[2026-09-15T16:38:04] [DEBUG] [racing.js] READ9 newest fact timestamp UTC = 2026-09-06T12:30:43.393000+00:00
+[2026-09-15T16:38:04] [DEBUG] [racing.js] DEFECT-8 PROVEN on production data: getHistoricalSnapshot queries underscore measurement names that do not exist in the bucket; live measurements use dot notation. No historical snapshot can succeed until the four measurement/field selectors are corrected.
+[2026-09-15T16:38:04] [RESULT] [tests] pytest ALL PASSED - scope: tests/mcp/test_phase2_historical_contract.py only, pytest executions: 1, retries: 0. This is a DEBUG checkpoint, not production validation.
