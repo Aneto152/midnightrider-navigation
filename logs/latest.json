@@ -1,6 +1,6 @@
 {
   "task": "Phase H security - incident SEC-2026-09-14-01, an InfluxDB token published in a public repository: audit, rotation of the consumers, deactivation, repository cleanup and anti-leak barrier",
-  "date": "2026-09-16T12:04:35Z",
+  "date": "2026-09-16T19:23:09Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -19,7 +19,8 @@
     "548ee128e63d  H2b recreate the grafana container so the provisioned datasource gets a real token (health ERROR -> OK)",
     "860120398157  H3a deactivate the exposed authorization and the orphan token, nothing deleted, reversible",
     "this commit    H3b untrack the two files carrying the value, install the anti-leak barrier, correct the written record",
-    "this commit    H3e redact the second published token (SEC-2026-09-15-02) and record it"
+    "this commit    H3e redact the second published token (SEC-2026-09-15-02) and record it",
+    "this commit    H3f redact the credentials sheet, normalise IPs, harden the barrier"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -37,7 +38,9 @@
     "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent"
   ],
   "next_steps": [
-    "revoke the InfluxDB Cloud token of SEC-2026-09-15-02 in the Cloud console - redacting the file did not revoke it",
+    "change the Grafana admin password and close anonymous access",
+    "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
+    "H3d: delete the two deactivated authorizations and the 3 unused Grafana-* tokens",
     "H3d, after a day of observation: permanently delete the two deactivated authorizations and the three unused Grafana-* org-wide tokens",
     "harden Grafana: admin password, anonymous access",
     "give Grafana a read-only token instead of the shared read+write one"
@@ -54,5 +57,14 @@
     "occurrences_redacted": 1,
     "is_a_boat_credential": "no - matches none of the 10 local authorizations and is refused by the local InfluxDB",
     "status": "REDACTED in the repository, NOT REVOKED - revocation in the InfluxDB Cloud console is owed and can only be done by Denis"
+  },
+  "third_incident": {
+    "id": "SEC-2026-09-16-03",
+    "what": "docs/guides/RESTORE.md was a published credentials sheet: Grafana admin password and boat WiFi passphrase, in a public repository",
+    "grafana_password": "redacted in the repository, ENCORE VALIDE, NOT CHANGED",
+    "wifi_passphrase": "redacted in the repository, NOT CHANGED - accepted risk, explicit decision by Denis: exploitation needs continuous physical proximity, which underway would be noticed",
+    "anonymous_grafana": "GF_AUTH_ANONYMOUS_ENABLED=true still lets anyone on the boat network read every dashboard with no password",
+    "hardcoded_ips_replaced": 5,
+    "status": "REDACTED, nothing changed - redacting is not changing"
   }
 }

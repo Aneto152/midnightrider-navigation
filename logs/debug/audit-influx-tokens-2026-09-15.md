@@ -356,3 +356,65 @@ identifiant. Chercher une valeur connue ne trouve jamais une fuite
 inconnue ; chercher une *forme* y arrive. C'est ce que fait la barrière,
 et elle se justifie en trouvant, le jour de son installation, une fuite
 que l'enquête manuelle avait manquée.
+
+
+## Fiche d'identifiants publiée — incident SEC-2026-09-16-03 — 20260916T192301Z
+
+En relisant `docs/guides/RESTORE.md` après H3e, il est apparu que ce
+document n'était pas un fichier contenant un token : c'était une **fiche
+d'identifiants**, publiée dans un dépôt public.
+
+| Identifiant | empreinte | occurrences masquées |
+|---|---|---|
+| mot de passe Grafana (admin) | `5579a330b7eb24ff` | 9 |
+| passphrase WiFi du bateau | `e465abafdd29e340` | 3 |
+
+Les adresses IP codées en dur du document (5 occurrence(s)) ont été
+remplacées par `midnightrider.local`, conformément à la règle du bord.
+
+### Le mot de passe Grafana
+
+Testé en lecture seule contre le Grafana local avant masquage : **ENCORE VALIDE**.
+Et il n'est que la seconde porte : `GF_AUTH_ANONYMOUS_ENABLED=true` dans
+`docker-compose.yml` laisse lire tous les tableaux de bord **sans aucun
+mot de passe** à qui est sur le réseau du bateau.
+
+### La passphrase WiFi — risque accepté, décision de Denis
+
+Denis a décidé de ne pas changer la clé WiFi, avec ce raisonnement :
+l'exploitation suppose une proximité physique continue avec le bateau,
+ce qui, en navigation, se remarquerait.
+
+Ce raisonnement est solide **en navigation**. Il l'est moins au ponton :
+dans un port, la borne est à portée depuis les bateaux voisins, le quai et
+souvent le parking, pendant des semaines, sans que personne ne remarque
+rien. Et la clé publiée est la même chaîne que le nom du compte GitHub
+public, donc devinable sans même lire ce fichier.
+
+La décision est consignée ici comme **risque accepté** et non comme oubli.
+C'est la différence qui compte : un risque accepté est un choix documenté,
+révisable, qui n'attend pas d'être redécouvert.
+
+### Défauts de ma part, corrigés ici
+
+**Défaut 23 — la note de H3e n'a jamais été écrite.** Le test
+d'idempotence cherchait la chaîne `SEC-2026-09-15-02` dans le document,
+or le texte de masquage inséré juste avant contient déjà cette chaîne : le
+script s'est cru déjà passé. Corrigé par un marqueur dédié
+(`H3F-CREDENTIAL-NOTE`) qui n'apparaît nulle part ailleurs.
+
+**Défaut 24 — ma répétition avait validé ce bug.** Le contrôle cherchait
+exactement le même marqueur que le script : une assertion qui teste la
+mauvaise chose donne un feu vert qui ne vaut rien. Les contrôles vérifient
+désormais le texte de la note, pas son marqueur.
+
+**Défaut 25 — mes greps d'adresses IP ne cherchaient que `192.168.1.x`.**
+L'adresse du point d'accès est `192.168.4.1` : elle a traversé toute la
+phase H sans être vue une seule fois.
+
+**Défaut 26 — la barrière de H3b ne voyait pas ces mots de passe.** Liste
+de mots-clés anglaise, et seuil de 20 caractères sur les valeurs. Deux mots
+de passe publiés, l'un de 13 caractères étiqueté « login », l'autre de 8
+étiqueté « MDP », sont passés dessous. Corrigé : règle
+`LABELLED_CREDENTIAL`, étiquettes françaises, seuil abaissé, et un
+discriminant réglé contre les 408 fichiers réels du dépôt.
