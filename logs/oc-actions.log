@@ -251,3 +251,5 @@
 [2026-09-16T23:14:09Z] [CONFIG_CHANGE] [security] H4C-PROBE: wifi-ap.txt ajoute a .gitignore
 [2026-09-16T23:14:09Z] [RESULT] [grafana] Result: SUCCESS - aucune modification de Grafana, du portail ni d aucun conteneur
 [2026-09-16T23:14:10Z] [COMMIT] SHA: 6f91220de4aaa9e4b93d3c340a0043f9061bd46e
+[2026-09-16T23:50:27Z] [FILE_MODIFY] [security] H4D-A: commit_chain reconstruite depuis l API, defaut 35 consigne, defauts 36/37/38 ouverts
+[2026-09-16T23:50:27Z] [FILE_MODIFY] [security] H4D-A: scanner --audit repare (git ls-files), verdict defaut 33 = CORRIGE

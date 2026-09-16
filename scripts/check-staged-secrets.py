@@ -12,6 +12,7 @@ Usage
 -----
     python3 scripts/check-staged-secrets.py              # scan the git index
     python3 scripts/check-staged-secrets.py --files a b  # scan given files
+    python3 scripts/check-staged-secrets.py --audit     # scan the whole tracked tree
     python3 scripts/check-staged-secrets.py --self-test  # prove it still works
 
 Exit code 0 = clean, 1 = a credential was found (or the self-test failed).
@@ -213,6 +214,12 @@ def scan_files(paths):
     return findings, scanned
 
 
+def tracked_files():
+    """Every file git tracks: what a repository-wide audit must actually read."""
+    out = subprocess.run(['git', 'ls-files'], capture_output=True, text=True)
+    return [p for p in out.stdout.split('\n') if p.strip()]
+
+
 def staged_files():
     out = subprocess.run(
         ['git', 'diff', '--cached', '--name-only', '--diff-filter=ACM'],
@@ -286,6 +293,11 @@ def main(argv):
     audit = '--audit' in argv
     if '--files' in argv:
         paths = argv[argv.index('--files') + 1:]
+    elif audit:
+        # DEFAUT 33 : --audit sans --files n examinait que l index, donc un
+        # audit du depot entier ne regardait rien. Un audit porte desormais
+        # sur tous les fichiers suivis par git.
+        paths = tracked_files()
     else:
         paths = staged_files()
     if audit:

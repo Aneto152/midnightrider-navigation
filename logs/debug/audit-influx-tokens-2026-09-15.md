@@ -536,3 +536,31 @@ faux, jamais par reecriture d historique :
 
 Lecon : un registre qui se contredit cesse d etre un registre. C est celui-ci
 qui a servi de base a une decision prise sur une information fausse.
+
+<!-- H4D-PART-A -->
+
+## H4d partie A - reparer le registre que j avais casse, et le scanner
+
+Defaut 35, le mien. En H4c j ai resolu les marqueurs "this commit" de
+commit_chain avec la commande 'git log --grep=TAG -1'. Cette commande renvoie le commit le
+plus RECENT qui cite l etiquette, or les commits tardifs citent les phases
+anterieures. Resultat : 9d9ba4f inscrit comme H3b alors qu il est H3e, et
+e3a9892 inscrit comme H3f alors qu il est H4b. J ai remplace deux marqueurs
+honnetes par deux SHA faux, ce qui est pire que le trou d origine.
+
+La chaine est reconstruite a partir de api.github.com, commit par commit. Une
+heuristique locale commode n est pas une autorite ; l API en est une.
+
+Defaut 33, mesure puis corrige : l option --audit employee sans --files
+n examinait que l index. Le mode audit lit desormais la liste complete des
+fichiers suivis par git. Verdict apres correctif :
+CORRIGE.
+
+Trois constats supplementaires ouverts, issus de la sonde H4c :
+- 36 : deux cartes de la page d accueil du portail pointent sur des tableaux
+  de bord inexistants (404 meme authentifie).
+- 37 : les UID du depot divergent de ceux de l instance. Depuis que H4b a
+  rendu un identifiant valide a deploy-dashboards-to-grafana.sh, lancer ce
+  script creerait vraisemblablement des doublons. Ne pas le lancer.
+- 38 : renvoi documentaire mort vers CLOUDFLARE-TUNNEL-URL.md. Etat du service
+  cloudflared mesure sur le Pi : ABSENT.

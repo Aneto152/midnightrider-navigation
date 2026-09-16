@@ -1,7 +1,7 @@
 {
-  "task": "Phase H securite - H4c, sonde de dependance a l acces anonyme et correction du registre",
+  "task": "Phase H securite - H4d, registre et scanner (A) puis fermeture de l acces anonyme Grafana (B)",
   "date": "2026-09-16T23:14:06Z",
-  "status": "SUCCESS",
+  "status": "IN_PROGRESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
     "id": "SEC-2026-09-14-01",
@@ -14,14 +14,19 @@
   "note_on_this_record": "written before its own commit existed, so it cannot contain its own SHA; that SHA is appended to logs/oc-actions.log by the same script",
   "deployment": "no service restarted, no container restarted, no data written to the production bucket by this phase",
   "commit_chain": [
-    "265bb857e1e2  H1b read-only audit of the InfluxDB authorizations and their consumers",
-    "fb73946746ff  H2a rotate the signalk-to-influxdb2 token away from the exposed one",
-    "548ee128e63d  H2b recreate the grafana container so the provisioned datasource gets a real token (health ERROR -> OK)",
-    "860120398157  H3a deactivate the exposed authorization and the orphan token, nothing deleted, reversible",
-    "9d9ba4f502e0    H3b untrack the two files carrying the value, install the anti-leak barrier, correct the written record",
-    "this commit    H3e redact the second published token (SEC-2026-09-15-02) and record it",
-    "e3a98921b3e5    H3f redact the credentials sheet, normalise IPs, harden the barrier",
-    "36956d45c16c  H4b reprendre la main sur le compte administrateur Grafana"
+    "265bb857e1e2  H1b audit en lecture seule des autorisations InfluxDB et de leurs consommateurs",
+    "fb73946746ff  H2a rotation du token signalk-to-influxdb2 hors de la valeur exposee",
+    "548ee128e63d  H2b recreation du conteneur grafana pour que la datasource recoive un vrai token",
+    "860120398157  H3a desactivation de l autorisation exposee et du token orphelin, reversible",
+    "bc39bb0e24b7  H3b detrackage des deux fichiers porteurs + pose de la barriere anti-fuite",
+    "9d9ba4f502e0  H3e caviardage du second token publie (SEC-2026-09-15-02)",
+    "1d0d58a55086  H3f caviardage ciblee du tableau des credentials - INCOMPLET, fuite laissee ligne 93",
+    "a2f59a3f68b7  H3g contenu - passphrase WiFi retiree de la commande nmcli, barriere v3",
+    "10ba9ece3f1a  H3g journal",
+    "e3a98921b3e5  H4b contenu - reprise en main du compte administrateur Grafana",
+    "36956d45c16c  H4b journal",
+    "6f91220de4aa  H4c contenu - sonde de dependance a l acces anonyme, correction du registre",
+    "69f38303df48  H4c journal"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -36,7 +41,9 @@
     "31 H3f a fait perdre le bit d execution de scripts/check-staged-secrets.py - corrige",
     "32 H3f n a pas inscrit son propre SHA dans logs/oc-actions.log - corrige par ajout",
     "34 l affirmation 'le mot de passe publie ouvre encore Grafana' etait fausse : le test utilisait un point d acces lisible par l anonyme - corrige par ajout en H4b",
-    "20b le compte administrateur Grafana n etait detenu par personne : valeur publiee perimee, aucune cle dans .env - repris en main en H4b, valeur connue desormais dans .env hors git"
+    "20b le compte administrateur Grafana n etait detenu par personne : valeur publiee perimee, aucune cle dans .env - repris en main en H4b, valeur connue desormais dans .env hors git",
+    "35 H4c a resolu les placeholders de commit_chain avec 'git log --grep=TAG -1', qui renvoie le commit le PLUS RECENT citant l etiquette : 9d9ba4f a ete ecrit comme H3b alors qu il est H3e, et e3a9892 comme H3f alors qu il est H4b. Deux marqueurs honnetes remplaces par deux SHA faux. Corrige en H4d a partir de l API GitHub, autorite unique.",
+    "33 scripts/check-staged-secrets.py --audit sans --files n examinait que l index et non le depot : mesure en H4c le 20260916T231406Z -> CORRIGE en H4d : --audit sans --files lit desormais git ls-files"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -44,7 +51,9 @@
     "20 l acces anonyme en lecture de Grafana reste actif : tous les tableaux de bord sont lisibles sans aucun identifiant sur le reseau du bateau ; la moitie 'mot de passe' de ce defaut est fermee par H4b",
     "21 influx auth list prints every token value in clear to anyone who can docker exec",
     "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent",
-    "33 scripts/check-staged-secrets.py --audit sans --files n examinait que l index et non le depot : mesure en H4c le 20260916T231406Z -> OUVERT"
+    "36 deux liens de portal/index.html pointent sur des tableaux de bord qui n existent pas dans l instance Grafana : 01-navigation-dashboard et data-model-status renvoient 404 meme authentifie. Deux des sept cartes de la page d accueil sont mortes. Mesure en H4c.",
+    "37 les UID des JSON de grafana-dashboards/ ne correspondent pas a ceux de l instance vivante (03-performance.json declare uid=performance-analysis, l instance repond sur 03-performance ; 11 fichiers sur 13 ont nom != uid). Depuis H4b, deploy-dashboards-to-grafana.sh dispose enfin d un identifiant valide : l executer creerait vraisemblablement une seconde serie de tableaux. NE PAS LANCER.",
+    "38 docs/ARCHITECTURE-MASTER.md annonce un acces distant par Cloudflare Tunnel et renvoie a CLOUDFLARE-TUNNEL-URL.md, fichier absent du depot. Etat mesure du service en H4d : ABSENT."
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -109,5 +118,12 @@
     "dashboards_lisibles_sans_identifiant": 5,
     "defaut_33": "OUVERT",
     "writes": "trois journaux et .gitignore uniquement"
+  },
+  "h4d": {
+    "run_utc": "20260916T235020Z",
+    "partie_A": "registre + scanner",
+    "defaut_33": "CORRIGE",
+    "tunnel_cloudflare": "ABSENT",
+    "tableau_temoin": "03-performance"
   }
 }
