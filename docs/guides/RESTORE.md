@@ -89,8 +89,8 @@ sudo systemctl enable regatta --now
 ```bash
 sudo nmcli con add type wifi ifname wlan0 con-name "MidnightRider-AP" \
   ssid "MidnightRider" mode ap \
-  ipv4.method shared ipv4.addresses midnightrider.local/24 \
-  wifi-sec.key-mgmt wpa-psk wifi-sec.psk "Aneto152" \
+  ipv4.method shared ipv4.addresses 192.168.4.1/24 \
+  wifi-sec.key-mgmt wpa-psk wifi-sec.psk "$WIFI_AP_PASSPHRASE" \
   wifi.band bg wifi.channel 6
 sudo nmcli con modify "MidnightRider-AP" connection.autoconnect yes
 sudo nmcli con up "MidnightRider-AP"
@@ -102,6 +102,17 @@ sudo apt install -y iptables-persistent
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 sudo netfilter-persistent save
 ```
+
+<!-- H3G-AP-NOTE -->
+> **Passphrase WiFi.** La commande ci-dessus lit la passphrase dans la
+> variable `WIFI_AP_PASSPHRASE`, jamais dans ce document. Avant de la
+> lancer : `read -rs WIFI_AP_PASSPHRASE` puis `export WIFI_AP_PASSPHRASE`.
+> La valeur de reference est dans le fichier d environnement local securise.
+>
+> **Adresse `192.168.4.1/24`.** C est l adresse statique que le point d acces
+> s attribue lui-meme ; `nmcli` refuse un nom d hote ici. Elle est donc
+> conservee volontairement, contrairement aux URL d acces du document qui
+> utilisent `midnightrider.local`.
 
 ---
 

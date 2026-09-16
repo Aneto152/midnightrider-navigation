@@ -1,6 +1,6 @@
 {
-  "task": "Phase H security — H3f-v2 targeted credential redaction repair",
-  "date": "2026-09-16T20:00:25Z",
+  "task": "Phase H securite - H3g, fermeture de la fuite laissee ouverte par H3f",
+  "date": "2026-09-16T20:19:56Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -28,7 +28,12 @@
     "15 the H2b v2 RESULT line over-claimed that Grafana never held the exposed token - corrected by addition in H3a",
     "16 the H3a report printed a hardcoded HTTP 401 instead of the observed HTTP 404 - corrected by addition in H3b",
     "17 the 401/403 log grep matched digits inside nanosecond timestamps - corrected by addition in H3b",
-    "18 the claim that the two files were not covered by .gitignore was false - corrected by addition in H3b"
+    "18 the claim that the two files were not covered by .gitignore was false - corrected by addition in H3b",
+    "28 la barriere v2 ignorait un identifiant passe en argument de ligne de commande - corrige en v3",
+    "29 la verification de H3f ne regardait que les lignes que le script venait d ecrire - corrige par un recensement du depot entier",
+    "30 H3f a remplace l adresse statique de la passerelle AP par un nom d hote, rendant la commande nmcli invalide - corrige",
+    "31 H3f a fait perdre le bit d execution de scripts/check-staged-secrets.py - corrige",
+    "32 H3f n a pas inscrit son propre SHA dans logs/oc-actions.log - corrige par ajout"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -61,14 +66,22 @@
   "third_incident": {
     "id": "SEC-2026-09-16-03",
     "what": "Grafana administrator credential and boat WiFi passphrase were published in docs/guides/RESTORE.md",
-    "status": "REDACTED in current repository; Grafana rotation and anonymous-access closure remain separate actions; WiFi unchanged by accepted-risk decision",
+    "status": "REDACTED dans l arbre courant : tableau des credentials (H3f) ET commande nmcli (H3g). NON CHANGE : la passphrase WiFi reste valide, risque accepte par Denis. Le mot de passe Grafana reste valide et l acces anonyme reste ouvert.",
     "repository_action": "Targeted field redaction, canonical host-name replacement, and v2 staged-secret barrier",
-    "note_on_values": "No credential value or credential fingerprint is stored in this record"
+    "note_on_values": "No credential value or credential fingerprint is stored in this record",
+    "note_on_the_wifi_value": "la valeur publiee est egale au nom de compte GitHub, donc presente dans les URL de clonage du depot : la masquer ne la rend pas secrete"
   },
   "h3f_v2_attempt": {
     "run_utc": "20260916T200024Z",
     "previous_attempt": "H3f-v1 stopped before commit because its final guard classified a diagnostic fingerprint as a literal secret",
     "correction": "Rebuilt RESTORE.md from clean HEAD and redacted only credential fields; public SSID/title text preserved",
     "service_impact": "none"
+  },
+  "h3g": {
+    "run_utc": "20260916T201947Z",
+    "h3f_commit": "1d0d58a550868a329e83a7ac721c23373c8dbdae",
+    "what_h3f_missed": "la passphrase WiFi restait en clair dans l argument wifi-sec.psk de l etape 6",
+    "why": "verification limitee aux deux lignes du tableau, et barriere v2 exigeant : = ou | apres l etiquette",
+    "service_impact": "aucun"
   }
 }

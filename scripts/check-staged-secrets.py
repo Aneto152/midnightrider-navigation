@@ -42,6 +42,18 @@ LONG = re.compile(r'[A-Za-z0-9_\-]{60,}={0,2}')
 
 PEM = re.compile(r'-----BEGIN (?:[A-Z ]+ )?PRIVATE KEY-----')
 
+# Un identifiant passe en ARGUMENT de ligne de commande. La version 2
+# exigeait ':' '=' ou '|' apres l'etiquette et laissait donc passer
+#   wifi-sec.psk "..."
+# qui est exactement la forme sous laquelle la passphrase WiFi est restee
+# publiee apres H3f (defaut 28). Seules les valeurs entre guillemets sont
+# examinees, et le discriminant habituel s'applique ensuite.
+CLI_CREDENTIAL = re.compile(
+    r'(?i)(wifi-sec\.psk|wifi\.psk|wireless-security\.psk|--password|'
+    r'--passwd|--api-key|--apikey|--token|--secret|--psk)'
+    r'\s+(["\'])([^"\']{4,80})\2')
+
+
 # A short human credential behind a label, in any of the shapes this
 # repository actually uses: a markdown table row, a "key: value" line, a
 # French label. This is what v1 was missing.
@@ -145,6 +157,10 @@ def scan_text(path, body):
         if PEM.search(line):
             findings.append((path, lineno, 'PRIVATE_KEY', '-----BEGIN ... PRIVATE KEY-----'))
             continue
+        cm = CLI_CREDENTIAL.search(line)
+        if cm and looks_like_password(cm.group(3)):
+            findings.append((path, lineno, 'CLI_CREDENTIAL', mask(cm.group(3))))
+            continue
         m = ASSIGN.search(line)
         if m and EXEMPT_PLACEHOLDER.search(m.group(2)):
             m = None
@@ -222,6 +238,12 @@ def self_test():
         ('login table row', '| Grafana login | `admin / Qx7ZzWpbTrap` |'),          # noscan
         ('passphrase, French label', '| WiFi AP | SSID: `Boat` / MDP: `Zz9KmqTrap` |'),  # noscan
         ('short password, key: value', 'GF_SECURITY_ADMIN_PASSWORD: Vv8RhtTrap'),    # noscan
+        # La forme restee publiee apres H3f. Valeur volontairement absurde :
+        # un echantillon d autotest ne doit jamais ressembler a un vrai
+        # identifiant du systeme (defaut 27).
+        ('nmcli psk argument',
+         'wifi-sec.key-mgmt wpa-psk wifi-sec.psk "Kk4TrapZz" \\'),           # noscan
+
     ]
     must_pass = [
         ('fingerprint', 'sha256[:16]=e80a47801529a25c'),
@@ -238,6 +260,10 @@ def self_test():
         ('flux query', 'from(bucket: "midnight_rider") |> range(start: -3h)'),
         ('user name only', '| Grafana login | `admin` |'),
         ('env var reference row', '| password | ${GF_SECURITY_ADMIN_PASSWORD} |'),
+        ('nmcli psk via variable',
+         'wifi-sec.psk "$WIFI_AP_PASSPHRASE" \\'),
+        ('nmcli key management only', 'wifi-sec.key-mgmt wpa-psk \\'),
+
     ]
     ok = True
     for label, sample in must_flag:

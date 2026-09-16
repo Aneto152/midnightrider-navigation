@@ -233,3 +233,9 @@
 [2026-09-16T20:00:25Z] [FILE_MODIFY] [security-repair] H3F-V2-CORRECTION: rebuilt RESTORE.md from clean HEAD and applied field-scoped redaction
 [2026-09-16T20:00:25Z] [FILE_MODIFY] [security-repair] H3F-V2-CORRECTION: retained v2 staged-secret barrier; no credential values or fingerprints logged
 [2026-09-16T20:00:25Z] [RESULT] [security-repair] Result: SUCCESS — H3f-v1 stopped before commit; v2 correction ready for staged validation
+
+[2026-09-16T20:19:56Z] [COMMIT] SHA: 1d0d58a550868a329e83a7ac721c23373c8dbdae
+[2026-09-16T20:19:56Z] [FILE_MODIFY] [security] H3G-CORRECTION: passphrase WiFi retiree de la commande nmcli de docs/guides/RESTORE.md, lue desormais dans WIFI_AP_PASSPHRASE
+[2026-09-16T20:19:56Z] [FILE_MODIFY] [security] H3G-CORRECTION: adresse statique de la passerelle AP rendue valide, nmcli refuse un nom d hote
+[2026-09-16T20:19:56Z] [CONFIG_CHANGE] [security] H3G-CORRECTION: barriere anti-fuite portee en version 3, regle CLI_CREDENTIAL pour les arguments de ligne de commande
+[2026-09-16T20:19:56Z] [RESULT] [security] Result: SUCCESS - fuite fermee dans l arbre courant; masquer n est pas changer, la valeur reste publique dans l historique et egale au nom de compte GitHub

@@ -425,3 +425,35 @@ discriminant réglé contre les 408 fichiers réels du dépôt.
 H3f-v1 reached redaction and barrier installation but committed nothing: its final guard classified a diagnostic credential fingerprint as a literal secret. H3f-v2 rebuilt the restore document from clean HEAD, redacted only the Grafana login and WiFi MDP fields, preserved public SSID and headings, and removed private-address literals.
 
 The rehearsed v2 barrier passed compilation, self-test, and repository audit before staging. No service, container, Signal K process, database, dashboard, or network configuration was changed. The WiFi passphrase remains unchanged under the recorded accepted-risk decision.
+
+
+## H3g - la fuite laissee ouverte par H3f
+
+H3f a masque les deux identifiants publies dans le tableau des
+credentials de `docs/guides/RESTORE.md` et a annonce la fuite fermee.
+Elle ne l etait pas. La passphrase WiFi restait en clair a l etape 6,
+dans l argument `wifi-sec.psk` de la commande nmcli.
+
+Deux aveuglements se sont additionnes. Ma verification ne regardait que
+les deux lignes du tableau, celles que je venais d ecrire (defaut 29).
+Et la barriere v2 exigeait un separateur `:` `=` ou `|` apres l
+etiquette, alors qu un argument de ligne de commande est separe par une
+espace (defaut 28). Le meme motif, sous une autre ponctuation, est
+passe deux fois.
+
+Recensement fait avant toute modification : la chaine publiee sert
+aussi de nom de compte GitHub, present dans plusieurs URL de clonage.
+Un nom de compte n est pas un secret ; ces occurrences sont laissees
+intactes et verifiees apres traitement. Consequence a retenir : la
+passphrase est de toute facon lisible dans l URL du depot, donc le seul
+correctif reel est de la changer. Denis a choisi de ne pas la changer et
+ce risque reste accepte et enregistre.
+
+Corriges aussi : l adresse de la passerelle du point d acces, que H3f
+avait remplacee par un nom d hote alors que nmcli exige une adresse
+numerique, ce qui rendait la procedure de restauration inexecutable
+(defaut 30) ; le bit d execution du scanner (defaut 31) ; et l absence
+du SHA de H3f dans le journal d actions (defaut 32).
+
+Aucun service, conteneur, processus Signal K, base, tableau de bord ou
+reglage reseau n a ete touche.
