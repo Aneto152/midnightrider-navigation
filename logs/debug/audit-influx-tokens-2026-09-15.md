@@ -457,3 +457,42 @@ du SHA de H3f dans le journal d actions (defaut 32).
 
 Aucun service, conteneur, processus Signal K, base, tableau de bord ou
 reglage reseau n a ete touche.
+
+
+## H4b - reprise en main du compte administrateur Grafana
+
+CORRECTION (defaut 34). En H3f puis dans deux comptes rendus, j ai
+affirme que le mot de passe publie ouvrait encore Grafana, en
+m appuyant sur un GET /api/org qui repondait HTTP 200. Le diagnostic
+en lecture seule du 2026-09-16 a montre que ce meme appel repond 200
+sans aucun identifiant, et meme avec un mot de passe tire au hasard :
+c est l acces anonyme qui repondait. Interroge sur /api/user, qui exige
+une session reelle, le mot de passe publie renvoie 401. Il est donc
+perime et ne donnait acces a rien. Mon affirmation etait fausse ; elle
+est corrigee ici par ajout, sans reecriture de l historique.
+
+Lecon de methode : un point d acces lisible par l anonyme ne peut pas
+servir a tester un identifiant. Le bon test est celui qui demande a
+Grafana QUI il croit avoir en face, pas celui qui demande une donnee.
+
+Situation reelle constatee : personne ne detenait le mot de passe
+administrateur de cette instance. Il n etait ni dans .env, ni dans
+docker-compose.yml, ni dans config/grafana-custom.ini, et la valeur
+publiee ne fonctionnait plus. L acces anonyme en lecture masquait ce
+trou : tout le monde voyait les tableaux de bord, donc personne ne
+s apercevait que plus personne ne pouvait administrer.
+
+Action faite ici : un mot de passe administrateur connu a ete etabli
+par grafana-cli dans le conteneur en fonctionnement, sans recreation ni
+redemarrage. Preuve : /api/user renvoie 200 avec login=admin, et
+/api/admin/stats est accessible. La valeur est ecrite seulement dans
+.env, verifie non suivi et ignore avant et apres. Les deux noms de cle
+attendus par les scripts du depot ont ete crees : ils etaient absents,
+donc deploy-dashboards-to-grafana.sh et post-race-cloud-sync.sh
+travaillaient jusqu ici avec un identifiant par defaut inexistant.
+
+Deliberement non fait : l acces anonyme en lecture reste actif. C est
+maintenant le seul vrai sujet de securite sur Grafana, et il se decide
+en connaissant son effet sur portal/viewer.html, qui affiche les
+tableaux de bord en iframe sans s authentifier. Il fallait d abord
+pouvoir se connecter avant de pouvoir fermer.

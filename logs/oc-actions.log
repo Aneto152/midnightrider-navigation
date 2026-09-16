@@ -240,3 +240,8 @@
 [2026-09-16T20:19:56Z] [CONFIG_CHANGE] [security] H3G-CORRECTION: barriere anti-fuite portee en version 3, regle CLI_CREDENTIAL pour les arguments de ligne de commande
 [2026-09-16T20:19:56Z] [RESULT] [security] Result: SUCCESS - fuite fermee dans l arbre courant; masquer n est pas changer, la valeur reste publique dans l historique et egale au nom de compte GitHub
 [2026-09-16T20:19:57Z] [COMMIT] SHA: a2f59a3f68b73e466d2162a9c42ac52e1d3c24b1
+[2026-09-16T22:54:14Z] [CORRECTION] [grafana] H4B-ADMIN-RESET: l affirmation de H3f selon laquelle le mot de passe publie ouvrait encore Grafana etait FAUSSE; /api/org repond 200 a l anonyme, /api/user renvoie 401 avec cette valeur
+[2026-09-16T22:54:14Z] [CONFIG_CHANGE] [grafana] H4B-ADMIN-RESET: mot de passe administrateur etabli par grafana-cli dans le conteneur en fonctionnement, aucune recreation ni redemarrage
+[2026-09-16T22:54:14Z] [DEBUG] [grafana] H4B-ADMIN-RESET: preuve /api/user HTTP 200 login=admin, /api/admin/stats accessible, acces anonyme inchange
+[2026-09-16T22:54:14Z] [FILE_MODIFY] [grafana] H4B-ADMIN-RESET: valeur ecrite dans .env uniquement [REDACTED - credential reference: grafana-admin-password]
+[2026-09-16T22:54:14Z] [RESULT] [grafana] Result: SUCCESS - compte administrateur a nouveau utilisable; acces anonyme en lecture toujours actif, decision a prendre

@@ -1,6 +1,6 @@
 {
-  "task": "Phase H securite - H3g, fermeture de la fuite laissee ouverte par H3f",
-  "date": "2026-09-16T20:19:56Z",
+  "task": "Phase H securite - H4b, reprise en main du compte administrateur Grafana",
+  "date": "2026-09-16T22:54:14Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -33,7 +33,8 @@
     "29 la verification de H3f ne regardait que les lignes que le script venait d ecrire - corrige par un recensement du depot entier",
     "30 H3f a remplace l adresse statique de la passerelle AP par un nom d hote, rendant la commande nmcli invalide - corrige",
     "31 H3f a fait perdre le bit d execution de scripts/check-staged-secrets.py - corrige",
-    "32 H3f n a pas inscrit son propre SHA dans logs/oc-actions.log - corrige par ajout"
+    "32 H3f n a pas inscrit son propre SHA dans logs/oc-actions.log - corrige par ajout",
+    "34 l affirmation 'le mot de passe publie ouvre encore Grafana' etait fausse : le test utilisait un point d acces lisible par l anonyme - corrige par ajout en H4b"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -69,7 +70,9 @@
     "status": "REDACTED dans l arbre courant : tableau des credentials (H3f) ET commande nmcli (H3g). NON CHANGE : la passphrase WiFi reste valide, risque accepte par Denis. Le mot de passe Grafana reste valide et l acces anonyme reste ouvert.",
     "repository_action": "Targeted field redaction, canonical host-name replacement, and v2 staged-secret barrier",
     "note_on_values": "No credential value or credential fingerprint is stored in this record",
-    "note_on_the_wifi_value": "la valeur publiee est egale au nom de compte GitHub, donc presente dans les URL de clonage du depot : la masquer ne la rend pas secrete"
+    "note_on_the_wifi_value": "la valeur publiee est egale au nom de compte GitHub, donc presente dans les URL de clonage du depot : la masquer ne la rend pas secrete",
+    "grafana_admin_password": "la valeur publiee etait PERIMEE et n authentifiait rien (401 sur /api/user); un mot de passe administrateur connu a ete etabli le 2026-09-16T22:54:14Z et vit dans .env seulement",
+    "grafana_anonymous_access": "TOUJOURS ACTIF : lecture de tous les tableaux de bord sans aucun identifiant sur le reseau du bateau; seul vrai sujet restant, decision a prendre avec l effet sur portal/viewer.html"
   },
   "h3f_v2_attempt": {
     "run_utc": "20260916T200024Z",
@@ -83,5 +86,13 @@
     "what_h3f_missed": "la passphrase WiFi restait en clair dans l argument wifi-sec.psk de l etape 6",
     "why": "verification limitee aux deux lignes du tableau, et barriere v2 exigeant : = ou | apres l etiquette",
     "service_impact": "aucun"
+  },
+  "h4b": {
+    "run_utc": "20260916T225410Z",
+    "grafana_version": "12.3.1",
+    "method": "grafana-cli admin reset-admin-password dans le conteneur en fonctionnement",
+    "proof": "/api/user HTTP 200 login=admin; /api/admin/stats accessible; /api/org anonyme inchange",
+    "where_the_value_lives": ".env uniquement, non suivi par git",
+    "service_impact": "aucun redemarrage, aucune recreation"
   }
 }
