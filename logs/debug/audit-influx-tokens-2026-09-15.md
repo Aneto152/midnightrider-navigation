@@ -418,3 +418,10 @@ de passe publiés, l'un de 13 caractères étiqueté « login », l'autre de 8
 étiqueté « MDP », sont passés dessous. Corrigé : règle
 `LABELLED_CREDENTIAL`, étiquettes françaises, seuil abaissé, et un
 discriminant réglé contre les 408 fichiers réels du dépôt.
+
+
+## H3f-v2 — targeted repair
+
+H3f-v1 reached redaction and barrier installation but committed nothing: its final guard classified a diagnostic credential fingerprint as a literal secret. H3f-v2 rebuilt the restore document from clean HEAD, redacted only the Grafana login and WiFi MDP fields, preserved public SSID and headings, and removed private-address literals.
+
+The rehearsed v2 barrier passed compilation, self-test, and repository audit before staging. No service, container, Signal K process, database, dashboard, or network configuration was changed. The WiFi passphrase remains unchanged under the recorded accepted-risk decision.

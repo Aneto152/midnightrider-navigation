@@ -89,7 +89,7 @@ sudo systemctl enable regatta --now
 ```bash
 sudo nmcli con add type wifi ifname wlan0 con-name "MidnightRider-AP" \
   ssid "MidnightRider" mode ap \
-  ipv4.method shared ipv4.addresses 192.168.4.1/24 \
+  ipv4.method shared ipv4.addresses midnightrider.local/24 \
   wifi-sec.key-mgmt wpa-psk wifi-sec.psk "Aneto152" \
   wifi.band bg wifi.channel 6
 sudo nmcli con modify "MidnightRider-AP" connection.autoconnect yes
@@ -148,9 +148,9 @@ crontab -l | { cat; echo "0 2 * * * /home/aneto/docker/signalk/git-backup.sh >> 
 | InfluxDB Cloud URL | `https://us-east-1-1.aws.cloud2.influxdata.com` |
 | InfluxDB Cloud Org ID | `48a34d6463cef7c9` |
 | InfluxDB Cloud token | `[REDACTED - credential reference: influxdb-cloud-token, incident SEC-2026-09-15-02]` |
-| Grafana login | `admin / MidnightRider` |
+| Grafana login | `admin / [REDACTED - credential reference: grafana-admin-password]` |
 | Grafana Cloud | `https://midnightrider.grafana.net` |
-| WiFi AP | SSID: `MidnightRider` / MDP: `Aneto152` |
+| WiFi AP | SSID: `MidnightRider` / MDP: `[REDACTED - credential reference: wifi-passphrase]` |
 
 ---
 
@@ -158,7 +158,14 @@ crontab -l | { cat; echo "0 2 * * * /home/aneto/docker/signalk/git-backup.sh >> 
 
 | Service | URL locale | URL externe |
 |---------|-----------|-------------|
-| SignalK | http://192.168.4.1:3000 | — |
-| Grafana | http://192.168.4.1:3001 | https://midnightrider.grafana.net |
-| InfluxDB | http://192.168.4.1:8086 | https://us-east-1-1.aws.cloud2.influxdata.com |
-| Régate | http://192.168.4.1:5000 | — |
+| SignalK | http://midnightrider.local:3000 | — |
+| Grafana | http://midnightrider.local:3001 | https://midnightrider.grafana.net |
+| InfluxDB | http://midnightrider.local:8086 | https://us-east-1-1.aws.cloud2.influxdata.com |
+| Régate | http://midnightrider.local:5000 | — |
+
+---
+
+## H3f credential-handling note
+
+<!-- H3F-CREDENTIAL-NOTE -->
+Credential values are not stored in this public procedure. The Grafana administrator credential is held only in the local secured environment file and must be rotated separately. The WiFi passphrase is local-only and remains unchanged by explicit operator decision; this is an accepted risk. Redaction removes publication from the current tree but does not revoke or change a credential already exposed in history or existing clones.

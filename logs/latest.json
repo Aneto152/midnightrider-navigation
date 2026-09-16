@@ -1,6 +1,6 @@
 {
-  "task": "Phase H security - incident SEC-2026-09-14-01, an InfluxDB token published in a public repository: audit, rotation of the consumers, deactivation, repository cleanup and anti-leak barrier",
-  "date": "2026-09-16T19:23:09Z",
+  "task": "Phase H security — H3f-v2 targeted credential redaction repair",
+  "date": "2026-09-16T20:00:25Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -60,11 +60,15 @@
   },
   "third_incident": {
     "id": "SEC-2026-09-16-03",
-    "what": "docs/guides/RESTORE.md was a published credentials sheet: Grafana admin password and boat WiFi passphrase, in a public repository",
-    "grafana_password": "redacted in the repository, ENCORE VALIDE, NOT CHANGED",
-    "wifi_passphrase": "redacted in the repository, NOT CHANGED - accepted risk, explicit decision by Denis: exploitation needs continuous physical proximity, which underway would be noticed",
-    "anonymous_grafana": "GF_AUTH_ANONYMOUS_ENABLED=true still lets anyone on the boat network read every dashboard with no password",
-    "hardcoded_ips_replaced": 5,
-    "status": "REDACTED, nothing changed - redacting is not changing"
+    "what": "Grafana administrator credential and boat WiFi passphrase were published in docs/guides/RESTORE.md",
+    "status": "REDACTED in current repository; Grafana rotation and anonymous-access closure remain separate actions; WiFi unchanged by accepted-risk decision",
+    "repository_action": "Targeted field redaction, canonical host-name replacement, and v2 staged-secret barrier",
+    "note_on_values": "No credential value or credential fingerprint is stored in this record"
+  },
+  "h3f_v2_attempt": {
+    "run_utc": "20260916T200024Z",
+    "previous_attempt": "H3f-v1 stopped before commit because its final guard classified a diagnostic fingerprint as a literal secret",
+    "correction": "Rebuilt RESTORE.md from clean HEAD and redacted only credential fields; public SSID/title text preserved",
+    "service_impact": "none"
   }
 }
