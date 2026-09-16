@@ -239,3 +239,4 @@
 [2026-09-16T20:19:56Z] [FILE_MODIFY] [security] H3G-CORRECTION: adresse statique de la passerelle AP rendue valide, nmcli refuse un nom d hote
 [2026-09-16T20:19:56Z] [CONFIG_CHANGE] [security] H3G-CORRECTION: barriere anti-fuite portee en version 3, regle CLI_CREDENTIAL pour les arguments de ligne de commande
 [2026-09-16T20:19:56Z] [RESULT] [security] Result: SUCCESS - fuite fermee dans l arbre courant; masquer n est pas changer, la valeur reste publique dans l historique et egale au nom de compte GitHub
+[2026-09-16T20:19:57Z] [COMMIT] SHA: a2f59a3f68b73e466d2162a9c42ac52e1d3c24b1
