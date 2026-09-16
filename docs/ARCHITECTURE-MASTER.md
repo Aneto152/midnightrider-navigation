@@ -196,6 +196,21 @@ RPi 4 (midnightrider.local)
 | **Regatta Server** | 5000 | HTTP | `docker compose` | Docker |
 | **Signal K UDP RX** | 4123 | UDP | Interne Signal K | Calypso injection |
 
+<!-- H4D-AUTH -->
+**Posture d'authentification Grafana (depuis H4d, 20260916) :**
+
+| Reglage | Valeur | Ou |
+|---|---|---|
+| `GF_AUTH_ANONYMOUS_ENABLED` | `false` — toute lecture exige une session | `docker-compose.yml` |
+| `GF_SECURITY_ALLOW_EMBEDDING` | `true` — `portal/viewer.html` (:8888) peut afficher Grafana (:3001) | `docker-compose.yml` |
+| Mot de passe admin | dans `.env`, hors git, jamais publie | `.env` |
+
+Le cookie de session porte sur l'hote et non sur le port, et dure 30 jours :
+une connexion par navigateur couvre aussi l'iframe du portail.
+`config/grafana-custom.ini` n'est **pas** charge par Grafana ; la configuration
+effective passe par les variables d'environnement, qui priment sur tout `.ini`.
+
+
 > ⚠️ **RÈGLE ABSOLUE :**  
 > Signal K = `systemctl` UNIQUEMENT  
 > InfluxDB + Grafana = `docker compose` UNIQUEMENT  

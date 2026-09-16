@@ -253,3 +253,6 @@
 [2026-09-16T23:14:10Z] [COMMIT] SHA: 6f91220de4aaa9e4b93d3c340a0043f9061bd46e
 [2026-09-16T23:50:27Z] [FILE_MODIFY] [security] H4D-A: commit_chain reconstruite depuis l API, defaut 35 consigne, defauts 36/37/38 ouverts
 [2026-09-16T23:50:27Z] [FILE_MODIFY] [security] H4D-A: scanner --audit repare (git ls-files), verdict defaut 33 = CORRIGE
+[2026-09-16T23:50:35Z] [CONFIG_CHANGE] [grafana] H4D-B: GF_AUTH_ANONYMOUS_ENABLED=false, GF_SECURITY_ALLOW_EMBEDDING=true, montage inerte retire
+[2026-09-16T23:50:35Z] [DOCKER_ACTION] [grafana] H4D-B: conteneur grafana recree seul (--no-deps), volumes externes preserves
+[2026-09-16T23:50:35Z] [RESULT] [grafana] Result: SUCCESS - anonyme HTTP 401, X-Frame-Options 'aucun', admin OK

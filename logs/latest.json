@@ -1,7 +1,7 @@
 {
   "task": "Phase H securite - H4d, registre et scanner (A) puis fermeture de l acces anonyme Grafana (B)",
   "date": "2026-09-16T23:14:06Z",
-  "status": "IN_PROGRESS",
+  "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
     "id": "SEC-2026-09-14-01",
@@ -43,12 +43,12 @@
     "34 l affirmation 'le mot de passe publie ouvre encore Grafana' etait fausse : le test utilisait un point d acces lisible par l anonyme - corrige par ajout en H4b",
     "20b le compte administrateur Grafana n etait detenu par personne : valeur publiee perimee, aucune cle dans .env - repris en main en H4b, valeur connue desormais dans .env hors git",
     "35 H4c a resolu les placeholders de commit_chain avec 'git log --grep=TAG -1', qui renvoie le commit le PLUS RECENT citant l etiquette : 9d9ba4f a ete ecrit comme H3b alors qu il est H3e, et e3a9892 comme H3f alors qu il est H4b. Deux marqueurs honnetes remplaces par deux SHA faux. Corrige en H4d a partir de l API GitHub, autorite unique.",
-    "33 scripts/check-staged-secrets.py --audit sans --files n examinait que l index et non le depot : mesure en H4c le 20260916T231406Z -> CORRIGE en H4d : --audit sans --files lit desormais git ls-files"
+    "33 scripts/check-staged-secrets.py --audit sans --files n examinait que l index et non le depot : mesure en H4c le 20260916T231406Z -> CORRIGE en H4d : --audit sans --files lit desormais git ls-files",
+    "20 acces anonyme en lecture de Grafana : FERME en H4d (GF_AUTH_ANONYMOUS_ENABLED=false), verifie par une requete sans identifiant"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
     "19 the exposed value remains in the git history, deliberately not rewritten",
-    "20 l acces anonyme en lecture de Grafana reste actif : tous les tableaux de bord sont lisibles sans aucun identifiant sur le reseau du bateau ; la moitie 'mot de passe' de ce defaut est fermee par H4b",
     "21 influx auth list prints every token value in clear to anyone who can docker exec",
     "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent",
     "36 deux liens de portal/index.html pointent sur des tableaux de bord qui n existent pas dans l instance Grafana : 01-navigation-dashboard et data-model-status renvoient 404 meme authentifie. Deux des sept cartes de la page d accueil sont mortes. Mesure en H4c.",
@@ -60,7 +60,9 @@
     "H3d: delete the two deactivated authorizations and the 3 unused Grafana-* tokens",
     "H3d, after a day of observation: permanently delete the two deactivated authorizations and the three unused Grafana-* org-wide tokens",
     "give Grafana a read-only token instead of the shared read+write one",
-    "decider de l acces anonyme Grafana, mesures de dependance faites en H4c"
+    "defaut 36 : reparer ou retirer les deux cartes mortes de portal/index.html",
+    "defaut 37 : aligner les UID de grafana-dashboards/ avant tout deploiement",
+    "verifier a l oeil que portal/viewer.html affiche bien Grafana apres une connexion"
   ],
   "previous_record": {
     "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
@@ -124,6 +126,11 @@
     "partie_A": "registre + scanner",
     "defaut_33": "CORRIGE",
     "tunnel_cloudflare": "ABSENT",
-    "tableau_temoin": "03-performance"
+    "tableau_temoin": "03-performance",
+    "partie_B": "acces anonyme ferme, embarquement iframe rendu effectif",
+    "anonyme_apres": "HTTP 401",
+    "x_frame_options_apres": "aucun",
+    "methode": "variables d environnement dans docker-compose.yml ; aucun fichier remonte sur /etc/grafana/grafana.ini",
+    "conteneur": "grafana recree seul (--no-deps) ; influxdb et signalk intacts"
   }
 }
