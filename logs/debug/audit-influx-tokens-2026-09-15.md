@@ -319,3 +319,40 @@ token planté pour preuve fonctionnelle.
 - mot de passe admin Grafana par défaut, et `GF_AUTH_ANONYMOUS_ENABLED=true` ;
 - `sudo` sans mot de passe pour `aneto` ;
 - token en lecture seule pour Grafana (une ligne de `docker-compose.yml`).
+
+
+## Second token publié — incident SEC-2026-09-15-02 — 20260916T120432Z
+
+Trouvé par la barrière installée en H3b, passée non plus sur les journaux
+mais sur les 407 fichiers suivis du dépôt. Une valeur de 88 caractères,
+commentée « InfluxDB Cloud token », d'empreinte `5e9d36294bf2a558`.
+
+| fichier | occurrences |
+|---|---|
+| `docs/guides/RESTORE.md` | 1 |
+
+Deux vérifications indépendantes établissent que **ce n'est pas un
+identifiant du bord** : son empreinte ne correspond à aucune des 10
+autorisations de l'InfluxDB local, et une lecture réelle du bucket local
+avec cette valeur répond HTTP 401.
+
+Cela ne prouve pas qu'il soit mort. S'il appartient à un compte InfluxDB
+Cloud encore ouvert, il y reste valide : masquer un fichier ne révoque pas
+un token. La valeur doit être **révoquée dans la console Cloud**, et elle
+est à considérer comme compromise — au moins 79 jours d'exposition
+publique. Cette action revient à Denis ; aucun script ne se connecte à un
+service externe avec un identifiant possiblement vivant.
+
+La valeur reste présente dans l'historique git, comme la première, et pour
+la même raison : réécrire l'historique d'un dépôt déjà cloné ne protège
+rien une fois la révocation faite.
+
+### Leçon de méthode
+
+`docs/guides/RESTORE.md` avait été examiné plusieurs fois pendant cette
+phase et déclaré propre. Il l'était au regard de la question posée :
+« contient-il LA valeur du token exposé ? ». Il contenait un autre
+identifiant. Chercher une valeur connue ne trouve jamais une fuite
+inconnue ; chercher une *forme* y arrive. C'est ce que fait la barrière,
+et elle se justifie en trouvant, le jour de son installation, une fuite
+que l'enquête manuelle avait manquée.

@@ -1,6 +1,6 @@
 {
   "task": "Phase H security - incident SEC-2026-09-14-01, an InfluxDB token published in a public repository: audit, rotation of the consumers, deactivation, repository cleanup and anti-leak barrier",
-  "date": "2026-09-15T22:33:51Z",
+  "date": "2026-09-16T12:04:35Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -18,7 +18,8 @@
     "fb73946746ff  H2a rotate the signalk-to-influxdb2 token away from the exposed one",
     "548ee128e63d  H2b recreate the grafana container so the provisioned datasource gets a real token (health ERROR -> OK)",
     "860120398157  H3a deactivate the exposed authorization and the orphan token, nothing deleted, reversible",
-    "this commit    H3b untrack the two files carrying the value, install the anti-leak barrier, correct the written record"
+    "this commit    H3b untrack the two files carrying the value, install the anti-leak barrier, correct the written record",
+    "this commit    H3e redact the second published token (SEC-2026-09-15-02) and record it"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -36,6 +37,7 @@
     "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent"
   ],
   "next_steps": [
+    "revoke the InfluxDB Cloud token of SEC-2026-09-15-02 in the Cloud console - redacting the file did not revoke it",
     "H3d, after a day of observation: permanently delete the two deactivated authorizations and the three unused Grafana-* org-wide tokens",
     "harden Grafana: admin password, anonymous access",
     "give Grafana a read-only token instead of the shared read+write one"
@@ -44,5 +46,13 @@
     "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
     "date": "2026-09-15T19:44:23Z",
     "commit": "43faf7685431c322911dc449cf296745926b7f1c"
+  },
+  "second_incident": {
+    "id": "SEC-2026-09-15-02",
+    "what": "a second InfluxDB token, commented \"InfluxDB Cloud token\", was published in docs/guides/RESTORE.md; found by the H3b barrier run over all tracked files",
+    "fingerprint": "5e9d36294bf2a558",
+    "occurrences_redacted": 1,
+    "is_a_boat_credential": "no - matches none of the 10 local authorizations and is refused by the local InfluxDB",
+    "status": "REDACTED in the repository, NOT REVOKED - revocation in the InfluxDB Cloud console is owed and can only be done by Denis"
   }
 }

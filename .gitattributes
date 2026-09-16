@@ -1,0 +1,6 @@
+
+# Journaux en mode ajout : en cas de conflit, garder les lignes des deux
+# cotes plutot que de reclamer une resolution manuelle.
+logs/oc-actions.log merge=union
+logs/debug/*.log merge=union
+logs/services/*.log merge=union

@@ -147,7 +147,7 @@ crontab -l | { cat; echo "0 2 * * * /home/aneto/docker/signalk/git-backup.sh >> 
 | InfluxDB local token | `[MASKED_INFLUX_TOKEN]` |
 | InfluxDB Cloud URL | `https://us-east-1-1.aws.cloud2.influxdata.com` |
 | InfluxDB Cloud Org ID | `48a34d6463cef7c9` |
-| InfluxDB Cloud token | `_kEQ4jECoIVng-8UF1ZmpWJvvMVSGPt0x0vzgWGHJbQLyoq2Og3BOzukXvddkjG4VFW0AIpryx5CBEJGXO9KpQ==` |
+| InfluxDB Cloud token | `[REDACTED - credential reference: influxdb-cloud-token, incident SEC-2026-09-15-02]` |
 | Grafana login | `admin / MidnightRider` |
 | Grafana Cloud | `https://midnightrider.grafana.net` |
 | WiFi AP | SSID: `MidnightRider` / MDP: `Aneto152` |
