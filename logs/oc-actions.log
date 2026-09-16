@@ -246,3 +246,7 @@
 [2026-09-16T22:54:14Z] [FILE_MODIFY] [grafana] H4B-ADMIN-RESET: valeur ecrite dans .env uniquement [REDACTED - credential reference: grafana-admin-password]
 [2026-09-16T22:54:14Z] [RESULT] [grafana] Result: SUCCESS - compte administrateur a nouveau utilisable; acces anonyme en lecture toujours actif, decision a prendre
 [2026-09-16T22:54:15Z] [COMMIT] SHA: e3a98921b3e5e0ae7519a2830e39f80ea8462b83
+[2026-09-16T23:14:09Z] [DEBUG] [grafana] H4C-PROBE: sonde en lecture seule; iframe portail=BLOQUE; 5 tableaux lisibles sans identifiant; defaut 33 mesure=OUVERT
+[2026-09-16T23:14:09Z] [FILE_MODIFY] [security] H4C-PROBE: registre corrige - defaut 20 scinde, contradiction third_incident levee, defauts 27 et 33 declares, commit_chain resolue
+[2026-09-16T23:14:09Z] [CONFIG_CHANGE] [security] H4C-PROBE: wifi-ap.txt ajoute a .gitignore
+[2026-09-16T23:14:09Z] [RESULT] [grafana] Result: SUCCESS - aucune modification de Grafana, du portail ni d aucun conteneur

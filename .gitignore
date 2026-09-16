@@ -113,3 +113,6 @@ regatta/fleet_stars.json
 # logs/*.txt ; nommées ici pour que la raison reste lisible.
 logs/debug/crash-capture-*.log
 logs/diagnostic_raw*
+
+# fichier local portant la passphrase du point d acces (jamais versionne)
+wifi-ap.txt

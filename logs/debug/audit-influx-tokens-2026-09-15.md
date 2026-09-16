@@ -496,3 +496,43 @@ maintenant le seul vrai sujet de securite sur Grafana, et il se decide
 en connaissant son effet sur portal/viewer.html, qui affiche les
 tableaux de bord en iframe sans s authentifier. Il fallait d abord
 pouvoir se connecter avant de pouvoir fermer.
+
+<!-- H4C-PROBE-NOTE -->
+
+## H4c - ce qui depend vraiment de l acces anonyme, et un registre remis d aplomb
+
+Mesure, pas supposition. Trois constats tires de la machine le 20260916T231406Z :
+
+1. Embarquement de Grafana dans le portail : BLOQUE. Le portail est servi sur
+   le port 8888 et l iframe pointe sur le port 3001 : deux origines
+   differentes pour un navigateur. Le fichier config/grafana-custom.ini du
+   depot demande allow_embedding = true, mais il est monte sur
+   /etc/grafana/provisioning/grafana.ini alors que Grafana lit
+   /etc/grafana/grafana.ini, et la variable d environnement
+   GF_SECURITY_X_FRAME_OPTIONS l emporte de toute facon sur un fichier.
+
+2. 5 tableau(x) de bord reference(s) par portal/index.html repondent
+   aujourd hui sans aucun identifiant.
+
+3. Un cookie de session porte sur l hote et ignore le port. Une connexion
+   unique sur midnightrider.local:3001 couvrirait donc aussi l iframe.
+
+Corrections du registre, par ajout et par rectification de champs devenus
+faux, jamais par reecriture d historique :
+
+- le defaut 20 affirmait encore que Grafana acceptait son mot de passe par
+  defaut. C est la moitie exacte de ce que le defaut 34 a refute. Il est
+  scinde : la partie mot de passe est fermee, la partie acces anonyme reste
+  ouverte.
+- third_incident.status se contredisait avec le champ ajoute par H4b quatre
+  lignes plus bas. La phrase perimee est rectifiee.
+- le defaut 33 etait annonce et jamais ecrit. Il est mesure ici, puis classe
+  selon le resultat : OUVERT.
+- le numero 27 reste introuvable dans le depot. Le trou est declare tel quel
+  dans latest.json plutot que comble par une invention.
+- next_steps portait deux fois la consigne de changer le mot de passe, faite.
+- commit_chain portait le texte litteral "this commit" a la place de SHA. Les
+  valeurs sont retrouvees dans l historique local, pas fabriquees.
+
+Lecon : un registre qui se contredit cesse d etre un registre. C est celui-ci
+qui a servi de base a une decision prise sur une information fausse.
