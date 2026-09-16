@@ -256,3 +256,4 @@
 [2026-09-16T23:50:35Z] [CONFIG_CHANGE] [grafana] H4D-B: GF_AUTH_ANONYMOUS_ENABLED=false, GF_SECURITY_ALLOW_EMBEDDING=true, montage inerte retire
 [2026-09-16T23:50:35Z] [DOCKER_ACTION] [grafana] H4D-B: conteneur grafana recree seul (--no-deps), volumes externes preserves
 [2026-09-16T23:50:35Z] [RESULT] [grafana] Result: SUCCESS - anonyme HTTP 401, X-Frame-Options 'aucun', admin OK
+[2026-09-16T23:50:35Z] [COMMIT] SHA: abb349f22bc0064f992041b5e98145c64ac219a7
