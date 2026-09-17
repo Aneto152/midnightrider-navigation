@@ -1,3 +1,29 @@
+# =====================================================================
+# UNITE RETIREE LE 2026-09-17 - NE PAS REINSTALLER, NE PAS REPARER
+#
+# Desarmee par :  sudo systemctl disable --now midnight-logsync.timer
+# Retablir par :  sudo systemctl enable --now midnight-logsync.timer
+#
+# Pourquoi elle est retiree :
+#   - elle n a JAMAIS fonctionne : WorkingDirectory=/home/pi/... est un
+#     chemin inexistant (l utilisateur du bord est aneto), donc systemd
+#     echouait en status=200/CHDIR toutes les 3 minutes ;
+#   - elle est redondante : scripts/commit-logs.sh, lance par
+#     midnight-logs-commit.timer toutes les 15 minutes, couvre deja
+#     logs/services/, logs/debug/, logs/oc-actions.log et
+#     logs/latest.json ;
+#   - la reparer serait NUISIBLE : son ExecStart tronque sur place tout
+#     journal de plus de 900 ko a ses 300 dernieres lignes, sans
+#     sauvegarde, et elle ne declare aucun User= donc tournerait en
+#     root dans un depot appartenant a aneto.
+#
+# ATTENTION : le README de ce dossier propose
+#   sudo cp etc/systemd/system/*.service /etc/systemd/system/
+# ce qui la reinstallerait. Exclure explicitement midnight-logsync.
+#
+# Constat detaille : logs/debug/timers-systemd-2026-09-17.md
+# Pose par h7e-v1.
+# =====================================================================
 [Unit]
 Description=Midnight Rider — Sync logs to GitHub every 3 minutes
 After=network-online.target

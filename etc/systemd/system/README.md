@@ -125,5 +125,64 @@ Live services on the Pi should match what's in Git:
 
 ---
 
-**Last Updated**: 2026-05-29  
+---
+
+## Unites retirees
+
+| Unite | Retiree le | Etat mesure | Pourquoi |
+|---|---|---|---|
+| `midnight-logsync.service` | 2026-09-17 | `failed (200/CHDIR)` depuis toujours | `WorkingDirectory=/home/pi/...` n existe pas : l utilisateur du bord est `aneto`. Le `bash` n a jamais demarre. |
+| `midnight-logsync.timer` | 2026-09-17 | `disabled`, `inactive` | Declenchait l unite ci-dessus toutes les 3 minutes, soit environ 480 echecs par jour. |
+
+Desarmement applique :
+
+```bash
+sudo systemctl disable --now midnight-logsync.timer
+sudo systemctl daemon-reload
+```
+
+Retablissement, si un jour c est voulu :
+
+```bash
+sudo systemctl enable --now midnight-logsync.timer
+```
+
+**Aucune fonction n est perdue.** `scripts/commit-logs.sh`, lance par
+`midnight-logs-commit.timer` toutes les 15 minutes, couvre deja
+`logs/services/`, `logs/debug/`, `logs/oc-actions.log` et
+`logs/latest.json` : c est verifie a l execution, pas suppose.
+
+**Ne pas la reparer.** Son `ExecStart` tronque sur place tout journal de
+plus de 900 ko a ses 300 dernieres lignes, sans sauvegarde, et l unite
+installee ne declare aucun `User=` : elle tournerait en `root` dans un
+depot appartenant a `aneto`.
+
+> ATTENTION au `sudo cp etc/systemd/system/*.service /etc/systemd/system/`
+> de la section Deployment Checklist ci-dessus : il reinstallerait cette
+> unite. En exclure explicitement `midnight-logsync`.
+
+Constat detaille : `logs/debug/timers-systemd-2026-09-17.md`.
+
+---
+
+## Ce tableau n est pas a jour
+
+Mesure du 2026-09-17 par h7e-v1, a comparer avec le contenu reel du
+dossier :
+
+- **15** unites sont presentes dans `etc/systemd/system/` ;
+- **9** seulement sont citees par le tableau *Services* ;
+- **5** sont citees mais **n existent pas** au depot :
+  `avahi-mdns-fix.service`, `calypso_anemometer.service`, `calypso_watchdog.service`, `portal.service`, `wit-nmea-server.service` ;
+- **11** sont presentes mais **jamais citees** :
+  `calypso_direct.service`, `mediaman-events.service`, `mediaman-events.timer`, `mediaman.service`, `mediaman.timer`, `midnight-logsync.service`, `midnight-logsync.timer`, `rfkill-wifi-block.service`, `signalk.service`, `sok_direct.service`, `wit-ble-direct.service`.
+
+A noter aussi : `signalk` est range dans *Services NOT in This Repo*
+alors que `signalk.service` est bien versionne ici.
+
+La remise a plat de ce tableau n est pas faite dans ce commit : elle
+demande de verifier, unite par unite, ce qui est reellement installe sur
+le Pi. C est un chantier a part.
+
+**Last Updated**: 2026-09-17  
 **Repository**: [midnightrider-navigation](https://github.com/Aneto152/midnightrider-navigation)
