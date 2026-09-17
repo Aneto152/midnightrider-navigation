@@ -294,3 +294,9 @@
 [2026-09-17T03:27:07] [DEBUG] [racing-mcp] H6c skew apres filtrage : EXPLOITABLE (60s acceptes=12, 300s acceptes=11)
 [2026-09-17T03:27:07] [RESULT] [mediaman] Result: SUCCESS - mesure seule, aucun code de production modifie
 [2026-09-17T03:27:07] [COMMIT] SHA: 9a4bfc5be0f93c2f274753130c4a41eae0309025
+[2026-09-17T20:38:09] [FILE_CREATE] [fluxprobe] tools/fluxprobe.py - sonde Flux unique, 4 etats, interdiction de rows[0], denominateur honnete
+[2026-09-17T20:38:09] [FILE_CREATE] [fluxprobe] tests/tools/test_fluxprobe.py - tests de non-regression des defauts 55, 59, 60
+[2026-09-17T20:38:09] [DEBUG] [fluxprobe] etalonnage sur InfluxDB : 4/4
+[2026-09-17T20:38:09] [DEBUG] [fluxprobe] defaut 60 : CONFIRME (8/8 reponses ou rows[0] n est pas le plus recent)
+[2026-09-17T20:38:09] [FILE_CREATE] [retractations] logs/debug/RETRACTATIONS.md - defauts 55, 56, 59, 60 retractes
+[2026-09-17T20:38:09] [RESULT] [fluxprobe] Result: VERT - tests 45, aucun code de production modifie

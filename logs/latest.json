@@ -317,5 +317,45 @@
     "services_touched": [],
     "units_installed": false,
     "units_enabled": false
-  }
+  },
+  "history": [
+    {
+      "task": "H7a - sonde Flux unique et retractations",
+      "version": "h7a-v3",
+      "timestamp": "2026-09-17T20:38:09Z",
+      "status": "SUCCESS",
+      "read_only_influx": true,
+      "production_code_modified": false,
+      "files_created": [
+        "tools/fluxprobe.py",
+        "tests/tools/test_fluxprobe.py",
+        "logs/debug/RETRACTATIONS.md",
+        "logs/debug/etalonnage-fluxprobe-2026-09-17.md"
+      ],
+      "files_modified": [
+        "logs/debug/contexte-ais-2026-09-17.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "tests": "VERT",
+      "calibration": "4/4",
+      "defect_60_verdict": "CONFIRME (8/8 reponses ou rows[0] n est pas le plus recent)",
+      "retracted": [
+        55,
+        56,
+        59,
+        60
+      ],
+      "still_open": [
+        44,
+        52,
+        53,
+        54,
+        58
+      ]
+    }
+  ],
+  "last_task": "H7a - sonde Flux unique et retractations",
+  "last_status": "SUCCESS",
+  "last_update": "2026-09-17T20:38:09Z"
 }
