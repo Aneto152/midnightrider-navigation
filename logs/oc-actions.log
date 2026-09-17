@@ -264,3 +264,4 @@
 [2026-09-17T00:46:04Z] [FILE_CREATE] [mediaman] H5A: snapshot_store.py et event_pipeline.py - joint du pipeline evenementiel (etape 4E.1)
 [2026-09-17T00:46:04Z] [FILE_CREATE] [mediaman] H5A: 3 fichiers de tests ajoutes ; tests/mediaman = 461 fonctions
 [2026-09-17T00:46:04Z] [RESULT] [mediaman] Result: SUCCESS - aucune unite systemd modifiee, aucun envoi Telegram
+[2026-09-17T00:46:05Z] [COMMIT] SHA: 2fb5c9f5b180b321c43a81fe775d6c3b812630ee
