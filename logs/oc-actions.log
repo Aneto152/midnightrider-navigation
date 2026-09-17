@@ -260,3 +260,4 @@
 [2026-09-17T00:04:06Z] [FILE_MODIFY] [portal] H4E: host fige retire des 7 liens, pages relatives a l hote d arrivee
 [2026-09-17T00:04:06Z] [DEBUG] [security] H4E: etat Tailscale mesure = ACTIF ; defaut 40 consigne (conclusion fausse en H4d)
 [2026-09-17T00:04:06Z] [RESULT] [portal] Result: SUCCESS - aucun service redemarre
+[2026-09-17T00:04:07Z] [COMMIT] SHA: d28dee3672caa12d91a2077cae3b628313e761f8
