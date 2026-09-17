@@ -422,6 +422,35 @@ explicite et commentée, et restreint le reste par `ProtectSystem=strict`.
 
 Tests : 501 fonctions dans `tests/mediaman`.
 
+<!-- H5C-DEFECT-49 -->
+### 4.6quater — Défaut 49 : un test instable une fois sur six
+
+`tests/mediaman/test_historical_request.py` fabriquait un instant futur avec
+`future_dt.replace(second=future_dt.second + 10)`. `datetime.replace()` remplace
+un **champ**, il ne fait pas d'arithmétique : si la seconde courante valait 50 ou
+plus, le champ dépassait 59 et l'appel levait `ValueError`.
+
+Ce test échouait donc **10 secondes sur 60, soit 16,7 % des exécutions**, depuis
+sa création. Il est passé à 00:45Z le 2026-09-17 et a échoué à 01:32Z avec
+exactement le même code. La conséquence dérangeante : les annonces de « suite
+entièrement verte » des phases précédentes l'étaient en partie par chance.
+
+**Corrigé** en remplaçant l'arithmétique sur les champs par des `timedelta`, sur
+l'ensemble du dépôt et non sur la seule occurrence connue.
+
+**Garde-fou ajouté** : `tests/mediaman/test_no_fragile_datetime_arithmetic.py`
+échoue si le motif `VAR.replace(champ=VAR.champ + N)` réapparaît dans n'importe
+quel test, pour les champs `second`, `minute`, `hour` et `day`. Les mois et les
+années en sont exclus : ce ne sont pas des durées fixes. Le garde vérifie aussi
+qu'il détecte bien l'expression d'origine et qu'il ne signale pas les
+`replace()` légitimes — un garde incapable de détecter son propre motif serait
+un test vert sans objet.
+
+**Preuve** : le test a été exécuté 6 fois dans la fenêtre des secondes 48 à
+59, celle qui échouait systématiquement, sans un seul échec.
+
+Tests : 506 dans `tests/mediaman`, 41 dans `tests/mcp`.
+
 ### 4.7 MCPCollector (Navigation Facts) — Step 3A
 
 **Status:** ✅ COMPLETE — Mocked unit tests passing (178/178 full suite)

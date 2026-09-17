@@ -655,3 +655,26 @@ explicite et commentée, avec `ProtectSystem=strict`.
 **Rappel non traité, et le plus ancien de la liste :** le jeton InfluxDB Cloud de
 SEC-2026-09-15-02 n'est toujours pas révoqué. La rédaction a masqué le document,
 elle n'a rien révoqué.
+
+<!-- H5C-NOTE -->
+## H5c — défaut 49 : un test instable une fois sur six
+
+`test_historical_request.py` fabriquait un instant futur avec
+`future_dt.replace(second=future_dt.second + 10)`. `datetime.replace()` remplace
+un champ sans faire d'arithmétique : au-delà de 59, il lève `ValueError`. Le test
+échouait **10 secondes sur 60 — 16,7 % des exécutions — depuis sa création**.
+
+Il est passé à 00:45Z le 2026-09-17 et a échoué à 01:32Z avec le même code. Ce
+n'était donc pas une régression introduite par l'étape 4E.2, ni un horodatage
+expiré comme je l'avais d'abord supposé : une instabilité permanente, masquée par
+le fait qu'elle ne se manifeste qu'une fois sur six.
+
+**Conséquence à assumer :** les annonces de « suite entièrement verte » des phases
+précédentes l'étaient en partie par chance. Un test instable ne dit pas la vérité
+sur le système, il dit l'heure à laquelle on l'a lancé.
+
+Corrigé sur toute la classe de bug, pas sur la seule occurrence, et verrouillé
+par `tests/mediaman/test_no_fragile_datetime_arithmetic.py`.
+
+**Rappel non traité, et toujours le plus ancien :** le jeton InfluxDB Cloud de
+SEC-2026-09-15-02 n'est pas révoqué.

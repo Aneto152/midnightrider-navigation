@@ -5,7 +5,7 @@ Tests strictly validated temporal parameters for historical snapshots.
 """
 
 import pytest
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from mediaman.historical_request import HistoricalRequest, HistoricalRequestValidator
 
 
@@ -39,7 +39,7 @@ class TestHistoricalRequestValidation:
         future_ts = datetime.now(timezone.utc).isoformat().replace("+00:00", "") + "Z"
         # Add 10 seconds to future
         future_dt = datetime.fromisoformat(future_ts.replace("Z", "+00:00")).replace(tzinfo=timezone.utc)
-        future_dt = future_dt.replace(second=future_dt.second + 10)
+        future_dt = future_dt + timedelta(seconds=10)
         future_ts = future_dt.isoformat().replace("+00:00", "Z")
         
         with pytest.raises(ValueError) as exc_info:

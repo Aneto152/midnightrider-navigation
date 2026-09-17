@@ -27,7 +27,8 @@
     "36956d45c16c  H4b journal",
     "6f91220de4aa  H4c contenu - sonde de dependance a l acces anonyme, correction du registre",
     "69f38303df48  H4c journal",
-    "h5b_content:7b237a3101992e306a16961bdffdf854f9f9db0f"
+    "h5b_content:7b237a3101992e306a16961bdffdf854f9f9db0f",
+    "h5c_content:PENDING_CONTENT_SHA"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -208,5 +209,34 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-17T01:40:59Z"
+  "last_updated": "2026-09-17T02:12:44Z",
+  "h5c": {
+    "phase": "H5c - defaut 49 : test instable une fois sur six",
+    "script_version": "h5c-v1",
+    "executed_at": "2026-09-17T02:12:44Z",
+    "status": "SUCCESS",
+    "files_created": [
+      "tests/mediaman/test_no_fragile_datetime_arithmetic.py"
+    ],
+    "files_modified": [
+      "tests/mediaman/test_historical_request.py",
+      "docs/ARCHITECTURE-MASTER.md",
+      "logs/latest.json",
+      "logs/oc-actions.log",
+      "logs/debug/audit-influx-tokens-2026-09-15.md"
+    ],
+    "tests_mediaman": 506,
+    "tests_mcp": 41,
+    "defaut_49": "CORRIGE",
+    "defaut_49_mecanisme": "datetime.replace(second=...+N) remplace un CHAMP sans arithmetique : au-dela de 59 il leve ValueError. Echec sur 10 secondes sur 60, soit 16,7 % des executions, depuis la creation du test.",
+    "defaut_49_portee": "1 occurrence(s) du motif trouvee(s) dans tests/ ; la classe entiere a ete corrigee, pas la seule occurrence connue",
+    "defaut_49_preuve": "test execute 6 fois dans la fenetre des secondes 48-59, celle qui echouait, sans aucun echec",
+    "defaut_49_garde": "tests/mediaman/test_no_fragile_datetime_arithmetic.py echoue si le motif reapparait",
+    "consequence": "Les annonces de suite entierement verte des phases precedentes etaient en partie dues au hasard de l horloge.",
+    "services_touched": [],
+    "notes": [
+      "Aucun service, aucune unite, aucun conteneur touche : seuls des tests.",
+      "Les champs month et year sont volontairement exclus du garde : ce ne sont pas des durees fixes."
+    ]
+  }
 }
