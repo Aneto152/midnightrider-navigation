@@ -27,7 +27,7 @@
     "36956d45c16c  H4b journal",
     "6f91220de4aa  H4c contenu - sonde de dependance a l acces anonyme, correction du registre",
     "69f38303df48  H4c journal",
-    "h5b_content:PENDING_CONTENT_SHA"
+    "h5b_content:7b237a3101992e306a16961bdffdf854f9f9db0f"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
