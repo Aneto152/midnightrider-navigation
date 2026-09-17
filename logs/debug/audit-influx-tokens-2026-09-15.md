@@ -678,3 +678,22 @@ par `tests/mediaman/test_no_fragile_datetime_arithmetic.py`.
 
 **Rappel non traité, et toujours le plus ancien :** le jeton InfluxDB Cloud de
 SEC-2026-09-15-02 n'est pas révoqué.
+
+<!-- H5D-NOTE -->
+## H5d — `mediaman.service` était inexécutable
+
+`ProtectHome=yes` avec un `WorkingDirectory` sous `/home` : systemd remplaçait
+`/home` par un tmpfs vide et l'unité échouait **avant son `ExecStart`**.
+`systemd-analyze verify` ne signalait rien. L'unité n'ayant jamais été activée,
+le défaut est resté invisible depuis sa création.
+
+Mesuré par portées transitoires dérivées du fichier, une propriété variant à la
+fois. Corrigé par `ProtectHome=no`, raison écrite dans le fichier. Rien n'a été
+installé dans `/etc`, rien n'a été activé.
+
+**Défaut 50, mon erreur :** le garde-fou livré en H5c déclarait légitime
+`other.replace(second=d.second + 10)`, qui échoue pourtant 10 secondes sur 60.
+Motif élargi à toute variable et à la soustraction.
+
+**Rappel non traité, et toujours le plus ancien :** le jeton InfluxDB Cloud de
+SEC-2026-09-15-02 n'est pas révoqué.

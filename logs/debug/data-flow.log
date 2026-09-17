@@ -2434,3 +2434,7 @@
 [2026-09-07T14:36:27.224Z] [FLOW] Compass→SK: headingTrue=66.9deg [signalk-heading-true-calculator]
 [2026-09-07T14:36:27.281Z] [FLOW] NavCalc→SK: set=0.2degT drift=0.10kts [signalk-current-calculator]
 [2026-09-07T14:36:27.337Z] [FLOW] Wind→SK: TWD=325.6deg TWS=9.6kts TWA=-101.3deg [signalk-truewind-calculator]
+[2026-09-16T22:34:03] STARTUP dry_run=True production_mode=False provider=test
+[2026-09-16T22:34:03] DATA_IN normalized_cycle=2026-09-17T02:30:00+00:00 now=2026-09-17T02:34:03.664672+00:00
+[2026-09-16T22:34:03] SEND_ATTEMPT dry_run=True content_length=298 execution_id=186275df
+[2026-09-16T22:34:03] SEND_ERROR: Sender error: ValueError: TELEGRAM_BOT_TOKEN not configured

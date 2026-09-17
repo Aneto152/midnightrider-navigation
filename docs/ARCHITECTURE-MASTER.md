@@ -451,6 +451,58 @@ un test vert sans objet.
 
 Tests : 506 dans `tests/mediaman`, 41 dans `tests/mcp`.
 
+<!-- H5D-PROTECTHOME-FIX -->
+### 4.6quinquies — `mediaman.service` était inexécutable, et personne ne le savait
+
+`mediaman.service` déclarait `ProtectHome=yes` alors que son `WorkingDirectory`
+est `/home/aneto/midnightrider-navigation`. Sous `ProtectHome=yes`, systemd
+remplace `/home` par un tmpfs vide dans l'espace de noms de l'unité : le
+répertoire de travail n'existe tout simplement pas pour le processus, et
+l'unité échoue **avant d'avoir atteint son `ExecStart`**.
+
+`systemd-analyze verify` ne signale rien : l'interaction n'est visible qu'à
+l'exécution. L'unité n'ayant jamais été activée, le défaut est resté invisible
+depuis sa création. Une unité qu'on n'exécute pas n'est pas une unité qui
+fonctionne : c'est une unité sur laquelle on n'a aucune information.
+
+**Mesure** — portées `systemd-run` transitoires reproduisant l'unité propriété
+par propriété, les propriétés étant **dérivées du fichier** et non recopiées à
+la main. Une seule varie à la fois :
+
+| Variante | Verdict |
+|----------|---------|
+| unité telle qu'elle était (`ProtectHome=yes`) | échec |
+| `ProtectHome=no` | passe |
+| `ProtectHome` absent (valeur par défaut) | passe |
+| `ProtectHome=yes` sans `ProtectSystem` | échec |
+| `ProtectHome=yes` sans `ReadWritePaths` | échec |
+| `ProtectHome=read-only` | échec |
+
+Retirer `ProtectSystem` ou `ReadWritePaths` ne sauve pas l'unité : la cause est
+bien `ProtectHome`, et `no` est bien le remède.
+
+**Corrigé** : `ProtectHome=no`, avec la raison écrite à côté dans le fichier.
+Le dépôt vit réellement sous `/home` ; tout le reste demeure en lecture seule
+par `ProtectSystem=strict`. Aucune unité n'a été installée dans `/etc` ni
+activée : le fichier du dépôt reste la seule chose modifiée.
+
+**Ce que cette correction ne prouve pas.** Un espace de noms qui laisse démarrer
+le processus ne dit rien de ce que le processus fait. Le vrai `ExecStart` a été
+exécuté séparément dans l'espace corrigé et son résultat consigné tel quel : le
+**défaut 44** — quel point d'entrée `mediaman.service` doit servir — reste une
+décision ouverte.
+
+#### Défaut 50 — le garde-fou de H5c déclarait légitime un bogue
+
+Le garde ajouté en H5c exigeait la **même variable** des deux côtés du motif, et
+rangeait donc `other.replace(second=d.second + 10)` parmi les appels légitimes.
+Cette expression échoue pourtant 10 secondes sur 60, exactement comme le
+défaut 49 : la fragilité vient de l'arithmétique sur le champ, pas de l'identité
+des variables. Le motif a été élargi à toute variable et à la soustraction,
+vérifié sans faux positif sur l'ensemble de `tests/`, et deux tests ont été
+ajoutés qui prouvent la détection **par exécution** avant de la prouver par
+expression régulière.
+
 ### 4.7 MCPCollector (Navigation Facts) — Step 3A
 
 **Status:** ✅ COMPLETE — Mocked unit tests passing (178/178 full suite)

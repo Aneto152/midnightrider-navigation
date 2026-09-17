@@ -33,9 +33,19 @@ TESTS_ROOT = Path(__file__).resolve().parent.parent
 
 
 def _fragile_pattern(field: str) -> re.Pattern:
-    """VAR.replace(champ=VAR.champ + N) - le motif exact du defaut 49."""
+    """
+    X.replace(champ=Y.champ +/- N) - arithmetique sur un champ datetime.
+
+    DEFAUT 50, corrige le 2026-09-17. La premiere version de ce motif exigeait
+    la MEME variable des deux cotes, et ce fichier rangeait donc
+    other.replace(second=d.second + 10) parmi les appels legitimes. Cette
+    expression echoue pourtant 10 secondes sur 60, exactement comme le defaut
+    49 : la fragilite vient de l arithmetique sur le champ, pas de l identite
+    des variables. La soustraction est incluse - elle passe sous zero avec la
+    meme brutalite.
+    """
     return re.compile(
-        rf"(?P<var>\w+)\.replace\(\s*{field}\s*=\s*(?P=var)\.{field}\s*\+\s*\d+\s*\)"
+        rf"\w+\.replace\(\s*{field}\s*=\s*\w+\.{field}\s*[-+]\s*\d+\s*\)"
     )
 
 
@@ -85,7 +95,7 @@ def test_the_guard_does_not_flag_legitimate_replace_calls():
         "d.replace(microsecond=0)",
         "d.replace(hour=12, minute=0, second=0)",
         "d.replace(tzinfo=timezone.utc)",
-        "other.replace(second=d.second + 10)",  # variables differentes
+        "d.replace(second=59)",
     ]
     pattern = _fragile_pattern("second")
     for expression in legitimate:
@@ -118,3 +128,32 @@ def test_the_original_expression_really_did_fail_in_that_window():
         except ValueError:
             failures += 1
     assert failures == 10
+
+
+def test_the_guard_detects_the_cross_variable_form():
+    """
+    Defaut 50, mon erreur : other.replace(second=d.second + 10) echoue 10
+    secondes sur 60 tout comme le defaut 49. Le garde doit le voir, et on le
+    verifie par execution avant de le verifier par expression reguliere.
+    """
+    from datetime import datetime, timezone
+
+    d = datetime(2026, 9, 17, 1, 32, 55, tzinfo=timezone.utc)
+    other = datetime(2026, 9, 17, 1, 32, 0, tzinfo=timezone.utc)
+    with pytest.raises(ValueError):
+        other.replace(second=d.second + 10)
+    assert _fragile_pattern("second").search(
+        "other.replace(second=d.second + 10)"
+    ) is not None
+
+
+def test_the_guard_detects_subtraction_too():
+    """Retirer N d un champ passe sous zero, et doit donc etre signale aussi."""
+    from datetime import datetime, timezone
+
+    d = datetime(2026, 9, 17, 1, 32, 5, tzinfo=timezone.utc)
+    with pytest.raises(ValueError):
+        d.replace(second=d.second - 10)
+    assert _fragile_pattern("second").search(
+        "d.replace(second=d.second - 10)"
+    ) is not None

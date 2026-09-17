@@ -28,7 +28,8 @@
     "6f91220de4aa  H4c contenu - sonde de dependance a l acces anonyme, correction du registre",
     "69f38303df48  H4c journal",
     "h5b_content:7b237a3101992e306a16961bdffdf854f9f9db0f",
-    "h5c_content:64078669c14668820885a816321957a2a56d47d6"
+    "h5c_content:64078669c14668820885a816321957a2a56d47d6",
+    "h5d_content:PENDING_CONTENT_SHA"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -52,7 +53,9 @@
     "38 docs/ARCHITECTURE-MASTER.md annonce un acces distant par Cloudflare Tunnel et renvoie a CLOUDFLARE-TUNNEL-URL.md, fichier absent du depot. Etat mesure du service en H4d : ABSENT. -> CORRIGE en H4e : la ligne annonce desormais Tailscale, restreint au tailnet.",
     "42 MediaMan : EventDetector, EventQueue et EventOrchestrator (etapes 4A/4B/4D, ~1150 lignes, 106 tests) n etaient importes par aucun module hors de leurs propres tests. Trois sous-systemes complets branches sur rien. Corrige en H5a par mediaman/event_pipeline.py et snapshot_store.py.",
     "43 la documentation MediaMan datait du 2026-08-27 et affirmait '303/303', 'Telegram NOT IMPLEMENTED' et 'OpenClaw adapter not implemented', trois affirmations fausses. Chiffres reels mesures en H5a : 461 tests dans tests/mediaman, 41 dans tests/mcp. Section 4.6bis ajoutee.",
-    "45 tests/mcp/test_phase2_historical_contract.py annoncait 24 scenarios pour 23 fonctions. Docstring alignee sur la realite en H5a."
+    "45 tests/mcp/test_phase2_historical_contract.py annoncait 24 scenarios pour 23 fonctions. Docstring alignee sur la realite en H5a.",
+    "ProtectHome mediaman.service - unite inexecutable, corrigee en H5d",
+    "50 le garde-fou H5c declarait legitime other.replace(second=d.second + 10)"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -209,7 +212,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-17T02:12:44Z",
+  "last_updated": "2026-09-17T02:34:48Z",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -237,6 +240,44 @@
     "notes": [
       "Aucun service, aucune unite, aucun conteneur touche : seuls des tests.",
       "Les champs month et year sont volontairement exclus du garde : ce ne sont pas des durees fixes."
+    ]
+  },
+  "h5d": {
+    "phase": "H5d - mediaman.service etait inexecutable",
+    "script_version": "h5d-v1",
+    "executed_at": "2026-09-17T02:34:48Z",
+    "status": "SUCCESS",
+    "files_modified": [
+      "etc/systemd/system/mediaman.service",
+      "tests/mediaman/test_no_fragile_datetime_arithmetic.py",
+      "docs/ARCHITECTURE-MASTER.md",
+      "logs/latest.json",
+      "logs/oc-actions.log",
+      "logs/debug/audit-influx-tokens-2026-09-15.md"
+    ],
+    "tests_mediaman": 508,
+    "tests_mcp": 41,
+    "protecthome": "CORRIGE - yes -> no",
+    "protecthome_mecanisme": "ProtectHome=yes remplace /home par un tmpfs vide dans l espace de noms ; le WorkingDirectory de l unite est sous /home, donc l unite echouait avant son ExecStart. systemd-analyze verify ne signale rien : visible seulement a l execution.",
+    "protecthome_matrice": {
+      "A_unite_telle_quelle": "ECHEC",
+      "B_protecthome_no": "PASSE",
+      "C_protecthome_absent": "PASSE",
+      "D_sans_protectsystem": "ECHEC",
+      "E_sans_readwritepaths": "ECHEC",
+      "F_protecthome_readonly": "PASSE",
+      "G_fichier_corrige_relu": "PASSE"
+    },
+    "execstart_reel_code_sortie": 1,
+    "defaut_50": "CORRIGE - motif elargi a toute variable et a la soustraction",
+    "units_installed": false,
+    "units_enabled": false,
+    "services_touched": [],
+    "notes": [
+      "Aucune unite copiee dans /etc, aucune unite activee, aucun service demarre.",
+      "Les portees systemd-run sont transitoires et disparaissent d elles-memes.",
+      "Le code de sortie du vrai ExecStart est rapporte tel quel : il concerne le defaut 44, pas H5d.",
+      "Effet de bord assume : /var/lib/mediaman et /var/log/mediaman ont ete crees par systemd pendant les sondes, exactement comme l unite les aurait crees."
     ]
   }
 }

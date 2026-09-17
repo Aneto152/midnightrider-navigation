@@ -31,7 +31,20 @@ Environment="MEDIAMAN_PRODUCTION_MODE=false"
 NoNewPrivileges=yes
 PrivateTmp=yes
 ProtectSystem=strict
-ProtectHome=yes
+# H5D-PROTECTHOME
+# ProtectHome valait "yes" alors que WorkingDirectory est
+# /home/aneto/midnightrider-navigation et que seul le sous-dossier logs
+# figurait dans ReadWritePaths. Sous ProtectHome=yes, systemd remplace /home
+# par un tmpfs vide dans l espace de noms de l unite : le repertoire de
+# travail n existe donc pas pour le processus et l unite echoue AVANT d avoir
+# atteint son ExecStart. L unite etant desactivee, personne ne l avait jamais
+# vu.
+# Mesure du 2026-09-17, portee systemd-run transitoire reproduisant l unite
+# propriete par propriete : "yes" echoue, "no" passe, et retirer
+# ProtectSystem ou ReadWritePaths ne change pas ce verdict.
+# Le depot vit reellement sous /home. Tout le reste demeure en lecture seule
+# grace a ProtectSystem=strict.
+ProtectHome=no
 ReadWritePaths=/var/lib/mediaman /var/log/mediaman /home/aneto/midnightrider-navigation/logs
 
 # Resource limits
