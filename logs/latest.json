@@ -67,7 +67,8 @@
     "36 deux liens de portal/index.html pointent sur des tableaux de bord qui n existent pas dans l instance Grafana : 01-navigation-dashboard et data-model-status renvoient 404 meme authentifie. Deux des sept cartes de la page d accueil sont mortes. Mesure en H4c.",
     "37 les UID des JSON de grafana-dashboards/ ne correspondent pas a ceux de l instance vivante (03-performance.json declare uid=performance-analysis, l instance repond sur 03-performance ; 11 fichiers sur 13 ont nom != uid). Depuis H4b, deploy-dashboards-to-grafana.sh dispose enfin d un identifiant valide : l executer creerait vraisemblablement une seconde serie de tableaux. NE PAS LANCER.",
     "39 tests/portal/test_portal.py::TestGrafanaConfig verifie allow_embedding dans config/grafana-custom.ini, fichier que Grafana ne charge pas. Le test passe et ne prouve rien. A repointer sur les variables d environnement de docker-compose.yml.",
-    "44 mediaman/mediaman.py (167 lignes) est le seul fichier que mediaman.service execute et n a aucun test ; il n utilise que la fondation d aout avec MEDIAMAN_CONTENT_PROVIDER=test, donc il produirait un article factice. La vraie chaine (historical_entrypoint.py) n est referencee par aucune unite systemd. A trancher en 4E.2."
+    "44 mediaman/mediaman.py (167 lignes) est le seul fichier que mediaman.service execute et n a aucun test ; il n utilise que la fondation d aout avec MEDIAMAN_CONTENT_PROVIDER=test, donc il produirait un article factice. La vraie chaine (historical_entrypoint.py) n est referencee par aucune unite systemd. A trancher en 4E.2.",
+    "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md"
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -358,16 +359,10 @@
       "task": "H7d - documentation : etat UM982, dedoublonnage section 8, collision SYSTEM-SUMMARY",
       "version": "h7d-v2",
       "timestamp": "2026-09-17T21:43:29Z",
-      "status": "SUCCESS",
+      "status": "ABORTED",
       "production_code_modified": false,
       "services_touched": [],
-      "files_modified": [
-        "docs/ARCHITECTURE-MASTER.md",
-        "docs/HARDWARE/UM982-GNSS-DATASHEET.md",
-        "docs/INTEGRATION/UM982-INTEGRATION-GUIDE.md",
-        "docs/SIGNALK-PLUGINS-INVENTORY.md",
-        "SYSTEM-SUMMARY.md"
-      ],
+      "files_modified": [],
       "files_renamed": {
         "docs/SYSTEM-SUMMARY.md": "docs/SYSTEM-OVERVIEW-1PAGE.md"
       },
@@ -393,10 +388,78 @@
         53,
         54,
         58
+      ],
+      "correction": {
+        "corrected_on": "2026-09-17T22:50:37Z",
+        "corrected_by": "h7d-v4",
+        "why": "cette entree a ete publiee par le job d auto-commit de 15 minutes (commit 80f3980) alors que h7d-v2 s etait arretee a son etape 8 sans commiter. Elle declarait SUCCESS et listait des fichiers absents du commit.",
+        "actually_published_by_80f3980": [
+          "docs/SYSTEM-SUMMARY.md -> docs/SYSTEM-OVERVIEW-1PAGE.md (renommage seul, sans le bandeau)",
+          "logs/debug/architecture-master-numerotation-2026-09-17.md",
+          "logs/latest.json",
+          "logs/oc-actions.log"
+        ],
+        "claimed_but_not_published": [
+          "docs/ARCHITECTURE-MASTER.md",
+          "docs/HARDWARE/UM982-GNSS-DATASHEET.md",
+          "docs/INTEGRATION/UM982-INTEGRATION-GUIDE.md",
+          "docs/SIGNALK-PLUGINS-INVENTORY.md",
+          "SYSTEM-SUMMARY.md"
+        ],
+        "consequence": "4 references cassees sur main jusqu a h7d-v4"
+      }
+    },
+    {
+      "task": "H7d - documentation : etat UM982, dedoublonnage section 8, achevement du renommage publie a moitie",
+      "version": "h7d-v4",
+      "timestamp": "2026-09-17T22:50:37Z",
+      "status": "SUCCESS",
+      "parent": "80f3980912be16616f300017ca00d76e5be90617",
+      "production_code_modified": false,
+      "services_touched": [],
+      "files_modified": [
+        "README.md",
+        "docs/INDEX.md",
+        "docs/ARCHITECTURE-MASTER.md",
+        "docs/HARDWARE/UM982-GNSS-DATASHEET.md",
+        "docs/INTEGRATION/UM982-INTEGRATION-GUIDE.md",
+        "docs/SIGNALK-PLUGINS-INVENTORY.md",
+        "docs/SYSTEM-OVERVIEW-1PAGE.md",
+        "SYSTEM-SUMMARY.md",
+        "logs/debug/architecture-master-numerotation-2026-09-17.md"
+      ],
+      "facts": {
+        "um982_connected": false,
+        "um982_status_date": "2026-09-17",
+        "position_sources": [
+          "N2K.1",
+          "N2K.2"
+        ],
+        "position_source_hardware": "two B&G Vulcan 7 FS chartplotters",
+        "position_source_caveat": "either chartplotter may be switched off - no source may be pinned",
+        "section8_duplicate_copies_removed": 4,
+        "broken_references_repaired": 5,
+        "broken_references_that_were_relative": 3
+      },
+      "defects_recorded": [
+        "61 le job d auto-commit de 15 minutes publie l index laisse par un script abandonne, journaux compris - a l origine du commit 80f3980 et, plus tot, de SEC-2026-09-14-01"
+      ],
+      "deferred": [
+        "renumerotation ARCHITECTURE-MASTER (voir logs/debug/architecture-master-numerotation-2026-09-17.md)",
+        "20 liens relatifs casses dans docs/INDEX.md, anterieurs, meme fichier de constat",
+        "defaut 61 : faire refuser au job d auto-commit tout index contenant autre chose que logs/"
+      ],
+      "still_open": [
+        44,
+        52,
+        53,
+        54,
+        58,
+        61
       ]
     }
   ],
-  "last_task": "H7d - documentation : etat UM982, dedoublonnage section 8, collision SYSTEM-SUMMARY",
+  "last_task": "H7d - documentation : etat UM982, dedoublonnage section 8, achevement du renommage publie a moitie",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-17T21:43:29Z"
+  "last_update": "2026-09-17T22:50:37Z"
 }

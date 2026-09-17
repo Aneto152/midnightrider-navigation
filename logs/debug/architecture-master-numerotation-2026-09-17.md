@@ -41,6 +41,59 @@ retire.
 6. Verifier apres coup qu aucun numero n est utilise deux fois et que
    l ordre des titres de niveau 2 est croissant.
 
+## Constat annexe : liens relatifs casses dans docs/INDEX.md
+
+Mesure du 2026-09-17 : dans `docs/INDEX.md`, 20 liens relatifs ne
+resolvent pas, pour 16 cibles distinctes. La cause est systematique et
+anterieure a ce commit : le fichier est DANS `docs/` mais ecrit ses
+cibles comme s il etait a la racine. Exemples mesures :
+
+| Lien ecrit | Resout en | Etat |
+|------------|-----------|------|
+| `docs/ARCHITECTURE-MASTER.md` | `docs/docs/ARCHITECTURE-MASTER.md` | absent |
+| `SOFTWARE/SIGNAL-K-CONFIGURATION.md` | `docs/SOFTWARE/...` | dossier absent |
+| `OPERATIONS/TROUBLESHOOTING.md` | `docs/OPERATIONS/...` | dossier absent |
+| `../CONTRIBUTING.md` | `CONTRIBUTING.md` | absent du depot |
+
+Ce n est pas corrige ici. Pour chaque cible il faut d abord decider si le
+document manque ou si le lien est mal ecrit : ce sont deux reparations
+differentes. Chantier distinct, a borner separement.
+
+## Defaut 61 — un job automatique publie du travail abandonne
+
+Constat du 2026-09-17, decouvert en tentant ce commit.
+
+`h7d-v2` s est arretee a son etape 8 sur son propre garde-fou, sans
+commiter : `README.md` etait hors liste blanche. Correct. Mais l etape 4
+avait utilise `git mv`, qui **indexe** le renommage. Huit minutes plus
+tard, le job d auto-commit des journaux, qui tourne toutes les 15 minutes,
+a commite et pousse cet index : commit `80f3980`.
+
+Ce qui a ete publie sans que personne ne le decide :
+
+| Publie | Consequence |
+|--------|-------------|
+| le renommage `docs/SYSTEM-SUMMARY.md` → `docs/SYSTEM-OVERVIEW-1PAGE.md` | 4 references cassees sur `main` |
+| `logs/latest.json` | declare `h7d-v2` **SUCCESS** et liste 5 documents modifies qui ne sont pas dans le commit |
+| `logs/oc-actions.log` | 5 lignes decrivant des modifications non publiees |
+| `logs/debug/architecture-master-numerotation-2026-09-17.md` | fichier non suivi, ramasse par `git add logs/` |
+
+Le meme mecanisme est deja identifie comme la cause de
+`SEC-2026-09-14-01` : c est lui qui avait publie l autorisation InfluxDB
+dans ce depot public.
+
+Deux consequences de conception, appliquees des ce commit :
+
+1. un script ne doit **rien indexer** avant son etape de commit, et ne
+   doit ecrire dans `logs/` qu a cet instant ;
+2. un script doit armer un piege de sortie qui, en cas d arret anormal,
+   vide l index et remet `logs/` a HEAD.
+
+Ce qui reste a decider, et n est pas fait ici : le job lui-meme devrait
+refuser de commiter quand l index contient autre chose que `logs/`.
+C est une modification de service, hors perimetre d un commit de
+documentation.
+
 ## Pourquoi ne pas l avoir fait maintenant
 
 Parce qu une renumerotation casse toutes les references croisees du type

@@ -305,3 +305,10 @@
 [2026-09-17T21:43:29] [FILE_MODIFY] [docs] docs/SYSTEM-SUMMARY.md renomme en docs/SYSTEM-OVERVIEW-1PAGE.md - collision de nom SSOT resolue, 0 perte
 [2026-09-17T21:43:29] [FILE_CREATE] [docs] logs/debug/architecture-master-numerotation-2026-09-17.md - constat differe
 [2026-09-17T21:43:29] [RESULT] [docs] Result: SUCCESS - aucun code de production modifie, aucun service touche
+[2026-09-17T22:50:37] [FILE_MODIFY] [docs] UM982 marque NON CONNECTE (2026-09-17) dans 5 documents - specifications et procedures conservees
+[2026-09-17T22:50:37] [FILE_MODIFY] [docs] ARCHITECTURE-MASTER : 4 copies excedentaires de la section 8 retirees apres verification d identite par sha256
+[2026-09-17T22:50:37] [FILE_MODIFY] [docs] docs/SYSTEM-OVERVIEW-1PAGE.md : bandeau explicatif pose - 80f3980 n avait publie que le renommage
+[2026-09-17T22:50:37] [FILE_MODIFY] [docs] 5 references reparees : README.md (x2), docs/INDEX.md (x2), docs/ARCHITECTURE-MASTER.md (x1) - cassees sur main depuis 80f3980, dont 3 relatives ou arborescentes
+[2026-09-17T22:50:37] [DEBUG] [git] defaut 61 enregistre - le job d auto-commit de 15 minutes a publie l index laisse par h7d-v2 (commit 80f3980) ainsi qu une entree de journal fausse ; l entree est rectifiee dans logs/latest.json
+[2026-09-17T22:50:37] [FILE_MODIFY] [docs] logs/debug/architecture-master-numerotation-2026-09-17.md - constat complete : numerotation, liens INDEX, defaut 61
+[2026-09-17T22:50:37] [RESULT] [docs] Result: SUCCESS - aucun code de production modifie, aucun service touche
