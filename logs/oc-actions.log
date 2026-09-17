@@ -300,3 +300,8 @@
 [2026-09-17T20:38:09] [DEBUG] [fluxprobe] defaut 60 : CONFIRME (8/8 reponses ou rows[0] n est pas le plus recent)
 [2026-09-17T20:38:09] [FILE_CREATE] [retractations] logs/debug/RETRACTATIONS.md - defauts 55, 56, 59, 60 retractes
 [2026-09-17T20:38:09] [RESULT] [fluxprobe] Result: VERT - tests 45, aucun code de production modifie
+[2026-09-17T21:43:29] [FILE_MODIFY] [docs] UM982 marque NON CONNECTE (2026-09-17) dans 5 documents - specifications et procedures conservees
+[2026-09-17T21:43:29] [FILE_MODIFY] [docs] ARCHITECTURE-MASTER : 4 copies excedentaires de la section 8 retirees apres verification d identite par sha256
+[2026-09-17T21:43:29] [FILE_MODIFY] [docs] docs/SYSTEM-SUMMARY.md renomme en docs/SYSTEM-OVERVIEW-1PAGE.md - collision de nom SSOT resolue, 0 perte
+[2026-09-17T21:43:29] [FILE_CREATE] [docs] logs/debug/architecture-master-numerotation-2026-09-17.md - constat differe
+[2026-09-17T21:43:29] [RESULT] [docs] Result: SUCCESS - aucun code de production modifie, aucun service touche

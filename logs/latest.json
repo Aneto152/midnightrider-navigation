@@ -353,9 +353,50 @@
         54,
         58
       ]
+    },
+    {
+      "task": "H7d - documentation : etat UM982, dedoublonnage section 8, collision SYSTEM-SUMMARY",
+      "version": "h7d-v2",
+      "timestamp": "2026-09-17T21:43:29Z",
+      "status": "SUCCESS",
+      "production_code_modified": false,
+      "services_touched": [],
+      "files_modified": [
+        "docs/ARCHITECTURE-MASTER.md",
+        "docs/HARDWARE/UM982-GNSS-DATASHEET.md",
+        "docs/INTEGRATION/UM982-INTEGRATION-GUIDE.md",
+        "docs/SIGNALK-PLUGINS-INVENTORY.md",
+        "SYSTEM-SUMMARY.md"
+      ],
+      "files_renamed": {
+        "docs/SYSTEM-SUMMARY.md": "docs/SYSTEM-OVERVIEW-1PAGE.md"
+      },
+      "files_created": [
+        "logs/debug/architecture-master-numerotation-2026-09-17.md"
+      ],
+      "facts": {
+        "um982_connected": false,
+        "um982_status_date": "2026-09-17",
+        "position_sources": [
+          "N2K.1",
+          "N2K.2"
+        ],
+        "position_source_hardware": "two B&G Vulcan 7 FS chartplotters",
+        "section8_duplicate_copies_removed": 4
+      },
+      "deferred": [
+        "renumerotation ARCHITECTURE-MASTER (voir logs/debug/architecture-master-numerotation-2026-09-17.md)"
+      ],
+      "still_open": [
+        44,
+        52,
+        53,
+        54,
+        58
+      ]
     }
   ],
-  "last_task": "H7a - sonde Flux unique et retractations",
+  "last_task": "H7d - documentation : etat UM982, dedoublonnage section 8, collision SYSTEM-SUMMARY",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-17T20:38:09Z"
+  "last_update": "2026-09-17T21:43:29Z"
 }
