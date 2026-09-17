@@ -1,3 +1,16 @@
+> **RETRACTATION PARTIELLE - 2026-09-17**
+>
+> Deux resultats de ce rapport sont retires : le taux de pollution AIS
+> ("1 reponse sur 1") et la mesure de skew ("12/12 acceptes en fenetre
+> 60 s"). Le premier a ete calcule sur les seules sondes reussies alors
+> que 11 sur 12 ont echoue ; le second provient d une sonde qui lisait
+> `rows[0]` d une reponse multi-series. Voir `logs/debug/RETRACTATIONS.md`,
+> defauts 59 et 60.
+>
+> **Ce qui reste valide** : l absence de filtre de contexte dans
+> `mcp/servers/racing.js` (defaut 58), l enumeration des contextes
+> (3991 dont un seul non-AIS) et l invalidation du jalon du 15 septembre.
+
 # Défaut 58 — `racing.js` ne filtre pas le contexte — 2026-09-17
 
 Lecture seule. Aucun code de production, aucun service, aucune unité,
