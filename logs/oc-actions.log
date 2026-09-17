@@ -289,3 +289,8 @@
 [2026-09-17T02:59:26] [FILE_MODIFY] [docs] H6a defaut 51 corrige : tableau ProtectHome relu depuis la mesure
 [2026-09-17T02:59:26] [RESULT] [mediaman] Result: SUCCESS - reconnaissance terminee, aucun code de production modifie
 [2026-09-17T02:59:26] [COMMIT] SHA: ce1de700a3da0e5020f06560d742055e15ea863c
+[2026-09-17T03:27:07] [DEBUG] [racing-mcp] H6c defaut 58 : racing.js sans filtre de contexte, 1/1 reponses issues de cibles AIS
+[2026-09-17T03:27:07] [DEBUG] [racing-mcp] H6c contexte du bateau identifie : vessels.urn:mrn:signalk:uuid:fdcfc5d2-9e90-401f-8b9c-1b80dd9ee72f
+[2026-09-17T03:27:07] [DEBUG] [racing-mcp] H6c skew apres filtrage : EXPLOITABLE (60s acceptes=12, 300s acceptes=11)
+[2026-09-17T03:27:07] [RESULT] [mediaman] Result: SUCCESS - mesure seule, aucun code de production modifie
+[2026-09-17T03:27:07] [COMMIT] SHA: 9a4bfc5be0f93c2f274753130c4a41eae0309025

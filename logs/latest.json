@@ -31,7 +31,7 @@
     "h5c_content:64078669c14668820885a816321957a2a56d47d6",
     "h5d_content:7da5057760595bd4266d49a9925e699f503a0e06",
     "h6a_content:ce1de700a3da0e5020f06560d742055e15ea863c",
-    "h6c_content:PENDING_CONTENT_SHA"
+    "h6c_content:9a4bfc5be0f93c2f274753130c4a41eae0309025"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
