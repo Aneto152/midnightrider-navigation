@@ -476,7 +476,15 @@ la main. Une seule varie à la fois :
 | `ProtectHome` absent (valeur par défaut) | passe |
 | `ProtectHome=yes` sans `ProtectSystem` | échec |
 | `ProtectHome=yes` sans `ReadWritePaths` | échec |
-| `ProtectHome=read-only` | échec |
+| `ProtectHome=read-only` | passe |
+
+
+> **Défaut 51, corrigé le 2026-09-17.** Ce tableau annonçait `read-only` en échec
+> alors que la mesure du même commit disait `PASSE` : le tableau avait été écrit à
+> la main au lieu d'être dérivé de la matrice enregistrée dans `logs/latest.json`.
+> Conséquence pratique : `ProtectHome=read-only` fonctionne et serait plus
+> étroit que `no` — `ReadWritePaths` remonte `logs/` en écriture par-dessus.
+> La valeur ci-dessus est maintenant relue depuis la mesure.
 
 Retirer `ProtectSystem` ou `ReadWritePaths` ne sauve pas l'unité : la cause est
 bien `ProtectHome`, et `no` est bien le remède.

@@ -29,7 +29,8 @@
     "69f38303df48  H4c journal",
     "h5b_content:7b237a3101992e306a16961bdffdf854f9f9db0f",
     "h5c_content:64078669c14668820885a816321957a2a56d47d6",
-    "h5d_content:7da5057760595bd4266d49a9925e699f503a0e06"
+    "h5d_content:7da5057760595bd4266d49a9925e699f503a0e06",
+    "h6a_content:PENDING_CONTENT_SHA"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -212,7 +213,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-17T02:34:48Z",
+  "last_updated": "2026-09-17T02:59:26Z",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -279,5 +280,24 @@
       "Le code de sortie du vrai ExecStart est rapporte tel quel : il concerne le defaut 44, pas H5d.",
       "Effet de bord assume : /var/lib/mediaman et /var/log/mediaman ont ete crees par systemd pendant les sondes, exactement comme l unite les aurait crees."
     ]
+  },
+  "h6a": {
+    "phase": "H6a - reconnaissance en lecture seule de la chaine historique",
+    "script_version": "h6a-v1",
+    "executed_at": "2026-09-17T02:59:26Z",
+    "status": "SUCCESS",
+    "verdict_donnees": "FAITS_MANQUANTS",
+    "as_of_retenu": "2026-09-17T01:59:24Z",
+    "racing_js_verdict": "ERREUR",
+    "racing_js_skew_ms": "n/d",
+    "historical_entrypoint_exit_code": 1,
+    "instants_testes": 0,
+    "instants_4_faits": 0,
+    "instants_sous_1000ms": 0,
+    "constat_couverture": "test_historical_e2e_offline.py remplace MCPClient ET MCPCollector par des doublures : la chaine reelle n avait jamais ete executee avant H6a.",
+    "defaut_51": "CORRIGE - tableau de la doc relu depuis la matrice mesuree",
+    "services_touched": [],
+    "units_installed": false,
+    "units_enabled": false
   }
 }
