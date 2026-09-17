@@ -30,7 +30,8 @@
     "h5b_content:7b237a3101992e306a16961bdffdf854f9f9db0f",
     "h5c_content:64078669c14668820885a816321957a2a56d47d6",
     "h5d_content:7da5057760595bd4266d49a9925e699f503a0e06",
-    "h6a_content:ce1de700a3da0e5020f06560d742055e15ea863c"
+    "h6a_content:ce1de700a3da0e5020f06560d742055e15ea863c",
+    "h6c_content:PENDING_CONTENT_SHA"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -213,7 +214,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-17T02:59:26Z",
+  "last_updated": "2026-09-17T03:27:07Z",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -296,6 +297,23 @@
     "instants_sous_1000ms": 0,
     "constat_couverture": "test_historical_e2e_offline.py remplace MCPClient ET MCPCollector par des doublures : la chaine reelle n avait jamais ete executee avant H6a.",
     "defaut_51": "CORRIGE - tableau de la doc relu depuis la matrice mesuree",
+    "services_touched": [],
+    "units_installed": false,
+    "units_enabled": false
+  },
+  "h6c": {
+    "phase": "H6c - defaut 58 : racing.js ne filtre pas le contexte",
+    "script_version": "h6c-v1",
+    "executed_at": "2026-09-17T03:27:07Z",
+    "status": "SUCCESS",
+    "defaut_58": "racing.js ligne 322 interroge navigation.position sans filtre de contexte ; group() effondre toutes les series AIS et AtoN et last() renvoie le point le plus recent quel qu en soit l emetteur",
+    "contexte_bateau": "vessels.urn:mrn:signalk:uuid:fdcfc5d2-9e90-401f-8b9c-1b80dd9ee72f",
+    "reponses_polluees": "1/1",
+    "skew_contexte_filtre": "EXPLOITABLE",
+    "instants_acceptes_fenetre_60s": 12,
+    "instants_acceptes_fenetre_300s": 11,
+    "consequence_jalon_2026_09_15": "le premier instantane historique COMPLETE avec bounded_skew_ms=1 a ete obtenu avec la requete non filtree : a rejouer avant d etre considere comme acquis",
+    "mystere_cardinalite_resolu": "18456 series = une par emetteur AIS, pas un bogue Influx",
     "services_touched": [],
     "units_installed": false,
     "units_enabled": false
