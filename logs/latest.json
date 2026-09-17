@@ -68,7 +68,8 @@
     "37 les UID des JSON de grafana-dashboards/ ne correspondent pas a ceux de l instance vivante (03-performance.json declare uid=performance-analysis, l instance repond sur 03-performance ; 11 fichiers sur 13 ont nom != uid). Depuis H4b, deploy-dashboards-to-grafana.sh dispose enfin d un identifiant valide : l executer creerait vraisemblablement une seconde serie de tableaux. NE PAS LANCER.",
     "39 tests/portal/test_portal.py::TestGrafanaConfig verifie allow_embedding dans config/grafana-custom.ini, fichier que Grafana ne charge pas. Le test passe et ne prouve rien. A repointer sur les variables d environnement de docker-compose.yml.",
     "44 mediaman/mediaman.py (167 lignes) est le seul fichier que mediaman.service execute et n a aucun test ; il n utilise que la fondation d aout avec MEDIAMAN_CONTENT_PROVIDER=test, donc il produirait un article factice. La vraie chaine (historical_entrypoint.py) n est referencee par aucune unite systemd. A trancher en 4E.2.",
-    "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md"
+    "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md",
+    "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md"
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -457,9 +458,53 @@
         58,
         61
       ]
+    },
+    {
+      "task": "H7e - retrait documente de midnight-logsync",
+      "version": "h7e-v1",
+      "timestamp": "2026-09-17T23:04:22Z",
+      "status": "SUCCESS",
+      "parent": "8120f3c481e87b801569792c8d135a065f05f013",
+      "production_code_modified": false,
+      "services_touched": [],
+      "systemd_change_applied_by_denis_before_this_commit": [
+        "sudo systemctl disable --now midnight-logsync.timer"
+      ],
+      "files_modified": [
+        "etc/systemd/system/midnight-logsync.service",
+        "etc/systemd/system/midnight-logsync.timer",
+        "etc/systemd/system/README.md",
+        "logs/debug/timers-systemd-2026-09-17.md"
+      ],
+      "facts": {
+        "logsync_ever_worked": false,
+        "logsync_failure": "status=200/CHDIR - WorkingDirectory /home/pi/midnightrider-navigation inexistant",
+        "logsync_failures_per_day": 480,
+        "logs_committed_by": "scripts/commit-logs.sh via midnight-logs-commit.timer (15 min)",
+        "coverage_loss": "none - verified at runtime against LOG_PATHS",
+        "logs_commit_timer_untouched": true
+      },
+      "defects_recorded": [
+        "62 le tableau de etc/systemd/system/README.md ne correspond plus au contenu du dossier"
+      ],
+      "deferred": [
+        "defaut 61 : brider scripts/commit-logs.sh pour qu il desindexe tout ce qui n est pas sous logs/ au lieu de le publier",
+        "defaut 62 : remise a plat du tableau des unites systemd",
+        "22 liens relatifs morts dans la documentation",
+        "renumerotation ARCHITECTURE-MASTER"
+      ],
+      "still_open": [
+        44,
+        52,
+        53,
+        54,
+        58,
+        61,
+        62
+      ]
     }
   ],
-  "last_task": "H7d - documentation : etat UM982, dedoublonnage section 8, achevement du renommage publie a moitie",
+  "last_task": "H7e - retrait documente de midnight-logsync",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-17T22:50:37Z"
+  "last_update": "2026-09-17T23:04:22Z"
 }

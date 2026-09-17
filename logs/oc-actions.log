@@ -312,3 +312,8 @@
 [2026-09-17T22:50:37] [DEBUG] [git] defaut 61 enregistre - le job d auto-commit de 15 minutes a publie l index laisse par h7d-v2 (commit 80f3980) ainsi qu une entree de journal fausse ; l entree est rectifiee dans logs/latest.json
 [2026-09-17T22:50:37] [FILE_MODIFY] [docs] logs/debug/architecture-master-numerotation-2026-09-17.md - constat complete : numerotation, liens INDEX, defaut 61
 [2026-09-17T22:50:37] [RESULT] [docs] Result: SUCCESS - aucun code de production modifie, aucun service touche
+[2026-09-17T23:04:22] [CONFIG_CHANGE] [systemd] midnight-logsync.timer desarme par Denis avant ce commit - unite en echec 200/CHDIR depuis toujours, environ 480 echecs par jour
+[2026-09-17T23:04:22] [FILE_MODIFY] [systemd] copies de reference de midnight-logsync alignees sur l unite installee, bandeau de retrait pose
+[2026-09-17T23:04:22] [FILE_MODIFY] [docs] etc/systemd/system/README.md : section des unites retirees, et constat d obsolescence du tableau (defaut 62)
+[2026-09-17T23:04:22] [FILE_CREATE] [docs] logs/debug/timers-systemd-2026-09-17.md - constat detaille des deux minuteurs et cause racine du defaut 61
+[2026-09-17T23:04:22] [RESULT] [systemd] Result: SUCCESS - aucun service en fonctionnement modifie, midnight-logs-commit.timer verifie actif
