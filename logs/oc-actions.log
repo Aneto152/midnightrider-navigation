@@ -257,3 +257,6 @@
 [2026-09-16T23:50:35Z] [DOCKER_ACTION] [grafana] H4D-B: conteneur grafana recree seul (--no-deps), volumes externes preserves
 [2026-09-16T23:50:35Z] [RESULT] [grafana] Result: SUCCESS - anonyme HTTP 401, X-Frame-Options 'aucun', admin OK
 [2026-09-16T23:50:35Z] [COMMIT] SHA: abb349f22bc0064f992041b5e98145c64ac219a7
+[2026-09-17T00:04:06Z] [FILE_MODIFY] [portal] H4E: host fige retire des 7 liens, pages relatives a l hote d arrivee
+[2026-09-17T00:04:06Z] [DEBUG] [security] H4E: etat Tailscale mesure = ACTIF ; defaut 40 consigne (conclusion fausse en H4d)
+[2026-09-17T00:04:06Z] [RESULT] [portal] Result: SUCCESS - aucun service redemarre

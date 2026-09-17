@@ -131,49 +131,49 @@
 
         <div class="dashboard-grid">
             <!-- Navigation Dashboard -->
-            <a href="viewer.html?dashboard=01-navigation-dashboard&host=midnightrider.local" class="dashboard-card">
+            <a href="viewer.html?dashboard=01-navigation-dashboard" class="dashboard-card">
                 <h2><span class="emoji">🧭</span> Navigation</h2>
                 <p>Live position, course, speed, heading, and navigation data</p>
                 <span class="badge">Primary</span>
             </a>
 
             <!-- Cockpit Dashboard -->
-            <a href="viewer.html?dashboard=cockpit-main&host=midnightrider.local" class="dashboard-card">
+            <a href="viewer.html?dashboard=cockpit-main" class="dashboard-card">
                 <h2><span class="emoji">🎰</span> Cockpit</h2>
                 <p>Master dashboard with key instruments and alerts</p>
                 <span class="badge">Primary</span>
             </a>
 
             <!-- Performance Dashboard -->
-            <a href="viewer.html?dashboard=03-performance&host=midnightrider.local" class="dashboard-card">
+            <a href="viewer.html?dashboard=03-performance" class="dashboard-card">
                 <h2><span class="emoji">⚡</span> Performance</h2>
                 <p>Boat speed, VMG, heel angle, and efficiency metrics</p>
                 <span class="badge">Racing</span>
             </a>
 
             <!-- Weather Dashboard -->
-            <a href="viewer.html?dashboard=04-wind-current&host=midnightrider.local" class="dashboard-card">
+            <a href="viewer.html?dashboard=04-wind-current" class="dashboard-card">
                 <h2><span class="emoji">💨</span> Weather</h2>
                 <p>Wind, pressure, temperature, and current data</p>
                 <span class="badge">Racing</span>
             </a>
 
             <!-- Alerts Dashboard -->
-            <a href="viewer.html?dashboard=08-alerts&host=midnightrider.local" class="dashboard-card">
+            <a href="viewer.html?dashboard=08-alerts" class="dashboard-card">
                 <h2><span class="emoji">🔔</span> Alerts</h2>
                 <p>Real-time alert monitoring and operational status</p>
                 <span class="badge">Safety</span>
             </a>
 
             <!-- Data Model Status Dashboard -->
-            <a href="viewer.html?dashboard=data-model-status&host=midnightrider.local" class="dashboard-card">
+            <a href="viewer.html?dashboard=data-model-status" class="dashboard-card">
                 <h2><span class="emoji">📊</span> Data Status</h2>
                 <p>Sensor health and measurement operational status</p>
                 <span class="badge">Monitoring</span>
             </a>
 
             <!-- Crew Dashboard -->
-            <a href="viewer.html?dashboard=09-crew&host=midnightrider.local" class="dashboard-card">
+            <a href="viewer.html?dashboard=09-crew" class="dashboard-card">
                 <h2><span class="emoji">👥</span> Crew</h2>
                 <p>Crew management and watch timer data</p>
                 <span class="badge">Team</span>
@@ -220,7 +220,7 @@
             </a>
 
             <!-- Signal K Data Browser -->
-            <a href="http://midnightrider.local:3000/" class="dashboard-card">
+            <a href="http://midnightrider.local:3000/" data-service-port="3000" class="dashboard-card">
                 <h2><span class="emoji">📡</span> Signal K</h2>
                 <p>Real-time data browser and API explorer</p>
                 <span class="badge">Data</span>
@@ -375,5 +375,16 @@
     <!-- ══════════════════════════════════════════════════════════════════ -->
     
     <script src="/static/js/night-mode.js"></script>
+
+<script>
+/* H4E-HOST-RELATIVE */
+// Les liens vers les services du bord suivent l hote par lequel la page a
+// ete ouverte : midnightrider.local a bord, adresse Tailscale a distance.
+// Aucune adresse figee : SYSTEM-SUMMARY.md interdit de documenter une IP
+// 100.x.x.x comme point d acces.
+document.querySelectorAll('a[data-service-port]').forEach(function (a) {
+  a.href = location.protocol + '//' + location.hostname + ':' + a.dataset.servicePort + '/';
+});
+</script>
 </body>
 </html>

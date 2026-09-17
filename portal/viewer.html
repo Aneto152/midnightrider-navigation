@@ -99,7 +99,7 @@
 
 <div class="error-overlay" id="errorOverlay">
   <div style="font-size:2.5em">📡</div>
-  <div class="error-msg">Could not load Grafana. Check that <br><code style="color:var(--accent-cyan)">midnightrider.local:3001</code> is reachable.</div>
+  <div class="error-msg">Could not load Grafana. Check that <br><code style="color:var(--accent-cyan)" id="errHost">midnightrider.local:3001</code> is reachable.</div>
 </div>
 
 <iframe id="grafana-frame" title="Grafana Dashboard" allowfullscreen></iframe>
@@ -122,6 +122,9 @@ const title = NAMES[dash] || dash.replace(/-/g, ' ').toUpperCase();
 document.getElementById('dashTitle').textContent = title;
 document.title = title + ' — Midnight Rider';
 
+// H4E-ERRHOST : nommer l hote reellement tente, pas une adresse figee.
+var _eh = document.getElementById('errHost');
+if (_eh) { _eh.textContent = host + ':3001'; }
 const grafanaUrl = `http://${host}:3001/d/${dash}?kiosk=1&refresh=${refresh}&theme=dark`;
 const frame = document.getElementById('grafana-frame');
 

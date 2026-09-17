@@ -1,6 +1,6 @@
 {
-  "task": "Phase H securite - H4d, registre et scanner (A) puis fermeture de l acces anonyme Grafana (B)",
-  "date": "2026-09-16T23:14:06Z",
+  "task": "Phase H - H4e, portail accessible par Tailscale sans adresse figee",
+  "date": "2026-09-17T00:04:04Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -44,7 +44,10 @@
     "20b le compte administrateur Grafana n etait detenu par personne : valeur publiee perimee, aucune cle dans .env - repris en main en H4b, valeur connue desormais dans .env hors git",
     "35 H4c a resolu les placeholders de commit_chain avec 'git log --grep=TAG -1', qui renvoie le commit le PLUS RECENT citant l etiquette : 9d9ba4f a ete ecrit comme H3b alors qu il est H3e, et e3a9892 comme H3f alors qu il est H4b. Deux marqueurs honnetes remplaces par deux SHA faux. Corrige en H4d a partir de l API GitHub, autorite unique.",
     "33 scripts/check-staged-secrets.py --audit sans --files n examinait que l index et non le depot : mesure en H4c le 20260916T231406Z -> CORRIGE en H4d : --audit sans --files lit desormais git ls-files",
-    "20 acces anonyme en lecture de Grafana : FERME en H4d (GF_AUTH_ANONYMOUS_ENABLED=false), verifie par une requete sans identifiant"
+    "20 acces anonyme en lecture de Grafana : FERME en H4d (GF_AUTH_ANONYMOUS_ENABLED=false), verifie par une requete sans identifiant",
+    "40 en H4d j ai ecrit 'aucun tunnel actif : l exposition se limite au reseau local' apres n avoir teste que cloudflared. Tailscale etait actif et documente depuis toujours dans SYSTEM-SUMMARY.md section 11, que je n ai pas relu sur ce point. Consequence : avant H4d, les tableaux Grafana lisibles sans identifiant l etaient pour tout le tailnet, pas seulement pour le reseau du bateau. Etat Tailscale mesure en H4e : ACTIF. Troisieme conclusion tiree au-dela de la mesure (voir 34, 35).",
+    "41 portal/index.html passait host=midnightrider.local sur ses sept liens, ce qui neutralisait le repli correct de viewer.html (params.get('host') || window.location.hostname). Le portail etait donc inutilisable a distance par Tailscale. Corrige en H4e : le parametre fige est retire, les pages suivent l hote d arrivee, aucune adresse 100.x.x.x n est ecrite nulle part.",
+    "38 docs/ARCHITECTURE-MASTER.md annonce un acces distant par Cloudflare Tunnel et renvoie a CLOUDFLARE-TUNNEL-URL.md, fichier absent du depot. Etat mesure du service en H4d : ABSENT. -> CORRIGE en H4e : la ligne annonce desormais Tailscale, restreint au tailnet."
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -53,7 +56,7 @@
     "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent",
     "36 deux liens de portal/index.html pointent sur des tableaux de bord qui n existent pas dans l instance Grafana : 01-navigation-dashboard et data-model-status renvoient 404 meme authentifie. Deux des sept cartes de la page d accueil sont mortes. Mesure en H4c.",
     "37 les UID des JSON de grafana-dashboards/ ne correspondent pas a ceux de l instance vivante (03-performance.json declare uid=performance-analysis, l instance repond sur 03-performance ; 11 fichiers sur 13 ont nom != uid). Depuis H4b, deploy-dashboards-to-grafana.sh dispose enfin d un identifiant valide : l executer creerait vraisemblablement une seconde serie de tableaux. NE PAS LANCER.",
-    "38 docs/ARCHITECTURE-MASTER.md annonce un acces distant par Cloudflare Tunnel et renvoie a CLOUDFLARE-TUNNEL-URL.md, fichier absent du depot. Etat mesure du service en H4d : ABSENT."
+    "39 tests/portal/test_portal.py::TestGrafanaConfig verifie allow_embedding dans config/grafana-custom.ini, fichier que Grafana ne charge pas. Le test passe et ne prouve rien. A repointer sur les variables d environnement de docker-compose.yml."
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -62,7 +65,8 @@
     "give Grafana a read-only token instead of the shared read+write one",
     "defaut 36 : reparer ou retirer les deux cartes mortes de portal/index.html",
     "defaut 37 : aligner les UID de grafana-dashboards/ avant tout deploiement",
-    "verifier a l oeil que portal/viewer.html affiche bien Grafana apres une connexion"
+    "controle visuel du portail par Tailscale et en local apres H4e",
+    "defaut 39 : repointer TestGrafanaConfig sur docker-compose.yml"
   ],
   "previous_record": {
     "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
@@ -132,5 +136,12 @@
     "x_frame_options_apres": "aucun",
     "methode": "variables d environnement dans docker-compose.yml ; aucun fichier remonte sur /etc/grafana/grafana.ini",
     "conteneur": "grafana recree seul (--no-deps) ; influxdb et signalk intacts"
+  },
+  "h4e": {
+    "run_utc": "20260917T000404Z",
+    "tailscale": "ACTIF",
+    "correctif": "portal/index.html, viewer.html et mcp.html suivent l hote d arrivee",
+    "adresse_figee": "aucune ; conforme a SYSTEM-SUMMARY.md section 11",
+    "services_touches": "aucun ; le portail relit ses fichiers a chaque requete"
   }
 }

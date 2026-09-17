@@ -564,3 +564,27 @@ Trois constats supplementaires ouverts, issus de la sonde H4c :
   script creerait vraisemblablement des doublons. Ne pas le lancer.
 - 38 : renvoi documentaire mort vers CLOUDFLARE-TUNNEL-URL.md. Etat du service
   cloudflared mesure sur le Pi : ABSENT.
+
+<!-- H4E-NOTE -->
+
+## H4e - le portail suit l hote, et une conclusion fausse de plus a mon actif
+
+Denis a constate que le portail, atteint par Tailscale, affichait des cadres
+vides : les sept liens de portal/index.html passaient host=midnightrider.local,
+un nom mDNS qui ne se resout pas hors du reseau local. Le repli de viewer.html
+etait pourtant correct depuis le debut. C est le lien qui l ecrasait.
+
+Correctif : le parametre fige est retire, les pages suivent l hote par lequel
+elles ont ete ouvertes. Aucune adresse 100.x.x.x n est ecrite dans le depot,
+conformement a SYSTEM-SUMMARY.md section 11.
+
+Defaut 40, le mien. En H4d j ai affiche "aucun tunnel actif : l exposition se
+limite au reseau local" apres n avoir interroge que cloudflared. Tailscale
+tournait. L acces anonyme que nous venons de fermer etait donc ouvert a tout
+le tailnet, et pas seulement au bateau. SYSTEM-SUMMARY.md documente Tailscale
+depuis toujours ; je ne l ai pas relu sur ce point et j ai fait confiance a
+ARCHITECTURE-MASTER.md, qui annoncait un tunnel Cloudflare inexistant.
+
+C est la troisieme fois que je conclus au-dela de ce que j ai mesure, apres le
+defaut 34 et le defaut 35. Les trois fois, une absence de signal a ete lue
+comme un signal d absence. Une sonde ne prouve que ce qu elle interroge.

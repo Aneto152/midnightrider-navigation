@@ -116,5 +116,16 @@ function copyConfig() {
 
 init();
 </script>
+
+<script>
+/* H4E-MCP-HOST */
+// Valeur par defaut alignee sur l hote d arrivee, sans ecraser une saisie.
+(function () {
+  var i = document.getElementById('influxUrl');
+  if (i && i.value.indexOf('midnightrider.local') !== -1) {
+    i.value = 'http://' + location.hostname + ':8086';
+  }
+})();
+</script>
 </body>
 </html>

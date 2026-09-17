@@ -91,7 +91,7 @@ Runtime E2E validation remains incomplete.
 | **Rôle** | Signal K server, Docker host (InfluxDB, Grafana), gateway BLE, scripts Python |
 | **Alimentation** | 12V → 5V USB-C via convertisseur DC/DC |
 | **Accès local** | SSH (`aneto@midnightrider.local`) |
-| **Accès distant** | Cloudflare Tunnel (voir `CLOUDFLARE-TUNNEL-URL.md`) |
+| **Accès distant** | Tailscale, restreint au tailnet Midnight Rider (état mesuré en H4e : ACTIF). Aucun tunnel Cloudflare n'existe : le fichier `CLOUDFLARE-TUNNEL-URL.md` annoncé ici n'a jamais été présent au dépôt. Les adresses `100.x.x.x` ne sont pas des points d'accès documentés (cf. `SYSTEM-SUMMARY.md` §11) : le portail suit l'hôte d'arrivée. |
 
 ### 2.2 Instruments actifs
 
