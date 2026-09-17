@@ -272,3 +272,8 @@
 [2026-09-17T01:40:59] [DEBUG] [mediaman] H5b defaut 49 OUVERT : test_future_timestamp_rejected
 [2026-09-17T01:40:59] [RESULT] [mediaman] Result: SUCCESS - tests mediaman=501 mcp=41 - aucune unite installee ni activee
 [2026-09-17T01:40:59] [COMMIT] SHA: 7b237a3101992e306a16961bdffdf854f9f9db0f
+[2026-09-17T02:12:45] [FILE_MODIFY] [tests] H5c defaut 49 CORRIGE : arithmetique sur champ datetime remplacee par timedelta (1 occurrence(s))
+[2026-09-17T02:12:45] [FILE_CREATE] [tests] H5c garde-fou : test_no_fragile_datetime_arithmetic.py interdit la reintroduction du motif
+[2026-09-17T02:12:45] [DEBUG] [tests] H5c mecanisme : echec 10 s sur 60 (16,7 pourcent) depuis la creation du test ; les suites vertes precedentes devaient en partie au hasard
+[2026-09-17T02:12:45] [RESULT] [tests] Result: SUCCESS - 6 executions dans la fenetre 48-59 sans echec - tests mediaman=506 mcp=41
+[2026-09-17T02:12:45] [COMMIT] SHA: 64078669c14668820885a816321957a2a56d47d6
