@@ -277,3 +277,9 @@
 [2026-09-17T02:12:45] [DEBUG] [tests] H5c mecanisme : echec 10 s sur 60 (16,7 pourcent) depuis la creation du test ; les suites vertes precedentes devaient en partie au hasard
 [2026-09-17T02:12:45] [RESULT] [tests] Result: SUCCESS - 6 executions dans la fenetre 48-59 sans echec - tests mediaman=506 mcp=41
 [2026-09-17T02:12:45] [COMMIT] SHA: 64078669c14668820885a816321957a2a56d47d6
+[2026-09-17T02:34:48] [CONFIG_CHANGE] [mediaman] H5d ProtectHome=yes -> no : l unite echouait avant son ExecStart, WorkingDirectory sous /home masque par un tmpfs
+[2026-09-17T02:34:48] [DEBUG] [mediaman] H5d matrice de portees transitoires derivees du fichier : A=ECHEC B=PASSE C=PASSE D=ECHEC E=ECHEC F=PASSE G=PASSE
+[2026-09-17T02:34:48] [DEBUG] [mediaman] H5d vrai ExecStart execute dans l espace corrige : code 1 - concerne le defaut 44, pas H5d
+[2026-09-17T02:34:48] [FILE_MODIFY] [tests] H5d defaut 50 corrige : motif du garde elargi a toute variable et a la soustraction
+[2026-09-17T02:34:48] [RESULT] [mediaman] Result: SUCCESS - tests mediaman=508 mcp=41 - aucune unite installee ni activee
+[2026-09-17T02:34:48] [COMMIT] SHA: 7da5057760595bd4266d49a9925e699f503a0e06
