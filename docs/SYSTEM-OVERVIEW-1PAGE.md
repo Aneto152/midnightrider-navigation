@@ -2,6 +2,20 @@
 
 **Version:** 2.1 | **Date:** 2026-06-14 | **Status:** ✅ Production (Block Island Race 2026-05-22 COMPLETE)
 
+> ℹ️ **Renommé le 2026-09-17.** Ce fichier s appelait `docs/SYSTEM-SUMMARY.md`,
+> ce qui entrait en collision avec `SYSTEM-SUMMARY.md` à la racine du dépôt — un
+> document différent, qui fait référence pour l exploitation. Les deux n avaient que
+> 11 % de contenu commun. Aucun contenu n a été perdu.
+
+> ℹ️ Le renommage seul a été publié par le commit `80f3980`, sans ce bandeau
+> ni les références : quatre liens ont pointé sur un fichier inexistant jusqu à la
+> correction. Voir `logs/debug/architecture-master-numerotation-2026-09-17.md`,
+> défaut 61.
+
+> ⚠️ **État au 2026-09-17 : l UM982 n est pas connecté à bord.** Position, vitesse
+> et cap fond proviennent des **deux Vulcan 7** (`N2K.1`, `N2K.2`). Voir §6 de
+> `docs/ARCHITECTURE-MASTER.md`.
+
 ---
 
 ## WHAT IS MIDNIGHT RIDER?

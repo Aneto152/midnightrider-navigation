@@ -826,10 +826,10 @@ B&G WS320 (BLE → base station → N2K) — PRIORITÉ 2 pour Signal K
 ### 5.4 Position GPS
 
 ```
-UM982 GNSS (Primary — 1.5m accuracy autonomous)
+UM982 GNSS (Primary par conception — 1.5m) — NON CONNECTÉ au 2026-09-17
   ↓ PGNs 129025, 129026, 129029 → Signal K → InfluxDB → Grafana
 
-Vulcan 7 FS internal GPS (Fallback — 3m accuracy)
+Vulcan 7 FS internal GPS x2 (Fallback — 3m) — SEULE SOURCE ACTIVE au 2026-09-17
   ↓ PGNs 129025, 129026 sur N2K bus (si UM982 absent)
 ```
 
@@ -901,6 +901,16 @@ Added Phase J-1 (2026-06-15). Real-time competitor tracking via Signal K AIS.
 | `environment.outside.pressure` | YDBC-05 | — | — |
 | `vessels.*` (AIS) | AIS700 | — | — |
 
+> ⚠️ **État au 2026-09-17.** Le tableau ci-dessus décrit les priorités **voulues**, pas l état courant.
+> L **UM982 n est pas connecté à bord**. Conséquences mesurées dans InfluxDB le 2026-09-17 :
+> - `navigation.position`, `navigation.speedOverGround` et `navigation.courseOverGroundTrue` proviennent
+>   uniquement des **deux Vulcan 7**, sources `N2K.1` et `N2K.2`. La priorité 2 est donc en vigueur.
+> - Les deux Vulcan émettent simultanément et ne sont pas synchronisés (écart mesuré de 1 à 216 ms).
+>   L un des deux peut être éteint : **aucune source ne doit être épinglée**, toujours prendre la plus récente.
+> - L effet sur `navigation.headingTrue` et `navigation.rateOfTurn` n a **pas** été mesuré — à vérifier.
+> - Aucune `sourcePriorities` n est configurée dans `~/.signalk/settings.json` pour ces trois chemins ;
+>   seules `environment.wind.angleApparent` et `speedApparent` en ont une (N2K.10 et Calypso.XX).
+
 ---
 
 ## 7. UNITÉS SI — RÉFÉRENCE RAPIDE
@@ -951,12 +961,12 @@ Added Phase J-1 (2026-06-15). Real-time competitor tracking via Signal K AIS.
 
 | # | Instrument | Modèle | Protocole | Source Signal K | Fréquence | État |
 |---|------------|--------|-----------|-----------------|-----------|------|
-| 1 | GPS + Cap vrai | Unicore UM982 | NMEA 0183 / USB | `signalk-um982-gnss.UM982-HDG` | 1 Hz | ✅ Actif |
+| 1 | GPS + Cap vrai | Unicore UM982 | NMEA 0183 / USB | `signalk-um982-gnss.UM982-HDG` | 1 Hz | ⚠️ NON CONNECTÉ (2026-09-17) |
 | 2 | IMU | WIT WT901BLECL | Bluetooth LE | `signalk-wit-imu-ble.XX` | 10 Hz | ✅ Actif |
 | 3 | Vent masthead | Calypso UP10 | Bluetooth LE | `calypso-up10` (UDP:4123) | 1 Hz | ✅ Actif |
 | 4 | Vent masthead (N2K) | B&G WS320 | NMEA 2000 | `nmea2000_ws320` | 5 Hz | ✅ Actif |
 | 5 | Gateway N2K | Yacht Devices YDNU-02 | USB / N2K | transparent | N/A | ✅ Actif |
-| 6 | Chartplotter | B&G Vulcan 7 FS | NMEA 2000 | `vulcan_internal` | 1 Hz | ✅ Actif |
+| 6 | Chartplotter (x2) | B&G Vulcan 7 FS | NMEA 2000 | `N2K.1` et `N2K.2` | 1 Hz | ✅ Actif |
 | 7 | Systèmes RPi | Raspberry Pi 4 | Interne | `signalk-system-stats` | 0.2 Hz | ✅ Actif |
 | 8 | Batterie | SOK BMS LiFePO4 | Bluetooth LE | Direct InfluxDB (bypass SK) | 0.2 Hz | ✅ Actif |
 | 9 | Baromètre | Yacht Devices YDBC-05 | NMEA 2000 | `nmea2000_ydbc05` | 0.5 Hz | ✅ Actif |
@@ -1017,76 +1027,6 @@ Added Phase J-1 (2026-06-15). Real-time competitor tracking via Signal K AIS.
 
 ---
 
-## 8. SIGNAL K — SOURCES ET PRIORITÉS (mis à jour 2026-06-15)
-
-> Ces sections sont fusionnées depuis `docs/HARDWARE/INSTRUMENT-INVENTORY.md`.
-> Pour la topologie complète du bus N2K et la matrice des flux PGN, voir le fichier canonical :
-> 📌 **`docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md`**
-
-### 8.1 Inventaire des sources Signal K
-
-| # | Instrument | Modèle | Protocole | Source Signal K | Fréquence | État |
-|---|------------|--------|-----------|-----------------|-----------|------|
-| 1 | GPS + Cap vrai | Unicore UM982 | NMEA 0183 / USB | `signalk-um982-gnss.UM982-HDG` | 1 Hz | ✅ Actif |
-| 2 | IMU | WIT WT901BLECL | Bluetooth LE | `signalk-wit-imu-ble.XX` | 10 Hz | ✅ Actif |
-| 3 | Vent masthead | Calypso UP10 | Bluetooth LE | `calypso-up10` (UDP:4123) | 1 Hz | ✅ Actif |
-| 4 | Vent masthead (N2K) | B&G WS320 | NMEA 2000 | `nmea2000_ws320` | 5 Hz | ✅ Actif |
-| 5 | Gateway N2K | Yacht Devices YDNU-02 | USB / N2K | transparent | N/A | ✅ Actif |
-| 6 | Chartplotter | B&G Vulcan 7 FS | NMEA 2000 | `vulcan_internal` | 1 Hz | ✅ Actif |
-| 7 | Systèmes RPi | Raspberry Pi 4 | Interne | `signalk-system-stats` | 0.2 Hz | ✅ Actif |
-| 8 | Batterie | SOK BMS LiFePO4 | Bluetooth LE | Direct InfluxDB (bypass SK) | 0.2 Hz | ✅ Actif |
-| 9 | Baromètre | Yacht Devices YDBC-05 | NMEA 2000 | `nmea2000_ydbc05` | 0.5 Hz | ✅ Actif |
-| 10 | Transpondeur AIS | B&G AIS700 Class B | NMEA 2000 | `nmea2000_ais700` | event-driven | ✅ Actif |
-
-### 8.2 Noms des sources Signal K
-
-## Signal K Source Name Reference
-
-| Signal K Source | Instrument | Notes |
-|-----------------|------------|-------|
-| `signalk-um982-gnss.UM982-HDG` | Unicore UM982 | Proprietary #UNIHEADING sentences — dual-antenna heading. HEADINGOFFSET 90 applied 2026-05-17 |
-| `signalk-wit-imu-ble.XX` | WIT WT901BLECL | Hull mount, 30 Hz — primary attitude source (highest SK priority) |
-| `nmea2000_ws320` | B&G WS320 | Apparent wind via N2K backbone → YDNU-02 → SK. Also feeds Vulcan 7 directly at 5 Hz |
-| `calypso-up10` | Calypso UP10 | Primary SK wind source (BLE → UDP port 4123). Active via systemd service |
-| `vulcan_internal` | B&G Vulcan 7 FS | Secondary GPS/COG/SOG from Vulcan internal GNSS |
-| `signalk-system-stats` | Raspberry Pi 4 | CPU temp (K), load, RAM |
-| `nmea2000_ydbc05` | Yacht Devices YDBC-05 | Atmospheric pressure via N2K → YDNU-02 → SK |
-| `nmea2000_ais700` | B&G AIS700 | AIS vessel targets via N2K → YDNU-02 → SK (`vessels.*` namespace) |
-| `sok_bms` | SOK Battery BMS | Direct InfluxDB — bypasses Signal K entirely |
-
----
-
-### 8.3 Priorités de source — Vent
-## Wind Data Source Priority (Signal K)
-
-| Priority | Source | Path | Notes |
-|----------|--------|------|-------|
-| 1 (highest) | `calypso-up10` | `environment.wind.*` | Primary — masthead BLE sensor, 1 Hz |
-| 2 | `nmea2000_ws320` | `environment.wind.*` | Secondary — N2K via YDNU-02, 5 Hz |
-
-> The WS320 also feeds the Vulcan 7 FS **directly** at 5 Hz without going through Signal K
-> (N2K backbone shortcut). The Vulcan uses this for real-time sail trim display.
-
-### 8.4 Priorités de source — Attitude
-## Attitude Data Source Priority (Signal K)
-
-| Priority | Source | Path | Notes |
-|----------|--------|------|-------|
-| 1 (highest) | `signalk-wit-imu-ble.XX` | `navigation.attitude.*` | WIT IMU — 30 Hz. Also feeds PGN 127257 → Vulcan 7 via YDNU-02 |
-| 2 | `calypso-up10` | `navigation.attitude.*` | Compass mode only (if `--compass=on`) — overridden by WIT |
-
----
-
-### 8.5 Non installés
-## Not Installed
-
-| # | Instrument | Role | Notes |
-|---|------------|------|-------|
-| 11 | Speed through water (STW) / loch | Boat speed, leeway | Via NMEA 2000 → YDNU-02 when installed |
-| 12 | Depth sounder | Depth, water temperature | Via NMEA 2000 → YDNU-02 when installed |
-
----
-
 ## 9.1 Secrets — Emplacement
 
 | Secret | Emplacement | Dans git ? |
@@ -1098,76 +1038,6 @@ Added Phase J-1 (2026-06-15). Real-time competitor tracking via Signal K AIS.
 | WiFi password | `config/wifi-ap.txt` | ⚠️ git privé seulement |
 
 #
-
----
-
-## 8. SIGNAL K — SOURCES ET PRIORITÉS (mis à jour 2026-06-15)
-
-> Ces sections sont fusionnées depuis `docs/HARDWARE/INSTRUMENT-INVENTORY.md`.
-> Pour la topologie complète du bus N2K et la matrice des flux PGN, voir le fichier canonical :
-> 📌 **`docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md`**
-
-### 8.1 Inventaire des sources Signal K
-
-| # | Instrument | Modèle | Protocole | Source Signal K | Fréquence | État |
-|---|------------|--------|-----------|-----------------|-----------|------|
-| 1 | GPS + Cap vrai | Unicore UM982 | NMEA 0183 / USB | `signalk-um982-gnss.UM982-HDG` | 1 Hz | ✅ Actif |
-| 2 | IMU | WIT WT901BLECL | Bluetooth LE | `signalk-wit-imu-ble.XX` | 10 Hz | ✅ Actif |
-| 3 | Vent masthead | Calypso UP10 | Bluetooth LE | `calypso-up10` (UDP:4123) | 1 Hz | ✅ Actif |
-| 4 | Vent masthead (N2K) | B&G WS320 | NMEA 2000 | `nmea2000_ws320` | 5 Hz | ✅ Actif |
-| 5 | Gateway N2K | Yacht Devices YDNU-02 | USB / N2K | transparent | N/A | ✅ Actif |
-| 6 | Chartplotter | B&G Vulcan 7 FS | NMEA 2000 | `vulcan_internal` | 1 Hz | ✅ Actif |
-| 7 | Systèmes RPi | Raspberry Pi 4 | Interne | `signalk-system-stats` | 0.2 Hz | ✅ Actif |
-| 8 | Batterie | SOK BMS LiFePO4 | Bluetooth LE | Direct InfluxDB (bypass SK) | 0.2 Hz | ✅ Actif |
-| 9 | Baromètre | Yacht Devices YDBC-05 | NMEA 2000 | `nmea2000_ydbc05` | 0.5 Hz | ✅ Actif |
-| 10 | Transpondeur AIS | B&G AIS700 Class B | NMEA 2000 | `nmea2000_ais700` | event-driven | ✅ Actif |
-
-### 8.2 Noms des sources Signal K
-
-## Signal K Source Name Reference
-
-| Signal K Source | Instrument | Notes |
-|-----------------|------------|-------|
-| `signalk-um982-gnss.UM982-HDG` | Unicore UM982 | Proprietary #UNIHEADING sentences — dual-antenna heading. HEADINGOFFSET 90 applied 2026-05-17 |
-| `signalk-wit-imu-ble.XX` | WIT WT901BLECL | Hull mount, 30 Hz — primary attitude source (highest SK priority) |
-| `nmea2000_ws320` | B&G WS320 | Apparent wind via N2K backbone → YDNU-02 → SK. Also feeds Vulcan 7 directly at 5 Hz |
-| `calypso-up10` | Calypso UP10 | Primary SK wind source (BLE → UDP port 4123). Active via systemd service |
-| `vulcan_internal` | B&G Vulcan 7 FS | Secondary GPS/COG/SOG from Vulcan internal GNSS |
-| `signalk-system-stats` | Raspberry Pi 4 | CPU temp (K), load, RAM |
-| `nmea2000_ydbc05` | Yacht Devices YDBC-05 | Atmospheric pressure via N2K → YDNU-02 → SK |
-| `nmea2000_ais700` | B&G AIS700 | AIS vessel targets via N2K → YDNU-02 → SK (`vessels.*` namespace) |
-| `sok_bms` | SOK Battery BMS | Direct InfluxDB — bypasses Signal K entirely |
-
----
-
-### 8.3 Priorités de source — Vent
-## Wind Data Source Priority (Signal K)
-
-| Priority | Source | Path | Notes |
-|----------|--------|------|-------|
-| 1 (highest) | `calypso-up10` | `environment.wind.*` | Primary — masthead BLE sensor, 1 Hz |
-| 2 | `nmea2000_ws320` | `environment.wind.*` | Secondary — N2K via YDNU-02, 5 Hz |
-
-> The WS320 also feeds the Vulcan 7 FS **directly** at 5 Hz without going through Signal K
-> (N2K backbone shortcut). The Vulcan uses this for real-time sail trim display.
-
-### 8.4 Priorités de source — Attitude
-## Attitude Data Source Priority (Signal K)
-
-| Priority | Source | Path | Notes |
-|----------|--------|------|-------|
-| 1 (highest) | `signalk-wit-imu-ble.XX` | `navigation.attitude.*` | WIT IMU — 30 Hz. Also feeds PGN 127257 → Vulcan 7 via YDNU-02 |
-| 2 | `calypso-up10` | `navigation.attitude.*` | Compass mode only (if `--compass=on`) — overridden by WIT |
-
----
-
-### 8.5 Non installés
-## Not Installed
-
-| # | Instrument | Role | Notes |
-|---|------------|------|-------|
-| 11 | Speed through water (STW) / loch | Boat speed, leeway | Via NMEA 2000 → YDNU-02 when installed |
-| 12 | Depth sounder | Depth, water temperature | Via NMEA 2000 → YDNU-02 when installed |
 
 ---
 
@@ -1186,76 +1056,6 @@ Added Phase J-1 (2026-06-15). Real-time competitor tracking via Signal K AIS.
 
 ---
 
-## 8. SIGNAL K — SOURCES ET PRIORITÉS (mis à jour 2026-06-15)
-
-> Ces sections sont fusionnées depuis `docs/HARDWARE/INSTRUMENT-INVENTORY.md`.
-> Pour la topologie complète du bus N2K et la matrice des flux PGN, voir le fichier canonical :
-> 📌 **`docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md`**
-
-### 8.1 Inventaire des sources Signal K
-
-| # | Instrument | Modèle | Protocole | Source Signal K | Fréquence | État |
-|---|------------|--------|-----------|-----------------|-----------|------|
-| 1 | GPS + Cap vrai | Unicore UM982 | NMEA 0183 / USB | `signalk-um982-gnss.UM982-HDG` | 1 Hz | ✅ Actif |
-| 2 | IMU | WIT WT901BLECL | Bluetooth LE | `signalk-wit-imu-ble.XX` | 10 Hz | ✅ Actif |
-| 3 | Vent masthead | Calypso UP10 | Bluetooth LE | `calypso-up10` (UDP:4123) | 1 Hz | ✅ Actif |
-| 4 | Vent masthead (N2K) | B&G WS320 | NMEA 2000 | `nmea2000_ws320` | 5 Hz | ✅ Actif |
-| 5 | Gateway N2K | Yacht Devices YDNU-02 | USB / N2K | transparent | N/A | ✅ Actif |
-| 6 | Chartplotter | B&G Vulcan 7 FS | NMEA 2000 | `vulcan_internal` | 1 Hz | ✅ Actif |
-| 7 | Systèmes RPi | Raspberry Pi 4 | Interne | `signalk-system-stats` | 0.2 Hz | ✅ Actif |
-| 8 | Batterie | SOK BMS LiFePO4 | Bluetooth LE | Direct InfluxDB (bypass SK) | 0.2 Hz | ✅ Actif |
-| 9 | Baromètre | Yacht Devices YDBC-05 | NMEA 2000 | `nmea2000_ydbc05` | 0.5 Hz | ✅ Actif |
-| 10 | Transpondeur AIS | B&G AIS700 Class B | NMEA 2000 | `nmea2000_ais700` | event-driven | ✅ Actif |
-
-### 8.2 Noms des sources Signal K
-
-## Signal K Source Name Reference
-
-| Signal K Source | Instrument | Notes |
-|-----------------|------------|-------|
-| `signalk-um982-gnss.UM982-HDG` | Unicore UM982 | Proprietary #UNIHEADING sentences — dual-antenna heading. HEADINGOFFSET 90 applied 2026-05-17 |
-| `signalk-wit-imu-ble.XX` | WIT WT901BLECL | Hull mount, 30 Hz — primary attitude source (highest SK priority) |
-| `nmea2000_ws320` | B&G WS320 | Apparent wind via N2K backbone → YDNU-02 → SK. Also feeds Vulcan 7 directly at 5 Hz |
-| `calypso-up10` | Calypso UP10 | Primary SK wind source (BLE → UDP port 4123). Active via systemd service |
-| `vulcan_internal` | B&G Vulcan 7 FS | Secondary GPS/COG/SOG from Vulcan internal GNSS |
-| `signalk-system-stats` | Raspberry Pi 4 | CPU temp (K), load, RAM |
-| `nmea2000_ydbc05` | Yacht Devices YDBC-05 | Atmospheric pressure via N2K → YDNU-02 → SK |
-| `nmea2000_ais700` | B&G AIS700 | AIS vessel targets via N2K → YDNU-02 → SK (`vessels.*` namespace) |
-| `sok_bms` | SOK Battery BMS | Direct InfluxDB — bypasses Signal K entirely |
-
----
-
-### 8.3 Priorités de source — Vent
-## Wind Data Source Priority (Signal K)
-
-| Priority | Source | Path | Notes |
-|----------|--------|------|-------|
-| 1 (highest) | `calypso-up10` | `environment.wind.*` | Primary — masthead BLE sensor, 1 Hz |
-| 2 | `nmea2000_ws320` | `environment.wind.*` | Secondary — N2K via YDNU-02, 5 Hz |
-
-> The WS320 also feeds the Vulcan 7 FS **directly** at 5 Hz without going through Signal K
-> (N2K backbone shortcut). The Vulcan uses this for real-time sail trim display.
-
-### 8.4 Priorités de source — Attitude
-## Attitude Data Source Priority (Signal K)
-
-| Priority | Source | Path | Notes |
-|----------|--------|------|-------|
-| 1 (highest) | `signalk-wit-imu-ble.XX` | `navigation.attitude.*` | WIT IMU — 30 Hz. Also feeds PGN 127257 → Vulcan 7 via YDNU-02 |
-| 2 | `calypso-up10` | `navigation.attitude.*` | Compass mode only (if `--compass=on`) — overridden by WIT |
-
----
-
-### 8.5 Non installés
-## Not Installed
-
-| # | Instrument | Role | Notes |
-|---|------------|------|-------|
-| 11 | Speed through water (STW) / loch | Boat speed, leeway | Via NMEA 2000 → YDNU-02 when installed |
-| 12 | Depth sounder | Depth, water temperature | Via NMEA 2000 → YDNU-02 when installed |
-
----
-
 ## 9.3 Firewall UFW — Ports ouverts
 
 | Port | Service | Accès |
@@ -1267,76 +1067,6 @@ Added Phase J-1 (2026-06-15). Real-time competitor tracking via Signal K AIS.
 | 18789 | OpenClaw Gateway | localhost uniquement |
 
 #
-
----
-
-## 8. SIGNAL K — SOURCES ET PRIORITÉS (mis à jour 2026-06-15)
-
-> Ces sections sont fusionnées depuis `docs/HARDWARE/INSTRUMENT-INVENTORY.md`.
-> Pour la topologie complète du bus N2K et la matrice des flux PGN, voir le fichier canonical :
-> 📌 **`docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md`**
-
-### 8.1 Inventaire des sources Signal K
-
-| # | Instrument | Modèle | Protocole | Source Signal K | Fréquence | État |
-|---|------------|--------|-----------|-----------------|-----------|------|
-| 1 | GPS + Cap vrai | Unicore UM982 | NMEA 0183 / USB | `signalk-um982-gnss.UM982-HDG` | 1 Hz | ✅ Actif |
-| 2 | IMU | WIT WT901BLECL | Bluetooth LE | `signalk-wit-imu-ble.XX` | 10 Hz | ✅ Actif |
-| 3 | Vent masthead | Calypso UP10 | Bluetooth LE | `calypso-up10` (UDP:4123) | 1 Hz | ✅ Actif |
-| 4 | Vent masthead (N2K) | B&G WS320 | NMEA 2000 | `nmea2000_ws320` | 5 Hz | ✅ Actif |
-| 5 | Gateway N2K | Yacht Devices YDNU-02 | USB / N2K | transparent | N/A | ✅ Actif |
-| 6 | Chartplotter | B&G Vulcan 7 FS | NMEA 2000 | `vulcan_internal` | 1 Hz | ✅ Actif |
-| 7 | Systèmes RPi | Raspberry Pi 4 | Interne | `signalk-system-stats` | 0.2 Hz | ✅ Actif |
-| 8 | Batterie | SOK BMS LiFePO4 | Bluetooth LE | Direct InfluxDB (bypass SK) | 0.2 Hz | ✅ Actif |
-| 9 | Baromètre | Yacht Devices YDBC-05 | NMEA 2000 | `nmea2000_ydbc05` | 0.5 Hz | ✅ Actif |
-| 10 | Transpondeur AIS | B&G AIS700 Class B | NMEA 2000 | `nmea2000_ais700` | event-driven | ✅ Actif |
-
-### 8.2 Noms des sources Signal K
-
-## Signal K Source Name Reference
-
-| Signal K Source | Instrument | Notes |
-|-----------------|------------|-------|
-| `signalk-um982-gnss.UM982-HDG` | Unicore UM982 | Proprietary #UNIHEADING sentences — dual-antenna heading. HEADINGOFFSET 90 applied 2026-05-17 |
-| `signalk-wit-imu-ble.XX` | WIT WT901BLECL | Hull mount, 30 Hz — primary attitude source (highest SK priority) |
-| `nmea2000_ws320` | B&G WS320 | Apparent wind via N2K backbone → YDNU-02 → SK. Also feeds Vulcan 7 directly at 5 Hz |
-| `calypso-up10` | Calypso UP10 | Primary SK wind source (BLE → UDP port 4123). Active via systemd service |
-| `vulcan_internal` | B&G Vulcan 7 FS | Secondary GPS/COG/SOG from Vulcan internal GNSS |
-| `signalk-system-stats` | Raspberry Pi 4 | CPU temp (K), load, RAM |
-| `nmea2000_ydbc05` | Yacht Devices YDBC-05 | Atmospheric pressure via N2K → YDNU-02 → SK |
-| `nmea2000_ais700` | B&G AIS700 | AIS vessel targets via N2K → YDNU-02 → SK (`vessels.*` namespace) |
-| `sok_bms` | SOK Battery BMS | Direct InfluxDB — bypasses Signal K entirely |
-
----
-
-### 8.3 Priorités de source — Vent
-## Wind Data Source Priority (Signal K)
-
-| Priority | Source | Path | Notes |
-|----------|--------|------|-------|
-| 1 (highest) | `calypso-up10` | `environment.wind.*` | Primary — masthead BLE sensor, 1 Hz |
-| 2 | `nmea2000_ws320` | `environment.wind.*` | Secondary — N2K via YDNU-02, 5 Hz |
-
-> The WS320 also feeds the Vulcan 7 FS **directly** at 5 Hz without going through Signal K
-> (N2K backbone shortcut). The Vulcan uses this for real-time sail trim display.
-
-### 8.4 Priorités de source — Attitude
-## Attitude Data Source Priority (Signal K)
-
-| Priority | Source | Path | Notes |
-|----------|--------|------|-------|
-| 1 (highest) | `signalk-wit-imu-ble.XX` | `navigation.attitude.*` | WIT IMU — 30 Hz. Also feeds PGN 127257 → Vulcan 7 via YDNU-02 |
-| 2 | `calypso-up10` | `navigation.attitude.*` | Compass mode only (if `--compass=on`) — overridden by WIT |
-
----
-
-### 8.5 Non installés
-## Not Installed
-
-| # | Instrument | Role | Notes |
-|---|------------|------|-------|
-| 11 | Speed through water (STW) / loch | Boat speed, leeway | Via NMEA 2000 → YDNU-02 when installed |
-| 12 | Depth sounder | Depth, water temperature | Via NMEA 2000 → YDNU-02 when installed |
 
 ---
 
@@ -1430,7 +1160,7 @@ curl -s http://localhost:3000/signalk/v1/api/vessels/self/environment/outside/pr
 | `docs/HARDWARE/INSTRUMENT-INVENTORY.md` | Inventaire instruments à jour |
 | `docs/DATA-SCHEMA-MASTER.md` | Schéma complet données Signal K / InfluxDB |
 | `docs/GRAFANA-UNIT-CONVERSIONS.md` | Conversions unités pour Grafana |
-| `docs/SYSTEM-SUMMARY.md` | Résumé système (référencé par Dust) |
+| `docs/SYSTEM-OVERVIEW-1PAGE.md` | Résumé système (référencé par Dust) |
 | `docs/DASHBOARDS-README.md` | Guide dashboards Grafana (référencé par Dust) |
 | `logs/latest.json` | Journal d'exécution OC |
 | `data/polars/j30_orc.json` | Polaires J/30 v3 — données ORC réelles |

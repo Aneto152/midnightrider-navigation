@@ -5,7 +5,7 @@
 **SoC:** Nebulas IV (UC9810)  
 **Interface:** UART (LV-TTL) / USB-Serial  
 **Date:** 2026-05-19  
-**Status:** ✅ Operational  
+**Status:** ⚠️ NOT CONNECTED (as of 2026-09-17) — hardware not wired aboard. Specifications below remain valid for reconnection.
 
 ---
 

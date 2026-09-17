@@ -12,7 +12,7 @@ Complete reference guide for the Midnight Rider navigation system.
 
 ### System Architecture
 - **[docs/ARCHITECTURE-MASTER.md](docs/ARCHITECTURE-MASTER.md)** — Full system design
-- **[System Summary](SYSTEM-SUMMARY.md)** — High-level overview
+- **[System Overview (1 page)](SYSTEM-OVERVIEW-1PAGE.md)** — High-level overview
 - **[Service Logging Visibility Strategy](docs/LOGGING-VISIBILITY-STRATEGY.md)** — Heartbeat visibility analysis & planning
 - **[Service Logging Locations](docs/SERVICE-LOGGING-LOCATIONS.md)** — Evidence reference table
 
@@ -253,7 +253,7 @@ Reference copies of all RPi system configuration files.
 docs/
 ├── INDEX.md (this file)
 ├── docs/ARCHITECTURE-MASTER.md
-├── SYSTEM-SUMMARY.md
+├── SYSTEM-OVERVIEW-1PAGE.md
 ├── SYSTEM-CHECKLIST.md
 ├── HARDWARE/
 │   ├── UM982-GNSS-DATASHEET.md

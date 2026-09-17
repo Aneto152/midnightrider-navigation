@@ -20,7 +20,7 @@ This README gives you an **end-to-end map** of the system. Use the layers:
 | Layer | Where to start |
 |-------|---------------|
 | 🗺️ **Architecture** (full design) | [`docs/ARCHITECTURE-MASTER.md`](docs/ARCHITECTURE-MASTER.md) |
-| ⚡ **Quick system status** | [`docs/SYSTEM-SUMMARY.md`](docs/SYSTEM-SUMMARY.md) |
+| ⚡ **Quick system status** | [`docs/SYSTEM-OVERVIEW-1PAGE.md`](docs/SYSTEM-OVERVIEW-1PAGE.md) |
 | 🔌 **Hardware specs** | [`docs/HARDWARE/`](docs/HARDWARE/) |
 | 🔧 **Component integration** | [`docs/INTEGRATION/`](docs/INTEGRATION/) |
 | 🧩 **Plugin development** | [`plugins/PLUGIN-DEVELOPMENT-GUIDE.md`](plugins/PLUGIN-DEVELOPMENT-GUIDE.md) |
@@ -109,7 +109,7 @@ midnightrider-navigation/
 ├── 📁 data/polars/ ← J30 ORC VPP polar data
 ├── 📁 docs/ ← Full documentation (start here)
 │ ├── ARCHITECTURE-MASTER.md ← ⭐ CANONICAL system design
-│ ├── SYSTEM-SUMMARY.md ← 1-page operational reference
+│ ├── SYSTEM-OVERVIEW-1PAGE.md ← 1-page operational reference
 │ ├── INDEX.md ← Documentation map
 │ └── HARDWARE/, INTEGRATION/, ops/ ← Guides
 │

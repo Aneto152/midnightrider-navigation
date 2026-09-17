@@ -405,7 +405,7 @@
 | signalk-server | 2.25.0 | ❓ unknown | An implementation of a [Signal K](http://signalk.org) server for boats. |
 | signalk-to-influxdb2 | 1.12.1 | ❓ unknown | Signal K to InfluxDb 2 |
 | signalk-to-nmea2000 | 2.24.0 | ❓ unknown | Signal K server plugin to convert Signal K to NMEA2000 |
-| signalk-um982-gnss | 1.0.0 | ✅ yes | UM982 dual-antenna GNSS: position, headingTrue, attitude |
+| signalk-um982-gnss | 1.0.0 | ⚠️ enabled, device absent | UM982 dual-antenna GNSS: position, headingTrue, attitude — matériel NON CONNECTÉ au 2026-09-17, le plugin reste activé |
 | simple-swizzle | 0.2.4 | ❓ unknown | Simply swizzle your arguments |
 | sisteransi | 1.0.5 | ❓ unknown | ANSI escape codes for some terminal swag |
 | split | 1.0.1 | ❓ unknown | split a Text Stream into a Line Stream |

@@ -4,6 +4,13 @@
 **Time:** ~30 min  
 **Difficulty:** Medium
 
+> ⚠️ **ÉTAT AU 2026-09-17 — UM982 NON CONNECTÉ À BORD.**
+> Ce guide reste valide et complet : il décrit la procédure à suivre
+> le jour où le matériel sera raccordé. Aucune étape n a été retirée.
+> La position, la vitesse et le cap fond proviennent actuellement des
+> **deux Vulcan 7** (sources Signal K `N2K.1` et `N2K.2`), ce qui est
+> le repli décrit en §5.4 de `docs/ARCHITECTURE-MASTER.md`.
+
 ---
 
 ## PHYSICAL SETUP

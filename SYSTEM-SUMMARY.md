@@ -173,7 +173,7 @@ The seven documented services (SignalK, InfluxDB, Grafana, OpenClaw-Gateway, Reg
 **Instrument → Signal K → Storage & Visualization:**
 
 ```
-UM982 (GPS/Heading)  ──┐
+UM982 (GPS/Heading)  ──┘  NON CONNECTÉ au 2026-09-17
 WIT IMU (BLE)        ──┐
 Calypso UP10 (BLE)   ──┼──> Signal K :3000 ──┬──> InfluxDB :8086 ──> Grafana :3001
 WS320 (N2K)          ──┤                      │
@@ -183,7 +183,7 @@ SOK BMS (BLE) ──────────────────────
 ```
 
 **Data flow details:**
-- **USB devices** (UM982) → Signal K via serial plugins
+- **USB devices** (UM982) → Signal K via serial plugins — **UM982 non connecté au 2026-09-17**
 - **Bluetooth LE devices** (WIT, Calypso, SOK) → Signal K via BLE daemons
 - **NMEA 2000 devices** (WS320, YDBC-05, AIS700, Vulcan 7 FS) → Signal K via YDNU-02 USB bridge
 - **Signal K → InfluxDB** — signalk-to-influxdb2 plugin writes 1-second intervals to bucket `midnight_rider`
@@ -503,7 +503,7 @@ git push origin main
    curl http://midnightrider.local:3000/api/
    ```
 
-4. If still down, check: USB connections (UM982), BLE connections (WIT, Calypso), YDNU-02 gateway.
+4. If still down, check: USB connections (UM982 — not connected as of 2026-09-17), BLE connections (WIT, Calypso), YDNU-02 gateway.
 
 ### If Docker services fail
 
