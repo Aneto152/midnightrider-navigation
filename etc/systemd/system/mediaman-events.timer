@@ -1,0 +1,23 @@
+[Unit]
+# Step 4E.2 timer. SHIPS DISABLED.
+# Enable with: systemctl enable --now mediaman-events.timer
+Description=Midnight Rider MediaMan — event pipeline timer (15-minute intervals)
+Documentation=file:///home/aneto/midnightrider-navigation/docs/ARCHITECTURE-MASTER.md
+Requires=mediaman-events.service
+
+[Timer]
+# Later than mediaman.timer's OnBootSec=5min so the two never start together.
+OnBootSec=10min
+OnUnitActiveSec=15min
+RandomizedDelaySec=30s
+
+# Persistent is deliberately off: event detection compares the present against
+# the last observation. Replaying passes missed while the Pi was powered down
+# would compare the present against a stale snapshot and emit misleading
+# transitions.
+Persistent=false
+
+Unit=mediaman-events.service
+
+[Install]
+WantedBy=timers.target

@@ -29,6 +29,7 @@ Conversely, if detection or enqueueing fails, the snapshot is NOT advanced,
 so nothing is silently lost.
 """
 
+import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, List, Optional
@@ -79,6 +80,7 @@ class EventPipeline:
         *,
         dry_run: bool,
         max_cycles: int = DEFAULT_MAX_CYCLES,
+        logger=None,
     ):
         """
         Every collaborator is injected. dry_run must be exactly True:
@@ -97,6 +99,11 @@ class EventPipeline:
         self.snapshot_store = snapshot_store
         self.dry_run = True
         self.max_cycles = max_cycles
+        # Optional and keyword-only: every caller written before step 4E.2
+        # keeps working untouched. Defect 46 - this pipeline used to run in
+        # complete silence, so a pass that detected nothing was
+        # indistinguishable from a pass that never ran.
+        self.logger = logger or logging.getLogger(__name__)
 
     def run_once(self, current: Any, observed_at: Optional[str] = None) -> PipelineResult:
         """
@@ -117,6 +124,11 @@ class EventPipeline:
             previous, _previous_observed_at = loaded
             result.had_previous_snapshot = True
 
+        self.logger.debug(
+            "DATA_IN pipeline pass: had_previous_snapshot=%s observed_at=%s",
+            result.had_previous_snapshot, observed_at,
+        )
+
         events = self.detector.detect_events(current, previous, observed_at)
         result.events_detected = len(events)
 
@@ -130,6 +142,10 @@ class EventPipeline:
         # durably enqueued, and before any orchestration is attempted.
         self.snapshot_store.save(current, observed_at)
         result.snapshot_saved = True
+        self.logger.info(
+            "DATA_OUT detected=%d enqueued=%d duplicate=%d snapshot_saved=True",
+            result.events_detected, result.events_enqueued, result.events_duplicate,
+        )
 
         result.leases_released = self.event_queue.release_expired_leases()
 
@@ -145,5 +161,13 @@ class EventPipeline:
                 error = getattr(cycle, "error", None)
                 if error:
                     result.errors.append(str(error))
+                    # Classification only: EventOrchestrator already sanitises
+                    # its error strings, and no payload reaches this point.
+                    self.logger.warning("ERROR cycle failed: %s", error)
 
+        self.logger.info(
+            "DATA_OUT cycles_run=%d succeeded=%d failed=%d leases_released=%d",
+            result.cycles_run, result.cycles_succeeded, result.cycles_failed,
+            result.leases_released,
+        )
         return result

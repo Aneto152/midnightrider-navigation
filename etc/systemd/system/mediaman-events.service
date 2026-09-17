@@ -1,0 +1,67 @@
+[Unit]
+# Step 4E.2 - drives mediaman/event_entrypoint.py, which runs the event
+# pipeline wired in step 4E.1.
+#
+# This unit is ADDITIVE. It does not replace mediaman.service and does not
+# interfere with it: different ExecStart, different state directory, different
+# log file. The fate of the August foundation stays an open decision.
+#
+# SHIPS DISABLED. Installing this file does nothing until an explicit
+# `systemctl enable --now mediaman-events.timer`.
+Description=Midnight Rider MediaMan — event pipeline (one-shot, dry-run)
+Documentation=file:///home/aneto/midnightrider-navigation/docs/ARCHITECTURE-MASTER.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/aneto/midnightrider-navigation
+ExecStart=/usr/bin/python3 -m mediaman.event_entrypoint
+User=aneto
+Group=aneto
+
+# /var/lib/mediaman-events, created and owned by systemd. The entrypoint reads
+# STATE_DIRECTORY from the environment, so this path is never hardcoded in the
+# Python code. Kept distinct from mediaman.service's StateDirectory=mediaman so
+# the two units can never corrupt each other's snapshot.
+StateDirectory=mediaman-events
+
+# Operator overrides live here. The leading dash makes the file optional.
+# Nothing in this unit or in the entrypoint requires a credential.
+EnvironmentFile=-/etc/mediaman/mediaman-events.env
+
+# Safe defaults. DRY_RUN must be the exact string "true" or the entrypoint
+# refuses to start (exit code 2).
+Environment="DRY_RUN=true"
+Environment="MEDIAMAN_ALLOW_LLM=false"
+Environment="MEDIAMAN_RACE_ID=midnight-rider"
+# "selftest" exercises the wiring with a synthetic result and its own isolated
+# state directory. Switch to "mcp" and set MEDIAMAN_MCP_SERVER_PATH in the
+# EnvironmentFile to collect real navigation data.
+Environment="MEDIAMAN_EVENT_SOURCE=selftest"
+
+# ProtectHome is deliberately "no", not "yes".
+# mediaman.service declares ProtectHome=yes while its WorkingDirectory is
+# /home/aneto/midnightrider-navigation, and lists only the logs subdirectory in
+# ReadWritePaths. Under ProtectHome=yes the working directory itself is not
+# reachable. That unit is disabled, so nobody ever saw it. Rather than repeat
+# the pattern, this unit states plainly that it needs its repository under
+# /home, and restricts everything else through ProtectSystem=strict.
+ProtectHome=no
+ProtectSystem=strict
+ReadWritePaths=/home/aneto/midnightrider-navigation/logs
+
+# Hardening that does not interfere with spawning the MCP server subprocess.
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+
+# An MCP collection may legitimately take a while; a hung one must still end.
+TimeoutStartSec=120
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

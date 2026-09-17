@@ -614,3 +614,44 @@ Ce qui reste, et qui n est pas un detail : mediaman.service lance
 mediaman.mediaman, qui produit un article factice. La vraie chaine vit dans
 historical_entrypoint.py et n est referencee par aucune unite. Le choix du
 point d entree est l etape 4E.2.
+
+<!-- H5B-NOTE -->
+## H5b — étape 4E.2 : point d'entrée du pipeline événementiel
+
+Le joint livré en 4E.1 n'était appelé par personne — mesuré : `event_pipeline`
+importé par **0** module. `mediaman/event_entrypoint.py` est le point d'entrée
+de processus qui manquait, piloté par `mediaman-events.service` / `.timer`,
+**livrées désactivées**. `mediaman.service` et `mediaman/mediaman.py` n'ont pas
+été touchés, vérifié par `git diff` avant commit.
+
+**Défaut 46 — corrigé.** La chaîne événementielle était muette : `event_detector`
+et `event_queue` ne journalisaient rien, `event_orchestrator` écrivait vers
+`logging.getLogger(__name__)` sans qu'aucun handler ne soit attaché à cette
+hiérarchie. Une passe qui ne détectait rien était indiscernable d'une passe qui
+n'avait pas tourné. Corrigé par rattachement du handler du logger de service au
+logger parent `mediaman`, sans modifier ces trois modules.
+
+**Défaut 47 — retiré, c'était une erreur de l'assistant.** L'affirmation
+« `runtime_entrypoint.py` et `staging_activation.py` ne sont importés par aucun
+test » reposait sur des fichiers téléchargés de façon corrompue : quota de l'API
+GitHub non authentifiée épuisé (60 requêtes/heure), réponses d'erreur décodées
+en déchet binaire, lues comme des fichiers vides. Mesure réelle : 2 fichiers de
+test dédiés. Quatrième occurrence dans ce chantier du motif « une absence de
+signal lue comme un signal d'absence ».
+
+**Défaut 48 — annulé avant d'exister.** Ces deux modules étaient soupçonnés
+d'être des clones. Mesure : 21 lignes de code diffèrent. Il n'y a rien à
+trancher.
+
+**Hypothèse `ProtectHome` — CONFIRMÉE par mesure.** Une portée systemd
+transitoire reproduisant les propriétés de `mediaman.service` (`ProtectHome=yes`,
+`WorkingDirectory` sous `/home`, `ReadWritePaths` limité au sous-dossier `logs`)
+**échoue**. Cette unité, si elle était activée, n'atteindrait jamais son
+`ExecStart`. `systemd-analyze verify` ne détecte pas ce cas : il ne voit pas les
+espaces de noms d'exécution. L'unité étant désactivée, personne ne l'avait jamais
+constaté. `mediaman-events.service` déclare donc `ProtectHome=no` de façon
+explicite et commentée, avec `ProtectSystem=strict`.
+
+**Rappel non traité, et le plus ancien de la liste :** le jeton InfluxDB Cloud de
+SEC-2026-09-15-02 n'est toujours pas révoqué. La rédaction a masqué le document,
+elle n'a rien révoqué.

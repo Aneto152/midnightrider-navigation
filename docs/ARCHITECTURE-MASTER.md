@@ -368,6 +368,60 @@ panne pendant la mise en file ne fait perdre aucune transition.
 - Création du bot Telegram et activation en production : décision de Denis,
   non autorisée à ce jour.
 
+<!-- H5B-4E2 -->
+### 4.6ter — MediaMan étape 4E.2 : point d'entrée du pipeline événementiel
+
+L'étape 4E.1 avait relié `EventDetector`, `EventQueue` et `EventOrchestrator`
+derrière `EventPipeline`. Il manquait ce qui appelle ce joint : aucun point
+d'entrée de processus ne l'invoquait. `mediaman/event_entrypoint.py` comble ce
+manque.
+
+**Unités livrées désactivées.** `mediaman-events.service` et
+`mediaman-events.timer` sont présents dans `etc/systemd/system/` mais ne sont
+ni installés dans `/etc` ni activés. `mediaman.service` et
+`mediaman/mediaman.py` n'ont pas été touchés : le sort de la fondation d'août
+reste une décision ouverte (défaut 44).
+
+**Posture de sûreté du point d'entrée :**
+
+| Garde-fou | Comportement |
+|-----------|--------------|
+| `DRY_RUN` | doit valoir exactement `true`, sinon code de sortie 2 |
+| `MEDIAMAN_ALLOW_LLM` | absent ou `false` → adaptateur de dry-run ; le vrai `OpenClawAdapter` n'est jamais construit, car son constructeur lance `openclaw --version` par `subprocess` |
+| Échec de collecte | code 3, et l'instantané n'est **pas** avancé (vérifié au niveau de la ligne SQLite, pas du fichier) |
+| Source `selftest` | état cloisonné dans son propre sous-dossier, pour qu'une donnée synthétique ne soit jamais comparée à une donnée réelle |
+| Envoi | aucun : ni Telegram, ni réseau au-delà du serveur MCP désigné |
+
+**Codes de sortie lus par systemd :** 0 passe effectuée · 2 configuration
+refusée · 3 collecte en échec · 4 erreur interne.
+
+**Défaut 46 — corrigé.** La chaîne événementielle tournait en silence :
+`event_detector` et `event_queue` ne journalisaient rien, et
+`event_orchestrator` écrivait vers `logging.getLogger(__name__)` sans qu'aucun
+handler ne soit jamais attaché à cette hiérarchie. Une passe qui ne détectait
+rien était indiscernable d'une passe qui n'avait pas tourné. Le point d'entrée
+rattache le handler du logger de service au logger parent `mediaman`, ce qui
+capte ces lignes **sans modifier une seule ligne** de ces trois modules.
+Mesuré : 1 ligne(s) de `mediaman.event_orchestrator` dans le journal
+produit par l'exécution de contrôle.
+
+**Défaut 47 — erreur de l'assistant, retirée.** Il avait été affirmé que
+`runtime_entrypoint.py` et `staging_activation.py` n'étaient importés par aucun
+module ni aucun test. L'affirmation reposait sur des fichiers téléchargés de
+façon corrompue : le quota de l'API GitHub non authentifiée était épuisé, et
+des messages d'erreur ont été lus comme des fichiers vides. Mesure réelle :
+2 fichier(s) de test dédiés à ces deux modules. Une absence de signal
+lue comme un signal d'absence.
+
+**Hypothèse `ProtectHome` — verdict : BLOQUE.** `mediaman.service`
+déclare `ProtectHome=yes` alors que son `WorkingDirectory` est sous `/home` et
+que seul le sous-dossier `logs` figure dans `ReadWritePaths`.
+`systemd-analyze verify` ne signale rien, l'interaction n'étant visible qu'à
+l'exécution. `mediaman-events.service` déclare donc `ProtectHome=no` de manière
+explicite et commentée, et restreint le reste par `ProtectSystem=strict`.
+
+Tests : 501 fonctions dans `tests/mediaman`.
+
 ### 4.7 MCPCollector (Navigation Facts) — Step 3A
 
 **Status:** ✅ COMPLETE — Mocked unit tests passing (178/178 full suite)

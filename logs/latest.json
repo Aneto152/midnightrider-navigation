@@ -26,7 +26,8 @@
     "e3a98921b3e5  H4b contenu - reprise en main du compte administrateur Grafana",
     "36956d45c16c  H4b journal",
     "6f91220de4aa  H4c contenu - sonde de dependance a l acces anonyme, correction du registre",
-    "69f38303df48  H4c journal"
+    "69f38303df48  H4c journal",
+    "h5b_content:PENDING_CONTENT_SHA"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -164,5 +165,48 @@
     "systemd": "aucune unite modifiee",
     "telegram": "aucun envoi",
     "dry_run": "impose par construction"
-  }
+  },
+  "h5b": {
+    "phase": "H5b - MediaMan etape 4E.2 : point d entree du pipeline evenementiel",
+    "script_version": "h5b-v2",
+    "executed_at": "2026-09-17T01:40:59Z",
+    "status": "SUCCESS",
+    "files_created": [
+      "mediaman/event_entrypoint.py",
+      "tests/mediaman/test_event_entrypoint.py",
+      "etc/systemd/system/mediaman-events.service",
+      "etc/systemd/system/mediaman-events.timer"
+    ],
+    "files_modified": [
+      "mediaman/event_pipeline.py",
+      "docs/ARCHITECTURE-MASTER.md",
+      "logs/latest.json",
+      "logs/oc-actions.log",
+      "logs/debug/audit-influx-tokens-2026-09-15.md"
+    ],
+    "units_installed": false,
+    "units_enabled": false,
+    "mediaman_service_touched": false,
+    "telegram_sent": false,
+    "llm_invoked": false,
+    "dry_run_enforced": true,
+    "tests_mediaman": 501,
+    "tests_mcp": 41,
+    "tests_new_file": 40,
+    "defaut_46": "CORRIGE - chaine evenementielle desormais journalisee",
+    "defaut_46_preuve": "1 ligne(s) de mediaman.event_orchestrator dans le journal de l execution de controle",
+    "defaut_47": "RETIRE - affirmation fausse de l assistant, fondee sur des fichiers corrompus par un quota d API GitHub epuise",
+    "defaut_47_mesure_reelle": "2 fichiers de test dedies (test_runtime_entrypoint.py, test_staging_activation.py) ; 21 lignes de code differentes entre runtime_entrypoint et staging_activation : ce ne sont PAS des clones",
+    "defaut_48": "ANNULE - la mesure montre 21 lignes de difference, il n y a pas de duplication a trancher",
+    "defaut_49": "OUVERT - tests/mediaman/test_historical_request.py::TestHistoricalRequestValidation::test_future_timestamp_rejected echouait a 01:32Z alors que la suite etait entierement verte a 00:45Z, sans changement dans cette zone",
+    "defaut_44": "OUVERT - le point d entree de mediaman.service produit toujours un article factice",
+    "protecthome_hypothesis": "BLOQUE - mesure par portee systemd transitoire : avec ProtectHome=yes et WorkingDirectory sous /home, l execution echoue. mediaman.service, si elle etait activee, echouerait avant tout ExecStart. systemd-analyze verify ne detecte pas ce cas.",
+    "notes": [
+      "Additif par construction : mediaman.service et mediaman/mediaman.py intacts, verifie par git diff avant commit.",
+      "Unites livrees desactivees ; aucune installation dans /etc.",
+      "L etat du mode selftest est cloisonne pour ne jamais contaminer les mesures reelles.",
+      "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
+    ]
+  },
+  "last_updated": "2026-09-17T01:40:59Z"
 }
