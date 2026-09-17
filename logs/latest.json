@@ -1,6 +1,6 @@
 {
-  "task": "Phase H - H4e, portail accessible par Tailscale sans adresse figee",
-  "date": "2026-09-17T00:04:04Z",
+  "task": "MediaMan etape 4E.1 - relier le pipeline evenementiel orphelin",
+  "date": "2026-09-17T00:45:17Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -47,7 +47,10 @@
     "20 acces anonyme en lecture de Grafana : FERME en H4d (GF_AUTH_ANONYMOUS_ENABLED=false), verifie par une requete sans identifiant",
     "40 en H4d j ai ecrit 'aucun tunnel actif : l exposition se limite au reseau local' apres n avoir teste que cloudflared. Tailscale etait actif et documente depuis toujours dans SYSTEM-SUMMARY.md section 11, que je n ai pas relu sur ce point. Consequence : avant H4d, les tableaux Grafana lisibles sans identifiant l etaient pour tout le tailnet, pas seulement pour le reseau du bateau. Etat Tailscale mesure en H4e : ACTIF. Troisieme conclusion tiree au-dela de la mesure (voir 34, 35).",
     "41 portal/index.html passait host=midnightrider.local sur ses sept liens, ce qui neutralisait le repli correct de viewer.html (params.get('host') || window.location.hostname). Le portail etait donc inutilisable a distance par Tailscale. Corrige en H4e : le parametre fige est retire, les pages suivent l hote d arrivee, aucune adresse 100.x.x.x n est ecrite nulle part.",
-    "38 docs/ARCHITECTURE-MASTER.md annonce un acces distant par Cloudflare Tunnel et renvoie a CLOUDFLARE-TUNNEL-URL.md, fichier absent du depot. Etat mesure du service en H4d : ABSENT. -> CORRIGE en H4e : la ligne annonce desormais Tailscale, restreint au tailnet."
+    "38 docs/ARCHITECTURE-MASTER.md annonce un acces distant par Cloudflare Tunnel et renvoie a CLOUDFLARE-TUNNEL-URL.md, fichier absent du depot. Etat mesure du service en H4d : ABSENT. -> CORRIGE en H4e : la ligne annonce desormais Tailscale, restreint au tailnet.",
+    "42 MediaMan : EventDetector, EventQueue et EventOrchestrator (etapes 4A/4B/4D, ~1150 lignes, 106 tests) n etaient importes par aucun module hors de leurs propres tests. Trois sous-systemes complets branches sur rien. Corrige en H5a par mediaman/event_pipeline.py et snapshot_store.py.",
+    "43 la documentation MediaMan datait du 2026-08-27 et affirmait '303/303', 'Telegram NOT IMPLEMENTED' et 'OpenClaw adapter not implemented', trois affirmations fausses. Chiffres reels mesures en H5a : 461 tests dans tests/mediaman, 41 dans tests/mcp. Section 4.6bis ajoutee.",
+    "45 tests/mcp/test_phase2_historical_contract.py annoncait 24 scenarios pour 23 fonctions. Docstring alignee sur la realite en H5a."
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -56,7 +59,8 @@
     "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent",
     "36 deux liens de portal/index.html pointent sur des tableaux de bord qui n existent pas dans l instance Grafana : 01-navigation-dashboard et data-model-status renvoient 404 meme authentifie. Deux des sept cartes de la page d accueil sont mortes. Mesure en H4c.",
     "37 les UID des JSON de grafana-dashboards/ ne correspondent pas a ceux de l instance vivante (03-performance.json declare uid=performance-analysis, l instance repond sur 03-performance ; 11 fichiers sur 13 ont nom != uid). Depuis H4b, deploy-dashboards-to-grafana.sh dispose enfin d un identifiant valide : l executer creerait vraisemblablement une seconde serie de tableaux. NE PAS LANCER.",
-    "39 tests/portal/test_portal.py::TestGrafanaConfig verifie allow_embedding dans config/grafana-custom.ini, fichier que Grafana ne charge pas. Le test passe et ne prouve rien. A repointer sur les variables d environnement de docker-compose.yml."
+    "39 tests/portal/test_portal.py::TestGrafanaConfig verifie allow_embedding dans config/grafana-custom.ini, fichier que Grafana ne charge pas. Le test passe et ne prouve rien. A repointer sur les variables d environnement de docker-compose.yml.",
+    "44 mediaman/mediaman.py (167 lignes) est le seul fichier que mediaman.service execute et n a aucun test ; il n utilise que la fondation d aout avec MEDIAMAN_CONTENT_PROVIDER=test, donc il produirait un article factice. La vraie chaine (historical_entrypoint.py) n est referencee par aucune unite systemd. A trancher en 4E.2."
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -66,7 +70,10 @@
     "defaut 36 : reparer ou retirer les deux cartes mortes de portal/index.html",
     "defaut 37 : aligner les UID de grafana-dashboards/ avant tout deploiement",
     "controle visuel du portail par Tailscale et en local apres H4e",
-    "defaut 39 : repointer TestGrafanaConfig sur docker-compose.yml"
+    "defaut 39 : repointer TestGrafanaConfig sur docker-compose.yml",
+    "MediaMan 4E.2 : choisir le point d entree que mediaman.service doit executer",
+    "MediaMan : ecrire les tests de mediaman.py ou le retirer",
+    "MediaMan : implementer LocalLLMProvider / OpenClawGatewayProvider ou les retirer"
   ],
   "previous_record": {
     "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
@@ -143,5 +150,19 @@
     "correctif": "portal/index.html, viewer.html et mcp.html suivent l hote d arrivee",
     "adresse_figee": "aucune ; conforme a SYSTEM-SUMMARY.md section 11",
     "services_touches": "aucun ; le portail relit ses fichiers a chaque requete"
+  },
+  "h5a": {
+    "run_utc": "20260917T004517Z",
+    "etape": "4E.1 - joint du pipeline evenementiel",
+    "modules_ajoutes": [
+      "mediaman/snapshot_store.py",
+      "mediaman/event_pipeline.py"
+    ],
+    "tests_mediaman": 461,
+    "tests_mcp": 41,
+    "suite_complete_code_retour": 0,
+    "systemd": "aucune unite modifiee",
+    "telegram": "aucun envoi",
+    "dry_run": "impose par construction"
   }
 }

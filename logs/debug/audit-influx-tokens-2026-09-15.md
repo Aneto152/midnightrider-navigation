@@ -588,3 +588,29 @@ ARCHITECTURE-MASTER.md, qui annoncait un tunnel Cloudflare inexistant.
 C est la troisieme fois que je conclus au-dela de ce que j ai mesure, apres le
 defaut 34 et le defaut 35. Les trois fois, une absence de signal a ete lue
 comme un signal d absence. Une sonde ne prouve que ce qu elle interroge.
+
+<!-- H5A-NOTE -->
+
+## H5a - MediaMan etape 4E.1 : trois sous-systemes branches sur rien
+
+L audit du jour a montre que EventOrchestrator n etait importe par aucun
+module hors de son propre fichier de tests. Avec EventDetector et EventQueue,
+cela faisait environ 1150 lignes et 106 tests verts pour un pipeline que rien
+n executait. Chaque piece passait ses tests ; l ensemble ne servait a rien.
+C est la meme famille de defaut que le 34, le 39 et le 40 : une verification
+qui mesure autre chose que ce qu elle pretend mesurer.
+
+Piece manquante decouverte en ecrivant le joint : rien ne persistait l etat
+precedent entre deux executions one-shot. EventDetector compare deux
+CollectionResult ; sous un timer systemd, le precedent ne survit pas. Le
+detecteur aurait recu previous=None a chaque passage et n aurait jamais emis
+le moindre evenement, sans qu aucun voyant ne s allume. D ou snapshot_store.
+
+Ordonnancement retenu : l instantane avance apres la mise en file et avant
+l orchestration. Une panne d orchestration ne peut pas faire redetecter les
+memes transitions, et une panne de mise en file ne perd rien.
+
+Ce qui reste, et qui n est pas un detail : mediaman.service lance
+mediaman.mediaman, qui produit un article factice. La vraie chaine vit dans
+historical_entrypoint.py et n est referencee par aucune unite. Le choix du
+point d entree est l etape 4E.2.

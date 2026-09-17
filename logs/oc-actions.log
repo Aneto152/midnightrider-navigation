@@ -261,3 +261,6 @@
 [2026-09-17T00:04:06Z] [DEBUG] [security] H4E: etat Tailscale mesure = ACTIF ; defaut 40 consigne (conclusion fausse en H4d)
 [2026-09-17T00:04:06Z] [RESULT] [portal] Result: SUCCESS - aucun service redemarre
 [2026-09-17T00:04:07Z] [COMMIT] SHA: d28dee3672caa12d91a2077cae3b628313e761f8
+[2026-09-17T00:46:04Z] [FILE_CREATE] [mediaman] H5A: snapshot_store.py et event_pipeline.py - joint du pipeline evenementiel (etape 4E.1)
+[2026-09-17T00:46:04Z] [FILE_CREATE] [mediaman] H5A: 3 fichiers de tests ajoutes ; tests/mediaman = 461 fonctions
+[2026-09-17T00:46:04Z] [RESULT] [mediaman] Result: SUCCESS - aucune unite systemd modifiee, aucun envoi Telegram

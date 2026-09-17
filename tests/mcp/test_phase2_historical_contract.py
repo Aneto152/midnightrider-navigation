@@ -4,7 +4,7 @@ Phase 2 Historical MCP/InfluxDB Contract Tests
 Tests the hardened racing.js MCP server with a synthetic HTTP backend.
 Launches real Node MCP subprocess; mocks InfluxDB with local HTTP server.
 
-Covers 24 scenarios:
+Covers 23 scenarios:
 1. initialize succeeds
 2. tools/list succeeds
 3. tools/list exposes get_historical_snapshot

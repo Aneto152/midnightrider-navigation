@@ -333,6 +333,41 @@ services:
 
 **For Details:** See [docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md](../INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md)
 
+<!-- H5A-STEP-4E1 -->
+### 4.6bis MediaMan — état réel au 2026-09-17 (remplace les statuts datés du 2026-08-27)
+
+Les blocs de statut plus haut dans ce document datent du 2026-08-27 et sont
+**périmés sur trois points vérifiables** : ils annoncent « 303/303 », « Telegram
+code NOT IMPLEMENTED » et « OpenClaw LLM adapter not implemented », alors que
+`telegram_sender.py`, `publication_bridge.py` et `openclaw_adapter.py` existent
+et sont testés. Chiffres mesurés ce jour : **461 fonctions de test dans
+`tests/mediaman`**, **41 dans `tests/mcp`**.
+
+**Étape 4E.1 — le joint (livrée) :**
+
+| Module | Rôle |
+|---|---|
+| `mediaman/snapshot_store.py` | Persiste la dernière `CollectionResult` entre deux exécutions one-shot. Sans lui, `EventDetector` reçoit `previous=None` à chaque passage et n'émet jamais aucun événement : un pipeline silencieux qui se déclare sain. |
+| `mediaman/event_pipeline.py` | Racine de composition `CollectionResult → EventDetector → EventQueue → EventOrchestrator`. Dépendances injectées, `dry_run=True` obligatoire, aucune variable d'environnement lue. |
+
+**Garantie d'ordonnancement :** l'instantané n'avance qu'une fois les événements
+durablement mis en file, et avant toute orchestration. Une panne pendant
+l'orchestration ne peut donc pas faire redétecter les mêmes transitions ; une
+panne pendant la mise en file ne fait perdre aucune transition.
+
+**Reste à faire — étape 4E.2 et au-delà :**
+
+- Décider quel point d'entrée `mediaman.service` doit exécuter. Aujourd'hui il
+  lance `mediaman.mediaman`, qui n'utilise que la fondation d'août avec
+  `MEDIAMAN_CONTENT_PROVIDER=test` : **un article factice**. La vraie chaîne vit
+  dans `historical_entrypoint.py` et n'est référencée par aucune unité systemd.
+- Brancher `EventPipeline` sur un déclencheur réel (timer), toujours en dry-run.
+- `mediaman.py` (167 lignes, le seul fichier que systemd exécute) n'a **aucun
+  test**. Volontairement laissé de côté tant que son sort n'est pas tranché.
+- `LocalLLMProvider` et `OpenClawGatewayProvider` lèvent `NotImplementedError`.
+- Création du bot Telegram et activation en production : décision de Denis,
+  non autorisée à ce jour.
+
 ### 4.7 MCPCollector (Navigation Facts) — Step 3A
 
 **Status:** ✅ COMPLETE — Mocked unit tests passing (178/178 full suite)
