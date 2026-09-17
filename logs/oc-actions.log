@@ -283,3 +283,9 @@
 [2026-09-17T02:34:48] [FILE_MODIFY] [tests] H5d defaut 50 corrige : motif du garde elargi a toute variable et a la soustraction
 [2026-09-17T02:34:48] [RESULT] [mediaman] Result: SUCCESS - tests mediaman=508 mcp=41 - aucune unite installee ni activee
 [2026-09-17T02:34:48] [COMMIT] SHA: 7da5057760595bd4266d49a9925e699f503a0e06
+[2026-09-17T02:59:26] [DEBUG] [mediaman] H6a reconnaissance lecture seule de la chaine historique - verdict donnees=FAITS_MANQUANTS
+[2026-09-17T02:59:26] [DEBUG] [racing-mcp] H6a racing.js pilote en JSON-RPC : ERREUR skew=n/d ms as_of=2026-09-17T01:59:24Z
+[2026-09-17T02:59:26] [DEBUG] [mediaman] H6a historical_entrypoint execute hors doublure : code 1
+[2026-09-17T02:59:26] [FILE_MODIFY] [docs] H6a defaut 51 corrige : tableau ProtectHome relu depuis la mesure
+[2026-09-17T02:59:26] [RESULT] [mediaman] Result: SUCCESS - reconnaissance terminee, aucun code de production modifie
+[2026-09-17T02:59:26] [COMMIT] SHA: ce1de700a3da0e5020f06560d742055e15ea863c
