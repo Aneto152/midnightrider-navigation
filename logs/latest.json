@@ -37,7 +37,10 @@
     "h7e_content:be0233e98f19bd41fe4593c4b0b56ef6dc8ac71c",
     "h7e_journal:6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65",
     "h8a_content:8919130fe36e82dd66e8eb07a073e26234f48a9e",
-    "h8b_content:1fa2853f91f1925c96a0972e57553f656fd1cb43"
+    "h8a_journal:ca11c26d1b1f869745dfcabc43255c45a90630e1",
+    "h8b_content:1fa2853f91f1925c96a0972e57553f656fd1cb43",
+    "h8b_journal:b6b7c1cc851cfd93637163cfffda73be9ba8f4f1",
+    "h8c_content:5cf6d029e4af8e0d44f568ea89e26bff4e7df20e"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -227,7 +230,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-18T14:16:59Z",
+  "last_updated": "2026-09-18T16:42:30Z",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -582,9 +585,9 @@
       "telegram_access": false,
       "files_modified": [
         "docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md",
-        "mcp/servers/racing.js",
         "logs/debug/defaut-58-filtre-contexte-2026-09-17.md",
-        "logs/debug/jalon-rejeu-2026-09-18.md"
+        "mcp/servers/racing.js",
+        "tests/mcp/test_defaut_58_context_filter.py"
       ],
       "replay": {
         "as_of": "2026-09-07T14:36:26Z",
@@ -597,7 +600,6 @@
         "facts_from_ais_before": 4,
         "facts_changed": 4,
         "distance_nm": 11.04,
-        "contexts_sharing_winning_timestamp": 1,
         "our_sources_in_window": {
           "navigation.position": [
             "N2K.1",
@@ -611,13 +613,15 @@
             "N2K.1",
             "N2K.2"
           ]
-        }
+        },
+        "contexts_sharing_our_filtered_timestamp": 1,
+        "measurement_method_error": "ce comptage portait sur NOTRE horodatage gagnant apres filtrage et non sur l instant que l ANCIENNE requete retenait : il ne repondait pas a la question posee. Refait par H8c, entree suivante. Le message du commit 1fa2853f91f1925c96a0972e57553f656fd1cb43 affirme de plus la conclusion inverse de celle qui a ete ecrite dans les documents : conclusion redigee avant la mesure."
       },
       "tests": {
         "defect_58": "6 passed",
         "tests_mcp": "47 passed"
       },
-      "redaction": "coordonnees du bateau retirees de mcp/servers/racing.js et de logs/debug/defaut-58-filtre-contexte-2026-09-17.md : la politique du depot est que les valeurs de faits n y sont pas consignees. Elles restent dans l historique du commit 8919130, qui ne se reecrit pas.",
+      "redaction": "coordonnees du bateau retirees de TROIS fichiers - mcp/servers/racing.js, logs/debug/defaut-58-filtre-contexte-2026-09-17.md et tests/mcp/test_defaut_58_context_filter.py, ou les valeurs sont remplacees par des valeurs fictives : la politique du depot est que les valeurs de faits n y sont pas consignees. Elles restent dans l historique du commit 8919130, qui ne se reecrit pas.",
       "corrections": [
         "entree h8a : version h8a-v1 rectifiee en h8a-v2",
         "note ajoutee au constat du defaut 58 : N2K.0 est le recepteur AIS, pas un instrument du bord ; defaut 64 retracte, jamais ecrit au depot"
@@ -628,10 +632,107 @@
         "defaut 62 : Deployment Checklist systemd",
         "SEC-2026-09-14-01 : revocation de l ancien jeton InfluxDB",
         "22 liens relatifs morts"
+      ],
+      "journal_commit": "b6b7c1cc851cfd93637163cfffda73be9ba8f4f1",
+      "journal_files": [
+        "logs/debug/jalon-rejeu-2026-09-18.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "rectified_by": "h8c-v1, 2026-09-18T16:42:30Z"
+    },
+    {
+      "task": "H8c - mesure de l egalite d horodatage au bon instant et rectification de H8b",
+      "version": "h8c-v1",
+      "timestamp": "2026-09-18T16:42:30Z",
+      "status": "SUCCESS",
+      "parent": "b6b7c1cc851cfd93637163cfffda73be9ba8f4f1",
+      "content_sha": "5cf6d029e4af8e0d44f568ea89e26bff4e7df20e",
+      "services_touched": [],
+      "influxdb_writes": 0,
+      "telegram_access": false,
+      "code_modified": false,
+      "files_modified": [
+        "docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md"
+      ],
+      "journal_files": [
+        "logs/debug/jalon-rejeu-2026-09-18.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "question": "sur la fenetre du jalon, plusieurs lignes partageaient-elles l instant que l ancienne requete (sans filtre de contexte) retenait ? Si oui, le last() de Flux tranchait arbitrairement et le jalon est inverifiable plutot que prouve faux.",
+      "measured": {
+        "window_seconds": 60,
+        "as_of": "2026-09-07T14:36:26Z",
+        "recorded_source_timestamp": "2026-09-07T14:36:24.298Z",
+        "facts_measured": 4,
+        "facts_total": 4,
+        "facts_won_by_ais": 4,
+        "facts_with_tie": 0,
+        "max_rows_at_winning_instant": 1,
+        "facts_matching_recorded_timestamp": 2,
+        "facts_where_our_row_shared_the_instant": 0,
+        "per_fact": {
+          "latitude": {
+            "old_winning_time": "2026-09-07T14:36:24.298Z",
+            "old_winning_context_is_ais": true,
+            "rows_at_that_instant": 1,
+            "contexts_at_that_instant": 1,
+            "ais_contexts_at_that_instant": 1,
+            "our_row_at_that_instant": false,
+            "equals_recorded_source_timestamp": true
+          },
+          "longitude": {
+            "old_winning_time": "2026-09-07T14:36:24.298Z",
+            "old_winning_context_is_ais": true,
+            "rows_at_that_instant": 1,
+            "contexts_at_that_instant": 1,
+            "ais_contexts_at_that_instant": 1,
+            "our_row_at_that_instant": false,
+            "equals_recorded_source_timestamp": true
+          },
+          "speed_over_ground": {
+            "old_winning_time": "2026-09-07T14:36:24.297Z",
+            "old_winning_context_is_ais": true,
+            "rows_at_that_instant": 1,
+            "contexts_at_that_instant": 1,
+            "ais_contexts_at_that_instant": 1,
+            "our_row_at_that_instant": false,
+            "equals_recorded_source_timestamp": false
+          },
+          "course_over_ground": {
+            "old_winning_time": "2026-09-07T14:36:24.297Z",
+            "old_winning_context_is_ais": true,
+            "rows_at_that_instant": 1,
+            "contexts_at_that_instant": 1,
+            "ais_contexts_at_that_instant": 1,
+            "our_row_at_that_instant": false,
+            "equals_recorded_source_timestamp": false
+          }
+        }
+      },
+      "verdict": "Remeasured on 2026-09-18 at the instant the unfiltered query actually selected: exactly one row existed there for each of the 4 facts, so that query was deterministic. Replayed against the same dataset, frozen since 2026-09-07, it returned an AIS context for 4 of the 4 facts. The 2026-09-15 output is therefore wrong, not merely unverifiable. For 2 of the 4 facts that instant is the source_timestamp recorded on 2026-09-15.",
+      "tests": {
+        "defect_58": "6 passed"
+      },
+      "corrections": [
+        "entree h8b : files_modified rectifie - il omettait tests/mcp/test_defaut_58_context_filter.py et citait logs/debug/jalon-rejeu-2026-09-18.md, qui appartient au commit de journal",
+        "entree h8b : journal_commit et journal_files ajoutes, caviardage porte a trois fichiers, comptage d horodatage renomme et son erreur de methode consignee",
+        "commit_chain : h8a_journal insere apres h8a_content",
+        "commit_chain : h8b_journal insere apres h8b_content",
+        "commit_chain : h8c_content ajoute en fin de chaine"
+      ],
+      "lesson": "aucune prose ecrite d avance - message de commit, titre de section, ligne de journal - ne doit affirmer une conclusion qui depend d une mesure : elle doit etre engendree depuis le resume de mesure, ou rester neutre. Une mesure doit en outre porter sur l instant exact de la question posee.",
+      "deferred": [
+        "defaut 63 : unite de course_over_ground_degrees (contrat publie)",
+        "defaut 61 : brider scripts/commit-logs.sh",
+        "defaut 62 : Deployment Checklist systemd",
+        "SEC-2026-09-14-01 : revocation de l ancien jeton InfluxDB",
+        "22 liens relatifs morts"
       ]
     }
   ],
-  "last_task": "H8b - rejeu du jalon du 2026-09-15 avec racing.js corrige",
+  "last_task": "H8c - mesure de l egalite d horodatage au bon instant et rectification de H8b",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-18T14:16:59Z"
+  "last_update": "2026-09-18T16:42:30Z"
 }
