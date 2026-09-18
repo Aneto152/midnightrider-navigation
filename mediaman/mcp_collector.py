@@ -42,7 +42,7 @@ class Provenance:
     """Source tracking for every collected fact."""
     tool_public_id: str  # e.g., "racing.get_snapshot"
     server_name: str  # e.g., "racing"
-    wire_tool_name: str  # e.g., "get_position"
+    wire_tool_name: str  # e.g., "get_snapshot"
     source_id: str  # sanitized source identifier
     source_timestamp: Optional[str] = None  # ISO 8601 UTC or UNKNOWN (never fabricated)
     observed_at: Optional[str] = None  # local collection time (distinct from source)

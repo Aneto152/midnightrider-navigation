@@ -42,6 +42,10 @@ MediaMan now supports opt-in historical test message generation from InfluxDB vi
 - **MCPCollector.collect_historical()**: Read-only InfluxDB queries at historical timestamp via MCP
 - **HistoricalMCPProvider**: Generates French articles from historical navigation facts
 - **racing.get_historical_snapshot**: MCP tool querying InfluxDB at as_of timestamp (read-only)
+- **MCPCollector.collect_current()**: même moteur, borne haute posée à l'instant de
+  consultation — le direct n'est pas un second chemin (H9, 2026-09-18)
+- **racing.get_snapshot**: MCP tool querying InfluxDB over an explicit
+  `[start_utc, end_utc]` interval (read-only)
 
 Historical mode is opt-in (`MEDIAMAN_CONTENT_PROVIDER=historical_mcp`), enforces DRY_RUN=true,
 requires explicit temporal parameters, fails closed on missing facts, and never accesses N2K or P5.
@@ -513,48 +517,70 @@ expression régulière.
 
 ### 4.7 MCPCollector (Navigation Facts) — Step 3A
 
-**Status:** ✅ COMPLETE — Mocked unit tests passing (178/178 full suite)
+**Status:** ✅ COMPLETE — une seule voie de collecte, les deux entrées couvertes par des tests
 
 **Boundary:** MCPClient → MCPCollector → validated structured navigation facts
 
-**Source-Verified Tools:**
+**Outils réellement déclarés par `mcp/servers/racing.js` (relevés le 2026-09-18) :**
 
-| Public ID | Wire Name | Server | Freshness | Status |
+| Public ID | Wire Name | Arguments | Borne haute | Limite de fraîcheur |
 |---|---|---|---|---|
-| `racing.get_position` | `get_position` | racing | 30 sec | ✅ Verified |
-| `racing.get_sog` | `get_sog` | racing | 15 sec | ✅ Verified |
-| `racing.get_cog` | `get_cog` | racing | 15 sec | ✅ Verified |
+| `racing.get_historical_snapshot` | `get_historical_snapshot` | `as_of_utc`, `window_seconds` | choisie par l'appelant | aucune — l'appelant assume l'instant |
+| `racing.get_snapshot` | `get_snapshot` | `start_utc`, `end_utc` | l'instant de consultation | la fenêtre elle-même, 30 s par défaut |
+
+Les deux portes appellent le même moteur, `collectSnapshot(startUtc, endUtc)`.
+C'est la seule fonction du serveur racing qui construise une requête Flux, et
+`tests/mcp/test_h9_chemin_unique.py` échoue si une seconde apparaît. Consulter
+en direct, c'est demander l'intervalle qui finit maintenant ; rejouer, c'est
+demander celui qui finissait autrefois. Même requête, même filtre `self`, même
+contrôle de dérive, même contrat d'unités.
+
+> **Correction du 2026-09-18, chantier H9b.** Cette section déclarait jusqu'ici
+> trois outils — `racing.get_position`, `racing.get_sog`, `racing.get_cog` —
+> sous l'en-tête « Source-Verified Tools », chacun marqué « ✅ Verified »,
+> avec des limites de fraîcheur de 30, 15 et 15 secondes. Le serveur racing n'a
+> jamais déclaré aucun de ces trois outils. Le code qui les appelait ne pouvait
+> donc rien collecter, et la mention « Verified » n'a jamais correspondu à une
+> vérification. C'est le défaut 65, fermé par H9 le 2026-09-18 (commit
+> 019c4ef6). La table est remplacée et non effacée en silence : une
+> documentation qui certifie ce qu'elle n'a pas mesuré est la cause du défaut,
+> pas son décor.
 
 **Key Properties:**
 
 - Provenance tracking: tool_public_id, server_name, wire_tool_name, source_id, timestamps, freshness
 - Source timestamp preservation (never fabricated)
 - Observed_at distinct from source_timestamp
-- Fail-closed semantics: stale facts block COMPLETE status
+- Fail-closed semantics: les quatre faits sont rendus ensemble ou la collecte est incomplète
 - Freshness validation: ISO 8601 UTC (Z and explicit offset), deterministic reference_time injection
 - Field validation: latitude (-90 to 90), longitude (-180 to 180), SOG (non-negative), COG (0-360°)
 - LLM-safe serialization: exact coordinates suppressed in `to_llm_context()`
 - Structured logging: STARTUP, DATA_IN, DATA_OUT, ERROR, SHUTDOWN events
 - Log output: exact coordinates, raw payloads, credentials never logged
 
-**Test Evidence (Mocked Unit Tests):**
+**Test Evidence:**
 
-- MCP client tests: 41/41 PASSED
-- Collector tests: 32/32 PASSED (26 original + 6 evidence-closure tests)
-- Full MediaMan suite: 178/178 PASSED (includes nested tests above)
-- All tests are mocked unit tests with no runtime E2E verification
-- Real MCPClient compatibility verified with subprocess mocked
-- Logging output verified (no exact coordinates or credentials)
-- Freshness edge cases verified (future, malformed, stale timestamps)
-- LLM-safe serialization verified (coordinate suppression)
+- `tests/mcp/test_h9_chemin_unique.py` — 13 tests : unicité du moteur, deux portes
+  déclarées, noms morts absents, requêtes Flux identiques au caractère près
+  depuis les deux portes, défauts 58 et 63 tenus par la porte neuve
+- `tests/mediaman/test_h9_collect_current.py` — 16 tests : comportement de
+  `collect_current`, plus 8 propriétés portées depuis la suite supprimée avec le
+  chemin mort (suppression des coordonnées dans `to_llm_context()`, aucune
+  coordonnée dans les journaux, horodatage futur ou malformé → `missing`)
+- `tests/mediaman/test_mcp_client.py` — liste blanche et correspondance des noms
+- Suites complètes au commit 019c4ef6 : `tests/mcp` 68 passés, `tests/mediaman` 495 passés
+- Tout ce qui précède est hors ligne. Aucune exécution de bout en bout sur
+  données vivantes n'a été possible : rien n'est entré dans InfluxDB depuis le
+  2026-09-07T14:36:24Z.
 
-**Not Implemented at This Stage:**
+**Non implémenté à l'étape 3A** (voir 4.8 et suivantes pour ce qui a suivi) :
 - SQLite event queue
 - OpenClaw adapter
 - Telegram integration
 - Timer activation
 
-**For Details:** `mediaman/mcp_collector.py` and `tests/mediaman/test_mcp_collector.py`
+**For Details:** `mediaman/mcp_collector.py`, `mcp/servers/racing.js`,
+`tests/mcp/test_h9_chemin_unique.py`, `tests/mediaman/test_h9_collect_current.py`
 
 ### 4.8 EventDetector (Deterministic Transitions) — Step 4A
 
@@ -953,7 +979,8 @@ Added Phase J-1 (2026-06-15). Real-time competitor tracking via Signal K AIS.
 
 ## 8. SIGNAL K — SOURCES ET PRIORITÉS (mis à jour 2026-06-15)
 
-> Ces sections sont fusionnées depuis `docs/HARDWARE/INSTRUMENT-INVENTORY.md`.
+> Ces sections sont fusionnées depuis l'ancien INSTRUMENT-INVENTORY.md,
+> supprimé après la fusion.
 > Pour la topologie complète du bus N2K et la matrice des flux PGN, voir le fichier canonical :
 > 📌 **`docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md`**
 
@@ -1155,11 +1182,10 @@ curl -s http://localhost:3000/signalk/v1/api/vessels/self/environment/outside/pr
 
 | Fichier | Rôle |
 |---------|------|
-| `docs/ARCHITECTURE-SYSTEM-MASTER-2026-04-25.md` | Ancien doc archi (partiellement obsolète) |
-| **`docs/ARCHITECTURE-REFERENCE-2026-05-20.md`** | **CE DOCUMENT — référence canonique** |
-| `docs/HARDWARE/INSTRUMENT-INVENTORY.md` | Inventaire instruments à jour |
+| **`docs/ARCHITECTURE-MASTER.md`** | **CE DOCUMENT — référence canonique** |
+| `docs/HARDWARE/` | Fiches techniques par instrument (12 fichiers, SSOT spécifications) |
 | `docs/DATA-SCHEMA-MASTER.md` | Schéma complet données Signal K / InfluxDB |
-| `docs/GRAFANA-UNIT-CONVERSIONS.md` | Conversions unités pour Grafana |
+| `docs/units/UNIT-CONVERSIONS-GRAFANA.md` | Conversions unités pour Grafana |
 | `docs/SYSTEM-OVERVIEW-1PAGE.md` | Résumé système (référencé par Dust) |
 | `docs/DASHBOARDS-README.md` | Guide dashboards Grafana (référencé par Dust) |
 | `logs/latest.json` | Journal d'exécution OC |

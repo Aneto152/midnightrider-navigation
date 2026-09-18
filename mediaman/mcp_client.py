@@ -68,7 +68,7 @@ class MCPClient:
     #
     # Noter au passage la description que portait racing.get_cog :
     # "Course over ground (degrees, radians)". Les deux unites a la fois,
-    # ecrit sans broncher. C etait le defaut 63 annonce trois ans avant
+    # ecrit sans broncher. C etait le defaut 63 annonce longtemps avant
     # d etre mesure, et personne ne l a lu.
     TOOL_ALLOWLIST = {
         'racing.get_snapshot': {
