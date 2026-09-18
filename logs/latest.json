@@ -1,6 +1,6 @@
 {
-  "task": "H11b - la barriere ne voyait pas ce qu elle mesurait",
-  "date": "2026-09-18T22:34:36Z",
+  "task": "H12 - le guide de secours ne pouvait pas etre suivi",
+  "date": "2026-09-18T23:33:34Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -80,7 +80,9 @@
     "63 CLOSED on 2026-09-18, chantier H8d: the course over ground was published in radians under the key course_over_ground_degrees. racing.js now converts it once in cogRadiansToDegrees(), validates the incoming value in [0, 2*PI] instead of [0, 360], and every snapshot declares its units; mcp_collector refuses a units block that disagrees. Measured proof over 365 days: [0.000000, 6.281400] rad, 0 row(s) above 2*PI out of 4078141. Content commit 36d2641c5cb2ef3b3963d45a57326f85fc295013.",
     "65 mediaman/mcp_collector.py calls racing.get_position, racing.get_sog and racing.get_cog, three tools that racing.js does not declare - it exposes get_historical_snapshot only. The realtime path of the collector is therefore dead and only mocks cover it. To arbitrate: implement the three tools, or remove the path. - ferme par H9 le 2026-09-18",
     "74 six commandes de la documentation visaient un bucket signalk inexistant, sur trois fichiers, plus une organisation fausse dans README.md - corrige par H11 le 2026-09-18, barriere posee",
-    "74 la documentation citait un bucket inexistant - ferme pour de bon en H11b : H11 l avait annonce ferme sur un detecteur aveugle"
+    "74 la documentation citait un bucket inexistant - ferme pour de bon en H11b : H11 l avait annonce ferme sur un detecteur aveugle",
+    "81 docs/ops/RECOVERY-GUIDE-SAFE.md ne pouvait pas etre suivi - reecrit en version 2.0 par H12",
+    "67 le harnais JS mort est desormais signale comme tel dans le guide de secours - H12"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -103,7 +105,9 @@
     "75 le motif de bucket de H11 ne voyait pas INFLUX_DB_BUCKET - corrige en H11b",
     "76 le motif d organisation de H11 ne voyait pas le mot-cle nu org= - corrige en H11b",
     "77 la procedure d activation cloud cite trois artefacts inexistants - rectification datee en H11b",
-    "78 les champs de tete de latest.json etaient perimes du 2026-09-17 - corriges en H11b"
+    "78 les champs de tete de latest.json etaient perimes du 2026-09-17 - corriges en H11b",
+    "82 README.md cite quatre serveurs MCP fantomes en -server.js",
+    "83 recensement : 189 chemins morts dans la documentation canonique, dont 119 dans docs/INDEX.md"
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -252,7 +256,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-18T22:34:36",
+  "last_updated": "2026-09-18T23:33:34",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -940,9 +944,55 @@
       "no_service_restarted": true,
       "no_container_removed": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H12 - le guide de secours ne pouvait pas etre suivi",
+      "version": "h12-v1",
+      "started_utc": "20260918T233227Z",
+      "finished_utc": "2026-09-18T23:33:34",
+      "content_commit": "6ad1a6b6b24a0d6d81df1a0395f1fde74f77d622",
+      "parent": "4ac4e97c52eb43e5b333ea56b6bde6a9c8ba4b2e",
+      "status": "SUCCESS",
+      "audit": {
+        "paths_cited": 53,
+        "paths_existing": 2,
+        "false_lines": 65,
+        "sections_affected": "11/12",
+        "rule_violation": "STEP 1 prescrivait docker-compose up -d pour Signal K"
+      },
+      "guide_lines": "559 -> 356",
+      "sections_removed": [
+        "gabarit config Claude",
+        "carte arborescence"
+      ],
+      "measured_not_remembered": {
+        "mcp_servers": 11,
+        "mcp_tools": 48,
+        "docker_containers": 4,
+        "systemd_timers": 4
+      },
+      "guard_documents": 2,
+      "guard_proven": "version 1.1 : 62 chemins morts, 20 commandes fautives ; version 2.0 : 0",
+      "guard_tests": "12 -> 17",
+      "defects_opened": [
+        82,
+        83
+      ],
+      "defects_closed": [
+        67,
+        81
+      ],
+      "tests": {
+        "barriere": "============================== 17 passed in 0.41s ==============================",
+        "suite-mcp": "============================= 85 passed in 39.74s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.10s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H11b - motifs de detection elargis, sept valeurs corrigees",
+  "last_task": "H12 - RECOVERY-GUIDE-SAFE.md version 2.0, deux documents sous garde",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-18T22:34:36"
+  "last_update": "2026-09-18T23:33:34"
 }

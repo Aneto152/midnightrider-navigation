@@ -381,3 +381,11 @@
 [2026-09-18T22:34:36] [FILE_MODIFY] [logs] H11b : defaut 78 - champs de tete de latest.json perimes du 2026-09-17, remis en coherence
 [2026-09-18T22:34:36] [RESULT] [barriere] H11b : SUCCESS - defaut 74 ferme pour de bon, defauts 75 a 78 traites
 [2026-09-18T22:34:36] [COMMIT] SHA: 94e6f3f7397f7eef805c3c765aa1bf3a50b21f00
+[2026-09-18T23:33:34] [FILE_MODIFY] [docs] H12 : audit de RECOVERY-GUIDE-SAFE.md - 53 chemins cites, 2 existants, 65 lignes fausses, 11 sections sur 12
+[2026-09-18T23:33:34] [DEBUG] [docs] H12 : STEP 1 de la version 1.1 prescrivait docker-compose up -d pour Signal K, contre la regle du bord
+[2026-09-18T23:33:34] [FILE_MODIFY] [docs] H12 : guide remplace par la version 2.0, 559 -> 356 lignes, procedure seule
+[2026-09-18T23:33:34] [FILE_DELETE] [docs] H12 : gabarit de config et carte d arborescence supprimes, renvoyes a leurs SSOT
+[2026-09-18T23:33:34] [FILE_MODIFY] [tests] H12 : deux documents sous garde, detecteur de chemins morts lisant toutes les lignes
+[2026-09-18T23:33:34] [DEBUG] [tests] H12 : premier detecteur limite aux accents inverses - 0 trouve sur la v1.1 qui en contenait 62, refait
+[2026-09-18T23:33:34] [RESULT] [docs] H12 : SUCCESS - defauts 67 et 81 fermes, 82 et 83 ouverts
+[2026-09-18T23:33:34] [COMMIT] SHA: 6ad1a6b6b24a0d6d81df1a0395f1fde74f77d622
