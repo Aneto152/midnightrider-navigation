@@ -36,7 +36,8 @@
     "h7d_journal:8120f3c481e87b801569792c8d135a065f05f013",
     "h7e_content:be0233e98f19bd41fe4593c4b0b56ef6dc8ac71c",
     "h7e_journal:6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65",
-    "h8a_content:8919130fe36e82dd66e8eb07a073e26234f48a9e"
+    "h8a_content:8919130fe36e82dd66e8eb07a073e26234f48a9e",
+    "h8b_content:1fa2853f91f1925c96a0972e57553f656fd1cb43"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -63,7 +64,8 @@
     "45 tests/mcp/test_phase2_historical_contract.py annoncait 24 scenarios pour 23 fonctions. Docstring alignee sur la realite en H5a.",
     "ProtectHome mediaman.service - unite inexecutable, corrigee en H5d",
     "50 le garde-fou H5c declarait legitime other.replace(second=d.second + 10)",
-    "58 mcp/servers/racing.js interrogeait InfluxDB sans filtre de contexte : les 4 faits publies etaient ceux de la derniere cible AIS ayant ecrit dans la fenetre - corrige en H8a, 6 tests de non-regression"
+    "58 mcp/servers/racing.js interrogeait InfluxDB sans filtre de contexte : les 4 faits publies etaient ceux de la derniere cible AIS ayant ecrit dans la fenetre - corrige en H8a, 6 tests de non-regression",
+    "64 RETRACTE le 2026-09-18 avant toute ecriture : j avais accuse la documentation de mentir sur les deux Vulcan alors que N2K.0 est le recepteur AIS et n ecrit jamais notre contexte - erreur de meme nature que le defaut 58, commise dans l outil de diagnostic"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -90,8 +92,8 @@
     "MediaMan 4E.2 : choisir le point d entree que mediaman.service doit executer",
     "MediaMan : ecrire les tests de mediaman.py ou le retirer",
     "MediaMan : implementer LocalLLMProvider / OpenClawGatewayProvider ou les retirer",
-    "rejouer le jalon MediaMan du 2026-09-15 avec racing.js corrige",
-    "defaut 63 : trancher l unite de course_over_ground_degrees"
+    "defaut 63 : trancher l unite de course_over_ground_degrees",
+    "defaut 61 : brider scripts/commit-logs.sh (service en marche)"
   ],
   "previous_record": {
     "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
@@ -225,7 +227,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-18T00:31:18Z",
+  "last_updated": "2026-09-18T14:16:59Z",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -514,7 +516,7 @@
     },
     {
       "task": "H8a - defaut 58 : filtre de contexte de racing.js",
-      "version": "h8a-v1",
+      "version": "h8a-v2",
       "timestamp": "2026-09-18T00:31:18Z",
       "status": "SUCCESS",
       "parent": "6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65",
@@ -565,10 +567,71 @@
         "defaut 61 : brider scripts/commit-logs.sh",
         "defaut 62 : Deployment Checklist de etc/systemd/system/README.md",
         "22 liens relatifs morts dans la documentation"
+      ],
+      "version_correction": "l entree indiquait h8a-v1 ; c est h8a-v2 qui a ete executee, v1 s etant arretee sur sa propre barriere de mesure - count() supprime la colonne _time, que latest_row() exige. Rectifie en H8b."
+    },
+    {
+      "task": "H8b - rejeu du jalon du 2026-09-15 avec racing.js corrige",
+      "version": "h8b-v1",
+      "timestamp": "2026-09-18T14:16:59Z",
+      "status": "SUCCESS",
+      "parent": "ca11c26d1b1f869745dfcabc43255c45a90630e1",
+      "content_sha": "1fa2853f91f1925c96a0972e57553f656fd1cb43",
+      "services_touched": [],
+      "influxdb_writes": 0,
+      "telegram_access": false,
+      "files_modified": [
+        "docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md",
+        "mcp/servers/racing.js",
+        "logs/debug/defaut-58-filtre-contexte-2026-09-17.md",
+        "logs/debug/jalon-rejeu-2026-09-18.md"
+      ],
+      "replay": {
+        "as_of": "2026-09-07T14:36:26Z",
+        "window_seconds": 60,
+        "dry_run": true,
+        "result": "SUCCESS",
+        "publication_id": "b36f4233caab5c1d794e184823f75031487a462754ef1a66fcfc671f81650e6f"
+      },
+      "measured": {
+        "facts_from_ais_before": 4,
+        "facts_changed": 4,
+        "distance_nm": 11.04,
+        "contexts_sharing_winning_timestamp": 1,
+        "our_sources_in_window": {
+          "navigation.position": [
+            "N2K.1",
+            "N2K.2"
+          ],
+          "navigation.speedOverGround": [
+            "N2K.1",
+            "N2K.2"
+          ],
+          "navigation.courseOverGroundTrue": [
+            "N2K.1",
+            "N2K.2"
+          ]
+        }
+      },
+      "tests": {
+        "defect_58": "6 passed",
+        "tests_mcp": "47 passed"
+      },
+      "redaction": "coordonnees du bateau retirees de mcp/servers/racing.js et de logs/debug/defaut-58-filtre-contexte-2026-09-17.md : la politique du depot est que les valeurs de faits n y sont pas consignees. Elles restent dans l historique du commit 8919130, qui ne se reecrit pas.",
+      "corrections": [
+        "entree h8a : version h8a-v1 rectifiee en h8a-v2",
+        "note ajoutee au constat du defaut 58 : N2K.0 est le recepteur AIS, pas un instrument du bord ; defaut 64 retracte, jamais ecrit au depot"
+      ],
+      "deferred": [
+        "defaut 63 : unite de course_over_ground_degrees (contrat publie)",
+        "defaut 61 : brider scripts/commit-logs.sh",
+        "defaut 62 : Deployment Checklist systemd",
+        "SEC-2026-09-14-01 : revocation de l ancien jeton InfluxDB",
+        "22 liens relatifs morts"
       ]
     }
   ],
-  "last_task": "H8a - defaut 58 : filtre de contexte de racing.js",
+  "last_task": "H8b - rejeu du jalon du 2026-09-15 avec racing.js corrige",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-18T00:31:18Z"
+  "last_update": "2026-09-18T14:16:59Z"
 }

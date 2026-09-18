@@ -328,3 +328,10 @@
 [2026-09-18T00:31:18] [COMMIT] SHA: 8120f3c481e87b801569792c8d135a065f05f013 (journal H7d, non journalise a l epoque)
 [2026-09-18T00:31:18] [COMMIT] SHA: be0233e98f19bd41fe4593c4b0b56ef6dc8ac71c (contenu H7e, non journalise a l epoque)
 [2026-09-18T00:31:18] [COMMIT] SHA: 6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65 (journal H7e, non journalise a l epoque)
+[2026-09-18T14:16:59] [DEBUG] [mediaman] H8b rejeu du jalon 2026-09-15 : as_of 2026-09-07T14:36:26Z, fenetre 60s, DRY_RUN=true, resultat SUCCESS, publication_id b36f4233caab5c1d
+[2026-09-18T14:16:59] [DEBUG] [mediaman] mesure : 4/4 faits venaient d une cible AIS, 4/4 valeurs changent, 1 contexte(s) partageaient l horodatage gagnant
+[2026-09-18T14:16:59] [FILE_MODIFY] [mediaman] docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md : Current status date au 2026-09-18, preuve du 15 conservee et marquee inverifiable, item 4 du reste a faire ferme (H7e)
+[2026-09-18T14:16:59] [FILE_MODIFY] [racing-mcp] caviardage : coordonnees du bateau retirees de mcp/servers/racing.js et logs/debug/defaut-58-filtre-contexte-2026-09-17.md - politique du depot, valeurs de faits non consignees
+[2026-09-18T14:16:59] [FILE_MODIFY] [journal] entree h8a : version h8a-v1 rectifiee en h8a-v2 ; defaut 64 retracte avant toute ecriture (N2K.0 = recepteur AIS)
+[2026-09-18T14:16:59] [RESULT] [mediaman] H8b : SUCCESS - rejeu SUCCESS - tests 58 6 passed - tests/mcp 47 passed - 0 service touche - 0 ecriture InfluxDB - 0 acces Telegram
+[2026-09-18T14:16:59] [COMMIT] SHA: 1fa2853f91f1925c96a0972e57553f656fd1cb43 (contenu H8b)
