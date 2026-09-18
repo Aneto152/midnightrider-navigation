@@ -352,3 +352,10 @@
 [2026-09-18T17:28:11] [DEBUG] [mcp] copie de racing.js hors du depot : aucune
 [2026-09-18T17:28:11] [RESULT] [mediaman] H8d : SUCCESS - defaut 63 ferme - defaut 65 ouvert - tests 63 8 passed, 58 6 passed, mcp 55 passed, mediaman 511 passed - 0 service redemarre - 0 ecriture InfluxDB - 0 acces Telegram
 [2026-09-18T17:28:11] [COMMIT] SHA: 36d2641c5cb2ef3b3963d45a57326f85fc295013 (contenu H8d)
+[2026-09-18T20:02:45Z] [FILE_MODIFY] [mcp-racing] H9 : moteur unique collectSnapshot(startUtc, endUtc), deux portes declarees
+[2026-09-18T20:02:45Z] [FILE_MODIFY] [mediaman] H9 : _collect_snapshot partage, collect_current ajoute, chemin mort supprime (defaut 65)
+[2026-09-18T20:02:45Z] [FILE_MODIFY] [mediaman] H9 : racing.get_snapshot ajoute a la liste blanche, trois entrees fantomes retirees
+[2026-09-18T20:02:45Z] [FILE_DELETE] [mediaman] H9 : tests/mediaman/test_mcp_collector.py supprime, 627 lignes, 32 tests sur le chemin mort, 8 proprietes portees
+[2026-09-18T20:02:45Z] [FILE_CREATE] [mediaman] H9 : deux suites neuves, chemin unique et collect_current
+[2026-09-18T20:02:45Z] [RESULT] [mediaman] H9 : SUCCESS
+[2026-09-18T20:02:45Z] [COMMIT] SHA: 019c4ef6c13938885d54fb8bafd4e2484c2b6f73
