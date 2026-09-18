@@ -31,7 +31,12 @@
     "h5c_content:64078669c14668820885a816321957a2a56d47d6",
     "h5d_content:7da5057760595bd4266d49a9925e699f503a0e06",
     "h6a_content:ce1de700a3da0e5020f06560d742055e15ea863c",
-    "h6c_content:9a4bfc5be0f93c2f274753130c4a41eae0309025"
+    "h6c_content:9a4bfc5be0f93c2f274753130c4a41eae0309025",
+    "h7d_content:c4792a8594b73fa9884ee8574d2357214f7d33b1",
+    "h7d_journal:8120f3c481e87b801569792c8d135a065f05f013",
+    "h7e_content:be0233e98f19bd41fe4593c4b0b56ef6dc8ac71c",
+    "h7e_journal:6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65",
+    "h8a_content:8919130fe36e82dd66e8eb07a073e26234f48a9e"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -57,7 +62,8 @@
     "43 la documentation MediaMan datait du 2026-08-27 et affirmait '303/303', 'Telegram NOT IMPLEMENTED' et 'OpenClaw adapter not implemented', trois affirmations fausses. Chiffres reels mesures en H5a : 461 tests dans tests/mediaman, 41 dans tests/mcp. Section 4.6bis ajoutee.",
     "45 tests/mcp/test_phase2_historical_contract.py annoncait 24 scenarios pour 23 fonctions. Docstring alignee sur la realite en H5a.",
     "ProtectHome mediaman.service - unite inexecutable, corrigee en H5d",
-    "50 le garde-fou H5c declarait legitime other.replace(second=d.second + 10)"
+    "50 le garde-fou H5c declarait legitime other.replace(second=d.second + 10)",
+    "58 mcp/servers/racing.js interrogeait InfluxDB sans filtre de contexte : les 4 faits publies etaient ceux de la derniere cible AIS ayant ecrit dans la fenetre - corrige en H8a, 6 tests de non-regression"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -69,7 +75,8 @@
     "39 tests/portal/test_portal.py::TestGrafanaConfig verifie allow_embedding dans config/grafana-custom.ini, fichier que Grafana ne charge pas. Le test passe et ne prouve rien. A repointer sur les variables d environnement de docker-compose.yml.",
     "44 mediaman/mediaman.py (167 lignes) est le seul fichier que mediaman.service execute et n a aucun test ; il n utilise que la fondation d aout avec MEDIAMAN_CONTENT_PROVIDER=test, donc il produirait un article factice. La vraie chaine (historical_entrypoint.py) n est referencee par aucune unite systemd. A trancher en 4E.2.",
     "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md",
-    "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md"
+    "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md",
+    "63 racing.js publie la cle course_over_ground_degrees avec la valeur Signal K en radians, sans conversion - contrat publie, arbitrage requis - constat dans logs/debug/defaut-58-filtre-contexte-2026-09-17.md"
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -82,7 +89,9 @@
     "defaut 39 : repointer TestGrafanaConfig sur docker-compose.yml",
     "MediaMan 4E.2 : choisir le point d entree que mediaman.service doit executer",
     "MediaMan : ecrire les tests de mediaman.py ou le retirer",
-    "MediaMan : implementer LocalLLMProvider / OpenClawGatewayProvider ou les retirer"
+    "MediaMan : implementer LocalLLMProvider / OpenClawGatewayProvider ou les retirer",
+    "rejouer le jalon MediaMan du 2026-09-15 avec racing.js corrige",
+    "defaut 63 : trancher l unite de course_over_ground_degrees"
   ],
   "previous_record": {
     "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
@@ -216,7 +225,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-17T03:27:07Z",
+  "last_updated": "2026-09-18T00:31:18Z",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -502,9 +511,64 @@
         61,
         62
       ]
+    },
+    {
+      "task": "H8a - defaut 58 : filtre de contexte de racing.js",
+      "version": "h8a-v1",
+      "timestamp": "2026-09-18T00:31:18Z",
+      "status": "SUCCESS",
+      "parent": "6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65",
+      "content_sha": "8919130fe36e82dd66e8eb07a073e26234f48a9e",
+      "production_code_modified": true,
+      "services_touched": [],
+      "files_modified": [
+        "mcp/servers/racing.js",
+        "tests/mcp/test_defaut_58_context_filter.py",
+        "logs/debug/timers-systemd-2026-09-17.md",
+        "logs/debug/defaut-58-filtre-contexte-2026-09-17.md"
+      ],
+      "change": "une ligne ajoutee dans la requete Flux : |> filter(fn: (r) => r.self == \"true\"), placee entre le filtre _field et keep() qui detruit le tag self",
+      "measured_before_writing": {
+        "window": "300 s finissant a 2026-09-07T14:36:25Z",
+        "facts_from_ais_target_before_fix": 4,
+        "ais_context": "vessels.urn:mrn:imo:mmsi:368111560",
+        "boat_context": "vessels.urn:mrn:signalk:uuid:fdcfc5d2-9e90-401f-8b9c-1b80dd9ee72f",
+        "self_tag_values": [
+          "true"
+        ],
+        "ais_rows_carry_self_tag": false,
+        "our_rows_lost_by_the_filter": 0,
+        "source_tags_per_nav_path": [
+          "N2K.0",
+          "N2K.1",
+          "N2K.2"
+        ]
+      },
+      "tests": {
+        "new_file": "tests/mcp/test_defaut_58_context_filter.py",
+        "new_tests": 6,
+        "result_new": "6 passed",
+        "result_tests_mcp_suite": "47 passed",
+        "offline_rehearsal": "4 des 6 tests echouent sur le code d avant le correctif, les 6 passent apres"
+      },
+      "rectifications_h7e": [
+        "logs/debug/timers-systemd-2026-09-17.md : LOG_PATHS cite dans le mauvais ordre - remplace par l ordre reel de la ligne 17",
+        "logs/debug/timers-systemd-2026-09-17.md : message de 80f3980 cite avec 43 insertions au lieu de 97 - remplace par le message relu",
+        "commit_chain : les SHA de contenu de H7d et H7e manquaient - ajoutes"
+      ],
+      "defects_recorded": [
+        "63 racing.js publie course_over_ground_degrees mais la valeur est en radians, telle que Signal K la stocke - aucune conversion dans le code, contrat publie, arbitrage requis"
+      ],
+      "deferred": [
+        "defaut 63 : unite du cap sur le fond (contrat publie)",
+        "jalon MediaMan du 2026-09-15 (f79abaf5ba15) a rejouer",
+        "defaut 61 : brider scripts/commit-logs.sh",
+        "defaut 62 : Deployment Checklist de etc/systemd/system/README.md",
+        "22 liens relatifs morts dans la documentation"
+      ]
     }
   ],
-  "last_task": "H7e - retrait documente de midnight-logsync",
+  "last_task": "H8a - defaut 58 : filtre de contexte de racing.js",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-17T23:04:22Z"
+  "last_update": "2026-09-18T00:31:18Z"
 }

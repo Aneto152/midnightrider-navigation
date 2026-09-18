@@ -317,3 +317,14 @@
 [2026-09-17T23:04:22] [FILE_MODIFY] [docs] etc/systemd/system/README.md : section des unites retirees, et constat d obsolescence du tableau (defaut 62)
 [2026-09-17T23:04:22] [FILE_CREATE] [docs] logs/debug/timers-systemd-2026-09-17.md - constat detaille des deux minuteurs et cause racine du defaut 61
 [2026-09-17T23:04:22] [RESULT] [systemd] Result: SUCCESS - aucun service en fonctionnement modifie, midnight-logs-commit.timer verifie actif
+[2026-09-18T00:31:18] [FILE_MODIFY] [racing-mcp] H8a defaut 58 : filtre de contexte self==true insere dans la requete Flux de mcp/servers/racing.js, entre le filtre _field et keep()
+[2026-09-18T00:31:18] [DEBUG] [racing-mcp] mesure prealable : 4 faits sur 4 venaient d une cible AIS (mmsi 368111560) ; le tag self ne vaut que 'true' et ne porte que sur nos lignes ; 0 de nos lignes perdue par le filtre sur la journee du 2026-09-07
+[2026-09-18T00:31:18] [FILE_CREATE] [racing-mcp] tests/mcp/test_defaut_58_context_filter.py : 6 tests, faux InfluxDB qui lit la requete Flux ; repetition hors ligne 4/6 rouges avant correctif, 6/6 verts apres
+[2026-09-18T00:31:18] [FILE_MODIFY] [journal] rectification de deux citations fausses de logs/debug/timers-systemd-2026-09-17.md : ordre de LOG_PATHS, et message de 80f3980 (97 insertions et non 43)
+[2026-09-18T00:31:18] [DEBUG] [racing-mcp] defaut 63 enregistre : course_over_ground_degrees porte une valeur en radians, sans conversion
+[2026-09-18T00:31:18] [RESULT] [racing-mcp] H8a : SUCCESS - tests defaut 58 : 6 passed - suite tests/mcp : 47 passed - aucun service redemarre
+[2026-09-18T00:31:18] [COMMIT] SHA: 8919130fe36e82dd66e8eb07a073e26234f48a9e (contenu H8a)
+[2026-09-18T00:31:18] [COMMIT] SHA: c4792a8594b73fa9884ee8574d2357214f7d33b1 (contenu H7d, non journalise a l epoque)
+[2026-09-18T00:31:18] [COMMIT] SHA: 8120f3c481e87b801569792c8d135a065f05f013 (journal H7d, non journalise a l epoque)
+[2026-09-18T00:31:18] [COMMIT] SHA: be0233e98f19bd41fe4593c4b0b56ef6dc8ac71c (contenu H7e, non journalise a l epoque)
+[2026-09-18T00:31:18] [COMMIT] SHA: 6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65 (journal H7e, non journalise a l epoque)
