@@ -40,7 +40,9 @@
     "h8a_journal:ca11c26d1b1f869745dfcabc43255c45a90630e1",
     "h8b_content:1fa2853f91f1925c96a0972e57553f656fd1cb43",
     "h8b_journal:b6b7c1cc851cfd93637163cfffda73be9ba8f4f1",
-    "h8c_content:5cf6d029e4af8e0d44f568ea89e26bff4e7df20e"
+    "h8c_content:5cf6d029e4af8e0d44f568ea89e26bff4e7df20e",
+    "h8c_journal:2a02632084c7e37d34d3305ad87969a02ea6c25e",
+    "h8d_content:36d2641c5cb2ef3b3963d45a57326f85fc295013"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -68,7 +70,8 @@
     "ProtectHome mediaman.service - unite inexecutable, corrigee en H5d",
     "50 le garde-fou H5c declarait legitime other.replace(second=d.second + 10)",
     "58 mcp/servers/racing.js interrogeait InfluxDB sans filtre de contexte : les 4 faits publies etaient ceux de la derniere cible AIS ayant ecrit dans la fenetre - corrige en H8a, 6 tests de non-regression",
-    "64 RETRACTE le 2026-09-18 avant toute ecriture : j avais accuse la documentation de mentir sur les deux Vulcan alors que N2K.0 est le recepteur AIS et n ecrit jamais notre contexte - erreur de meme nature que le defaut 58, commise dans l outil de diagnostic"
+    "64 RETRACTE le 2026-09-18 avant toute ecriture : j avais accuse la documentation de mentir sur les deux Vulcan alors que N2K.0 est le recepteur AIS et n ecrit jamais notre contexte - erreur de meme nature que le defaut 58, commise dans l outil de diagnostic",
+    "63 CLOSED on 2026-09-18, chantier H8d: the course over ground was published in radians under the key course_over_ground_degrees. racing.js now converts it once in cogRadiansToDegrees(), validates the incoming value in [0, 2*PI] instead of [0, 360], and every snapshot declares its units; mcp_collector refuses a units block that disagrees. Measured proof over 365 days: [0.000000, 6.281400] rad, 0 row(s) above 2*PI out of 4078141. Content commit 36d2641c5cb2ef3b3963d45a57326f85fc295013."
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -81,7 +84,7 @@
     "44 mediaman/mediaman.py (167 lignes) est le seul fichier que mediaman.service execute et n a aucun test ; il n utilise que la fondation d aout avec MEDIAMAN_CONTENT_PROVIDER=test, donc il produirait un article factice. La vraie chaine (historical_entrypoint.py) n est referencee par aucune unite systemd. A trancher en 4E.2.",
     "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md",
     "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md",
-    "63 racing.js publie la cle course_over_ground_degrees avec la valeur Signal K en radians, sans conversion - contrat publie, arbitrage requis - constat dans logs/debug/defaut-58-filtre-contexte-2026-09-17.md"
+    "65 mediaman/mcp_collector.py calls racing.get_position, racing.get_sog and racing.get_cog, three tools that racing.js does not declare - it exposes get_historical_snapshot only. The realtime path of the collector is therefore dead and only mocks cover it. To arbitrate: implement the three tools, or remove the path."
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -230,7 +233,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-18T16:42:30Z",
+  "last_updated": "2026-09-18T17:28:11Z",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -730,9 +733,70 @@
         "SEC-2026-09-14-01 : revocation de l ancien jeton InfluxDB",
         "22 liens relatifs morts"
       ]
+    },
+    {
+      "task": "H8d - defaut 63 : le cap publie en degres vrais et les unites declarees",
+      "version": "h8d-v1",
+      "timestamp": "2026-09-18T17:28:11Z",
+      "status": "SUCCESS",
+      "parent": "2a02632084c7e37d34d3305ad87969a02ea6c25e",
+      "content_sha": "36d2641c5cb2ef3b3963d45a57326f85fc295013",
+      "services_touched": [],
+      "services_restarted": [],
+      "influxdb_writes": 0,
+      "telegram_access": false,
+      "code_modified": true,
+      "files_modified": [
+        "mcp/servers/racing.js",
+        "mediaman/mcp_collector.py",
+        "tests/mcp/test_defaut_63_cog_degres.py",
+        "tests/mcp/test_defaut_58_context_filter.py",
+        "tests/mcp/test_phase2_historical_contract.py",
+        "docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md"
+      ],
+      "journal_files": [
+        "logs/debug/defaut-63-cap-en-degres-2026-09-18.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "arbitration": "Denis, 2026-09-18 : convertir dans racing.js, garder la cle course_over_ground_degrees, declarer les unites",
+      "measured": {
+        "measurement": "navigation.courseOverGroundTrue",
+        "days_probed": 365,
+        "cog_min_radians": 0.0,
+        "cog_max_radians": 6.2814,
+        "max_degrees": 359.89770943347526,
+        "rows_total": 4078141,
+        "rows_above_two_pi": 0,
+        "rows_nonzero": 3626071,
+        "sample_time": "2026-09-07T14:36:23.698Z",
+        "sample_radians": 1.7523,
+        "sample_degrees": 100.39939444077416
+      },
+      "tests": {
+        "defect_63": "8 passed",
+        "defect_58": "6 passed",
+        "tests_mcp": "55 passed",
+        "tests_mediaman": "511 passed"
+      },
+      "deployed_copy": "aucune",
+      "not_proven": "le jeu de donnees est fige depuis le 2026-09-07 et notre cap valait 0 sur la fenetre du jalon : aucun rejeu ne peut montrer la difference, 0 radian valant 0 degre. La preuve repose sur le domaine mesure et sur les huit tests.",
+      "corrections": [
+        "defaut 63 ferme",
+        "defaut 65 ouvert : chemin temps reel mort",
+        "commit_chain : h8c_journal insere apres h8c_content",
+        "commit_chain : h8d_content ajoute en fin de chaine"
+      ],
+      "deferred": [
+        "defaut 61 : brider scripts/commit-logs.sh",
+        "defaut 62 : Deployment Checklist systemd",
+        "defaut 65 : chemin temps reel mort du collecteur",
+        "SEC-2026-09-14-01 : revocation de l ancien jeton InfluxDB",
+        "22 liens relatifs morts"
+      ]
     }
   ],
-  "last_task": "H8c - mesure de l egalite d horodatage au bon instant et rectification de H8b",
+  "last_task": "H8d - defaut 63 : le cap publie en degres vrais et les unites declarees",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-18T16:42:30Z"
+  "last_update": "2026-09-18T17:28:11Z"
 }

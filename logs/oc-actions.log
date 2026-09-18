@@ -343,3 +343,12 @@
 [2026-09-18T16:42:30] [COMMIT] SHA: b6b7c1cc851cfd93637163cfffda73be9ba8f4f1 (journal H8b, jamais journalise : un commit de journal ne peut pas contenir son propre SHA)
 [2026-09-18T16:42:30] [RESULT] [mediaman] H8c : SUCCESS - mesure OK - tests defaut 58 6 passed - 0 ligne de code modifiee - 0 service touche - 0 ecriture InfluxDB - 0 acces Telegram
 [2026-09-18T16:42:30] [COMMIT] SHA: 5cf6d029e4af8e0d44f568ea89e26bff4e7df20e (contenu H8c)
+[2026-09-18T17:28:11] [DEBUG] [mediaman] H8d mesure du domaine de navigation.courseOverGroundTrue sur 365 jours, lecture seule : le champ est en radians, la conversion est donc fondee
+[2026-09-18T17:28:11] [FILE_MODIFY] [mcp] mcp/servers/racing.js : cap converti en degres vrais dans cogRadiansToDegrees(), domaine d entree [0, 2*PI] au lieu de [0, 360], bloc units ajoute a la reponse
+[2026-09-18T17:28:11] [FILE_MODIFY] [mediaman] mediaman/mcp_collector.py : un bloc units qui contredit le contrat est refuse, son absence est toleree
+[2026-09-18T17:28:11] [FILE_CREATE] [tests] tests/mcp/test_defaut_63_cog_degres.py : 8 tests, dont 4 echouent sur le code d avant le correctif
+[2026-09-18T17:28:11] [FILE_MODIFY] [tests] tests/mcp/test_defaut_58_context_filter.py et tests/mcp/test_phase2_historical_contract.py : preuve en negatif etendue a la forme convertie, valeur injectee redevenue valide dans les quatre domaines
+[2026-09-18T17:28:11] [FILE_MODIFY] [docs] docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md : section Units contract
+[2026-09-18T17:28:11] [DEBUG] [mcp] copie de racing.js hors du depot : aucune
+[2026-09-18T17:28:11] [RESULT] [mediaman] H8d : SUCCESS - defaut 63 ferme - defaut 65 ouvert - tests 63 8 passed, 58 6 passed, mcp 55 passed, mediaman 511 passed - 0 service redemarre - 0 ecriture InfluxDB - 0 acces Telegram
+[2026-09-18T17:28:11] [COMMIT] SHA: 36d2641c5cb2ef3b3963d45a57326f85fc295013 (contenu H8d)
