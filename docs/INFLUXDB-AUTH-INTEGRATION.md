@@ -91,7 +91,7 @@ from src.influx_client import InfluxDBClient
 
 client = InfluxDBClient(
     url="http://localhost:8086",
-    org="midnight-rider",
+    org="MidnightRider",
 )
 
 # Query returns CSV string
@@ -107,7 +107,7 @@ print(result)
 # Stream results to file (more memory-efficient)
 bytes_written = client.stream_query(
     flux_query='from(bucket:"midnight_rider") |> range(start:-7d)',
-    org="midnight-rider",
+    org="MidnightRider",
     output_file="results.csv",
     progress_callback=lambda b: print(f"Progress: {b} bytes"),
 )
@@ -128,7 +128,7 @@ client = InfluxDBClient(
     auth_provider=token_provider,
 )
 
-result = client.query(flux_query='...', org="midnight-rider")
+result = client.query(flux_query='...', org="MidnightRider")
 ```
 
 #### Docker-Specific Auth
@@ -142,7 +142,7 @@ docker_auth = DockerInternalCliAuthProvider(
 )
 
 client = InfluxDBClient(auth_provider=docker_auth)
-result = client.query(flux_query='...', org="midnight-rider")
+result = client.query(flux_query='...', org="MidnightRider")
 ```
 
 ### Command-Line Interface
@@ -327,7 +327,7 @@ Logs are sanitized:
 try:
     result = client.query(
         flux_query='from(bucket:"nonexistent")',
-        org="midnight-rider",
+        org="MidnightRider",
     )
 except RuntimeError as e:
     print(f"Query failed: {e}")
@@ -352,7 +352,7 @@ except RuntimeError as e:
 try:
     bytes_written = client.stream_query(
         flux_query='from(bucket:"midnight_rider")',
-        org="midnight-rider",
+        org="MidnightRider",
         output_file="/full/disk.csv",
     )
 except RuntimeError as e:

@@ -107,20 +107,38 @@ BUCKETS_ATTESTES = {
 
 BUCKETS_FICTIFS_ADMIS = {
     "nonexistent": "fixture de test negatif, docs/INFLUXDB-AUTH-INTEGRATION.md",
-    "test": "bucket des suites hors ligne",
-    "your-bucket": "gabarit a remplacer par le lecteur",
 }
 
-ORG_ATTESTEE = "MidnightRider"
+# L organisation du serveur local, et l identifiant de l organisation
+# InfluxDB Cloud qui apparait tel quel dans les commandes de replication.
+ORGS_ATTESTEES = {
+    "MidnightRider":
+        "unique organisation du serveur local, relevee le 2026-09-18",
+    "48a34d6463cef7c9":
+        "identifiant de l organisation InfluxDB Cloud, docs/setup/INFLUXDB-CONFIG.md",
+}
 
-MOTIF_ORG = re.compile(
-    r"""INFLUX(?:DB)?_(?!CLOUD)[A-Z_]*ORG\s*[:=]\s*["'`]?([A-Za-z0-9_-]+)""")
-
+# H11 a ecrit ces motifs trop etroits puis s est declare victorieux :
+# INFLUX(?:DB)?_ ne voyait pas INFLUX_DB_BUCKET, et l organisation n etait
+# cherchee que sous forme de variable, jamais sous le mot-cle nu org=.
+# Un bucket faux et six organisations fausses sont passes au travers.
 MOTIFS_BUCKET = (
     re.compile(r"""from\(\s*bucket\s*:\s*["'`]([A-Za-z0-9_-]+)"""),
     re.compile(r"""\bbucket\s*[:=]\s*["'`]([A-Za-z0-9_-]+)["'`]"""),
-    re.compile(r"""INFLUX(?:DB)?_(?:CLOUD_)?BUCKET\s*=\s*["'`]?([A-Za-z0-9_-]+)"""),
+    re.compile(r"""\bINFLUX[A-Z_]*BUCKET\s*[:=]\s*["'`]?([A-Za-z0-9_${}-]+)"""),
+    re.compile(r"""--bucket[= ]+["'`]?([A-Za-z0-9_${}-]+)"""),
 )
+
+MOTIFS_ORG = (
+    re.compile(r"""\bINFLUX[A-Z_]*ORG\s*[:=]\s*["'`]?([A-Za-z0-9_${}-]+)"""),
+    re.compile(r"""\borg\s*[:=]\s*["'`]([A-Za-z0-9_${}-]+)["'`]"""),
+    re.compile(r"""--org[= ]+["'`]?([A-Za-z0-9_${}-]+)"""),
+)
+
+
+def _est_une_variable(valeur):
+    """$INFLUX_CLOUD_BUCKET nomme une variable, pas un bucket."""
+    return valeur.startswith("$") or "{" in valeur
 
 
 def fichiers_documentation():
@@ -156,35 +174,96 @@ class TestNomsDeBucket:
                         continue  # bloc de correction : on y cite le passe
                     for motif in MOTIFS_BUCKET:
                         for nom in motif.findall(ligne):
+                            if _est_une_variable(nom):
+                                continue
                             if nom not in connus:
                                 fautes.append("%s:%d -> %s" % (
                                     os.path.relpath(chemin, RACINE), numero, nom))
         assert fautes == [], (
             "buckets cites qui n existent pas sur le serveur : %s" % fautes)
 
-    def test_toute_organisation_citee_est_la_bonne(self):
-        """L organisation est unique sur ce serveur : MidnightRider."""
+    def test_toute_organisation_citee_est_attestee(self):
+        """Le serveur local n a qu une organisation : MidnightRider."""
         fautes = []
         for chemin in fichiers_documentation():
             with open(chemin, encoding="utf-8") as f:
                 for numero, ligne in enumerate(f, 1):
                     if ligne.lstrip().startswith(">"):
                         continue
-                    for nom in MOTIF_ORG.findall(ligne):
-                        if nom in ("your-org", "48a34d6463cef7c9"):
-                            continue
-                        if nom != ORG_ATTESTEE:
-                            fautes.append("%s:%d -> %s" % (
-                                os.path.relpath(chemin, RACINE), numero, nom))
+                    for motif in MOTIFS_ORG:
+                        for nom in motif.findall(ligne):
+                            if _est_une_variable(nom):
+                                continue
+                            if nom not in ORGS_ATTESTEES:
+                                fautes.append("%s:%d -> %s" % (
+                                    os.path.relpath(chemin, RACINE), numero, nom))
         assert fautes == [], (
-            "organisations citees qui ne sont pas %s : %s"
-            % (ORG_ATTESTEE, fautes))
+            "organisations citees qui ne sont pas attestees : %s" % fautes)
 
-    def test_chaque_bucket_declare_porte_sa_raison(self):
-        for table in (BUCKETS_ATTESTES, BUCKETS_FICTIFS_ADMIS):
+    def test_chaque_valeur_declaree_porte_sa_raison(self):
+        tables = (BUCKETS_ATTESTES, BUCKETS_FICTIFS_ADMIS, ORGS_ATTESTEES)
+        for table in tables:
             for nom, raison in table.items():
                 assert raison and len(raison) > 15, (
-                    "le bucket %s est declare sans raison" % nom)
+                    "la valeur %s est declaree sans raison" % nom)
+
+
+class TestLaBarriereVoitCeQuElleDoitVoir:
+    """Ces tests interrogent le detecteur, pas le corpus.
+
+    Defaut 75 et 76 : H11 a affiche BUCKETS_FANTOMES_RESTANTS=0 et
+    considere le defaut 74 ferme, alors qu il restait INFLUX_DB_BUCKET=signalk
+    dans docs/setup/INFLUXDB-CONFIG.md et six org="midnight-rider" dans
+    docs/INFLUXDB-AUTH-INTEGRATION.md. Le corpus n etait pas propre : le
+    detecteur etait aveugle. Un corpus qui passe ne prouve rien tant que
+    personne n a verifie que la barriere sait voir.
+
+    Chaque echantillon ci-dessous est une ligne reellement presente dans le
+    depot, ou qui y a ete presente. Ajouter une forme ici avant de la
+    corriger est la bonne facon d etendre cette barriere.
+    """
+
+    ECHANTILLONS_BUCKET = (
+        ("    - INFLUX_DB_BUCKET=signalk", "signalk"),
+        ("    - INFLUX_BUCKET=midnight_rider", "midnight_rider"),
+        ("INFLUXDB_BUCKET=midnight_rider", "midnight_rider"),
+        ('export INFLUX_CLOUD_BUCKET="signalk-cloud"', "signalk-cloud"),
+        ('    --bucket "signalk-cloud" \\', "signalk-cloud"),
+        ('from(bucket:"midnight_rider")', "midnight_rider"),
+        ('  bucket: "midnight_rider"', "midnight_rider"),
+    )
+
+    ECHANTILLONS_ORG = (
+        ('    org="midnight-rider",', "midnight-rider"),
+        ("INFLUX_ORG=MidnightRider", "MidnightRider"),
+        ("    - INFLUX_DB_ORG=MidnightRider", "MidnightRider"),
+        ("  --org MidnightRider \\", "MidnightRider"),
+        ('export INFLUX_CLOUD_ORG="48a34d6463cef7c9"', "48a34d6463cef7c9"),
+    )
+
+    def test_les_motifs_de_bucket_voient_les_formes_du_depot(self):
+        for ligne, attendu in self.ECHANTILLONS_BUCKET:
+            vus = set()
+            for motif in MOTIFS_BUCKET:
+                vus.update(motif.findall(ligne))
+            assert attendu in vus, (
+                "aucun motif de bucket ne voit %r ; attendu %s, vu %s"
+                % (ligne, attendu, sorted(vus)))
+
+    def test_les_motifs_d_organisation_voient_les_formes_du_depot(self):
+        for ligne, attendu in self.ECHANTILLONS_ORG:
+            vus = set()
+            for motif in MOTIFS_ORG:
+                vus.update(motif.findall(ligne))
+            assert attendu in vus, (
+                "aucun motif d organisation ne voit %r ; attendu %s, vu %s"
+                % (ligne, attendu, sorted(vus)))
+
+    def test_les_variables_ne_sont_pas_prises_pour_des_valeurs(self):
+        assert _est_une_variable("$INFLUX_CLOUD_BUCKET")
+        assert _est_une_variable("${INFLUX_ORG}")
+        assert not _est_une_variable("midnight_rider")
+        assert not _est_une_variable("MidnightRider")
 
 
 class TestOutilsDeclares:

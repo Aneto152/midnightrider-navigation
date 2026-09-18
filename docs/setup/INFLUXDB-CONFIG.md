@@ -34,7 +34,7 @@ influxdb:
   ports:
     - "8086:8086"
   environment:
-    - INFLUX_DB_BUCKET=signalk
+    - INFLUX_DB_BUCKET=midnight_rider
     - INFLUX_DB_ORG=MidnightRider
     - INFLUX_DOCKER_INIT_MODE=setup
     - INFLUX_ORG=MidnightRider
@@ -131,6 +131,17 @@ INFLUX_CLOUD_BUCKET=signalk-cloud
 **Status:** ⏳ Token expired, not syncing to cloud
 
 ## How to Activate Cloud
+
+> **Rectification du 2026-09-18, chantier H11b.** La procedure ci-dessous
+> decrit trois artefacts qui n existent pas dans ce depot :
+> `scripts/astronomical-data.sh` (etape 3), le service docker-compose
+> `astronomical` (etape 4) et `scripts/replicate-to-cloud.sh` (section
+> Hybrid Replication Script). `docker-compose.yml` ne declare que quatre
+> services : influxdb, grafana, regatta et start-line-worker. La section
+> reste en place parce que la replication cloud est un objectif assume,
+> mais elle se lit comme une intention, pas comme un mode d emploi. Le
+> seul script de synchronisation cloud reel du depot est
+> `scripts/post-race-cloud-sync.sh`.
 
 ### Step 1: Renew Cloud Token
 
