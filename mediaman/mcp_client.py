@@ -55,34 +55,26 @@ class MCPClient:
 
     # PUBLIC TOOL IDENTIFIERS → WIRE-LEVEL MCP TOOL NAMES (SOURCE-VERIFIED)
     TOOL_WIRE_MAPPING = {
-        'racing.get_position': 'get_position',
-        'racing.get_sog': 'get_sog',
-        'racing.get_cog': 'get_cog',
+        'racing.get_snapshot': 'get_snapshot',
         'racing.get_historical_snapshot': 'get_historical_snapshot',
     }
 
     # SAFE TOOL ALLOWLIST — SOURCE-VERIFIED NAVIGATION TOOLS ONLY
+    # Les trois entrees racing.get_position, racing.get_sog et racing.get_cog
+    # ont ete retirees le 2026-09-18. Elles autorisaient trois outils que
+    # mcp/servers/racing.js n a jamais declares : la liste blanche donnait
+    # donc son accord a des appels qui ne pouvaient qu echouer, ce qui est
+    # la pire forme de permission - rassurante et vide. Defaut 65.
+    #
+    # Noter au passage la description que portait racing.get_cog :
+    # "Course over ground (degrees, radians)". Les deux unites a la fois,
+    # ecrit sans broncher. C etait le defaut 63 annonce trois ans avant
+    # d etre mesure, et personne ne l a lu.
     TOOL_ALLOWLIST = {
-        'racing.get_position': {
+        'racing.get_snapshot': {
             'server': 'racing',
-            'wire_name': 'get_position',
-            'description': 'Current boat position (lat/lon from Signal K)',
-            'safe': True,
-            'requires_live_data': False,
-            'returns_structured_data': True
-        },
-        'racing.get_sog': {
-            'server': 'racing',
-            'wire_name': 'get_sog',
-            'description': 'Speed over ground (m/s, knots) from Signal K',
-            'safe': True,
-            'requires_live_data': False,
-            'returns_structured_data': True
-        },
-        'racing.get_cog': {
-            'server': 'racing',
-            'wire_name': 'get_cog',
-            'description': 'Course over ground (degrees, radians) from Signal K',
+            'wire_name': 'get_snapshot',
+            'description': 'Bounded-skew navigation snapshot over an explicit [start_utc, end_utc] interval (InfluxDB read-only). Live consultation sets end_utc to the present instant.',
             'safe': True,
             'requires_live_data': False,
             'returns_structured_data': True
@@ -306,7 +298,7 @@ class MCPClient:
         Call a tool on the MCP server.
 
         Args:
-            tool_name: Public tool name (e.g., 'racing.get_position')
+            tool_name: Public tool name (e.g., 'racing.get_snapshot')
             arguments: Tool arguments
 
         Returns:

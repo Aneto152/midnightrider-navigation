@@ -23,9 +23,9 @@ def detector():
 def complete_result():
     """Create a COMPLETE CollectionResult with valid facts."""
     provenance = Provenance(
-        tool_public_id='racing.get_position',
+        tool_public_id='racing.get_snapshot',
         server_name='racing',
-        wire_tool_name='get_position',
+        wire_tool_name='get_snapshot',
         source_id='src_001',
         source_timestamp='2026-08-27T20:40:00Z',
         observed_at='2026-08-27T20:40:01Z',
@@ -49,9 +49,9 @@ def complete_result():
 def partial_result():
     """Create a PARTIAL CollectionResult with stale facts."""
     provenance = Provenance(
-        tool_public_id='racing.get_position',
+        tool_public_id='racing.get_snapshot',
         server_name='racing',
-        wire_tool_name='get_position',
+        wire_tool_name='get_snapshot',
         source_id='src_001',
         source_timestamp='2026-08-27T20:10:00Z',  # 30 minutes old
         observed_at='2026-08-27T20:40:01Z',
@@ -128,9 +128,9 @@ class TestFactTransitions:
     def test_valid_to_stale_emits_fact_became_stale(self, detector):
         """Valid → stale emits FACT_BECAME_STALE."""
         prev_prov = Provenance(
-            tool_public_id='racing.get_sog',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_sog',
+            wire_tool_name='get_snapshot',
             source_id='src_002',
             source_timestamp='2026-08-27T20:40:00Z',
             observed_at='2026-08-27T20:40:01Z',
@@ -145,9 +145,9 @@ class TestFactTransitions:
         )
 
         curr_prov = Provenance(
-            tool_public_id='racing.get_sog',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_sog',
+            wire_tool_name='get_snapshot',
             source_id='src_002',
             source_timestamp='2026-08-27T20:39:50Z',  # Old
             observed_at='2026-08-27T20:40:20Z',
@@ -173,9 +173,9 @@ class TestFactTransitions:
     def test_stale_to_valid_emits_fact_recovered(self, detector):
         """Stale → valid emits FACT_RECOVERED."""
         prev_prov = Provenance(
-            tool_public_id='racing.get_cog',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_cog',
+            wire_tool_name='get_snapshot',
             source_id='src_003',
             source_timestamp='2026-08-27T20:39:50Z',
             observed_at='2026-08-27T20:40:01Z',
@@ -190,9 +190,9 @@ class TestFactTransitions:
         )
 
         curr_prov = Provenance(
-            tool_public_id='racing.get_cog',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_cog',
+            wire_tool_name='get_snapshot',
             source_id='src_003',
             source_timestamp='2026-08-27T20:40:10Z',  # Fresh
             observed_at='2026-08-27T20:40:11Z',
@@ -222,9 +222,9 @@ class TestEventIDDeterminism:
     def test_same_transition_produces_same_event_id(self, detector):
         """Identical transitions produce identical event IDs."""
         prov = Provenance(
-            tool_public_id='racing.get_position',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_position',
+            wire_tool_name='get_snapshot',
             source_id='src_001',
             source_timestamp='2026-08-27T20:40:00Z',
             observed_at='2026-08-27T20:40:01Z',
@@ -296,9 +296,9 @@ class TestFailClosedBehavior:
     def test_unchanged_state_produces_no_duplicate_event(self, detector):
         """Same collection status twice produces no event."""
         prov = Provenance(
-            tool_public_id='racing.get_position',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_position',
+            wire_tool_name='get_snapshot',
             source_id='src_001',
             source_timestamp='2026-08-27T20:40:00Z',
             observed_at='2026-08-27T20:40:01Z',
@@ -339,9 +339,9 @@ class TestFailClosedBehavior:
     def test_nan_and_infinity_rejected(self, detector):
         """NaN and infinity values do not produce valid facts in events."""
         prov = Provenance(
-            tool_public_id='racing.get_sog',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_sog',
+            wire_tool_name='get_snapshot',
             source_id='src_002',
             source_timestamp='2026-08-27T20:40:00Z',
             observed_at='2026-08-27T20:40:01Z',
@@ -404,9 +404,9 @@ class TestMissingTimestamps:
     def test_missing_source_timestamp_preserved(self, detector):
         """Missing source_timestamp remains None in event."""
         prov = Provenance(
-            tool_public_id='racing.get_position',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_position',
+            wire_tool_name='get_snapshot',
             source_id='src_001',
             source_timestamp=None,  # Missing
             observed_at='2026-08-27T20:40:01Z',
@@ -436,9 +436,9 @@ class TestRealCollectionResultObjects:
         """Detector operates on real CollectionResult/NavigationFact, not mocks."""
         # Create real objects
         prov = Provenance(
-            tool_public_id='racing.get_position',
+            tool_public_id='racing.get_snapshot',
             server_name='racing',
-            wire_tool_name='get_position',
+            wire_tool_name='get_snapshot',
             source_id='src_001',
             source_timestamp='2026-08-27T20:40:00Z',
             observed_at='2026-08-27T20:40:01Z',

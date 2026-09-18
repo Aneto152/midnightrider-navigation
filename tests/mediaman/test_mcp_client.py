@@ -210,7 +210,7 @@ class TestMCPClientUTCTimestamp:
                     client.process = mock_process
 
                     decoded = {'latitude': 41.1234}
-                    result = client._wrap_result('racing.get_position', decoded)
+                    result = client._wrap_result('racing.get_snapshot', decoded)
 
                     # Verify observed_at format
                     observed_at = result['observed_at']
@@ -230,7 +230,7 @@ class TestMCPClientUTCTimestamp:
                         'latitude': 41.1234,
                         'source_timestamp': '2026-08-27T23:19:00.123456Z'
                     }
-                    result = client._wrap_result('racing.get_position', decoded)
+                    result = client._wrap_result('racing.get_snapshot', decoded)
 
                     assert result['source_timestamp'] == '2026-08-27T23:19:00.123456Z'
 
@@ -243,7 +243,7 @@ class TestMCPClientUTCTimestamp:
                     client.process = mock_process
 
                     decoded = {'latitude': 41.1234}
-                    result = client._wrap_result('racing.get_position', decoded)
+                    result = client._wrap_result('racing.get_snapshot', decoded)
 
                     assert result['source_timestamp'] == 'UNKNOWN'
 
@@ -351,9 +351,9 @@ class TestMCPClientWireMapping:
     """Tool wire-name mapping."""
 
     def test_wire_mapping_exists(self):
-        """Wire mapping is defined for racing.get_position."""
-        assert 'racing.get_position' in MCPClient.TOOL_WIRE_MAPPING
-        assert MCPClient.TOOL_WIRE_MAPPING['racing.get_position'] == 'get_position'
+        """Wire mapping is defined for racing.get_snapshot."""
+        assert 'racing.get_snapshot' in MCPClient.TOOL_WIRE_MAPPING
+        assert MCPClient.TOOL_WIRE_MAPPING['racing.get_snapshot'] == 'get_snapshot'
 
     def test_call_tool_sends_wire_name(self, mock_process):
         """call_tool sends wire name to server."""
@@ -384,11 +384,11 @@ class TestMCPClientWireMapping:
                     client.response_queue.put(mcp_response)
 
                     with patch.object(client, '_validate_jsonrpc_response'):
-                        result = client.call_tool('racing.get_position', {})
+                        result = client.call_tool('racing.get_snapshot', {})
 
                     # Verify wire name was sent
                     assert sent_request is not None
-                    assert sent_request['params']['name'] == 'get_position'
+                    assert sent_request['params']['name'] == 'get_snapshot'
 
 
 class TestMCPClientAllowlist:
@@ -396,7 +396,7 @@ class TestMCPClientAllowlist:
 
     def test_tool_allowlist_active(self):
         """Tool allowlist is defined."""
-        assert 'racing.get_position' in MCPClient.TOOL_ALLOWLIST
+        assert 'racing.get_snapshot' in MCPClient.TOOL_ALLOWLIST
 
     def test_tool_not_allowlisted_rejected(self, mock_process):
         """Non-allowlisted tool is rejected."""
@@ -669,7 +669,7 @@ class TestMCPClientTimeoutPropagation:
                     
                     with patch.object(client, '_send_request', side_effect=track_send):
                         try:
-                            client.call_tool('racing.get_position')
+                            client.call_tool('racing.get_snapshot')
                         except:
                             pass
                     

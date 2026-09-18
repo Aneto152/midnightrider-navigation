@@ -227,16 +227,16 @@ class FakeAdapter:
 def result_with(status, race_id="race-1", validation="valid"):
     prov = Provenance(
         tool_public_id="nav.position", server_name="signalk",
-        wire_tool_name="get_position", source_id="vessels.self",
+        wire_tool_name="get_snapshot", source_id="vessels.self",
         source_timestamp="2026-09-17T00:00:00Z", observed_at="2026-09-17T00:00:05Z",
         freshness_limit_seconds=30, validation_status=validation, warnings=[],
     )
     return CollectionResult(
         status=status, race_id=race_id,
         facts=[NavigationFact("sog", 6.4, "kn", prov)],
-        tools_attempted=["get_position"],
-        tools_succeeded=["get_position"] if status != CollectionStatus.FAILED else [],
-        tools_failed=[] if status != CollectionStatus.FAILED else ["get_position"],
+        tools_attempted=["get_snapshot"],
+        tools_succeeded=["get_snapshot"] if status != CollectionStatus.FAILED else [],
+        tools_failed=[] if status != CollectionStatus.FAILED else ["get_snapshot"],
         collection_start_at="2026-09-17T00:00:00Z",
         collection_end_at="2026-09-17T00:00:06Z", errors=[], warnings=[],
     )

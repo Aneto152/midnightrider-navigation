@@ -6,7 +6,8 @@ MCPClient. Implements actual freshness validation, logging instrumentation, and
 LLM-safe serialization.
 
 Features:
-- Source-verified tool collection (racing.get_position, racing.get_sog, racing.get_cog)
+- Single collection engine, two entry points (historical and live) differing
+  only by who chooses the upper bound and whether age matters
 - Provenance tracking with complete metadata
 - Fail-closed collection (missing values remain None, no fabrication)
 - Deterministic freshness validation (ISO 8601 parsing with injected reference time)
@@ -22,7 +23,7 @@ import math
 from dataclasses import dataclass, asdict, field
 from typing import Optional, Dict, Any, List
 from enum import Enum
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 from mediaman.mcp_client import MCPClient, MCPClientError, MCPProtocolError, MCPServerError, MCPTimeoutError
 from mediaman.logging_utils import setup_service_logger
@@ -39,7 +40,7 @@ class CollectionStatus(Enum):
 @dataclass
 class Provenance:
     """Source tracking for every collected fact."""
-    tool_public_id: str  # e.g., "racing.get_position"
+    tool_public_id: str  # e.g., "racing.get_snapshot"
     server_name: str  # e.g., "racing"
     wire_tool_name: str  # e.g., "get_position"
     source_id: str  # sanitized source identifier
@@ -156,37 +157,21 @@ class CollectionResult:
         }
 
 
-class SourceVerifiedTools(Enum):
-    """Source-verified MCP tools only."""
-    POSITION = ("racing.get_position", "get_position")
-    SOG = ("racing.get_sog", "get_sog")
-    COG = ("racing.get_cog", "get_cog")
-
-    @property
-    def public_id(self) -> str:
-        return self.value[0]
-
-    @property
-    def wire_name(self) -> str:
-        return self.value[1]
-
-    @property
-    def server(self) -> str:
-        return "racing"
-
-
 class MCPCollector:
     """
     Expanded MCP collector with verified tools, deterministic freshness,
     logging, and LLM-safe serialization.
     """
 
-    # Freshness limits (seconds) from source verification
-    FRESHNESS_LIMITS = {
-        "racing.get_position": 30,
-        "racing.get_sog": 15,
-        "racing.get_cog": 15,
-    }
+    # Default observation window for a live consultation, in seconds.
+    #
+    # A live snapshot is an interval ending now. This single number plays both
+    # roles that used to be split across three per-tool limits: how far back
+    # the engine may look to find the four facts, and the age beyond which
+    # those facts are reported stale. Historical collection passes None and
+    # has no freshness limit at all - that is one of the only two legitimate
+    # differences between the two entry points.
+    DEFAULT_CURRENT_WINDOW_SECONDS = 30
 
     def __init__(self, client: MCPClient, race_id: Optional[str] = None, reference_time: Optional[str] = None):
         """
@@ -205,11 +190,15 @@ class MCPCollector:
 
     def collect_historical(self, as_of_utc: str, window_seconds: int) -> CollectionResult:
         """
-        Collect historical navigation facts at as_of timestamp via MCP historical tool.
+        Collect navigation facts at a past instant chosen by the caller.
+
+        One of the two entry points of the single collection engine. It owns
+        nothing but its own argument validation: the collection itself is
+        _collect_snapshot, shared byte for byte with collect_current.
 
         Args:
-            as_of_utc: ISO 8601 UTC timestamp for historical snapshot
-            window_seconds: Query window in seconds (bounded, positive)
+            as_of_utc: ISO 8601 UTC timestamp for the upper bound
+            window_seconds: how far back to look, in seconds (1-3600)
 
         Returns:
             CollectionResult with facts, provenance, and diagnostics
@@ -220,7 +209,7 @@ class MCPCollector:
 
         # Validate request parameters
         try:
-            request = HistoricalRequest(
+            HistoricalRequest(
                 race_id=self.race_id or "historical",
                 as_of_utc=as_of_utc,
                 window_seconds=window_seconds
@@ -236,9 +225,129 @@ class MCPCollector:
             self.logger.error(f"Collector ERROR: Invalid historical request: {str(e)}")
             return result
 
+        return self._collect_snapshot(
+            tool_public_id='racing.get_historical_snapshot',
+            wire_tool_name='get_historical_snapshot',
+            tool_args={'as_of_utc': as_of_utc, 'window_seconds': window_seconds},
+            source_id='mcp:racing:historical',
+            freshness_limit_seconds=None,
+            mode='historical',
+        )
+
+    def collect_current(self, window_seconds: Optional[int] = None) -> CollectionResult:
+        """
+        Collect navigation facts as of now.
+
+        The second entry point, and deliberately the thinner of the two: a
+        live consultation is a historical one whose upper bound happens to be
+        the present instant. It reaches the same engine, the same Flux query,
+        the same self filter, the same bounded-skew check and the same unit
+        contract. The only thing it adds is that age matters.
+
+        The upper bound comes from self._now_utc(), which already honours the
+        reference_time injected at construction. That is what lets the frozen
+        historical dataset serve as a bench for the live path: build the
+        collector with reference_time set to a past instant and this method
+        replays the live code path over real recorded data, with no clock
+        anywhere being deceived.
+
+        Args:
+            window_seconds: observation window ending now, in seconds.
+                Defaults to DEFAULT_CURRENT_WINDOW_SECONDS.
+
+        Returns:
+            CollectionResult with facts, provenance, and diagnostics.
+            Status is PARTIAL rather than COMPLETE when the facts are older
+            than the window.
+        """
+        if window_seconds is None:
+            window_seconds = self.DEFAULT_CURRENT_WINDOW_SECONDS
+
+        if not isinstance(window_seconds, int) or isinstance(window_seconds, bool) \
+                or window_seconds < 1 or window_seconds > 3600:
+            result = CollectionResult(
+                status=CollectionStatus.FAILED,
+                race_id=self.race_id,
+                collection_start_at=self._now_utc(),
+                collection_end_at=self._now_utc(),
+                errors=[f"Invalid current request: window_seconds must be an integer in 1..3600, got {window_seconds!r}"]
+            )
+            self.logger.error(
+                f"Collector ERROR: Invalid current request: window_seconds={window_seconds!r}"
+            )
+            return result
+
+        end_utc = self._now_utc()
+        try:
+            end_dt = self._parse_iso_utc(end_utc)
+        except ValueError as e:
+            result = CollectionResult(
+                status=CollectionStatus.FAILED,
+                race_id=self.race_id,
+                collection_start_at=end_utc,
+                collection_end_at=end_utc,
+                errors=[f"Invalid current request: unparsable reference time: {str(e)}"]
+            )
+            self.logger.error(f"Collector ERROR: unparsable reference time")
+            return result
+
+        start_dt = end_dt - timedelta(seconds=window_seconds)
+        start_utc = start_dt.isoformat().replace('+00:00', '') + 'Z'
+
+        return self._collect_snapshot(
+            tool_public_id='racing.get_snapshot',
+            wire_tool_name='get_snapshot',
+            tool_args={'start_utc': start_utc, 'end_utc': end_utc},
+            source_id='mcp:racing:current',
+            freshness_limit_seconds=window_seconds,
+            mode='current',
+        )
+
+    @staticmethod
+    def _parse_iso_utc(value: str) -> datetime:
+        """Parse an ISO 8601 UTC timestamp with a literal Z suffix."""
+        if not isinstance(value, str) or not value.endswith('Z'):
+            raise ValueError(f"timestamp must end with Z: {value!r}")
+        return datetime.fromisoformat(value[:-1]).replace(tzinfo=timezone.utc)
+
+    def _collect_snapshot(
+        self,
+        tool_public_id: str,
+        wire_tool_name: str,
+        tool_args: Dict[str, Any],
+        source_id: str,
+        freshness_limit_seconds: Optional[int],
+        mode: str,
+    ) -> CollectionResult:
+        """
+        THE SINGLE COLLECTION BODY.
+
+        Historical and live collection both land here. Whatever is written
+        below applies identically to both, by construction rather than by
+        discipline: there is no second copy to keep in step.
+
+        Before 2026-09-18 there were two bodies. The historical one filtered
+        on self, bounded the skew across the four facts and converted the
+        course from radians; the live one did none of the three, because it
+        had been written first and never revisited. Collection quality
+        depended on which entry point you happened to call. That is what H9
+        removed.
+
+        Args:
+            tool_public_id: public MCP tool id, recorded in provenance
+            wire_tool_name: bare tool name as declared by the server
+            tool_args: arguments forwarded verbatim to the tool
+            source_id: provenance source identifier
+            freshness_limit_seconds: None for historical (age is irrelevant),
+                a positive number for live (age beyond it means stale)
+            mode: 'historical' or 'current', for logging only
+        """
         collection_start = self._now_utc()
 
-        self.logger.info(f"Collector STARTUP: historical mode, as_of={as_of_utc}, window={window_seconds}s")
+        self.logger.info(
+            f"Collector STARTUP: mode={mode}, tool={tool_public_id}, "
+            f"args={ {k: tool_args[k] for k in sorted(tool_args)} }"
+        )
 
         result = CollectionResult(
             status=CollectionStatus.FAILED,
@@ -247,15 +356,9 @@ class MCPCollector:
         )
 
         try:
-            self.logger.info(f"Collector DATA_IN: calling racing.get_historical_snapshot")
+            self.logger.info(f"Collector DATA_IN: calling {tool_public_id}")
 
-            response = self.client.call_tool(
-                'racing.get_historical_snapshot',
-                {
-                    'as_of_utc': as_of_utc,
-                    'window_seconds': window_seconds
-                }
-            )
+            response = self.client.call_tool(tool_public_id, dict(tool_args))
 
             if response and response.get('result'):
                 decoded = response['result']
@@ -278,8 +381,8 @@ class MCPCollector:
                         if extra:
                             error_parts.append(f"Extra: {extra}")
                         result.status = CollectionStatus.FAILED
-                        result.tools_failed.append('racing.get_historical_snapshot')
-                        result.errors.append(f"Historical snapshot field mismatch: {'; '.join(error_parts)}")
+                        result.tools_failed.append(tool_public_id)
+                        result.errors.append(f"Snapshot field mismatch: {'; '.join(error_parts)}")
                         result.collection_end_at = self._now_utc()
                         self.logger.error(f"Collector ERROR: Field mismatch: {'; '.join(error_parts)}")
                         return result
@@ -344,22 +447,33 @@ class MCPCollector:
 
                     if validation_errors:
                         result.status = CollectionStatus.FAILED
-                        result.tools_failed.append('racing.get_historical_snapshot')
+                        result.tools_failed.append(tool_public_id)
                         result.errors.extend(validation_errors)
                         result.collection_end_at = self._now_utc()
                         self.logger.error(f"Collector ERROR: Validation failures: {validation_errors}")
                         return result
 
                     # All four facts valid — create facts list
+                    # The two legitimate differences between a historical
+                    # collection and a live one are both expressed here, and
+                    # nowhere else: which tool was addressed, and whether age
+                    # is allowed to matter. Everything above this line is
+                    # shared by construction.
                     provenance = Provenance(
-                        tool_public_id="racing.get_historical_snapshot",
+                        tool_public_id=tool_public_id,
                         server_name="racing",
-                        wire_tool_name="get_historical_snapshot",
-                        source_id="mcp:racing:historical",
+                        wire_tool_name=wire_tool_name,
+                        source_id=source_id,
                         source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
                         observed_at=response.get('observed_at'),
-                        freshness_limit_seconds=None,  # Historical data has no freshness limit
-                        validation_status="valid"
+                        freshness_limit_seconds=freshness_limit_seconds,
+                        validation_status=(
+                            "valid" if freshness_limit_seconds is None
+                            else self._validate_freshness(
+                                decoded.get('source_timestamp'),
+                                freshness_limit_seconds
+                            )
+                        )
                     )
 
                     result.facts.append(NavigationFact(
@@ -387,32 +501,45 @@ class MCPCollector:
                         provenance=provenance
                     ))
 
-                    result.status = CollectionStatus.COMPLETE
-                    result.tools_succeeded.append('racing.get_historical_snapshot')
+                    if provenance.validation_status == "valid":
+                        result.status = CollectionStatus.COMPLETE
+                    else:
+                        # A live fact older than its window describes a boat
+                        # that is no longer where it claims to be. PARTIAL,
+                        # never COMPLETE: the publication layer decides what
+                        # to do with it, but nothing downstream may present it
+                        # as current. Historical collection never reaches this
+                        # branch, its freshness limit being None.
+                        result.status = CollectionStatus.PARTIAL
+                        result.warnings.append(
+                            f"{tool_public_id}: facts are {provenance.validation_status} "
+                            f"relative to a {freshness_limit_seconds}s window"
+                        )
+                    result.tools_succeeded.append(tool_public_id)
                 else:
                     result.status = CollectionStatus.FAILED
-                    result.tools_failed.append('racing.get_historical_snapshot')
-                    result.errors.append(f"Historical snapshot request failed: {decoded.get('error', 'unknown error')}")
+                    result.tools_failed.append(tool_public_id)
+                    result.errors.append(f"Snapshot request failed: {decoded.get('error', 'unknown error')}")
             else:
                 result.status = CollectionStatus.FAILED
-                result.tools_failed.append('racing.get_historical_snapshot')
-                result.errors.append("Historical snapshot returned empty or malformed response")
+                result.tools_failed.append(tool_public_id)
+                result.errors.append("Snapshot returned empty or malformed response")
 
         except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
             result.status = CollectionStatus.FAILED
-            result.tools_failed.append('racing.get_historical_snapshot')
-            error_msg = f"racing.get_historical_snapshot: {type(e).__name__}: {str(e)}"
+            result.tools_failed.append(tool_public_id)
+            error_msg = f"{tool_public_id}: {type(e).__name__}: {str(e)}"
             result.errors.append(error_msg)
             self.logger.error(f"Collector ERROR: {error_msg}")
         except Exception as e:
             result.status = CollectionStatus.FAILED
-            result.tools_failed.append('racing.get_historical_snapshot')
-            error_msg = f"racing.get_historical_snapshot: Unexpected error: {str(e)}"
+            result.tools_failed.append(tool_public_id)
+            error_msg = f"{tool_public_id}: Unexpected error: {str(e)}"
             result.errors.append(error_msg)
             self.logger.error(f"Collector ERROR: {error_msg}")
 
         result.collection_end_at = self._now_utc()
-        result.tools_attempted.append('racing.get_historical_snapshot')
+        result.tools_attempted.append(tool_public_id)
 
         self.logger.info(
             f"Collector DATA_OUT: status={result.status.value}, "
@@ -424,243 +551,28 @@ class MCPCollector:
 
         return result
 
-    def collect(self, tools: Optional[List[SourceVerifiedTools]] = None) -> CollectionResult:
-        """
-        Collect navigation facts from verified MCP tools.
-
-        Args:
-            tools: List of tools to collect (default: position, SOG, COG)
-
-        Returns:
-            CollectionResult with facts, provenance, and diagnostics
-        """
-        if tools is None:
-            tools = [SourceVerifiedTools.POSITION, SourceVerifiedTools.SOG, SourceVerifiedTools.COG]
-
-        collection_start = self._now_utc()
-
-        # Log startup
-        self.logger.info(f"Collector STARTUP: {len(tools)} tools attempted for race_id={self.race_id}")
-
-        result = CollectionResult(
-            status=CollectionStatus.FAILED,
-            race_id=self.race_id,
-            collection_start_at=collection_start
-        )
-
-        position = None
-        sog = None
-        cog = None
-
-        for tool in tools:
-            result.tools_attempted.append(tool.public_id)
-
-            try:
-                if tool == SourceVerifiedTools.POSITION:
-                    position = self._collect_position(result)
-                    if position:
-                        result.tools_succeeded.append(tool.public_id)
-                elif tool == SourceVerifiedTools.SOG:
-                    sog = self._collect_sog(result)
-                    if sog:
-                        result.tools_succeeded.append(tool.public_id)
-                elif tool == SourceVerifiedTools.COG:
-                    cog = self._collect_cog(result)
-                    if cog:
-                        result.tools_succeeded.append(tool.public_id)
-            except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
-                result.tools_failed.append(tool.public_id)
-                error_msg = f"{tool.public_id}: {type(e).__name__}: {str(e)}"
-                result.errors.append(error_msg)
-                self.logger.error(f"Collector ERROR: {error_msg}")
-            except Exception as e:
-                result.tools_failed.append(tool.public_id)
-                error_msg = f"{tool.public_id}: Unexpected error: {str(e)}"
-                result.errors.append(error_msg)
-                self.logger.error(f"Collector ERROR: {error_msg}")
-
-        # Determine collection status
-        # Check if any facts are stale — stale facts cannot contribute to COMPLETE status
-        has_stale_facts = any(
-            fact.provenance.validation_status == 'stale'
-            for fact in result.facts
-        )
-
-        if len(result.tools_succeeded) == len(result.tools_attempted) and not has_stale_facts:
-            result.status = CollectionStatus.COMPLETE
-        elif len(result.tools_succeeded) > 0 or has_stale_facts:
-            result.status = CollectionStatus.PARTIAL
-        elif len(result.facts) > 0:
-            result.status = CollectionStatus.INVALID
-        else:
-            result.status = CollectionStatus.FAILED
-
-        result.collection_end_at = self._now_utc()
-
-        # Log summary (DATA_OUT)
-        self.logger.info(
-            f"Collector DATA_OUT: status={result.status.value}, "
-            f"facts={len(result.facts)}, "
-            f"succeeded={len(result.tools_succeeded)}, "
-            f"failed={len(result.tools_failed)}"
-        )
-        self.logger.info(f"Collector SHUTDOWN")
-
-        return result
-
-    def _collect_position(self, result: CollectionResult) -> Optional[NavigationFact]:
-        """Collect latitude and longitude."""
-        try:
-            self.logger.info("Collector DATA_IN: calling racing.get_position")
-            response = self.client.call_tool('racing.get_position')
-
-            if response and response.get('result'):
-                decoded = response['result']
-                latitude = decoded.get('latitude')
-                longitude = decoded.get('longitude')
-
-                if latitude is not None and longitude is not None:
-                    # Validate ranges
-                    if not (-90 <= latitude <= 90):
-                        result.warnings.append(f"racing.get_position: latitude out of range: {latitude}")
-                        return None
-                    if not (-180 <= longitude <= 180):
-                        result.warnings.append(f"racing.get_position: longitude out of range: {longitude}")
-                        return None
-
-                    provenance = Provenance(
-                        tool_public_id="racing.get_position",
-                        server_name="racing",
-                        wire_tool_name="get_position",
-                        source_id="mcp:racing:get_position",
-                        source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
-                        observed_at=response.get('observed_at'),
-                        freshness_limit_seconds=self.FRESHNESS_LIMITS.get("racing.get_position"),
-                        validation_status=self._validate_freshness(
-                            decoded.get('source_timestamp'),
-                            self.FRESHNESS_LIMITS.get("racing.get_position")
-                        )
-                    )
-
-                    # Create two facts: latitude and longitude (exact values preserved internally, not logged)
-                    result.facts.append(NavigationFact(
-                        field_name="latitude",
-                        value=latitude,
-                        unit="decimal_degrees",
-                        provenance=provenance
-                    ))
-                    result.facts.append(NavigationFact(
-                        field_name="longitude",
-                        value=longitude,
-                        unit="decimal_degrees",
-                        provenance=provenance
-                    ))
-
-                    self.logger.info(f"Collector DATA_IN: racing.get_position success (2 facts: lat, lon)")
-                    return result.facts[-1]
-
-            result.warnings.append("racing.get_position: malformed or missing fields")
-            return None
-        except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
-            raise
-
-    def _collect_sog(self, result: CollectionResult) -> Optional[NavigationFact]:
-        """Collect speed over ground."""
-        try:
-            self.logger.info("Collector DATA_IN: calling racing.get_sog")
-            response = self.client.call_tool('racing.get_sog')
-
-            if response and response.get('result'):
-                decoded = response['result']
-                sog_ms = decoded.get('speed_over_ground_ms')
-
-                if sog_ms is not None:
-                    # Validate: must be numeric and non-negative
-                    if not isinstance(sog_ms, (int, float)) or sog_ms < 0:
-                        result.warnings.append(f"racing.get_sog: invalid speed value: {sog_ms}")
-                        return None
-
-                    provenance = Provenance(
-                        tool_public_id="racing.get_sog",
-                        server_name="racing",
-                        wire_tool_name="get_sog",
-                        source_id="mcp:racing:get_sog",
-                        source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
-                        observed_at=response.get('observed_at'),
-                        freshness_limit_seconds=self.FRESHNESS_LIMITS.get("racing.get_sog"),
-                        validation_status=self._validate_freshness(
-                            decoded.get('source_timestamp'),
-                            self.FRESHNESS_LIMITS.get("racing.get_sog")
-                        )
-                    )
-
-                    fact = NavigationFact(
-                        field_name="speed_over_ground",
-                        value=sog_ms,
-                        unit="m/s",
-                        provenance=provenance
-                    )
-                    result.facts.append(fact)
-
-                    self.logger.info(f"Collector DATA_IN: racing.get_sog success (value={sog_ms}m/s, freshness={provenance.validation_status})")
-                    return fact
-                else:
-                    result.warnings.append("racing.get_sog: speed_over_ground_ms is None")
-                    return None
-
-            result.warnings.append("racing.get_sog: malformed or missing fields")
-            return None
-        except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
-            raise
-
-    def _collect_cog(self, result: CollectionResult) -> Optional[NavigationFact]:
-        """Collect course over ground."""
-        try:
-            self.logger.info("Collector DATA_IN: calling racing.get_cog")
-            response = self.client.call_tool('racing.get_cog')
-
-            if response and response.get('result'):
-                decoded = response['result']
-                cog_deg = decoded.get('course_over_ground_degrees')
-
-                if cog_deg is not None:
-                    # Validate: must be numeric and in valid circular range
-                    if not isinstance(cog_deg, (int, float)) or cog_deg < 0 or cog_deg > 360:
-                        result.warnings.append(f"racing.get_cog: invalid course value: {cog_deg}")
-                        return None
-
-                    provenance = Provenance(
-                        tool_public_id="racing.get_cog",
-                        server_name="racing",
-                        wire_tool_name="get_cog",
-                        source_id="mcp:racing:get_cog",
-                        source_timestamp=decoded.get('source_timestamp', 'UNKNOWN'),
-                        observed_at=response.get('observed_at'),
-                        freshness_limit_seconds=self.FRESHNESS_LIMITS.get("racing.get_cog"),
-                        validation_status=self._validate_freshness(
-                            decoded.get('source_timestamp'),
-                            self.FRESHNESS_LIMITS.get("racing.get_cog")
-                        )
-                    )
-
-                    fact = NavigationFact(
-                        field_name="course_over_ground",
-                        value=cog_deg,
-                        unit="degrees_true",
-                        provenance=provenance
-                    )
-                    result.facts.append(fact)
-
-                    self.logger.info(f"Collector DATA_IN: racing.get_cog success (value={cog_deg}°, freshness={provenance.validation_status})")
-                    return fact
-                else:
-                    result.warnings.append("racing.get_cog: course_over_ground_degrees is None")
-                    return None
-
-            result.warnings.append("racing.get_cog: malformed or missing fields")
-            return None
-        except (MCPProtocolError, MCPServerError, MCPClientError, MCPTimeoutError) as e:
-            raise
+    # ------------------------------------------------------------------
+    # Ce qui se trouvait ici, et pourquoi il n y est plus.
+    #
+    # collect(), _collect_position(), _collect_sog() et _collect_cog() -
+    # environ 235 lignes - formaient un second chemin de collecte adresse a
+    # trois outils, racing.get_position, racing.get_sog et racing.get_cog,
+    # que mcp/servers/racing.js n a jamais declares. Ce chemin etait donc
+    # mort : appele pour de vrai, il recevait trois fois Unknown tool.
+    #
+    # Il n a pas ete complete, il a ete supprime, et ce n est pas la meme
+    # decision. Le completer aurait rouvert deux defauts deja fermes sur le
+    # chemin destine a la course : trois appels separes rendent impossible le
+    # controle de derive entre les quatre faits, et ce code ne portait ni le
+    # filtre self du defaut 58 ni la conversion radians -> degres du
+    # defaut 63.
+    #
+    # Sa fonction est reprise par collect_current(), qui atteint le meme
+    # moteur que collect_historical(). Defaut 65, ferme le 2026-09-18.
+    #
+    # tests/mcp/test_h9_chemin_unique.py interdit la reapparition des trois
+    # noms d outils dans ce fichier.
+    # ------------------------------------------------------------------
 
     def _validate_freshness(self, source_timestamp: Optional[str], limit_seconds: Optional[int]) -> str:
         """

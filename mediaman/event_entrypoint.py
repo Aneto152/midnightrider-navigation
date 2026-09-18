@@ -236,12 +236,21 @@ def collect_selftest_result(config: dict):
 
 
 def collect_mcp_result(config: dict, logger: logging.Logger):
-    """Collect the present state through the real MCP chain."""
+    """
+    Collect the present state through the real MCP chain.
+
+    Until 2026-09-18 this called collector.collect(), a second collection
+    path addressed to three tools the racing MCP server never declared. It
+    could only ever return FAILED. It now calls collect_current(), which is
+    the historical engine with its upper bound set to the present instant -
+    same Flux query, same self filter, same bounded-skew check, same unit
+    contract. See defect 65 and logs/debug/h9-chemin-unique-2026-09-18.md.
+    """
     from mediaman.mcp_client import MCPClient
     from mediaman.mcp_collector import MCPCollector
     client = MCPClient(server_path=config["mcp_server_path"])
     collector = MCPCollector(client=client, race_id=config["race_id"])
-    result = collector.collect()
+    result = collector.collect_current()
     logger.info(
         "DATA_IN collection status=%s facts=%d tools_ok=%d tools_failed=%d",
         getattr(result.status, "value", result.status),

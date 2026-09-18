@@ -116,6 +116,66 @@ specification-compliant consumer will need the same envelope.
   defect 58 context filter. Four of its eight tests fail against the code as
   it stood before this change: status of this run SUCCESS.
 
+## One collection path, added 2026-09-18 (defect 65)
+
+Decided with Denis on 2026-09-18, after measuring that the collector
+addressed three tools - `racing.get_position`, `racing.get_sog`,
+`racing.get_cog` - that the racing MCP server has never declared.
+
+**Both uses are kept. Neither gets its own architecture.**
+
+- Live consultation is the intended use during a race.
+- Historical replay is the test bench for it, because a race cannot be
+  debugged while it is being sailed.
+
+The two differ by the temporal horizon and by nothing else. There is one
+engine, `collectSnapshot(startUtc, endUtc)`, and two thin doors:
+
+| Door | Upper bound chosen by | Freshness limit |
+|------|----------------------|-----------------|
+| `get_historical_snapshot(as_of_utc, window_seconds)` | the caller | none |
+| `get_snapshot(start_utc, end_utc)` | the caller, set to now for live use | the window |
+
+Those two lines are the complete list of legitimate differences. Everything
+else - the Flux query, the `self == "true"` context filter of defect 58, the
+bounded-skew check across the four facts, the radian-to-degree conversion of
+defect 63, the `units` block - is shared by construction rather than by
+discipline, because there is no second copy to keep in step.
+
+**The server never asks what time it is.** The upper bound always arrives as
+a parameter. This removes any need for a test backdoor: replaying a past
+instant through the live code path is done by passing a past bound, not by
+deceiving a clock. On the collector side the same role is played by
+`reference_time`, which already existed.
+
+**Bounds are normalised.** The engine rewrites both bounds through
+`toISOString()` before building the query. Without it the two doors would
+emit textually different queries for the same interval - `.000Z` against
+`Z` - and convergence could only be checked on results, never on queries.
+
+**What enforces this, in tests rather than in prose:**
+
+- `tests/mcp/test_h9_chemin_unique.py` counts the Flux query builders in
+  `racing.js` and requires exactly one;
+- the same file asserts that both doors emit byte-identical queries and
+  return identical facts and units for the same interval;
+- it asserts that defects 58 and 63 stay closed through the new door;
+- it forbids the three dead tool names from reappearing in the collector.
+
+**What was removed, and why it was removed rather than completed:**
+`collect()` and its three helpers, about 235 lines. Three separate calls
+mean three instants, which cannot be skew-checked, and that code carried
+neither the context filter nor the unit conversion. Completing it would have
+reopened defects 58 and 63 on the path meant for racing.
+
+`tests/mediaman/test_mcp_collector.py` - 627 lines, 32 tests - tested that
+path exclusively and was deleted. Eight of its properties were ported to
+`tests/mediaman/test_h9_collect_current.py`: coordinate suppression in logs
+and in the LLM context, absence of any direct Signal K access, and the
+handling of future or malformed timestamps. The other twenty-four asserted
+a per-tool partial-collection semantics that no longer exists once the call
+is atomic.
+
 ## Metadata boundary
 
 The following metadata fields are authoritative:

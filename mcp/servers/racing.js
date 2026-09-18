@@ -299,7 +299,11 @@ function cogRadiansToDegrees(radians) {
 }
 
 /**
- * Get historical snapshot at as_of_utc with bounded skew validation
+ * HISTORICAL DOOR - an instant and a tolerance.
+ *
+ * Kept verbatim so that every existing caller and every existing test keeps
+ * working unchanged. It owns no collection logic whatsoever: it turns its two
+ * arguments into the two bounds the single engine takes, and delegates.
  */
 async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
   // Validate as_of_utc
@@ -326,7 +330,81 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
   const windowMs = windowSeconds * 1000;
   const startTime = new Date(asOfDate.getTime() - windowMs).toISOString();
 
-  logEvent('DATA_IN', { asOfUtc, windowSeconds, startTime });
+  return await collectSnapshot(startTime, asOfUtc);
+}
+
+/**
+ * RANGE DOOR - two explicit bounds.
+ *
+ * Live consultation is not a second architecture. It is this door with
+ * end_utc set to the instant the caller consults. Decided with Denis on
+ * 2026-09-18: one path, and the temporal horizon is a parameter.
+ *
+ * A consequence worth stating, because it removes a temptation: nothing in
+ * this server ever asks what time it is. There is therefore nothing here to
+ * lie to in order to replay the past. A live collection and a replayed one
+ * differ only by the bounds the caller passes.
+ */
+async function getSnapshot(startUtc, endUtc) {
+  return await collectSnapshot(startUtc, endUtc);
+}
+
+/**
+ * THE SINGLE COLLECTION ENGINE.
+ *
+ * Both doors above end here. This is the only function in this file that
+ * builds a Flux query, and tests/mcp/test_h9_chemin_unique.py counts the
+ * openings of a Flux query in this file and requires exactly one - so a
+ * second engine cannot appear without turning a test red. That assertion is
+ * the whole point of H9: convergence that is verified, not promised.
+ *
+ * Until 2026-09-18 a second, unfinished collection path asked for position,
+ * SOG and COG through three separate tools that this server never declared.
+ * Three calls mean three instants, which cannot be skew-checked, and that
+ * path carried neither the self filter of defect 58 nor the radian
+ * conversion of defect 63. Completing it would have reopened both defects on
+ * the path meant for racing. It was removed instead: defect 65.
+ */
+async function collectSnapshot(startUtc, endUtc) {
+  if (!startUtc || typeof startUtc !== 'string') {
+    throw new Error('start_utc is required and must be a string');
+  }
+  if (!endUtc || typeof endUtc !== 'string') {
+    throw new Error('end_utc is required and must be a string');
+  }
+  if (!startUtc.endsWith('Z') || !endUtc.endsWith('Z')) {
+    throw new Error('start_utc and end_utc must end with \'Z\' (UTC timezone required)');
+  }
+
+  const startDate = validateTimestamp(startUtc);
+  const endDate = validateTimestamp(endUtc);
+  if (!startDate || !endDate) {
+    throw new Error('start_utc and end_utc must be valid ISO 8601 UTC timestamps with Z suffix');
+  }
+
+  const durationMs = endDate.getTime() - startDate.getTime();
+  if (durationMs <= 0) {
+    throw new Error('end_utc must be strictly after start_utc');
+  }
+  if (durationMs > 3600 * 1000) {
+    throw new Error('the interval must not exceed 3600 seconds');
+  }
+
+  // Local aliases. Everything below this line is the collection body as it
+  // stood at commit e64f3ca5, moved here unchanged - extraction, not rewrite.
+  // Keeping the original variable names is what makes that verifiable by
+  // reading the diff rather than by trusting this comment.
+  // Les deux bornes sont normalisees avant de servir. Sans cela les deux
+  // portes produiraient des requetes Flux textuellement differentes pour le
+  // meme intervalle - la porte historique calcule sa borne basse avec
+  // toISOString() et obtient .000Z, la porte de plage recoit ce que
+  // l appelant a ecrit. Meme instant, autre chaine. Normaliser ici est ce
+  // qui rend la convergence verifiable au caractere pres, et non seulement
+  // semantiquement.
+  const startTime = startDate.toISOString();
+  const asOfUtc = endDate.toISOString();
+
+  logEvent('DATA_IN', { startTime, asOfUtc, durationMs });
 
   // Four independent queries, one per fact.
   //
@@ -480,7 +558,15 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
       speed_over_ground_ms: timestamps.speed_over_ground.toISOString(),
       course_over_ground_degrees: timestamps.course_over_ground.toISOString()
     },
-    bounded_skew_ms: skew
+    bounded_skew_ms: skew,
+    // Both bounds are echoed back to the caller. A consumer must never have
+    // to guess which interval produced a fact, and an answer collected live
+    // must be distinguishable from a replayed one by its content alone.
+    interval: {
+      start_utc: startTime,
+      end_utc: asOfUtc,
+      duration_seconds: Math.round(durationMs / 1000)
+    }
   };
 }
 
@@ -492,6 +578,8 @@ async function handleTool(name, args) {
     switch (name) {
       case 'get_historical_snapshot':
         return await getHistoricalSnapshot(args.as_of_utc, args.window_seconds);
+      case 'get_snapshot':
+        return await getSnapshot(args.start_utc, args.end_utc);
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
@@ -523,6 +611,25 @@ const tools = [
         }
       },
       required: ['as_of_utc', 'window_seconds'],
+      additionalProperties: false
+    }
+  },
+  {
+    name: 'get_snapshot',
+    description: 'Get a bounded-skew snapshot over an explicit [start_utc, end_utc] interval. Live consultation is this tool with end_utc set to the present instant.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        start_utc: {
+          type: 'string',
+          description: 'ISO 8601 UTC timestamp with literal Z suffix - lower bound of the interval'
+        },
+        end_utc: {
+          type: 'string',
+          description: 'ISO 8601 UTC timestamp with literal Z suffix - upper bound of the interval, set to the present instant for a live consultation'
+        }
+      },
+      required: ['start_utc', 'end_utc'],
       additionalProperties: false
     }
   }
