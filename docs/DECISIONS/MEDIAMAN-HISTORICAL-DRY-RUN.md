@@ -101,17 +101,30 @@ that mocks MCP and InfluxDB boundaries.
 
 remote_sha must not be used for two different commit meanings.
 
-## Current status, updated 2026-09-15
+## Current status, updated 2026-09-18
 
 - offline_orchestration_validated: true
 - real_mcp_influxdb_runtime_e2e_validated: true
-  Evidence: mediaman/historical_entrypoint.py executed on the Raspberry Pi
-  against the real racing.js MCP server and the real InfluxDB instance,
-  DRY_RUN=true, as_of_utc 2026-09-07T14:36:26Z, window 60 seconds, exit
-  code 0, four facts COMPLETE, bounded_skew_ms 1, source_timestamp
-  2026-09-07T14:36:24.298Z, content generated and validated, publication
-  state SENT with a provider_id carrying the dry-run prefix. Fact values
-  are deliberately not recorded in this repository.
+  Evidence: mediaman/historical_entrypoint.py replayed on the Raspberry Pi on
+  2026-09-18 against the real racing.js MCP server and the real InfluxDB
+  instance, with the defect 58 context filter in place, DRY_RUN=true,
+  as_of_utc 2026-09-07T14:36:26Z, window 60 seconds, same parameters as the
+  2026-09-15 run. Outcome: replay SUCCESS, dry-run enforcement verified. Publication id b36f4233caab5c1d.... Content generated and
+  validated, publication state SENT with a provider_id carrying the dry-run
+  prefix. Fact values are deliberately not recorded in this repository.
+- superseded_evidence_2026_09_15: the original run reported exit code 0, four
+  facts COMPLETE, bounded_skew_ms 1 and source_timestamp
+  2026-09-07T14:36:24.298Z. That run queried InfluxDB WITHOUT any context
+  filter, so its four facts may have belonged to an AIS target rather than to
+  Midnight Rider. Measured on the same 60 second window on 2026-09-18: 4 of
+  the four facts were selected from an AIS context, 4 of the four values
+  change once the context filter is applied, the published position being about 11.04 nautical miles away from the vessel's actual position. Only one context had written at that timestamp, so the 2026-09-15 selection was determinate. The 2026-09-15 status line
+  must therefore not be read as proof about this vessel own data. It is kept
+  here because the history of a decision is part of the decision. Defect 58
+  was fixed in commit 8919130fe36e82dd66e8eb07a073e26234f48a9e, with six
+  regression tests in tests/mcp/test_defaut_58_context_filter.py.
+- our_sources_in_that_window: measured with group() then sort() then last():
+  N2K.1, N2K.2.
 - implementation_commit_sha: 43faf7685431c322911dc449cf296745926b7f1c
 - audit_commit_sha: f79abaf5ba1553c0f063033c41ce9a79a634b729
 - contract test suite: 23 passed, 0 failed
@@ -134,7 +147,12 @@ remote_sha must not be used for two different commit meanings.
 3. SEC-2026-09-14-01 remains open: the previously exposed InfluxDB token has
    not been revoked, even though a narrowly scoped replacement token now
    exists.
-4. etc/systemd/system/midnight-logsync.service is obsolete, runs as user pi
-   and uses git add -f, which would force-add gitignored service logs.
+4. CLOSED on 2026-09-17, chantier H7e: etc/systemd/system/midnight-logsync
+   was retired. The timer is disabled and inactive, the repository copies
+   were realigned on the units actually installed and carry a retirement
+   banner, and logs/debug/timers-systemd-2026-09-17.md records the
+   measurement. The service had never run: WorkingDirectory pointed at
+   /home/pi, so it failed with status=200/CHDIR roughly 480 times a day.
+   No function was lost; scripts/commit-logs.sh covers all four log paths.
 5. InfluxDB holds no measurement after 2026-09-07T14:36:24Z, so a live run
    needs fresh data before it can prove anything about live operation.

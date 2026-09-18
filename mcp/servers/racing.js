@@ -311,9 +311,10 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
   // carried only by our own rows; AIS rows carry no `self` tag at all, so
   // `r.self == "true"` excludes them. Without that filter the four facts below
   // came from whichever vessel wrote last: in the 300 s window ending
-  // 2026-09-07T14:36:25Z the answer was mmsi 368111560 at 40.7759233 /
-  // -73.9419249 doing 5.34, while Midnight Rider sat at 40.8357563 /
-  // -73.7122455, stopped. Four facts out of four were another boat's.
+  // 2026-09-07T14:36:25Z the answer was an AIS target roughly 11 nautical
+  // miles away, reported as moving, while Midnight Rider lay stopped. Four
+  // facts out of four were another boat's. Coordinates are deliberately not
+  // recorded here: see docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md.
   // That was defect 58.
   //
   // ORDER MATTERS. This filter must stay ABOVE keep(), which drops every

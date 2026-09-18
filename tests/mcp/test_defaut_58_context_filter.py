@@ -6,12 +6,15 @@ vrai moteur. Le faux des tests existants renvoie la meme reponse quelle
 que soit la requete : il ne peut donc pas distinguer une requete filtree
 d'une requete non filtree. C'est precisement ce qu'il n'a pas vu.
 
-Valeurs mesurees sur l'InfluxDB de production le 2026-09-17, fenetre de
-300 s finissant a 2026-09-07T14:36:25Z :
+Les valeurs ci-dessous sont FICTIVES et le restent volontairement. Ce test
+n a pas besoin de la position reelle du bateau : il lui faut deux jeux de
+valeurs distincts, l un attribue a notre contexte et l autre a une cible
+AIS qui ecrit apres nous. La politique du depot, posee dans
+docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md, est que les valeurs de faits
+n y sont pas consignees.
 
-  Midnight Rider  40.8357563 / -73.7122455   SOG 0      COG 0
-  cible AIS       40.7759233 / -73.9419249   SOG 5.34   COG 3.4505
-                  vessels.urn:mrn:imo:mmsi:368111560
+  notre bateau  41.1111111 / -72.2222222   SOG 0      COG 0
+  cible AIS     41.3333333 / -72.4444444   SOG 6.66   COG 2.2222
 
 Le tag `self` n'existe que sur nos propres lignes, avec la seule valeur
 "true" ; les 3990 contextes AIS ne portent aucun tag `self`. La cible AIS
@@ -32,10 +35,10 @@ import pytest
 
 # (bateau, cible AIS) pour chaque couple mesure/champ interroge par racing.js
 VALEURS = {
-    ("navigation.position", "lat"): ("40.8357563", "40.7759233"),
-    ("navigation.position", "lon"): ("-73.7122455", "-73.9419249"),
-    ("navigation.speedOverGround", "value"): ("0", "5.34"),
-    ("navigation.courseOverGroundTrue", "value"): ("0", "3.4505"),
+    ("navigation.position", "lat"): ("41.1111111", "41.3333333"),
+    ("navigation.position", "lon"): ("-72.2222222", "-72.4444444"),
+    ("navigation.speedOverGround", "value"): ("0", "6.66"),
+    ("navigation.courseOverGroundTrue", "value"): ("0", "2.2222"),
 }
 # Le bateau ecrit avant la cible AIS : c'est tout le piege du last().
 HEURE_BATEAU = "2026-09-07T14:36:24.298Z"
@@ -228,12 +231,12 @@ def test_la_cible_ais_plus_recente_est_ignoree(serveur_racing):
     assert charge is not None, json.dumps(reponse, default=str)
     assert charge.get("success") is True, json.dumps(charge, default=str)
     faits = charge["facts"]
-    assert abs(faits["latitude"] - 40.8357563) < 1e-7, faits
-    assert abs(faits["longitude"] - (-73.7122455)) < 1e-7, faits
+    assert abs(faits["latitude"] - 41.1111111) < 1e-7, faits
+    assert abs(faits["longitude"] - (-72.2222222)) < 1e-7, faits
     assert faits["speed_over_ground_ms"] == 0, faits
     assert faits["course_over_ground_degrees"] == 0, faits
     # La preuve en negatif : aucune valeur de la cible AIS ne doit survivre.
-    for interdit in (40.7759233, -73.9419249, 5.34, 3.4505):
+    for interdit in (41.3333333, -72.4444444, 6.66, 2.2222):
         assert interdit not in faits.values(), (
             "valeur de la cible AIS publiee comme fait du bateau : %r" % interdit)
 
@@ -270,7 +273,7 @@ def test_sans_cible_ais_le_resultat_est_identique(serveur_racing):
     charge = snapshot(reponse)
     assert charge is not None, json.dumps(reponse, default=str)
     assert charge.get("success") is True, json.dumps(charge, default=str)
-    assert abs(charge["facts"]["latitude"] - 40.8357563) < 1e-7, charge
+    assert abs(charge["facts"]["latitude"] - 41.1111111) < 1e-7, charge
 
 
 def test_si_le_filtre_ne_rend_rien_le_snapshot_est_incomplet(serveur_racing):
@@ -285,6 +288,6 @@ def test_si_le_filtre_ne_rend_rien_le_snapshot_est_incomplet(serveur_racing):
     brut = json.dumps(reponse, default=str)
     assert charge is None or charge.get("success") is not True, brut
     assert "incomplete" in brut.lower(), brut
-    for interdit in ("40.7759233", "-73.9419249", "5.34", "3.4505"):
+    for interdit in ("41.3333333", "-72.4444444", "6.66", "2.2222"):
         assert interdit not in brut, (
             "valeur AIS publiee alors que le bateau est absent : " + interdit)

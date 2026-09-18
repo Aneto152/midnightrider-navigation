@@ -27,13 +27,25 @@ exactement ce que `racing.js` interroge avec `window_seconds: 300`.
 
 | fait | requete ACTUELLE | requete CORRIGEE |
 |---|---|---|
-| latitude | 40.7759233 | 40.8357563 |
-| longitude | -73.9419249 | -73.7122455 |
-| speed_over_ground | 5.34 | 0 |
-| course_over_ground | 3.4505 | 0 |
+| latitude | cible AIS | Midnight Rider |
+| longitude | cible AIS | Midnight Rider |
+| speed_over_ground | en mouvement | 0 |
+| course_over_ground | cap non nul | 0 |
+
+Les deux positions sont distantes d environ **11 milles marins**.
+
+> **Caviardage du 2026-09-18, chantier H8b.** Ce tableau donnait les
+> coordonnees exactes du bateau. `docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md`
+> pose que les valeurs de faits ne sont deliberement pas consignees dans ce
+> depot, qui est public ; la position de la cible AIS est diffusee par
+> construction, la notre ne l est pas. Les coordonnees ont donc ete retirees
+> de la version courante. Elles restent dans l historique git du commit
+> 8919130 : l historique ne se reecrit pas, et la seule chose honnete est de
+> le dire. La demonstration ne perd rien : ce qui compte est que les quatre
+> faits venaient d un autre navire, a une dizaine de milles.
 
 Contexte qui gagnait les quatre requetes :
-`vessels.urn:mrn:imo:mmsi:368111560`, une cible AIS. Elle avait ecrit
+une cible AIS. Elle avait ecrit
 apres nous dans la fenetre.
 
 **Quatre faits sur quatre etaient ceux d un autre navire.** Le voilier
@@ -109,6 +121,29 @@ Repetition hors ligne avant livraison, sur une copie du depot a
 `6c7bfa32` : **4 tests sur 6 echouent avant le correctif**, les 6 passent
 apres. Les 2 qui passaient deja sont les deux tests de garde, ceux qui
 interdisent une regression future.
+
+## 5 bis. Les trois sources, et pourquoi elles ne se contredisent pas
+
+`schema.tagValues(tag: "source")` sur `navigation.position` rend **trois**
+valeurs : `N2K.0`, `N2K.1` et `N2K.2`. La documentation, elle, affirme que
+la position vient uniquement des **deux** Vulcan 7. Les deux enonces sont
+vrais, et j ai d abord cru a tort que la documentation mentait.
+
+Mesure du 2026-09-18 : `N2K.0` est **le recepteur AIS**, pas un instrument
+du bord. Il alimente 22 chemins tous specifiques a l AIS (`atonType`,
+`design.aisShipType`, `design.beam/draft/length`,
+`navigation.destination.commonName`, `rateOfTurn`, `specialManeuver`,
+`state`, `notifications.ais.*`, `offPosition`, `sensors.ais.*`, `virtual`)
+et 3990 contextes tous en `atons.` ou `vessels.urn:mrn:imo:mmsi:`. Son tag
+`self` est vide : il n ecrit **jamais** notre contexte.
+
+`N2K.1` et `N2K.2` alimentent 14 chemins strictement identiques entre eux,
+tous de navigation GNSS. Ce sont bien les deux Vulcan 7.
+
+**Lecon de methode** : une valeur de tag lue sur une mesure ne dit pas de
+quel bateau elle parle. Croiser `source` ET `context`, toujours. Lire
+`tagValues(tag: "source")` sans filtrer le contexte, c est refaire le
+defaut 58 dans l outil de diagnostic.
 
 ## 6. Ce qui reste ouvert
 
