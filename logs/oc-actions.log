@@ -373,3 +373,11 @@
 [2026-09-18T22:07:39] [DEBUG] [systeme] H11 : defauts 69 a 73 ouverts - conteneur zombie, deux unites en echec, quatre plugins bavards, panique InfluxDB sur last
 [2026-09-18T22:07:39] [RESULT] [docs] H11 : SUCCESS - defaut 74 ferme, barriere elargie aux valeurs de configuration
 [2026-09-18T22:07:39] [COMMIT] SHA: 0d4b94a509be2b3fd06fca4f0134b82934060665
+[2026-09-18T22:34:36] [DEBUG] [barriere] H11b : RECTIFICATION de la ligne RESULT de H11 - le defaut 74 n etait pas ferme, le detecteur etait aveugle
+[2026-09-18T22:34:36] [FILE_MODIFY] [docs] H11b : defaut 75 - INFLUX_DB_BUCKET=signalk restait ligne 37 de docs/setup/INFLUXDB-CONFIG.md, corrige
+[2026-09-18T22:34:36] [FILE_MODIFY] [docs] H11b : defaut 76 - six org=midnight-rider restaient dans docs/INFLUXDB-AUTH-INTEGRATION.md, corriges en MidnightRider
+[2026-09-18T22:34:36] [FILE_MODIFY] [docs] H11b : defaut 77 - rectification datee sur la procedure cloud qui cite trois artefacts inexistants
+[2026-09-18T22:34:36] [FILE_MODIFY] [tests] H11b : motifs elargis et trois tests qui interrogent le detecteur au lieu du corpus
+[2026-09-18T22:34:36] [FILE_MODIFY] [logs] H11b : defaut 78 - champs de tete de latest.json perimes du 2026-09-17, remis en coherence
+[2026-09-18T22:34:36] [RESULT] [barriere] H11b : SUCCESS - defaut 74 ferme pour de bon, defauts 75 a 78 traites
+[2026-09-18T22:34:36] [COMMIT] SHA: 94e6f3f7397f7eef805c3c765aa1bf3a50b21f00
