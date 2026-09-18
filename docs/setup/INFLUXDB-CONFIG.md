@@ -38,7 +38,7 @@ influxdb:
     - INFLUX_DB_ORG=MidnightRider
     - INFLUX_DOCKER_INIT_MODE=setup
     - INFLUX_ORG=MidnightRider
-    - INFLUX_BUCKET=signalk
+    - INFLUX_BUCKET=midnight_rider
     - INFLUX_ADMIN_USER=admin
     - INFLUX_ADMIN_PASSWORD=password
     - INFLUX_ADMIN_TOKEN=[MASKED_INFLUX_TOKEN]
@@ -67,7 +67,7 @@ astronomical:
     - INFLUX_URL=http://localhost:8086
     - INFLUX_TOKEN=[MASKED_INFLUX_TOKEN]
     - INFLUX_ORG=MidnightRider
-    - INFLUX_BUCKET=signalk
+    - INFLUX_BUCKET=midnight_rider
     
     # Cloud (when available)
     - INFLUX_CLOUD_URL=https://us-east-1-1.aws.cloud2.influxdata.com
@@ -85,7 +85,7 @@ When both local and cloud are active:
 # scripts/replicate-to-cloud.sh
 
 # Query local
-influx query 'from(bucket:"signalk") |> range(start: -24h)' \
+influx query 'from(bucket:"midnight_rider") |> range(start: -24h)' \
   --org MidnightRider > /tmp/data.csv
 
 # Write to cloud (if token available)
@@ -114,7 +114,7 @@ Add to crontab:
 INFLUX_URL=http://localhost:8086
 INFLUX_TOKEN=[MASKED_INFLUX_TOKEN]
 INFLUX_ORG=MidnightRider
-INFLUX_BUCKET=signalk
+INFLUX_BUCKET=midnight_rider
 ```
 
 **Status:** ✅ All services writing to local InfluxDB

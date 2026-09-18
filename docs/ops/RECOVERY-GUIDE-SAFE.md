@@ -180,9 +180,9 @@ ls -la /dev/ttyUSB* | grep -i gps
 curl http://localhost:3000/signalk/v1/api/self | jq '.navigation.courseOverGroundTrue'
 
 # Check InfluxDB is storing
-influx query 'from(bucket:"signalk") 
+influx query 'from(bucket:"midnight_rider") 
   |> range(start: -5m) 
-  |> filter(fn: (r) => r._measurement == "navigation")
+  |> filter(fn: (r) => r._measurement == "navigation.position")
   |> last()' \
   --org MidnightRider \
   --token ${INFLUX_TOKEN}

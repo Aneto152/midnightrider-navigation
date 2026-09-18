@@ -350,7 +350,14 @@ from(bucket: "midnight_rider")
 
 ## 8. Vue par serveur MCP
 
-**Audit 2026-05-01:** 7 serveurs implémentés. 🔧 **ISSUE:** Tous utilisent bucket 'signalk', doivent utiliser 'midnight_rider'. Voir `docs/MCP-INTEGRATION-STATUS.md`.
+**Audit 2026-05-01:** 7 serveurs implémentés.
+
+> **Rectification du 2026-09-18, chantier H11.** Cette note portait la
+> mention ISSUE : les sept serveurs interrogeaient un bucket 'signalk'.
+> Ils interrogent tous `midnight_rider` aujourd hui - verifie sur les
+> sept fichiers de `mcp/servers/` - et le bucket 'signalk' n existe pas
+> sur le serveur. Le renvoi pointait vers docs/MCP-INTEGRATION-STATUS.md,
+> fichier qui n existe pas non plus.
 
 | Serveur MCP | Fichier | Bucket | Statut | Notes |
 |---|---|---|---|---|

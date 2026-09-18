@@ -95,6 +95,98 @@ class TestCheminsCites:
             )
 
 
+# Buckets reellement presents sur le serveur, releve du 2026-09-18 par
+# GET /api/v2/buckets : il n y en a qu un. Toute autre valeur citee dans
+# la documentation est une commande que personne ne pourra executer.
+BUCKETS_ATTESTES = {
+    "midnight_rider":
+        "seul bucket present sur localhost:8086, releve le 2026-09-18",
+    "signalk-cloud":
+        "cible de replication InfluxDB Cloud, decrite dans docs/setup/INFLUXDB-CONFIG.md",
+}
+
+BUCKETS_FICTIFS_ADMIS = {
+    "nonexistent": "fixture de test negatif, docs/INFLUXDB-AUTH-INTEGRATION.md",
+    "test": "bucket des suites hors ligne",
+    "your-bucket": "gabarit a remplacer par le lecteur",
+}
+
+ORG_ATTESTEE = "MidnightRider"
+
+MOTIF_ORG = re.compile(
+    r"""INFLUX(?:DB)?_(?!CLOUD)[A-Z_]*ORG\s*[:=]\s*["'`]?([A-Za-z0-9_-]+)""")
+
+MOTIFS_BUCKET = (
+    re.compile(r"""from\(\s*bucket\s*:\s*["'`]([A-Za-z0-9_-]+)"""),
+    re.compile(r"""\bbucket\s*[:=]\s*["'`]([A-Za-z0-9_-]+)["'`]"""),
+    re.compile(r"""INFLUX(?:DB)?_(?:CLOUD_)?BUCKET\s*=\s*["'`]?([A-Za-z0-9_-]+)"""),
+)
+
+
+def fichiers_documentation():
+    trouves = []
+    for base, dossiers, fichiers in os.walk(RACINE):
+        dossiers[:] = [d for d in dossiers
+                       if d not in (".git", "node_modules", "logs", "__pycache__")]
+        for f in fichiers:
+            if not f.endswith(".md"):
+                continue
+            chemin = os.path.join(base, f)
+            relatif = os.path.relpath(chemin, RACINE)
+            if relatif.startswith("docs" + os.sep) or os.sep not in relatif:
+                trouves.append(chemin)
+    return sorted(trouves)
+
+
+class TestNomsDeBucket:
+    """Un bucket cite dans la documentation doit exister sur le serveur.
+
+    Le defaut 74 : deux guides proposaient une commande de copier-coller
+    sur un bucket `signalk` que le serveur n a pas. L un des deux etait le
+    guide de recuperation - celui qu on lit quand ca va deja mal.
+    """
+
+    def test_tout_bucket_cite_est_atteste(self):
+        connus = set(BUCKETS_ATTESTES) | set(BUCKETS_FICTIFS_ADMIS)
+        fautes = []
+        for chemin in fichiers_documentation():
+            with open(chemin, encoding="utf-8") as f:
+                for numero, ligne in enumerate(f, 1):
+                    if ligne.lstrip().startswith(">"):
+                        continue  # bloc de correction : on y cite le passe
+                    for motif in MOTIFS_BUCKET:
+                        for nom in motif.findall(ligne):
+                            if nom not in connus:
+                                fautes.append("%s:%d -> %s" % (
+                                    os.path.relpath(chemin, RACINE), numero, nom))
+        assert fautes == [], (
+            "buckets cites qui n existent pas sur le serveur : %s" % fautes)
+
+    def test_toute_organisation_citee_est_la_bonne(self):
+        """L organisation est unique sur ce serveur : MidnightRider."""
+        fautes = []
+        for chemin in fichiers_documentation():
+            with open(chemin, encoding="utf-8") as f:
+                for numero, ligne in enumerate(f, 1):
+                    if ligne.lstrip().startswith(">"):
+                        continue
+                    for nom in MOTIF_ORG.findall(ligne):
+                        if nom in ("your-org", "48a34d6463cef7c9"):
+                            continue
+                        if nom != ORG_ATTESTEE:
+                            fautes.append("%s:%d -> %s" % (
+                                os.path.relpath(chemin, RACINE), numero, nom))
+        assert fautes == [], (
+            "organisations citees qui ne sont pas %s : %s"
+            % (ORG_ATTESTEE, fautes))
+
+    def test_chaque_bucket_declare_porte_sa_raison(self):
+        for table in (BUCKETS_ATTESTES, BUCKETS_FICTIFS_ADMIS):
+            for nom, raison in table.items():
+                assert raison and len(raison) > 15, (
+                    "le bucket %s est declare sans raison" % nom)
+
+
 class TestOutilsDeclares:
     """Les outils annonces doivent etre ceux que le serveur declare."""
 

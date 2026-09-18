@@ -269,8 +269,8 @@ Copy `.env.example` → `.env.local` and set:
 
 ```bash
 INFLUXDB_TOKEN=<your-token>      # InfluxDB read/write token
-INFLUXDB_ORG=midnight-rider      # Organization name
-INFLUXDB_BUCKET=midnight-rider   # Data bucket
+INFLUXDB_ORG=MidnightRider       # Organization name
+INFLUXDB_BUCKET=midnight_rider   # Data bucket
 GRAFANA_PASSWORD=<admin-password> # Grafana admin password
 ```
 
