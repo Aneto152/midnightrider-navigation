@@ -292,6 +292,32 @@ class MCPCollector:
 
                     validation_errors = []
 
+                    # D1bis - defaut 63 : le serveur declare ses unites.
+                    # Bloc absent = serveur plus ancien, on n exige rien pour
+                    # ne pas casser une chaine deja deployee. Bloc present et
+                    # faux = on refuse, plutot que de publier un cap dans la
+                    # mauvaise unite comme le 2026-09-15.
+                    units_data = decoded.get('units')
+                    if isinstance(units_data, dict):
+                        expected_units = {
+                            'latitude': 'degrees',
+                            'longitude': 'degrees',
+                            'speed_over_ground_ms': 'm_per_s',
+                            'course_over_ground_degrees': 'degrees_true',
+                        }
+                        for unit_key, unit_expected in expected_units.items():
+                            unit_seen = units_data.get(unit_key)
+                            if unit_seen != unit_expected:
+                                validation_errors.append(
+                                    f"unit mismatch for {unit_key}: expected "
+                                    f"{unit_expected}, got {unit_seen}"
+                                )
+                    elif units_data is not None:
+                        validation_errors.append(
+                            "units must be an object, got "
+                            f"{type(units_data).__name__}"
+                        )
+
                     # Validate latitude
                     if lat is None:
                         validation_errors.append("latitude is None")

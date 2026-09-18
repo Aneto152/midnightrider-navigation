@@ -86,6 +86,36 @@ Known gap: the other MCP servers under mcp/servers/ still answer with a bare
 result object. MediaMan does not use them, but any Python or
 specification-compliant consumer will need the same envelope.
 
+## Units contract, added 2026-09-18 (defect 63)
+
+- Signal K serves angles in SI units. navigation.courseOverGroundTrue is
+  therefore in radians, and the server published that raw value under the
+  key course_over_ground_degrees: the collector labelled it
+  unit="degrees_true" and the article printed "Cap: {value}deg", so a vessel
+  heading 198 degrees would have been announced at 3.45 degrees.
+- Measured proof, not convention: over 365 days of our own rows the field
+  stays in [0.000000, 6.281400] rad, with 0 row(s) above 2*PI out of 4078141
+  and 3626071 row(s) above 0.1 rad. A course expressed in degrees cannot
+  stay below 6.29 for a year of sailing.
+- mcp/servers/racing.js converts the course over ground from radians to true
+  degrees exactly once, at the boundary of the server, in
+  cogRadiansToDegrees(). The validated domain of the incoming value is [0,
+  2*PI] and no longer [0, 360]: a degree interval contains the whole radian
+  interval, which is why three successive validations never reported
+  anything. A value beyond 2*PI now fails the collection loudly instead of
+  publishing a false course.
+- Every snapshot carries a units block next to facts: latitude and longitude
+  in degrees, speed_over_ground_ms in m_per_s, course_over_ground_degrees in
+  degrees_true. The block is a sibling of facts and never a fifth fact,
+  because the four-field set is validated exactly.
+- mediaman/mcp_collector.py refuses a payload whose units block contradicts
+  that contract. An absent block is accepted, so an older server keeps
+  working; a block that disagrees is a validation error.
+- tests/mcp/test_defaut_63_cog_degres.py locks the conversion, the two
+  domain bounds, the loud failure beyond 2*PI, the units block and the
+  defect 58 context filter. Four of its eight tests fail against the code as
+  it stood before this change: status of this run SUCCESS.
+
 ## Metadata boundary
 
 The following metadata fields are authoritative:

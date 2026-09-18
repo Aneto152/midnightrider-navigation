@@ -22,6 +22,7 @@ a ecrit APRES nous : sans filtre, c'est elle qui gagne le last().
 """
 
 import json
+import math
 import os
 import re
 import socket
@@ -236,7 +237,11 @@ def test_la_cible_ais_plus_recente_est_ignoree(serveur_racing):
     assert faits["speed_over_ground_ms"] == 0, faits
     assert faits["course_over_ground_degrees"] == 0, faits
     # La preuve en negatif : aucune valeur de la cible AIS ne doit survivre.
-    for interdit in (41.3333333, -72.4444444, 6.66, 2.2222):
+    # Defaut 63 : le cap est converti en degres a la publication,
+    # donc interdire la seule valeur brute ne prouverait plus rien.
+    cap_ais_converti = math.degrees(2.2222)
+    for interdit in (41.3333333, -72.4444444, 6.66, 2.2222,
+                     cap_ais_converti):
         assert interdit not in faits.values(), (
             "valeur de la cible AIS publiee comme fait du bateau : %r" % interdit)
 
@@ -288,6 +293,8 @@ def test_si_le_filtre_ne_rend_rien_le_snapshot_est_incomplet(serveur_racing):
     brut = json.dumps(reponse, default=str)
     assert charge is None or charge.get("success") is not True, brut
     assert "incomplete" in brut.lower(), brut
-    for interdit in ("41.3333333", "-72.4444444", "6.66", "2.2222"):
+    # Defaut 63 : la forme convertie du cap AIS est interdite aussi.
+    for interdit in ("41.3333333", "-72.4444444", "6.66", "2.2222",
+                     "%.4f" % math.degrees(2.2222)):
         assert interdit not in brut, (
             "valeur AIS publiee alors que le bateau est absent : " + interdit)

@@ -386,9 +386,16 @@ def test_four_synthetic_queries_return_valid_values(racing_mcp_server):
     sample_time = (now - timedelta(seconds=2)).isoformat().replace('+00:00', 'Z')
     window_start = (now - timedelta(seconds=60)).isoformat().replace('+00:00', 'Z')
 
+    # Defaut 63 : ce faux InfluxDB rend la MEME charge aux quatre requetes,
+    # donc la valeur doit etre valide dans les quatre domaines a la fois -
+    # latitude, longitude, vitesse positive, et cap en RADIANS dans [0, 2*PI].
+    # 45.5 ne l etait plus : c est un cap impossible en radians. Le fait que
+    # ce faux serveur reponde la meme chose a toutes les questions est par
+    # ailleurs ce qui a laisse vivre le defaut 58 ; ce n est pas corrige ici.
+    valeur_valide_dans_les_quatre_domaines = '3.5'
     SyntheticInfluxDBHandler.response_data = _annotated_flux_csv(
-        sample_time, '45.5', 'latitude', 'navigation_position_latitude',
-        window_start, as_of)
+        sample_time, valeur_valide_dans_les_quatre_domaines, 'latitude',
+        'navigation_position_latitude', window_start, as_of)
     SyntheticInfluxDBHandler.response_status = 200
 
     send_mcp_request(proc, 'initialize')

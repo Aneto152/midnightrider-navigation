@@ -8,6 +8,8 @@
  * - Requires as_of_utc (ISO 8601 UTC with literal Z suffix) and window_seconds (1-3600)
  * - Preserves actual _time from each query; rejects skew > 1000 ms
  * - Fail-closed on any missing or invalid field
+ * - COG arrives from Signal K in radians (SI) and is published in true
+ *   degrees; every published fact carries its unit in the units block
  * - Structured logging to stderr only; stdout reserved for JSON-RPC
  */
 
@@ -242,6 +244,11 @@ function validateTimestamp(ts) {
   }
 }
 
+// Borne haute du cap en radians, avec une marge pour l arrondi flottant :
+// une valeur exactement egale a 2*PI doit passer. Declaree avant
+// validateNumeric, qui s en sert.
+const COG_RADIANS_MAX = 2 * Math.PI + 1e-9;
+
 /**
  * Validate numeric field ranges
  */
@@ -258,11 +265,37 @@ function validateNumeric(value, field) {
       return (num >= -180 && num <= 180) ? num : null;
     case 'speed_over_ground':
       return num >= 0 ? num : null;
+    // Defaut 63. Signal K sert navigation.courseOverGroundTrue en RADIANS,
+    // jamais en degres : c est une unite SI, et c est aussi une mesure.
+    // mesure du 2026-09-18 sur 365 jours de nos propres lignes : minimum
+    // 0.000000 rad, maximum 6.281400 rad, 0 ligne(s) au-dela de 2*PI sur
+    // 4078141.
+    // Le domaine valide est donc [0, 2*PI] et non [0, 360] : un intervalle
+    // exprime en degres contient tout l intervalle des radians, si bien
+    // qu aucune valeur en radians n etait jamais signalee. Une valeur au-dela
+    // de 2*PI fait desormais echouer la collecte, bruyamment, plutot que de
+    // publier un cap faux.
     case 'course_over_ground':
-      return (num >= 0 && num <= 360) ? num : null;
+      return (num >= 0 && num <= COG_RADIANS_MAX) ? num : null;
     default:
       return Number.isFinite(num) ? num : null;
   }
+}
+
+/**
+ * Convert a Signal K course over ground from radians to true degrees.
+ *
+ * Signal K serves angles in SI units, that is radians in [0, 2*PI]. The
+ * published contract key is `course_over_ground_degrees`, so the value has to
+ * be converted exactly once, here, at the boundary of the server. Converting
+ * anywhere downstream would leave the raw radian value travelling under a key
+ * that claims degrees, which is defect 63.
+ *
+ * @param {number} radians - course over ground in radians, already validated
+ * @returns {number} course over ground in true degrees, in [0, 360]
+ */
+function cogRadiansToDegrees(radians) {
+  return radians * (180 / Math.PI);
 }
 
 /**
@@ -429,7 +462,16 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
       latitude: facts.latitude,
       longitude: facts.longitude,
       speed_over_ground_ms: facts.speed_over_ground,
-      course_over_ground_degrees: facts.course_over_ground
+      course_over_ground_degrees: cogRadiansToDegrees(facts.course_over_ground)
+    },
+    // Chaque fait publie dit son unite. Sans cela le defaut 63 a pu vivre :
+    // la cle annoncait des degres, la valeur etait en radians, et aucun
+    // consommateur n avait de quoi s en apercevoir.
+    units: {
+      latitude: 'degrees',
+      longitude: 'degrees',
+      speed_over_ground_ms: 'm_per_s',
+      course_over_ground_degrees: 'degrees_true'
     },
     source_timestamp: sourceTimestamp,
     fact_timestamps: {
