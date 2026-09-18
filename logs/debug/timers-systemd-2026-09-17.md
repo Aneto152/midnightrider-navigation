@@ -79,7 +79,7 @@ _La copie du depot etait deja conforme._
 `scripts/commit-logs.sh` declare :
 
 ```bash
-LOG_PATHS="logs/latest.json logs/oc-actions.log logs/services/ logs/debug/"
+LOG_PATHS="logs/services/ logs/debug/ logs/latest.json logs/oc-actions.log"
 ```
 
 Les quatre chemins que `midnight-logsync` pretendait publier y sont deja.
@@ -100,7 +100,18 @@ Un `git commit` emporte tout l index. Le 2026-09-17 a 21:51:02Z, l index
 contenait le `git mv` laisse par `h7d-v2`, arretee sur son garde-fou sans
 commiter : le job l a publie sous l identite
 `MidnightRider AI Assistant <ai@midnightrider.local>`, message
-`logs: auto-update — 4 files changed, 43 insertions(+), 2 deletions(-)`.
+`logs: auto-update —  4 files changed, 97 insertions(+), 2 deletions(-)`.
+
+> **Rectification du 2026-09-17, chantier H8a.** Les deux citations
+> ci-dessus - `LOG_PATHS` et ce message de commit - avaient ete
+> ecrites de memoire et etaient fausses : mauvais ordre pour la
+> premiere, `43 insertions` au lieu de `97` pour la seconde. Elles
+> ont ete remplacees par les chaines relues, l une dans
+> `scripts/commit-logs.sh` ligne 17, l autre par l API GitHub sur le
+> commit `80f3980912be16616f300017ca00d76e5be90617`. La demonstration
+> de la section 5 n en depend pas : les quatre chemins sont les memes
+> quel que soit leur ordre.
+
 La barriere anti-secrets n a rien vu, et elle avait raison : un
 renommage ne contient pas de secret.
 

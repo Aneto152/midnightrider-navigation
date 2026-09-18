@@ -304,6 +304,30 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
   // a single 'value' field. Signal K publishes dotted paths as measurement
   // names; the previous underscore names matched nothing at all.
   //
+  // The self filter is what makes these four facts OUR facts. Measured on the
+  // production bucket on 2026-09-17: navigation.position carries 3991 distinct
+  // contexts, of which 3990 are AIS targets or AtoNs and exactly one is
+  // Midnight Rider. The tag `self` exists with the single value "true" and is
+  // carried only by our own rows; AIS rows carry no `self` tag at all, so
+  // `r.self == "true"` excludes them. Without that filter the four facts below
+  // came from whichever vessel wrote last: in the 300 s window ending
+  // 2026-09-07T14:36:25Z the answer was mmsi 368111560 at 40.7759233 /
+  // -73.9419249 doing 5.34, while Midnight Rider sat at 40.8357563 /
+  // -73.7122455, stopped. Four facts out of four were another boat's.
+  // That was defect 58.
+  //
+  // ORDER MATTERS. This filter must stay ABOVE keep(), which drops every
+  // column except _time and _value - including `self`. Moved below keep() it
+  // would filter nothing and silently restore the defect. The regression test
+  // tests/mcp/test_defaut_58_context_filter.py asserts the order, not just
+  // the presence.
+  //
+  // No source is ever pinned. These three measurements each carry three source
+  // tags - N2K.0, N2K.1 and N2K.2, measured 2026-09-17 - because the two
+  // Vulcan 7 plotters are not always both powered. Preferring one named source
+  // would leave the snapshot blind whenever that source is silent; group()
+  // then last() takes the newest point whichever source wrote it.
+  //
   // keep() reduces every input table to the same two columns so that tables
   // carrying different tag sets can be merged; group() collapses them into a
   // single table; sort() then last() returns exactly one record, the newest of
@@ -323,6 +347,7 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
       |> range(start: ${startTime}, stop: ${asOfUtc})
       |> filter(fn: (r) => r._measurement == "${selector.measurement}")
       |> filter(fn: (r) => r._field == "${selector.field}")
+      |> filter(fn: (r) => r.self == "true")
       |> keep(columns: ["_time", "_value"])
       |> group()
       |> sort(columns: ["_time"])
