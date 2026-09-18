@@ -118,13 +118,30 @@ remote_sha must not be used for two different commit meanings.
   filter, so its four facts may have belonged to an AIS target rather than to
   Midnight Rider. Measured on the same 60 second window on 2026-09-18: 4 of
   the four facts were selected from an AIS context, 4 of the four values
-  change once the context filter is applied, the published position being about 11.04 nautical miles away from the vessel's actual position. Only one context had written at that timestamp, so the 2026-09-15 selection was determinate. The 2026-09-15 status line
+  change once the context filter is applied, the published position being about 11.04 nautical miles away from the vessel's actual position.
+  Remeasured on 2026-09-18 at the instant the unfiltered query actually
+  selected: exactly one row existed there for each of the 4 facts, so that
+  query was deterministic. Replayed against the same dataset, frozen since
+  2026-09-07, it returned an AIS context for 4 of the 4 facts. The
+  2026-09-15 output is therefore wrong, not merely unverifiable. For 2 of
+  the 4 facts that instant is the source_timestamp recorded on 2026-09-15. The 2026-09-15 status line
   must therefore not be read as proof about this vessel own data. It is kept
   here because the history of a decision is part of the decision. Defect 58
   was fixed in commit 8919130fe36e82dd66e8eb07a073e26234f48a9e, with six
   regression tests in tests/mcp/test_defaut_58_context_filter.py.
-- our_sources_in_that_window: measured with group() then sort() then last():
-  N2K.1, N2K.2.
+- our_sources_in_that_window: measured with schema.tagValues on the source
+  tag, restricted by the predicate r.self == "true": N2K.1, N2K.2. N2K.0
+  also writes navigation paths, but only for AIS contexts: it is the AIS
+  receiver and never writes this vessel own context.
+- measurement_method_note: the figure published on 2026-09-18 by chantier
+  H8b, "only one context had written at that timestamp", was measured at OUR
+  filtered winning timestamp and not at the instant the unfiltered query
+  selected, so it did not answer the question it was written to answer.
+  Corrected the same day by chantier H8c: 0 of 4 facts tie-broken, at most 1
+  row(s) at the winning instant, 2 of 4 winning instants equal to the
+  recorded source_timestamp. The commit message of
+  1fa2853f91f1925c96a0972e57553f656fd1cb43 states the opposite conclusion;
+  commit messages are not rewritten, this line supersedes it.
 - implementation_commit_sha: 43faf7685431c322911dc449cf296745926b7f1c
 - audit_commit_sha: f79abaf5ba1553c0f063033c41ce9a79a634b729
 - contract test suite: 23 passed, 0 failed
