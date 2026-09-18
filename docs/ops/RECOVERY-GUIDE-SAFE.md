@@ -1,559 +1,356 @@
-⚠️ **SECURITY NOTE:** This guide uses placeholders (${INFLUX_TOKEN}, ${PROJECT_ROOT}).
-Fill in your actual values before executing commands.
+# 🔄 RECOVERY GUIDE — Bringing Midnight Rider Back Up
 
-# 🔄 RECOVERY GUIDE — Complete Reconstruction Instructions
+**Purpose:** what to do, in order, when the boat's systems are down or a
+Raspberry Pi has to be rebuilt from nothing.
 
-**Purpose:** If the system crashes or needs to be rebuilt, this guide allows complete recovery of all MCP systems and logic.
+**Rewritten:** 2026-09-18 (chantier H12) — **Version 2.0**
 
-**Status:** Production-Ready Backup Documentation  
-**Date:** 2026-04-27 (Updated)  
-**Version:** 1.1
-
----
-
-## QUICK SUMMARY: What Was Built
-
-**Complete AI Coaching System for J/30 Sailing Boat (MidnightRider)**
-
-```
-7 MCP Servers (37 Tools) + 2 Data Loggers + 3 Cron Jobs + Complete Documentation
-```
-
-**Total Commits:** 140+  
-**Total Files:** 219+  
-**Total Lines of Code:** 15,000+  
-**Storage:** GitHub (public, MIT License), InfluxDB (local + cloud optional)
+> **Why this document was rewritten.** Version 1.1 dated from 2026-04-19 and
+> described a layout that no longer exists. An audit on 2026-09-18 found that
+> of the 53 file paths it cited, **2 existed**. It named seven MCP servers by
+> filenames (`racing-server.js`) that were never in this repository, told the
+> reader to query a bucket named `signalk` that does not exist, listed three
+> cron jobs pointing at scripts that were never written — and, most seriously,
+> STEP 1 instructed the reader to bring Signal K up with `docker-compose up -d`,
+> which is the one action the architecture forbids. That instruction is the
+> most plausible origin of the orphaned `signalk` Docker container found
+> `Exited (137)` after four months.
+>
+> Two sections were removed rather than corrected, because they duplicated
+> information that is already correct elsewhere: the Claude configuration
+> template now lives only in `mcp/claude_desktop_config.example.json`, and the
+> file-structure map only in `docs/INDEX.md`. A recovery guide that duplicates
+> other documents goes stale faster than the system it is meant to rescue.
 
 ---
 
-## THE COMPLETE SYSTEM ARCHITECTURE
+## 0. WHAT THIS DOCUMENT OWNS
 
-### 1. DATA SOURCES (Inputs)
+This guide owns **procedure**: the order of operations, and how to tell
+whether each step worked. It owns nothing else.
 
-```
-UM982 GNSS (Dual Antenna) → TRUE heading, roll/pitch/yaw
-  ├─ #HEADINGA proprietary sentences
-  ├─ 1 Hz frequency
-  └─ Plugin: ~/.signalk/plugins/signalk-um982-proprietary.js
+| You need | Read |
+|---|---|
+| System overview, ports, services | `docs/ARCHITECTURE-MASTER.md` |
+| Field quick-reference on race day | `SYSTEM-SUMMARY.md` |
+| Where any document lives | `docs/INDEX.md` |
+| Claude / MCP client configuration | `mcp/claude_desktop_config.example.json` |
+| InfluxDB setup and cloud replication | `docs/setup/INFLUXDB-CONFIG.md` |
+| Signal K plugin inventory and status | `docs/SIGNALK-PLUGINS-INVENTORY.md` |
+| N2K bus and PGN flow | `docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md` |
+| Grafana dashboards | `docs/DASHBOARDS-README.md` |
 
-Wind Sensors → Apparent & True wind
-  ├─ Speed (knots)
-  ├─ Direction (degrees)
-  └─ 1 Hz frequency
-
-Speed Sensor (Loch) → Speed Through Water
-  ├─ Knots
-  └─ 1 Hz frequency
-
-Depth Sounder → Water depth & temperature
-  ├─ Meters + feet
-  ├─ Temperature (celsius)
-  └─ Real-time
-
-External APIs (Free, No Auth):
-  ├─ Open-Meteo (Weather forecast)
-  ├─ NOAA (Buoy observations, 3 stations LIS)
-  └─ InfluxDB Cloud (optional, token-based)
-```
-
-### 2. CENTRAL HUB (Signal K)
-
-```
-Port: 3000 (default)
-Function: Aggregate all sensors into unified format
-Signal K Schema: v1.7+
-Output: JSON/REST API on :3000/signalk
-```
-
-**Key plugins:**
-- `signalk-to-influxdb2` — Write all data to InfluxDB
-- `signalk-um982-proprietary` — Parse UM982 attitude (#HEADINGA)
-
-### 3. DATABASE (InfluxDB)
-
-```
-Port: 8086
-Type: Time-series database (optimized for 1 Hz data)
-Local: localhost:8086 (always active, no internet required)
-Cloud: Optional (token renewal when needed)
-
-Org: MidnightRider
-Bucket: signalk
-Token: ${INFLUX_TOKEN}
-
-Data Retention:
-  ├─ Local: 7-14 days (rotating)
-  └─ Cloud: Unlimited (with valid token)
-
-Measurement Prefixes:
-  ├─ navigation.* (heading, position, COG, SOG)
-  ├─ environment.* (wind, water temp, depth)
-  ├─ attitude.* (heel, pitch, yaw)
-  ├─ weather.* (forecast from Open-Meteo)
-  ├─ buoy.* (observations from NOAA)
-  └─ astronomy.* (sun, moon, tides)
-```
-
-### 4. INTELLIGENCE LAYER (7 MCP Servers)
-
-**Location:** `${PROJECT_ROOT}/docker/signalk/mcp/`
-
-Each server is a Node.js file that:
-1. Reads from InfluxDB
-2. Applies logic/transformation
-3. Returns JSON to Claude via MCP protocol
-
-**Servers:**
-
-| # | Name | File | Tools | Purpose |
-|---|------|------|-------|---------|
-| 1 | Astronomical | astronomical-server.js | 4 | Sun, moon, tides, events |
-| 2 | Racing | racing-server.js | 17 | Navigation, wind, perf, sailing |
-| 3 | Polar | polar-server.js | 5 | Efficiency, targets, analysis |
-| 4 | Crew | crew-server.js | 3 | Helmsman, rotation, workload |
-| 5 | Race Mgmt | race-server.js | 4 | Sails, start, distance, marks |
-| 6 | Weather | weather-server.js | 3 | Forecast, trend, assessment |
-| 7 | Buoy | buoy-server.js | 2 | Observations, wind comparison |
-
-**Total Tools:** 37
-
-### 5. DATA LOGGERS (Cron Jobs)
-
-```
-*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/weather-logger.sh
-  └─ Fetches Open-Meteo, logs to InfluxDB every 5 minutes
-
-*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/buoy-logger.sh
-  └─ Fetches NOAA buoy data, logs to InfluxDB every 5 minutes
-
-0 0 * * * ${PROJECT_ROOT}/docker/signalk/scripts/init-astronomical-data.sh
-  └─ Calculates sun/moon/tides, logs to InfluxDB daily at midnight
-```
-
-### 6. CLIENT LAYER (Claude/Cursor)
-
-```
-Configuration: ~/.config/Claude/claude_desktop_config.json
-
-Contains:
-  ├─ 7 MCP server definitions
-  ├─ Paths to each server script
-  ├─ Environment variables (INFLUX_TOKEN, etc.)
-  └─ Connection protocol (stdio)
-
-When user asks Claude: "What's our race picture?"
-  → Claude calls multiple tools (get_buoy_data, get_race_data, etc.)
-  → MCP servers query InfluxDB
-  → Response returned as JSON to Claude
-  → Claude synthesizes into natural language
-```
+**Host:** `midnightrider.local` — always use the mDNS alias. The Pi takes its
+address from DHCP; any hard-coded address in a procedure is a procedure that
+will fail on the day you need it.
 
 ---
 
-## STEP-BY-STEP RECOVERY INSTRUCTIONS
+## 1. START ORDER
 
-If the system crashes, follow these steps to rebuild:
+### ⛔ The one rule that overrides everything
 
-### STEP 1: Verify Core Infrastructure
+**Signal K runs under `systemctl`. Never under Docker. Never
+`docker-compose up` for Signal K.**
+
+There is no `docker/` directory in this repository and no Signal K image.
+A container named `signalk` on this Pi is a leftover, not a service — it
+should be removed, not started.
+
+### 1.1 — Signal K (port 3000)
 
 ```bash
-# Check Docker containers running
-docker ps | grep -E "influxdb|signalk|grafana"
-
-# Expected output:
-# signalk:3000 (Signal K server)
-# influxdb:8086 (Time-series database)
-# grafana:3001 (Visualization, optional)
-
-# If missing, run docker-compose:
-cd ${PROJECT_ROOT}/docker/signalk
-docker-compose up -d
+sudo systemctl start signalk
+systemctl status signalk --no-pager
 ```
 
-### STEP 2: Verify Data Flow
+Unit file: `etc/systemd/system/signalk.service`
+Working directory: `/home/aneto/.signalk` (outside this repository)
+Binary: `/usr/bin/signalk-server`
+
+Expected: `active (running)`, `Restart=always`, low `NRestarts`.
+
+### 1.2 — Docker services
+
+Four containers, and only four, are defined in `docker-compose.yml` at the
+repository root:
+
+| Container | Port | Role |
+|---|---|---|
+| `influxdb` | 8086 | time-series store, InfluxDB 2.8 |
+| `grafana` | 3001 | dashboards |
+| `regatta` | 5000 | regatta server |
+| `start-line-worker` | — | start-line computation worker |
 
 ```bash
-# Check UM982 is sending data
-ls -la /dev/ttyUSB* | grep -i gps
+cd ~/midnightrider-navigation
+docker compose up -d
+docker ps --format '{{.Names}}\t{{.Status}}'
+```
 
-# Check Signal K is receiving
-curl http://localhost:3000/signalk/v1/api/self | jq '.navigation.courseOverGroundTrue'
+Expected: those four `Up`. Anything else listed is a leftover.
 
-# Check InfluxDB is storing
-influx query 'from(bucket:"midnight_rider") 
-  |> range(start: -5m) 
+### 1.3 — Scheduled tasks
+
+**There is no crontab on this system.** Scheduling is done with systemd
+timers. See § 4.
+
+---
+
+## 2. VERIFY EACH LINK IN THE CHAIN
+
+Work down the chain in order. The first link that fails is the one to fix;
+everything below it will look broken whether it is or not.
+
+```bash
+bash scripts/check-system.sh
+```
+
+That script covers most of the following. Run the individual checks when it
+reports a problem and you need to know which link.
+
+### 2.1 — Sensors reach the Pi
+
+```bash
+ls -l /dev/serial/by-id/ 2>/dev/null
+ip -brief link | grep -i can
+```
+
+Empty output on both means no instrument is connected. **That is the normal
+state when the boat is at the dock with the panel off** — it is not a fault.
+See `logs/debug/ingestion-au-repos-2026-09-18.md` for what a correctly idle
+chain looks like.
+
+### 2.2 — Signal K holds a vessel
+
+```bash
+curl -s http://localhost:3000/signalk/v1/api/vessels/self | head -c 400
+```
+
+A `404` with `{}` on `/vessels` means Signal K is up but has received nothing.
+Go back to 2.1 before touching anything downstream.
+
+### 2.3 — InfluxDB answers
+
+```bash
+curl -s http://localhost:8086/health
+```
+
+Expected: `"status":"pass"`, `ready for queries and writes`.
+
+### 2.4 — The token is accepted
+
+The token is **never written in this repository**. It lives in `.env`, which
+`.gitignore` excludes. Read it into the environment, never into a document:
+
+```bash
+set -a; . ./.env; set +a
+curl -s -H "Authorization: Token $INFLUXDB_TOKEN" \
+  http://localhost:8086/api/v2/buckets | head -c 300
+```
+
+To rotate it: `scripts/rotate-token.sh`.
+
+### 2.5 — The bucket exists and holds data
+
+There is **one** bucket: `midnight_rider`, organisation `MidnightRider`,
+retention unlimited (measured 2026-09-18). No bucket named `signalk` has ever
+existed on this server.
+
+```bash
+influx query --org MidnightRider --token "$INFLUXDB_TOKEN" '
+from(bucket:"midnight_rider")
+  |> range(start: -30d)
   |> filter(fn: (r) => r._measurement == "navigation.position")
-  |> last()' \
-  --org MidnightRider \
-  --token ${INFLUX_TOKEN}
+  |> last()'
 ```
 
-### STEP 3: Restore All MCP Servers
+An empty result over 30 days means nothing has been written for a month.
+A result whose timestamp is old tells you exactly when ingestion stopped,
+which is usually the most useful single fact in a recovery.
+
+### 2.6 — Signal K is writing to InfluxDB
+
+The `signalk-to-influxdb2` plugin carries this link. Its configuration lives
+in `/home/aneto/.signalk/plugin-config-data/` (outside this repository) and
+must name organisation `MidnightRider` and bucket `midnight_rider`.
+
+---
+
+## 3. RESTORE THE MCP SERVERS
+
+**11 servers, 48 tools**, all under `mcp/servers/`:
+
+| Server | Tools | Server | Tools |
+|---|---|---|---|
+| `astronomical.js` | 4 | `polar.js` | 5 |
+| `buoy.js` | 5 | `race.js` | 7 |
+| `competitor.js` | 5 | `racing.js` | 2 |
+| `crew.js` | 3 | `system.js` | 5 |
+| `electrical.js` | 5 | `weather.js` | 3 |
+| `imu.js` | 4 | | |
+
+`racing.js` exposes exactly two tools — `get_historical_snapshot` and
+`get_snapshot` — two thin doors onto one collection engine. Two is correct;
+if you find more, someone has reintroduced a second query path.
 
 ```bash
-# Clone or pull from GitHub
-cd ${PROJECT_ROOT}/docker/signalk
+cd ~/midnightrider-navigation
 git pull origin main
-
-# Verify all server files exist
-ls -la mcp/
-  ├─ astronomical-server.js ✅
-  ├─ racing-server.js ✅
-  ├─ polar-server.js ✅
-  ├─ crew-server.js ✅
-  ├─ race-server.js ✅
-  ├─ weather-server.js ✅
-  ├─ buoy-server.js ✅
-  ├─ test-servers.sh ✅
-  └─ test-all-mcp.js ✅
-
-# Make executables
-chmod +x mcp/*.js mcp/*.sh
+ls mcp/servers/*.js | wc -l        # expect 11
+bash scripts/sync-plugins.sh       # deploy to the OpenClaw workspace
 ```
 
-### STEP 4: Restore Cron Jobs
+Deployed copies live in `/home/aneto/.openclaw/workspace/mcp/`, which is where
+the client configuration points. The repository holds the source; the workspace
+holds what runs.
 
-```bash
-# Check current cron
-crontab -l
-
-# If missing, reinstall:
-crontab -e
-# Add these lines:
-*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/weather-logger.sh >> /tmp/weather-logger.log 2>&1
-*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/buoy-logger.sh >> /tmp/buoy-logger.log 2>&1
-0 0 * * * ${PROJECT_ROOT}/docker/signalk/scripts/init-astronomical-data.sh >> /tmp/astronomical.log 2>&1
-
-# Save and exit
-```
-
-### STEP 5: Test All Servers
-
-```bash
-# Run test suite
-bash ${PROJECT_ROOT}/docker/signalk/mcp/test-servers.sh
-
-# Expected: ✅ All 7 servers responsive
-
-# Run comprehensive test
-node ${PROJECT_ROOT}/docker/signalk/mcp/test-all-mcp.js
-```
-
-### STEP 6: Restore Claude Integration
-
-```bash
-# Edit Claude config
-nano ~/.config/Claude/claude_desktop_config.json
-
-# Add all 7 servers (see template below)
-
-# Restart Claude/Cursor
-
-# Test in Claude:
-# "What's the current heading?"
-# Should return immediately from MCP
-```
+Client configuration: copy from `mcp/claude_desktop_config.example.json`. It is
+the single source of truth for server names, paths and environment, and it is
+kept correct. Do not retype it from memory.
 
 ---
 
-## CONFIGURATION TEMPLATE: claude_desktop_config.json
+## 4. RESTORE SCHEDULED TASKS
 
-```json
-{
-  "mcpServers": {
-    "astronomical": {
-      "command": "${PROJECT_ROOT}/docker/signalk/mcp/astronomical-server.js",
-      "env": {
-        "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
-        "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
-      }
-    },
-    "racing": {
-      "command": "${PROJECT_ROOT}/docker/signalk/mcp/racing-server.js",
-      "env": {
-        "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
-        "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
-      }
-    },
-    "polar": {
-      "command": "${PROJECT_ROOT}/docker/signalk/mcp/polar-server.js",
-      "env": {
-        "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
-        "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
-      }
-    },
-    "crew": {
-      "command": "${PROJECT_ROOT}/docker/signalk/mcp/crew-server.js",
-      "env": {
-        "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
-        "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
-      }
-    },
-    "race": {
-      "command": "${PROJECT_ROOT}/docker/signalk/mcp/race-server.js",
-      "env": {
-        "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
-        "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
-      }
-    },
-    "weather": {
-      "command": "${PROJECT_ROOT}/docker/signalk/mcp/weather-server.js",
-      "env": {
-        "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
-        "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
-      }
-    },
-    "buoy": {
-      "command": "${PROJECT_ROOT}/docker/signalk/mcp/buoy-server.js",
-      "env": {
-        "INFLUX_URL": "http://localhost:8086",
-        "INFLUX_TOKEN": "${INFLUX_TOKEN}",
-        "INFLUX_ORG": "MidnightRider",
-        "INFLUX_BUCKET": "signalk"
-      }
-    }
-  }
-}
+Four systemd timers, defined under `etc/systemd/system/`:
+
+| Timer | Interval | What it does |
+|---|---|---|
+| `mediaman.timer` | 15 min | MediaMan article pipeline |
+| `mediaman-events.timer` | 15 min | MediaMan event pipeline |
+| `midnight-logs-commit.timer` | 15 min | commit logs to git |
+| `midnight-logsync.timer` | 3 min | push logs to GitHub |
+
+```bash
+sudo cp etc/systemd/system/*.service etc/systemd/system/*.timer /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable --now mediaman.timer mediaman-events.timer \
+                            midnight-logs-commit.timer midnight-logsync.timer
+systemctl list-timers --all | grep -E 'mediaman|midnight'
+systemctl list-units --state=failed
 ```
+
+`systemctl list-units --state=failed` should print nothing. As of 2026-09-18 it
+prints `midnight-logsync.service` and `telegraf.service` — both known, both
+open (defects 70 and 71). Background on the timers:
+`logs/debug/timers-systemd-2026-09-17.md`.
 
 ---
 
-## GITHUB REPOSITORY (Single Source of Truth)
+## 5. RUN THE TESTS
 
-**Location:** https://github.com/Aneto152/midnightrider-navigation
+```bash
+cd ~/midnightrider-navigation
+python3 -m pytest tests/mcp        # expect 80 passed
+python3 -m pytest tests/mediaman   # expect 495 passed
+```
 
-**All code committed:**
-- 7 MCP servers (complete)
-- 2 data loggers (complete)
-- Documentation (complete)
-- Test scripts (complete)
+⚠️ **Do not use the JavaScript harness.** `tests/mcp/js/test-all-mcp.js` and
+`tests/mcp/js/test-servers.sh` are dead: they address seven servers by names
+that do not exist and hard-code the non-existent `signalk` bucket. `npm test`
+in `mcp/` fails for the same reason. Known, open: defects 67 and 80.
 
-**To clone:**
+Python dependencies, if the environment is new:
+
+```bash
+pip3 install -r ble/requirements.txt       # bleak, for the BLE daemons
+pip3 install -r scripts/requirements.txt   # pyserial, for enable_gnhpr.py
+```
+
+There is no `requirements.txt` at the repository root, by design.
+
+---
+
+## 6. DISASTER RECOVERY SCENARIOS
+
+### Scenario 1 — MCP servers deleted or corrupted
+
+```bash
+cd ~/midnightrider-navigation && git pull origin main
+ls mcp/servers/*.js | wc -l    # 11
+bash scripts/sync-plugins.sh
+python3 -m pytest tests/mcp
+```
+
+Recovery time: under 5 minutes. Nothing is lost; the repository is the source.
+
+### Scenario 2 — No data in InfluxDB
+
+Establish **whether the boat sailed** before treating this as a fault. An idle
+chain and a broken chain look identical from a query. Work § 2 downward.
+
+If the boat did sail and the data is missing, the external collectors can be
+replayed by hand — they fetch from public APIs and do not depend on the boat:
+
+```bash
+bash scripts/weather-logger.sh       # Open-Meteo
+python3 scripts/noaa_collector.py    # NOAA buoys, Long Island Sound
+```
+
+Instrument data cannot be replayed. It is only in InfluxDB, and in the Google
+Drive backups produced by `scripts/influxdb-gdrive-backup.sh`.
+
+### Scenario 3 — Scheduled tasks lost
+
+Re-apply § 4. Recovery time: under 2 minutes.
+
+### Scenario 4 — MCP client configuration lost
+
+Copy `mcp/claude_desktop_config.example.json` to the client's configuration
+path and restart the client. Recovery time: under 1 minute.
+
+### Scenario 5 — Complete loss, new Raspberry Pi
+
 ```bash
 git clone https://github.com/Aneto152/midnightrider-navigation.git
 cd midnightrider-navigation
-git log --oneline | head -20  # See all commits
+bash scripts/install-midnight-rider.sh
 ```
 
-**Last commits (in order):**
-- e23ff8f: MCP Overview (conceptual guide, French)
-- 6d1e2b6: MCP Test Results + checklist
-- 2496e22: Test suite (test-servers.sh, test-all-mcp.js)
-- 7c1d72f: MCP Ecosystem Complete Recap
-- ea8f68d: Buoy integration (NOAA observations)
-- b117bce: Weather integration (Open-Meteo)
-- ... and earlier MCP server commits
+Then, in order: § 1 (start), § 4 (timers), § 3 (MCP), § 5 (tests), § 2 (verify).
+
+Two things are **not** in the repository and must be restored by hand:
+`.env` (InfluxDB token — generate a new one, do not attempt to recover the old)
+and `/home/aneto/.signalk/` (Signal K's own configuration and plugin settings).
+
+Dashboards are redeployed with `scripts/deploy-dashboards-to-grafana.sh`.
 
 ---
 
-## FILE STRUCTURE (Complete Map)
+## 7. POST-RECOVERY CHECKLIST
 
-```
-${PROJECT_ROOT}/docker/signalk/
-├── docker-compose.yml              ← Start all containers
-├── mcp/                            ← 7 MCP Servers + tests
-│   ├── astronomical-server.js      (4 tools)
-│   ├── racing-server.js            (17 tools)
-│   ├── polar-server.js             (5 tools)
-│   ├── crew-server.js              (3 tools)
-│   ├── race-server.js              (4 tools)
-│   ├── weather-server.js           (3 tools)
-│   ├── buoy-server.js              (2 tools)
-│   ├── test-servers.sh             ← Quick test
-│   ├── test-all-mcp.js             ← Comprehensive test
-│   ├── *-package.json              ← Dependencies per server
-│   └── claude_desktop_config.example.json
-├── scripts/
-│   ├── weather-logger.sh           ← Cron: every 5 min
-│   ├── buoy-logger.sh              ← Cron: every 5 min
-│   ├── init-astronomical-data.sh   ← Cron: daily midnight
-│   └── astronomical-data.sh        ← Main script
-├── docs/memory/
-│   ├── ALERTES.md
-│   ├── ARCHITECTURE.md
-│   ├── GPS-HEADING.md
-│   ├── LOCH-CALIBRATION.md
-│   ├── PGN130824.md
-│   ├── STATUS.md
-│   ├── SYSTEM.md
-│   ├── TODO.md
-│   └── UM982-ATTITUDE.md
-├── MCP-ECOSYSTEM-RECAP.md          ← Technical reference
-├── MCP-TEST-RESULTS.md             ← Test report
-├── MCP-OVERVIEW.md                 ← Conceptual guide (FR)
-├── MIDNIGHTRIDER-ARTICLE.md        ← Journalistic article
-├── RECOVERY-GUIDE.md               ← THIS FILE
-├── INFLUXDB-CONFIG.md
-├── INFLUXDB-WORKFLOW.md
-├── DOCKER-README.md
-└── .git/                           ← All commits saved
-```
+- [ ] `systemctl status signalk` → `active (running)`
+- [ ] `docker ps` → exactly `influxdb`, `grafana`, `regatta`, `start-line-worker`
+- [ ] No container named `signalk` — if one exists, remove it
+- [ ] `curl localhost:8086/health` → `pass`
+- [ ] Bucket `midnight_rider` present, organisation `MidnightRider`
+- [ ] `ls mcp/servers/*.js | wc -l` → `11`
+- [ ] `python3 -m pytest tests/mcp` → 80 passed
+- [ ] `python3 -m pytest tests/mediaman` → 495 passed
+- [ ] `systemctl list-units --state=failed` → empty
+- [ ] `systemctl list-timers` → the four timers scheduled
+- [ ] With the boat powered: a fresh point in `navigation.position` within 5 minutes
+- [ ] `git status` → clean
 
 ---
 
-## MEMORY BACKUPS (In OpenClaw Workspace)
+## 8. WHAT THIS GUIDE DOES NOT COVER
 
-**Primary Memory:**
-- `${PROJECT_ROOT}/.openclaw/workspace/MEMORY.md`
-- `${PROJECT_ROOT}/.openclaw/workspace/memory/2026-04-19-mcp-complete.md`
-
-**Contains:**
-- Complete summary of what was built
-- 37 tools listed with descriptions
-- Architecture diagram
-- Next steps
-- Test results
-
----
-
-## DISASTER RECOVERY SCENARIOS
-
-### Scenario 1: MCP Servers Deleted
-
-```bash
-# Recovery time: < 5 minutes
-cd ${PROJECT_ROOT}/docker/signalk
-git pull origin main
-# All servers restored
-bash mcp/test-servers.sh  # Verify
-```
-
-### Scenario 2: InfluxDB Data Lost
-
-```bash
-# Recovery depends on what lost:
-# - If cloud token still valid: Query cloud
-# - If local only: Cron jobs will repopulate (5 min + hourly)
-# - Full history: Stored in GitHub (see commits)
-
-# To manually restore astronomical data:
-bash scripts/init-astronomical-data.sh
-
-# To manually restore weather:
-bash scripts/weather-logger.sh
-
-# To manually restore buoys:
-bash scripts/buoy-logger.sh
-```
-
-### Scenario 3: Cron Jobs Lost
-
-```bash
-# Recovery time: < 2 minutes
-crontab -e
-# Add back the 3 lines from STEP 4 above
-```
-
-### Scenario 4: Claude Config Lost
-
-```bash
-# Recovery time: < 1 minute
-# Copy from template:
-cat > ~/.config/Claude/claude_desktop_config.json << 'EOF'
-[paste template from CONFIGURATION TEMPLATE section above]
-EOF
-
-# Restart Claude/Cursor
-```
-
-### Scenario 5: Complete System Loss (Hardware Failure)
-
-```bash
-# Recovery time: 30-45 minutes (full rebuild)
-
-# 1. New hardware setup
-docker-compose up -d
-
-# 2. Clone code
-git clone https://github.com/Aneto152/midnightrider-navigation.git
-
-# 3. Restore cron jobs (STEP 4)
-
-# 4. Configure Claude (STEP 6)
-
-# 5. Test (STEP 5)
-
-# All data, code, logic restored
-```
+- **Instrument-level faults.** A sensor that reports nothing is a hardware
+  question: see the datasheet in `docs/HARDWARE/` for that instrument.
+- **The N2K bus.** See `docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md`.
+- **Secrets.** No token, password or key appears anywhere in this repository,
+  and none should ever be added to it. `scripts/check-staged-secrets.py` runs
+  before every commit to enforce that.
+- **Guarantees.** This guide has been checked against the repository on
+  2026-09-18: every path it cites exists, and a test in
+  `tests/mcp/test_h9b_coherence_doc_code.py` fails if that stops being true.
+  It has **not** been rehearsed end to end on real hardware. Restoring a Pi
+  from nothing by following § 6 Scenario 5 is still an untested procedure,
+  and the honest thing is to say so rather than to promise 45 minutes.
 
 ---
 
-## CRITICAL INFORMATION (Memorize This)
-
-**GitHub URL:**
-```
-https://github.com/Aneto152/midnightrider-navigation
-```
-
-**InfluxDB Token (Local):**
-```
-${INFLUX_TOKEN}
-```
-
-**Key Paths:**
-- Code: `${PROJECT_ROOT}/docker/signalk/`
-- Memory: `${PROJECT_ROOT}/.openclaw/workspace/`
-- Config: `~/.config/Claude/claude_desktop_config.json`
-
-**Cron Jobs (3):**
-1. Weather: `*/5 * * * *`
-2. Buoys: `*/5 * * * *`
-3. Astronomical: `0 0 * * *`
-
-**Ports:**
-- Signal K: 3000
-- InfluxDB: 8086
-- Grafana: 3001 (optional)
-
----
-
-## VALIDATION CHECKLIST (After Recovery)
-
-- [ ] Docker containers running (signalk, influxdb)
-- [ ] UM982 data flowing to Signal K
-- [ ] Signal K data flowing to InfluxDB
-- [ ] All 7 MCP servers respond to `initialize` request
-- [ ] All 37 tools callable with correct signatures
-- [ ] Cron jobs installed and logging
-- [ ] Claude config updated with all 7 servers
-- [ ] Test in Claude: "What's our heading?" → Returns value
-- [ ] Test in Claude: "Why are we slow?" → Returns efficiency analysis
-- [ ] Documentation accessible from GitHub
-
----
-
-## SUMMARY: Building Trust in the System
-
-This RECOVERY-GUIDE ensures:
-
-✅ **Nothing is Lost** — All code on GitHub, all memory backed up  
-✅ **Everything is Documented** — Each component explained  
-✅ **Fast Recovery** — Even total loss recoverable in < 45 min  
-✅ **Self-Healing** — Cron jobs repopulate data automatically  
-✅ **Knowledge Transfer** — Anyone can understand and rebuild  
-
-The system is NOT fragile. It's designed to survive.
-
----
-
-**Last Updated:** 2026-04-19 23:08 EDT  
-**Version:** 1.0 (Complete & Tested)  
-**Author:** AI Assistant for Denis Lafarge (MidnightRider J/30)
-
----
-
-🔄 **This document is the system's insurance policy.**
-
-If I crash, this guide brings me back. 🚀
+**Audited and rewritten:** 2026-09-18, chantier H12
+**Supersedes:** version 1.1 of 2026-04-27, which cited 53 paths of which 2 existed

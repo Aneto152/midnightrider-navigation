@@ -308,3 +308,180 @@ class TestOutilsDeclares:
         for nom in ("racing.get_historical_snapshot", "racing.get_snapshot"):
             assert nom in texte, "%s absent de l'architecture maitresse" % nom
 
+
+
+# ---------------------------------------------------------------------------
+# H12 - un document de procedure doit pouvoir etre suivi
+#
+# La version 1.1 de docs/ops/RECOVERY-GUIDE-SAFE.md citait 53 chemins dont 2
+# existaient, et son STEP 1 prescrivait de demarrer Signal K avec
+# docker-compose - l action que l architecture interdit en capitales. Un
+# document de secours faux est pire qu absent : on le suit quand on n a plus
+# le temps de verifier.
+#
+# La liste sous garde est courte a dessein. Le recensement du 2026-09-18 a
+# trouve 189 chemins morts dans la documentation canonique, dont 119 dans le
+# seul docs/INDEX.md. Tout mettre sous garde d un coup obligerait a tout
+# corriger dans le meme passage. Les documents entrent ici a mesure qu ils
+# sont assainis.
+# ---------------------------------------------------------------------------
+
+DOCUMENTS_SOUS_GARDE = (
+    "docs/ops/RECOVERY-GUIDE-SAFE.md",
+    "docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md",
+)
+
+EXTENSIONS_DE_FICHIER = (
+    "js", "py", "sh", "md", "json", "yml", "yaml", "conf", "service", "timer",
+)
+
+MOTIF_CHEMIN = re.compile(
+    r"[A-Za-z0-9_${}./~-]*[A-Za-z0-9_-]+\.(?:%s)\b" % "|".join(EXTENSIONS_DE_FICHIER)
+)
+
+# Ce qui ressemble a un chemin sans en etre un.
+NON_CHEMINS = {
+    "navigation.position",   # nom de measurement InfluxDB
+    "telegraf.service",      # unite systeme absente du depot - defaut 71
+    "Node.js",
+}
+
+VERBE_DOCKER = re.compile(
+    r"\bdocker[- ](?:compose\s+)?(?:up|run|start|ps|create|restart)\b"
+)
+
+
+def _index_des_noms():
+    """Tous les noms de fichiers du depot, pour resoudre un nom nu."""
+    noms = set()
+    for base, dossiers, fichiers in os.walk(RACINE):
+        dossiers[:] = [d for d in dossiers
+                       if d not in (".git", "node_modules", "__pycache__")]
+        noms.update(fichiers)
+    return noms
+
+
+def chemins_morts(document, noms=None):
+    """Chemins cites par un document et introuvables dans le depot.
+
+    Lit TOUTES les lignes, pas seulement les accents inverses : les chemins
+    faux de la version 1.1 vivaient dans des blocs de code et des
+    arborescences ASCII, invisibles d un balayage des accents inverses.
+    """
+    if noms is None:
+        noms = _index_des_noms()
+    morts = []
+    with open(os.path.join(RACINE, document), encoding="utf-8") as f:
+        for numero, ligne in enumerate(f, 1):
+            if ligne.lstrip().startswith(">"):
+                continue  # bloc de rectification : on y cite ce qui n existe plus
+            for brut in MOTIF_CHEMIN.findall(ligne):
+                if brut in NON_CHEMINS:
+                    continue
+                c = brut.replace("${PROJECT_ROOT}/", "").replace("$PROJECT_ROOT/", "")
+                if c.startswith(("~", "/", "$")):
+                    continue  # hors depot, non verifiable ici
+                c = c.lstrip("./")
+                if os.path.exists(os.path.join(RACINE, c)):
+                    continue
+                if "/" not in c and c in noms:
+                    continue  # nom nu, resolu ailleurs dans le depot
+                morts.append((numero, brut))
+    return morts
+
+
+def lignes_de_commande(document):
+    """Les lignes situees a l interieur des blocs de code d un document."""
+    dedans = False
+    with open(os.path.join(RACINE, document), encoding="utf-8") as f:
+        for numero, ligne in enumerate(f, 1):
+            if ligne.lstrip().startswith("```"):
+                dedans = not dedans
+                continue
+            if dedans:
+                yield numero, ligne.rstrip("\n")
+
+
+def commandes_docker_sur_signalk(document):
+    """Commandes qui feraient tourner Signal K sous Docker, ou l y chercheraient."""
+    fautes = []
+    for numero, ligne in lignes_de_commande(document):
+        if VERBE_DOCKER.search(ligne) and re.search(r"\bsignalk\b", ligne):
+            fautes.append((numero, ligne.strip()))
+        elif re.search(r"docker/signalk", ligne):
+            fautes.append((numero, ligne.strip()))
+    return fautes
+
+
+class TestUnDocumentDeProcedurePeutEtreSuivi:
+    """Ce qu un document de secours promet doit exister."""
+
+    def test_les_documents_sous_garde_ne_citent_aucun_chemin_mort(self):
+        noms = _index_des_noms()
+        fautes = []
+        for document in DOCUMENTS_SOUS_GARDE:
+            for numero, brut in chemins_morts(document, noms):
+                fautes.append("%s:%d -> %s" % (document, numero, brut))
+        assert fautes == [], (
+            "%d chemin(s) cite(s) et introuvable(s) : %s"
+            % (len(fautes), fautes[:12])
+        )
+
+    def test_aucune_commande_ne_cherche_signal_k_dans_docker(self):
+        """Signal K tourne sous systemctl. Jamais sous Docker.
+
+        Le conteneur orphelin `signalk`, Exited (137) depuis quatre mois, est
+        selon toute vraisemblance ne du STEP 1 de la version 1.1, qui donnait
+        le docker-compose up pour le creer.
+        """
+        fautes = []
+        for document in DOCUMENTS_SOUS_GARDE:
+            for numero, ligne in commandes_docker_sur_signalk(document):
+                fautes.append("%s:%d -> %s" % (document, numero, ligne[:70]))
+        assert fautes == [], (
+            "commande(s) qui traitent Signal K comme un conteneur : %s" % fautes
+        )
+
+    def test_le_guide_de_secours_prescrit_systemctl(self):
+        chemin = os.path.join(RACINE, "docs", "ops", "RECOVERY-GUIDE-SAFE.md")
+        with open(chemin, encoding="utf-8") as f:
+            texte = f.read()
+        assert "systemctl start signalk" in texte, (
+            "le guide de secours ne dit pas comment demarrer Signal K"
+        )
+
+
+class TestLeDetecteurDeCheminsVoitCeQuIlDoitVoir:
+    """Le detecteur est teste sur les formes qui l ont pris en defaut.
+
+    Un premier detecteur ne lisait que les accents inverses. Passe sur la
+    version 1.1 du guide, il trouvait zero chemin mort - alors qu il y en
+    avait 62. Ses angles morts etaient les blocs de code et les
+    arborescences ASCII, c est-a-dire l endroit ou vivent les commandes.
+    """
+
+    ECHANTILLONS = (
+        "${PROJECT_ROOT}/docker/signalk/mcp/racing-server.js",
+        "bash ${PROJECT_ROOT}/docker/signalk/mcp/test-servers.sh",
+        "  |-- astronomical-server.js      (4 tools)",
+        "*/5 * * * * ${PROJECT_ROOT}/docker/signalk/scripts/buoy-logger.sh",
+        '    "command": "${PROJECT_ROOT}/docker/signalk/mcp/polar-server.js",',
+    )
+
+    def test_le_motif_voit_les_chemins_hors_accents_inverses(self):
+        for ligne in self.ECHANTILLONS:
+            assert MOTIF_CHEMIN.findall(ligne), (
+                "le motif de chemin ne voit rien dans %r" % ligne
+            )
+
+    ECHANTILLONS_DOCKER = (
+        'docker ps | grep -E "influxdb|signalk|grafana"',
+        "cd ${PROJECT_ROOT}/docker/signalk",
+        "docker-compose up -d   # signalk",
+    )
+
+    def test_le_controle_docker_voit_les_formes_de_la_version_1_1(self):
+        for ligne in self.ECHANTILLONS_DOCKER:
+            vu = (VERBE_DOCKER.search(ligne) and re.search(r"\bsignalk\b", ligne)) \
+                 or re.search(r"docker/signalk", ligne)
+            assert vu, "le controle ne voit pas %r" % ligne
