@@ -46,7 +46,9 @@
     "h8d_journal:e64f3ca5b51a83ed74772346c86fcbc02a003dc6",
     "h9_content:019c4ef6c13938885d54fb8bafd4e2484c2b6f73",
     "h9_journal:f59411b5a12c6bb3cfe5d9f979060d95a2b69d5c",
-    "h9b_content:42b63390402c73e0b63f84921584da934681f412"
+    "h9b_content:42b63390402c73e0b63f84921584da934681f412",
+    "h9b_journal:d5bba0054b9e49aa64d28c9b3674a3ccf64f0f75",
+    "h11_content:0d4b94a509be2b3fd06fca4f0134b82934060665"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -76,7 +78,8 @@
     "58 mcp/servers/racing.js interrogeait InfluxDB sans filtre de contexte : les 4 faits publies etaient ceux de la derniere cible AIS ayant ecrit dans la fenetre - corrige en H8a, 6 tests de non-regression",
     "64 RETRACTE le 2026-09-18 avant toute ecriture : j avais accuse la documentation de mentir sur les deux Vulcan alors que N2K.0 est le recepteur AIS et n ecrit jamais notre contexte - erreur de meme nature que le defaut 58, commise dans l outil de diagnostic",
     "63 CLOSED on 2026-09-18, chantier H8d: the course over ground was published in radians under the key course_over_ground_degrees. racing.js now converts it once in cogRadiansToDegrees(), validates the incoming value in [0, 2*PI] instead of [0, 360], and every snapshot declares its units; mcp_collector refuses a units block that disagrees. Measured proof over 365 days: [0.000000, 6.281400] rad, 0 row(s) above 2*PI out of 4078141. Content commit 36d2641c5cb2ef3b3963d45a57326f85fc295013.",
-    "65 mediaman/mcp_collector.py calls racing.get_position, racing.get_sog and racing.get_cog, three tools that racing.js does not declare - it exposes get_historical_snapshot only. The realtime path of the collector is therefore dead and only mocks cover it. To arbitrate: implement the three tools, or remove the path. - ferme par H9 le 2026-09-18"
+    "65 mediaman/mcp_collector.py calls racing.get_position, racing.get_sog and racing.get_cog, three tools that racing.js does not declare - it exposes get_historical_snapshot only. The realtime path of the collector is therefore dead and only mocks cover it. To arbitrate: implement the three tools, or remove the path. - ferme par H9 le 2026-09-18",
+    "74 six commandes de la documentation visaient un bucket signalk inexistant, sur trois fichiers, plus une organisation fausse dans README.md - corrige par H11 le 2026-09-18, barriere posee"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -90,7 +93,12 @@
     "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md",
     "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md",
     "67 - tests/mcp/js/test-all-mcp.js teste sept serveurs par des noms de fichiers inexistants et une configuration InfluxDB fausse ; harnais mort, constate le 2026-09-18",
-    "68 - validate_capabilities() ne controle au demarrage que get_historical_snapshot ; la porte du direct, get_snapshot, n est pas validee. Constate le 2026-09-18 par la relecture de H9."
+    "68 - validate_capabilities() ne controle au demarrage que get_historical_snapshot ; la porte du direct, get_snapshot, n est pas validee. Constate le 2026-09-18 par la relecture de H9.",
+    "69 - conteneur Docker nomme signalk, Exited (137) depuis 4 mois. La regle du bord est systemctl uniquement pour Signal K ; ce conteneur est un piege dormant. Constate le 2026-09-18.",
+    "70 - midnight-logsync.service en echec : les journaux de service ne sont plus pousses sur GitHub. Constate le 2026-09-18.",
+    "71 - telegraf.service en echec, unite absente du depot. Constate le 2026-09-18.",
+    "72 - quatre plugins de calcul tournent sans donnee d entree et ont ecrit 11,8 Mo de journaux (j30-leeway 3,8 Mo, truewind 3,1 Mo, heading-true 2,6 Mo, current 2,2 Mo) pour un standard de 5 Mo. Constate le 2026-09-18.",
+    "73 - InfluxDB 2.8.0 panique cote lecture sur l operateur last : 'Dispatcher panic: arrow/array: index out of range', des dizaines d occurrences le 2026-09-17 a 03:27. C est l operateur central du chemin MCP. Constate le 2026-09-18."
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -239,7 +247,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-18T21:38:44",
+  "last_updated": "2026-09-18T22:07:39",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -863,9 +871,42 @@
       "foreign_work_untouched": true,
       "no_service_restarted": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H11 - la chaine est au repos, pas cassee",
+      "version": "h11-v1",
+      "started_utc": "20260918T220632Z",
+      "finished_utc": "2026-09-18T22:07:39",
+      "content_commit": "0d4b94a509be2b3fd06fca4f0134b82934060665",
+      "parent": "d5bba0054b9e49aa64d28c9b3674a3ccf64f0f75",
+      "status": "SUCCESS",
+      "question_resolue": "l arret d ingestion du 2026-09-07 n est pas une panne : bateau a quai, instruments eteints, confirme par Denis",
+      "ingestion_state": "idle_by_design",
+      "last_data_point_utc": "2026-09-07T13:42:57Z",
+      "defects_opened": [
+        69,
+        70,
+        71,
+        72,
+        73
+      ],
+      "defects_closed": [
+        74
+      ],
+      "guard_extended": "noms de bucket et d organisation cites dans la documentation",
+      "guard_proven": "executee avant correction : 3 des 9 tests echouent",
+      "manual_count_vs_guard": "comptage manuel 2 occurrences, barriere 6 plus une organisation",
+      "tests": {
+        "barriere": "============================== 9 passed in 0.20s ===============================",
+        "suite-mcp": "============================= 77 passed in 39.55s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 21.75s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H9b - coherence documentation / code",
+  "last_task": "H11 - ingestion au repos, documentation des buckets corrigee",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-18T21:38:44"
+  "last_update": "2026-09-18T22:07:39"
 }

@@ -366,3 +366,10 @@
 [2026-09-18T21:38:44] [DEBUG] [mediaman] H9b : defaut 68 ouvert, validate_capabilities ne valide que la porte historique
 [2026-09-18T21:38:44] [RESULT] [docs] H9b : SUCCESS - 6 renvois morts corriges, 1 barriere installee et prouvee, defaut 67 toujours ouvert
 [2026-09-18T21:38:44] [COMMIT] SHA: 42b63390402c73e0b63f84921584da934681f412
+[2026-09-18T22:07:39] [DEBUG] [ingestion] H11 : arret du 2026-09-07 elucide - bateau a quai, instruments eteints, aucune panne
+[2026-09-18T22:07:39] [FILE_MODIFY] [docs] H11 : six commandes visaient le bucket inexistant signalk sur trois fichiers, corrigees
+[2026-09-18T22:07:39] [FILE_MODIFY] [docs] H11 : README annoncait une organisation et un bucket faux, corriges
+[2026-09-18T22:07:39] [FILE_DELETE] [plugins] H11 : suppression de signalk-truewind-calculator.js.bak.v103
+[2026-09-18T22:07:39] [DEBUG] [systeme] H11 : defauts 69 a 73 ouverts - conteneur zombie, deux unites en echec, quatre plugins bavards, panique InfluxDB sur last
+[2026-09-18T22:07:39] [RESULT] [docs] H11 : SUCCESS - defaut 74 ferme, barriere elargie aux valeurs de configuration
+[2026-09-18T22:07:39] [COMMIT] SHA: 0d4b94a509be2b3fd06fca4f0134b82934060665
