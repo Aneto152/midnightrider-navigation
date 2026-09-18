@@ -359,3 +359,10 @@
 [2026-09-18T20:02:45Z] [FILE_CREATE] [mediaman] H9 : deux suites neuves, chemin unique et collect_current
 [2026-09-18T20:02:45Z] [RESULT] [mediaman] H9 : SUCCESS
 [2026-09-18T20:02:45Z] [COMMIT] SHA: 019c4ef6c13938885d54fb8bafd4e2484c2b6f73
+[2026-09-18T21:38:44] [FILE_MODIFY] [docs] H9b : section 4.7 reecrite, trois outils inexistants ne sont plus certifies Verified (cause du defaut 65)
+[2026-09-18T21:38:44] [FILE_MODIFY] [docs] H9b : six renvois morts corriges, dont le document qui se nommait lui-meme par un fichier supprime
+[2026-09-18T21:38:44] [FILE_MODIFY] [mediaman] H9b : deux commentaires corriges, un outil mort cite en exemple et un chiffre jamais mesure
+[2026-09-18T21:38:44] [FILE_CREATE] [tests] H9b : suite de garde sur les chemins cites et les outils declares, 6 tests
+[2026-09-18T21:38:44] [DEBUG] [mediaman] H9b : defaut 68 ouvert, validate_capabilities ne valide que la porte historique
+[2026-09-18T21:38:44] [RESULT] [docs] H9b : SUCCESS - 6 renvois morts corriges, 1 barriere installee et prouvee, defaut 67 toujours ouvert
+[2026-09-18T21:38:44] [COMMIT] SHA: 42b63390402c73e0b63f84921584da934681f412

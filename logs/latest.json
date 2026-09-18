@@ -44,7 +44,9 @@
     "h8c_journal:2a02632084c7e37d34d3305ad87969a02ea6c25e",
     "h8d_content:36d2641c5cb2ef3b3963d45a57326f85fc295013",
     "h8d_journal:e64f3ca5b51a83ed74772346c86fcbc02a003dc6",
-    "h9_content:019c4ef6c13938885d54fb8bafd4e2484c2b6f73"
+    "h9_content:019c4ef6c13938885d54fb8bafd4e2484c2b6f73",
+    "h9_journal:f59411b5a12c6bb3cfe5d9f979060d95a2b69d5c",
+    "h9b_content:42b63390402c73e0b63f84921584da934681f412"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b",
@@ -87,7 +89,8 @@
     "44 mediaman/mediaman.py (167 lignes) est le seul fichier que mediaman.service execute et n a aucun test ; il n utilise que la fondation d aout avec MEDIAMAN_CONTENT_PROVIDER=test, donc il produirait un article factice. La vraie chaine (historical_entrypoint.py) n est referencee par aucune unite systemd. A trancher en 4E.2.",
     "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md",
     "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md",
-    "67 - tests/mcp/js/test-all-mcp.js teste sept serveurs par des noms de fichiers inexistants et une configuration InfluxDB fausse ; harnais mort, constate le 2026-09-18"
+    "67 - tests/mcp/js/test-all-mcp.js teste sept serveurs par des noms de fichiers inexistants et une configuration InfluxDB fausse ; harnais mort, constate le 2026-09-18",
+    "68 - validate_capabilities() ne controle au demarrage que get_historical_snapshot ; la porte du direct, get_snapshot, n est pas validee. Constate le 2026-09-18 par la relecture de H9."
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -236,7 +239,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-18T20:02:45Z",
+  "last_updated": "2026-09-18T21:38:44",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -833,9 +836,36 @@
       "not_proven": "aucune donnee ingeree depuis 2026-09-07T14:36:24Z : collect_current ne peut pas etre verifie de bout en bout sur le Pi tant que le bateau ne navigue pas. La preuve repose sur le banc d essai reference_time, qui execute le code du direct sur des donnees reellement enregistrees.",
       "no_service_restarted": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H9b - la documentation canonique doit pointer vers ce qui existe",
+      "version": "h9b-v1",
+      "started_utc": "20260918T213737Z",
+      "finished_utc": "2026-09-18T21:38:44",
+      "content_commit": "42b63390402c73e0b63f84921584da934681f412",
+      "parent": "f59411b5a12c6bb3cfe5d9f979060d95a2b69d5c",
+      "status": "SUCCESS",
+      "root_cause_addressed": "la section 4.7 certifiait Verified trois outils que le serveur n a jamais declares ; le defaut 65 a probablement survecu la",
+      "dead_pointers_fixed": 6,
+      "guard_added": "tests/mcp/test_h9b_coherence_doc_code.py",
+      "guard_proven": "executee sur le depot avant correction : 3 des 6 tests echouent",
+      "tests": {
+        "h9b-garde": "============================== 6 passed in 0.09s ===============================",
+        "suite-mcp": "============================= 74 passed in 39.44s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 21.65s ======================="
+      },
+      "not_done": [
+        "defaut 67 - harnais test-all-mcp.js mort, trois renvois faux",
+        "defaut 68 - validation de capacites asymetrique",
+        "les 41 lignes horodatees avec Z ne sont pas reecrites, un journal append-only ne se recrit pas"
+      ],
+      "foreign_work_present": true,
+      "foreign_work_untouched": true,
+      "no_service_restarted": true,
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H9 - un seul chemin de collecte (defaut 65)",
+  "last_task": "H9b - coherence documentation / code",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-18T20:02:45Z"
+  "last_update": "2026-09-18T21:38:44"
 }
