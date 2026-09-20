@@ -7,7 +7,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node tests/test-all-mcp.js"
+    "test": "cd .. && python3 -m pytest tests/mcp tests/mediaman"
   },
   "dependencies": {},
   "servers": {

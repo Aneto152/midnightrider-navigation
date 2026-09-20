@@ -485,3 +485,72 @@ class TestLeDetecteurDeCheminsVoitCeQuIlDoitVoir:
             vu = (VERBE_DOCKER.search(ligne) and re.search(r"\bsignalk\b", ligne)) \
                  or re.search(r"docker/signalk", ligne)
             assert vu, "le controle ne voit pas %r" % ligne
+
+
+# ---------------------------------------------------------------------------
+# H12b - un compte annonce est une promesse verifiable
+#
+# H12 a ecrit "expect 80 passed" dans le guide de secours et a ajoute cinq
+# tests dans le meme commit. Le guide etait faux a la seconde ou il etait
+# pousse. Rien ne l a vu : la barriere verifiait les chemins, pas les nombres.
+#
+# Seul tests/mcp passe sous garde. Le comptage statique des "def test_" y
+# donne exactement ce que pytest compte. Il n en va pas de meme pour
+# tests/mediaman, ou pytest compte 495 la ou les "def test_" sont 492 : y
+# poser la meme barriere reviendrait a mesurer autre chose que ce qu elle
+# pretendrait mesurer. C est l erreur que ce depot repete depuis deux jours ;
+# on ne la reproduit pas pour faire un chiffre de plus.
+# ---------------------------------------------------------------------------
+
+GUIDE_DE_SECOURS = os.path.join("docs", "ops", "RECOVERY-GUIDE-SAFE.md")
+
+
+def _compter_tests(dossier):
+    """Nombre de fonctions de test declarees sous un dossier."""
+    total = 0
+    for base, dossiers, fichiers in os.walk(os.path.join(RACINE, dossier)):
+        dossiers[:] = [d for d in dossiers if d != "__pycache__"]
+        for nom in fichiers:
+            if nom.startswith("test_") and nom.endswith(".py"):
+                with open(os.path.join(base, nom), encoding="utf-8") as f:
+                    total += sum(1 for l in f if l.lstrip().startswith("def test_"))
+    return total
+
+
+class TestUnCompteAnnonceEstVerifiable:
+    """Ce qu un document promet en chiffres doit se mesurer."""
+
+    def test_le_guide_annonce_le_bon_nombre_de_tests_mcp(self):
+        reel = _compter_tests("tests/mcp")
+        with open(os.path.join(RACINE, GUIDE_DE_SECOURS), encoding="utf-8") as f:
+            texte = f.read()
+        annonces = set(int(x) for x in re.findall(
+            r"pytest tests/mcp[^\n\d]{0,24}?(\d+) passed", texte))
+        assert annonces, "le guide n annonce plus aucun compte pour tests/mcp"
+        assert annonces == {reel}, (
+            "le guide annonce %s pour tests/mcp, le depot en declare %d"
+            % (sorted(annonces), reel))
+
+    def test_npm_test_lance_une_suite_qui_existe(self):
+        """mcp/package.json a designe pendant des mois un fichier absent."""
+        import json as _json
+        with open(os.path.join(RACINE, "mcp", "package.json"), encoding="utf-8") as f:
+            paquet = _json.load(f)
+        commande = paquet.get("scripts", {}).get("test", "")
+        assert commande, "mcp/package.json ne declare aucune commande de test"
+        cibles = re.findall(r"tests/[A-Za-z0-9_./-]+", commande)
+        assert cibles, "la commande de test ne designe aucune suite : %r" % commande
+        for cible in cibles:
+            assert os.path.exists(os.path.join(RACINE, cible)), (
+                "npm test designe %s, qui n existe pas" % cible)
+
+    def test_le_harnais_javascript_mort_n_est_plus_la(self):
+        """Sept serveurs inexistants, un bucket inexistant, zero appelant.
+
+        Supprime le 2026-09-18 plutot que repare : rien ne dependait d un
+        resultat vert de sa part.
+        """
+        for mort in ("tests/mcp/js/test-all-mcp.js",
+                     "tests/mcp/js/test-servers.sh"):
+            assert not os.path.exists(os.path.join(RACINE, mort)), (
+                "%s est revenu" % mort)

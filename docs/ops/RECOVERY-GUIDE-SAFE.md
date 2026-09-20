@@ -242,14 +242,17 @@ open (defects 70 and 71). Background on the timers:
 
 ```bash
 cd ~/midnightrider-navigation
-python3 -m pytest tests/mcp        # expect 80 passed
+python3 -m pytest tests/mcp        # expect 88 passed
 python3 -m pytest tests/mediaman   # expect 495 passed
 ```
 
-⚠️ **Do not use the JavaScript harness.** `tests/mcp/js/test-all-mcp.js` and
-`tests/mcp/js/test-servers.sh` are dead: they address seven servers by names
-that do not exist and hard-code the non-existent `signalk` bucket. `npm test`
-in `mcp/` fails for the same reason. Known, open: defects 67 and 80.
+`npm test` in `mcp/` runs those same two suites; there is nothing else to
+run. A separate JavaScript harness lived in `tests/mcp/js/` until 2026-09-18.
+It addressed seven servers by filenames that never existed and hard-coded a
+bucket that never existed, and `mcp/package.json` pointed at it through a
+path that was also wrong, so `npm test` had been failing on contact for
+months. It was deleted rather than repaired: nothing anywhere depended on a
+passing result from it.
 
 Python dependencies, if the environment is new:
 
@@ -326,7 +329,7 @@ Dashboards are redeployed with `scripts/deploy-dashboards-to-grafana.sh`.
 - [ ] `curl localhost:8086/health` → `pass`
 - [ ] Bucket `midnight_rider` present, organisation `MidnightRider`
 - [ ] `ls mcp/servers/*.js | wc -l` → `11`
-- [ ] `python3 -m pytest tests/mcp` → 80 passed
+- [ ] `python3 -m pytest tests/mcp` → 88 passed
 - [ ] `python3 -m pytest tests/mediaman` → 495 passed
 - [ ] `systemctl list-units --state=failed` → empty
 - [ ] `systemctl list-timers` → the four timers scheduled

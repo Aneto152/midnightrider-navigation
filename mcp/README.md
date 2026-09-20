@@ -33,8 +33,8 @@ Environment variables (all servers):
 ## Tests
 
 ```bash
-python3 -m pytest tests/test_mcp.py -v
-node mcp/tests/test-all-mcp.js
+python3 -m pytest tests/mcp -v
+python3 -m pytest tests/mediaman -v
 ```
 
 ## SSOT References
