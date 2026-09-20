@@ -554,3 +554,137 @@ class TestUnCompteAnnonceEstVerifiable:
                      "tests/mcp/js/test-servers.sh"):
             assert not os.path.exists(os.path.join(RACINE, mort)), (
                 "%s est revenu" % mort)
+
+
+# ---------------------------------------------------------------------------
+# H12c - le journal doit se tenir lui-meme
+#
+# logs/latest.json est le seul registre qui dise ce qui reste a faire sur ce
+# bateau, et il etait le seul fichier du depot que rien ne verifiait. Le
+# 2026-09-20, apres un chantier consacre a la difference entre signaler un
+# defaut et le fermer, il portait le defaut 67 dans defects_closed ET dans
+# defects_open, le defaut 74 deux fois, et une entree sans identifiant.
+#
+# Le premier motif que j avais ecrit pour lire ces identifiants etait
+# \d+\b. Il ne reconnait pas "20b", un sous-identifiant legitime, et
+# comptait donc une entree orpheline de trop. Le motif ci-dessous accepte un
+# suffixe de lettre, et deux tests d echantillon le prouvent au lieu de
+# l affirmer.
+# ---------------------------------------------------------------------------
+
+CHEMIN_JOURNAL = os.path.join(RACINE, "logs", "latest.json")
+
+IDENTIFIANT_DE_DEFAUT = re.compile(r"^\s*(\d+[a-z]?)\b")
+
+
+def _journal():
+    """logs/latest.json, decode."""
+    import json as _json
+    with open(CHEMIN_JOURNAL, encoding="utf-8") as fichier:
+        return _json.load(fichier)
+
+
+def identifiants_de_defauts(entrees):
+    """Identifiants lus en tete d entree, et entrees qui n en portent pas.
+
+    Rend un couple (dictionnaire identifiant -> entrees, liste des
+    orphelines). Un identifiant peut porter un suffixe de lettre : 20b est
+    un identifiant, pas une entree sans numero.
+    """
+    vus = {}
+    orphelines = []
+    for entree in entrees:
+        trouve = IDENTIFIANT_DE_DEFAUT.match(str(entree))
+        if trouve:
+            vus.setdefault(trouve.group(1), []).append(str(entree))
+        else:
+            orphelines.append(str(entree))
+    return vus, orphelines
+
+
+def incoherences_du_journal(journal):
+    """Les trois manieres dont ce registre s est deja contredit."""
+    fermes, sans_id_fermes = identifiants_de_defauts(
+        journal.get("defects_closed", []))
+    ouverts, sans_id_ouverts = identifiants_de_defauts(
+        journal.get("defects_open", []))
+    return {
+        "des_deux_cotes": sorted(set(fermes) & set(ouverts)),
+        "en_double": sorted(
+            [k for k, v in fermes.items() if len(v) > 1]
+            + [k for k, v in ouverts.items() if len(v) > 1]),
+        "sans_identifiant": sans_id_fermes + sans_id_ouverts,
+    }
+
+
+class TestLeJournalNeSeContreditPas:
+    """Un registre qui se contredit ne dit plus ce qui reste a faire."""
+
+    def test_le_journal_est_lisible_et_porte_les_deux_listes(self):
+        journal = _journal()
+        for liste in ("defects_closed", "defects_open"):
+            assert liste in journal, "logs/latest.json n a plus de %s" % liste
+            assert isinstance(journal[liste], list), (
+                "%s n est pas une liste" % liste)
+            for entree in journal[liste]:
+                assert isinstance(entree, str), (
+                    "%s contient autre chose qu une chaine : %r" % (liste, entree))
+
+    def test_aucun_defaut_n_est_a_la_fois_ouvert_et_ferme(self):
+        """Le cas du defaut 67, le 2026-09-20, apres H12b."""
+        vu = incoherences_du_journal(_journal())["des_deux_cotes"]
+        assert not vu, (
+            "defauts declares ouverts ET fermes : %s" % ", ".join(vu))
+
+    def test_aucun_defaut_n_est_declare_deux_fois(self):
+        """Le cas du defaut 74, ferme par H11 puis re-ferme par H11b."""
+        vu = incoherences_du_journal(_journal())["en_double"]
+        assert not vu, (
+            "defauts figurant deux fois dans la meme liste : %s" % ", ".join(vu))
+
+    def test_chaque_defaut_porte_un_identifiant(self):
+        """Sans numero, une entree est invisible a tout recoupement."""
+        vu = incoherences_du_journal(_journal())["sans_identifiant"]
+        assert not vu, (
+            "entrees sans identifiant : %s"
+            % "; ".join(e[:80] for e in vu))
+
+
+class TestLeControleDuJournalVoitCeQuIlDoitVoir:
+    """Une barriere qui ne rend jamais rouge ne prouve rien.
+
+    Les deux echantillons ci-dessous reproduisent l etat reel du journal au
+    commit 9234a33a et une variante, et exigent que le controle les signale.
+    """
+
+    def test_le_controle_voit_un_defaut_ouvert_et_ferme_a_la_fois(self):
+        echantillon = {
+            "defects_closed": [
+                "67 harnais JS mort supprime (tests/mcp/js/) - H12b",
+                "80 le harnais codait en dur un bucket inexistant - H12b",
+            ],
+            "defects_open": [
+                "67 - tests/mcp/js/test-all-mcp.js teste sept serveurs absents",
+                "69 - le conteneur signalk est sorti il y a quatre mois",
+            ],
+        }
+        vu = incoherences_du_journal(echantillon)
+        assert vu["des_deux_cotes"] == ["67"], vu
+        assert vu["en_double"] == [], vu
+        assert vu["sans_identifiant"] == [], vu
+
+    def test_le_controle_voit_un_doublon_une_orpheline_et_accepte_20b(self):
+        echantillon = {
+            "defects_closed": [
+                "74 six commandes visaient un bucket inexistant - H11",
+                "74 la documentation citait un bucket inexistant - H11b",
+                "20b le compte administrateur Grafana n etait detenu par personne",
+                "ProtectHome mediaman.service - unite inexecutable, corrigee en H5d",
+            ],
+            "defects_open": [],
+        }
+        vu = incoherences_du_journal(echantillon)
+        assert vu["en_double"] == ["74"], vu
+        assert vu["des_deux_cotes"] == [], vu
+        assert len(vu["sans_identifiant"]) == 1, vu
+        assert vu["sans_identifiant"][0].startswith("ProtectHome"), vu
