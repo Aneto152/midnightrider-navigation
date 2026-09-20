@@ -1,6 +1,6 @@
 {
-  "task": "H12 - le guide de secours ne pouvait pas etre suivi",
-  "date": "2026-09-18T23:33:34Z",
+  "task": "H12b - retractation : signaler un defaut n est pas le fermer",
+  "date": "2026-09-20T18:04:12Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -82,7 +82,9 @@
     "74 six commandes de la documentation visaient un bucket signalk inexistant, sur trois fichiers, plus une organisation fausse dans README.md - corrige par H11 le 2026-09-18, barriere posee",
     "74 la documentation citait un bucket inexistant - ferme pour de bon en H11b : H11 l avait annonce ferme sur un detecteur aveugle",
     "81 docs/ops/RECOVERY-GUIDE-SAFE.md ne pouvait pas etre suivi - reecrit en version 2.0 par H12",
-    "67 le harnais JS mort est desormais signale comme tel dans le guide de secours - H12"
+    "67 harnais JS mort supprime (tests/mcp/js/), npm test et mcp/README.md corriges - H12b, verifiable : le repertoire n existe plus",
+    "80 le harnais codait en dur le bucket inexistant signalk - supprime avec lui en H12b",
+    "84 H12 annoncait 80 tests mcp dans un guide dont le commit en portait 85 - corrige et mis sous garde en H12b"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -256,7 +258,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-18T23:33:34",
+  "last_updated": "2026-09-20T18:04:12",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -990,9 +992,46 @@
       "no_service_restarted": true,
       "no_container_removed": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H12b - retractation : signaler un defaut n est pas le fermer",
+      "version": "h12b-v2",
+      "started_utc": "20260920T180302Z",
+      "finished_utc": "2026-09-20T18:04:12",
+      "content_commit": "44623e362d5a92447b836d7dbea2783e4737c920",
+      "base": "c83c2ba0c9a13babe99b1a117d914786af539dfb",
+      "status": "SUCCESS",
+      "retraction": "H12 avait inscrit le defaut 67 dans defects_closed alors que le guide de secours, pousse dans le meme commit, ecrivait 'Known, open: defects 67 and 80' ; le harnais, npm test et mcp/README.md etaient intacts",
+      "entries_retracted": 1,
+      "files_deleted": [
+        "tests/mcp/js/test-all-mcp.js",
+        "tests/mcp/js/test-servers.sh",
+        "tests/mcp/js/__init__.py"
+      ],
+      "self_inflicted_defect": "H12 annoncait 'expect 80 passed' dans un guide dont le propre commit portait tests/mcp a 85",
+      "guard_added": "le compte annonce par le guide doit egaler les tests declares",
+      "guard_scope_refused": "tests/mediaman non mis sous garde : comptage statique 492 contre 495 rendus par pytest",
+      "guard_tests": "17 -> 20",
+      "mcp_tests_declared": 88,
+      "defects_opened": [
+        84
+      ],
+      "defects_closed": [
+        67,
+        80,
+        84
+      ],
+      "tests": {
+        "barriere": "============================== 20 passed in 0.44s ==============================",
+        "suite-mcp": "============================= 88 passed in 39.89s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.59s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H12 - RECOVERY-GUIDE-SAFE.md version 2.0, deux documents sous garde",
+  "last_task": "H12b - harnais JS mort supprime, compte de tests mis sous garde",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-18T23:33:34"
+  "last_update": "2026-09-20T18:04:12"
 }

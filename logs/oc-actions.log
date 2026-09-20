@@ -389,3 +389,12 @@
 [2026-09-18T23:33:34] [DEBUG] [tests] H12 : premier detecteur limite aux accents inverses - 0 trouve sur la v1.1 qui en contenait 62, refait
 [2026-09-18T23:33:34] [RESULT] [docs] H12 : SUCCESS - defauts 67 et 81 fermes, 82 et 83 ouverts
 [2026-09-18T23:33:34] [COMMIT] SHA: 6ad1a6b6b24a0d6d81df1a0395f1fde74f77d622
+[2026-09-20T18:04:12] [DEBUG] [journal] H12b : RETRACTATION - H12 avait declare le defaut 67 ferme alors que le guide du meme commit le disait ouvert ; le guide avait raison
+[2026-09-20T18:04:12] [FILE_DELETE] [tests] H12b : tests/mcp/js/ supprime - 13 ko adressant sept serveurs inexistants et un bucket inexistant
+[2026-09-20T18:04:12] [FILE_MODIFY] [mcp] H12b : npm test lance desormais tests/mcp et tests/mediaman au lieu d un fichier absent
+[2026-09-20T18:04:12] [FILE_MODIFY] [mcp] H12b : mcp/README.md ne renvoie plus a tests/test_mcp.py, qui n existe pas
+[2026-09-20T18:04:12] [FILE_MODIFY] [docs] H12b : defaut 84 - H12 annoncait 80 tests mcp dans un guide dont le commit en portait 85
+[2026-09-20T18:04:12] [FILE_MODIFY] [tests] H12b : le compte annonce par le guide est desormais compare aux tests declares
+[2026-09-20T18:04:12] [DEBUG] [tests] H12b : tests/mediaman volontairement hors garde - comptage statique 492 contre 495 rendus par pytest
+[2026-09-20T18:04:12] [RESULT] [tests] H12b : SUCCESS - defauts 67, 80 et 84 fermes par suppression et par mesure
+[2026-09-20T18:04:12] [COMMIT] SHA: 44623e362d5a92447b836d7dbea2783e4737c920
