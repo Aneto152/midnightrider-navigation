@@ -1,6 +1,6 @@
 {
-  "task": "H14a - le guide cesse de prescrire ce que le depot interdit",
-  "date": "2026-09-20T19:41:38Z",
+  "task": "H14a-bis - le perimetre de la mesure porte son nom",
+  "date": "2026-09-20T20:18:52Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -87,7 +87,8 @@
     "85 logs/latest.json se contredisait - 67 ouvert et ferme, 74 ferme deux fois, une entree sans identifiant, aucun test sur ces listes - repare et mis sous garde par H12c, verifiable : quatre tests | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse une entree ouverte et fermee a la fois",
     "87 tests/mcp/test_phase2_historical_contract.py annoncait 23 scenarios puis en enumerait 24 - H5a avait aligne le nombre et laisse la liste - en-tete accorde a ses deux chiffres par H13 | preuve: tests/mcp/test_h9b_coherence_doc_code.py compare l en-tete a l enumeration et aux fonctions",
     "88 etc/systemd/system/mediaman-events.service affirmait en commentaire que mediaman.service declare ProtectHome=yes, faux depuis H5d - reecrit au passe par H13 | preuve: etc/systemd/system/mediaman-events.service",
-    "89 le guide de secours v2.0 prescrivait systemctl enable --now midnight-logsync.timer, unite desarmee par H7e dont l en-tete dit en capitales NE PAS REINSTALLER - ordre retire, avertissement pose, copies en masse du README remplacees par une boucle qui l exclut | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse toute prescription d armement dans docs/ et toute copie en masse"
+    "89 le guide de secours v2.0 prescrivait systemctl enable --now midnight-logsync.timer, unite desarmee par H7e dont l en-tete dit en capitales NE PAS REINSTALLER - ordre retire, avertissement pose, copies en masse du README remplacees par une boucle qui l exclut | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse toute prescription d armement dans docs/ et toute copie en masse",
+    "94 - la mesure posee par H14a pour fermer le defaut 89 ne regardait que docs/ : la commande interdite restait prete a coller dans etc/systemd/system/README.md ligne 153 et dans l en-tete des deux unites, trois lignes sous NE PAS REINSTALLER - cinq lignes retirees, perimetre elargi aux fichiers de procedure de docs/, etc/, scripts/ et de la racine | preuve: tests/mcp/test_h9b_coherence_doc_code.py verifie que etc/systemd/system/midnight-logsync.service fait partie du perimetre mesure et refuse toute prescription d armement qui s y trouverait"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -264,7 +265,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-20T19:41:38",
+  "last_updated": "2026-09-20T20:18:52",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -1145,9 +1146,39 @@
       "no_container_removed": true,
       "no_installed_unit_touched": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H14a-bis - le perimetre de la mesure porte son nom",
+      "version": "h14a-bis-v1",
+      "started_utc": "20260920T201743Z",
+      "finished_utc": "2026-09-20T20:18:52",
+      "content_commit": "0bc2a69e0ba37f79e8d57c7d728ffd54663cb995",
+      "base": "f761aedaf986e6a6645202f284c9ca971f1be570",
+      "status": "SUCCESS",
+      "what_h14a_missed": "le controle de H14a ne parcourait que docs/ ; la commande interdite survivait dans etc/systemd/system/README.md et dans l en-tete des deux unites",
+      "lines_removed": 5,
+      "new_scope": "docs/, etc/, scripts/ et la racine ; .md .sh .service .timer .py ; 88 fichiers",
+      "excluded_on_purpose": "logs/ et tests/ citent la ligne interdite a dessein : archives et echantillons",
+      "guard_tests": "36 -> 39",
+      "guide_count": "104 -> 107",
+      "mcp_tests_declared": 107,
+      "defects_closed": [
+        94
+      ],
+      "units_redeployed": false,
+      "only_comments_changed_in_units": true,
+      "tests": {
+        "barriere": "============================== 39 passed in 0.60s ==============================",
+        "suite-mcp": "============================= 107 passed in 39.87s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.41s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "no_installed_unit_touched": true,
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H14a - piege 89 retire du guide de secours",
+  "last_task": "H14a-bis - defaut 94, la mesure ne regardait que docs/",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-20T19:41:38"
+  "last_update": "2026-09-20T20:18:52"
 }

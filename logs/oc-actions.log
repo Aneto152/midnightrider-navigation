@@ -425,3 +425,11 @@
 [2026-09-20T19:41:38] [DEBUG] [docker] H14a : le conteneur orphelin vient de .openclaw/workspace, pas du guide - mon attribution du matin etait fausse
 [2026-09-20T19:41:38] [RESULT] [docs] H14a : SUCCESS - 89 ferme, 70 requalifie, 90 a 93 ouverts
 [2026-09-20T19:41:38] [COMMIT] SHA: 96b84834d85a3fb4d7fed21964336cdbe79812ea
+[2026-09-20T20:18:52] [DEBUG] [tests] H14a-bis : la mesure de H14a ne parcourait que docs/ - trois prescriptions d armement survivaient dans etc/ - defaut 94
+[2026-09-20T20:18:52] [FILE_MODIFY] [docs] H14a-bis : bloc de retablissement retire du README des unites
+[2026-09-20T20:18:52] [FILE_MODIFY] [config] H14a-bis : ligne Retablir par retiree des en-tetes des deux unites, commentaires seuls
+[2026-09-20T20:18:52] [FILE_MODIFY] [config] H14a-bis : deux mentions de copie en masse remplacees par un avertissement dans les deux unites
+[2026-09-20T20:18:52] [FILE_MODIFY] [tests] H14a-bis : perimetre elargi a docs/ etc/ scripts/ et la racine, 88 fichiers de procedure
+[2026-09-20T20:18:52] [FILE_MODIFY] [tests] H14a-bis : trois controles poses sur le perimetre lui-meme
+[2026-09-20T20:18:52] [RESULT] [tests] H14a-bis : SUCCESS - 94 ferme, aucune unite redeployee
+[2026-09-20T20:18:52] [COMMIT] SHA: 0bc2a69e0ba37f79e8d57c7d728ffd54663cb995
