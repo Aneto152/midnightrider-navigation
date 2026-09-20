@@ -65,6 +65,7 @@ Complete reference guide for the Midnight Rider navigation system.
 |-------|------|
 | **Signal K Configuration** | [SOFTWARE/SIGNAL-K-CONFIGURATION.md](SOFTWARE/SIGNAL-K-CONFIGURATION.md) |
 | **InfluxDB Setup** | [SOFTWARE/INFLUXDB-SETUP.md](SOFTWARE/INFLUXDB-SETUP.md) |
+| **InfluxDB Data Model (SSOT)** | [SOFTWARE/INFLUXDB-DATA-MODEL.md](SOFTWARE/INFLUXDB-DATA-MODEL.md) |
 | **Grafana Dashboards** | [SOFTWARE/GRAFANA-DASHBOARDS.md](SOFTWARE/GRAFANA-DASHBOARDS.md) |
 | **Plugins Catalog** | [SOFTWARE/PLUGINS-CATALOG.md](SOFTWARE/PLUGINS-CATALOG.md) |
 | **Scripts Catalog** | [SOFTWARE/SCRIPTS-CATALOG.md](SOFTWARE/SCRIPTS-CATALOG.md) |
