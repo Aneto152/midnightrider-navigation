@@ -1,6 +1,6 @@
 {
-  "task": "H14c - la premisse etait fausse",
-  "date": "2026-09-20T21:21:38Z",
+  "task": "H14d - le pluriel reduit au singulier",
+  "date": "2026-09-20T22:27:48Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -119,7 +119,8 @@
     "90 - mediaman.service, mediaman.timer, mediaman-events.service et mediaman-events.timer ne sont pas installes sur la machine (LoadState=not-found). La chaine mediaman n est plus programmee, alors que le collecteur MCP a ecrit a 14h52 le 2026-09-20 : il reste a comprendre ce qui la declenche. Constate le 2026-09-20. | constat: systemctl list-unit-files et systemctl show rendent LoadState=not-found pour les quatre unites, mesure du 2026-09-20, reprise dans logs/debug/premisse-fausse-2026-09-20.md",
     "91 - quatre unites installees divergent de leur copie de reference au depot : calypso_direct.service, midnight-logsync.service, midnightrider-portal.service, midnight-logsync.timer. Constate le 2026-09-20. | constat: comparaison des unites installees avec leur copie de reference sous etc/systemd/system/, mesure du 2026-09-20, reprise dans logs/debug/premisse-fausse-2026-09-20.md",
     "93 - l historique git porte 3 104 Mo de logs/services/wit-ble-direct.log, 1 824 Mo de logs/debug/data-flow.log et 517 Mo de logs/services/calypso-direct.log, malgre .gitignore : un git add -f les a forces. 1 350 des 2 411 commits sont des logs: auto-update. 146 des 344 Mo sont des objets en vrac qu un git gc repackerait sans toucher a l historique. Constate le 2026-09-20. | constat: git cat-file sur tout l historique et git count-objects -v, mesures du 2026-09-20, reprises dans logs/debug/premisse-fausse-2026-09-20.md",
-    "97 - les quatre conteneurs de production (influxdb, grafana, regatta, start-line-worker) sont definis par un fichier hors depot, dans le workspace OpenClaw, tandis que le depot porte un docker-compose.yml qui declare les memes quatre services avec les memes container_name : la copie qui fait foi n est pas versionnee, et rien ne garantit que les deux soient identiques. | constat: docker inspect des labels com.docker.compose.project et comparaison caviardee des deux fichiers, dans logs/debug/premisse-fausse-2026-09-20.md"
+    "97 - la definition des conteneurs de production est partagee entre deux fichiers compose : influxdb, grafana, regatta tournent sous le projet midnightrider-navigation, definis par le docker-compose.yml du depot, tandis que start-line-worker tourne sous le projet workspace, defini par un fichier hors depot et non versionne. Les deux fichiers declarent pourtant les memes services avec les memes container_name, et ils ne sont pas identiques. | constat: etiquettes com.docker.compose.project relevees un conteneur a la fois le 2026-09-20, dans logs/debug/pluriel-reduit-2026-09-20.md ; comparaison caviardee des deux fichiers dans logs/debug/premisse-fausse-2026-09-20.md",
+    "98 - le guide de secours prescrit section 1.2 un docker compose up -d depuis le depot. Le depot fixe container_name: start-line-worker, nom deja pris par un conteneur du projet compose \"workspace\" : la commande s arreterait sur un conflit de nom, en pleine panne. Les autres services appartiennent au projet du depot et se reconcilieraient sans bruit. Le guide porte desormais l avertissement et la commande de controle. | constat: etiquettes com.docker.compose.project des 4 conteneurs, relevees une par une, et container_name lus dans docker-compose.yml, le 2026-09-20 - sortie complete dans logs/debug/pluriel-reduit-2026-09-20.md"
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -268,7 +269,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-20T21:21:38",
+  "last_updated": "2026-09-20T22:27:48",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -1261,11 +1262,37 @@
         "suite-mediaman": "======================= 495 passed, 2 warnings in 22.27s ======================="
       },
       "influxdb_writes": 0
+    },
+    {
+      "task": "H14d - le texte doit sortir de la mesure",
+      "date": "2026-09-20T22:27:48Z",
+      "status": "SUCCESS",
+      "base": "80462e958337e7faaf440b26e5f769a7041a6b22",
+      "content_sha": "9e4ae872d9d88306c5758776b0c3e19cf7108f32",
+      "containers_measured": 4,
+      "containers_owned_by_another_project": 1,
+      "containers_not_defined_by_repo_compose": 1,
+      "defect_97_rewritten": true,
+      "defect_98_opened": true,
+      "wifi_ap_hole_retracted": true,
+      "defects_open_total": 26,
+      "defects_closed_total": 42,
+      "closures_without_proof": 14,
+      "guard_tests": "44 -> 48",
+      "guide_count": "112 -> 116",
+      "mcp_tests_declared": 116,
+      "machine_actions": 0,
+      "tests": {
+        "barriere": "============================== 48 passed in 0.87s ==============================",
+        "suite-mcp": "============================= 116 passed in 39.98s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.11s ======================="
+      },
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H14c - retractation du defaut 92, constat exige a l ouverture",
+  "last_task": "H14d - defaut 97 reecrit sur la mesure, defaut 98 ouvert",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-20T21:21:38",
+  "last_update": "2026-09-20T22:27:48",
   "last_dust_action": {
     "timestamp": "2026-09-20T21:50:17Z",
     "action": "cockpit_attitude_and_wind_angle_fix",

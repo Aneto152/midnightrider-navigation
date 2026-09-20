@@ -55,9 +55,22 @@ ou l ecart se paie en geste et non en chiffre :
 - **71** est ferme : rendu caduc par 95, telegraf est masque
 - **96** est ferme comme doublon de **69**, ouvert le meme jour par un
   chantier qui n avait pas relu la liste des defauts ouverts
-- **97** est ouvert : les quatre conteneurs de production sont definis
-  hors depot, et le depot porte une seconde definition des memes services
-- **98** est ouvert si le projet proprietaire n est pas celui du depot
+- **97** est ouvert : la definition des conteneurs de production est
+  partagee entre deux fichiers compose, dont un hors depot
+- **98** est ouvert : le `docker compose up -d` du guide de secours
+  echouerait sur un nom de conteneur deja pris par un autre projet
+
+> **Rectificatif du 2026-09-20, ecrit par H14d.** Les deux lignes
+> ci-dessus etaient fausses a l heure ou elles ont ete ecrites. La
+> premiere disait *les quatre* conteneurs definis hors depot ; la mesure
+> de ce meme chantier, quelques lignes plus haut dans sa propre sortie,
+> en avait trouve **un seul** : `start-line-worker`. La seconde posait une
+> condition la ou un compte rendu doit porter un etat, et **98** n a pas
+> ete ouvert : la variable qui en decidait ne portait qu un seul nom de
+> projet pour quatre conteneurs. Le message du commit `3d60635c` annonce
+> lui aussi *97 et 98 ouverts*. Trois textes ecrits d avance, aucun
+> conditionne a la mesure - le defaut meme que ce compte rendu
+> rectifiait. Voir `logs/debug/pluriel-reduit-2026-09-20.md`.
 
 ## La mesure nouvelle
 
@@ -79,7 +92,7 @@ defaut ouvert doit desormais porter `| constat:` et dire d ou il sort.
 | 91 | comparaison des unites installees avec `etc/systemd/system/` |
 | 93 | `git cat-file` sur tout l historique, `git count-objects -v` |
 | 97 | labels `com.docker.compose.project` des quatre conteneurs, et comparaison caviardee des deux fichiers compose |
-| 98 | `container_name` du compose du depot, deja pris par le projet `midnightrider-navigation` |
+| 98 | `container_name` du compose du depot, deja pris par un conteneur d un autre projet compose |
 
 ## Le trou de config/wifi-ap.txt
 

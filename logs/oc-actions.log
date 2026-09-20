@@ -456,3 +456,11 @@
 [2026-09-20T21:50:17Z] [RESULT] [grafana] Result: SUCCESS — 3 empty attitude queries restored, 2 wind angle queries made readable
 [2026-09-20T21:50:17Z] [FILE_MODIFY] [docs] docs/SOFTWARE/INFLUXDB-DATA-MODEL.md — 2.2.1 missing self tag on N2K.35 attitude, 4.4 angular conventions
 [2026-09-20T21:50:18Z] [COMMIT] SHA: 4bafd49d6f6576b0e4ce8ceb38914d195e0f7264
+[2026-09-20T22:27:48] [DEBUG] [docker] H14d : proprietaire releve un conteneur a la fois - 1 sur 4 appartiennent a un autre projet compose
+[2026-09-20T22:27:48] [FILE_MODIFY] [defauts] H14d : defaut 97 reecrit sur la mesure, defaut 98 ouvert avec constat
+[2026-09-20T22:27:48] [FILE_MODIFY] [docs] H14d : guide de secours 1.2 - tableau des proprietaires, avertissement, commande de controle
+[2026-09-20T22:27:48] [ROLLBACK] [tests] H14d : le trou de config/wifi-ap.txt n a jamais existe - exception codee en dur retiree
+[2026-09-20T22:27:48] [FILE_MODIFY] [tests] H14d : chemins_morts consulte git comme chemins_cites le faisait deja
+[2026-09-20T22:27:48] [FILE_MODIFY] [tests] H14d : un compte rendu encore cite doit dire l etat du jour, jamais sous condition
+[2026-09-20T22:27:48] [RESULT] [defauts] H14d : SUCCESS - aucun geste sur la machine
+[2026-09-20T22:27:48] [COMMIT] SHA: 9e4ae872d9d88306c5758776b0c3e19cf7108f32
