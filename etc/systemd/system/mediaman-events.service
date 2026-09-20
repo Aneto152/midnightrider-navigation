@@ -41,12 +41,14 @@ Environment="MEDIAMAN_RACE_ID=midnight-rider"
 Environment="MEDIAMAN_EVENT_SOURCE=selftest"
 
 # ProtectHome is deliberately "no", not "yes".
-# mediaman.service declares ProtectHome=yes while its WorkingDirectory is
-# /home/aneto/midnightrider-navigation, and lists only the logs subdirectory in
-# ReadWritePaths. Under ProtectHome=yes the working directory itself is not
-# reachable. That unit is disabled, so nobody ever saw it. Rather than repeat
-# the pattern, this unit states plainly that it needs its repository under
-# /home, and restricts everything else through ProtectSystem=strict.
+# mediaman.service declarait ProtectHome=yes alors que son WorkingDirectory
+# est /home/aneto/midnightrider-navigation et que seul le sous-repertoire
+# logs figurait dans ReadWritePaths : sous ProtectHome=yes, le repertoire de
+# travail lui-meme devenait inatteignable. Corrige en H5d - les deux unites
+# declarent aujourd hui ProtectHome=no. Le piege est decrit ici au passe,
+# pour qu il ne soit pas repose, et non parce qu il serait encore actif.
+# Cette unite a besoin de son depot sous /home et restreint tout le reste
+# par ProtectSystem=strict.
 ProtectHome=no
 ProtectSystem=strict
 ReadWritePaths=/home/aneto/midnightrider-navigation/logs

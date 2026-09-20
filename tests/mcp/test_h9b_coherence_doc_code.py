@@ -688,3 +688,133 @@ class TestLeControleDuJournalVoitCeQuIlDoitVoir:
         assert vu["des_deux_cotes"] == [], vu
         assert len(vu["sans_identifiant"]) == 1, vu
         assert vu["sans_identifiant"][0].startswith("ProtectHome"), vu
+
+
+# ---------------------------------------------------------------------------
+# H13 - une fermeture doit porter sa preuve
+#
+# L audit du 2026-09-20 a passe 20 des 34 fermetures declarees a la preuve
+# materielle. Dix-neuf tiennent. Quatorze sont infalsifiables : dix disent
+# "corrected by addition", c est-a-dire qu un paragraphe a ete ajoute a un
+# compte rendu. Rien dans le depot ne peut les confirmer ni les refuter.
+#
+# Le registre confondait deux choses : changer le systeme, et ecrire a
+# propos du systeme. Chaque entree porte desormais " | preuve: ...". Les
+# chemins cites doivent exister. Et le nombre de fermetures sans preuve
+# materielle ne peut plus augmenter : c est un cliquet, pas un voeu.
+# ---------------------------------------------------------------------------
+
+MARQUEUR_PREUVE = " | preuve: "
+SANS_PREUVE = "sans preuve materielle"
+
+# Quatorze au 2026-09-20. Ce nombre est un plafond : il peut baisser quand
+# une vieille fermeture recoit enfin une preuve, jamais monter.
+PLAFOND_SANS_PREUVE = 14
+
+# Le \b final n est pas decoratif : sans lui, l alternative js coupe
+# logs/latest.json en logs/latest.js et le controle accuse un chemin
+# inexistant. La repetition du 2026-09-20 l a attrape.
+CHEMIN_DANS_UNE_PREUVE = re.compile(
+    r"[\w./-]+\.(?:py|js|json|md|sh|yml|yaml|service)\b")
+
+
+def preuve_de(entree):
+    """La partie de l entree qui suit le marqueur, ou None."""
+    if MARQUEUR_PREUVE not in entree:
+        return None
+    return entree.split(MARQUEUR_PREUVE, 1)[1].strip()
+
+
+def fermetures_sans_preuve(journal):
+    """Entrees fermees qui ne portent aucun marqueur de preuve."""
+    return [e for e in journal.get("defects_closed", [])
+            if preuve_de(e) is None]
+
+
+def chemins_cites_en_preuve(journal):
+    """Couples (entree, chemin) pour tous les chemins cites en preuve.
+
+    Le nom porte "en_preuve" parce que chemins_cites existe deja dans ce
+    fichier, pour les documents sous garde. La repetition du 2026-09-20 a
+    vu la seconde definition ecraser la premiere et faire tomber un test
+    ecrit six jours plus tot.
+    """
+    trouves = []
+    for entree in journal.get("defects_closed", []):
+        texte = preuve_de(entree)
+        if not texte or texte.startswith(SANS_PREUVE):
+            continue
+        for chemin in CHEMIN_DANS_UNE_PREUVE.findall(texte):
+            trouves.append((entree, chemin))
+    return trouves
+
+
+class TestUneFermeturePorteSaPreuve:
+    """Le registre doit dire ce qui prouve chaque fermeture."""
+
+    def test_chaque_fermeture_porte_une_preuve(self):
+        manquantes = fermetures_sans_preuve(_journal())
+        assert not manquantes, (
+            "fermetures sans marqueur de preuve : %s"
+            % "; ".join(e[:70] for e in manquantes))
+
+    def test_les_chemins_cites_en_preuve_existent(self):
+        absents = []
+        for entree, chemin in chemins_cites_en_preuve(_journal()):
+            if not os.path.exists(os.path.join(RACINE, chemin)):
+                absents.append("%s (cite par %s)" % (chemin, entree[:40]))
+        assert not absents, (
+            "chemins cites en preuve et introuvables : %s" % "; ".join(absents))
+
+    def test_le_nombre_de_fermetures_sans_preuve_ne_monte_pas(self):
+        """Un cliquet. Il peut descendre ; il ne remonte pas."""
+        journal = _journal()
+        combien = sum(1 for e in journal.get("defects_closed", [])
+                      if (preuve_de(e) or "").startswith(SANS_PREUVE))
+        assert combien <= PLAFOND_SANS_PREUVE, (
+            "%d fermetures sans preuve materielle, plafond %d : une fermeture "
+            "nouvelle doit citer un fichier, un test ou une ligne"
+            % (combien, PLAFOND_SANS_PREUVE))
+
+    def test_le_contrat_historique_compte_ce_qu_il_enumere(self):
+        """Le defaut 45 avait aligne le nombre et laisse la liste."""
+        chemin = os.path.join(RACINE, "tests", "mcp",
+                              "test_phase2_historical_contract.py")
+        source = open(chemin, encoding="utf-8").read()
+        docstring = source.split('"""')[1]
+        enumeres = [l for l in docstring.splitlines()
+                    if re.match(r"^\d+\.", l.strip())]
+        fonctions = re.findall(r"^def (test_\w+)", source, re.M)
+        annonce = re.search(r"Covers (\d+) scenarios across (\d+) test functions",
+                            docstring)
+        assert annonce, (
+            "l en-tete du contrat historique n annonce pas ses deux nombres")
+        assert int(annonce.group(1)) == len(enumeres), (
+            "en-tete annonce %s scenarios, la liste en compte %d"
+            % (annonce.group(1), len(enumeres)))
+        assert int(annonce.group(2)) == len(fonctions), (
+            "en-tete annonce %s fonctions, le fichier en declare %d"
+            % (annonce.group(2), len(fonctions)))
+
+
+class TestLeControleDesPreuvesVoitCeQuIlDoitVoir:
+    """Deux echantillons, parce qu une barriere qui ne rougit jamais ment."""
+
+    def test_le_controle_voit_une_fermeture_sans_preuve(self):
+        echantillon = {"defects_closed": [
+            "90 corrige par ajout dans le compte rendu de H3b",
+            "91 harnais supprime | preuve: tests/mcp/test_h9b_coherence_doc_code.py",
+        ]}
+        manquantes = fermetures_sans_preuve(echantillon)
+        assert len(manquantes) == 1, manquantes
+        assert manquantes[0].startswith("90"), manquantes
+
+    def test_le_controle_voit_un_chemin_invente(self):
+        echantillon = {"defects_closed": [
+            "92 corrige | preuve: mcp/servers/inexistant-server.js",
+            "93 note | preuve: sans preuve materielle (annotation d un rapport)",
+        ]}
+        cites = chemins_cites_en_preuve(echantillon)
+        assert [c for _, c in cites] == ["mcp/servers/inexistant-server.js"], cites
+        assert not os.path.exists(
+            os.path.join(RACINE, "mcp/servers/inexistant-server.js"))
