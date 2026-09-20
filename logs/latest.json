@@ -1,6 +1,6 @@
 {
-  "task": "H14a-bis - le perimetre de la mesure porte son nom",
-  "date": "2026-09-20T20:18:52Z",
+  "task": "H14b-1 - deux gestes reversibles, et un troisieme",
+  "date": "2026-09-20T21:03:15Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -88,7 +88,8 @@
     "87 tests/mcp/test_phase2_historical_contract.py annoncait 23 scenarios puis en enumerait 24 - H5a avait aligne le nombre et laisse la liste - en-tete accorde a ses deux chiffres par H13 | preuve: tests/mcp/test_h9b_coherence_doc_code.py compare l en-tete a l enumeration et aux fonctions",
     "88 etc/systemd/system/mediaman-events.service affirmait en commentaire que mediaman.service declare ProtectHome=yes, faux depuis H5d - reecrit au passe par H13 | preuve: etc/systemd/system/mediaman-events.service",
     "89 le guide de secours v2.0 prescrivait systemctl enable --now midnight-logsync.timer, unite desarmee par H7e dont l en-tete dit en capitales NE PAS REINSTALLER - ordre retire, avertissement pose, copies en masse du README remplacees par une boucle qui l exclut | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse toute prescription d armement dans docs/ et toute copie en masse",
-    "94 - la mesure posee par H14a pour fermer le defaut 89 ne regardait que docs/ : la commande interdite restait prete a coller dans etc/systemd/system/README.md ligne 153 et dans l en-tete des deux unites, trois lignes sous NE PAS REINSTALLER - cinq lignes retirees, perimetre elargi aux fichiers de procedure de docs/, etc/, scripts/ et de la racine | preuve: tests/mcp/test_h9b_coherence_doc_code.py verifie que etc/systemd/system/midnight-logsync.service fait partie du perimetre mesure et refuse toute prescription d armement qui s y trouverait"
+    "94 - la mesure posee par H14a pour fermer le defaut 89 ne regardait que docs/ : la commande interdite restait prete a coller dans etc/systemd/system/README.md ligne 153 et dans l en-tete des deux unites, trois lignes sous NE PAS REINSTALLER - cinq lignes retirees, perimetre elargi aux fichiers de procedure de docs/, etc/, scripts/ et de la racine | preuve: tests/mcp/test_h9b_coherence_doc_code.py verifie que etc/systemd/system/midnight-logsync.service fait partie du perimetre mesure et refuse toute prescription d armement qui s y trouverait",
+    "95 - telegraf etait la seule unite en echec de la machine : sa configuration reclame un parseur nmea que le paquet ne fournit pas, il n a jamais demarre une seule fois - unite masquee, reversible par unmask | preuve: systemctl is-enabled telegraf rend masked, mesure consignee dans logs/debug/deux-gestes-reversibles-2026-09-20.md"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -116,7 +117,8 @@
     "90 - mediaman.service, mediaman.timer, mediaman-events.service et mediaman-events.timer ne sont pas installes sur la machine (LoadState=not-found). La chaine mediaman n est plus programmee, alors que le collecteur MCP a ecrit a 14h52 le 2026-09-20 : il reste a comprendre ce qui la declenche. Constate le 2026-09-20.",
     "91 - quatre unites installees divergent de leur copie de reference au depot : calypso_direct.service, midnight-logsync.service, midnightrider-portal.service, midnight-logsync.timer. Constate le 2026-09-20.",
     "92 - /home/aneto/.openclaw/workspace/docker-compose.yml declare un Signal K en conteneur avec restart: unless-stopped. C est de la que vient le conteneur orphelin, pas du guide comme je l avais affirme. Un docker compose up dans ce repertoire lancerait un second Signal K en concurrence du service systemd sur le port 3000. Constate le 2026-09-20.",
-    "93 - l historique git porte 3 104 Mo de logs/services/wit-ble-direct.log, 1 824 Mo de logs/debug/data-flow.log et 517 Mo de logs/services/calypso-direct.log, malgre .gitignore : un git add -f les a forces. 1 350 des 2 411 commits sont des logs: auto-update. 146 des 344 Mo sont des objets en vrac qu un git gc repackerait sans toucher a l historique. Constate le 2026-09-20."
+    "93 - l historique git porte 3 104 Mo de logs/services/wit-ble-direct.log, 1 824 Mo de logs/debug/data-flow.log et 517 Mo de logs/services/calypso-direct.log, malgre .gitignore : un git add -f les a forces. 1 350 des 2 411 commits sont des logs: auto-update. 146 des 344 Mo sont des objets en vrac qu un git gc repackerait sans toucher a l historique. Constate le 2026-09-20.",
+    "96 - le conteneur Signal K orphelin b03f2697b87c et son image de 1,75 Go sont toujours sur le disque. Sa politique de redemarrage est passee a no par H14b-1 ; sa suppression est le premier geste de H14b-2."
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -265,7 +267,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-20T20:18:52",
+  "last_updated": "2026-09-20T21:03:15",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -1176,11 +1178,49 @@
       "no_container_removed": true,
       "no_installed_unit_touched": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H14b-1 - deux gestes reversibles, et un troisieme",
+      "version": "h14b1-v3",
+      "started_utc": "20260920T210158Z",
+      "finished_utc": "2026-09-20T21:03:15",
+      "content_commit": "e33c5deec845cae0106b85ced1b7aed97c63fcc0",
+      "base": "3f7b6c28b0fbbb54c8000c0d1cf878d007e5f068",
+      "status": "SUCCESS",
+      "machine_first": true,
+      "telegraf": "FAIT",
+      "telegraf_rollback": "sudo systemctl unmask telegraf",
+      "openclaw_compose": "SAUTE (un conteneur du projet workspace tourne)",
+      "openclaw_compose_backup": "/home/aneto/backups/openclaw-compose-2026-09-20",
+      "openclaw_compose_rollback": "mv *.retire-2026-09-20 back to their original names",
+      "zombie_restart_policy": "FAIT",
+      "zombie_rollback": "docker update --restart=unless-stopped b03f2697b87c",
+      "nothing_deleted": true,
+      "images_removed": 0,
+      "containers_removed": 0,
+      "volumes_removed": 0,
+      "guard_tests": "39 -> 41",
+      "guide_count": "107 -> 109",
+      "mcp_tests_declared": 109,
+      "compose_files_under_measure": 2,
+      "defects_closed": [
+        95
+      ],
+      "defects_opened": [
+        96
+      ],
+      "tests": {
+        "barriere": "============================== 41 passed in 0.84s ==============================",
+        "suite-mcp": "============================= 109 passed in 40.29s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.25s ======================="
+      },
+      "signalk_untouched": true,
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H14a-bis - defaut 94, la mesure ne regardait que docs/",
+  "last_task": "H14b-1 - telegraf masque, compose OpenClaw retire, zombie desarme",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-20T20:18:52",
+  "last_update": "2026-09-20T21:03:15",
   "last_dust_action": {
     "timestamp": "2026-09-20T16:55:20",
     "action": "cockpit_rebuild_onboard_sources",

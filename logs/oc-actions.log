@@ -437,3 +437,9 @@
 [2026-09-20T16:55:20] [RESULT] [grafana] Result: SUCCESS — AIS echo replaced by DST810 log, GNSS, Calypso wind, truewind/current/leeway plugins
 [2026-09-20T16:55:20] [FILE_MODIFY] [repo] grafana-dashboards/01-cockpit.json regenerated from live dashboard
 [2026-09-20T16:55:22] [COMMIT] SHA: fd95a997db2bbe30f0828157f86f808a7d75efa0
+[2026-09-20T21:03:15] [SERVICE_RESTART] [telegraf] H14b-1 : disable puis mask - FAIT
+[2026-09-20T21:03:15] [CONFIG_CHANGE] [openclaw] H14b-1 : compose du workspace sauvegarde puis renomme - SAUTE (un conteneur du projet workspace tourne)
+[2026-09-20T21:03:15] [DOCKER_ACTION] [signalk-zombie] H14b-1 : politique de redemarrage a no - FAIT
+[2026-09-20T21:03:15] [FILE_MODIFY] [tests] H14b-1 : mesure nouvelle - aucun compose du depot ne declare un service signalk (2 fichiers sous mesure)
+[2026-09-20T21:03:15] [RESULT] [machine] H14b-1 : SUCCESS - 0 conteneur supprime, 0 image supprimee, 0 volume touche
+[2026-09-20T21:03:15] [COMMIT] SHA: e33c5deec845cae0106b85ced1b7aed97c63fcc0
