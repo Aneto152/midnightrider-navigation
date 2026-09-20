@@ -1,6 +1,6 @@
 {
-  "task": "H14b-1 - deux gestes reversibles, et un troisieme",
-  "date": "2026-09-20T21:03:15Z",
+  "task": "H14c - la premisse etait fausse",
+  "date": "2026-09-20T21:21:38Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -89,7 +89,10 @@
     "88 etc/systemd/system/mediaman-events.service affirmait en commentaire que mediaman.service declare ProtectHome=yes, faux depuis H5d - reecrit au passe par H13 | preuve: etc/systemd/system/mediaman-events.service",
     "89 le guide de secours v2.0 prescrivait systemctl enable --now midnight-logsync.timer, unite desarmee par H7e dont l en-tete dit en capitales NE PAS REINSTALLER - ordre retire, avertissement pose, copies en masse du README remplacees par une boucle qui l exclut | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse toute prescription d armement dans docs/ et toute copie en masse",
     "94 - la mesure posee par H14a pour fermer le defaut 89 ne regardait que docs/ : la commande interdite restait prete a coller dans etc/systemd/system/README.md ligne 153 et dans l en-tete des deux unites, trois lignes sous NE PAS REINSTALLER - cinq lignes retirees, perimetre elargi aux fichiers de procedure de docs/, etc/, scripts/ et de la racine | preuve: tests/mcp/test_h9b_coherence_doc_code.py verifie que etc/systemd/system/midnight-logsync.service fait partie du perimetre mesure et refuse toute prescription d armement qui s y trouverait",
-    "95 - telegraf etait la seule unite en echec de la machine : sa configuration reclame un parseur nmea que le paquet ne fournit pas, il n a jamais demarre une seule fois - unite masquee, reversible par unmask | preuve: systemctl is-enabled telegraf rend masked, mesure consignee dans logs/debug/deux-gestes-reversibles-2026-09-20.md"
+    "95 - telegraf etait la seule unite en echec de la machine : sa configuration reclame un parseur nmea que le paquet ne fournit pas, il n a jamais demarre une seule fois - unite masquee, reversible par unmask | preuve: systemctl is-enabled telegraf rend masked, mesure consignee dans logs/debug/deux-gestes-reversibles-2026-09-20.md",
+    "92 - RETRACTE : j avais ecrit que le compose du workspace OpenClaw declarait un Signal K en restart: unless-stopped. C est faux. Je l avais deduit d une etiquette de conteneur, sans jamais ouvrir le fichier. Il declare influxdb, grafana, regatta et start-line-worker - les quatre conteneurs de production. Le chantier qui devait le renommer a ete arrete par une garde de prudence, pas par ma comprehension | preuve: la lecture du fichier par H14b-1 rend \"declare un Signal K : non\", sortie complete dans logs/debug/premisse-fausse-2026-09-20.md",
+    "71 - telegraf etait en echec depuis son installation, unite absente du depot - rendu caduc par la fermeture 95 : l unite est masquee depuis H14b-1 et la machine ne compte plus aucune unite en echec | preuve: logs/debug/deux-gestes-reversibles-2026-09-20.md",
+    "96 - doublon du defaut 69 : meme conteneur, meme image, ouvert le meme jour par un chantier qui n avait pas relu la liste des defauts ouverts - fusionne dans 69 | preuve: logs/debug/premisse-fausse-2026-09-20.md"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -103,9 +106,8 @@
     "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md",
     "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md",
     "68 - validate_capabilities() ne controle au demarrage que get_historical_snapshot ; la porte du direct, get_snapshot, n est pas validee. Constate le 2026-09-18 par la relecture de H9.",
-    "69 - conteneur Docker nomme signalk, Exited (137) depuis 4 mois. La regle du bord est systemctl uniquement pour Signal K ; ce conteneur est un piege dormant. Constate le 2026-09-18.",
+    "69 - conteneur Docker nomme signalk (b03f2697b87c), Exited (137) depuis quatre mois, et son image de 1,75 Go. La regle du bord est systemctl uniquement pour Signal K. Sa politique de redemarrage est passee a no par H14b-1 ; sa suppression et celle de l image sont le premier geste de H14b-2. | constat: docker ps -a et docker inspect, sorties dans logs/debug/premisse-fausse-2026-09-20.md",
     "70 - midnight-logsync.timer est desarmee a dessein depuis H7e, ce n est pas une panne : elle n apparait plus dans les unites en echec. Ce qui reste ouvert est la consequence : les journaux de services ne sont pas publies, .gitignore excluant logs/services/*.log. Requalifie le 2026-09-20 par H14a.",
-    "71 - telegraf.service en echec, unite absente du depot. Constate le 2026-09-18.",
     "72 - quatre plugins de calcul tournent sans donnee d entree et ont ecrit 11,8 Mo de journaux (j30-leeway 3,8 Mo, truewind 3,1 Mo, heading-true 2,6 Mo, current 2,2 Mo) pour un standard de 5 Mo. Constate le 2026-09-18.",
     "73 - InfluxDB 2.8.0 panique cote lecture sur l operateur last : 'Dispatcher panic: arrow/array: index out of range', des dizaines d occurrences le 2026-09-17 a 03:27. C est l operateur central du chemin MCP. Constate le 2026-09-18.",
     "75 le motif de bucket de H11 ne voyait pas INFLUX_DB_BUCKET - corrige en H11b",
@@ -114,11 +116,10 @@
     "78 les champs de tete de latest.json etaient perimes du 2026-09-17 - corriges en H11b",
     "82 README.md cite quatre serveurs MCP fantomes en -server.js",
     "83 recensement : 189 chemins morts dans la documentation canonique, dont 119 dans docs/INDEX.md",
-    "90 - mediaman.service, mediaman.timer, mediaman-events.service et mediaman-events.timer ne sont pas installes sur la machine (LoadState=not-found). La chaine mediaman n est plus programmee, alors que le collecteur MCP a ecrit a 14h52 le 2026-09-20 : il reste a comprendre ce qui la declenche. Constate le 2026-09-20.",
-    "91 - quatre unites installees divergent de leur copie de reference au depot : calypso_direct.service, midnight-logsync.service, midnightrider-portal.service, midnight-logsync.timer. Constate le 2026-09-20.",
-    "92 - /home/aneto/.openclaw/workspace/docker-compose.yml declare un Signal K en conteneur avec restart: unless-stopped. C est de la que vient le conteneur orphelin, pas du guide comme je l avais affirme. Un docker compose up dans ce repertoire lancerait un second Signal K en concurrence du service systemd sur le port 3000. Constate le 2026-09-20.",
-    "93 - l historique git porte 3 104 Mo de logs/services/wit-ble-direct.log, 1 824 Mo de logs/debug/data-flow.log et 517 Mo de logs/services/calypso-direct.log, malgre .gitignore : un git add -f les a forces. 1 350 des 2 411 commits sont des logs: auto-update. 146 des 344 Mo sont des objets en vrac qu un git gc repackerait sans toucher a l historique. Constate le 2026-09-20.",
-    "96 - le conteneur Signal K orphelin b03f2697b87c et son image de 1,75 Go sont toujours sur le disque. Sa politique de redemarrage est passee a no par H14b-1 ; sa suppression est le premier geste de H14b-2."
+    "90 - mediaman.service, mediaman.timer, mediaman-events.service et mediaman-events.timer ne sont pas installes sur la machine (LoadState=not-found). La chaine mediaman n est plus programmee, alors que le collecteur MCP a ecrit a 14h52 le 2026-09-20 : il reste a comprendre ce qui la declenche. Constate le 2026-09-20. | constat: systemctl list-unit-files et systemctl show rendent LoadState=not-found pour les quatre unites, mesure du 2026-09-20, reprise dans logs/debug/premisse-fausse-2026-09-20.md",
+    "91 - quatre unites installees divergent de leur copie de reference au depot : calypso_direct.service, midnight-logsync.service, midnightrider-portal.service, midnight-logsync.timer. Constate le 2026-09-20. | constat: comparaison des unites installees avec leur copie de reference sous etc/systemd/system/, mesure du 2026-09-20, reprise dans logs/debug/premisse-fausse-2026-09-20.md",
+    "93 - l historique git porte 3 104 Mo de logs/services/wit-ble-direct.log, 1 824 Mo de logs/debug/data-flow.log et 517 Mo de logs/services/calypso-direct.log, malgre .gitignore : un git add -f les a forces. 1 350 des 2 411 commits sont des logs: auto-update. 146 des 344 Mo sont des objets en vrac qu un git gc repackerait sans toucher a l historique. Constate le 2026-09-20. | constat: git cat-file sur tout l historique et git count-objects -v, mesures du 2026-09-20, reprises dans logs/debug/premisse-fausse-2026-09-20.md",
+    "97 - les quatre conteneurs de production (influxdb, grafana, regatta, start-line-worker) sont definis par un fichier hors depot, dans le workspace OpenClaw, tandis que le depot porte un docker-compose.yml qui declare les memes quatre services avec les memes container_name : la copie qui fait foi n est pas versionnee, et rien ne garantit que les deux soient identiques. | constat: docker inspect des labels com.docker.compose.project et comparaison caviardee des deux fichiers, dans logs/debug/premisse-fausse-2026-09-20.md"
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -267,7 +268,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-20T21:03:15",
+  "last_updated": "2026-09-20T21:21:38",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -1216,11 +1217,55 @@
       },
       "signalk_untouched": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H14c - la premisse etait fausse",
+      "version": "h14c-v1",
+      "started_utc": "20260920T212026Z",
+      "finished_utc": "2026-09-20T21:21:38",
+      "content_commit": "842c310454d763db5854bcaefe694839fb8b7931",
+      "base": "895ba2c686a8eb0cdc554599388efcbb1bc6a48b",
+      "status": "SUCCESS",
+      "retracted": [
+        92
+      ],
+      "retraction_reason": "defaut ouvert sur la lecture d une etiquette de conteneur ; le fichier accuse ne declare aucun Signal K mais les quatre conteneurs de production",
+      "corrected_constat": "logs/debug/deux-gestes-reversibles-2026-09-20.md",
+      "false_commit_message": "895ba2c686a8eb0cdc554599388efcbb1bc6a48b",
+      "defects_closed": [
+        71,
+        92,
+        96
+      ],
+      "defects_opened": [
+        97,
+        98
+      ],
+      "merged_into_69": [
+        96
+      ],
+      "new_rule": "tout defaut ouvert doit porter | constat: et dire comment il a ete observe",
+      "open_without_constat": 20,
+      "ceiling_open_without_constat": 20,
+      "defects_open_total": 25,
+      "defects_closed_total": 42,
+      "closures_without_proof": 14,
+      "wifi_ap_hole_closed": true,
+      "guard_tests": "41 -> 44",
+      "guide_count": "109 -> 112",
+      "mcp_tests_declared": 112,
+      "machine_actions": 0,
+      "tests": {
+        "barriere": "============================== 44 passed in 0.75s ==============================",
+        "suite-mcp": "============================= 112 passed in 40.27s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.27s ======================="
+      },
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H14b-1 - telegraf masque, compose OpenClaw retire, zombie desarme",
+  "last_task": "H14c - retractation du defaut 92, constat exige a l ouverture",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-20T21:03:15",
+  "last_update": "2026-09-20T21:21:38",
   "last_dust_action": {
     "timestamp": "2026-09-20T16:55:20",
     "action": "cockpit_rebuild_onboard_sources",

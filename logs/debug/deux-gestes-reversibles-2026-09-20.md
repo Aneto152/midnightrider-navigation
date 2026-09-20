@@ -28,18 +28,21 @@ Unites en echec apres le geste : **0**.
 
 ## 2. le compose du workspace OpenClaw — SAUTE (un conteneur du projet workspace tourne)
 
-Hors depot, dans `/home/aneto/.openclaw/workspace`. Il declarait un Signal K en
-`restart: unless-stopped`, alors que Signal K appartient a `systemctl` :
-c est la regle d architecture la plus ancienne du bateau. Un
-`docker compose up` lance dans ce dossier ouvrirait un second Signal K
-sur le port 3000, en conflit avec le vrai.
+Hors depot, dans `/home/aneto/.openclaw/workspace`. **Rien n a ete
+touche** : la garde a refuse le geste parce qu un conteneur du projet
+`workspace` tournait. Aucune sauvegarde n a ete faite, aucun fichier
+renomme, aucun `LIRE-MOI` pose.
 
-Sauvegarde integrale, empreintes comprises :
-
-    /home/aneto/backups/openclaw-compose-2026-09-20
-
-Les fichiers sont renommes en `*.retire-2026-09-20`, et un `LIRE-MOI` pose a
-cote donne la commande exacte de retour en arriere.
+> **Rectificatif du 2026-09-20, ecrit par H14c.** Le paragraphe qui
+> figurait ici etait faux deux fois. Il affirmait au passe des gestes qui
+> n ont jamais eu lieu, parce que son texte n etait pas conditionne au
+> statut. Et il reposait sur une premisse fausse : ce fichier **ne
+> declare aucun Signal K**. Il declare `influxdb`, `grafana`, `regatta`
+> et `start-line-worker` — les quatre conteneurs de production du bateau.
+> Le defaut 92 est retracte. Le message du commit de journal
+> `895ba2c6`, qui annonce un compose retire, est faux lui aussi ; on ne
+> reecrit pas l historique, on le corrige ici. Voir
+> `logs/debug/premisse-fausse-2026-09-20.md`.
 
 ## 3. le conteneur zombie — FAIT
 
