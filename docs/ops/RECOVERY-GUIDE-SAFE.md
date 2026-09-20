@@ -258,7 +258,7 @@ on the timers: `logs/debug/timers-systemd-2026-09-17.md`.
 
 ```bash
 cd ~/midnightrider-navigation
-python3 -m pytest tests/mcp        # expect 107 passed
+python3 -m pytest tests/mcp        # expect 109 passed
 python3 -m pytest tests/mediaman   # expect 495 passed
 ```
 
@@ -345,7 +345,7 @@ Dashboards are redeployed with `scripts/deploy-dashboards-to-grafana.sh`.
 - [ ] `curl localhost:8086/health` → `pass`
 - [ ] Bucket `midnight_rider` present, organisation `MidnightRider`
 - [ ] `ls mcp/servers/*.js | wc -l` → `11`
-- [ ] `python3 -m pytest tests/mcp` → 107 passed
+- [ ] `python3 -m pytest tests/mcp` → 109 passed
 - [ ] `python3 -m pytest tests/mediaman` → 495 passed
 - [ ] `systemctl list-units --state=failed` → empty
 - [ ] `systemctl list-timers` → `midnight-logs-commit.timer` scheduled, the only one installed (defect 90)

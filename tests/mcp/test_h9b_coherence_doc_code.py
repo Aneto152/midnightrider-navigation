@@ -1035,3 +1035,81 @@ class TestLePerimetreDeLaMesurePorteSonNom:
             "midnight-logsync.timer\n")
         vues = lignes_qui_arment(echantillon)
         assert [numero for numero, _ in vues] == [2, 4], vues
+
+
+# Signal K appartient a systemctl sur ce bateau. C est la regle
+# d architecture la plus ancienne du projet, ecrite en capitales dans
+# ARCHITECTURE-MASTER, et rien ne la verifiait. Le 2026-09-20, un compose
+# hors depot declarait pourtant un Signal K en restart: unless-stopped, et
+# le conteneur qu il avait cree dormait depuis quatre mois (defaut 92).
+# Hors du depot, un test ne peut rien. Dans le depot, il peut interdire
+# que la meme chose y entre un jour.
+SERVICE_INTERDIT_EN_CONTENEUR = "signalk"
+IMAGE_INTERDITE = "signalk/signalk-server"
+
+
+def fichiers_compose():
+    """Tout fichier compose du depot, exemples compris."""
+    trouves = []
+    for base, dossiers, fichiers in os.walk(RACINE):
+        dossiers[:] = [d for d in dossiers
+                       if d not in (".git", "node_modules", "__pycache__")]
+        for nom in fichiers:
+            if re.match(r"^(docker-)?compose.*\.ya?ml(\.example)?$", nom):
+                trouves.append(os.path.relpath(
+                    os.path.join(base, nom), RACINE))
+    return sorted(trouves)
+
+
+def services_declares(texte):
+    """Noms des services d un compose, sans dependre d un parseur YAML.
+
+    PyYAML n est pas installe sur le Pi et ne le sera pas pour un test :
+    la lecture se fait a l indentation, comme docker compose l ecrit.
+    """
+    noms, dedans = [], False
+    for ligne in texte.splitlines():
+        if re.match(r"^services:\s*$", ligne):
+            dedans = True
+            continue
+        if dedans:
+            if re.match(r"^\S", ligne):
+                dedans = False
+                continue
+            trouve = re.match(r"^  ([A-Za-z0-9._-]+):\s*$", ligne)
+            if trouve:
+                noms.append(trouve.group(1))
+    return noms
+
+
+class TestAucunComposeDuDepotNeDeclareSignalK:
+    """Signal K = systemctl, jamais docker. Defaut 92."""
+
+    def test_aucun_compose_du_depot_ne_declare_un_service_signalk(self):
+        coupables = []
+        for chemin in fichiers_compose():
+            texte = _lire(os.path.join(RACINE, chemin))
+            for nom in services_declares(texte):
+                if SERVICE_INTERDIT_EN_CONTENEUR in nom.lower():
+                    coupables.append("%s : service %s" % (chemin, nom))
+            if IMAGE_INTERDITE in texte:
+                coupables.append("%s : image %s" % (chemin, IMAGE_INTERDITE))
+        assert not coupables, (
+            "Signal K appartient a systemctl, pas a docker : %s"
+            % "; ".join(coupables))
+
+    def test_le_controle_lit_bien_un_compose(self):
+        """Un compose temoin, bati sur celui qui a cree le zombie."""
+        temoin = (
+            "services:\n"
+            "  influxdb:\n"
+            "    image: influxdb:2.8\n"
+            "  signalk:\n"
+            "    image: signalk/signalk-server:latest\n"
+            "    restart: unless-stopped\n"
+            "volumes:\n"
+            "  influxdb-data:\n")
+        assert services_declares(temoin) == ["influxdb", "signalk"]
+        assert IMAGE_INTERDITE in temoin
+        assert services_declares("volumes:\n  rien:\n") == []
+        assert fichiers_compose(), "aucun compose trouve dans le depot"
