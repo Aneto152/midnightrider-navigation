@@ -433,3 +433,6 @@
 [2026-09-20T20:18:52] [FILE_MODIFY] [tests] H14a-bis : trois controles poses sur le perimetre lui-meme
 [2026-09-20T20:18:52] [RESULT] [tests] H14a-bis : SUCCESS - 94 ferme, aucune unite redeployee
 [2026-09-20T20:18:52] [COMMIT] SHA: 0bc2a69e0ba37f79e8d57c7d728ffd54663cb995
+[2026-09-20T16:55:20] [CONFIG_CHANGE] [grafana] Cockpit rebuilt on onboard instruments (self==true), 14 panels, 20 queries
+[2026-09-20T16:55:20] [RESULT] [grafana] Result: SUCCESS — AIS echo replaced by DST810 log, GNSS, Calypso wind, truewind/current/leeway plugins
+[2026-09-20T16:55:20] [FILE_MODIFY] [repo] grafana-dashboards/01-cockpit.json regenerated from live dashboard

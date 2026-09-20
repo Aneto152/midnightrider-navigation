@@ -1180,5 +1180,15 @@
   ],
   "last_task": "H14a-bis - defaut 94, la mesure ne regardait que docs/",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-20T20:18:52"
+  "last_update": "2026-09-20T20:18:52",
+  "last_dust_action": {
+    "timestamp": "2026-09-20T16:55:20",
+    "action": "cockpit_rebuild_onboard_sources",
+    "status": "SUCCESS",
+    "detail": "cockpit-main rebuilt on self==true; AIS MMSI context no longer used; attitude pinned to N2K.35 per Denis; see docs/SOFTWARE/INFLUXDB-DATA-MODEL.md",
+    "files_modified": [
+      "grafana-dashboards/01-cockpit.json",
+      "logs/oc-actions.log"
+    ]
+  }
 }
