@@ -398,3 +398,12 @@
 [2026-09-20T18:04:12] [DEBUG] [tests] H12b : tests/mediaman volontairement hors garde - comptage statique 492 contre 495 rendus par pytest
 [2026-09-20T18:04:12] [RESULT] [tests] H12b : SUCCESS - defauts 67, 80 et 84 fermes par suppression et par mesure
 [2026-09-20T18:04:12] [COMMIT] SHA: 44623e362d5a92447b836d7dbea2783e4737c920
+[2026-09-20T18:31:32] [DEBUG] [journal] H12c : logs/latest.json portait le defaut 67 dans defects_closed ET dans defects_open apres H12b
+[2026-09-20T18:31:32] [FILE_MODIFY] [journal] H12c : 67 retire de defects_open - H12b l avait ferme par suppression du harnais
+[2026-09-20T18:31:32] [FILE_MODIFY] [journal] H12c : les deux fermetures du defaut 74 fusionnees en une seule entree
+[2026-09-20T18:31:32] [FILE_MODIFY] [journal] H12c : la fermeture ProtectHome recoit le numero 86, attribue retroactivement
+[2026-09-20T18:31:32] [FILE_MODIFY] [tests] H12c : quatre controles poses sur logs/latest.json, deux echantillons prouvent qu ils rendent rouge
+[2026-09-20T18:31:32] [DEBUG] [tests] H12c : motif d identifiant corrige - \d+\b ne reconnaissait pas 20b, sixieme mesure trop etroite de la semaine
+[2026-09-20T18:31:32] [FILE_MODIFY] [docs] H12c : le guide passe de 88 a 94 tests annonces, impose par la garde posee en H12b
+[2026-09-20T18:31:32] [RESULT] [journal] H12c : SUCCESS - defaut 85 ouvert et ferme, defaut 86 numerote retroactivement
+[2026-09-20T18:31:32] [COMMIT] SHA: cbd002bbe5e6789a0d8d64cbf17fb5eb39b407cc
