@@ -436,3 +436,4 @@
 [2026-09-20T16:55:20] [CONFIG_CHANGE] [grafana] Cockpit rebuilt on onboard instruments (self==true), 14 panels, 20 queries
 [2026-09-20T16:55:20] [RESULT] [grafana] Result: SUCCESS — AIS echo replaced by DST810 log, GNSS, Calypso wind, truewind/current/leeway plugins
 [2026-09-20T16:55:20] [FILE_MODIFY] [repo] grafana-dashboards/01-cockpit.json regenerated from live dashboard
+[2026-09-20T16:55:22] [COMMIT] SHA: fd95a997db2bbe30f0828157f86f808a7d75efa0
