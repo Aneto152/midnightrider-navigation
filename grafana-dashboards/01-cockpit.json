@@ -1,41 +1,78 @@
 {
- "uid": "cockpit-main",
- "title": "01 — COCKPIT (données du bord)",
- "tags": [
-  "cockpit",
-  "midnight-rider",
-  "bord"
- ],
- "timezone": "America/New_York",
- "schemaVersion": 39,
- "refresh": "5s",
- "time": {
-  "from": "now-15m",
-  "to": "now"
- },
+ "description": "Cockpit alimente par les instruments du bord (self=true). L echo AIS du bateau n est pas utilise : il ne porte que 6 champs issus du GPS de l AIS.",
  "editable": true,
  "panels": [
   {
+   "datasource": {
+    "type": "influxdb",
+    "uid": "efifgp8jvgj5sf"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "color": {
+      "mode": "thresholds"
+     },
+     "decimals": 2,
+     "thresholds": {
+      "mode": "absolute",
+      "steps": [
+       {
+        "color": "text",
+        "value": null
+       }
+      ]
+     },
+     "unit": "velocityknot"
+    },
+    "overrides": []
+   },
+   "gridPos": {
+    "h": 4,
+    "w": 6,
+    "x": 0,
+    "y": 0
+   },
    "id": 101,
-   "type": "stat",
+   "options": {
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "auto",
+    "orientation": "auto",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "textMode": "auto"
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "influxdb",
+      "uid": "efifgp8jvgj5sf"
+     },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.speedThroughWater\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])",
+     "rawQuery": true,
+     "refId": "A",
+     "resultFormat": "time_series"
+    }
+   ],
    "title": "Vitesse surface (loch)",
+   "type": "stat"
+  },
+  {
    "datasource": {
     "type": "influxdb",
     "uid": "efifgp8jvgj5sf"
    },
-   "gridPos": {
-    "h": 4,
-    "w": 6,
-    "x": 0,
-    "y": 0
-   },
    "fieldConfig": {
     "defaults": {
-     "unit": "velocityknot",
-     "decimals": 2,
      "color": {
       "mode": "thresholds"
      },
+     "decimals": 2,
      "thresholds": {
       "mode": "absolute",
       "steps": [
@@ -44,58 +81,58 @@
         "value": null
        }
       ]
-     }
+     },
+     "unit": "velocityknot"
     },
     "overrides": []
    },
-   "options": {
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "colorMode": "value",
-    "graphMode": "none",
-    "justifyMode": "auto",
-    "textMode": "auto",
-    "orientation": "auto"
+   "gridPos": {
+    "h": 4,
+    "w": 6,
+    "x": 6,
+    "y": 0
    },
-   "targets": [
-    {
-     "refId": "A",
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.speedThroughWater\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])"
-    }
-   ]
-  },
-  {
    "id": 102,
-   "type": "stat",
+   "options": {
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "auto",
+    "orientation": "auto",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "textMode": "auto"
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "influxdb",
+      "uid": "efifgp8jvgj5sf"
+     },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.2\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])",
+     "rawQuery": true,
+     "refId": "A",
+     "resultFormat": "time_series"
+    }
+   ],
    "title": "Vitesse fond (GPS)",
+   "type": "stat"
+  },
+  {
    "datasource": {
     "type": "influxdb",
     "uid": "efifgp8jvgj5sf"
    },
-   "gridPos": {
-    "h": 4,
-    "w": 6,
-    "x": 6,
-    "y": 0
-   },
    "fieldConfig": {
     "defaults": {
-     "unit": "velocityknot",
-     "decimals": 2,
      "color": {
       "mode": "thresholds"
      },
+     "decimals": 2,
      "thresholds": {
       "mode": "absolute",
       "steps": [
@@ -104,44 +141,10 @@
         "value": null
        }
       ]
-     }
+     },
+     "unit": "velocityknot"
     },
     "overrides": []
-   },
-   "options": {
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "colorMode": "value",
-    "graphMode": "none",
-    "justifyMode": "auto",
-    "textMode": "auto",
-    "orientation": "auto"
-   },
-   "targets": [
-    {
-     "refId": "A",
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.2\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])"
-    }
-   ]
-  },
-  {
-   "id": 103,
-   "type": "stat",
-   "title": "VMG",
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
    },
    "gridPos": {
     "h": 4,
@@ -149,13 +152,47 @@
     "x": 12,
     "y": 0
    },
+   "id": 103,
+   "options": {
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "auto",
+    "orientation": "auto",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "textMode": "auto"
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "influxdb",
+      "uid": "efifgp8jvgj5sf"
+     },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.course.calcValues.velocityMadeGood\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])",
+     "rawQuery": true,
+     "refId": "A",
+     "resultFormat": "time_series"
+    }
+   ],
+   "title": "VMG",
+   "type": "stat"
+  },
+  {
+   "datasource": {
+    "type": "influxdb",
+    "uid": "efifgp8jvgj5sf"
+   },
    "fieldConfig": {
     "defaults": {
-     "unit": "velocityknot",
-     "decimals": 2,
      "color": {
       "mode": "thresholds"
      },
+     "decimals": 0,
      "thresholds": {
       "mode": "absolute",
       "steps": [
@@ -164,44 +201,10 @@
         "value": null
        }
       ]
-     }
+     },
+     "unit": "degree"
     },
     "overrides": []
-   },
-   "options": {
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "colorMode": "value",
-    "graphMode": "none",
-    "justifyMode": "auto",
-    "textMode": "auto",
-    "orientation": "auto"
-   },
-   "targets": [
-    {
-     "refId": "A",
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.course.calcValues.velocityMadeGood\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])"
-    }
-   ]
-  },
-  {
-   "id": 104,
-   "type": "stat",
-   "title": "Cap vrai",
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
    },
    "gridPos": {
     "h": 4,
@@ -209,13 +212,47 @@
     "x": 18,
     "y": 0
    },
+   "id": 104,
+   "options": {
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "auto",
+    "orientation": "auto",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "textMode": "auto"
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "influxdb",
+      "uid": "efifgp8jvgj5sf"
+     },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])",
+     "rawQuery": true,
+     "refId": "A",
+     "resultFormat": "time_series"
+    }
+   ],
+   "title": "Cap vrai",
+   "type": "stat"
+  },
+  {
+   "datasource": {
+    "type": "influxdb",
+    "uid": "efifgp8jvgj5sf"
+   },
    "fieldConfig": {
     "defaults": {
-     "unit": "degree",
-     "decimals": 0,
      "color": {
       "mode": "thresholds"
      },
+     "decimals": 1,
      "thresholds": {
       "mode": "absolute",
       "steps": [
@@ -224,44 +261,10 @@
         "value": null
        }
       ]
-     }
+     },
+     "unit": "degree"
     },
     "overrides": []
-   },
-   "options": {
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "colorMode": "value",
-    "graphMode": "none",
-    "justifyMode": "auto",
-    "textMode": "auto",
-    "orientation": "auto"
-   },
-   "targets": [
-    {
-     "refId": "A",
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.headingTrue\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])"
-    }
-   ]
-  },
-  {
-   "id": 105,
-   "type": "stat",
-   "title": "Gîte",
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
    },
    "gridPos": {
     "h": 4,
@@ -269,13 +272,47 @@
     "x": 0,
     "y": 4
    },
+   "id": 105,
+   "options": {
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "auto",
+    "orientation": "auto",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "textMode": "auto"
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "influxdb",
+      "uid": "efifgp8jvgj5sf"
+     },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.attitude.roll\")\n  // N2K.35 n ecrit pas le tag self sur l attitude : on filtre sur la source\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])",
+     "rawQuery": true,
+     "refId": "A",
+     "resultFormat": "time_series"
+    }
+   ],
+   "title": "Gîte",
+   "type": "stat"
+  },
+  {
+   "datasource": {
+    "type": "influxdb",
+    "uid": "efifgp8jvgj5sf"
+   },
    "fieldConfig": {
     "defaults": {
-     "unit": "degree",
-     "decimals": 1,
      "color": {
       "mode": "thresholds"
      },
+     "decimals": 1,
      "thresholds": {
       "mode": "absolute",
       "steps": [
@@ -284,44 +321,10 @@
         "value": null
        }
       ]
-     }
+     },
+     "unit": "degree"
     },
     "overrides": []
-   },
-   "options": {
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "colorMode": "value",
-    "graphMode": "none",
-    "justifyMode": "auto",
-    "textMode": "auto",
-    "orientation": "auto"
-   },
-   "targets": [
-    {
-     "refId": "A",
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.attitude.roll\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])"
-    }
-   ]
-  },
-  {
-   "id": 106,
-   "type": "stat",
-   "title": "Dérive (leeway)",
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
    },
    "gridPos": {
     "h": 4,
@@ -329,13 +332,47 @@
     "x": 6,
     "y": 4
    },
+   "id": 106,
+   "options": {
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "auto",
+    "orientation": "auto",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "textMode": "auto"
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "influxdb",
+      "uid": "efifgp8jvgj5sf"
+     },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance.leewayAngle\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])",
+     "rawQuery": true,
+     "refId": "A",
+     "resultFormat": "time_series"
+    }
+   ],
+   "title": "Dérive (leeway)",
+   "type": "stat"
+  },
+  {
+   "datasource": {
+    "type": "influxdb",
+    "uid": "efifgp8jvgj5sf"
+   },
    "fieldConfig": {
     "defaults": {
-     "unit": "degree",
-     "decimals": 1,
      "color": {
       "mode": "thresholds"
      },
+     "decimals": 1,
      "thresholds": {
       "mode": "absolute",
       "steps": [
@@ -344,44 +381,10 @@
         "value": null
        }
       ]
-     }
+     },
+     "unit": "lengthm"
     },
     "overrides": []
-   },
-   "options": {
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "colorMode": "value",
-    "graphMode": "none",
-    "justifyMode": "auto",
-    "textMode": "auto",
-    "orientation": "auto"
-   },
-   "targets": [
-    {
-     "refId": "A",
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance.leewayAngle\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])"
-    }
-   ]
-  },
-  {
-   "id": 107,
-   "type": "stat",
-   "title": "Profondeur sous sonde",
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
    },
    "gridPos": {
     "h": 4,
@@ -389,13 +392,47 @@
     "x": 12,
     "y": 4
    },
+   "id": 107,
+   "options": {
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "auto",
+    "orientation": "auto",
+    "reduceOptions": {
+     "calcs": [
+      "lastNotNull"
+     ],
+     "fields": "",
+     "values": false
+    },
+    "textMode": "auto"
+   },
+   "targets": [
+    {
+     "datasource": {
+      "type": "influxdb",
+      "uid": "efifgp8jvgj5sf"
+     },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.depth.belowTransducer\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])",
+     "rawQuery": true,
+     "refId": "A",
+     "resultFormat": "time_series"
+    }
+   ],
+   "title": "Profondeur sous sonde",
+   "type": "stat"
+  },
+  {
+   "datasource": {
+    "type": "influxdb",
+    "uid": "efifgp8jvgj5sf"
+   },
    "fieldConfig": {
     "defaults": {
-     "unit": "lengthm",
-     "decimals": 1,
      "color": {
       "mode": "thresholds"
      },
+     "decimals": 0,
      "thresholds": {
       "mode": "absolute",
       "steps": [
@@ -404,44 +441,10 @@
         "value": null
        }
       ]
-     }
+     },
+     "unit": "percent"
     },
     "overrides": []
-   },
-   "options": {
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "colorMode": "value",
-    "graphMode": "none",
-    "justifyMode": "auto",
-    "textMode": "auto",
-    "orientation": "auto"
-   },
-   "targets": [
-    {
-     "refId": "A",
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.depth.belowTransducer\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])"
-    }
-   ]
-  },
-  {
-   "id": 108,
-   "type": "stat",
-   "title": "Batterie Calypso",
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
    },
    "gridPos": {
     "h": 4,
@@ -449,26 +452,12 @@
     "x": 18,
     "y": 4
    },
-   "fieldConfig": {
-    "defaults": {
-     "unit": "percent",
-     "decimals": 0,
-     "color": {
-      "mode": "thresholds"
-     },
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "text",
-        "value": null
-       }
-      ]
-     }
-    },
-    "overrides": []
-   },
+   "id": 108,
    "options": {
+    "colorMode": "value",
+    "graphMode": "none",
+    "justifyMode": "auto",
+    "orientation": "auto",
     "reduceOptions": {
      "calcs": [
       "lastNotNull"
@@ -476,32 +465,41 @@
      "fields": "",
      "values": false
     },
-    "colorMode": "value",
-    "graphMode": "none",
-    "justifyMode": "auto",
-    "textMode": "auto",
-    "orientation": "auto"
+    "textMode": "auto"
    },
    "targets": [
     {
-     "refId": "A",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"electrical.batteries.calypso.percent\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"electrical.batteries.calypso.percent\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> last()\n  |> keep(columns: [\"_time\", \"_value\"])"
+     "refId": "A",
+     "resultFormat": "time_series"
     }
-   ]
+   ],
+   "title": "Batterie Calypso",
+   "type": "stat"
   },
   {
-   "id": 201,
-   "type": "timeseries",
-   "title": "Vitesses — surface et fond",
    "datasource": {
     "type": "influxdb",
     "uid": "efifgp8jvgj5sf"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "axisPlacement": "auto",
+      "drawStyle": "line",
+      "fillOpacity": 8,
+      "lineWidth": 1,
+      "showPoints": "never",
+      "spanNulls": false
+     },
+     "unit": "velocityknot"
+    },
+    "overrides": []
    },
    "gridPos": {
     "h": 7,
@@ -509,29 +507,16 @@
     "x": 0,
     "y": 8
    },
-   "fieldConfig": {
-    "defaults": {
-     "unit": "velocityknot",
-     "custom": {
-      "drawStyle": "line",
-      "lineWidth": 1,
-      "fillOpacity": 8,
-      "showPoints": "never",
-      "spanNulls": false,
-      "axisPlacement": "auto"
-     }
-    },
-    "overrides": []
-   },
+   "id": 201,
    "options": {
     "legend": {
-     "displayMode": "list",
-     "placement": "bottom",
-     "showLegend": true,
      "calcs": [
       "lastNotNull",
       "max"
-     ]
+     ],
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
     },
     "tooltip": {
      "mode": "multi",
@@ -540,52 +525,45 @@
    },
    "targets": [
     {
-     "refId": "A",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.speedThroughWater\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Surface (loch)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.speedThroughWater\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Surface (loch)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "A",
+     "resultFormat": "time_series"
     },
     {
-     "refId": "B",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.2\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Fond (GPS)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.speedOverGround\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.2\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Fond (GPS)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "B",
+     "resultFormat": "time_series"
     }
-   ]
+   ],
+   "title": "Vitesses — surface et fond",
+   "type": "timeseries"
   },
   {
-   "id": 202,
-   "type": "timeseries",
-   "title": "Vent vrai — angle et force",
    "datasource": {
     "type": "influxdb",
     "uid": "efifgp8jvgj5sf"
    },
-   "gridPos": {
-    "h": 7,
-    "w": 12,
-    "x": 12,
-    "y": 8
-   },
    "fieldConfig": {
     "defaults": {
-     "unit": "degree",
      "custom": {
+      "axisPlacement": "auto",
       "drawStyle": "line",
-      "lineWidth": 1,
       "fillOpacity": 8,
+      "lineWidth": 1,
       "showPoints": "never",
-      "spanNulls": false,
-      "axisPlacement": "auto"
-     }
+      "spanNulls": false
+     },
+     "unit": "degree"
     },
     "overrides": [
      {
@@ -603,18 +581,41 @@
         "value": "right"
        }
       ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Angle vrai (° 0-360)"
+      },
+      "properties": [
+       {
+        "id": "custom.axisSoftMin",
+        "value": 0
+       },
+       {
+        "id": "custom.axisSoftMax",
+        "value": 360
+       }
+      ]
      }
     ]
    },
+   "gridPos": {
+    "h": 7,
+    "w": 12,
+    "x": 12,
+    "y": 8
+   },
+   "id": 202,
    "options": {
     "legend": {
-     "displayMode": "list",
-     "placement": "bottom",
-     "showLegend": true,
      "calcs": [
       "lastNotNull",
       "max"
-     ]
+     ],
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
     },
     "tooltip": {
      "mode": "multi",
@@ -623,52 +624,45 @@
    },
    "targets": [
     {
-     "refId": "A",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.wind.angleTrueWater\")\n  |> filter(fn: (r) => r.self == \"true\")\n  // angle publie dans -pi..+pi : remis en 0-360, sinon la courbe saute d un bord a l autre au portant\n  |> map(fn: (r) => ({r with _value: (if r._value < 0.0 then r._value + 6.28318531 else r._value) * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Angle vrai (° 0-360)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.wind.angleTrueWater\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Angle vrai (°)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "A",
+     "resultFormat": "time_series"
     },
     {
-     "refId": "B",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.wind.speedTrue\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Force vraie (kn)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.wind.speedTrue\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Force vraie (kn)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "B",
+     "resultFormat": "time_series"
     }
-   ]
+   ],
+   "title": "Vent vrai — angle et force",
+   "type": "timeseries"
   },
   {
-   "id": 203,
-   "type": "timeseries",
-   "title": "Vent apparent — angle et force",
    "datasource": {
     "type": "influxdb",
     "uid": "efifgp8jvgj5sf"
    },
-   "gridPos": {
-    "h": 7,
-    "w": 12,
-    "x": 0,
-    "y": 15
-   },
    "fieldConfig": {
     "defaults": {
-     "unit": "degree",
      "custom": {
+      "axisPlacement": "auto",
       "drawStyle": "line",
-      "lineWidth": 1,
       "fillOpacity": 8,
+      "lineWidth": 1,
       "showPoints": "never",
-      "spanNulls": false,
-      "axisPlacement": "auto"
-     }
+      "spanNulls": false
+     },
+     "unit": "degree"
     },
     "overrides": [
      {
@@ -686,18 +680,41 @@
         "value": "right"
        }
       ]
+     },
+     {
+      "matcher": {
+       "id": "byName",
+       "options": "Angle apparent (° 0-360)"
+      },
+      "properties": [
+       {
+        "id": "custom.axisSoftMin",
+        "value": 0
+       },
+       {
+        "id": "custom.axisSoftMax",
+        "value": 360
+       }
+      ]
      }
     ]
    },
+   "gridPos": {
+    "h": 7,
+    "w": 12,
+    "x": 0,
+    "y": 15
+   },
+   "id": 203,
    "options": {
     "legend": {
-     "displayMode": "list",
-     "placement": "bottom",
-     "showLegend": true,
      "calcs": [
       "lastNotNull",
       "max"
-     ]
+     ],
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
     },
     "tooltip": {
      "mode": "multi",
@@ -706,34 +723,47 @@
    },
    "targets": [
     {
-     "refId": "A",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.wind.angleApparent\")\n  |> filter(fn: (r) => r.self == \"true\")\n  // angle publie dans -pi..+pi : remis en 0-360, sinon la courbe saute d un bord a l autre au portant\n  |> map(fn: (r) => ({r with _value: (if r._value < 0.0 then r._value + 6.28318531 else r._value) * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Angle apparent (° 0-360)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.wind.angleApparent\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Angle apparent (°)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "A",
+     "resultFormat": "time_series"
     },
     {
-     "refId": "B",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.wind.speedApparent\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Force apparente (kn)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.wind.speedApparent\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Force apparente (kn)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "B",
+     "resultFormat": "time_series"
     }
-   ]
+   ],
+   "title": "Vent apparent — angle et force",
+   "type": "timeseries"
   },
   {
-   "id": 204,
-   "type": "timeseries",
-   "title": "Assiette — gîte et tangage (N2K.35)",
    "datasource": {
     "type": "influxdb",
     "uid": "efifgp8jvgj5sf"
+   },
+   "fieldConfig": {
+    "defaults": {
+     "custom": {
+      "axisPlacement": "auto",
+      "drawStyle": "line",
+      "fillOpacity": 8,
+      "lineWidth": 1,
+      "showPoints": "never",
+      "spanNulls": false
+     },
+     "unit": "degree"
+    },
+    "overrides": []
    },
    "gridPos": {
     "h": 7,
@@ -741,29 +771,16 @@
     "x": 12,
     "y": 15
    },
-   "fieldConfig": {
-    "defaults": {
-     "unit": "degree",
-     "custom": {
-      "drawStyle": "line",
-      "lineWidth": 1,
-      "fillOpacity": 8,
-      "showPoints": "never",
-      "spanNulls": false,
-      "axisPlacement": "auto"
-     }
-    },
-    "overrides": []
-   },
+   "id": 204,
    "options": {
     "legend": {
-     "displayMode": "list",
-     "placement": "bottom",
-     "showLegend": true,
      "calcs": [
       "lastNotNull",
       "max"
-     ]
+     ],
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
     },
     "tooltip": {
      "mode": "multi",
@@ -772,52 +789,45 @@
    },
    "targets": [
     {
-     "refId": "A",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.attitude.roll\")\n  // N2K.35 n ecrit pas le tag self sur l attitude : on filtre sur la source\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Gîte (°)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.attitude.roll\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Gîte (°)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "A",
+     "resultFormat": "time_series"
     },
     {
-     "refId": "B",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.attitude.pitch\")\n  // N2K.35 n ecrit pas le tag self sur l attitude : on filtre sur la source\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Tangage (°)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.attitude.pitch\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.35\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Tangage (°)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "B",
+     "resultFormat": "time_series"
     }
-   ]
+   ],
+   "title": "Assiette — gîte et tangage (N2K.35)",
+   "type": "timeseries"
   },
   {
-   "id": 205,
-   "type": "timeseries",
-   "title": "Courant — drift et set",
    "datasource": {
     "type": "influxdb",
     "uid": "efifgp8jvgj5sf"
    },
-   "gridPos": {
-    "h": 7,
-    "w": 12,
-    "x": 0,
-    "y": 22
-   },
    "fieldConfig": {
     "defaults": {
-     "unit": "velocityknot",
      "custom": {
+      "axisPlacement": "auto",
       "drawStyle": "line",
-      "lineWidth": 1,
       "fillOpacity": 8,
+      "lineWidth": 1,
       "showPoints": "never",
-      "spanNulls": false,
-      "axisPlacement": "auto"
-     }
+      "spanNulls": false
+     },
+     "unit": "velocityknot"
     },
     "overrides": [
      {
@@ -838,15 +848,22 @@
      }
     ]
    },
+   "gridPos": {
+    "h": 7,
+    "w": 12,
+    "x": 0,
+    "y": 22
+   },
+   "id": 205,
    "options": {
     "legend": {
-     "displayMode": "list",
-     "placement": "bottom",
-     "showLegend": true,
      "calcs": [
       "lastNotNull",
       "max"
-     ]
+     ],
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
     },
     "tooltip": {
      "mode": "multi",
@@ -855,52 +872,45 @@
    },
    "targets": [
     {
-     "refId": "A",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.current.drift\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Drift (kn)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.current.drift\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Drift (kn)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "A",
+     "resultFormat": "time_series"
     },
     {
-     "refId": "B",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.current.setTrue\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Set (°)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"environment.current.setTrue\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Set (°)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "B",
+     "resultFormat": "time_series"
     }
-   ]
+   ],
+   "title": "Courant — drift et set",
+   "type": "timeseries"
   },
   {
-   "id": 206,
-   "type": "timeseries",
-   "title": "Dérive et VMG",
    "datasource": {
     "type": "influxdb",
     "uid": "efifgp8jvgj5sf"
    },
-   "gridPos": {
-    "h": 7,
-    "w": 12,
-    "x": 12,
-    "y": 22
-   },
    "fieldConfig": {
     "defaults": {
-     "unit": "degree",
      "custom": {
+      "axisPlacement": "auto",
       "drawStyle": "line",
-      "lineWidth": 1,
       "fillOpacity": 8,
+      "lineWidth": 1,
       "showPoints": "never",
-      "spanNulls": false,
-      "axisPlacement": "auto"
-     }
+      "spanNulls": false
+     },
+     "unit": "degree"
     },
     "overrides": [
      {
@@ -921,15 +931,22 @@
      }
     ]
    },
+   "gridPos": {
+    "h": 7,
+    "w": 12,
+    "x": 12,
+    "y": 22
+   },
+   "id": 206,
    "options": {
     "legend": {
-     "displayMode": "list",
-     "placement": "bottom",
-     "showLegend": true,
      "calcs": [
       "lastNotNull",
       "max"
-     ]
+     ],
+     "displayMode": "list",
+     "placement": "bottom",
+     "showLegend": true
     },
     "tooltip": {
      "mode": "multi",
@@ -938,27 +955,42 @@
    },
    "targets": [
     {
-     "refId": "A",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance.leewayAngle\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Dérive (°)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"performance.leewayAngle\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 180.0 / 3.14159265}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"Dérive (°)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "A",
+     "resultFormat": "time_series"
     },
     {
-     "refId": "B",
      "datasource": {
       "type": "influxdb",
       "uid": "efifgp8jvgj5sf"
      },
+     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.course.calcValues.velocityMadeGood\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"VMG (kn)\")\n  |> group(columns: [\"_field\"])",
      "rawQuery": true,
-     "resultFormat": "time_series",
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.course.calcValues.velocityMadeGood\")\n  |> filter(fn: (r) => r.self == \"true\")\n  |> map(fn: (r) => ({r with _value: r._value * 1.94384}))\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> keep(columns: [\"_time\", \"_value\"])\n  |> set(key: \"_field\", value: \"VMG (kn)\")\n  |> group(columns: [\"_field\"])"
+     "refId": "B",
+     "resultFormat": "time_series"
     }
-   ]
+   ],
+   "title": "Dérive et VMG",
+   "type": "timeseries"
   }
  ],
- "description": "Cockpit alimente par les instruments du bord (self=true). L echo AIS du bateau n est pas utilise : il ne porte que 6 champs issus du GPS de l AIS."
+ "refresh": "5s",
+ "schemaVersion": 39,
+ "tags": [
+  "cockpit",
+  "midnight-rider",
+  "bord"
+ ],
+ "time": {
+  "from": "now-15m",
+  "to": "now"
+ },
+ "timezone": "America/New_York",
+ "title": "01 — COCKPIT (données du bord)",
+ "uid": "cockpit-main"
 }

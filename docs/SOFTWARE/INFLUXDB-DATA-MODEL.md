@@ -10,7 +10,9 @@ ready-to-use Flux recipes, measured pitfalls, volumetry.
 procedures (see `docs/INTEGRATION/`), N2K bus topology
 (see `docs/INTEGRATION/N2K-NETWORK-ARCHITECTURE.md`).
 
-**Last verified:** 2026-09-20, by direct measurement against the live bucket.
+**Last verified:** 2026-09-20, by direct measurement against the live
+bucket. Revised the same day: attitude exception (2.2.1) and angular
+conventions (4.4).
 Every figure below was obtained by counting real points, never by reading an
 index. See *Provenance* at the end.
 
@@ -53,8 +55,11 @@ They are distinguished by the `context` tag.
 
 ### 2.2 The canonical filter: use `self`
 
-Every point written for the carrying vessel also carries the tag `self` with
-the value `"true"`. AIS contacts do not carry this tag.
+Almost every point written for the carrying vessel also carries the tag
+`self` with the value `"true"`. AIS contacts never carry this tag.
+
+> **This filter is necessary but not sufficient.** One measured exception
+> exists — read 2.2.1 before querying attitude.
 
 ```flux
 |> filter(fn: (r) => r.self == "true")
@@ -73,6 +78,52 @@ them locally when needed:
 ```bash
 python3 -c "import json;print(json.load(open('$HOME/.signalk/baseDeltas.json')))"
 ```
+
+### 2.2.1 Measured exception — attitude from `N2K.35`
+
+Counted on 2026-09-20 over a 10-minute window (2026-09-05 16:00-16:10 UTC):
+
+| Measurement | Source | `self` | Points |
+|---|---|---|---|
+| `navigation.attitude.roll` | `Calypso.XX` | `"true"` | 1 038 |
+| `navigation.attitude.roll` | `N2K.35` | **absent** | 6 000 |
+| `navigation.attitude.pitch` | `N2K.35` | **absent** | 6 000 |
+| `navigation.speedThroughWater` | `N2K.35` | `"true"` | 6 000 |
+
+The same physical device (`N2K.35`) writes `speedThroughWater` **with** the
+`self` tag and `attitude.roll` / `.pitch` **without** it. Two write paths
+coexist for one instrument.
+
+Consequence: `self == "true" and source == "N2K.35"` on attitude returns
+**zero rows**. This silently emptied three cockpit panels between the rebuild
+and its correction on 2026-09-20.
+
+A full sweep of onboard measurements lacking the `self` tag (AIS contexts
+excluded) returned **exactly two**: `navigation.attitude.roll` and
+`navigation.attitude.pitch`, both from `N2K.35`. No other onboard measurement
+escapes the canonical filter.
+
+**Rule for attitude: filter on `source`, not on `self`.**
+
+```flux
+from(bucket: "midnight_rider")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r._measurement == "navigation.attitude.roll")
+  // N2K.35 does not write the self tag on attitude - filter on the source
+  |> filter(fn: (r) => r.source == "N2K.35")
+```
+
+Filtering on the source alone is safe here: AIS never transmits attitude, and
+over the measured window the measurement had exactly two producers, both
+onboard. For a query that must span attitude and other paths at once:
+
+```flux
+  |> filter(fn: (r) => r.self == "true" or r.source == "N2K.35")
+```
+
+This is a **defect to fix upstream** — the Signal K to InfluxDB write path
+should tag attitude like every other onboard path. Until it is fixed, the rule
+above is the documented behaviour.
 
 ### 2.3 Why the boat's own AIS echo is a poor source
 
@@ -101,7 +152,7 @@ identity carried **more than 70 measurements and ~22 million points**.
 | Tag | Present on | Values | Use |
 |---|---|---|---|
 | `context` | all points | `vessels.*` | vessel identity |
-| `self` | onboard points only | `"true"` | **canonical onboard filter** |
+| `self` | onboard points, **except `navigation.attitude.*` from `N2K.35`** (see 2.2.1) | `"true"` | **canonical onboard filter** |
 | `source` | all points | see below | which device or plugin produced it |
 
 Note that `context` has very high cardinality (~2000 on a racing day). Any
@@ -153,7 +204,7 @@ Several paths are written by more than one source. A query that does not pin
 
 | Measurement | Sources | Recommended |
 |---|---|---|
-| `navigation.attitude.roll` / `.pitch` | `N2K.35`, `Calypso.XX` | **`N2K.35`** (decided 2026-09-20) |
+| `navigation.attitude.roll` / `.pitch` | `N2K.35`, `Calypso.XX` | **`N2K.35`** (decided 2026-09-20) — filter on `source` only, no `self` tag, see 2.2.1 |
 | `navigation.position` | `N2K.1`, `N2K.2` | pin one |
 | `navigation.speedOverGround` | `N2K.1`, `N2K.2` (+ AIS echo) | pin one, and filter `self` |
 | `navigation.courseOverGroundTrue` | `N2K.1`, `N2K.2` (+ AIS echo) | pin one, and filter `self` |
@@ -170,6 +221,64 @@ Signal K publishes SI. InfluxDB stores SI. Convert at query time.
 | depth | metres | as is |
 | temperature | kelvin | `- 273.15` → °C |
 | pressure | pascal | `/ 100.0` → hPa |
+
+### 4.4 Angular quantities — never average across the wrap
+
+Signal K publishes two different kinds of angle. Mixing them up produces
+graphs that look like sensor noise but are pure display artefacts.
+
+| Path | Stored range | Convention |
+|---|---|---|
+| `environment.wind.angleApparent` | -pi..+pi | relative to bow, **positive to starboard** |
+| `environment.wind.angleTrueWater` / `.angleTrueGround` | -pi..+pi | idem |
+| `navigation.attitude.roll` / `.pitch` | small, signed | positive to starboard / bow up |
+| `performance.leewayAngle` | small, signed | positive to leeward |
+| `navigation.headingTrue` / `.headingMagnetic` | 0..2pi | compass direction |
+| `environment.wind.directionTrue` | 0..2pi | compass direction |
+| `environment.current.setTrue` | 0..2pi | compass direction |
+
+**Measured on 2026-09-20**: downwind, `angleApparent` oscillates around pi.
+Consecutive samples read +176 deg and -167 deg — the same physical direction,
+1 degree apart. Plotted raw, the line crosses the whole chart at every
+oscillation. Worse, `aggregateWindow(mean)` averages +176 and -167 into 4.5,
+a value that corresponds to nothing.
+
+**Rule 1 — wind angles: remap to 0..360 before aggregating.** A sailing boat
+never sails with the apparent wind on the nose, so 0/360 is the safe place to
+put the discontinuity. Port/starboard is preserved: 0-180 starboard,
+180-360 port.
+
+```flux
+  |> map(fn: (r) => ({r with _value:
+       (if r._value < 0.0 then r._value + 6.28318531 else r._value)
+       * 180.0 / 3.14159265}))
+```
+
+**Rule 2 — compass directions (heading, wind direction, current set): a plain
+mean is invalid.** Averaging 359 deg and 1 deg gives 180 deg, the exact
+opposite. Either display instantaneous values (`last()`, no aggregation), or
+compute a circular mean:
+
+```flux
+import "math"
+// mean of the unit vectors, then back to an angle
+  |> reduce(identity: {s: 0.0, c: 0.0, n: 0.0}, fn: (r, accumulator) => ({
+       s: accumulator.s + math.sin(x: r._value),
+       c: accumulator.c + math.cos(x: r._value),
+       n: accumulator.n + 1.0}))
+  |> map(fn: (r) => ({_value:
+       math.atan2(y: r.s, x: r.c) * 180.0 / 3.14159265}))
+  |> map(fn: (r) => ({r with _value:
+       if r._value < 0.0 then r._value + 360.0 else r._value}))
+```
+
+**Rule 3 — small signed angles** (roll, pitch, leeway) never wrap. Plain mean
+is correct for them.
+
+Known remaining gap: the cockpit's *Courant — drift et set* panel still takes
+a plain mean of `setTrue`. Its direction is unreliable whenever the current
+sets near north. Tracked, not yet fixed.
+
 
 ---
 
@@ -336,6 +445,7 @@ bucket on 2026-09-20, not from an index or from prior documentation.
 |---|---|
 | onboard identity is the Signal K UUID | counted `environment.wind.*`, `sensors.wit.*`, `performance.*` grouped by `context` — AIS cannot produce these paths |
 | `self == "true"` exists | `schema.tagValues(tag: "self", ...)` returned exactly one value |
+| attitude from `N2K.35` carries no `self` tag | counted by `(source, self)` over 10 minutes, then a full sweep of onboard measurements without the tag |
 | source inventory | counted, grouped by `_measurement` and `source`, 1 h then 24 h |
 | AIS field list | counted, filtered on the MMSI context |
 | volumetry | same counts, 2026-09-05 |

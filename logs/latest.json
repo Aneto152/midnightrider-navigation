@@ -1267,12 +1267,13 @@
   "last_status": "SUCCESS",
   "last_update": "2026-09-20T21:21:38",
   "last_dust_action": {
-    "timestamp": "2026-09-20T16:55:20",
-    "action": "cockpit_rebuild_onboard_sources",
+    "timestamp": "2026-09-20T21:50:17Z",
+    "action": "cockpit_attitude_and_wind_angle_fix",
     "status": "SUCCESS",
-    "detail": "cockpit-main rebuilt on self==true; AIS MMSI context no longer used; attitude pinned to N2K.35 per Denis; see docs/SOFTWARE/INFLUXDB-DATA-MODEL.md",
+    "detail": "Two cockpit defects fixed. (1) N2K.35 writes navigation.attitude.roll/pitch without the self tag; self+source returned 0 rows and emptied 3 panels; attitude now filtered on source only; a full sweep found no other onboard measurement missing the tag. (2) Wind angles are published in -pi..pi, so downwind samples alternate between +176 and -167 deg, drawing full-scale vertical strokes, and aggregateWindow(mean) averaged them into meaningless near-zero values; angles remapped to 0..360 before aggregation. Both documented in docs/SOFTWARE/INFLUXDB-DATA-MODEL.md (2.2.1 and 4.4). Upstream defect: Signal K to InfluxDB write path should tag attitude. Known gap: the current set panel still takes a plain mean of a compass direction and is unreliable near north.",
     "files_modified": [
       "grafana-dashboards/01-cockpit.json",
+      "docs/SOFTWARE/INFLUXDB-DATA-MODEL.md",
       "logs/oc-actions.log"
     ]
   }

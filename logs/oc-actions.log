@@ -451,3 +451,7 @@
 [2026-09-20T21:21:38] [FILE_MODIFY] [tests] H14c : config/wifi-ap.txt rejoint les faux amis - la barriere passait sur une seule machine
 [2026-09-20T21:21:38] [RESULT] [defauts] H14c : SUCCESS - aucun geste sur la machine
 [2026-09-20T21:21:38] [COMMIT] SHA: 842c310454d763db5854bcaefe694839fb8b7931
+[2026-09-20T21:50:17Z] [CONFIG_CHANGE] [grafana] Cockpit attitude panels: filter on source N2K.35 instead of self tag
+[2026-09-20T21:50:17Z] [CONFIG_CHANGE] [grafana] Cockpit wind angle panels: remap -180..180 to 0..360 before aggregation
+[2026-09-20T21:50:17Z] [RESULT] [grafana] Result: SUCCESS — 3 empty attitude queries restored, 2 wind angle queries made readable
+[2026-09-20T21:50:17Z] [FILE_MODIFY] [docs] docs/SOFTWARE/INFLUXDB-DATA-MODEL.md — 2.2.1 missing self tag on N2K.35 attitude, 4.4 angular conventions
