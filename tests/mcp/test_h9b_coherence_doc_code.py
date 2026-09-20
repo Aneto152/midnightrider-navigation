@@ -818,3 +818,139 @@ class TestLeControleDesPreuvesVoitCeQuIlDoitVoir:
         assert [c for _, c in cites] == ["mcp/servers/inexistant-server.js"], cites
         assert not os.path.exists(
             os.path.join(RACINE, "mcp/servers/inexistant-server.js"))
+
+
+# ---------------------------------------------------------------------------
+# H14a - aucun document ne prescrit ce que le depot interdit
+#
+# Deux fois de suite, le guide de secours a envoye un equipier faire
+# exactement ce que le depot interdit. En v1.1 : docker-compose up -d pour
+# Signal K, alors que la regle est systemctl uniquement. En v2.0, que j ai
+# ecrite moi-meme le 2026-09-20 : systemctl enable --now
+# midnight-logsync.timer, alors que l unite porte en capitales, dans son
+# propre en-tete, NE PAS REINSTALLER, NE PAS REPARER.
+#
+# La troisieme fois, un test l attrapera.
+# ---------------------------------------------------------------------------
+
+UNITE_DESARMEE = "midnight-logsync"
+
+ARMEMENT = re.compile(
+    r"systemctl\s+(?:--\S+\s+)*(?:enable|start|unmask)\b[^\n]*" + UNITE_DESARMEE)
+
+COPIE_EN_MASSE = re.compile(
+    r"\bcp\s+[^\n]*etc/systemd/system/\*[^\n]*\s/etc/systemd/system")
+
+
+def _documents_markdown(sous_repertoires):
+    """Chemins relatifs de tous les .md sous les repertoires donnes."""
+    trouves = []
+    for depart in sous_repertoires:
+        racine_depart = os.path.join(RACINE, depart)
+        for base, dossiers, fichiers in os.walk(racine_depart):
+            dossiers[:] = [d for d in dossiers if d not in (".git", "node_modules")]
+            for nom in fichiers:
+                if nom.endswith(".md"):
+                    trouves.append(os.path.relpath(
+                        os.path.join(base, nom), RACINE))
+    return sorted(trouves)
+
+
+def lignes_logiques(texte):
+    """Lignes logiques du shell : une continuation \\ prolonge la precedente.
+
+    Cette fonction n est pas un raffinement. Sans elle, le controle ne voit
+    pas le piege qu il est ecrit pour attraper : dans le guide du
+    2026-09-20, systemctl enable --now etait sur une ligne et
+    midnight-logsync.timer sur la suivante, apres un antislash. Un
+    detecteur ligne a ligne rendait vert sur la prescription exacte qu il
+    devait refuser. C est l echantillon qui l a montre, pas la relecture.
+    """
+    logiques = []
+    tampon = ""
+    debut = None
+    for numero, brute in enumerate(texte.splitlines(), 1):
+        if not tampon:
+            debut = numero
+        nue = brute.rstrip()
+        if nue.endswith("\\"):
+            tampon += nue[:-1] + " "
+            continue
+        tampon += nue
+        logiques.append((debut, tampon))
+        tampon = ""
+    if tampon:
+        logiques.append((debut, tampon))
+    return logiques
+
+
+def _coupables(texte, motif):
+    """Lignes logiques ou le motif frappe, citations exclues."""
+    trouvees = []
+    for numero, ligne in lignes_logiques(texte):
+        if ligne.lstrip().startswith(">"):
+            continue
+        if motif.search(ligne):
+            trouvees.append((numero, ligne.strip()))
+    return trouvees
+
+
+def lignes_qui_arment(texte):
+    """Prescriptions d armement de l unite desarmee."""
+    return _coupables(texte, ARMEMENT)
+
+
+def lignes_de_copie_en_masse(texte):
+    """Copies de tout etc/systemd/system/ sans exclusion."""
+    return _coupables(texte, COPIE_EN_MASSE)
+
+
+class TestAucunDocumentNArmeUneUniteDesarmee:
+    """Le guide ne doit plus prescrire ce que le depot interdit."""
+
+    def test_aucun_document_de_procedure_n_arme_midnight_logsync(self):
+        """docs/ seulement : c est ce qu on suit sous la pression."""
+        coupables = []
+        for chemin in _documents_markdown(["docs"]):
+            for numero, ligne in lignes_qui_arment(_lire(chemin)):
+                coupables.append("%s:%d %s" % (chemin, numero, ligne[:70]))
+        assert not coupables, (
+            "documents prescrivant d armer %s : %s"
+            % (UNITE_DESARMEE, "; ".join(coupables)))
+
+    def test_aucun_document_ne_copie_les_unites_en_masse(self):
+        """Une copie globale reinstallerait l unite desarmee."""
+        coupables = []
+        for chemin in _documents_markdown(["docs", "etc"]):
+            for numero, ligne in lignes_de_copie_en_masse(_lire(chemin)):
+                coupables.append("%s:%d %s" % (chemin, numero, ligne[:70]))
+        assert not coupables, (
+            "copies en masse de etc/systemd/system sans exclusion : %s"
+            % "; ".join(coupables))
+
+
+class TestLeControleDesUnitesVoitCeQuIlDoitVoir:
+    """Les deux echantillons sont les lignes reelles du 2026-09-20."""
+
+    def test_le_controle_voit_une_prescription_d_armement(self):
+        echantillon = (
+            "sudo systemctl daemon-reload\n"
+            "sudo systemctl enable --now mediaman.timer \\\n"
+            "                            midnight-logs-commit.timer midnight-logsync.timer\n"
+            "> Retablir par : sudo systemctl enable --now midnight-logsync.timer\n")
+        vues = lignes_qui_arment(echantillon)
+        assert len(vues) == 1, vues
+        # la ligne logique commence a la ligne 2 et se prolonge sur la 3 :
+        # c est exactement la forme que prenait le piege dans le guide.
+        assert vues[0][0] == 2, vues
+        assert "midnight-logsync.timer" in vues[0][1], vues
+
+    def test_le_controle_voit_une_copie_en_masse_et_epargne_la_boucle(self):
+        dangereux = ("sudo cp etc/systemd/system/*.service /etc/systemd/system/\n"
+                     "sudo cp etc/systemd/system/*.timer /etc/systemd/system/\n")
+        sur = ("for unite in etc/systemd/system/*.service; do\n"
+               "  case \"$unite\" in *midnight-logsync*) continue ;; esac\n"
+               "  sudo cp \"$unite\" /etc/systemd/system/\n"
+               "done\n")
+        assert len(lignes_de_copie_en_masse(dangereux)) == 2
+        assert lignes_de_copie_en_masse(sur) == []

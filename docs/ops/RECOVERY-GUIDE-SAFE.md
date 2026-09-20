@@ -215,26 +215,42 @@ kept correct. Do not retype it from memory.
 
 Four systemd timers, defined under `etc/systemd/system/`:
 
-| Timer | Interval | What it does |
-|---|---|---|
-| `mediaman.timer` | 15 min | MediaMan article pipeline |
-| `mediaman-events.timer` | 15 min | MediaMan event pipeline |
-| `midnight-logs-commit.timer` | 15 min | commit logs to git |
-| `midnight-logsync.timer` | 3 min | push logs to GitHub |
+Measured on the Pi on 2026-09-20. **One timer is installed and running, not four.**
+
+| Timer | Installed | State | What it does |
+|---|---|---|---|
+| `midnight-logs-commit.timer` | yes | `enabled`, `active`, every 15 min | commits logs to git |
+| `mediaman.timer` | **no** | `LoadState=not-found` | MediaMan article pipeline — defect 90 |
+| `mediaman-events.timer` | **no** | `LoadState=not-found` | MediaMan event pipeline — defect 90 |
+| `midnight-logsync.timer` | yes | `disabled`, **deliberately** | see the warning below |
+
+> ⛔ **Never enable `midnight-logsync.timer`.**
+> Its `ExecStart` truncates in place any service log over 900 kB down to its
+> last 300 lines, with no backup. It declares no `User=`, so it would run as
+> root in a repository owned by `aneto`. Its `WorkingDirectory=/home/pi/...`
+> has never existed on this boat. H7e disarmed it on 2026-09-17 and wrote the
+> reason in capitals at the top of the unit file itself. Earlier versions of
+> this very guide told you to enable it — that was defect 89.
 
 ```bash
-sudo cp etc/systemd/system/*.service etc/systemd/system/*.timer /etc/systemd/system/
+# Deploy the reference units, EXCEPT the disarmed one.
+for unite in etc/systemd/system/*.service etc/systemd/system/*.timer; do
+  case "$unite" in *midnight-logsync*) continue ;; esac
+  sudo cp "$unite" /etc/systemd/system/
+done
 sudo systemctl daemon-reload
-sudo systemctl enable --now mediaman.timer mediaman-events.timer \
-                            midnight-logs-commit.timer midnight-logsync.timer
+sudo systemctl enable --now midnight-logs-commit.timer
 systemctl list-timers --all | grep -E 'mediaman|midnight'
 systemctl list-units --state=failed
 ```
 
-`systemctl list-units --state=failed` should print nothing. As of 2026-09-18 it
-prints `midnight-logsync.service` and `telegraf.service` — both known, both
-open (defects 70 and 71). Background on the timers:
-`logs/debug/timers-systemd-2026-09-17.md`.
+As of 2026-09-20, `systemctl list-units --state=failed` prints
+`telegraf.service`, and nothing else. Telegraf's configuration asks for a
+parser named `nmea`, which Telegraf does not provide; the service has
+therefore never started a single time (defect 71). `midnight-logsync.service`
+no longer appears there: it is disabled, not failing. Four installed units
+diverge from their reference copy in this repository (defect 91). Background
+on the timers: `logs/debug/timers-systemd-2026-09-17.md`.
 
 ---
 
@@ -242,7 +258,7 @@ open (defects 70 and 71). Background on the timers:
 
 ```bash
 cd ~/midnightrider-navigation
-python3 -m pytest tests/mcp        # expect 100 passed
+python3 -m pytest tests/mcp        # expect 104 passed
 python3 -m pytest tests/mediaman   # expect 495 passed
 ```
 
@@ -329,10 +345,10 @@ Dashboards are redeployed with `scripts/deploy-dashboards-to-grafana.sh`.
 - [ ] `curl localhost:8086/health` → `pass`
 - [ ] Bucket `midnight_rider` present, organisation `MidnightRider`
 - [ ] `ls mcp/servers/*.js | wc -l` → `11`
-- [ ] `python3 -m pytest tests/mcp` → 100 passed
+- [ ] `python3 -m pytest tests/mcp` → 104 passed
 - [ ] `python3 -m pytest tests/mediaman` → 495 passed
 - [ ] `systemctl list-units --state=failed` → empty
-- [ ] `systemctl list-timers` → the four timers scheduled
+- [ ] `systemctl list-timers` → `midnight-logs-commit.timer` scheduled, the only one installed (defect 90)
 - [ ] With the boat powered: a fresh point in `navigation.position` within 5 minutes
 - [ ] `git status` → clean
 

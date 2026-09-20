@@ -5,8 +5,11 @@ All custom systemd service files for the Midnight Rider navigation system.
 These files are **reference copies in Git** — deploy on the Pi with:
 
 ```bash
-sudo cp etc/systemd/system/*.service /etc/systemd/system/
-sudo cp etc/systemd/system/*.timer /etc/systemd/system/
+# NE JAMAIS copier midnight-logsync : unite desarmee, voir son en-tete.
+for unite in etc/systemd/system/*.service etc/systemd/system/*.timer; do
+  case "$unite" in *midnight-logsync*) continue ;; esac
+  sudo cp "$unite" /etc/systemd/system/
+done
 sudo systemctl daemon-reload
 sudo systemctl enable <service>
 sudo systemctl start <service>
@@ -71,8 +74,11 @@ sudo udevadm trigger
 
 ```bash
 # 1. Copy service files
-sudo cp etc/systemd/system/*.service /etc/systemd/system/
-sudo cp etc/systemd/system/*.timer /etc/systemd/system/
+# NE JAMAIS copier midnight-logsync : unite desarmee, voir son en-tete.
+for unite in etc/systemd/system/*.service etc/systemd/system/*.timer; do
+  case "$unite" in *midnight-logsync*) continue ;; esac
+  sudo cp "$unite" /etc/systemd/system/
+done
 
 # 2. Copy udev rules
 sudo cp etc/udev/rules.d/*.rules /etc/udev/rules.d/
@@ -120,7 +126,7 @@ journalctl -u wit-nmea-server -n 20
 This directory is the **canonical source** for all Midnight Rider custom systemd services.
 
 Live services on the Pi should match what's in Git:
-- After any change to `etc/systemd/system/*.service`, redeploy to Pi with `sudo cp`
+- After any change to `etc/systemd/system/*.service`, redeploy to Pi with the loop above, which skips `midnight-logsync`
 - After any change on the Pi, commit back to Git
 
 ---
