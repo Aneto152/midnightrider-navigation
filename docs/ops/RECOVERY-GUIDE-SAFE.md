@@ -72,19 +72,36 @@ Expected: `active (running)`, `Restart=always`, low `NRestarts`.
 
 ### 1.2 — Docker services
 
-Four containers, and only four, are defined in `docker-compose.yml` at the
-repository root:
+Four containers carry the boat. The repository `docker-compose.yml` declares
+all four, but it does not own all four. Measured with `docker inspect` on
+2026-09-20:
 
-| Container | Port | Role |
-|---|---|---|
-| `influxdb` | 8086 | time-series store, InfluxDB 2.8 |
-| `grafana` | 3001 | dashboards |
-| `regatta` | 5000 | regatta server |
-| `start-line-worker` | — | start-line computation worker |
+| Container | Port | Role | Compose project that owns it |
+|---|---|---|---|
+| `influxdb` | 8086 | time-series store, InfluxDB 2.8 | `midnightrider-navigation` |
+| `grafana` | 3001 | dashboards | `midnightrider-navigation` |
+| `regatta` | 5000 | regatta server | `midnightrider-navigation` |
+| `start-line-worker` | — | start-line computation worker | `workspace` |
+
+> ⚠️ **Defect 98 — read this before bringing the stack up.** 1 of these
+> containers is owned by another Compose project: `start-line-worker`. That
+> project's Compose file lives outside the repository and is not versioned.
+> The repository compose fixes the same `container_name`, so while that
+> container exists, `docker compose up -d` from here stops on a name
+> conflict. The others belong to this repository and reconcile silently.
+
+Check the owner first, then bring up only what this repository owns:
 
 ```bash
 cd ~/midnightrider-navigation
-docker compose up -d
+docker inspect -f '{{index .Config.Labels "com.docker.compose.project"}}' start-line-worker
+```
+
+- answer `midnightrider-navigation`, or `No such object` → `docker compose up -d`
+- anything else → `docker compose up -d influxdb grafana regatta`, and leave that
+  container to the project that owns it
+
+```bash
 docker ps --format '{{.Names}}\t{{.Status}}'
 ```
 
@@ -258,7 +275,7 @@ on the timers: `logs/debug/timers-systemd-2026-09-17.md`.
 
 ```bash
 cd ~/midnightrider-navigation
-python3 -m pytest tests/mcp        # expect 112 passed
+python3 -m pytest tests/mcp        # expect 116 passed
 python3 -m pytest tests/mediaman   # expect 495 passed
 ```
 
@@ -345,7 +362,7 @@ Dashboards are redeployed with `scripts/deploy-dashboards-to-grafana.sh`.
 - [ ] `curl localhost:8086/health` → `pass`
 - [ ] Bucket `midnight_rider` present, organisation `MidnightRider`
 - [ ] `ls mcp/servers/*.js | wc -l` → `11`
-- [ ] `python3 -m pytest tests/mcp` → 112 passed
+- [ ] `python3 -m pytest tests/mcp` → 116 passed
 - [ ] `python3 -m pytest tests/mediaman` → 495 passed
 - [ ] `systemctl list-units --state=failed` → empty
 - [ ] `systemctl list-timers` → `midnight-logs-commit.timer` scheduled, the only one installed (defect 90)

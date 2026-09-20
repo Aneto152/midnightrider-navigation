@@ -344,12 +344,14 @@ NON_CHEMINS = {
     "navigation.position",   # nom de measurement InfluxDB
     "telegraf.service",      # unite systeme absente du depot - defauts 71, 95
     "Node.js",
-    # Le mot de passe WiFi. ARCHITECTURE-MASTER le cite et dit lui-meme
-    # "git prive seulement" : le fichier existe sur le Pi et ne doit pas
-    # etre suivi. Sans cette ligne, la barriere echoue sur tout clone
-    # propre - elle s appelle "tout chemin cite existe" et verifiait en
-    # realite "existe sur cette machine-ci".
-    "config/wifi-ap.txt",
+    # H14c avait ajoute ici "config/wifi-ap.txt" en croyant boucher un
+    # trou : la barriere aurait echoue sur tout clone propre. C est faux.
+    # chemins_cites() appelle git check-ignore depuis bien avant H14c, et
+    # le fichier est declare dans .gitignore. Ce qui echouait etait mon
+    # banc d essai : une archive extraite sans .git, ou check-ignore ne
+    # peut rien dire. L exception codee en dur est donc retiree, et
+    # chemins_morts() recoit le meme recours a git - deux detecteurs de la
+    # meme chose doivent la voir pareil. Voir logs/debug/RETRACTATIONS.md.
 }
 
 VERBE_DOCKER = re.compile(
@@ -390,6 +392,8 @@ def chemins_morts(document, noms=None):
                 c = c.lstrip("./")
                 if os.path.exists(os.path.join(RACINE, c)):
                     continue
+                if _ignore_par_git(c):
+                    continue  # absent a dessein : git le declare ignore
                 if "/" not in c and c in noms:
                     continue  # nom nu, resolu ailleurs dans le depot
                 morts.append((numero, brut))
@@ -1186,3 +1190,154 @@ class TestChaqueDefautOuvertDitCommentIlAEteObserve:
         assert constat_de(avec) == "docker inspect"
         assert constat_de(sans) == ""
         assert "constat" in MARQUEUR_CONSTAT
+
+
+# ---------------------------------------------------------------------------
+# H14d - un compte rendu encore cite dit l etat du jour
+#
+# H14c a rectifie un constat qui affirmait au passe des gestes jamais faits.
+# Le meme jour, il en a ecrit trois du meme genre : le defaut 97 disait que
+# les quatre conteneurs de production etaient definis hors depot quand sa
+# propre mesure en avait trouve un seul, son compte rendu annoncait un
+# defaut 98 qu il n a pas ouvert, et son message de commit aussi. Trois
+# textes ecrits d avance, aucun conditionne a ce qui venait d etre mesure.
+#
+# Un compte rendu qu un defaut cite comme sa preuve ou son constat est
+# invoque pour l etat d aujourd hui : il doit dire l etat d aujourd hui. Les
+# comptes rendus que plus rien ne cite sont de l histoire, et on ne reecrit
+# pas l histoire - ils sont hors de cette mesure, et c est dit ici plutot
+# que laisse a deviner.
+#
+# Une phrase fausse peut survivre a un seul endroit : dans une citation,
+# ligne commencant par >. C est deja la regle de chemins_morts() et du test
+# des outils morts, qui laissent ce qui n existe plus vivre dans un bloc de
+# rectification et nulle part ailleurs. Un rectificatif doit pouvoir citer
+# ce qu il rectifie.
+
+# "**98** est ouvert", ou "le defaut 98 est ouvert". Une affirmation ecrite
+# autrement echappe a la mesure : elle s appelle donc "etat annonce en
+# clair", et pas "toute affirmation".
+ETAT_ANNONCE = re.compile(
+    r"(?:\*\*(\d{1,3}[a-z]?)\*\*|(?:le\s+)?defauts?\s+(\d{1,3}[a-z]?))"
+    r"\s+est\s+(ouvert|ferme|retracte)")
+
+# "98 est ouvert si le projet n est pas celui du depot" : une condition
+# n est pas un etat. Un compte rendu rend compte de ce qui a ete mesure.
+ETAT_SOUS_CONDITION = re.compile(
+    r"(?:\*\*\d{1,3}[a-z]?\*\*|defauts?\s+\d{1,3}[a-z]?)"
+    r"\s+(?:est\s+(?:ouvert|ferme|retracte)\s+si\b|ser(?:a|ait)\b)")
+
+
+def hors_citation(texte):
+    """Le texte prive de ses lignes de citation, numeros de lignes gardes."""
+    return "\n".join("" if l.lstrip().startswith(">") else l
+                     for l in texte.splitlines())
+
+
+def comptes_rendus_vivants():
+    """Fichiers logs/debug cites par un defaut ouvert ou ferme aujourd hui."""
+    journal = _journal()
+    cites = set()
+    entrees = (journal.get("defects_open", [])
+               + journal.get("defects_closed", []))
+    for entree in entrees:
+        queue = ""
+        for marqueur in (MARQUEUR_CONSTAT, MARQUEUR_PREUVE):
+            if marqueur in entree:
+                queue += " " + entree.split(marqueur, 1)[1]
+        for chemin in CHEMIN_DANS_UNE_PREUVE.findall(queue):
+            if chemin.startswith("logs/debug/") and chemin.endswith(".md"):
+                cites.add(chemin)
+    return sorted(cites)
+
+
+def etats_annonces():
+    """Triplets (compte rendu, identifiant, etat), citations exclues."""
+    trouves = []
+    for chemin in comptes_rendus_vivants():
+        absolu = os.path.join(RACINE, chemin)
+        if not os.path.exists(absolu):
+            continue
+        with open(absolu, encoding="utf-8") as fichier:
+            texte = hors_citation(fichier.read())
+        for gras, nu, etat in ETAT_ANNONCE.findall(texte):
+            trouves.append((chemin, gras or nu, etat))
+    return trouves
+
+
+def etats_du_journal():
+    """Deux ensembles d identifiants : ce qui est ouvert, ce qui est ferme."""
+    journal = _journal()
+
+    def tete(entree):
+        morceaux = entree.split()
+        return morceaux[0] if morceaux else ""
+
+    return ({tete(e) for e in journal.get("defects_open", [])},
+            {tete(e) for e in journal.get("defects_closed", [])})
+
+
+class TestUnCompteRenduVivantDitLEtatDuJour:
+    """Ce qu un defaut cite comme sa preuve parle du present."""
+
+    def test_tout_etat_annonce_est_celui_du_journal(self):
+        ouverts, fermes = etats_du_journal()
+        fautes = []
+        for chemin, identifiant, etat in etats_annonces():
+            if etat == "ouvert" and identifiant not in ouverts:
+                fautes.append("%s annonce %s ouvert" % (chemin, identifiant))
+            elif etat in ("ferme", "retracte") and identifiant not in fermes:
+                fautes.append("%s annonce %s %s" % (chemin, identifiant, etat))
+        assert fautes == [], (
+            "compte(s) rendu(s) encore cite(s) annoncant un etat que le "
+            "journal ne porte pas : %s" % fautes)
+
+    def test_aucun_etat_n_est_annonce_sous_condition(self):
+        fautes = []
+        for chemin in comptes_rendus_vivants():
+            absolu = os.path.join(RACINE, chemin)
+            if not os.path.exists(absolu):
+                continue
+            with open(absolu, encoding="utf-8") as fichier:
+                texte = hors_citation(fichier.read())
+            for trouve in ETAT_SOUS_CONDITION.findall(texte):
+                fautes.append("%s -> %s" % (chemin, trouve.strip()))
+        assert fautes == [], (
+            "un compte rendu pose une condition la ou il doit porter un "
+            "etat mesure : %s" % fautes)
+
+    def test_le_controle_des_etats_annonces_voit_ce_qu_il_doit_voir(self):
+        """Les trois formes qui ont echappe a H14c, plus la citation."""
+        annonce = "- **98** est ouvert : conflit de nom de conteneur"
+        condition = "- **98** est ouvert si le projet n est pas celui du depot"
+        citee = "> - **98** est ouvert si le projet n est pas celui du depot"
+        nue = "le defaut 92 est retracte"
+        assert ETAT_ANNONCE.findall(hors_citation(annonce)) == [
+            ("98", "", "ouvert")]
+        assert ETAT_ANNONCE.findall(hors_citation(nue)) == [
+            ("", "92", "retracte")]
+        assert ETAT_SOUS_CONDITION.findall(hors_citation(condition))
+        assert not ETAT_SOUS_CONDITION.findall(hors_citation(citee))
+        assert not ETAT_ANNONCE.findall(hors_citation(citee))
+
+
+class TestLesDeuxDetecteursDeCheminsSAccordent:
+    """Deux detecteurs de la meme chose doivent la voir pareil.
+
+    chemins_cites() savait depuis longtemps qu un fichier declare dans
+    .gitignore n a pas a exister ; chemins_morts() ne le savait pas. H14c a
+    cru boucher le trou en codant en dur une exception, sur une observation
+    faite hors arbre git - la ou git check-ignore ne peut rien repondre.
+    """
+
+    def test_ni_exception_codee_en_dur_ni_detecteur_aveugle(self):
+        import inspect as _inspect
+        assert _ignore_par_git("config/wifi-ap.txt"), (
+            "config/wifi-ap.txt n est plus declare ignore par git : la "
+            "retractation de H14d ne tient plus")
+        assert "config/wifi-ap.txt" not in NON_CHEMINS, (
+            "l exception codee en dur est revenue - les deux detecteurs "
+            "doivent lire la meme source, git")
+        assert "_ignore_par_git" in _inspect.getsource(chemins_morts), (
+            "chemins_morts() ne consulte plus git : il redeviendrait "
+            "aveugle aux fichiers volontairement non suivis")
