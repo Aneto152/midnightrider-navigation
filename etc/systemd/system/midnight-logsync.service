@@ -2,7 +2,10 @@
 # UNITE RETIREE LE 2026-09-17 - NE PAS REINSTALLER, NE PAS REPARER
 #
 # Desarmee par :  sudo systemctl disable --now midnight-logsync.timer
-# Retablir par :  sudo systemctl enable --now midnight-logsync.timer
+# Retablissement : aucun. La commande qui rearmerait cette unite ne
+#   figure plus ici, ni dans le README de ce dossier : le 2026-09-20 elle
+#   y etait encore, toute prete, trois lignes sous ce NE PAS REINSTALLER.
+#   Defaut 94.
 #
 # Pourquoi elle est retiree :
 #   - elle n a JAMAIS fonctionne : WorkingDirectory=/home/pi/... est un
@@ -17,9 +20,9 @@
 #     sauvegarde, et elle ne declare aucun User= donc tournerait en
 #     root dans un depot appartenant a aneto.
 #
-# ATTENTION : le README de ce dossier propose
-#   sudo cp etc/systemd/system/*.service /etc/systemd/system/
-# ce qui la reinstallerait. Exclure explicitement midnight-logsync.
+# ATTENTION : toute copie globale de ce dossier vers /etc/systemd/system
+# reinstallerait cette unite. Le README utilise desormais une boucle qui
+# saute midnight-logsync, et un test refuse toute copie en masse.
 #
 # Constat detaille : logs/debug/timers-systemd-2026-09-17.md
 # Pose par h7e-v1.

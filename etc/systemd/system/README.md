@@ -147,11 +147,13 @@ sudo systemctl disable --now midnight-logsync.timer
 sudo systemctl daemon-reload
 ```
 
-Retablissement, si un jour c est voulu :
-
-```bash
-sudo systemctl enable --now midnight-logsync.timer
-```
+**Retablissement : aucun.** La commande qui rearmerait cette unite ne
+figure plus ici. Le 2026-09-20 elle y etait encore, dans un bloc pret a
+coller, huit lignes au-dessus de **Ne pas la reparer** — et la mesure
+posee le matin meme pour interdire exactement cela ne regardait que
+`docs/`. Defaut 94. Si cette fonction manquait un jour vraiment, ce
+serait une unite neuve : avec un `User=`, un `WorkingDirectory=` qui
+existe, et sans troncature en place.
 
 **Aucune fonction n est perdue.** `scripts/commit-logs.sh`, lance par
 `midnight-logs-commit.timer` toutes les 15 minutes, couvre deja
@@ -163,9 +165,10 @@ plus de 900 ko a ses 300 dernieres lignes, sans sauvegarde, et l unite
 installee ne declare aucun `User=` : elle tournerait en `root` dans un
 depot appartenant a `aneto`.
 
-> ATTENTION au `sudo cp etc/systemd/system/*.service /etc/systemd/system/`
-> de la section Deployment Checklist ci-dessus : il reinstallerait cette
-> unite. En exclure explicitement `midnight-logsync`.
+> La section Deployment Checklist ci-dessus ne copie plus les unites en
+> masse : sa boucle saute `midnight-logsync` depuis H14a, le 2026-09-20.
+> Toute copie globale de ce dossier vers `/etc/systemd/system`
+> reinstallerait cette unite ; un test la refuse desormais.
 
 Constat detaille : `logs/debug/timers-systemd-2026-09-17.md`.
 

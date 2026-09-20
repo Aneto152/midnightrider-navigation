@@ -842,15 +842,53 @@ COPIE_EN_MASSE = re.compile(
     r"\bcp\s+[^\n]*etc/systemd/system/\*[^\n]*\s/etc/systemd/system")
 
 
-def _documents_markdown(sous_repertoires):
-    """Chemins relatifs de tous les .md sous les repertoires donnes."""
+# H14a a ferme le defaut 89 avec un controle qui ne regardait que docs/.
+# Pendant qu il rendait vert, la commande interdite dormait dans
+# etc/systemd/system/README.md, dans un bloc pret a coller, et dans
+# l en-tete des deux unites elles-memes. Une mesure plus etroite que son
+# nom rassure a tort. Defaut 94.
+RACINES_SOUS_GARDE = ("docs", "etc", "scripts")
+EXTENSIONS_SOUS_GARDE = (".md", ".sh", ".service", ".timer", ".py")
+
+# Deux racines restent hors perimetre, et ce n est pas un oubli :
+#   logs/  : les constats citent le piege mot pour mot ; ce sont des
+#            archives de ce qui a ete ecrit, pas des ordres a suivre ;
+#   tests/ : les echantillons de ce fichier contiennent la ligne
+#            interdite a dessein, pour prouver que le controle la voit.
+# Un test verifie que cette exclusion reste bien celle-la, et pas une
+# autre qui se serait installee en silence.
+RACINES_HORS_GARDE = ("logs", "tests")
+
+# Les quatre fichiers ou la prescription interdite a reellement vecu. Le
+# perimetre doit les contenir : c est la seule facon de verifier qu il
+# porte son nom.
+FICHIERS_OU_LE_PIEGE_A_VECU = (
+    "docs/ops/RECOVERY-GUIDE-SAFE.md",
+    "etc/systemd/system/README.md",
+    "etc/systemd/system/midnight-logsync.service",
+    "etc/systemd/system/midnight-logsync.timer",
+)
+
+
+def _fichiers_sous_garde():
+    """Tout fichier qu un equipier peut lire et suivre.
+
+    Les .md de la racine, et sous docs/, etc/ et scripts/ ce qui se lit ou
+    s execute : .md, .sh, .service, .timer, .py. Un en-tete d unite est un
+    document de procedure comme un autre : c est la que la commande
+    interdite a survecu a H14a.
+    """
     trouves = []
-    for depart in sous_repertoires:
+    for nom in sorted(os.listdir(RACINE)):
+        if nom.endswith(".md") and os.path.isfile(os.path.join(RACINE, nom)):
+            trouves.append(nom)
+    for depart in RACINES_SOUS_GARDE:
         racine_depart = os.path.join(RACINE, depart)
         for base, dossiers, fichiers in os.walk(racine_depart):
-            dossiers[:] = [d for d in dossiers if d not in (".git", "node_modules")]
+            dossiers[:] = [d for d in dossiers
+                           if d not in (".git", "node_modules", "__pycache__")]
             for nom in fichiers:
-                if nom.endswith(".md"):
+                if nom.endswith(EXTENSIONS_SOUS_GARDE):
                     trouves.append(os.path.relpath(
                         os.path.join(base, nom), RACINE))
     return sorted(trouves)
@@ -906,22 +944,22 @@ def lignes_de_copie_en_masse(texte):
 
 
 class TestAucunDocumentNArmeUneUniteDesarmee:
-    """Le guide ne doit plus prescrire ce que le depot interdit."""
+    """Aucun fichier de procedure ne prescrit ce que le depot interdit."""
 
-    def test_aucun_document_de_procedure_n_arme_midnight_logsync(self):
-        """docs/ seulement : c est ce qu on suit sous la pression."""
+    def test_aucun_fichier_sous_garde_n_arme_midnight_logsync(self):
+        """Pas seulement docs/ : le piege vivait aussi dans etc/."""
         coupables = []
-        for chemin in _documents_markdown(["docs"]):
+        for chemin in _fichiers_sous_garde():
             for numero, ligne in lignes_qui_arment(_lire(chemin)):
                 coupables.append("%s:%d %s" % (chemin, numero, ligne[:70]))
         assert not coupables, (
-            "documents prescrivant d armer %s : %s"
+            "fichiers prescrivant d armer %s : %s"
             % (UNITE_DESARMEE, "; ".join(coupables)))
 
-    def test_aucun_document_ne_copie_les_unites_en_masse(self):
+    def test_aucun_fichier_sous_garde_ne_copie_les_unites_en_masse(self):
         """Une copie globale reinstallerait l unite desarmee."""
         coupables = []
-        for chemin in _documents_markdown(["docs", "etc"]):
+        for chemin in _fichiers_sous_garde():
             for numero, ligne in lignes_de_copie_en_masse(_lire(chemin)):
                 coupables.append("%s:%d %s" % (chemin, numero, ligne[:70]))
         assert not coupables, (
@@ -954,3 +992,46 @@ class TestLeControleDesUnitesVoitCeQuIlDoitVoir:
                "done\n")
         assert len(lignes_de_copie_en_masse(dangereux)) == 2
         assert lignes_de_copie_en_masse(sur) == []
+
+
+class TestLePerimetreDeLaMesurePorteSonNom:
+    """Ces trois controles portent sur le perimetre, pas sur son contenu.
+
+    H14a a ferme le defaut 89 avec une mesure qui ne regardait que docs/.
+    Le contenu de docs/ etait propre ; c est le perimetre qui mentait.
+    """
+
+    def test_le_perimetre_couvre_les_fichiers_ou_le_piege_a_deja_vecu(self):
+        sous_garde = set(_fichiers_sous_garde())
+        oublies = [c for c in FICHIERS_OU_LE_PIEGE_A_VECU
+                   if c not in sous_garde]
+        assert not oublies, (
+            "le perimetre n inclut pas les fichiers ou la prescription "
+            "interdite a deja vecu : %s" % "; ".join(oublies))
+
+    def test_le_perimetre_ecarte_les_archives_et_les_echantillons(self):
+        """L exclusion doit rester un choix nomme, pas un effet de bord."""
+        sous_garde = _fichiers_sous_garde()
+        dedans = [c for c in sous_garde
+                  if c.split(os.sep)[0] in RACINES_HORS_GARDE]
+        assert not dedans, (
+            "logs/ et tests/ citent la ligne interdite a dessein : %s"
+            % "; ".join(dedans[:3]))
+        assert len(sous_garde) > 50, (
+            "perimetre suspect : %d fichiers seulement" % len(sous_garde))
+
+    def test_le_controle_voit_les_deux_formes_trouvees_hors_docs(self):
+        """Les deux lignes reelles du 2026-09-20, hors de docs/.
+
+        La premiere vient d un bloc ```bash du README des unites, la
+        seconde d un commentaire d en-tete d unite. Un controle limite au
+        markdown de docs/ n en voyait aucune.
+        """
+        echantillon = (
+            "```bash\n"
+            "sudo systemctl enable --now midnight-logsync.timer\n"
+            "```\n"
+            "# Retablir par :  sudo systemctl enable --now "
+            "midnight-logsync.timer\n")
+        vues = lignes_qui_arment(echantillon)
+        assert [numero for numero, _ in vues] == [2, 4], vues
