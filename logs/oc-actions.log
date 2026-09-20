@@ -416,3 +416,12 @@
 [2026-09-20T18:53:03] [FILE_MODIFY] [docs] H13 : le guide passe de 94 a 100 tests annonces
 [2026-09-20T18:53:03] [RESULT] [registre] H13 : SUCCESS - defauts 87 et 88 fermes avec preuve
 [2026-09-20T18:53:03] [COMMIT] SHA: cfb5201b633d8a026ab79a876e0849577f3bcc17
+[2026-09-20T19:41:38] [DEBUG] [docs] H14a : le guide v2.0 prescrivait d armer midnight-logsync, unite desarmee par H7e - defaut 89
+[2026-09-20T19:41:38] [FILE_MODIFY] [docs] H14a : ordre d armement retire, avertissement en bloc cite pose
+[2026-09-20T19:41:38] [FILE_MODIFY] [docs] H14a : tableau des timers remplace par l etat mesure - un seul installe, pas quatre
+[2026-09-20T19:41:38] [FILE_MODIFY] [docs] H14a : deux copies en masse du README des unites remplacees par une boucle excluant midnight-logsync
+[2026-09-20T19:41:38] [FILE_MODIFY] [tests] H14a : deux controles poses, deux echantillons batis sur les lignes reelles du jour
+[2026-09-20T19:41:38] [DEBUG] [services] H14a : cause de l echec de telegraf etablie - parseur nmea inexistant, jamais demarre
+[2026-09-20T19:41:38] [DEBUG] [docker] H14a : le conteneur orphelin vient de .openclaw/workspace, pas du guide - mon attribution du matin etait fausse
+[2026-09-20T19:41:38] [RESULT] [docs] H14a : SUCCESS - 89 ferme, 70 requalifie, 90 a 93 ouverts
+[2026-09-20T19:41:38] [COMMIT] SHA: 96b84834d85a3fb4d7fed21964336cdbe79812ea

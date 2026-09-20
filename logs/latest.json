@@ -1,6 +1,6 @@
 {
-  "task": "H13 - une fermeture doit porter sa preuve",
-  "date": "2026-09-20T18:53:03Z",
+  "task": "H14a - le guide cesse de prescrire ce que le depot interdit",
+  "date": "2026-09-20T19:41:38Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -86,7 +86,8 @@
     "84 H12 annoncait 80 tests mcp dans un guide dont le commit en portait 85 - corrige et mis sous garde en H12b | preuve: tests/mcp/test_h9b_coherence_doc_code.py compare le chiffre annonce au chiffre declare",
     "85 logs/latest.json se contredisait - 67 ouvert et ferme, 74 ferme deux fois, une entree sans identifiant, aucun test sur ces listes - repare et mis sous garde par H12c, verifiable : quatre tests | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse une entree ouverte et fermee a la fois",
     "87 tests/mcp/test_phase2_historical_contract.py annoncait 23 scenarios puis en enumerait 24 - H5a avait aligne le nombre et laisse la liste - en-tete accorde a ses deux chiffres par H13 | preuve: tests/mcp/test_h9b_coherence_doc_code.py compare l en-tete a l enumeration et aux fonctions",
-    "88 etc/systemd/system/mediaman-events.service affirmait en commentaire que mediaman.service declare ProtectHome=yes, faux depuis H5d - reecrit au passe par H13 | preuve: etc/systemd/system/mediaman-events.service"
+    "88 etc/systemd/system/mediaman-events.service affirmait en commentaire que mediaman.service declare ProtectHome=yes, faux depuis H5d - reecrit au passe par H13 | preuve: etc/systemd/system/mediaman-events.service",
+    "89 le guide de secours v2.0 prescrivait systemctl enable --now midnight-logsync.timer, unite desarmee par H7e dont l en-tete dit en capitales NE PAS REINSTALLER - ordre retire, avertissement pose, copies en masse du README remplacees par une boucle qui l exclut | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse toute prescription d armement dans docs/ et toute copie en masse"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -101,7 +102,7 @@
     "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md",
     "68 - validate_capabilities() ne controle au demarrage que get_historical_snapshot ; la porte du direct, get_snapshot, n est pas validee. Constate le 2026-09-18 par la relecture de H9.",
     "69 - conteneur Docker nomme signalk, Exited (137) depuis 4 mois. La regle du bord est systemctl uniquement pour Signal K ; ce conteneur est un piege dormant. Constate le 2026-09-18.",
-    "70 - midnight-logsync.service en echec : les journaux de service ne sont plus pousses sur GitHub. Constate le 2026-09-18.",
+    "70 - midnight-logsync.timer est desarmee a dessein depuis H7e, ce n est pas une panne : elle n apparait plus dans les unites en echec. Ce qui reste ouvert est la consequence : les journaux de services ne sont pas publies, .gitignore excluant logs/services/*.log. Requalifie le 2026-09-20 par H14a.",
     "71 - telegraf.service en echec, unite absente du depot. Constate le 2026-09-18.",
     "72 - quatre plugins de calcul tournent sans donnee d entree et ont ecrit 11,8 Mo de journaux (j30-leeway 3,8 Mo, truewind 3,1 Mo, heading-true 2,6 Mo, current 2,2 Mo) pour un standard de 5 Mo. Constate le 2026-09-18.",
     "73 - InfluxDB 2.8.0 panique cote lecture sur l operateur last : 'Dispatcher panic: arrow/array: index out of range', des dizaines d occurrences le 2026-09-17 a 03:27. C est l operateur central du chemin MCP. Constate le 2026-09-18.",
@@ -110,7 +111,11 @@
     "77 la procedure d activation cloud cite trois artefacts inexistants - rectification datee en H11b",
     "78 les champs de tete de latest.json etaient perimes du 2026-09-17 - corriges en H11b",
     "82 README.md cite quatre serveurs MCP fantomes en -server.js",
-    "83 recensement : 189 chemins morts dans la documentation canonique, dont 119 dans docs/INDEX.md"
+    "83 recensement : 189 chemins morts dans la documentation canonique, dont 119 dans docs/INDEX.md",
+    "90 - mediaman.service, mediaman.timer, mediaman-events.service et mediaman-events.timer ne sont pas installes sur la machine (LoadState=not-found). La chaine mediaman n est plus programmee, alors que le collecteur MCP a ecrit a 14h52 le 2026-09-20 : il reste a comprendre ce qui la declenche. Constate le 2026-09-20.",
+    "91 - quatre unites installees divergent de leur copie de reference au depot : calypso_direct.service, midnight-logsync.service, midnightrider-portal.service, midnight-logsync.timer. Constate le 2026-09-20.",
+    "92 - /home/aneto/.openclaw/workspace/docker-compose.yml declare un Signal K en conteneur avec restart: unless-stopped. C est de la que vient le conteneur orphelin, pas du guide comme je l avais affirme. Un docker compose up dans ce repertoire lancerait un second Signal K en concurrence du service systemd sur le port 3000. Constate le 2026-09-20.",
+    "93 - l historique git porte 3 104 Mo de logs/services/wit-ble-direct.log, 1 824 Mo de logs/debug/data-flow.log et 517 Mo de logs/services/calypso-direct.log, malgre .gitignore : un git add -f les a forces. 1 350 des 2 411 commits sont des logs: auto-update. 146 des 344 Mo sont des objets en vrac qu un git gc repackerait sans toucher a l historique. Constate le 2026-09-20."
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -259,7 +264,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-20T18:53:03",
+  "last_updated": "2026-09-20T19:41:38",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -1100,9 +1105,49 @@
       "no_service_restarted": true,
       "no_container_removed": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H14a - le guide cesse de prescrire ce que le depot interdit",
+      "version": "h14a-v1",
+      "started_utc": "20260920T194026Z",
+      "finished_utc": "2026-09-20T19:41:38",
+      "content_commit": "96b84834d85a3fb4d7fed21964336cdbe79812ea",
+      "base": "de89dcc6c418b9139bb6dc17e77ff68c91567926",
+      "status": "SUCCESS",
+      "trap_removed": "le guide v2.0 prescrivait d armer midnight-logsync, unite desarmee par H7e ; meme famille de faute que le docker-compose up -d de la v1.1",
+      "third_path": "les deux copies en masse du README des unites reinstallaient l unite desarmee sans qu on tape rien de suspect",
+      "measured": "un seul timer installe et actif, pas quatre ; mediaman.timer et mediaman-events.timer sont not-found",
+      "telegraf_cause": "la configuration reclame un parseur nmea que Telegraf ne fournit pas : le service n a jamais demarre",
+      "i_was_wrong": "j avais attribue le conteneur orphelin au guide v1.1 ; docker inspect le rattache a /home/aneto/.openclaw/workspace",
+      "git_weight": "3 104 Mo de wit-ble-direct.log dans l historique, pas data-flow.log comme je le supposais",
+      "guard_tests": "32 -> 36",
+      "guide_count": "100 -> 104",
+      "mcp_tests_declared": 104,
+      "defects_closed": [
+        89
+      ],
+      "defects_requalified": [
+        70
+      ],
+      "defects_opened": [
+        90,
+        91,
+        92,
+        93
+      ],
+      "scope": "fichiers du depot uniquement ; 90 a 93 demandent d agir sur la machine, ce sera H14b",
+      "tests": {
+        "barriere": "============================== 36 passed in 0.68s ==============================",
+        "suite-mcp": "============================= 104 passed in 41.25s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.08s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "no_installed_unit_touched": true,
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H13 - chaque fermeture cite ce qui la prouve",
+  "last_task": "H14a - piege 89 retire du guide de secours",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-20T18:53:03"
+  "last_update": "2026-09-20T19:41:38"
 }
