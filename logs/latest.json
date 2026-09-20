@@ -1,6 +1,6 @@
 {
-  "task": "H12c - le journal doit se tenir lui-meme",
-  "date": "2026-09-20T18:31:32Z",
+  "task": "H13 - une fermeture doit porter sa preuve",
+  "date": "2026-09-20T18:53:03Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -84,7 +84,9 @@
     "67 harnais JS mort supprime (tests/mcp/js/), npm test et mcp/README.md corriges - H12b, verifiable : le repertoire n existe plus | preuve: tests/mcp/test_h9b_coherence_doc_code.py verifie que tests/mcp/js a disparu",
     "80 le harnais codait en dur le bucket inexistant signalk - supprime avec lui en H12b | preuve: tests/mcp/test_h9b_coherence_doc_code.py garde les valeurs attestees",
     "84 H12 annoncait 80 tests mcp dans un guide dont le commit en portait 85 - corrige et mis sous garde en H12b | preuve: tests/mcp/test_h9b_coherence_doc_code.py compare le chiffre annonce au chiffre declare",
-    "85 logs/latest.json se contredisait - 67 ouvert et ferme, 74 ferme deux fois, une entree sans identifiant, aucun test sur ces listes - repare et mis sous garde par H12c, verifiable : quatre tests | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse une entree ouverte et fermee a la fois"
+    "85 logs/latest.json se contredisait - 67 ouvert et ferme, 74 ferme deux fois, une entree sans identifiant, aucun test sur ces listes - repare et mis sous garde par H12c, verifiable : quatre tests | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse une entree ouverte et fermee a la fois",
+    "87 tests/mcp/test_phase2_historical_contract.py annoncait 23 scenarios puis en enumerait 24 - H5a avait aligne le nombre et laisse la liste - en-tete accorde a ses deux chiffres par H13 | preuve: tests/mcp/test_h9b_coherence_doc_code.py compare l en-tete a l enumeration et aux fonctions",
+    "88 etc/systemd/system/mediaman-events.service affirmait en commentaire que mediaman.service declare ProtectHome=yes, faux depuis H5d - reecrit au passe par H13 | preuve: etc/systemd/system/mediaman-events.service"
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
@@ -257,7 +259,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-20T18:31:32",
+  "last_updated": "2026-09-20T18:53:03",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -1068,9 +1070,39 @@
       "no_service_restarted": true,
       "no_container_removed": true,
       "influxdb_writes": 0
+    },
+    {
+      "task": "H13 - une fermeture doit porter sa preuve",
+      "version": "h13-v1",
+      "started_utc": "20260920T185133Z",
+      "finished_utc": "2026-09-20T18:53:03",
+      "content_commit": "cfb5201b633d8a026ab79a876e0849577f3bcc17",
+      "base": "f795d2e8b067d140c6a25bf498c13ee9dc0f4221",
+      "status": "SUCCESS",
+      "audit": "20 fermetures sur 34 passees a la preuve materielle : 19 prouvees, 1 fermee a moitie, 14 infalsifiables par construction",
+      "finding": "le registre ne distinguait pas changer le systeme et ecrire a propos du systeme",
+      "ratchet": "plafond de 14 fermetures sans preuve materielle, il peut baisser et ne peut plus monter",
+      "guard_tests": "26 -> 32",
+      "guide_count": "94 -> 100",
+      "mcp_tests_declared": 100,
+      "my_own_detector": "3 fausses alertes sur 4 ; signalk\\b capturait signalk-cloud, septieme mesure fautive de la semaine et la premiere par exces",
+      "not_asserted": "l appariement des 24 scenarios aux 23 fonctions n est pas fiable ; rien n est affirme sur la couverture reelle",
+      "defects_closed": [
+        87,
+        88
+      ],
+      "tests": {
+        "barriere": "============================== 32 passed in 0.51s ==============================",
+        "contrat-historique": "============================= 23 passed in 19.95s ==============================",
+        "suite-mcp": "============================= 100 passed in 39.99s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.04s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
     }
   ],
-  "last_task": "H12c - logs/latest.json repare et mis sous garde",
+  "last_task": "H13 - chaque fermeture cite ce qui la prouve",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-20T18:31:32"
+  "last_update": "2026-09-20T18:53:03"
 }

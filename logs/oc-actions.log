@@ -407,3 +407,12 @@
 [2026-09-20T18:31:32] [FILE_MODIFY] [docs] H12c : le guide passe de 88 a 94 tests annonces, impose par la garde posee en H12b
 [2026-09-20T18:31:32] [RESULT] [journal] H12c : SUCCESS - defaut 85 ouvert et ferme, defaut 86 numerote retroactivement
 [2026-09-20T18:31:32] [COMMIT] SHA: cbd002bbe5e6789a0d8d64cbf17fb5eb39b407cc
+[2026-09-20T18:53:03] [DEBUG] [registre] H13 : audit de 20 fermetures sur 34 - 19 prouvees, 1 a moitie, 14 infalsifiables
+[2026-09-20T18:53:03] [FILE_MODIFY] [registre] H13 : 34 fermetures annotees d un marqueur de preuve
+[2026-09-20T18:53:03] [FILE_MODIFY] [tests] H13 : cliquet pose a 14 fermetures sans preuve materielle
+[2026-09-20T18:53:03] [FILE_MODIFY] [tests] H13 : defaut 87 - en-tete du contrat historique accorde a son enumeration
+[2026-09-20T18:53:03] [FILE_MODIFY] [services] H13 : defaut 88 - commentaire perime de mediaman-events.service reecrit au passe
+[2026-09-20T18:53:03] [DEBUG] [registre] H13 : mon detecteur d audit a produit 3 fausses alertes sur 4, signalk\b capturait signalk-cloud
+[2026-09-20T18:53:03] [FILE_MODIFY] [docs] H13 : le guide passe de 94 a 100 tests annonces
+[2026-09-20T18:53:03] [RESULT] [registre] H13 : SUCCESS - defauts 87 et 88 fermes avec preuve
+[2026-09-20T18:53:03] [COMMIT] SHA: cfb5201b633d8a026ab79a876e0849577f3bcc17
