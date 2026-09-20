@@ -342,8 +342,14 @@ MOTIF_CHEMIN = re.compile(
 # Ce qui ressemble a un chemin sans en etre un.
 NON_CHEMINS = {
     "navigation.position",   # nom de measurement InfluxDB
-    "telegraf.service",      # unite systeme absente du depot - defaut 71
+    "telegraf.service",      # unite systeme absente du depot - defauts 71, 95
     "Node.js",
+    # Le mot de passe WiFi. ARCHITECTURE-MASTER le cite et dit lui-meme
+    # "git prive seulement" : le fichier existe sur le Pi et ne doit pas
+    # etre suivi. Sans cette ligne, la barriere echoue sur tout clone
+    # propre - elle s appelle "tout chemin cite existe" et verifiait en
+    # realite "existe sur cette machine-ci".
+    "config/wifi-ap.txt",
 }
 
 VERBE_DOCKER = re.compile(
@@ -1113,3 +1119,70 @@ class TestAucunComposeDuDepotNeDeclareSignalK:
         assert IMAGE_INTERDITE in temoin
         assert services_declares("volumes:\n  rien:\n") == []
         assert fichiers_compose(), "aucun compose trouve dans le depot"
+
+
+# H13 a exige une preuve pour chaque fermeture. Rien n exigeait rien pour
+# les ouvertures. Le 2026-09-20, le defaut 92 a ete ouvert sur la lecture
+# d une etiquette : le conteneur orphelin porte dans ses labels le chemin
+# du compose qui l a cree, pas son contenu d aujourd hui. Le fichier
+# accuse ne declarait rien de ce qu on lui reprochait, et un chantier a
+# failli renommer la definition des quatre conteneurs de production.
+#
+# Un defaut ouvert doit donc dire comment il a ete observe. Les anciens
+# ne le disent pas ; leur nombre ne peut plus monter.
+MARQUEUR_CONSTAT = " | constat: "
+PLAFOND_OUVERTURES_SANS_CONSTAT = 20
+
+
+def constat_de(entree):
+    """Comment le defaut a ete observe, ou une chaine vide."""
+    if MARQUEUR_CONSTAT not in entree:
+        return ""
+    return entree.split(MARQUEUR_CONSTAT, 1)[1].strip()
+
+
+def ouvertures_sans_constat():
+    """Les defauts ouverts qui ne disent pas d ou ils sortent."""
+    return [e for e in _journal().get("defects_open", [])
+            if not constat_de(e)]
+
+
+def chemins_cites_en_constat():
+    """Chemins cites par les constats d ouverture, hors faux amis."""
+    trouves = []
+    for entree in _journal().get("defects_open", []):
+        constat = constat_de(entree)
+        if not constat:
+            continue
+        for chemin in CHEMIN_DANS_UNE_PREUVE.findall(constat):
+            if chemin not in NON_CHEMINS:
+                trouves.append((entree[:24], chemin))
+    return trouves
+
+
+class TestChaqueDefautOuvertDitCommentIlAEteObserve:
+    """La discipline de H13, etendue aux ouvertures."""
+
+    def test_le_nombre_d_ouvertures_sans_constat_ne_monte_pas(self):
+        muettes = ouvertures_sans_constat()
+        assert len(muettes) <= PLAFOND_OUVERTURES_SANS_CONSTAT, (
+            "%d defauts ouverts ne disent pas comment ils ont ete observes, "
+            "plafond %d : %s"
+            % (len(muettes), PLAFOND_OUVERTURES_SANS_CONSTAT,
+               "; ".join(e[:40] for e in muettes[:3])))
+
+    def test_les_chemins_cites_dans_un_constat_existent(self):
+        manquants = [(defaut, chemin)
+                     for defaut, chemin in chemins_cites_en_constat()
+                     if not os.path.exists(os.path.join(RACINE, chemin))]
+        assert not manquants, (
+            "constats citant un fichier introuvable : %s"
+            % "; ".join("%s -> %s" % (d, c) for d, c in manquants))
+
+    def test_le_controle_des_constats_voit_ce_qu_il_doit_voir(self):
+        """Un constat se lit apres le marqueur, et pas avant."""
+        avec = "97 - deux definitions concurrentes | constat: docker inspect"
+        sans = "12 - quelque chose, constate le 2026-09-18."
+        assert constat_de(avec) == "docker inspect"
+        assert constat_de(sans) == ""
+        assert "constat" in MARQUEUR_CONSTAT
