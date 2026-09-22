@@ -95,9 +95,9 @@
     "96 - doublon du defaut 69 : meme conteneur, meme image, ouvert le meme jour par un chantier qui n avait pas relu la liste des defauts ouverts - fusionne dans 69 | preuve: logs/debug/premisse-fausse-2026-09-20.md"
   ],
   "defects_open": [
-    "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
-    "19 the exposed value remains in the git history, deliberately not rewritten",
-    "21 influx auth list prints every token value in clear to anyone who can docker exec",
+    "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten | constat: logs/debug/audit-influx-tokens-2026-09-15.md",
+    "19 the exposed value remains in the git history, deliberately not rewritten | constat: logs/oc-actions.log",
+    "21 influx auth list prints every token value in clear to anyone who can docker exec | constat: logs/oc-actions.log",
     "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent",
     "36 deux liens de portal/index.html pointent sur des tableaux de bord qui n existent pas dans l instance Grafana : 01-navigation-dashboard et data-model-status renvoient 404 meme authentifie. Deux des sept cartes de la page d accueil sont mortes. Mesure en H4c.",
     "37 les UID des JSON de grafana-dashboards/ ne correspondent pas a ceux de l instance vivante (03-performance.json declare uid=performance-analysis, l instance repond sur 03-performance ; 11 fichiers sur 13 ont nom != uid). Depuis H4b, deploy-dashboards-to-grafana.sh dispose enfin d un identifiant valide : l executer creerait vraisemblablement une seconde serie de tableaux. NE PAS LANCER.",
@@ -1345,20 +1345,23 @@
       "state_store": "MEDIAMAN_STATE_DB > STATE_DIRECTORY > ~/.mediaman/publications.db",
       "publication_identity": "sha256(mode:race_id:as_of_utc:window_seconds:content)",
       "machine_actions": 0
+    },
+    {
+      "task": "H9b - evidence markers on three open defects",
+      "date": "2026-09-22T23:52:09Z",
+      "status": "SUCCESS",
+      "base": "0311cb98b66e0acd158cce3757d7b93f08f5aaba",
+      "files_modified": [
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "tests_barrier": 48,
+      "machine_actions": 0,
+      "note": "Added factual constat markers to defects 14, 19 and 21; no defect was closed or rewritten."
     }
   ],
-  "last_task": "MediaMan - la memoire des publications",
+  "last_task": "H9b - evidence markers on three open defects",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-22T21:00:29Z",
-  "last_dust_action": {
-    "timestamp": "2026-09-20T21:50:17Z",
-    "action": "cockpit_attitude_and_wind_angle_fix",
-    "status": "SUCCESS",
-    "detail": "Two cockpit defects fixed. (1) N2K.35 writes navigation.attitude.roll/pitch without the self tag; self+source returned 0 rows and emptied 3 panels; attitude now filtered on source only; a full sweep found no other onboard measurement missing the tag. (2) Wind angles are published in -pi..pi, so downwind samples alternate between +176 and -167 deg, drawing full-scale vertical strokes, and aggregateWindow(mean) averaged them into meaningless near-zero values; angles remapped to 0..360 before aggregation. Both documented in docs/SOFTWARE/INFLUXDB-DATA-MODEL.md (2.2.1 and 4.4). Upstream defect: Signal K to InfluxDB write path should tag attitude. Known gap: the current set panel still takes a plain mean of a compass direction and is unreliable near north.",
-    "files_modified": [
-      "grafana-dashboards/01-cockpit.json",
-      "docs/SOFTWARE/INFLUXDB-DATA-MODEL.md",
-      "logs/oc-actions.log"
-    ]
-  }
+  "last_update": "2026-09-22T23:52:09Z",
+  "last_dust_action": "Added evidence markers to defects 14, 19 and 21; barrier measured 48 passed."
 }

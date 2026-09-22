@@ -490,3 +490,6 @@
 [2026-09-22T21:23:13Z] [FILE_MODIFY] [journal] Complete missing MediaMan commit marker for the previous push
 [2026-09-22T21:23:13Z] [RESULT] [journal] SUCCESS - previous MediaMan commit marker restored; no credentials added
 [2026-09-22T21:23:13Z] [COMMIT] SHA: e4ed75da47fb58098b8e46293814cacdd9fb1ad6
+[2026-09-22T23:52:11Z] [FILE_MODIFY] [h9b] Added factual evidence markers to defects 14, 19 and 21
+[2026-09-22T23:52:11Z] [RESULT] [h9b] SUCCESS - 48 coherence-barrier tests passed; no defect closed and no credential added
+[2026-09-22T23:52:11Z] [COMMIT] SHA: 0311cb98b66e0acd158cce3757d7b93f08f5aaba
