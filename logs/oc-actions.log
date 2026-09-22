@@ -478,3 +478,7 @@
 [2026-09-21T22:45:38] [DEBUG] [mediaman] tir a blanc : fenetre recente 2026-09-21T22:43:36Z, code 1
 [2026-09-21T22:45:38] [DEBUG] [mediaman] jeton InfluxDB lu depuis /home/aneto/midnightrider-navigation/.env [REDACTED - credential reference: INFLUX_TOKEN]
 [2026-09-21T22:45:38] [RESULT] [mediaman] SUCCESS - aucune ecriture InfluxDB, aucun envoi Telegram, aucun geste machine
+[2026-09-22T01:13:32] [DEBUG] [influxdb] dernier souffle : 110 mesures, 0 vivantes, 110 muettes
+[2026-09-22T01:13:32] [DEBUG] [influxdb] navigation.position : dernier point self=true 2026-09-07T14:36:24.199Z, verdict LIEN_MUET
+[2026-09-22T01:13:32] [DEBUG] [influxdb] jeton lu depuis /home/aneto/midnightrider-navigation/.env [REDACTED - credential reference: INFLUX_TOKEN]
+[2026-09-22T01:13:32] [RESULT] [influxdb] SUCCESS - lecture seule, 0 ecriture, 0 geste machine

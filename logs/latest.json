@@ -1,6 +1,6 @@
 {
-  "task": "mediaman - tir a blanc de la chaine historique",
-  "date": "2026-09-21T22:45:38Z",
+  "task": "InfluxDB - le dernier souffle de chaque mesure",
+  "date": "2026-09-22T01:13:32Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -120,7 +120,8 @@
     "91 - quatre unites installees divergent de leur copie de reference au depot : calypso_direct.service, midnight-logsync.service, midnightrider-portal.service, midnight-logsync.timer. Constate le 2026-09-20. | constat: comparaison des unites installees avec leur copie de reference sous etc/systemd/system/, mesure du 2026-09-20, reprise dans logs/debug/premisse-fausse-2026-09-20.md",
     "93 - l historique git porte 3 104 Mo de logs/services/wit-ble-direct.log, 1 824 Mo de logs/debug/data-flow.log et 517 Mo de logs/services/calypso-direct.log, malgre .gitignore : un git add -f les a forces. 1 350 des 2 411 commits sont des logs: auto-update. 146 des 344 Mo sont des objets en vrac qu un git gc repackerait sans toucher a l historique. Constate le 2026-09-20. | constat: git cat-file sur tout l historique et git count-objects -v, mesures du 2026-09-20, reprises dans logs/debug/premisse-fausse-2026-09-20.md",
     "97 - la definition des conteneurs de production est partagee entre deux fichiers compose : influxdb, grafana, regatta tournent sous le projet midnightrider-navigation, definis par le docker-compose.yml du depot, tandis que start-line-worker tourne sous le projet workspace, defini par un fichier hors depot et non versionne. Les deux fichiers declarent pourtant les memes services avec les memes container_name, et ils ne sont pas identiques. | constat: etiquettes com.docker.compose.project relevees un conteneur a la fois le 2026-09-20, dans logs/debug/pluriel-reduit-2026-09-20.md ; comparaison caviardee des deux fichiers dans logs/debug/premisse-fausse-2026-09-20.md",
-    "98 - le guide de secours prescrit section 1.2 un docker compose up -d depuis le depot. Le depot fixe container_name: start-line-worker, nom deja pris par un conteneur du projet compose \"workspace\" : la commande s arreterait sur un conflit de nom, en pleine panne. Les autres services appartiennent au projet du depot et se reconcilieraient sans bruit. Le guide porte desormais l avertissement et la commande de controle. | constat: etiquettes com.docker.compose.project des 4 conteneurs, relevees une par une, et container_name lus dans docker-compose.yml, le 2026-09-20 - sortie complete dans logs/debug/pluriel-reduit-2026-09-20.md"
+    "98 - le guide de secours prescrit section 1.2 un docker compose up -d depuis le depot. Le depot fixe container_name: start-line-worker, nom deja pris par un conteneur du projet compose \"workspace\" : la commande s arreterait sur un conflit de nom, en pleine panne. Les autres services appartiennent au projet du depot et se reconcilieraient sans bruit. Le guide porte desormais l avertissement et la commande de controle. | constat: etiquettes com.docker.compose.project des 4 conteneurs, relevees une par une, et container_name lus dans docker-compose.yml, le 2026-09-20 - sortie complete dans logs/debug/pluriel-reduit-2026-09-20.md",
+    "100 - aucune des 110 mesures du bucket n a recu de point A NOUS depuis plus d une heure. Ce n est pas un chemin qui manque : plus rien de ce qui nous concerne n entre. Le lien Signal K -> InfluxDB n ecrit plus. Notre dernier point de navigation.position : 2026-09-07T14:36:24.199Z. Verdict de la mesure : LIEN_MUET. | constat: logs/debug/influxdb-dernier-souffle-2026-09-22.md"
   ],
   "next_steps": [
     "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
@@ -269,7 +270,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-21T22:45:38",
+  "last_updated": "2026-09-22T01:13:32",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -1303,11 +1304,30 @@
       "telegram_touched": false,
       "influxdb_writes": 0,
       "machine_actions": 0
+    },
+    {
+      "task": "InfluxDB - le dernier souffle de chaque mesure",
+      "date": "2026-09-22T01:13:32Z",
+      "status": "SUCCESS",
+      "base": "47a4f7d28709f27208bb3fb36eeca39e32ba51a4",
+      "verdict": "LIEN_MUET",
+      "measurements_total": 110,
+      "measurements_alive": 0,
+      "measurements_silent": 110,
+      "position_last_self_point": "2026-09-07T14:36:24.199Z",
+      "position_last_day_with_self": "aucun",
+      "position_last_day_any_row": "2026-09-08",
+      "position_last_row_any_context": "2026-09-07T14:36:24.298Z",
+      "position_state": "muette",
+      "days_with_no_row_of_ours": 30,
+      "bucket_retention_seconds": "0",
+      "influxdb_writes": 0,
+      "machine_actions": 0
     }
   ],
-  "last_task": "mediaman - rejeu 2026-09-07T14:36:26Z, code 0",
+  "last_task": "InfluxDB - dernier souffle, verdict LIEN_MUET",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-21T22:45:38",
+  "last_update": "2026-09-22T01:13:32",
   "last_dust_action": {
     "timestamp": "2026-09-20T21:50:17Z",
     "action": "cockpit_attitude_and_wind_angle_fix",
