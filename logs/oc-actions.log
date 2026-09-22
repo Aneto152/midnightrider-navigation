@@ -487,3 +487,6 @@
 [2026-09-22T21:00:29] [DEBUG] [mediaman] journal corrige : il annoncait publication published au second passage
 [2026-09-22T21:00:29] [DEBUG] [mediaman] tests 495 -> 524, barriere 48, aucun envoi reel possible
 [2026-09-22T21:00:29] [RESULT] [mediaman] SUCCESS - 0 geste machine, 0 envoi, 0 secret journalise
+[2026-09-22T21:23:13Z] [FILE_MODIFY] [journal] Complete missing MediaMan commit marker for the previous push
+[2026-09-22T21:23:13Z] [RESULT] [journal] SUCCESS - previous MediaMan commit marker restored; no credentials added
+[2026-09-22T21:23:13Z] [COMMIT] SHA: e4ed75da47fb58098b8e46293814cacdd9fb1ad6
