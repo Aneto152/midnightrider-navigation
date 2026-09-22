@@ -15,7 +15,9 @@ Required environment variables (exact checks, no defaults):
 
 Execution:
 - MCPClient (subprocess) → MCPCollector → Provider (via factory) → Bridge → DryRunSender
-- Temporary SQLite state database
+- Persistent SQLite publication memory
+  (MEDIAMAN_STATE_DB, default ~/.mediaman/publications.db,
+   ":tmp:" for the former ephemeral behaviour)
 - No TelegramSender instantiation
 - No Telegram credential access
 - Guaranteed MCPClient termination (success and failure paths)
@@ -25,6 +27,8 @@ Returns:
 - non-zero on validation error, MCP error, or publication failure
 """
 
+import contextlib
+import hashlib
 import os
 import sys
 import tempfile
@@ -42,6 +46,108 @@ from mediaman.publication_contract import PublicationDTO
 from mediaman.publication_bridge import PublicationBridge
 from mediaman.publication_state import PublicationStateStore
 from mediaman.logging_utils import setup_service_logger
+
+
+# ---------------------------------------------------------------------------
+# Publication memory
+#
+# A store named "publication state" must remember publications between runs,
+# not only inside one. Until now it lived in a directory destroyed at the end
+# of every execution: its guarantee "the same publication is not sent twice"
+# held for the duration of one process and no longer.
+#
+# The identity of a publication carries the mode for the same reason: a
+# rehearsal must never consume the slot of a real publication, and a real
+# publication must never be mistaken for a rehearsal already done.
+# ---------------------------------------------------------------------------
+
+SENTINELLE_ETAT_EPHEMERE = ":tmp:"
+NOM_MEMOIRE = "publications.db"
+CHEMIN_ETAT_DEFAUT = "~/.mediaman/" + NOM_MEMOIRE
+MODES_PUBLICATION = ("dry-run", "live")
+MODE_PUBLICATION_A_BLANC = "dry-run"
+
+
+def resolve_state_db_path(environ=None, repo_root=None):
+    """Return the path of the publication memory.
+
+    MEDIAMAN_STATE_DB == ":tmp:"      -> ephemeral store (former behaviour)
+    MEDIAMAN_STATE_DB set             -> that path, expanded and absolute
+    else STATE_DIRECTORY set          -> <STATE_DIRECTORY>/publications.db
+                                         (systemd sets it from StateDirectory=,
+                                          same convention as event_entrypoint)
+    else                              -> ~/.mediaman/publications.db
+
+    A path inside the repository is refused: publication state is runtime
+    data and must never reach a commit.
+    """
+    environ = os.environ if environ is None else environ
+    brut = (environ.get("MEDIAMAN_STATE_DB") or "").strip()
+    if brut == SENTINELLE_ETAT_EPHEMERE:
+        return SENTINELLE_ETAT_EPHEMERE
+    if brut:
+        defaut = brut
+    else:
+        systemd_state = (environ.get("STATE_DIRECTORY") or "").strip()
+        defaut = (os.path.join(systemd_state.split(":")[0], NOM_MEMOIRE)
+                  if systemd_state else CHEMIN_ETAT_DEFAUT)
+    chemin = os.path.abspath(os.path.expanduser(defaut))
+    if os.path.isdir(chemin):
+        raise ValueError(f"MEDIAMAN_STATE_DB designe un repertoire : {chemin}")
+    racine = repo_root or str(Path(__file__).resolve().parents[1])
+    racine = os.path.abspath(racine)
+    if chemin == racine or chemin.startswith(racine + os.sep):
+        raise ValueError(
+            f"MEDIAMAN_STATE_DB est dans le depot ({racine}) : {chemin}"
+        )
+    return chemin
+
+
+def derive_publication_id(mode, race_id, as_of_utc, window_seconds, content):
+    """SHA-256 identity of a publication, mode included.
+
+    The canonical string is "<mode>:<race_id>:<as_of_utc>:<window>:<content>".
+    Two publications of the same content in the same window are the same
+    publication only if they are of the same kind.
+    """
+    if mode not in MODES_PUBLICATION:
+        raise ValueError(f"mode de publication inconnu : {mode!r}")
+    canonical = f"{mode}:{race_id}:{as_of_utc}:{window_seconds}:{content}"
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
+
+
+@contextlib.contextmanager
+def open_publication_store(db_path, clock=None):
+    """Yield (store, nature) with nature in {"persistant", "ephemere"}.
+
+    The parent directory of a persistent store is created private (0700):
+    it holds operational history, not secrets, but it is nobody else business.
+    """
+    clock = clock or (
+        lambda: datetime.now(timezone.utc)
+        .isoformat(timespec="seconds")
+        .replace("+00:00", "Z")
+    )
+    if db_path == SENTINELLE_ETAT_EPHEMERE:
+        with tempfile.TemporaryDirectory(prefix="mediaman-hist-") as tmpdir:
+            store = PublicationStateStore(
+                db_path=os.path.join(tmpdir, "state.db"), clock=clock
+            )
+            store.initialize()
+            try:
+                yield store, "ephemere"
+            finally:
+                store.close()
+        return
+    parent = os.path.dirname(db_path)
+    if parent:
+        os.makedirs(parent, mode=0o700, exist_ok=True)
+    store = PublicationStateStore(db_path=db_path, clock=clock)
+    store.initialize()
+    try:
+        yield store, "persistant"
+    finally:
+        store.close()
 
 
 class DryRunSender:
@@ -223,15 +329,14 @@ def main(argv: list | None = None) -> int:
         return 1
 
     try:
-        # PHASE 4: CREATE TEMPORARY STATE STORE (SQLite)
-        with tempfile.TemporaryDirectory(prefix="mediaman-hist-") as tmpdir:
-            db_path = os.path.join(tmpdir, "state.db")
-            state_store = PublicationStateStore(
-                db_path=db_path,
-                clock=lambda: datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
-            )
-            state_store.initialize()
-            logger.info("DATA_IN temporary SQLite state store initialized")
+        # PHASE 4: OPEN THE PUBLICATION MEMORY (SQLite)
+        try:
+            db_path = resolve_state_db_path()
+        except ValueError as e:
+            logger.error(f"ERROR: Invalid MEDIAMAN_STATE_DB: {e}")
+            return 1
+        with open_publication_store(db_path) as (state_store, nature_etat):
+            logger.info(f"DATA_IN SQLite publication memory initialized: nature={nature_etat}")
 
             # PHASE 5: INITIALIZE MCPCollector WITH MCP CLIENT
             collector = MCPCollector(
@@ -299,10 +404,15 @@ def main(argv: list | None = None) -> int:
             logger.info("DATA_OUT content validated")
 
             # PHASE 11: CREATE IMMUTABLE PUBLICATION DTO
-            # Generate publication_id as SHA-256 of canonical inputs (required by validator)
-            import hashlib
-            canonical_publication = f"{race_id}:{as_of_utc}:{window_seconds}:{content}"
-            publication_id = hashlib.sha256(canonical_publication.encode('utf-8')).hexdigest()
+            # The identity carries the mode: a rehearsal and a real publication
+            # of the same content in the same window are two publications.
+            publication_id = derive_publication_id(
+                mode=MODE_PUBLICATION_A_BLANC,
+                race_id=race_id,
+                as_of_utc=as_of_utc,
+                window_seconds=window_seconds,
+                content=content,
+            )
 
             try:
                 publication = PublicationDTO(
@@ -316,7 +426,14 @@ def main(argv: list | None = None) -> int:
                 logger.error(f"ERROR: Failed to create publication DTO: {e}")
                 return 1
 
-            logger.info(f"DATA_IN publication created: id={publication_id}")
+            # Une publication deja presente dans la memoire ne sera ni
+            # recreee ni renvoyee par le pont. On le mesure AVANT de
+            # publier, pour que le journal dise ce qui s est passe.
+            deja_en_memoire = state_store.get(publication_id) is not None
+            if deja_en_memoire:
+                logger.info(f"DATA_IN publication already in memory: id={publication_id}")
+            else:
+                logger.info(f"DATA_IN publication prepared: id={publication_id}")
 
             # PHASE 12: PUBLISH VIA BRIDGE (one-shot, dry-run only)
             # Pass canonical parameters to bridge for deterministic cross-process identity and sender support
@@ -327,7 +444,16 @@ def main(argv: list | None = None) -> int:
                     as_of_utc=as_of_utc,
                     window_seconds=window_seconds
                 )
-                logger.info(f"DATA_OUT publication published: state={result.state.value}, provider_id={result.provider_message_id}")
+                if deja_en_memoire:
+                    logger.info(
+                        f"DATA_OUT nothing sent, publication already done: "
+                        f"state={result.state.value}, provider_id={result.provider_message_id}"
+                    )
+                else:
+                    logger.info(
+                        f"DATA_OUT publication published: state={result.state.value}, "
+                        f"provider_id={result.provider_message_id}"
+                    )
             except ValueError as e:
                 logger.error(f"ERROR: Publication failed: {e}")
                 return 1
@@ -337,7 +463,10 @@ def main(argv: list | None = None) -> int:
                 logger.error(f"ERROR: DRY_RUN enforcement failed: provider_id={result.provider_message_id}")
                 return 1
 
-            logger.info("DATA_OUT dry-run publication successful and verified")
+            if deja_en_memoire:
+                logger.info("SHUTDOWN dry-run publication was already done, nothing re-sent")
+            else:
+                logger.info("DATA_OUT dry-run publication successful and verified")
 
     finally:
         # PHASE 14: GUARANTEED MCP CLIENT CLEANUP

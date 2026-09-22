@@ -482,3 +482,8 @@
 [2026-09-22T01:13:32] [DEBUG] [influxdb] navigation.position : dernier point self=true 2026-09-07T14:36:24.199Z, verdict LIEN_MUET
 [2026-09-22T01:13:32] [DEBUG] [influxdb] jeton lu depuis /home/aneto/midnightrider-navigation/.env [REDACTED - credential reference: INFLUX_TOKEN]
 [2026-09-22T01:13:32] [RESULT] [influxdb] SUCCESS - lecture seule, 0 ecriture, 0 geste machine
+[2026-09-22T21:00:29] [FILE_MODIFY] [mediaman] memoire des publications : magasin persistant, mode dans l identite
+[2026-09-22T21:00:29] [FILE_CREATE] [mediaman] tests/mediaman/test_publication_memory.py : 29 tests
+[2026-09-22T21:00:29] [DEBUG] [mediaman] journal corrige : il annoncait publication published au second passage
+[2026-09-22T21:00:29] [DEBUG] [mediaman] tests 495 -> 524, barriere 48, aucun envoi reel possible
+[2026-09-22T21:00:29] [RESULT] [mediaman] SUCCESS - 0 geste machine, 0 envoi, 0 secret journalise

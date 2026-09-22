@@ -45,7 +45,10 @@ class TestHistoricalEntrypoint:
         with patch('mediaman.historical_entrypoint.setup_service_logger', return_value=mock_logger):
             with patch.dict(os.environ, {
                 'MEDIAMAN_CONTENT_PROVIDER': 'historical_mcp',
-                'DRY_RUN': 'true'
+                'DRY_RUN': 'true',
+                    # memoire isolee : un test n ecrit jamais dans le
+                    # repertoire personnel de l operateur
+                    'MEDIAMAN_STATE_DB': ':tmp:'
             }, clear=True):
                 result = main()
                 assert result != 0, "Should fail without MEDIAMAN_RACE_ID"
@@ -62,7 +65,10 @@ class TestHistoricalEntrypoint:
             with patch.dict(os.environ, {
                 'MEDIAMAN_CONTENT_PROVIDER': 'historical_mcp',
                 'MEDIAMAN_RACE_ID': 'test-race',
-                'DRY_RUN': 'true'
+                'DRY_RUN': 'true',
+                    # memoire isolee : un test n ecrit jamais dans le
+                    # repertoire personnel de l operateur
+                    'MEDIAMAN_STATE_DB': ':tmp:'
             }, clear=True):
                 result = main()
                 assert result != 0, "Should fail without MEDIAMAN_HISTORICAL_AS_OF"
@@ -80,7 +86,10 @@ class TestHistoricalEntrypoint:
                 'MEDIAMAN_CONTENT_PROVIDER': 'historical_mcp',
                 'MEDIAMAN_RACE_ID': 'test-race',
                 'MEDIAMAN_HISTORICAL_AS_OF': '2026-09-01T12:00:00Z',
-                'DRY_RUN': 'true'
+                'DRY_RUN': 'true',
+                    # memoire isolee : un test n ecrit jamais dans le
+                    # repertoire personnel de l operateur
+                    'MEDIAMAN_STATE_DB': ':tmp:'
             }, clear=True):
                 result = main()
                 assert result != 0, "Should fail without MEDIAMAN_HISTORICAL_WINDOW_SECONDS"
@@ -99,7 +108,10 @@ class TestHistoricalEntrypoint:
                 'MEDIAMAN_RACE_ID': 'test-race',
                 'MEDIAMAN_HISTORICAL_AS_OF': '2026-09-01T12:00:00Z',
                 'MEDIAMAN_HISTORICAL_WINDOW_SECONDS': '60',
-                'DRY_RUN': 'true'
+                'DRY_RUN': 'true',
+                    # memoire isolee : un test n ecrit jamais dans le
+                    # repertoire personnel de l operateur
+                    'MEDIAMAN_STATE_DB': ':tmp:'
             }, clear=True):
                 result = main()
                 assert result != 0, "Should fail without MEDIAMAN_MCP_SERVER_PATH"

@@ -127,7 +127,10 @@ class TestHistoricalOfflineE2E:
                     'MEDIAMAN_HISTORICAL_AS_OF': '2026-09-01T12:00:00Z',
                     'MEDIAMAN_HISTORICAL_WINDOW_SECONDS': '60',
                     'MEDIAMAN_MCP_SERVER_PATH': mcp_server_path,
-                    'DRY_RUN': 'true'
+                    'DRY_RUN': 'true',
+                    # memoire isolee : un test n ecrit jamais dans le
+                    # repertoire personnel de l operateur
+                    'MEDIAMAN_STATE_DB': ':tmp:'
                 }, clear=True):
                     # Mock the logger setup
                     with patch('mediaman.historical_entrypoint.setup_service_logger', return_value=mock_logger):

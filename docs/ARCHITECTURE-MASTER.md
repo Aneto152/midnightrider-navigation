@@ -335,6 +335,20 @@ services:
 - State: SQLite at `/var/lib/mediaman/state.sqlite3` (runtime only)
 - Logs: `/var/log/mediaman/mediaman.log` (structured, sanitized)
 
+**Mémoire des publications (chaîne historique, depuis 2026-09-22) :**
+- Résolution : `MEDIAMAN_STATE_DB` > `STATE_DIRECTORY` (posé par systemd via
+  `StateDirectory=`) > `~/.mediaman/publications.db`. Même convention que
+  `event_entrypoint._resolve_state_dir`.
+- Valeur spéciale `MEDIAMAN_STATE_DB=:tmp:` : magasin éphémère, détruit en fin
+  d'exécution. C'était l'unique comportement jusqu'au 2026-09-22 ; les tests
+  l'emploient pour ne jamais écrire dans le répertoire personnel de l'opérateur.
+- Un chemin situé dans le dépôt est refusé : cet état est une donnée d'exécution
+  et ne doit jamais atteindre un commit.
+- L'identité d'une publication est
+  `sha256("<mode>:<race_id>:<as_of_utc>:<window_seconds>:<content>")` avec
+  `mode ∈ {dry-run, live}` : un tir à blanc ne consomme jamais le créneau d'une
+  publication réelle, et réciproquement.
+
 **For Details:** See [docs/INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md](../INTEGRATION/TELEGRAM-REPORTER-INTEGRATION-GUIDE.md)
 
 <!-- H5A-STEP-4E1 -->
