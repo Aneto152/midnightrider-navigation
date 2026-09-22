@@ -1363,5 +1363,15 @@
   "last_task": "H9b - evidence markers on three open defects",
   "last_status": "SUCCESS",
   "last_update": "2026-09-22T23:52:09Z",
-  "last_dust_action": "Added evidence markers to defects 14, 19 and 21; barrier measured 48 passed."
+  "last_dust_action": {
+    "timestamp": "2026-09-22T23:52:09Z",
+    "action": "h9b_evidence_markers",
+    "status": "SUCCESS",
+    "detail": "Added factual evidence markers to defects 14, 19 and 21; barrier measured 48 passed.",
+    "files_modified": [
+      "logs/latest.json",
+      "logs/oc-actions.log"
+    ],
+    "tests_barrier": 48
+  }
 }

@@ -493,3 +493,6 @@
 [2026-09-22T23:52:11Z] [FILE_MODIFY] [h9b] Added factual evidence markers to defects 14, 19 and 21
 [2026-09-22T23:52:11Z] [RESULT] [h9b] SUCCESS - 48 coherence-barrier tests passed; no defect closed and no credential added
 [2026-09-22T23:52:11Z] [COMMIT] SHA: 0311cb98b66e0acd158cce3757d7b93f08f5aaba
+[2026-09-22T23:54:41Z] [FILE_MODIFY] [h9b] Restored structured last_dust_action journal schema
+[2026-09-22T23:54:41Z] [RESULT] [h9b] SUCCESS - 48 coherence-barrier tests passed; schema preserved and no credential added
+[2026-09-22T23:54:41Z] [COMMIT] SHA: 963c59d0c1bb38aeef04a2c47e4e2568207aac47
