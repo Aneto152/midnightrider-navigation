@@ -1405,32 +1405,47 @@
       "tests_barrier": 48,
       "machine_actions": 0,
       "note": "Historical opt-in optional facts added; live four-fact path preserved; trends and LLM remain separate."
+    },
+    {
+      "task": "MediaMan - MCP optional-fact provenance correction",
+      "date": "2026-09-23T02:59:52Z",
+      "status": "SUCCESS",
+      "base": "71dcb9fe15cd44596e108919ba44e98894f7f5bb",
+      "files_modified": [
+        "mcp/servers/racing.js",
+        "mediaman/mcp_collector.py",
+        "tests/mediaman/test_mcp_optional_facts.py",
+        "tests/mcp/test_phase3_narrative_expansion.py",
+        "logs/debug/mediaman-mcp-provenance-v1-2026-09-22.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "tests_mediaman": 545,
+      "tests_mcp": 121,
+      "tests_barrier": 48,
+      "machine_actions": 0,
+      "note": "Optional facts now preserve actual source tags; no scope or publication behavior changed."
     }
   ],
-  "last_task": "MediaMan - MCP narrative expansion v1",
+  "last_task": "MediaMan - MCP optional-fact provenance correction",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-23T00:45:53Z",
+  "last_update": "2026-09-23T02:59:52Z",
   "last_dust_action": {
-    "timestamp": "2026-09-23T00:45:53Z",
-    "action": "mediaman_mcp_narrative_expansion_v1",
+    "timestamp": "2026-09-23T02:59:52Z",
+    "action": "mediaman_mcp_optional_fact_provenance",
     "status": "SUCCESS",
-    "detail": "Historical opt-in optional facts added; live four-fact path preserved; trends and LLM remain separate.",
+    "detail": "Optional historical facts now preserve actual InfluxDB source tags; no scope or publication behavior changed.",
     "files_modified": [
       "mcp/servers/racing.js",
       "mediaman/mcp_collector.py",
-      "mediaman/content_provider.py",
-      "docs/ARCHITECTURE-MASTER.md",
-      "docs/ops/RECOVERY-GUIDE-SAFE.md",
       "tests/mediaman/test_mcp_optional_facts.py",
       "tests/mcp/test_phase3_narrative_expansion.py",
-      "logs/debug/mediaman-mcp-expansion-v1-2026-09-22.md",
+      "logs/debug/mediaman-mcp-provenance-v1-2026-09-22.md",
       "logs/latest.json",
       "logs/oc-actions.log"
     ],
-    "tests_mediaman_before": 539,
-    "tests_mediaman_after": 545,
-    "tests_mcp_before": 116,
-    "tests_mcp_after": 121,
+    "tests_mediaman": 545,
+    "tests_mcp": 121,
     "tests_barrier": 48
   }
 }

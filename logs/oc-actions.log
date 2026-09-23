@@ -502,3 +502,6 @@
 [2026-09-23T00:45:53Z] [FILE_MODIFY] [mediaman-mcp] Added opt-in historical optional facts and fail-soft article rendering
 [2026-09-23T00:45:53Z] [RESULT] [mediaman-mcp] SUCCESS - MediaMan 539->545, MCP 116->121, H9b 48; no LLM or publication activation
 [2026-09-23T00:45:53Z] [COMMIT] SHA: 20013a166d4a52c85ff9bc0f8f870c167078d106
+[2026-09-23T02:59:52Z] [FILE_MODIFY] [mediaman-mcp] Corrected actual source provenance for optional historical facts
+[2026-09-23T02:59:52Z] [RESULT] [mediaman-mcp] SUCCESS - MediaMan 545, MCP 121, H9b 48; no scope or publication behavior changed
+[2026-09-23T02:59:52Z] [COMMIT] SHA: 71dcb9fe15cd44596e108919ba44e98894f7f5bb

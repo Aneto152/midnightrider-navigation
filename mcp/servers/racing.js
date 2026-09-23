@@ -371,7 +371,7 @@ function buildFactQuery(selector, startTime, endTime) {
     |> filter(fn: (r) => r._measurement == "${selector.measurement}")
     |> filter(fn: (r) => r._field == "${selector.field}")
     |> filter(fn: (r) => ${selector.source || 'r.self == "true"'})
-    |> keep(columns: ["_time", "_value"])
+    |> keep(columns: ["_time", "_value", "source"])
     |> group()
     |> sort(columns: ["_time"])
     |> last(column: "_time")`;
@@ -578,7 +578,7 @@ async function collectSnapshot(startUtc, endUtc, includeOptionalFacts = false) {
       optionalFacts[selector.fact] = transformed;
       optionalUnits[selector.fact] = selector.unit;
       optionalTimestamps[selector.fact] = stamp.toISOString();
-      optionalSources[selector.fact] = selector.source;
+      optionalSources[selector.fact] = row.source || selector.source;
     }
   }
 

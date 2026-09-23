@@ -57,6 +57,7 @@ class OptionalFactsClient:
                 "optional_facts": dict(self.optional),
                 "optional_units": dict(OPTIONAL_UNITS),
                 "optional_fact_timestamps": dict(OPTIONAL_TIMES),
+                "optional_sources": {key: "N2K.35" for key in self.optional},
             },
             "observed_at": "2026-09-05T12:00:03Z",
         }
@@ -79,6 +80,7 @@ def test_optional_facts_are_appended_with_contract_units():
     assert values["depth_below_transducer"].value == 4.2
     assert values["depth_below_transducer"].unit == "m"
     assert values["wind_true_speed"].provenance.source_timestamp == "2026-09-05T12:00:02Z"
+    assert values["wind_true_speed"].provenance.source_id == "N2K.35"
 
 
 

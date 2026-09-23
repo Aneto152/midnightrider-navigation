@@ -17,6 +17,8 @@ def test_optional_response_keeps_required_four_fact_shape():
     assert "optional_facts: optionalFacts" in SERVER
     assert "optional_units: optionalUnits" in SERVER
     assert "optional_fact_timestamps: optionalTimestamps" in SERVER
+    assert 'keep(columns: ["_time", "_value", "source"])' in SERVER
+    assert 'optionalSources[selector.fact] = row.source || selector.source' in SERVER
     assert "facts: {" in SERVER
 
 

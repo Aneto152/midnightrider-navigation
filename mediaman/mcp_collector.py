@@ -507,6 +507,7 @@ class MCPCollector:
                     optional_facts = decoded.get('optional_facts', {})
                     optional_units = decoded.get('optional_units', {})
                     optional_timestamps = decoded.get('optional_fact_timestamps', {})
+                    optional_sources = decoded.get('optional_sources', {})
                     if isinstance(optional_facts, dict):
                         from mediaman.narrative_contract import OPTIONAL_FACT_IDS, fact_spec
                         for optional_id in OPTIONAL_FACT_IDS:
@@ -532,7 +533,7 @@ class MCPCollector:
                                 tool_public_id=tool_public_id,
                                 server_name="racing",
                                 wire_tool_name=wire_tool_name,
-                                source_id=f"{source_id}:optional:{optional_id}",
+                                source_id=optional_sources.get(optional_id, f"{source_id}:optional:{optional_id}"),
                                 source_timestamp=timestamp,
                                 observed_at=response.get('observed_at'),
                                 freshness_limit_seconds=freshness_limit_seconds,
