@@ -62,3 +62,9 @@ The default Python MCPClient request timeout remains 5 seconds for the live
 and snapshot paths. `MCPCollector.collect_historical_analysis` explicitly uses
 a 120-second per-call override, matching the 90-second Node historical timeout
 and the validated one-hour read-only query.
+
+## Detector series wiring
+
+The temporal analyzer maps each canonical series to the detector key expected by
+the pattern contract. `wind_true_speed`, `wind_true_angle` and `attitude_roll`
+are never emitted under a generic `value` key before detector execution.

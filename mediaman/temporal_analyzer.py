@@ -67,8 +67,9 @@ def normalize_rows(rows: Iterable[Mapping[str, Any]]) -> dict[str, list[Temporal
         values.sort(key=lambda sample: sample.timestamp_utc)
     return dict(result)
 
-def _points(series: list[TemporalSample], *, knots: bool = False) -> list[SeriesPoint]:
-    return [SeriesPoint(s.timestamp_utc, {"value": meters_per_second_to_knots(s.value) if knots else s.value}) for s in series]
+def _points(series: list[TemporalSample], key: str, *, knots: bool = False) -> list[SeriesPoint]:
+    """Convert one named temporal series into detector-compatible points."""
+    return [SeriesPoint(s.timestamp_utc, {key: meters_per_second_to_knots(s.value) if knots else s.value}) for s in series]
 
 def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, resolution_seconds: int) -> dict[str, Any]:
     """Build a deterministic evidence-backed analysis packet."""
@@ -101,9 +102,9 @@ def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, res
         result["evidence"]["missing_series"] = missing
         return result
     patterns = []
-    patterns.extend(event.as_dict() for event in detect_wind_patterns(_points(series[WIND_SPEED], knots=True)))
-    patterns.extend(event.as_dict() for event in detect_point_of_sail(_points(series[WIND_ANGLE])))
-    patterns.extend(event.as_dict() for event in detect_tack_and_maneuver_patterns(_points(series[WIND_ANGLE])))
+    patterns.extend(event.as_dict() for event in detect_wind_patterns(_points(series[WIND_SPEED], WIND_SPEED, knots=True)))
+    patterns.extend(event.as_dict() for event in detect_point_of_sail(_points(series[WIND_ANGLE], WIND_ANGLE)))
+    patterns.extend(event.as_dict() for event in detect_tack_and_maneuver_patterns(_points(series[WIND_ANGLE], WIND_ANGLE)))
     if HEEL in series:
-        patterns.extend(event.as_dict() for event in detect_heavy_heel(_points(series[HEEL])))
+        patterns.extend(event.as_dict() for event in detect_heavy_heel(_points(series[HEEL], HEEL)))
     return HistoricalAnalysis(interval, coverage, series_output, stats, patterns=patterns, evidence=evidence).as_dict()

@@ -32,3 +32,15 @@ def test_signed_true_wind_angle_and_incomplete_coverage_fail_closed():
     assert result["status"] == "INCOMPLETE"
     assert result["patterns"] == []
     assert "wind_true_angle" in result["evidence"]["missing_series"]
+
+def test_analysis_wires_named_series_into_detectors():
+    rows = [
+        row("wind_true_speed", "2026-09-05T12:00:00Z", 5.0, "truewind.test"),
+        row("wind_true_speed", "2026-09-05T12:01:00Z", 7.0, "truewind.test"),
+        row("wind_true_angle", "2026-09-05T12:00:00Z", 45.0, "truewind.test"),
+        row("wind_true_angle", "2026-09-05T12:01:00Z", 45.0, "truewind.test"),
+    ]
+    result = analyze(rows, "2026-09-05T12:00:00Z", "2026-09-05T12:02:00Z", 60)
+    pattern_ids = {event["pattern_id"] for event in result["patterns"]}
+    assert "point_of_sail" in pattern_ids
+    assert "wind_strengthening" in pattern_ids
