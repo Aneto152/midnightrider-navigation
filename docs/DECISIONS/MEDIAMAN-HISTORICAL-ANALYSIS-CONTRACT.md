@@ -94,3 +94,29 @@ only canonical series and never call an LLM.
 R-squared bands do not overlap. `data_gap` is reported once for the whole
 interval and names the worst series, so a sparse window never silently
 produces confident tactical patterns.
+
+## Tack and gybe attribution
+
+A maneuver is claimed only when the boat itself turns. The detector pairs
+`navigation.headingTrue` with `environment.wind.directionTrue` on shared
+timestamps and follows the signed heading-to-wind angle.
+
+| Condition | Threshold |
+|---|---|
+| signed angle changes sign | required |
+| smallest crossing angle | at least 5 degrees |
+| true-heading change | at least 45 degrees |
+| absolute wind rotation | at most half the heading change |
+
+The crossing magnitude then classifies the maneuver: a mean absolute angle
+below 90 degrees means the bow crossed the wind and yields `true_tack`, while
+90 degrees or more means the stern crossed and yields `true_gybe`. No tack side
+is asserted, because the sign convention of the absolute wind direction is not
+formally pinned in this repository.
+
+`detect_tack_and_maneuver_patterns` in `mediaman/pattern_detector.py` stays
+deliberately unwired from `analyze`: it derives `luffing` from the true-wind
+angle alone, which cannot separate a boat maneuver from a wind rotation. The
+attribution branch for `luffing` and `bearing_away` now also requires a
+material absolute TWA change, so a tack, which leaves the TWA magnitude
+unchanged, is never reported as a bearing away.

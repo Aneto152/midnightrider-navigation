@@ -1531,5 +1531,20 @@
     "llm_invoked": false,
     "telegram_sent": false,
     "credentials_logged": false
+  },
+  "true_tack_and_gybe_detectors": {
+    "status": "SUCCESS",
+    "executed_at": "2026-09-23T23:01:21Z",
+    "patterns_added": [
+      "true_tack",
+      "true_gybe"
+    ],
+    "defect_closed": "luffing and bearing_away no longer fire on an unchanged TWA magnitude",
+    "twa_only_detector_wired": false,
+    "parent_commit": "2997bef2ee75a21fcff4d837732e7daba6156908",
+    "historical_test": "SUCCESS",
+    "llm_invoked": false,
+    "telegram_sent": false,
+    "credentials_logged": false
   }
 }
