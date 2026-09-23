@@ -55,9 +55,11 @@ No live Telegram publication has been implemented. No runtime activation has occ
 **Narrative data contract (validated 2026-09-22):** MediaMan now defines a
 normalized boundary in `mediaman/narrative_contract.py` for four required and
 fifteen optional facts, each carrying unit, source, timestamp, quality and
-availability. This is a contract-only phase; MCP collection expansion, trend
-aggregation and LLM narration remain separate follow-up phases. See
-`docs/DECISIONS/MEDIAMAN-NARRATIVE-DATA-CONTRACT.md`.
+availability. The historical MCP path now has an opt-in narrative expansion that returns
+fifteen optional facts in a separate `optional_facts` envelope. The current
+four-fact live path remains unchanged. This phase is fail-soft for optional
+instruments; trend aggregation and LLM narration remain separate follow-up
+phases. See `docs/DECISIONS/MEDIAMAN-NARRATIVE-DATA-CONTRACT.md`.
 No systemd units are enabled. No credentials are stored in code or logs.
 Runtime E2E validation remains incomplete.
 

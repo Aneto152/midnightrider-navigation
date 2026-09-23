@@ -363,15 +363,42 @@ class HistoricalMCPProvider(ContentProvider):
         sog = facts_dict["speed_over_ground"]
         cog = facts_dict["course_over_ground"]
 
-        # Construct article from validated facts only
-        # No unsupported claims such as "all systems verified"
+        # Optional facts are rendered only when validated by the collector.
+        # Missing values are omitted; the article never invents measurements.
+        optional_labels = {
+            "speed_through_water": ("Vitesse surface", "m/s"),
+            "depth_below_transducer": ("Profondeur", "m"),
+            "water_temperature": ("Température eau", "°C"),
+            "wind_apparent_angle": ("Vent apparent - angle", "°"),
+            "wind_apparent_speed": ("Vent apparent - vitesse", "m/s"),
+            "wind_true_angle": ("Vent vrai - angle", "°"),
+            "wind_true_speed": ("Vent vrai - vitesse", "m/s"),
+            "wind_true_direction": ("Vent vrai - direction", "°"),
+            "current_set": ("Courant - direction", "°"),
+            "current_drift": ("Courant - dérive", "m/s"),
+            "attitude_roll": ("Roulis", "°"),
+            "attitude_pitch": ("Tangage", "°"),
+            "outside_temperature": ("Température extérieure", "°C"),
+            "outside_pressure": ("Pression extérieure", "hPa"),
+            "calypso_battery_percent": ("Batterie Calypso", "%"),
+        }
+        optional_lines = []
+        for field_name, (label, unit) in optional_labels.items():
+            if field_name in facts_dict:
+                optional_lines.append(f"**{label}**: {facts_dict[field_name]} {unit}")
+        optional_section = "\n".join(optional_lines)
+        if optional_section:
+            optional_section = "\n\n" + optional_section
+
+        # Construct article from validated facts only.
         article = (
             f"🏁 *Midnight Rider* — Historique {self.snapshot_count}\n\n"
             f"**Nom**: Navire de course J/30\n"
             f"**Moment**: {as_of_utc} (historique, fenêtre {window_seconds}s)\n\n"
             f"**Position**: {lat}°, {lon}°\n"
             f"**Cap**: {cog}° (cap au vrai)\n"
-            f"**Vitesse**: {sog} m/s (vitesse par rapport au sol)\n\n"
+            f"**Vitesse**: {sog} m/s (vitesse par rapport au sol)"
+            f"{optional_section}\n\n"
             f"Article généré à partir de données historiques InfluxDB via le système MCP.\n"
             f"Aucun message réel n'a été envoyé à Telegram."
         )

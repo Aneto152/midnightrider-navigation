@@ -228,7 +228,7 @@ class MCPCollector:
         return self._collect_snapshot(
             tool_public_id='racing.get_historical_snapshot',
             wire_tool_name='get_historical_snapshot',
-            tool_args={'as_of_utc': as_of_utc, 'window_seconds': window_seconds},
+            tool_args={'as_of_utc': as_of_utc, 'window_seconds': window_seconds, 'include_optional_facts': True},
             source_id='mcp:racing:historical',
             freshness_limit_seconds=None,
             mode='historical',
@@ -500,6 +500,53 @@ class MCPCollector:
                         unit="degrees_true",
                         provenance=provenance
                     ))
+
+                    # Optional narrative facts are fail-soft. The MCP server
+                    # returns them only when available; one silent instrument
+                    # must not invalidate the four mandatory navigation facts.
+                    optional_facts = decoded.get('optional_facts', {})
+                    optional_units = decoded.get('optional_units', {})
+                    optional_timestamps = decoded.get('optional_fact_timestamps', {})
+                    if isinstance(optional_facts, dict):
+                        from mediaman.narrative_contract import OPTIONAL_FACT_IDS, fact_spec
+                        for optional_id in OPTIONAL_FACT_IDS:
+                            if optional_id not in optional_facts:
+                                continue
+                            value = optional_facts[optional_id]
+                            unit = optional_units.get(optional_id)
+                            timestamp = optional_timestamps.get(optional_id, decoded.get('source_timestamp', 'UNKNOWN'))
+                            if not isinstance(value, (int, float)) or isinstance(value, bool):
+                                result.warnings.append(f"Optional fact {optional_id} ignored: non-numeric value")
+                                continue
+                            try:
+                                expected_unit = fact_spec(optional_id).unit
+                            except ValueError:
+                                result.warnings.append(f"Optional fact {optional_id} ignored: unknown contract ID")
+                                continue
+                            if unit != expected_unit:
+                                result.warnings.append(
+                                    f"Optional fact {optional_id} ignored: unit {unit!r}, expected {expected_unit!r}"
+                                )
+                                continue
+                            optional_provenance = Provenance(
+                                tool_public_id=tool_public_id,
+                                server_name="racing",
+                                wire_tool_name=wire_tool_name,
+                                source_id=f"{source_id}:optional:{optional_id}",
+                                source_timestamp=timestamp,
+                                observed_at=response.get('observed_at'),
+                                freshness_limit_seconds=freshness_limit_seconds,
+                                validation_status=(
+                                    "valid" if freshness_limit_seconds is None
+                                    else self._validate_freshness(timestamp, freshness_limit_seconds)
+                                )
+                            )
+                            result.facts.append(NavigationFact(
+                                field_name=optional_id,
+                                value=value,
+                                unit=unit,
+                                provenance=optional_provenance
+                            ))
 
                     if provenance.validation_status == "valid":
                         result.status = CollectionStatus.COMPLETE

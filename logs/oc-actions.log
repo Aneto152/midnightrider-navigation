@@ -499,3 +499,6 @@
 [2026-09-23T00:24:25Z] [FILE_CREATE] [mediaman-contract] Created validated narrative data contract v1 and tests
 [2026-09-23T00:24:25Z] [RESULT] [mediaman-contract] SUCCESS - 524 to 539 MediaMan tests, 48 H9b tests; no activation or credential added
 [2026-09-23T00:24:25Z] [COMMIT] SHA: 34ed1a26cb50d7fb968f4a94a28b894f07524b54
+[2026-09-23T00:45:53Z] [FILE_MODIFY] [mediaman-mcp] Added opt-in historical optional facts and fail-soft article rendering
+[2026-09-23T00:45:53Z] [RESULT] [mediaman-mcp] SUCCESS - MediaMan 539->545, MCP 116->121, H9b 48; no LLM or publication activation
+[2026-09-23T00:45:53Z] [COMMIT] SHA: 20013a166d4a52c85ff9bc0f8f870c167078d106

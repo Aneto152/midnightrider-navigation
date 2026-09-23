@@ -305,7 +305,7 @@ function cogRadiansToDegrees(radians) {
  * working unchanged. It owns no collection logic whatsoever: it turns its two
  * arguments into the two bounds the single engine takes, and delegates.
  */
-async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
+async function getHistoricalSnapshot(asOfUtc, windowSeconds, includeOptionalFacts = false) {
   // Validate as_of_utc
   if (!asOfUtc || typeof asOfUtc !== 'string') {
     throw new Error('as_of_utc is required and must be a string');
@@ -330,7 +330,7 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
   const windowMs = windowSeconds * 1000;
   const startTime = new Date(asOfDate.getTime() - windowMs).toISOString();
 
-  return await collectSnapshot(startTime, asOfUtc);
+  return await collectSnapshot(startTime, asOfUtc, includeOptionalFacts);
 }
 
 /**
@@ -346,7 +346,7 @@ async function getHistoricalSnapshot(asOfUtc, windowSeconds) {
  * differ only by the bounds the caller passes.
  */
 async function getSnapshot(startUtc, endUtc) {
-  return await collectSnapshot(startUtc, endUtc);
+  return await collectSnapshot(startUtc, endUtc, false);
 }
 
 /**
@@ -365,7 +365,19 @@ async function getSnapshot(startUtc, endUtc) {
  * conversion of defect 63. Completing it would have reopened both defects on
  * the path meant for racing. It was removed instead: defect 65.
  */
-async function collectSnapshot(startUtc, endUtc) {
+function buildFactQuery(selector, startTime, endTime) {
+  return `from(bucket:"${INFLUX_BUCKET}")
+    |> range(start: ${startTime}, stop: ${endTime})
+    |> filter(fn: (r) => r._measurement == "${selector.measurement}")
+    |> filter(fn: (r) => r._field == "${selector.field}")
+    |> filter(fn: (r) => ${selector.source || 'r.self == "true"'})
+    |> keep(columns: ["_time", "_value"])
+    |> group()
+    |> sort(columns: ["_time"])
+    |> last(column: "_time")`;
+}
+
+async function collectSnapshot(startUtc, endUtc, includeOptionalFacts = false) {
   if (!startUtc || typeof startUtc !== 'string') {
     throw new Error('start_utc is required and must be a string');
   }
@@ -452,18 +464,30 @@ async function collectSnapshot(startUtc, endUtc) {
     { fact: 'course_over_ground', measurement: 'navigation.courseOverGroundTrue', field: 'value' }
   ];
 
+  // Optional facts are opt-in so the existing four-query current path and its
+  // regression tests remain unchanged. Historical MediaMan explicitly opts in.
+  const OPTIONAL_FACT_SELECTORS = [
+    { fact: 'speed_through_water', measurement: 'navigation.speedThroughWater', field: 'value', unit: 'm_per_s', source: 'r.source == "N2K.35"', transform: 'identity' },
+    { fact: 'depth_below_transducer', measurement: 'environment.depth.belowTransducer', field: 'value', unit: 'm', source: 'r.source == "N2K.35"', transform: 'identity' },
+    { fact: 'water_temperature', measurement: 'environment.water.temperature', field: 'value', unit: 'celsius', source: 'r.source == "N2K.35"', transform: 'kelvin_to_celsius' },
+    { fact: 'wind_apparent_angle', measurement: 'environment.wind.angleApparent', field: 'value', unit: 'degrees_relative', source: 'r.source =~ /^Calypso\./', transform: 'radians_to_degrees' },
+    { fact: 'wind_apparent_speed', measurement: 'environment.wind.speedApparent', field: 'value', unit: 'm_per_s', source: 'r.source =~ /^Calypso\./', transform: 'identity' },
+    { fact: 'wind_true_angle', measurement: 'environment.wind.angleTrueWater', field: 'value', unit: 'degrees_relative', source: 'r.source =~ /^signalk-truewind-calculator\./', transform: 'radians_to_degrees' },
+    { fact: 'wind_true_speed', measurement: 'environment.wind.speedTrue', field: 'value', unit: 'm_per_s', source: 'r.source =~ /^signalk-truewind-calculator\./', transform: 'identity' },
+    { fact: 'wind_true_direction', measurement: 'environment.wind.directionTrue', field: 'value', unit: 'degrees_true', source: 'r.source =~ /^signalk-truewind-calculator\./', transform: 'radians_to_degrees_compass' },
+    { fact: 'current_set', measurement: 'environment.current.setTrue', field: 'value', unit: 'degrees_true', source: 'r.source =~ /^signalk-current-calculator\./', transform: 'radians_to_degrees_compass' },
+    { fact: 'current_drift', measurement: 'environment.current.drift', field: 'value', unit: 'm_per_s', source: 'r.source =~ /^signalk-current-calculator\./', transform: 'identity' },
+    { fact: 'attitude_roll', measurement: 'navigation.attitude.roll', field: 'value', unit: 'degrees', source: 'r.source == "N2K.35"', transform: 'radians_to_degrees' },
+    { fact: 'attitude_pitch', measurement: 'navigation.attitude.pitch', field: 'value', unit: 'degrees', source: 'r.source == "N2K.35"', transform: 'radians_to_degrees' },
+    { fact: 'outside_temperature', measurement: 'environment.outside.temperature', field: 'value', unit: 'celsius', source: 'r.source == "N2K.116"', transform: 'kelvin_to_celsius' },
+    { fact: 'outside_pressure', measurement: 'environment.outside.pressure', field: 'value', unit: 'hpa', source: 'r.source == "N2K.116"', transform: 'pascal_to_hpa' },
+    { fact: 'calypso_battery_percent', measurement: 'batteries.calypso.percent', field: 'value', unit: 'percent', source: 'r.source =~ /^Calypso\./', transform: 'identity' }
+  ];
+
   const queryResults = {};
 
   for (const selector of FACT_SELECTORS) {
-    const query = `from(bucket:"${INFLUX_BUCKET}")
-      |> range(start: ${startTime}, stop: ${asOfUtc})
-      |> filter(fn: (r) => r._measurement == "${selector.measurement}")
-      |> filter(fn: (r) => r._field == "${selector.field}")
-      |> filter(fn: (r) => r.self == "true")
-      |> keep(columns: ["_time", "_value"])
-      |> group()
-      |> sort(columns: ["_time"])
-      |> last(column: "_time")`;
+    const query = buildFactQuery(selector, startTime, asOfUtc);
 
     try {
       const results = await queryInfluxDB(query);
@@ -477,6 +501,27 @@ async function collectSnapshot(startUtc, endUtc) {
         error: sanitizeError(e)
       });
       throw new Error(`Failed to query ${selector.fact}: ${sanitizeError(e)}`);
+    }
+  }
+
+  const optionalResults = {};
+  if (includeOptionalFacts) {
+    for (const selector of OPTIONAL_FACT_SELECTORS) {
+      const query = buildFactQuery(selector, startTime, asOfUtc);
+      try {
+        const results = await queryInfluxDB(query);
+        optionalResults[selector.fact] = results.length > 0 ? results[0] : null;
+      } catch (e) {
+        // Optional measurements are fail-soft: one unavailable instrument must
+        // not discard the four mandatory navigation facts.
+        logEvent('ERROR', {
+          phase: 'optional_query',
+          fact: selector.fact,
+          measurement: selector.measurement,
+          error: sanitizeError(e)
+        });
+        optionalResults[selector.fact] = null;
+      }
     }
   }
 
@@ -510,6 +555,33 @@ async function collectSnapshot(startUtc, endUtc) {
     timestamps[selector.fact] = stamp;
   }
 
+  const optionalFacts = {};
+  const optionalUnits = {};
+  const optionalTimestamps = {};
+  const optionalSources = {};
+  const optionalTransforms = {
+    identity: value => value,
+    kelvin_to_celsius: value => value - 273.15,
+    pascal_to_hpa: value => value / 100.0,
+    radians_to_degrees: value => value * (180 / Math.PI),
+    radians_to_degrees_compass: value => ((value * (180 / Math.PI)) + 360) % 360
+  };
+  if (includeOptionalFacts) {
+    for (const selector of OPTIONAL_FACT_SELECTORS) {
+      const row = optionalResults[selector.fact];
+      if (!row || row._value === null || row._value === undefined || row._value === '' || !row._time) continue;
+      const raw = parseFloat(row._value);
+      const stamp = validateTimestamp(row._time);
+      if (!Number.isFinite(raw) || !stamp) continue;
+      const transformed = optionalTransforms[selector.transform](raw);
+      if (!Number.isFinite(transformed)) continue;
+      optionalFacts[selector.fact] = transformed;
+      optionalUnits[selector.fact] = selector.unit;
+      optionalTimestamps[selector.fact] = stamp.toISOString();
+      optionalSources[selector.fact] = selector.source;
+    }
+  }
+
   // Validate bounded skew
   const timesMs = Object.values(timestamps).map(t => t.getTime());
   const skew = Math.max(...timesMs) - Math.min(...timesMs);
@@ -526,6 +598,7 @@ async function collectSnapshot(startUtc, endUtc) {
   // place for coordinates; only non-locating metadata is emitted here.
   logEvent('DATA_OUT', {
     factsReturned: Object.keys(facts).length,
+    optionalFactsReturned: Object.keys(optionalFacts).length,
     positionPresent: facts.latitude !== null && facts.longitude !== null,
     sogPresent: facts.speed_over_ground !== null,
     cogPresent: facts.course_over_ground !== null,
@@ -552,6 +625,10 @@ async function collectSnapshot(startUtc, endUtc) {
       course_over_ground_degrees: 'degrees_true'
     },
     source_timestamp: sourceTimestamp,
+    optional_facts: optionalFacts,
+    optional_units: optionalUnits,
+    optional_fact_timestamps: optionalTimestamps,
+    optional_sources: optionalSources,
     fact_timestamps: {
       latitude: timestamps.latitude.toISOString(),
       longitude: timestamps.longitude.toISOString(),
@@ -577,7 +654,7 @@ async function handleTool(name, args) {
   try {
     switch (name) {
       case 'get_historical_snapshot':
-        return await getHistoricalSnapshot(args.as_of_utc, args.window_seconds);
+        return await getHistoricalSnapshot(args.as_of_utc, args.window_seconds, args.include_optional_facts === true);
       case 'get_snapshot':
         return await getSnapshot(args.start_utc, args.end_utc);
       default:
@@ -608,6 +685,10 @@ const tools = [
           description: 'Historical window in seconds (1-3600)',
           minimum: 1,
           maximum: 3600
+        },
+        include_optional_facts: {
+          type: 'boolean',
+          description: 'Opt in to the fail-soft narrative fact expansion; default false preserves the four-fact contract'
         }
       },
       required: ['as_of_utc', 'window_seconds'],
