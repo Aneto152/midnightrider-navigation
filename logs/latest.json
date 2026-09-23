@@ -1458,7 +1458,7 @@
     "timestamp": "2026-09-23T04:03:46.499931Z",
     "action": "mediaman_historical_analysis_phase1",
     "status": "SUCCESS",
-    "detail": "Server-side Flux downsampling added per measurement/field/source bucket; H9b documentation count corrected to 126.",
+    "detail": "Historical analysis uses a dedicated 90-second timeout; live and snapshot paths remain at 20 seconds.",
     "files_modified": [
       "mediaman/temporal_contract.py",
       "mediaman/temporal_analyzer.py",
@@ -1482,6 +1482,8 @@
     "measured_flux_seconds": 10.534281,
     "flux_server_downsampling": "last_per_series_bucket",
     "baseline_direct_seconds": 56.815135,
-    "baseline_direct_bytes": 28306910
+    "baseline_direct_bytes": 28306910,
+    "historical_query_timeout_ms": 90000,
+    "live_query_timeout_ms": 20000
   }
 }

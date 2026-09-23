@@ -523,3 +523,5 @@
 [2026-09-23T17:17:33Z] [RESULT] [mediaman-analysis] SUCCESS - one grouped query retained; historical response bounded before MCP; live path unchanged
 [2026-09-23T17:20:42Z] [FILE_MODIFY] [mediaman-analysis] H9b count corrected from 125 to 126 after server-side downsampling test addition
 [2026-09-23T17:20:42Z] [RESULT] [mediaman-analysis] SUCCESS - server-side temporal downsampling validation complete; live path unchanged
+[2026-09-23T17:33:19Z] [CONFIG_CHANGE] [mediaman-analysis] Dedicated historical timeout set to 90000ms; live and snapshot timeout remain 20000ms
+[2026-09-23T17:33:19Z] [RESULT] [mediaman-analysis] SUCCESS - timeout scoped to historical analysis only; live path unchanged
