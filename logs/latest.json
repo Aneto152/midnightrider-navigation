@@ -1458,7 +1458,7 @@
     "timestamp": "2026-09-23T04:03:46.499931Z",
     "action": "mediaman_historical_analysis_phase1",
     "status": "SUCCESS",
-    "detail": "H9 repaired: snapshot and temporal paths converge on one Flux query constructor; grouped temporal analysis remains historical-only.",
+    "detail": "Phase I v2 semantics repaired: signed angles, weighted buckets, incomplete coverage and direct MCP tests.",
     "files_modified": [
       "mediaman/temporal_contract.py",
       "mediaman/temporal_analyzer.py",
@@ -1475,6 +1475,8 @@
     ],
     "influx_series": "grouped_temporal_query",
     "llm": "not_activated",
-    "live_path": "unchanged"
+    "live_path": "unchanged",
+    "commit_sha": "f297c83e985c4815c6e51c73c96ab47db881fc54",
+    "tests_full_validation": 686
   }
 }

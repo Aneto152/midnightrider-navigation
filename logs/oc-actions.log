@@ -512,3 +512,6 @@
 [2026-09-23T04:03:46Z] [RESULT] [mediaman-analysis] SUCCESS - grouped temporal query; live path unchanged; LLM not activated
 [2026-09-23T04:10:35Z] [FILE_MODIFY] [mediaman-analysis] H9 repair: snapshot and temporal query paths now share one Flux constructor
 [2026-09-23T04:10:35Z] [RESULT] [mediaman-analysis] SUCCESS - H9 unique query constructor; tests passed; no live-path or LLM change
+[2026-09-23T04:20:16Z] [FILE_MODIFY] [mediaman-analysis] Phase I v2 semantic repair: signed angles, weighted buckets, incomplete coverage and direct MCP tests
+[2026-09-23T04:20:16Z] [RESULT] [mediaman-analysis] SUCCESS - prior validation 686 passed; current repair pending final validation
+[2026-09-23T04:12:05Z] [COMMIT] SHA: f297c83e985c4815c6e51c73c96ab47db881fc54
