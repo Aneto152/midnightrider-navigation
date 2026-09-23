@@ -1500,5 +1500,19 @@
     "llm_invoked": false,
     "telegram_sent": false,
     "credentials_logged": false
+  },
+  "wind_trend_and_data_gap_detectors": {
+    "status": "SUCCESS",
+    "executed_at": "2026-09-23T22:43:42Z",
+    "patterns_added": [
+      "persistent_shift",
+      "wind_oscillation",
+      "data_gap"
+    ],
+    "parent_commit": "aa004b6243fb7c2137e9e4ca2132971fbe41e1d5",
+    "historical_test": "SUCCESS",
+    "llm_invoked": false,
+    "telegram_sent": false,
+    "credentials_logged": false
   }
 }

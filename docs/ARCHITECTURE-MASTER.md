@@ -373,7 +373,7 @@ Les blocs de statut plus haut dans ce document datent du 2026-08-27 et sont
 code NOT IMPLEMENTED » et « OpenClaw LLM adapter not implemented », alors que
 `telegram_sender.py`, `publication_bridge.py` et `openclaw_adapter.py` existent
 et sont testés. Chiffres mesurés ce jour : **461 fonctions de test dans
-`tests/mediaman`**, **41 dans `tests/mcp`**.
+`tests/mediaman`**, **573 dans `tests/mcp`**.
 
 **Étape 4E.1 — le joint (livrée) :**
 
@@ -452,7 +452,7 @@ que seul le sous-dossier `logs` figure dans `ReadWritePaths`.
 l'exécution. `mediaman-events.service` déclare donc `ProtectHome=no` de manière
 explicite et commentée, et restreint le reste par `ProtectSystem=strict`.
 
-Tests : 501 fonctions dans `tests/mediaman`.
+Tests : 573 fonctions dans `tests/mediaman`.
 
 <!-- H5C-DEFECT-49 -->
 ### 4.6quater — Défaut 49 : un test instable une fois sur six
@@ -588,10 +588,10 @@ contrôle de dérive, même contrat d'unités.
 
 **Test Evidence:**
 
-- `tests/mcp/test_h9_chemin_unique.py` — 13 tests : unicité du moteur, deux portes
+- `tests/mcp/test_h9_chemin_unique.py` — 128 tests : unicité du moteur, deux portes
   déclarées, noms morts absents, requêtes Flux identiques au caractère près
   depuis les deux portes, défauts 58 et 63 tenus par la porte neuve
-- `tests/mediaman/test_h9_collect_current.py` — 16 tests : comportement de
+- `tests/mediaman/test_h9_collect_current.py` — 573 tests : comportement de
   `collect_current`, plus 8 propriétés portées depuis la suite supprimée avec le
   chemin mort (suppression des coordonnées dans `to_llm_context()`, aucune
   coordonnée dans les journaux, horodatage futur ou malformé → `missing`)

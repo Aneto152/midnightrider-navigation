@@ -24,6 +24,15 @@ HEEL = "attitude_roll"
 WIND_DIRECTION = "wind_true_direction"
 HEADING = "heading_true"
 
+PERSISTENT_SHIFT_MIN_DEGREES = 10.0
+PERSISTENT_SHIFT_MIN_R_SQUARED = 0.7
+OSCILLATION_MIN_CROSSINGS = 3
+OSCILLATION_MIN_AMPLITUDE_DEGREES = 8.0
+OSCILLATION_MAX_R_SQUARED = 0.5
+TREND_MIN_SAMPLES = 5
+DATA_GAP_MIN_COVERAGE_RATIO = 0.9
+DATA_GAP_MAX_MISSING_BUCKETS = 2
+
 def _percentile(values: list[float], fraction: float) -> float | None:
     if not values:
         return None
@@ -111,6 +120,134 @@ def detect_wind_attribution_patterns(series: Mapping[str, list[TemporalSample]])
     return events
 
 
+def _parse_utc(timestamp: str) -> datetime | None:
+    """Parse an ISO-8601 UTC timestamp, returning None when it is unusable."""
+    try:
+        return datetime.fromisoformat(str(timestamp).replace("Z", "+00:00"))
+    except (TypeError, ValueError):
+        return None
+
+def _unwrap_degrees(samples: list[TemporalSample]) -> list[float]:
+    """Unfold a circular bearing series into a continuous signed sequence."""
+    unwrapped = [float(samples[0].value)]
+    previous = float(samples[0].value)
+    for sample in samples[1:]:
+        current = float(sample.value)
+        unwrapped.append(unwrapped[-1] + circular_delta_degrees(previous, current))
+        previous = current
+    return unwrapped
+
+def detect_wind_direction_trend_patterns(series: Mapping[str, list[TemporalSample]]) -> list[dict[str, Any]]:
+    """Separate a persistent wind rotation from an oscillating breeze.
+
+    A persistent shift is a monotonic rotation that a linear fit explains well.
+    An oscillation is a repeated swing around the trend that the fit explains
+    poorly. The two conditions are mutually exclusive by construction.
+    """
+    direction = series.get(WIND_DIRECTION, [])
+    if len(direction) < TREND_MIN_SAMPLES:
+        return []
+    times = [_parse_utc(sample.timestamp_utc) for sample in direction]
+    if any(moment is None for moment in times):
+        return []
+    origin = times[0]
+    minutes = [(moment - origin).total_seconds() / 60.0 for moment in times]
+    if len(set(minutes)) < TREND_MIN_SAMPLES:
+        return []
+    values = _unwrap_degrees(direction)
+    try:
+        slope, intercept = statistics.linear_regression(minutes, values)
+        r_squared = statistics.correlation(minutes, values) ** 2
+    except (statistics.StatisticsError, ValueError, ZeroDivisionError):
+        return []
+    residuals = [value - (slope * minute + intercept) for value, minute in zip(values, minutes)]
+    crossings = sum(
+        1
+        for first, second in zip(residuals, residuals[1:])
+        if (first > 0.0 > second) or (first < 0.0 < second)
+    )
+    amplitude = max(residuals) - min(residuals)
+    total_delta = values[-1] - values[0]
+    start = direction[0].timestamp_utc
+    end = direction[-1].timestamp_utc
+    events: list[dict[str, Any]] = []
+    if abs(total_delta) >= PERSISTENT_SHIFT_MIN_DEGREES and r_squared >= PERSISTENT_SHIFT_MIN_R_SQUARED:
+        events.append({
+            "pattern_id": "persistent_shift",
+            "start_utc": start, "end_utc": end, "confidence": 0.85,
+            "evidence": ["absolute wind direction rotated monotonically and a linear fit explains it"],
+            "metrics": {
+                "total_delta_degrees": total_delta,
+                "slope_degrees_per_minute": slope,
+                "r_squared": r_squared,
+                "rotation": "right" if total_delta > 0 else "left",
+            },
+        })
+    if (
+        crossings >= OSCILLATION_MIN_CROSSINGS
+        and amplitude >= OSCILLATION_MIN_AMPLITUDE_DEGREES
+        and r_squared <= OSCILLATION_MAX_R_SQUARED
+    ):
+        events.append({
+            "pattern_id": "wind_oscillation",
+            "start_utc": start, "end_utc": end, "confidence": 0.8,
+            "evidence": ["absolute wind direction swung repeatedly around its trend"],
+            "metrics": {
+                "trend_crossings": crossings,
+                "amplitude_degrees": amplitude,
+                "r_squared": r_squared,
+                "total_delta_degrees": total_delta,
+            },
+        })
+    return events
+
+def detect_data_gap_patterns(
+    series: Mapping[str, list[TemporalSample]],
+    start_utc: str,
+    end_utc: str,
+    resolution_seconds: int,
+) -> list[dict[str, Any]]:
+    """Flag series whose bucket coverage is below the requested resolution."""
+    start = _parse_utc(start_utc)
+    end = _parse_utc(end_utc)
+    if start is None or end is None or resolution_seconds <= 0:
+        return []
+    expected = int((end - start).total_seconds() // resolution_seconds)
+    if expected < TREND_MIN_SAMPLES:
+        return []
+    tolerated_gap = resolution_seconds * (DATA_GAP_MAX_MISSING_BUCKETS + 1)
+    degraded: list[tuple[str, float, float]] = []
+    for name in sorted(series):
+        samples = series[name]
+        ratio = len(samples) / expected
+        moments = [_parse_utc(sample.timestamp_utc) for sample in samples]
+        spacings = [
+            (second - first).total_seconds()
+            for first, second in zip(moments, moments[1:])
+            if first is not None and second is not None
+        ]
+        widest = max(spacings) if spacings else 0.0
+        if ratio < DATA_GAP_MIN_COVERAGE_RATIO or widest > tolerated_gap:
+            degraded.append((name, ratio, widest))
+    if not degraded:
+        return []
+    worst = min(degraded, key=lambda entry: entry[1])
+    return [{
+        "pattern_id": "data_gap",
+        "start_utc": start_utc, "end_utc": end_utc, "confidence": 0.95,
+        "evidence": [
+            "series below the configured coverage threshold: "
+            + ", ".join(name for name, _, _ in degraded)
+        ],
+        "metrics": {
+            "expected_buckets": expected,
+            "degraded_series_count": len(degraded),
+            "worst_series": worst[0],
+            "worst_coverage_ratio": worst[1],
+            "maximum_gap_seconds": max(widest for _, _, widest in degraded),
+        },
+    }]
+
 def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, resolution_seconds: int) -> dict[str, Any]:
     """Build a deterministic evidence-backed analysis packet."""
     interval = HistoricalInterval(start_utc, end_utc, resolution_seconds)
@@ -145,6 +282,8 @@ def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, res
     patterns.extend(event.as_dict() for event in detect_wind_patterns(_points(series[WIND_SPEED], WIND_SPEED, knots=True)))
     patterns.extend(event.as_dict() for event in detect_point_of_sail(_points(series[WIND_ANGLE], WIND_ANGLE)))
     patterns.extend(detect_wind_attribution_patterns(series))
+    patterns.extend(detect_wind_direction_trend_patterns(series))
+    patterns.extend(detect_data_gap_patterns(series, start_utc, end_utc, resolution_seconds))
     if HEEL in series:
         patterns.extend(event.as_dict() for event in detect_heavy_heel(_points(series[HEEL], HEEL)))
     return HistoricalAnalysis(interval, coverage, series_output, stats, patterns=patterns, evidence=evidence).as_dict()

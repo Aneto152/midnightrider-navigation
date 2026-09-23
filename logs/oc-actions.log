@@ -536,3 +536,6 @@
 [2026-09-23T22:31:28Z] [FILE_MODIFY] [racing-mcp] HEADING_TRUE_FLUX_REGEX_FIX_RECORDED: closed the missing Flux regex delimiter on the heading_true source filter; no credential logged
 [2026-09-23T22:31:28Z] [FILE_MODIFY] [documentation] Declared tests/mcp count aligned to 128 after adding the regression test
 [2026-09-23T22:31:28Z] [RESULT] [mediaman] SUCCESS - full suite and read-only historical recheck passed; LLM not activated; Telegram not requested
+[2026-09-23T22:43:42Z] [FILE_MODIFY] [mediaman-analysis] WIND_TREND_AND_DATA_GAP_DETECTORS_RECORDED: added persistent_shift, wind_oscillation and data_gap detectors; no credential logged
+[2026-09-23T22:43:42Z] [FILE_CREATE] [mediaman-analysis] tests/mediaman/test_temporal_trend_patterns.py covers both trend branches and the coverage guard
+[2026-09-23T22:43:42Z] [RESULT] [mediaman-analysis] SUCCESS - full suite and read-only historical recheck passed; live path, Signal K, Docker and LLM unchanged

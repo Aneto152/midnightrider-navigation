@@ -78,3 +78,19 @@ absolute wind-direction rotation. `wind_refusal` and `wind_adonnante` require a
 stable true heading. `luffing` and `bearing_away` require stable absolute wind
 direction and a material true-heading change. Without those inputs, the TWA
 change remains unattributed.
+
+## Wind trend and data-gap detectors
+
+Three deterministic detectors complement the wind-attribution rules. They read
+only canonical series and never call an LLM.
+
+| Pattern | Required series | Rule |
+|---|---|---|
+| `persistent_shift` | `wind_true_direction` | at least 5 samples, unwrapped rotation of at least 10 degrees, linear fit with R-squared of at least 0.7 |
+| `wind_oscillation` | `wind_true_direction` | at least 3 crossings of the fitted trend, residual amplitude of at least 8 degrees, R-squared of at most 0.5 |
+| `data_gap` | any series | bucket coverage below 90 percent of the requested resolution, or a spacing wider than three buckets |
+
+`persistent_shift` and `wind_oscillation` are mutually exclusive because the
+R-squared bands do not overlap. `data_gap` is reported once for the whole
+interval and names the worst series, so a sparse window never silently
+produces confident tactical patterns.
