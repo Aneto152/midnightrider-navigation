@@ -55,3 +55,10 @@ The historical grouped query has a dedicated 90-second HTTP timeout because a
 one-hour direct Flux query measured 56.815135 seconds. The live and snapshot
 paths retain the 20-second timeout. This is a bounded read-only safeguard, not
 a service restart or a change to Signal K.
+
+## Python MCP client timeout
+
+The default Python MCPClient request timeout remains 5 seconds for the live
+and snapshot paths. `MCPCollector.collect_historical_analysis` explicitly uses
+a 120-second per-call override, matching the 90-second Node historical timeout
+and the validated one-hour read-only query.

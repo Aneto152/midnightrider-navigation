@@ -314,6 +314,7 @@ class MCPCollector:
                 'end_utc': end_utc,
                 'resolution_seconds': resolution_seconds,
             },
+            timeout_seconds=120,
         )
         payload = response.get('result', response)
         rows = payload.get('rows', []) if isinstance(payload, dict) else []

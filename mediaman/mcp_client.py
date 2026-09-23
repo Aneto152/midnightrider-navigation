@@ -302,7 +302,8 @@ class MCPClient:
     def call_tool(
         self,
         tool_name: str,
-        arguments: Optional[Dict[str, Any]] = None
+        arguments: Optional[Dict[str, Any]] = None,
+        timeout_seconds: Optional[float] = None
     ) -> Dict[str, Any]:
         """
         Call a tool on the MCP server.
@@ -310,6 +311,7 @@ class MCPClient:
         Args:
             tool_name: Public tool name (e.g., 'racing.get_snapshot')
             arguments: Tool arguments
+            timeout_seconds: Optional per-call timeout override for bounded historical analysis
 
         Returns:
             Structured MCP result with source tracking
@@ -330,11 +332,12 @@ class MCPClient:
         if arguments is None:
             arguments = {}
 
-        # Call tool with wire name and explicit request timeout
+        # Historical analysis may take longer than the default live-path timeout.
+        request_timeout = self.REQUEST_TIMEOUT_SECONDS if timeout_seconds is None else timeout_seconds
         response = self._send_request(
             'tools/call',
             {'name': wire_name, 'arguments': arguments},
-            timeout_seconds=self.REQUEST_TIMEOUT_SECONDS
+            timeout_seconds=request_timeout
         )
 
         # Decode MCP result envelope

@@ -527,3 +527,5 @@
 [2026-09-23T17:33:19Z] [RESULT] [mediaman-analysis] SUCCESS - timeout scoped to historical analysis only; live path unchanged
 [2026-09-23T17:39:08Z] [FILE_MODIFY] [mediaman-analysis] H9b count corrected from 126 to 127 after dedicated historical-timeout test addition
 [2026-09-23T17:39:08Z] [RESULT] [mediaman-analysis] SUCCESS - historical-only timeout validation complete; live path unchanged
+[2026-09-23T17:51:43Z] [CONFIG_CHANGE] [mediaman-analysis] Added Python MCPClient per-call timeout; historical collector uses 120s, default remains 5s
+[2026-09-23T17:51:43Z] [RESULT] [mediaman-analysis] SUCCESS - Python end-to-end historical timeout boundary prepared; live path unchanged
