@@ -675,7 +675,7 @@ function buildTemporalQuery(startUtc, endUtc, resolutionSeconds) {
   const sourceClauses = TEMPORAL_SELECTORS.map(selector => {
     if (selector.source === 'self') return `(r._measurement == "${selector.measurement}" and r.self == "true")`;
     if (selector.source === 'N2K.35') return `(r._measurement == "${selector.measurement}" and r.source == "N2K.35")`;
-    if (selector.source === 'heading') return `(r._measurement == "${selector.measurement}" and r.source =~ /^signalk-heading-true-calculator\.)`;
+    if (selector.source === 'heading') return `(r._measurement == "${selector.measurement}" and r.source =~ /^signalk-heading-true-calculator\./)`;
     return `(r._measurement == "${selector.measurement}" and r.source =~ /^signalk-truewind-calculator\./)`;
   }).join(' or ');
   const queryBody = [

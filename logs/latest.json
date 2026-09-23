@@ -1489,5 +1489,16 @@
     "python_historical_timeout_seconds": 120,
     "pattern_series_keys": "explicit",
     "wind_attribution": "heading_and_absolute_wind_required"
+  },
+  "heading_true_flux_regex_fix": {
+    "status": "SUCCESS",
+    "executed_at": "2026-09-23T22:31:28Z",
+    "issue": "MCP HTTP 400 caused by a missing closing Flux regex delimiter on the heading_true source filter",
+    "documentation_fix": "declared tests/mcp count aligned to 128",
+    "historical_test": "SUCCESS",
+    "unsupported_luffing_emitted": false,
+    "llm_invoked": false,
+    "telegram_sent": false,
+    "credentials_logged": false
   }
 }

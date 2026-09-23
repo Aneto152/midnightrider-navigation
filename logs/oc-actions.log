@@ -533,3 +533,6 @@
 [2026-09-23T18:14:37Z] [RESULT] [mediaman-analysis] SUCCESS - detector wiring corrected; live path and LLM unchanged
 [2026-09-23T21:30:11Z] [FILE_MODIFY] [mediaman-analysis] Added absolute wind-direction and true-heading attribution for wind shifts and maneuvers
 [2026-09-23T21:30:11Z] [RESULT] [mediaman-analysis] SUCCESS - TWA-only maneuver attribution removed; live path and LLM unchanged
+[2026-09-23T22:31:28Z] [FILE_MODIFY] [racing-mcp] HEADING_TRUE_FLUX_REGEX_FIX_RECORDED: closed the missing Flux regex delimiter on the heading_true source filter; no credential logged
+[2026-09-23T22:31:28Z] [FILE_MODIFY] [documentation] Declared tests/mcp count aligned to 128 after adding the regression test
+[2026-09-23T22:31:28Z] [RESULT] [mediaman] SUCCESS - full suite and read-only historical recheck passed; LLM not activated; Telegram not requested
