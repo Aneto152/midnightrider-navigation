@@ -1458,7 +1458,7 @@
     "timestamp": "2026-09-23T04:03:46.499931Z",
     "action": "mediaman_historical_analysis_phase1",
     "status": "SUCCESS",
-    "detail": "Historical grouped Flux query measured at 10.534281s; MCP historical timeout raised to 20s; live path unchanged.",
+    "detail": "Historical Flux query now downsamples server-side per measurement/field/source bucket before MCP transfer; live path unchanged.",
     "files_modified": [
       "mediaman/temporal_contract.py",
       "mediaman/temporal_analyzer.py",
@@ -1479,6 +1479,9 @@
     "commit_sha": "f297c83e985c4815c6e51c73c96ab47db881fc54",
     "tests_full_validation": 691,
     "mcp_historical_timeout_ms": 20000,
-    "measured_flux_seconds": 10.534281
+    "measured_flux_seconds": 10.534281,
+    "flux_server_downsampling": "last_per_series_bucket",
+    "baseline_direct_seconds": 56.815135,
+    "baseline_direct_bytes": 28306910
   }
 }

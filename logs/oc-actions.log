@@ -519,3 +519,5 @@
 [2026-09-23T04:32:53Z] [RESULT] [mediaman-analysis] SUCCESS - Phase I v2 complete validation passed; no live-path or LLM change
 [2026-09-23T17:07:07Z] [CONFIG_CHANGE] [mediaman-analysis] Historical MCP timeout raised from 5000ms to 20000ms after measured direct Flux response of 10.534281s
 [2026-09-23T17:07:07Z] [RESULT] [mediaman-analysis] SUCCESS - historical-only timeout change; live path unchanged; LLM not activated
+[2026-09-23T17:17:33Z] [CONFIG_CHANGE] [mediaman-analysis] Added server-side aggregateWindow at requested resolution, grouped by measurement, field and source
+[2026-09-23T17:17:33Z] [RESULT] [mediaman-analysis] SUCCESS - one grouped query retained; historical response bounded before MCP; live path unchanged
