@@ -692,7 +692,11 @@ function temporalSeriesName(row) {
 function normalizeTemporalValue(series, value) {
   const numeric = Number(value);
   if (!Number.isFinite(numeric)) return null;
-  if (series === 'wind_true_angle' || series === 'course_over_ground' || series === 'attitude_roll' || series === 'attitude_pitch') {
+  if (series === 'wind_true_angle' || series === 'attitude_roll' || series === 'attitude_pitch') {
+    const degrees = numeric * 180 / Math.PI;
+    return degrees > 180 ? degrees - 360 : degrees;
+  }
+  if (series === 'course_over_ground') {
     return ((numeric * 180 / Math.PI) + 360) % 360;
   }
   if (series === 'speed_through_water' || series === 'wind_true_speed' || series === 'speed_over_ground') return numeric;
@@ -702,6 +706,7 @@ function normalizeTemporalValue(series, value) {
 
 function downsampleTemporalRows(rows, resolutionSeconds) {
   const buckets = new Map();
+  const angular = new Set(['wind_true_angle', 'course_over_ground', 'attitude_roll', 'attitude_pitch']);
   for (const row of rows) {
     const series = temporalSeriesName(row);
     if (!series || !row._time) continue;
@@ -712,15 +717,19 @@ function downsampleTemporalRows(rows, resolutionSeconds) {
     const bucket = Math.floor(timestamp.getTime() / (resolutionSeconds * 1000));
     const key = `${series}:${bucket}`;
     const previous = buckets.get(key);
-    // Preserve the last angle sample in a bucket; average scalar samples.
-    if (!previous || series.includes('angle') || series.includes('course') || series.includes('roll') || series.includes('pitch')) {
-      buckets.set(key, { series, timestamp_utc: timestamp.toISOString(), value, source_id: row.source || null });
+    if (!previous || angular.has(series)) {
+      buckets.set(key, { series, timestamp_utc: timestamp.toISOString(), value, source_id: row.source || null, sum: value, count: 1 });
     } else {
-      previous.value = (previous.value + value) / 2;
+      previous.sum += value;
+      previous.count += 1;
+      previous.value = previous.sum / previous.count;
       previous.timestamp_utc = timestamp.toISOString();
+      previous.source_id = row.source || previous.source_id;
     }
   }
-  return [...buckets.values()].sort((a, b) => a.timestamp_utc.localeCompare(b.timestamp_utc));
+  return [...buckets.values()]
+    .map(({ sum, count, ...row }) => row)
+    .sort((a, b) => a.timestamp_utc.localeCompare(b.timestamp_utc));
 }
 
 async function getHistoricalAnalysis(startUtc, endUtc, resolutionSeconds = 60) {

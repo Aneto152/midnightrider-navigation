@@ -78,16 +78,32 @@ def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, res
     stats = {}
     for name, values in series.items():
         stats[name] = _stats(values, knots=name in {WIND_SPEED, SOG, STW}, circular=name in {WIND_ANGLE, COG})
-    coverage = {}
-    for name, values in series.items():
-        coverage[name] = {"sample_count": len(values), "first_utc": values[0].timestamp_utc if values else None, "last_utc": values[-1].timestamp_utc if values else None}
+    coverage = {
+        name: {
+            "sample_count": len(values),
+            "first_utc": values[0].timestamp_utc if values else None,
+            "last_utc": values[-1].timestamp_utc if values else None,
+        }
+        for name, values in series.items()
+    }
+    evidence = {
+        "query_count": 1,
+        "source_ids": sorted({s.source_id for values in series.values() for s in values if s.source_id}),
+        "sample_counts": {k: len(v) for k, v in series.items()},
+    }
+    required = {WIND_SPEED, WIND_ANGLE}
+    missing = sorted(name for name in required if len(series.get(name, [])) < 2)
+    if missing:
+        result = HistoricalAnalysis(interval, coverage, series_output, stats, patterns=[], evidence=evidence).as_dict()
+        result["success"] = False
+        result["status"] = "INCOMPLETE"
+        result["evidence"]["incomplete_reason"] = "required_temporal_series_missing_or_insufficient"
+        result["evidence"]["missing_series"] = missing
+        return result
     patterns = []
-    if WIND_SPEED in series:
-        patterns.extend(event.as_dict() for event in detect_wind_patterns(_points(series[WIND_SPEED], knots=True)))
-    if WIND_ANGLE in series:
-        patterns.extend(event.as_dict() for event in detect_point_of_sail(_points(series[WIND_ANGLE])))
-        patterns.extend(event.as_dict() for event in detect_tack_and_maneuver_patterns(_points(series[WIND_ANGLE])))
+    patterns.extend(event.as_dict() for event in detect_wind_patterns(_points(series[WIND_SPEED], knots=True)))
+    patterns.extend(event.as_dict() for event in detect_point_of_sail(_points(series[WIND_ANGLE])))
+    patterns.extend(event.as_dict() for event in detect_tack_and_maneuver_patterns(_points(series[WIND_ANGLE])))
     if HEEL in series:
         patterns.extend(event.as_dict() for event in detect_heavy_heel(_points(series[HEEL])))
-    evidence = {"query_count": 1, "source_ids": sorted({s.source_id for values in series.values() for s in values if s.source_id}), "sample_counts": {k: len(v) for k, v in series.items()}}
     return HistoricalAnalysis(interval, coverage, series_output, stats, patterns=patterns, evidence=evidence).as_dict()

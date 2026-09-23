@@ -22,3 +22,13 @@ def test_empty_series_remains_evidence_backed():
     result = analyze([], "2026-09-05T12:00:00Z", "2026-09-05T12:01:00Z", 60)
     assert result["patterns"] == []
     assert result["evidence"]["sample_counts"] == {}
+
+def test_signed_true_wind_angle_and_incomplete_coverage_fail_closed():
+    rows = [
+        row("wind_true_speed", "2026-09-05T12:00:00Z", 5.0, "truewind.test"),
+    ]
+    result = analyze(rows, "2026-09-05T12:00:00Z", "2026-09-05T12:01:00Z", 60)
+    assert result["success"] is False
+    assert result["status"] == "INCOMPLETE"
+    assert result["patterns"] == []
+    assert "wind_true_angle" in result["evidence"]["missing_series"]

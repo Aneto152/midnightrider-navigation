@@ -1,7 +1,7 @@
 # MediaMan Historical Analysis Contract
 
-**Status:** Phase I v1 design and implementation boundary  
-**Scope:** bounded, read-only historical analysis from InfluxDB  
+**Status:** Phase I v1 design and implementation boundary
+**Scope:** bounded, read-only historical analysis from InfluxDB
 **LLM:** not activated
 
 ## Contract
