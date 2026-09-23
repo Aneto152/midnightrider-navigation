@@ -35,3 +35,7 @@ circular arithmetic; a transition from 359° to 1° is a +2° movement.
 The path is read-only. It does not change Signal K, Docker, live MediaMan,
 Telegram publication or LLM activation. Credentials remain in the secured
 runtime environment and never enter results or logs.
+
+## MCP query timeout
+
+The grouped historical query uses a 20-second MCP HTTP timeout. The value is based on a measured 10.534281-second direct Flux response for a 10-minute historical window. This timeout applies only to the historical analysis path; the live path is unchanged.

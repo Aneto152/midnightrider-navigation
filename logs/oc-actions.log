@@ -517,3 +517,5 @@
 [2026-09-23T04:12:05Z] [COMMIT] SHA: f297c83e985c4815c6e51c73c96ab47db881fc54
 [2026-09-23T04:32:53Z] [FILE_MODIFY] [mediaman-analysis] H9b documentation count corrected from 121 to 125
 [2026-09-23T04:32:53Z] [RESULT] [mediaman-analysis] SUCCESS - Phase I v2 complete validation passed; no live-path or LLM change
+[2026-09-23T17:07:07Z] [CONFIG_CHANGE] [mediaman-analysis] Historical MCP timeout raised from 5000ms to 20000ms after measured direct Flux response of 10.534281s
+[2026-09-23T17:07:07Z] [RESULT] [mediaman-analysis] SUCCESS - historical-only timeout change; live path unchanged; LLM not activated

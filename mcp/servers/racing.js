@@ -22,7 +22,7 @@ const INFLUX_URL = process.env.INFLUX_URL || 'http://localhost:8086';
 const INFLUX_TOKEN = process.env.INFLUX_TOKEN || '';
 const INFLUX_ORG = process.env.INFLUX_ORG || 'MidnightRider';
 const INFLUX_BUCKET = process.env.INFLUX_BUCKET || 'midnight_rider';
-const HTTP_TIMEOUT_MS = 5000;
+const HTTP_TIMEOUT_MS = 20000;
 const SKEW_LIMIT_MS = 1000;
 
 const MCP_VERSION = '2024-11-05';

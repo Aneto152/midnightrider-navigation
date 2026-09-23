@@ -1458,7 +1458,7 @@
     "timestamp": "2026-09-23T04:03:46.499931Z",
     "action": "mediaman_historical_analysis_phase1",
     "status": "SUCCESS",
-    "detail": "Phase I v2 repaired: shared Flux constructor, signed angles, weighted buckets, incomplete coverage, direct MCP tests and H9b documentation count.",
+    "detail": "Historical grouped Flux query measured at 10.534281s; MCP historical timeout raised to 20s; live path unchanged.",
     "files_modified": [
       "mediaman/temporal_contract.py",
       "mediaman/temporal_analyzer.py",
@@ -1477,6 +1477,8 @@
     "llm": "not_activated",
     "live_path": "unchanged",
     "commit_sha": "f297c83e985c4815c6e51c73c96ab47db881fc54",
-    "tests_full_validation": 691
+    "tests_full_validation": 691,
+    "mcp_historical_timeout_ms": 20000,
+    "measured_flux_seconds": 10.534281
   }
 }
