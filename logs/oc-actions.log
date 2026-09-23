@@ -539,3 +539,6 @@
 [2026-09-23T22:43:42Z] [FILE_MODIFY] [mediaman-analysis] WIND_TREND_AND_DATA_GAP_DETECTORS_RECORDED: added persistent_shift, wind_oscillation and data_gap detectors; no credential logged
 [2026-09-23T22:43:42Z] [FILE_CREATE] [mediaman-analysis] tests/mediaman/test_temporal_trend_patterns.py covers both trend branches and the coverage guard
 [2026-09-23T22:43:42Z] [RESULT] [mediaman-analysis] SUCCESS - full suite and read-only historical recheck passed; live path, Signal K, Docker and LLM unchanged
+[2026-09-23T22:47:58Z] [FILE_MODIFY] [documentation] DOC_COUNT_OVERREACH_RESTORED: restored four per-file or dated test counts in docs/ARCHITECTURE-MASTER.md and one in docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md
+[2026-09-23T22:47:58Z] [DEBUG] [documentation] Root cause: the aggregate count-sync heuristic replaced any isolated number on a line citing a test suite, including per-file counts and dated measurements; the heuristic is retired
+[2026-09-23T22:47:58Z] [RESULT] [documentation] SUCCESS - aggregate totals in docs/ops/RECOVERY-GUIDE-SAFE.md left untouched; no code change; LLM not activated

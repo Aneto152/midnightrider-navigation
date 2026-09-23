@@ -245,7 +245,7 @@ remote_sha must not be used for two different commit meanings.
 1. mediaman/mcp_collector.py ignores fact_timestamps and bounded_skew_ms and
    never calls math.isfinite. The skew guarantee of this document is
    therefore enforced only inside racing.js, on the producer side.
-2. tests/mcp/test_phase2_historical_contract.py advertises 128 scenarios for
+2. tests/mcp/test_phase2_historical_contract.py advertises 24 scenarios for
    23 test functions, and none of them covers a skew of exactly 1000 ms
    accepted, a skew above 1000 ms rejected, preservation of the real _time
    values, selection of the newest source_timestamp, individual

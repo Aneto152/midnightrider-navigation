@@ -1514,5 +1514,22 @@
     "llm_invoked": false,
     "telegram_sent": false,
     "credentials_logged": false
+  },
+  "doc_count_overreach_restoration": {
+    "status": "SUCCESS",
+    "executed_at": "2026-09-23T22:47:58Z",
+    "parent_commit": "77258374666d7c0e6bdf8ebad28ddc3f7006b3f9",
+    "restored_counts": [
+      "ARCHITECTURE-MASTER.md tests/mcp dated measurement 41",
+      "ARCHITECTURE-MASTER.md tests/mediaman dated measurement 501",
+      "ARCHITECTURE-MASTER.md test_h9_chemin_unique.py 13",
+      "ARCHITECTURE-MASTER.md test_h9_collect_current.py 16",
+      "MEDIAMAN-HISTORICAL-DRY-RUN.md test_phase2_historical_contract.py 24"
+    ],
+    "aggregate_totals_preserved": "docs/ops/RECOVERY-GUIDE-SAFE.md",
+    "code_changed": false,
+    "llm_invoked": false,
+    "telegram_sent": false,
+    "credentials_logged": false
   }
 }
