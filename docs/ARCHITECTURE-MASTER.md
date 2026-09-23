@@ -51,6 +51,13 @@ Historical mode is opt-in (`MEDIAMAN_CONTENT_PROVIDER=historical_mcp`), enforces
 requires explicit temporal parameters, fails closed on missing facts, and never accesses N2K or P5.
 
 No live Telegram publication has been implemented. No runtime activation has occurred.
+
+**Narrative data contract (validated 2026-09-22):** MediaMan now defines a
+normalized boundary in `mediaman/narrative_contract.py` for four required and
+fifteen optional facts, each carrying unit, source, timestamp, quality and
+availability. This is a contract-only phase; MCP collection expansion, trend
+aggregation and LLM narration remain separate follow-up phases. See
+`docs/DECISIONS/MEDIAMAN-NARRATIVE-DATA-CONTRACT.md`.
 No systemd units are enabled. No credentials are stored in code or logs.
 Runtime E2E validation remains incomplete.
 

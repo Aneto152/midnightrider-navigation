@@ -80,6 +80,7 @@ Complete reference guide for the Midnight Rider navigation system.
   - Setup & activation procedures
 
 - **[docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md](DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md)** — Historical DRY_RUN decision and boundaries
+- **[docs/DECISIONS/MEDIAMAN-NARRATIVE-DATA-CONTRACT.md](DECISIONS/MEDIAMAN-NARRATIVE-DATA-CONTRACT.md)** — Normalized facts boundary for richer MediaMan articles
   - Offline orchestration test scope
   - Real MCP-to-InfluxDB runtime E2E status
   - Fact completeness contract (D1-D2)

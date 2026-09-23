@@ -1358,20 +1358,50 @@
       "tests_barrier": 48,
       "machine_actions": 0,
       "note": "Added factual constat markers to defects 14, 19 and 21; no defect was closed or rewritten."
+    },
+    {
+      "task": "MediaMan - narrative data contract v1",
+      "date": "2026-09-23T00:24:25Z",
+      "status": "SUCCESS",
+      "base": "34ed1a26cb50d7fb968f4a94a28b894f07524b54",
+      "files_modified": [
+        "mediaman/narrative_contract.py",
+        "tests/mediaman/test_narrative_contract.py",
+        "docs/ARCHITECTURE-MASTER.md",
+        "docs/INDEX.md",
+        "docs/DECISIONS/MEDIAMAN-NARRATIVE-DATA-CONTRACT.md",
+        "logs/debug/mediaman-contrat-data-v1-2026-09-22.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "tests_mediaman_before": 524,
+      "tests_mediaman_after": 539,
+      "tests_added": 15,
+      "tests_barrier": 48,
+      "machine_actions": 0,
+      "note": "Defined the normalized fact boundary only; MCP expansion, trends and LLM narration remain separate phases."
     }
   ],
-  "last_task": "H9b - evidence markers on three open defects",
+  "last_task": "MediaMan - narrative data contract v1",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-22T23:52:09Z",
+  "last_update": "2026-09-23T00:24:25Z",
   "last_dust_action": {
-    "timestamp": "2026-09-22T23:52:09Z",
-    "action": "h9b_evidence_markers",
+    "timestamp": "2026-09-23T00:24:25Z",
+    "action": "mediaman_narrative_data_contract_v1",
     "status": "SUCCESS",
-    "detail": "Added factual evidence markers to defects 14, 19 and 21; barrier measured 48 passed.",
+    "detail": "Defined four required and fifteen optional normalized facts; no MCP, trend, LLM or publication activation.",
     "files_modified": [
+      "mediaman/narrative_contract.py",
+      "tests/mediaman/test_narrative_contract.py",
+      "docs/ARCHITECTURE-MASTER.md",
+      "docs/INDEX.md",
+      "docs/DECISIONS/MEDIAMAN-NARRATIVE-DATA-CONTRACT.md",
+      "logs/debug/mediaman-contrat-data-v1-2026-09-22.md",
       "logs/latest.json",
       "logs/oc-actions.log"
     ],
+    "tests_mediaman_before": 524,
+    "tests_mediaman_after": 539,
     "tests_barrier": 48
   }
 }
