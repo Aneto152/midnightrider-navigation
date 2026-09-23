@@ -60,6 +60,11 @@ fifteen optional facts in a separate `optional_facts` envelope. The current
 four-fact live path remains unchanged. This phase is fail-soft for optional
 instruments; trend aggregation and LLM narration remain separate follow-up
 phases. See `docs/DECISIONS/MEDIAMAN-NARRATIVE-DATA-CONTRACT.md`.
+
+The next analysis boundary is the deterministic navigation-pattern engine. Its
+pattern registry and event contract are the SSOT in
+`docs/DECISIONS/MEDIAMAN-NAVIGATION-PATTERN-SSOT.md`; the LLM may narrate
+evidence-backed events but may not invent or calculate them.
 No systemd units are enabled. No credentials are stored in code or logs.
 Runtime E2E validation remains incomplete.
 

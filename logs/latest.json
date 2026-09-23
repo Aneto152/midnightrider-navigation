@@ -1425,27 +1425,54 @@
       "tests_barrier": 48,
       "machine_actions": 0,
       "note": "Optional facts now preserve actual source tags; no scope or publication behavior changed."
+    },
+    {
+      "task": "MediaMan - deterministic navigation pattern foundation v1",
+      "date": "2026-09-23T03:35:54Z",
+      "status": "SUCCESS",
+      "base": "8ba67e8391a3132c453752dcca97a8594f91b846",
+      "files_modified": [
+        "mediaman/nautical_units.py",
+        "mediaman/pattern_contract.py",
+        "mediaman/pattern_detector.py",
+        "tests/mediaman/test_pattern_detector.py",
+        "docs/DECISIONS/MEDIAMAN-NAVIGATION-PATTERN-SSOT.md",
+        "docs/ARCHITECTURE-MASTER.md",
+        "docs/INDEX.md",
+        "logs/debug/mediaman-pattern-foundation-v1-2026-09-22.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "tests_mediaman_before": 545,
+      "tests_mediaman_after": 563,
+      "tests_added": 18,
+      "tests_barrier": 48,
+      "machine_actions": 0,
+      "note": "Added nautical units, circular arithmetic, implemented v1 pattern detectors and an SSOT registry for future patterns."
     }
   ],
-  "last_task": "MediaMan - MCP optional-fact provenance correction",
+  "last_task": "MediaMan - deterministic navigation pattern foundation v1",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-23T02:59:52Z",
+  "last_update": "2026-09-23T03:35:54Z",
   "last_dust_action": {
-    "timestamp": "2026-09-23T02:59:52Z",
-    "action": "mediaman_mcp_optional_fact_provenance",
+    "timestamp": "2026-09-23T03:35:54Z",
+    "action": "mediaman_navigation_pattern_foundation_v1",
     "status": "SUCCESS",
-    "detail": "Optional historical facts now preserve actual InfluxDB source tags; no scope or publication behavior changed.",
+    "detail": "Added nautical units, circular arithmetic, implemented v1 pattern detectors and an SSOT registry for future patterns.",
     "files_modified": [
-      "mcp/servers/racing.js",
-      "mediaman/mcp_collector.py",
-      "tests/mediaman/test_mcp_optional_facts.py",
-      "tests/mcp/test_phase3_narrative_expansion.py",
-      "logs/debug/mediaman-mcp-provenance-v1-2026-09-22.md",
+      "mediaman/nautical_units.py",
+      "mediaman/pattern_contract.py",
+      "mediaman/pattern_detector.py",
+      "tests/mediaman/test_pattern_detector.py",
+      "docs/DECISIONS/MEDIAMAN-NAVIGATION-PATTERN-SSOT.md",
+      "docs/ARCHITECTURE-MASTER.md",
+      "docs/INDEX.md",
+      "logs/debug/mediaman-pattern-foundation-v1-2026-09-22.md",
       "logs/latest.json",
       "logs/oc-actions.log"
     ],
-    "tests_mediaman": 545,
-    "tests_mcp": 121,
+    "tests_mediaman_before": 545,
+    "tests_mediaman_after": 563,
     "tests_barrier": 48
   }
 }

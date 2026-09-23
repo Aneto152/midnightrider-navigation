@@ -505,3 +505,6 @@
 [2026-09-23T02:59:52Z] [FILE_MODIFY] [mediaman-mcp] Corrected actual source provenance for optional historical facts
 [2026-09-23T02:59:52Z] [RESULT] [mediaman-mcp] SUCCESS - MediaMan 545, MCP 121, H9b 48; no scope or publication behavior changed
 [2026-09-23T02:59:52Z] [COMMIT] SHA: 71dcb9fe15cd44596e108919ba44e98894f7f5bb
+[2026-09-23T03:35:54Z] [FILE_CREATE] [mediaman-pattern] Added deterministic navigation pattern foundation and SSOT registry
+[2026-09-23T03:35:54Z] [RESULT] [mediaman-pattern] SUCCESS - MediaMan 545->563, H9b 48; no live query, LLM or publication activation
+[2026-09-23T03:35:54Z] [COMMIT] SHA: 8ba67e8391a3132c453752dcca97a8594f91b846
