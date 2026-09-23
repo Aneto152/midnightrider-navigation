@@ -23,6 +23,7 @@ const INFLUX_TOKEN = process.env.INFLUX_TOKEN || '';
 const INFLUX_ORG = process.env.INFLUX_ORG || 'MidnightRider';
 const INFLUX_BUCKET = process.env.INFLUX_BUCKET || 'midnight_rider';
 const HTTP_TIMEOUT_MS = 20000;
+const HISTORICAL_QUERY_TIMEOUT_MS = 90000;
 const SKEW_LIMIT_MS = 1000;
 
 const MCP_VERSION = '2024-11-05';
@@ -80,7 +81,7 @@ logEvent('STARTUP', { version: MCP_VERSION, bucket: INFLUX_BUCKET });
 /**
  * Query InfluxDB with timeout and error handling
  */
-async function queryInfluxDB(fluxQuery) {
+async function queryInfluxDB(fluxQuery, timeoutMs = HTTP_TIMEOUT_MS) {
   return new Promise((resolve, reject) => {
     const postData = fluxQuery;
 
@@ -95,7 +96,7 @@ async function queryInfluxDB(fluxQuery) {
           'Content-Type': 'application/vnd.flux',
           'Content-Length': Buffer.byteLength(postData)
         },
-        timeout: HTTP_TIMEOUT_MS
+        timeout: timeoutMs
       };
 
       // Do NOT log Authorization header
@@ -743,7 +744,7 @@ async function getHistoricalAnalysis(startUtc, endUtc, resolutionSeconds = 60) {
   if (duration > 21600 * 1000) throw new Error('historical analysis interval must not exceed 21600 seconds');
   if (!Number.isInteger(resolutionSeconds) || resolutionSeconds < 10 || resolutionSeconds > 300) throw new Error('resolution_seconds must be an integer between 10 and 300');
   logEvent('DATA_IN', { analysis: 'historical', durationSeconds: Math.round(duration / 1000), resolutionSeconds });
-  const rows = await queryInfluxDB(buildTemporalQuery(start.toISOString(), end.toISOString(), resolutionSeconds));
+  const rows = await queryInfluxDB(buildTemporalQuery(start.toISOString(), end.toISOString(), resolutionSeconds), HISTORICAL_QUERY_TIMEOUT_MS);
   const seriesRows = downsampleTemporalRows(rows, resolutionSeconds);
   const result = {
     success: true,

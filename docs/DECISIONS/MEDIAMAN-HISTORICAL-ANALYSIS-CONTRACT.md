@@ -48,3 +48,10 @@ representative is the last sample in each bucket, which preserves signed and
 circular angle semantics. Python then performs deterministic statistics over
 the bounded representative series. A one-hour baseline measured 56.815135
 seconds and 28,306,910 bytes before this optimization.
+
+## Historical query timeout
+
+The historical grouped query has a dedicated 90-second HTTP timeout because a
+one-hour direct Flux query measured 56.815135 seconds. The live and snapshot
+paths retain the 20-second timeout. This is a bounded read-only safeguard, not
+a service restart or a change to Signal K.

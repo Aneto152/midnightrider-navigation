@@ -28,3 +28,7 @@ def test_temporal_angle_semantics_are_explicit():
 def test_temporal_query_downsamples_server_side_per_series():
     assert 'aggregateWindow(every: ${resolutionSeconds}s, fn: last' in RACING
     assert 'group(columns: ["_measurement", "_field", "source"])' in RACING
+
+def test_historical_path_has_dedicated_timeout():
+    assert 'HISTORICAL_QUERY_TIMEOUT_MS = 90000' in RACING
+    assert 'queryInfluxDB(buildTemporalQuery(start.toISOString(), end.toISOString(), resolutionSeconds), HISTORICAL_QUERY_TIMEOUT_MS)' in RACING

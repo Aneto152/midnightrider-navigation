@@ -525,3 +525,5 @@
 [2026-09-23T17:20:42Z] [RESULT] [mediaman-analysis] SUCCESS - server-side temporal downsampling validation complete; live path unchanged
 [2026-09-23T17:33:19Z] [CONFIG_CHANGE] [mediaman-analysis] Dedicated historical timeout set to 90000ms; live and snapshot timeout remain 20000ms
 [2026-09-23T17:33:19Z] [RESULT] [mediaman-analysis] SUCCESS - timeout scoped to historical analysis only; live path unchanged
+[2026-09-23T17:39:08Z] [FILE_MODIFY] [mediaman-analysis] H9b count corrected from 126 to 127 after dedicated historical-timeout test addition
+[2026-09-23T17:39:08Z] [RESULT] [mediaman-analysis] SUCCESS - historical-only timeout validation complete; live path unchanged

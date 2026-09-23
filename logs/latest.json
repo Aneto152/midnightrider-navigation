@@ -1458,7 +1458,7 @@
     "timestamp": "2026-09-23T04:03:46.499931Z",
     "action": "mediaman_historical_analysis_phase1",
     "status": "SUCCESS",
-    "detail": "Historical analysis uses a dedicated 90-second timeout; live and snapshot paths remain at 20 seconds.",
+    "detail": "Historical-only timeout 90000ms documented and validated; live/snapshot timeout remains 20000ms; H9b count corrected to 127.",
     "files_modified": [
       "mediaman/temporal_contract.py",
       "mediaman/temporal_analyzer.py",
@@ -1477,7 +1477,7 @@
     "llm": "not_activated",
     "live_path": "unchanged",
     "commit_sha": "f297c83e985c4815c6e51c73c96ab47db881fc54",
-    "tests_full_validation": 692,
+    "tests_full_validation": 693,
     "mcp_historical_timeout_ms": 20000,
     "measured_flux_seconds": 10.534281,
     "flux_server_downsampling": "last_per_series_bucket",
