@@ -21,6 +21,8 @@ SOG = "speed_over_ground"
 COG = "course_over_ground"
 STW = "speed_through_water"
 HEEL = "attitude_roll"
+WIND_DIRECTION = "wind_true_direction"
+HEADING = "heading_true"
 
 def _percentile(values: list[float], fraction: float) -> float | None:
     if not values:
@@ -71,6 +73,44 @@ def _points(series: list[TemporalSample], key: str, *, knots: bool = False) -> l
     """Convert one named temporal series into detector-compatible points."""
     return [SeriesPoint(s.timestamp_utc, {key: meters_per_second_to_knots(s.value) if knots else s.value}) for s in series]
 
+def detect_wind_attribution_patterns(series: Mapping[str, list[TemporalSample]]) -> list[dict[str, Any]]:
+    """Attribute TWA changes only when absolute wind and heading evidence exists."""
+    twa = series.get(WIND_ANGLE, [])
+    wind_direction = series.get(WIND_DIRECTION, [])
+    heading = series.get(HEADING, [])
+    if len(twa) < 2 or len(wind_direction) < 2 or len(heading) < 2:
+        return []
+    twa_start, twa_end = twa[0].value, twa[-1].value
+    wind_delta = circular_delta_degrees(wind_direction[0].value, wind_direction[-1].value)
+    heading_delta = circular_delta_degrees(heading[0].value, heading[-1].value)
+    twa_abs_delta = abs(twa_end) - abs(twa_start)
+    start = twa[0].timestamp_utc
+    end = twa[-1].timestamp_utc
+    events: list[dict[str, Any]] = []
+    if abs(wind_delta) >= 10.0:
+        events.append({
+            "pattern_id": "wind_shift_right" if wind_delta > 0 else "wind_shift_left",
+            "start_utc": start, "end_utc": end, "confidence": 0.9,
+            "evidence": ["absolute true-wind direction changed beyond the configured threshold"],
+            "metrics": {"wind_direction_delta_degrees": wind_delta},
+        })
+    if abs(heading_delta) <= 5.0 and abs(twa_abs_delta) >= 15.0:
+        events.append({
+            "pattern_id": "wind_refusal" if twa_abs_delta < 0 else "wind_adonnante",
+            "start_utc": start, "end_utc": end, "confidence": 0.85,
+            "evidence": ["true heading remained stable while TWA changed materially"],
+            "metrics": {"twa_absolute_delta_degrees": twa_abs_delta, "heading_delta_degrees": heading_delta},
+        })
+    elif abs(wind_delta) <= 5.0 and abs(heading_delta) >= 15.0:
+        events.append({
+            "pattern_id": "luffing" if twa_abs_delta < 0 else "bearing_away",
+            "start_utc": start, "end_utc": end, "confidence": 0.85,
+            "evidence": ["absolute wind direction remained stable while true heading changed materially"],
+            "metrics": {"twa_absolute_delta_degrees": twa_abs_delta, "heading_delta_degrees": heading_delta},
+        })
+    return events
+
+
 def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, resolution_seconds: int) -> dict[str, Any]:
     """Build a deterministic evidence-backed analysis packet."""
     interval = HistoricalInterval(start_utc, end_utc, resolution_seconds)
@@ -104,7 +144,7 @@ def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, res
     patterns = []
     patterns.extend(event.as_dict() for event in detect_wind_patterns(_points(series[WIND_SPEED], WIND_SPEED, knots=True)))
     patterns.extend(event.as_dict() for event in detect_point_of_sail(_points(series[WIND_ANGLE], WIND_ANGLE)))
-    patterns.extend(event.as_dict() for event in detect_tack_and_maneuver_patterns(_points(series[WIND_ANGLE], WIND_ANGLE)))
+    patterns.extend(detect_wind_attribution_patterns(series))
     if HEEL in series:
         patterns.extend(event.as_dict() for event in detect_heavy_heel(_points(series[HEEL], HEEL)))
     return HistoricalAnalysis(interval, coverage, series_output, stats, patterns=patterns, evidence=evidence).as_dict()

@@ -1458,7 +1458,7 @@
     "timestamp": "2026-09-23T04:03:46.499931Z",
     "action": "mediaman_historical_analysis_phase1",
     "status": "SUCCESS",
-    "detail": "Temporal analyzer now passes explicit canonical series keys into deterministic detectors; end-to-end patterns are enabled.",
+    "detail": "Wind attribution now requires absolute true-wind direction and true heading; TWA-only luffing/bearing-away attribution removed.",
     "files_modified": [
       "mediaman/temporal_contract.py",
       "mediaman/temporal_analyzer.py",
@@ -1487,6 +1487,7 @@
     "live_query_timeout_ms": 20000,
     "python_default_timeout_seconds": 5,
     "python_historical_timeout_seconds": 120,
-    "pattern_series_keys": "explicit"
+    "pattern_series_keys": "explicit",
+    "wind_attribution": "heading_and_absolute_wind_required"
   }
 }

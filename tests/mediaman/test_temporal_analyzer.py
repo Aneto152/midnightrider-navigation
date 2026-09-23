@@ -44,3 +44,31 @@ def test_analysis_wires_named_series_into_detectors():
     pattern_ids = {event["pattern_id"] for event in result["patterns"]}
     assert "point_of_sail" in pattern_ids
     assert "wind_strengthening" in pattern_ids
+
+def test_twa_change_without_heading_and_absolute_wind_is_not_luffing():
+    rows = [
+        row("wind_true_speed", "2026-09-05T12:00:00Z", 5.0, "truewind.test"),
+        row("wind_true_speed", "2026-09-05T12:01:00Z", 6.0, "truewind.test"),
+        row("wind_true_angle", "2026-09-05T12:00:00Z", -125.0, "truewind.test"),
+        row("wind_true_angle", "2026-09-05T12:01:00Z", -98.0, "truewind.test"),
+    ]
+    result = analyze(rows, "2026-09-05T12:00:00Z", "2026-09-05T12:02:00Z", 60)
+    assert "luffing" not in {event["pattern_id"] for event in result["patterns"]}
+
+
+def test_heading_and_absolute_wind_enable_refusal_or_wind_shift():
+    rows = [
+        row("wind_true_speed", "2026-09-05T12:00:00Z", 5.0, "truewind.test"),
+        row("wind_true_speed", "2026-09-05T12:01:00Z", 6.0, "truewind.test"),
+        row("wind_true_angle", "2026-09-05T12:00:00Z", -125.0, "truewind.test"),
+        row("wind_true_angle", "2026-09-05T12:01:00Z", -98.0, "truewind.test"),
+        row("wind_true_direction", "2026-09-05T12:00:00Z", 240.0, "truewind.test"),
+        row("wind_true_direction", "2026-09-05T12:01:00Z", 267.0, "truewind.test"),
+        row("heading_true", "2026-09-05T12:00:00Z", 180.0, "heading.test"),
+        row("heading_true", "2026-09-05T12:01:00Z", 180.0, "heading.test"),
+    ]
+    result = analyze(rows, "2026-09-05T12:00:00Z", "2026-09-05T12:02:00Z", 60)
+    ids = {event["pattern_id"] for event in result["patterns"]}
+    assert "wind_shift_right" in ids
+    assert "wind_refusal" in ids
+    assert "luffing" not in ids

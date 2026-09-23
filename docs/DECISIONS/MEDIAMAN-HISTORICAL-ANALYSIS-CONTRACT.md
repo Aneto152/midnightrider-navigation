@@ -68,3 +68,13 @@ and the validated one-hour read-only query.
 The temporal analyzer maps each canonical series to the detector key expected by
 the pattern contract. `wind_true_speed`, `wind_true_angle` and `attitude_roll`
 are never emitted under a generic `value` key before detector execution.
+
+## Wind attribution
+
+TWA variation alone is not sufficient to claim luffing or bearing away. The
+analysis requests `environment.wind.directionTrue` and
+`navigation.headingTrue`. `wind_shift_left` and `wind_shift_right` describe
+absolute wind-direction rotation. `wind_refusal` and `wind_adonnante` require a
+stable true heading. `luffing` and `bearing_away` require stable absolute wind
+direction and a material true-heading change. Without those inputs, the TWA
+change remains unattributed.

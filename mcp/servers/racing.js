@@ -664,6 +664,8 @@ const TEMPORAL_SELECTORS = [
   { series: 'speed_through_water', measurement: 'navigation.speedThroughWater', field: 'value', source: 'N2K.35' },
   { series: 'wind_true_angle', measurement: 'environment.wind.angleTrueWater', field: 'value', source: 'truewind' },
   { series: 'wind_true_speed', measurement: 'environment.wind.speedTrue', field: 'value', source: 'truewind' },
+  { series: 'wind_true_direction', measurement: 'environment.wind.directionTrue', field: 'value', source: 'truewind' },
+  { series: 'heading_true', measurement: 'navigation.headingTrue', field: 'value', source: 'heading' },
   { series: 'attitude_roll', measurement: 'navigation.attitude.roll', field: 'value', source: 'N2K.35' },
   { series: 'attitude_pitch', measurement: 'navigation.attitude.pitch', field: 'value', source: 'N2K.35' }
 ];
@@ -673,6 +675,7 @@ function buildTemporalQuery(startUtc, endUtc, resolutionSeconds) {
   const sourceClauses = TEMPORAL_SELECTORS.map(selector => {
     if (selector.source === 'self') return `(r._measurement == "${selector.measurement}" and r.self == "true")`;
     if (selector.source === 'N2K.35') return `(r._measurement == "${selector.measurement}" and r.source == "N2K.35")`;
+    if (selector.source === 'heading') return `(r._measurement == "${selector.measurement}" and r.source =~ /^signalk-heading-true-calculator\.)`;
     return `(r._measurement == "${selector.measurement}" and r.source =~ /^signalk-truewind-calculator\./)`;
   }).join(' or ');
   const queryBody = [
@@ -699,7 +702,7 @@ function normalizeTemporalValue(series, value) {
     const degrees = numeric * 180 / Math.PI;
     return degrees > 180 ? degrees - 360 : degrees;
   }
-  if (series === 'course_over_ground') {
+  if (series === 'course_over_ground' || series === 'wind_true_direction' || series === 'heading_true') {
     return ((numeric * 180 / Math.PI) + 360) % 360;
   }
   if (series === 'speed_through_water' || series === 'wind_true_speed' || series === 'speed_over_ground') return numeric;
