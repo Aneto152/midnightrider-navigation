@@ -365,16 +365,23 @@ async function getSnapshot(startUtc, endUtc) {
  * conversion of defect 63. Completing it would have reopened both defects on
  * the path meant for racing. It was removed instead: defect 65.
  */
-function buildFactQuery(selector, startTime, endTime) {
+function buildFluxQuery(queryBody, startTime, endTime) {
   return `from(bucket:"${INFLUX_BUCKET}")
     |> range(start: ${startTime}, stop: ${endTime})
-    |> filter(fn: (r) => r._measurement == "${selector.measurement}")
-    |> filter(fn: (r) => r._field == "${selector.field}")
-    |> filter(fn: (r) => ${selector.source || 'r.self == "true"'})
-    |> keep(columns: ["_time", "_value", "source"])
-    |> group()
-    |> sort(columns: ["_time"])
-    |> last(column: "_time")`;
+${queryBody}`;
+}
+
+function buildFactQuery(selector, startTime, endTime) {
+  const queryBody = [
+    `    |> filter(fn: (r) => r._measurement == "${selector.measurement}")`,
+    `    |> filter(fn: (r) => r._field == "${selector.field}")`,
+    `    |> filter(fn: (r) => ${selector.source || 'r.self == "true"'})`,
+    `    |> keep(columns: ["_time", "_value", "source"])`,
+    '    |> group()',
+    '    |> sort(columns: ["_time"])',
+    '    |> last(column: "_time")'
+  ].join('\n');
+  return buildFluxQuery(queryBody, startTime, endTime);
 }
 
 async function collectSnapshot(startUtc, endUtc, includeOptionalFacts = false) {
@@ -647,6 +654,100 @@ async function collectSnapshot(startUtc, endUtc, includeOptionalFacts = false) {
   };
 }
 
+
+const TEMPORAL_SELECTORS = [
+  { series: 'latitude', measurement: 'navigation.position', field: 'lat', source: 'self' },
+  { series: 'longitude', measurement: 'navigation.position', field: 'lon', source: 'self' },
+  { series: 'speed_over_ground', measurement: 'navigation.speedOverGround', field: 'value', source: 'self' },
+  { series: 'course_over_ground', measurement: 'navigation.courseOverGroundTrue', field: 'value', source: 'self' },
+  { series: 'speed_through_water', measurement: 'navigation.speedThroughWater', field: 'value', source: 'N2K.35' },
+  { series: 'wind_true_angle', measurement: 'environment.wind.angleTrueWater', field: 'value', source: 'truewind' },
+  { series: 'wind_true_speed', measurement: 'environment.wind.speedTrue', field: 'value', source: 'truewind' },
+  { series: 'attitude_roll', measurement: 'navigation.attitude.roll', field: 'value', source: 'N2K.35' },
+  { series: 'attitude_pitch', measurement: 'navigation.attitude.pitch', field: 'value', source: 'N2K.35' }
+];
+
+function buildTemporalQuery(startUtc, endUtc) {
+  const measurements = [...new Set(TEMPORAL_SELECTORS.map(selector => selector.measurement))];
+  const sourceClauses = TEMPORAL_SELECTORS.map(selector => {
+    if (selector.source === 'self') return `(r._measurement == "${selector.measurement}" and r.self == "true")`;
+    if (selector.source === 'N2K.35') return `(r._measurement == "${selector.measurement}" and r.source == "N2K.35")`;
+    return `(r._measurement == "${selector.measurement}" and r.source =~ /^signalk-truewind-calculator\./)`;
+  }).join(' or ');
+  const queryBody = [
+    `    |> filter(fn: (r) => contains(value: r._measurement, set: [${measurements.map(value => `"${value}"`).join(', ')}]))`,
+    `    |> filter(fn: (r) => ${sourceClauses})`,
+    '    |> keep(columns: ["_time", "_measurement", "_field", "_value", "source"])',
+    '    |> group()',
+    '    |> sort(columns: ["_time"])'
+  ].join('\n');
+  return buildFluxQuery(queryBody, startUtc, endUtc);
+}
+
+function temporalSeriesName(row) {
+  const selector = TEMPORAL_SELECTORS.find(item => item.measurement === row._measurement && item.field === row._field);
+  return selector ? selector.series : null;
+}
+
+function normalizeTemporalValue(series, value) {
+  const numeric = Number(value);
+  if (!Number.isFinite(numeric)) return null;
+  if (series === 'wind_true_angle' || series === 'course_over_ground' || series === 'attitude_roll' || series === 'attitude_pitch') {
+    return ((numeric * 180 / Math.PI) + 360) % 360;
+  }
+  if (series === 'speed_through_water' || series === 'wind_true_speed' || series === 'speed_over_ground') return numeric;
+  if (series === 'water_temperature') return numeric - 273.15;
+  return numeric;
+}
+
+function downsampleTemporalRows(rows, resolutionSeconds) {
+  const buckets = new Map();
+  for (const row of rows) {
+    const series = temporalSeriesName(row);
+    if (!series || !row._time) continue;
+    const value = normalizeTemporalValue(series, row._value);
+    if (value === null) continue;
+    const timestamp = new Date(row._time);
+    if (Number.isNaN(timestamp.getTime())) continue;
+    const bucket = Math.floor(timestamp.getTime() / (resolutionSeconds * 1000));
+    const key = `${series}:${bucket}`;
+    const previous = buckets.get(key);
+    // Preserve the last angle sample in a bucket; average scalar samples.
+    if (!previous || series.includes('angle') || series.includes('course') || series.includes('roll') || series.includes('pitch')) {
+      buckets.set(key, { series, timestamp_utc: timestamp.toISOString(), value, source_id: row.source || null });
+    } else {
+      previous.value = (previous.value + value) / 2;
+      previous.timestamp_utc = timestamp.toISOString();
+    }
+  }
+  return [...buckets.values()].sort((a, b) => a.timestamp_utc.localeCompare(b.timestamp_utc));
+}
+
+async function getHistoricalAnalysis(startUtc, endUtc, resolutionSeconds = 60) {
+  if (!startUtc || !endUtc || !startUtc.endsWith('Z') || !endUtc.endsWith('Z')) throw new Error('start_utc and end_utc must end with Z');
+  const start = validateTimestamp(startUtc);
+  const end = validateTimestamp(endUtc);
+  if (!start || !end || end <= start) throw new Error('invalid historical analysis interval');
+  const duration = end.getTime() - start.getTime();
+  if (duration > 21600 * 1000) throw new Error('historical analysis interval must not exceed 21600 seconds');
+  if (!Number.isInteger(resolutionSeconds) || resolutionSeconds < 10 || resolutionSeconds > 300) throw new Error('resolution_seconds must be an integer between 10 and 300');
+  logEvent('DATA_IN', { analysis: 'historical', durationSeconds: Math.round(duration / 1000), resolutionSeconds });
+  const rows = await queryInfluxDB(buildTemporalQuery(start.toISOString(), end.toISOString()));
+  const seriesRows = downsampleTemporalRows(rows, resolutionSeconds);
+  const result = {
+    success: true,
+    status: 'COMPLETE',
+    analysis_version: '1',
+    interval: { start_utc: start.toISOString(), end_utc: end.toISOString(), duration_seconds: Math.round(duration / 1000) },
+    resolution_seconds: resolutionSeconds,
+    rows: seriesRows,
+    query_count: 1,
+    llm_status: 'not_activated'
+  };
+  logEvent('DATA_OUT', { analysis: 'historical', queryCount: 1, sampleCount: seriesRows.length, seriesCount: new Set(seriesRows.map(row => row.series)).size });
+  return result;
+}
+
 /**
  * Handle MCP tool calls
  */
@@ -657,6 +758,8 @@ async function handleTool(name, args) {
         return await getHistoricalSnapshot(args.as_of_utc, args.window_seconds, args.include_optional_facts === true);
       case 'get_snapshot':
         return await getSnapshot(args.start_utc, args.end_utc);
+      case 'get_historical_analysis':
+        return await getHistoricalAnalysis(args.start_utc, args.end_utc, args.resolution_seconds);
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
@@ -692,6 +795,20 @@ const tools = [
         }
       },
       required: ['as_of_utc', 'window_seconds'],
+      additionalProperties: false
+    }
+  },
+  {
+    name: 'get_historical_analysis',
+    description: 'Read a bounded historical time series from InfluxDB for deterministic MediaMan analysis',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        start_utc: { type: 'string', description: 'ISO 8601 UTC timestamp ending with Z' },
+        end_utc: { type: 'string', description: 'ISO 8601 UTC timestamp ending with Z' },
+        resolution_seconds: { type: 'integer', description: 'Temporal resolution from 10 to 300 seconds', minimum: 10, maximum: 300 }
+      },
+      required: ['start_utc', 'end_utc'],
       additionalProperties: false
     }
   },

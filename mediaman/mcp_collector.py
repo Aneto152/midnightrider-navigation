@@ -303,6 +303,31 @@ class MCPCollector:
             mode='current',
         )
 
+    def collect_historical_analysis(self, start_utc: str, end_utc: str, resolution_seconds: int = 60) -> Dict[str, Any]:
+        # Collect grouped temporal series and analyze them deterministically.
+        from mediaman.temporal_analyzer import analyze
+
+        response = self.client.call_tool(
+            'racing.get_historical_analysis',
+            {
+                'start_utc': start_utc,
+                'end_utc': end_utc,
+                'resolution_seconds': resolution_seconds,
+            },
+        )
+        payload = response.get('result', response)
+        rows = payload.get('rows', []) if isinstance(payload, dict) else []
+        self.logger.info('Historical analysis DATA_IN rows=%s resolution=%s', len(rows), resolution_seconds)
+        result = analyze(rows, start_utc, end_utc, resolution_seconds)
+        result['evidence'] = {
+            **result.get('evidence', {}),
+            'mcp_source': response.get('source', 'mcp:racing'),
+            'source_timestamp': response.get('source_timestamp', 'UNKNOWN'),
+        }
+        self.logger.info('Historical analysis DATA_OUT patterns=%s', len(result.get('patterns', [])))
+        return result
+
+
     @staticmethod
     def _parse_iso_utc(value: str) -> datetime:
         """Parse an ISO 8601 UTC timestamp with a literal Z suffix."""

@@ -508,3 +508,7 @@
 [2026-09-23T03:35:54Z] [FILE_CREATE] [mediaman-pattern] Added deterministic navigation pattern foundation and SSOT registry
 [2026-09-23T03:35:54Z] [RESULT] [mediaman-pattern] SUCCESS - MediaMan 545->563, H9b 48; no live query, LLM or publication activation
 [2026-09-23T03:35:54Z] [COMMIT] SHA: 10d199e4ad58e24ef65132a4bfc1e94779f2f1df
+[2026-09-23T04:03:46Z] [FILE_CREATE] [mediaman-analysis] Added bounded temporal contract and deterministic historical analysis foundation
+[2026-09-23T04:03:46Z] [RESULT] [mediaman-analysis] SUCCESS - grouped temporal query; live path unchanged; LLM not activated
+[2026-09-23T04:10:35Z] [FILE_MODIFY] [mediaman-analysis] H9 repair: snapshot and temporal query paths now share one Flux constructor
+[2026-09-23T04:10:35Z] [RESULT] [mediaman-analysis] SUCCESS - H9 unique query constructor; tests passed; no live-path or LLM change

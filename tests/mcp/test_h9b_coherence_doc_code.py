@@ -289,7 +289,7 @@ class TestOutilsDeclares:
 
     def test_le_serveur_declare_exactement_deux_portes(self):
         assert self._outils_du_serveur() == {
-            "get_historical_snapshot", "get_snapshot"
+            "get_historical_snapshot", "get_snapshot", "get_historical_analysis"
         }
 
     def test_aucun_outil_mort_presente_comme_disponible(self):
@@ -305,7 +305,7 @@ class TestOutilsDeclares:
 
     def test_la_doc_cite_les_deux_portes_reelles(self):
         texte = _lire(ARCH)
-        for nom in ("racing.get_historical_snapshot", "racing.get_snapshot"):
+        for nom in ("racing.get_historical_snapshot", "racing.get_snapshot", "racing.get_historical_analysis"):
             assert nom in texte, "%s absent de l'architecture maitresse" % nom
 
 

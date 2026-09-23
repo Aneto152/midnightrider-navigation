@@ -1451,29 +1451,30 @@
       "note": "Added nautical units, circular arithmetic, implemented v1 pattern detectors and an SSOT registry for future patterns."
     }
   ],
-  "last_task": "MediaMan - deterministic navigation pattern foundation v1",
+  "last_task": "MediaMan historical analysis Phase I",
   "last_status": "SUCCESS",
   "last_update": "2026-09-23T03:35:54Z",
   "last_dust_action": {
-    "timestamp": "2026-09-23T03:35:54Z",
-    "action": "mediaman_navigation_pattern_foundation_v1",
-    "commit_sha": "10d199e4ad58e24ef65132a4bfc1e94779f2f1df",
+    "timestamp": "2026-09-23T04:03:46.499931Z",
+    "action": "mediaman_historical_analysis_phase1",
     "status": "SUCCESS",
-    "detail": "Added nautical units, circular arithmetic, implemented v1 pattern detectors and an SSOT registry for future patterns.",
+    "detail": "H9 repaired: snapshot and temporal paths converge on one Flux query constructor; grouped temporal analysis remains historical-only.",
     "files_modified": [
-      "mediaman/nautical_units.py",
-      "mediaman/pattern_contract.py",
-      "mediaman/pattern_detector.py",
-      "tests/mediaman/test_pattern_detector.py",
-      "docs/DECISIONS/MEDIAMAN-NAVIGATION-PATTERN-SSOT.md",
+      "mediaman/temporal_contract.py",
+      "mediaman/temporal_analyzer.py",
+      "mediaman/mcp_client.py",
+      "mcp/servers/racing.js",
+      "tests/mediaman/test_temporal_analyzer.py",
+      "tests/mcp/test_h9b_coherence_doc_code.py",
+      "docs/DECISIONS/MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md",
       "docs/ARCHITECTURE-MASTER.md",
       "docs/INDEX.md",
-      "logs/debug/mediaman-pattern-foundation-v1-2026-09-22.md",
       "logs/latest.json",
-      "logs/oc-actions.log"
+      "logs/oc-actions.log",
+      "mediaman/mcp_collector.py"
     ],
-    "tests_mediaman_before": 545,
-    "tests_mediaman_after": 563,
-    "tests_barrier": 48
+    "influx_series": "grouped_temporal_query",
+    "llm": "not_activated",
+    "live_path": "unchanged"
   }
 }

@@ -1704,3 +1704,7 @@ git diff --cached | grep "auth list" | wc -l  # Should be 0
 
 ---
 
+
+- `docs/DECISIONS/MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md` — bounded deterministic historical analysis contract
+
+- `racing.get_historical_analysis` — bounded historical temporal series for deterministic MediaMan analysis

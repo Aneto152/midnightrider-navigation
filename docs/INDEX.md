@@ -318,3 +318,5 @@ docs/
 | `ais/fleet_db.html` | Fleet database browser — accessible at `/ais/fleet_db` on portal |
 
 Unit tests:** `tests/test_ais_lib.py` (34) · `tests/test_competitors_db.py` (23) · `tests/test_server_handlers.py` (18) · `tests/test_ais_html.py` (35) — **110 total**
+
+- `docs/DECISIONS/MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md` — bounded deterministic historical analysis contract
