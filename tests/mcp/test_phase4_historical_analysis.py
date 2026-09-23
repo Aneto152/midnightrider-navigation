@@ -24,3 +24,7 @@ def test_temporal_angle_semantics_are_explicit():
     assert "series === 'wind_true_angle'" in RACING
     assert "series === 'course_over_ground'" in RACING
     assert "previous.sum += value" in RACING
+
+def test_temporal_query_downsamples_server_side_per_series():
+    assert 'aggregateWindow(every: ${resolutionSeconds}s, fn: last' in RACING
+    assert 'group(columns: ["_measurement", "_field", "source"])' in RACING

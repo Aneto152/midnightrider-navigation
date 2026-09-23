@@ -667,7 +667,7 @@ const TEMPORAL_SELECTORS = [
   { series: 'attitude_pitch', measurement: 'navigation.attitude.pitch', field: 'value', source: 'N2K.35' }
 ];
 
-function buildTemporalQuery(startUtc, endUtc) {
+function buildTemporalQuery(startUtc, endUtc, resolutionSeconds) {
   const measurements = [...new Set(TEMPORAL_SELECTORS.map(selector => selector.measurement))];
   const sourceClauses = TEMPORAL_SELECTORS.map(selector => {
     if (selector.source === 'self') return `(r._measurement == "${selector.measurement}" and r.self == "true")`;
@@ -677,8 +677,10 @@ function buildTemporalQuery(startUtc, endUtc) {
   const queryBody = [
     `    |> filter(fn: (r) => contains(value: r._measurement, set: [${measurements.map(value => `"${value}"`).join(', ')}]))`,
     `    |> filter(fn: (r) => ${sourceClauses})`,
-    '    |> keep(columns: ["_time", "_measurement", "_field", "_value", "source"])',
+    '    |> group(columns: ["_measurement", "_field", "source"])',
+    `    |> aggregateWindow(every: ${resolutionSeconds}s, fn: last, createEmpty: false)`,
     '    |> group()',
+    '    |> keep(columns: ["_time", "_measurement", "_field", "_value", "source"])',
     '    |> sort(columns: ["_time"])'
   ].join('\n');
   return buildFluxQuery(queryBody, startUtc, endUtc);
@@ -741,7 +743,7 @@ async function getHistoricalAnalysis(startUtc, endUtc, resolutionSeconds = 60) {
   if (duration > 21600 * 1000) throw new Error('historical analysis interval must not exceed 21600 seconds');
   if (!Number.isInteger(resolutionSeconds) || resolutionSeconds < 10 || resolutionSeconds > 300) throw new Error('resolution_seconds must be an integer between 10 and 300');
   logEvent('DATA_IN', { analysis: 'historical', durationSeconds: Math.round(duration / 1000), resolutionSeconds });
-  const rows = await queryInfluxDB(buildTemporalQuery(start.toISOString(), end.toISOString()));
+  const rows = await queryInfluxDB(buildTemporalQuery(start.toISOString(), end.toISOString(), resolutionSeconds));
   const seriesRows = downsampleTemporalRows(rows, resolutionSeconds);
   const result = {
     success: true,

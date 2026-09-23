@@ -521,3 +521,5 @@
 [2026-09-23T17:07:07Z] [RESULT] [mediaman-analysis] SUCCESS - historical-only timeout change; live path unchanged; LLM not activated
 [2026-09-23T17:17:33Z] [CONFIG_CHANGE] [mediaman-analysis] Added server-side aggregateWindow at requested resolution, grouped by measurement, field and source
 [2026-09-23T17:17:33Z] [RESULT] [mediaman-analysis] SUCCESS - one grouped query retained; historical response bounded before MCP; live path unchanged
+[2026-09-23T17:20:42Z] [FILE_MODIFY] [mediaman-analysis] H9b count corrected from 125 to 126 after server-side downsampling test addition
+[2026-09-23T17:20:42Z] [RESULT] [mediaman-analysis] SUCCESS - server-side temporal downsampling validation complete; live path unchanged

@@ -39,3 +39,12 @@ runtime environment and never enter results or logs.
 ## MCP query timeout
 
 The grouped historical query uses a 20-second MCP HTTP timeout. The value is based on a measured 10.534281-second direct Flux response for a 10-minute historical window. This timeout applies only to the historical analysis path; the live path is unchanged.
+
+## Server-side temporal downsampling
+
+The grouped Flux query applies `aggregateWindow` at the requested resolution,
+grouped by measurement, field and source, before returning data to MCP. The
+representative is the last sample in each bucket, which preserves signed and
+circular angle semantics. Python then performs deterministic statistics over
+the bounded representative series. A one-hour baseline measured 56.815135
+seconds and 28,306,910 bytes before this optimization.
