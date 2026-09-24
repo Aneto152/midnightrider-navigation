@@ -1,5 +1,5 @@
 {
-  "task": "MediaMan - la memoire des publications",
+  "task": "step4_environmental_series",
   "date": "2026-09-22T21:00:29Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
@@ -1546,5 +1546,15 @@
     "llm_invoked": false,
     "telegram_sent": false,
     "credentials_logged": false
-  }
+  },
+  "commit_sha": "ca04852e66fe48a191b9d48f7ae8da520854c17b",
+  "files_modified": [
+    "mcp/servers/racing.js",
+    "mediaman/temporal_analyzer.py",
+    "tests/mediaman/test_environmental_patterns.py",
+    "tests/mcp/test_temporal_selectors_step4.py",
+    "docs/DECISIONS/MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md",
+    "docs/ops/RECOVERY-GUIDE-SAFE.md"
+  ],
+  "timestamp_utc": "2026-09-24T02:20:48Z"
 }

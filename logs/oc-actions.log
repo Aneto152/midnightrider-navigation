@@ -545,3 +545,6 @@
 [2026-09-23T23:01:21Z] [FILE_MODIFY] [mediaman-analysis] TRUE_TACK_AND_GYBE_DETECTORS_RECORDED: added true_tack and true_gybe from heading and absolute wind evidence; no credential logged
 [2026-09-23T23:01:21Z] [DEBUG] [mediaman-analysis] Defect closed: the luffing and bearing_away branch accepted an unchanged TWA magnitude, so a tack was reported as a bearing away; a material TWA change is now required
 [2026-09-23T23:01:21Z] [RESULT] [mediaman-analysis] SUCCESS - full suite and read-only historical recheck passed; Signal K, Docker, live path and LLM unchanged
+[2026-09-24T02:20:48] [FILE_MODIFY] [mediaman] Step 4: four environmental series pinned to one instrument each, exhaustive source resolver, four deterministic detectors
+[2026-09-24T02:20:48] [RESULT] [mediaman] Result: SUCCESS - tests/mcp 133 passed, tests/mediaman 585 passed
+[2026-09-24T02:20:48] [COMMIT] SHA: ca04852e66fe48a191b9d48f7ae8da520854c17b
