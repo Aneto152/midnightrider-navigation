@@ -551,3 +551,6 @@
 [2026-09-24T02:27:47] [ROLLBACK] [repository] Restored four unrelated worktree entries from the accidental step-4 inclusion; no file contents logged
 [2026-09-24T02:27:47] [RESULT] [repository] Result: SUCCESS - targeted tests/mcp and tests/mediaman passed; worktree restored to four entries
 [2026-09-24T02:27:47] [COMMIT] SHA: 30c406f359408ce102ba5edbcfeae0c088b9cb60
+[2026-09-24T02:59:25] [FILE_MODIFY] [mediaman] Suppressed standalone sustained_turn; requires overlap with heading-confirmed true_tack or true_gybe
+[2026-09-24T02:59:25] [RESULT] [mediaman] Result: SUCCESS - targeted suite and pre-LLM E2E passed
+[2026-09-24T02:59:25] [COMMIT] SHA: 2c6906d9d7bc32acb642bccc231fa56cc9d6a33e
