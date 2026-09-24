@@ -182,3 +182,25 @@ identifier emitted since the wind-attribution work is absent from the
 registry, and the registry still lists the wind refusal and adonnante
 patterns as planned under different names. Reconciling the registry with the
 code is deliberately kept out of this change.
+
+## Mark-passage geometry contract
+
+The `mark_passage` pattern is accepted only from deterministic course geometry.
+The primary inputs are ordered snapshots of `navigation.currentRoute.waypoints`
+and raw `navigation.position` samples. VMG and plotter `nextPoint` values are
+observation-only diagnostics and are never acceptance signals, because VMG is
+computed relative to the plotter's active waypoint and would make acceptance
+circular.
+
+A candidate requires approach to a named route waypoint, a local minimum of
+geodesic distance, departure after that minimum, positive-to-negative geometric
+closing-rate change, valid samples on both sides, and an in-window timestamp.
+Repeated raw candidates are clustered into one physical event. Route evolution
+that shares a waypoint is reported as `TRANSITION_OBSERVED`; it is not treated
+as a universal claim about Vulcan behavior. No Vulcan waypoint-advance model is
+inferred from a single historical example.
+
+The validated September 5, 2026 dry-run detected `BUZZARD` around
+`2026-09-05T14:12Z` across three independent position sources. This empirical
+result validates the detector contract only; it does not characterize Vulcan's
+undocumented internal algorithm.
