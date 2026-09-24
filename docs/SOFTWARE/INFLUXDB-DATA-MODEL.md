@@ -337,6 +337,41 @@ from(bucket: "midnight_rider")
 
 ---
 
+### 5.5 Boat track for a map panel (Geomap)
+
+`navigation.position` needs its own recipe. It carries a high-cardinality
+`s2_cell_id` tag (see 6.5), so the naive query silently pairs a latitude from
+one S2 cell with a longitude from another. `group(columns: ["_field"])`
+collapses every tag except the field name, which is what makes the `pivot`
+trustworthy. `sort` is not optional: without it the route layer draws the
+samples out of order.
+
+```flux
+from(bucket: "midnight_rider")
+  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
+  |> filter(fn: (r) => r._measurement == "navigation.position")
+  // Filtre canonique du bord, le meme que pour toutes les autres mesures.
+  // Les cibles AIS et les aides a la navigation portent un contexte MMSI
+  // et n ont PAS ce tag : elles sont exclues ici, sans filtre de source.
+  |> filter(fn: (r) => r.self == "true")
+  |> filter(fn: (r) => r._field == "lat" or r._field == "lon")
+  // Ecrase les tags s2_cell_id, context et source. Sans cette ligne, le
+  // bateau change de cellule S2 en avancant, chaque cellule devient une
+  // serie, et le pivot apparie des lat et des lon issues de cellules
+  // differentes -> des sauts de 20 milles en 30 secondes.
+  |> group(columns: ["_field"])
+  // createEmpty reste a false : sur cette mesure les fenetres nulles
+  // detruisent la trace (mesure : 70 positions survivantes sur 2880).
+  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
+  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
+  |> sort(columns: ["_time"])
+  |> keep(columns: ["_time", "lat", "lon"])
+```
+
+Do **not** add `createEmpty: true` here — see 6.5.
+
+---
+
 ## 6. Measured pitfalls
 
 These cost real debugging time on 2026-09-20. Read them before writing a
@@ -378,6 +413,40 @@ left no explanation.
 **Always** bound the range, filter before grouping, and escalate in stages:
 one hour, then one day. Diagnostic scripts in this project use a memory guard
 (floor 2000 MB, abort 1500 MB, max cost 1200 MB).
+
+---
+
+### 6.5 `navigation.position` carries an `s2_cell_id` tag
+
+Measured group key:
+
+```
+[_start, _stop, _field, _measurement, context, s2_cell_id, source]
+```
+
+`s2_cell_id` is an S2 geographic cell. The boat moves, it crosses a cell
+boundary, InfluxDB opens a **new series**. A single day of sailing produced
+26 distinct series for one `(measurement, field, source, self)` combination.
+
+Two consequences, both measured on 2026-09-05:
+
+| Query | Rows | Valid positions | Jumps > 1 NM |
+|---|---|---|---|
+| `createEmpty: true`, no regrouping | 2880 | **70** | 0 (nothing left to jump) |
+| `createEmpty: false`, no regrouping | 2880 | 2880 | **28, worst 23.2 NM** |
+| `createEmpty: false` + `group(columns: ["_field"])` + `sort` | 2880 | 2880 | see 5.5 |
+
+1. **Never use `createEmpty: true` on `navigation.position`.** `aggregateWindow`
+   runs per series, so each S2 cell manufactures a full set of empty windows.
+   The `pivot` then drowns the real values in nulls: 70 positions survived out
+   of 2880 windows, and the Geomap drew a 3 NM fragment of a 59 NM day.
+2. **Always `group(columns: ["_field"])` before aggregating.** Two samples 30 s
+   apart cannot be 23 NM apart (that would be 2800 knots). Those jumps were
+   latitudes and longitudes from different S2 cells paired by `_time`.
+
+The same trap applies to any future measurement written with a geohash-style
+tag. The symptom is always the same: a plausible row count with impossible
+values.
 
 ---
 
@@ -449,6 +518,7 @@ bucket on 2026-09-20, not from an index or from prior documentation.
 | source inventory | counted, grouped by `_measurement` and `source`, 1 h then 24 h |
 | AIS field list | counted, filtered on the MMSI context |
 | volumetry | same counts, 2026-09-05 |
+| `navigation.position` carries `s2_cell_id` | dumped the full group key of a raw sample, then counted valid positions and impossible jumps for three query variants over 2026-09-05 |
 
 Reports are kept on the Pi under `~/diagnostics/`.
 
@@ -461,3 +531,148 @@ Reports are kept on the Pi under `~/diagnostics/`.
 - `docs/HARDWARE/` — per-instrument specifications
 - `docs/DASHBOARDS-README.md` — Grafana dashboard reference
 - `tools/influx_powerbi_export/README.md` — export classification rules
+
+## Measured InfluxDB measurement dictionary — Saturday 2026-09-05 ET
+
+This section is the measured inventory for the complete local ET day
+`2026-09-05 00:00–24:00 ET`, queried as the UTC interval
+`2026-09-05T04:00:00Z` → `2026-09-06T04:00:00Z`. It is the SSOT for the
+observed InfluxDB measurement dictionary. The inventory is empirical: a row
+exists only when at least one point was present in that interval.
+
+The table reports the measurement path, fields, source tags, point count and
+observed temporal bounds. InfluxDB does not carry a reliable universal unit
+schema in the measurement name; a unit marked `UNRESOLVED` must be verified
+against the producer and documented here before a selector, detector or
+article uses it.
+
+| Measurement | Fields | Sources/tags | Points in day | First → last UTC | Documentation | Storage unit / status |
+|---|---|---|---:|---|---|---|
+| `<empty>` | `value` | `N2K.0` | 576344 | 2026-09-05T04:00:00.209Z → 2026-09-06T03:59:59.907Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `atonType` | `value` | `N2K.0` | 75434 | 2026-09-05T04:00:01.024Z → 2026-09-06T03:59:59.907Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `design.aisShipType` | `value` | `N2K.0` | 31478 | 2026-09-05T04:00:02.265Z → 2026-09-06T03:59:59.092Z | documented | UNRESOLVED — verify producer contract before use |
+| `design.beam` | `value` | `N2K.0` | 43302 | 2026-09-05T04:00:02.265Z → 2026-09-06T03:59:59.092Z | documented | UNRESOLVED — verify producer contract before use |
+| `design.draft` | `value` | `N2K.0` | 6358 | 2026-09-05T04:00:18.271Z → 2026-09-06T03:59:58.752Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `design.length` | `value` | `N2K.0` | 43201 | 2026-09-05T04:00:02.265Z → 2026-09-06T03:59:59.092Z | documented | UNRESOLVED — verify producer contract before use |
+| `electrical.batteries.calypso.percent` | `value` | `Calypso.XX` | 345004 | 2026-09-05T04:00:00.001Z → 2026-09-06T03:59:59.936Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `electrical.displays.navico.default.brightness` | `value` | `N2K.11`, `N2K.9` | 32 | 2026-09-05T10:19:58.562Z → 2026-09-06T01:17:24.515Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `environment.current.drift` | `value` | `signalk-current-calculator.XX` | 655820 | 2026-09-05T04:00:00.084Z → 2026-09-06T03:59:59.91Z | documented | UNRESOLVED — verify producer contract before use |
+| `environment.current.setTrue` | `value` | `signalk-current-calculator.XX` | 655820 | 2026-09-05T04:00:00.084Z → 2026-09-06T03:59:59.91Z | documented | UNRESOLVED — verify producer contract before use |
+| `environment.depth.belowTransducer` | `value` | `N2K.35`, `N2K.4` | 86352 | 2026-09-05T04:00:00.558Z → 2026-09-06T03:59:59.116Z | observed — documentation gap | metres in storage |
+| `environment.outside.pressure` | `value` | `Calypso.XX`, `N2K.116` | 343782 | 2026-09-05T04:00:00.353Z → 2026-09-06T03:59:59.608Z | documented | pascal in storage |
+| `environment.outside.temperature` | `value` | `Calypso.XX` | 345004 | 2026-09-05T04:00:00.001Z → 2026-09-06T03:59:59.936Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `environment.water.temperature` | `value` | `N2K.35` | 1061156 | 2026-09-05T04:00:00.081Z → 2026-09-06T03:59:59.925Z | documented | kelvin in storage |
+| `environment.wind.angleApparent` | `value` | `Calypso.XX` | 345004 | 2026-09-05T04:00:00.001Z → 2026-09-06T03:59:59.936Z | documented | UNRESOLVED — verify producer contract before use |
+| `environment.wind.angleTrueGround` | `value` | `signalk-truewind-calculator.XX` | 344758 | 2026-09-05T04:00:00Z → 2026-09-06T03:59:59.935Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `environment.wind.angleTrueWater` | `value` | `signalk-truewind-calculator.XX` | 344758 | 2026-09-05T04:00:00Z → 2026-09-06T03:59:59.935Z | documented | radian in storage; signed relative angle |
+| `environment.wind.directionTrue` | `value` | `signalk-truewind-calculator.XX` | 344758 | 2026-09-05T04:00:00Z → 2026-09-06T03:59:59.935Z | documented | radian in storage; compass direction |
+| `environment.wind.speedApparent` | `value` | `Calypso.XX` | 345004 | 2026-09-05T04:00:00.001Z → 2026-09-06T03:59:59.936Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `environment.wind.speedOverGround` | `value` | `signalk-truewind-calculator.XX` | 344758 | 2026-09-05T04:00:00Z → 2026-09-06T03:59:59.935Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `environment.wind.speedTrue` | `value` | `signalk-truewind-calculator.XX` | 344758 | 2026-09-05T04:00:00Z → 2026-09-06T03:59:59.936Z | observed — documentation gap | m/s |
+| `navigation.acceleration.x` | `value` | `Calypso.XX` | 602137 | 2026-09-05T04:00:00.133Z → 2026-09-06T03:59:59.755Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.acceleration.y` | `value` | `Calypso.XX` | 602134 | 2026-09-05T04:00:00.133Z → 2026-09-06T03:59:59.755Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.acceleration.z` | `value` | `Calypso.XX` | 602133 | 2026-09-05T04:00:00.133Z → 2026-09-06T03:59:59.755Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.attitude.pitch` | `value` | `Calypso.XX`, `N2K.35` | 1028002 | 2026-09-05T04:00:00.056Z → 2026-09-06T03:59:59.981Z | documented | radian in storage |
+| `navigation.attitude.roll` | `value` | `Calypso.XX`, `N2K.35` | 1028002 | 2026-09-05T04:00:00.056Z → 2026-09-06T03:59:59.981Z | documented | radian in storage |
+| `navigation.course.arrivalCircle` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.392Z → 2026-09-06T02:44:02.307Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.bearingMagnetic` | `value` | `course-provider` | 293785 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.bearingTrackMagnetic` | `value` | `course-provider` | 303173 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.bearingTrackTrue` | `value` | `course-provider` | 305205 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.bearingTrue` | `value` | `course-provider` | 295605 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.calcMethod` | `value` | `course-provider` | 309042 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.crossTrackError` | `value` | `course-provider` | 301192 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.distance` | `value` | `course-provider` | 297429 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.estimatedTimeOfArrival` | `value` | `course-provider` | 277794 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.previousPoint.distance` | `value` | `course-provider` | 299317 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.timeToGo` | `value` | `course-provider` | 279589 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.calcValues.velocityMadeGood` | `value` | `course-provider` | 291824 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.nextPoint` | `value` | `N2K.8` | 11 | 2026-09-05T14:52:54.392Z → 2026-09-06T02:44:02.307Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.previousPoint` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.392Z → 2026-09-06T02:44:02.307Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.course.startTime` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.392Z → 2026-09-06T02:44:02.307Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.activeRoute.startTime` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.bearingTrackTrue` | `value` | `N2K.5`, `N2K.8` | 167164 | 2026-09-05T04:00:00.66Z → 2026-09-06T03:59:59.44Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.crossTrackError` | `value` | `N2K.5`, `N2K.8` | 167199 | 2026-09-05T04:00:00.653Z → 2026-09-06T03:59:59.435Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.nextPoint.arrivalCircle` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.nextPoint.bearingTrue` | `value` | `N2K.5`, `N2K.8` | 167164 | 2026-09-05T04:00:00.661Z → 2026-09-06T03:59:59.44Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.nextPoint.distance` | `value` | `N2K.5`, `N2K.8` | 167164 | 2026-09-05T04:00:00.661Z → 2026-09-06T03:59:59.44Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.nextPoint.position` | `value` | `N2K.5`, `N2K.8`, `courseApi` | 167176 | 2026-09-05T04:00:00.661Z → 2026-09-06T03:59:59.44Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.nextPoint.timeToGo` | `value` | `N2K.5`, `N2K.8` | 164385 | 2026-09-05T04:00:00.661Z → 2026-09-06T03:59:59.44Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.nextPoint.value.type` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.nextPoint.velocityMadeGood` | `value` | `N2K.5`, `N2K.8` | 167164 | 2026-09-05T04:00:00.661Z → 2026-09-06T03:59:59.44Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.previousPoint.position` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseGreatCircle.previousPoint.value.type` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseOverGroundTrue` | `value` | `N2K.0`, `N2K.1`, `N2K.2` | 1030015 | 2026-09-05T04:00:00.084Z → 2026-09-06T03:59:59.91Z | documented | radian in storage |
+| `navigation.courseRhumbline.activeRoute.startTime` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseRhumbline.crossTrackError` | `value` | `N2K.8` | 2 | 2026-09-05T14:53:23.962Z → 2026-09-05T22:14:11.086Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseRhumbline.nextPoint.arrivalCircle` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseRhumbline.nextPoint.position` | `value` | `N2K.5`, `N2K.8`, `courseApi` | 2830 | 2026-09-05T14:52:54.391Z → 2026-09-06T03:59:59.485Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseRhumbline.nextPoint.value.type` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseRhumbline.previousPoint.position` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.courseRhumbline.previousPoint.value.type` | `value` | `courseApi` | 11 | 2026-09-05T14:52:54.391Z → 2026-09-06T02:44:02.306Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.currentRoute.name` | `value` | `N2K.5`, `N2K.8` | 573 | 2026-09-05T14:52:55.41Z → 2026-09-06T03:59:55.161Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.currentRoute.waypoints` | `value` | `N2K.5`, `N2K.8` | 34367 | 2026-09-05T04:00:01.886Z → 2026-09-06T03:59:56.406Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.datetime` | `value` | `N2K.1`, `N2K.2` | 340253 | 2026-09-05T04:00:00.396Z → 2026-09-06T03:59:59.465Z | documented | UNRESOLVED — verify producer contract before use |
+| `navigation.destination.commonName` | `value` | `N2K.0` | 7123 | 2026-09-05T04:00:18.271Z → 2026-09-06T03:59:58.752Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.antennaAltitude` | `value` | `N2K.1`, `N2K.2` | 170081 | 2026-09-05T04:00:00.652Z → 2026-09-06T03:59:59.465Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.geoidalSeparation` | `value` | `N2K.1`, `N2K.2` | 170081 | 2026-09-05T04:00:00.652Z → 2026-09-06T03:59:59.465Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.horizontalDilution` | `value` | `N2K.1`, `N2K.2` | 170081 | 2026-09-05T04:00:00.652Z → 2026-09-06T03:59:59.465Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.integrity` | `value` | `N2K.1`, `N2K.2` | 170081 | 2026-09-05T04:00:00.652Z → 2026-09-06T03:59:59.465Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.methodQuality` | `value` | `N2K.1`, `N2K.2` | 170081 | 2026-09-05T04:00:00.652Z → 2026-09-06T03:59:59.465Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.positionDilution` | `value` | `N2K.1`, `N2K.2` | 170081 | 2026-09-05T04:00:00.652Z → 2026-09-06T03:59:59.465Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.satellites` | `value` | `N2K.1`, `N2K.2` | 170081 | 2026-09-05T04:00:00.652Z → 2026-09-06T03:59:59.465Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.satellitesInView` | `value` | `N2K.1`, `N2K.2` | 169906 | 2026-09-05T04:00:00.723Z → 2026-09-06T03:59:59.834Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.gnss.type` | `value` | `N2K.1`, `N2K.2` | 170081 | 2026-09-05T04:00:00.652Z → 2026-09-06T03:59:59.465Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.headingMagnetic` | `value` | `Calypso.XX` | 164538 | 2026-09-05T04:00:00.379Z → 2026-09-06T03:59:59.981Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.headingTrue` | `value` | `N2K.0`, `signalk-heading-true-calculator.XX` | 439791 | 2026-09-05T04:00:00.379Z → 2026-09-06T03:59:59.981Z | documented | radian in storage |
+| `navigation.log` | `value` | `N2K.35` | 86349 | 2026-09-05T04:00:00.266Z → 2026-09-06T03:59:59.119Z | documented | UNRESOLVED — verify producer contract before use |
+| `navigation.magneticVariation` | `value` | `N2K.1`, `N2K.2`, `N2K.5`, `N2K.8` | 340282 | 2026-09-05T04:00:00.197Z → 2026-09-06T03:59:59.685Z | documented | UNRESOLVED — verify producer contract before use |
+| `navigation.position` | `lat`, `lon` | `N2K.0`, `N2K.1`, `N2K.2` | 4429712 | 2026-09-05T04:00:00.046Z → 2026-09-06T03:59:59.983Z | documented | lat/lon coordinate fields; verify coordinate unit per field |
+| `navigation.rateOfTurn` | `value` | `Calypso.XX`, `N2K.0` | 727473 | 2026-09-05T04:00:00.133Z → 2026-09-06T03:59:59.755Z | observed — documentation gap | radian/second in storage |
+| `navigation.specialManeuver` | `value` | `N2K.0` | 228181 | 2026-09-05T04:00:01.517Z → 2026-09-06T03:59:59.36Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.speedOverGround` | `value` | `N2K.0`, `N2K.1`, `N2K.2` | 1071538 | 2026-09-05T04:00:00.084Z → 2026-09-06T03:59:59.91Z | documented | m/s |
+| `navigation.speedThroughWater` | `value` | `N2K.35` | 863466 | 2026-09-05T04:00:00.073Z → 2026-09-06T03:59:59.914Z | documented | m/s |
+| `navigation.speedThroughWaterReferenceType` | `value` | `N2K.35` | 863466 | 2026-09-05T04:00:00.073Z → 2026-09-06T03:59:59.914Z | documented | UNRESOLVED — verify producer contract before use |
+| `navigation.state` | `value` | `N2K.0` | 184033 | 2026-09-05T04:00:01.517Z → 2026-09-06T03:59:59.36Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `navigation.trip.log` | `value` | `N2K.35` | 86349 | 2026-09-05T04:00:00.266Z → 2026-09-06T03:59:59.119Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `notifications.ais.AIS12Valarm` | `value` | `N2K.0` | 39 | 2026-09-05T10:47:10.724Z → 2026-09-05T15:41:56.74Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `notifications.ais.unknown113` | `value` | `N2K.0` | 2787 | 2026-09-05T04:00:19.9Z → 2026-09-06T03:59:47.267Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `notifications.navigation.course.perpendicularPassed` | `value` | `course-provider` | 6 | 2026-09-05T20:22:06.81Z → 2026-09-06T02:44:03.169Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `notifications.server.newVersion` | `value` | `signalk-server` | 1 | 2026-09-05T15:44:13.05Z → 2026-09-05T15:44:13.05Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `offPosition` | `value` | `N2K.0` | 75434 | 2026-09-05T04:00:01.024Z → 2026-09-06T03:59:59.907Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `performance.leewayAngle` | `value` | `signalk-j30-leeway.XX` | 164538 | 2026-09-05T04:00:00.377Z → 2026-09-06T03:59:59.979Z | documented | radian in storage; signed |
+| `performance.velocityMadeGoodToWaypoint` | `value` | `course-provider` | 290271 | 2026-09-05T04:00:00.474Z → 2026-09-06T03:59:59.939Z | documented | UNRESOLVED — verify producer contract before use |
+| `sensors.ais.class` | `value` | `N2K.0` | 552252 | 2026-09-05T04:00:00.209Z → 2026-09-06T03:59:59.907Z | documented | UNRESOLVED — verify producer contract before use |
+| `sensors.ais.fromBow` | `value` | `N2K.0` | 30616 | 2026-09-05T04:00:02.265Z → 2026-09-06T03:59:59.093Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.ais.fromCenter` | `value` | `N2K.0` | 28937 | 2026-09-05T04:00:02.265Z → 2026-09-06T03:59:59.093Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.wit.magneticField.x` | `value` | `Calypso.XX` | 49760 | 2026-09-05T04:00:00.62Z → 2026-09-06T03:59:57.688Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.wit.magneticField.y` | `value` | `Calypso.XX` | 49760 | 2026-09-05T04:00:00.621Z → 2026-09-06T03:59:57.688Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.wit.magneticField.z` | `value` | `Calypso.XX` | 49760 | 2026-09-05T04:00:00.621Z → 2026-09-06T03:59:57.688Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.wit.quaternion.w` | `value` | `Calypso.XX` | 164538 | 2026-09-05T04:00:00.379Z → 2026-09-06T03:59:59.982Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.wit.quaternion.x` | `value` | `Calypso.XX` | 164538 | 2026-09-05T04:00:00.379Z → 2026-09-06T03:59:59.982Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.wit.quaternion.y` | `value` | `Calypso.XX` | 164538 | 2026-09-05T04:00:00.379Z → 2026-09-06T03:59:59.982Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.wit.quaternion.z` | `value` | `Calypso.XX` | 164538 | 2026-09-05T04:00:00.379Z → 2026-09-06T03:59:59.982Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `sensors.wit.temperature` | `value` | `Calypso.XX` | 49760 | 2026-09-05T04:00:00.621Z → 2026-09-06T03:59:57.688Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+| `virtual` | `value` | `N2K.0` | 75434 | 2026-09-05T04:00:01.024Z → 2026-09-06T03:59:59.907Z | observed — documentation gap | UNRESOLVED — verify producer contract before use |
+
+### SSOT rules for future additions or modifications
+
+A new measurement may be added to this dictionary only after the following
+metadata is verified from the producer and a real InfluxDB sample:
+
+1. exact `_measurement` and `_field` names;
+2. source tag and producer/plugin identity;
+3. storage unit and any conversion applied at the MCP boundary;
+4. expected refresh rate and whether `aggregateWindow(last)` is valid;
+5. whether the source is ambiguous and therefore must be pinned explicitly;
+6. first/last observed timestamps and a representative point count;
+7. owning SSOT section in this file, with no duplicate PGN table in
+   `docs/INTEGRATION/` or `docs/HARDWARE/`;
+8. a regression test for the selector, source filter and unit conversion.
+
+Measurements marked `observed — documentation gap` or
+`UNRESOLVED — verify producer contract before use` are inventory facts only.
+They must not be wired into historical analysis until their producer, units,
+source semantics and documentation owner are validated.
+
+This inventory was generated deterministically from InfluxDB. No LLM was
+activated and no Telegram publication was performed.
