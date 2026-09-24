@@ -337,41 +337,6 @@ from(bucket: "midnight_rider")
 
 ---
 
-### 5.5 Boat track for a map panel (Geomap)
-
-`navigation.position` needs its own recipe. It carries a high-cardinality
-`s2_cell_id` tag (see 6.5), so the naive query silently pairs a latitude from
-one S2 cell with a longitude from another. `group(columns: ["_field"])`
-collapses every tag except the field name, which is what makes the `pivot`
-trustworthy. `sort` is not optional: without it the route layer draws the
-samples out of order.
-
-```flux
-from(bucket: "midnight_rider")
-  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)
-  |> filter(fn: (r) => r._measurement == "navigation.position")
-  // Filtre canonique du bord, le meme que pour toutes les autres mesures.
-  // Les cibles AIS et les aides a la navigation portent un contexte MMSI
-  // et n ont PAS ce tag : elles sont exclues ici, sans filtre de source.
-  |> filter(fn: (r) => r.self == "true")
-  |> filter(fn: (r) => r._field == "lat" or r._field == "lon")
-  // Ecrase les tags s2_cell_id, context et source. Sans cette ligne, le
-  // bateau change de cellule S2 en avancant, chaque cellule devient une
-  // serie, et le pivot apparie des lat et des lon issues de cellules
-  // differentes -> des sauts de 20 milles en 30 secondes.
-  |> group(columns: ["_field"])
-  // createEmpty reste a false : sur cette mesure les fenetres nulles
-  // detruisent la trace (mesure : 70 positions survivantes sur 2880).
-  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)
-  |> pivot(rowKey: ["_time"], columnKey: ["_field"], valueColumn: "_value")
-  |> sort(columns: ["_time"])
-  |> keep(columns: ["_time", "lat", "lon"])
-```
-
-Do **not** add `createEmpty: true` here — see 6.5.
-
----
-
 ## 6. Measured pitfalls
 
 These cost real debugging time on 2026-09-20. Read them before writing a
@@ -413,40 +378,6 @@ left no explanation.
 **Always** bound the range, filter before grouping, and escalate in stages:
 one hour, then one day. Diagnostic scripts in this project use a memory guard
 (floor 2000 MB, abort 1500 MB, max cost 1200 MB).
-
----
-
-### 6.5 `navigation.position` carries an `s2_cell_id` tag
-
-Measured group key:
-
-```
-[_start, _stop, _field, _measurement, context, s2_cell_id, source]
-```
-
-`s2_cell_id` is an S2 geographic cell. The boat moves, it crosses a cell
-boundary, InfluxDB opens a **new series**. A single day of sailing produced
-26 distinct series for one `(measurement, field, source, self)` combination.
-
-Two consequences, both measured on 2026-09-05:
-
-| Query | Rows | Valid positions | Jumps > 1 NM |
-|---|---|---|---|
-| `createEmpty: true`, no regrouping | 2880 | **70** | 0 (nothing left to jump) |
-| `createEmpty: false`, no regrouping | 2880 | 2880 | **28, worst 23.2 NM** |
-| `createEmpty: false` + `group(columns: ["_field"])` + `sort` | 2880 | 2880 | see 5.5 |
-
-1. **Never use `createEmpty: true` on `navigation.position`.** `aggregateWindow`
-   runs per series, so each S2 cell manufactures a full set of empty windows.
-   The `pivot` then drowns the real values in nulls: 70 positions survived out
-   of 2880 windows, and the Geomap drew a 3 NM fragment of a 59 NM day.
-2. **Always `group(columns: ["_field"])` before aggregating.** Two samples 30 s
-   apart cannot be 23 NM apart (that would be 2800 knots). Those jumps were
-   latitudes and longitudes from different S2 cells paired by `_time`.
-
-The same trap applies to any future measurement written with a geohash-style
-tag. The symptom is always the same: a plausible row count with impossible
-values.
 
 ---
 
@@ -518,7 +449,6 @@ bucket on 2026-09-20, not from an index or from prior documentation.
 | source inventory | counted, grouped by `_measurement` and `source`, 1 h then 24 h |
 | AIS field list | counted, filtered on the MMSI context |
 | volumetry | same counts, 2026-09-05 |
-| `navigation.position` carries `s2_cell_id` | dumped the full group key of a raw sample, then counted valid positions and impossible jumps for three query variants over 2026-09-05 |
 
 Reports are kept on the Pi under `~/diagnostics/`.
 
