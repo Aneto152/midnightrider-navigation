@@ -19,6 +19,8 @@ NM_PER_DEGREE = 60.0
 
 @dataclass(frozen=True)
 class Waypoint:
+    """One named route waypoint with validated finite coordinates."""
+
     name: str
     latitude: float
     longitude: float
@@ -26,13 +28,18 @@ class Waypoint:
 
 @dataclass(frozen=True)
 class RouteSnapshot:
+    """One observed state of the plotter route, with unusable waypoints counted."""
+
     timestamp: datetime
     waypoints: tuple[Waypoint, ...]
     source: str = ""
+    skipped_waypoints: int = 0
 
 
 @dataclass(frozen=True)
 class PositionSample:
+    """One raw vessel position fix, attributed to its emitting source."""
+
     timestamp: datetime
     latitude: float
     longitude: float
@@ -41,6 +48,8 @@ class PositionSample:
 
 @dataclass(frozen=True)
 class MarkPassageEvent:
+    """One accepted mark passage together with the geometry that justifies it."""
+
     mark_name: str
     mark_latitude: float
     mark_longitude: float
@@ -55,12 +64,16 @@ class MarkPassageEvent:
     event_kind: str
     raw_candidates_in_cluster: int = 1
     cluster_window_seconds: float = 120.0
+    speed_before_kn: float = 0.0
+    speed_after_kn: float = 0.0
 
     def to_dict(self) -> dict[str, Any]:
+        """Return the event as a plain JSON-serialisable mapping."""
         return asdict(self)
 
 
 def _timestamp(value: Any) -> datetime:
+    """Parse an ISO-8601 instant or datetime into an aware UTC datetime."""
     if isinstance(value, datetime):
         result = value
     elif isinstance(value, str):
@@ -76,17 +89,31 @@ def _timestamp(value: Any) -> datetime:
 
 
 def _iso(value: datetime) -> str:
+    """Render a datetime as millisecond-precision ISO-8601 with a Z suffix."""
     return value.astimezone(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
 
 
 def _number(value: Any, name: str) -> float:
-    result = float(value)
+    """Coerce a raw value to a finite float.
+
+    Real route snapshots published by the plotter carry waypoints whose
+    coordinates are null. Those must surface as ValueError so that callers
+    can skip one waypoint instead of losing the whole snapshot to a
+    TypeError raised from inside float().
+    """
+    if value is None or isinstance(value, bool):
+        raise ValueError(f"{name} is missing")
+    try:
+        result = float(value)
+    except (TypeError, ValueError) as error:
+        raise ValueError(f"{name} is not a number") from error
     if not math.isfinite(result):
         raise ValueError(f"{name} must be finite")
     return result
 
 
 def _position_dict(raw: Mapping[str, Any]) -> Mapping[str, Any]:
+    """Unwrap the Signal K position envelope, which nests coordinates under value."""
     position = raw.get("position", raw)
     if not isinstance(position, Mapping):
         raise ValueError("position must be an object")
@@ -97,6 +124,7 @@ def _position_dict(raw: Mapping[str, Any]) -> Mapping[str, Any]:
 
 
 def normalize_waypoint(raw: Mapping[str, Any]) -> Waypoint:
+    """Validate one raw waypoint, raising ValueError when it is unusable."""
     if not isinstance(raw, Mapping):
         raise ValueError("waypoint must be an object")
     position = _position_dict(raw)
@@ -113,18 +141,38 @@ def normalize_waypoint(raw: Mapping[str, Any]) -> Waypoint:
 
 
 def normalize_route_snapshot(raw: Mapping[str, Any]) -> RouteSnapshot:
+    """Validate one route snapshot, skipping unusable waypoints but counting them.
+
+    A snapshot survives as long as two usable waypoints remain, because real
+    plotter routes publish waypoints with null coordinates. The number of
+    skipped waypoints is preserved so nothing is dropped silently.
+    """
     value = raw.get("value", raw.get("waypoints", raw))
     if isinstance(value, Mapping) and isinstance(value.get("value"), str):
         value = value["value"]
     if not isinstance(value, Sequence) or isinstance(value, (str, bytes)):
         raise ValueError("route snapshot must contain a waypoint list")
-    waypoints = tuple(normalize_waypoint(item) for item in value)
-    if len(waypoints) < 2:
-        raise ValueError("route snapshot requires at least two waypoints")
-    return RouteSnapshot(_timestamp(raw.get("timestamp", raw.get("_time"))), waypoints, str(raw.get("source", "")))
+    usable: list[Waypoint] = []
+    skipped = 0
+    for item in value:
+        try:
+            usable.append(normalize_waypoint(item))
+        except ValueError:
+            skipped += 1
+    if len(usable) < 2:
+        raise ValueError(
+            "route snapshot requires at least two usable waypoints "
+            f"({len(usable)} usable, {skipped} skipped)")
+    return RouteSnapshot(
+        _timestamp(raw.get("timestamp", raw.get("_time"))),
+        tuple(usable),
+        str(raw.get("source", "")),
+        skipped,
+    )
 
 
 def normalize_position(raw: Mapping[str, Any]) -> PositionSample:
+    """Validate one raw position fix into a PositionSample."""
     position = _position_dict(raw)
     latitude = _number(position.get("latitude", position.get("lat")), "latitude")
     longitude = _number(position.get("longitude", position.get("lon")), "longitude")
@@ -136,6 +184,7 @@ def normalize_position(raw: Mapping[str, Any]) -> PositionSample:
 
 
 def distance_nm(a_lat: float, a_lon: float, b_lat: float, b_lon: float) -> float:
+    """Return the great-circle distance between two points, in nautical miles."""
     p1 = math.radians(a_lat)
     p2 = math.radians(b_lat)
     dp = p2 - p1
@@ -145,6 +194,7 @@ def distance_nm(a_lat: float, a_lon: float, b_lat: float, b_lon: float) -> float
 
 
 def _project_to_route(sample: PositionSample, route: RouteSnapshot) -> tuple[float, float, int]:
+    """Project a fix onto the route, returning chainage, cross-track and leg index."""
     """Return cumulative chainage, cross-track distance and nearest leg."""
     best: tuple[float, float, int] | None = None
     chainage = 0.0
@@ -169,6 +219,7 @@ def _project_to_route(sample: PositionSample, route: RouteSnapshot) -> tuple[flo
 
 
 def _route_chainages(route: RouteSnapshot) -> list[float]:
+    """Return the cumulative along-route distance of each waypoint."""
     values = [0.0]
     for a, b in zip(route.waypoints, route.waypoints[1:]):
         values.append(values[-1] + distance_nm(a.latitude, a.longitude, b.latitude, b.longitude))
@@ -179,6 +230,12 @@ def _representative_route(
     snapshots: Sequence[RouteSnapshot],
     reference_time: datetime | None = None,
 ) -> tuple[RouteSnapshot, str]:
+    """Pick the latest snapshot at or before reference_time and classify topology.
+
+    A route that changes while sharing at least one waypoint is a normal
+    plotter advance and yields TRANSITION_OBSERVED; disjoint route sets
+    yield UNCERTAIN.
+    """
     if not snapshots:
         raise ValueError("at least one route snapshot is required")
     ordered = sorted(snapshots, key=lambda snapshot: snapshot.timestamp)
@@ -197,6 +254,13 @@ def _representative_route(
 
 
 def _cluster(events: Sequence[MarkPassageEvent], window_seconds: float) -> list[MarkPassageEvent]:
+    """Collapse repeated candidates for the same mark into one physical event.
+
+    The representative is the minimum-distance candidate. Note that the
+    minimum distance is rounded to four decimals, so ties are broken by the
+    earliest timestamp; the representative instant therefore carries an
+    uncertainty of about one sampling interval.
+    """
     ordered = sorted(events, key=lambda event: (event.mark_name, event.passage_time_utc))
     groups: list[list[MarkPassageEvent]] = []
     for event in ordered:
@@ -225,12 +289,26 @@ def detect_mark_passage(
     radius_nm: float = 0.10,
     edge_seconds: float = 90.0,
     event_cluster_seconds: float = 120.0,
+    max_plausible_speed_kn: float = 15.0,
     acceptance_start: Any | None = None,
     acceptance_end: Any | None = None,
 ) -> dict[str, Any]:
-    """Detect named route-waypoint passages from route geometry and track only."""
+    """Detect named route-waypoint passages from route geometry and track only.
+
+    Acceptance uses route geometry and raw position exclusively. VMG and the
+    plotter nextPoint are never consulted.
+
+    ``max_plausible_speed_kn`` rejects a candidate whose supporting samples
+    imply an average speed the vessel cannot reach. It exists to discard
+    position outliers, which were measured on source N2K.0 on 2026-09-05
+    (a 15.6 nm displacement across 90 s, i.e. 624 kn). It is an outlier
+    filter, not a performance model of the vessel, and it is deliberately
+    exposed as a parameter so it can be revised against multi-day data.
+    """
     if radius_nm <= 0 or edge_seconds <= 0 or event_cluster_seconds <= 0:
         raise ValueError("radius and time parameters must be positive")
+    if max_plausible_speed_kn <= 0:
+        raise ValueError("max_plausible_speed_kn must be positive")
     routes = [item if isinstance(item, RouteSnapshot) else normalize_route_snapshot(item) for item in route_snapshots]
     track = [item if isinstance(item, PositionSample) else normalize_position(item) for item in positions]
     track.sort(key=lambda item: item.timestamp)
@@ -241,6 +319,7 @@ def detect_mark_passage(
     start = _timestamp(acceptance_start) if acceptance_start is not None else None
     end = _timestamp(acceptance_end) if acceptance_end is not None else None
     raw_events: list[MarkPassageEvent] = []
+    implausible_candidates = 0
 
     for index, waypoint in enumerate(route.waypoints):
         inside = [i for i, (sample, *_rest) in enumerate(projected)
@@ -285,6 +364,15 @@ def detect_mark_passage(
             event_kind = "ROUTE_START_ENDPOINT_CANDIDATE" if index == 0 else (
                 "ROUTE_END_ENDPOINT_CANDIDATE" if index == len(route.waypoints) - 1 else "INTERIOR_WAYPOINT_CANDIDATE"
             )
+            leg_before_nm = distance_nm(
+                before.latitude, before.longitude, minimum.latitude, minimum.longitude)
+            leg_after_nm = distance_nm(
+                minimum.latitude, minimum.longitude, after.latitude, after.longitude)
+            speed_before_kn = leg_before_nm / (dt_before / 3600.0)
+            speed_after_kn = leg_after_nm / (dt_after / 3600.0)
+            if max(speed_before_kn, speed_after_kn) > max_plausible_speed_kn:
+                implausible_candidates += 1
+                continue
             raw_events.append(MarkPassageEvent(
                 mark_name=waypoint.name,
                 mark_latitude=waypoint.latitude,
@@ -298,6 +386,8 @@ def detect_mark_passage(
                 geometric_closing_rate_sign_flip=True,
                 route_progress_nm=round(progress, 4),
                 event_kind=event_kind,
+                speed_before_kn=round(speed_before_kn, 3),
+                speed_after_kn=round(speed_after_kn, 3),
             ))
 
     events = _cluster(raw_events, event_cluster_seconds)
@@ -305,7 +395,10 @@ def detect_mark_passage(
         "detector": "course_geometry",
         "route_topology_status": topology_status,
         "route_waypoints": [asdict(item) for item in route.waypoints],
+        "route_waypoints_skipped": route.skipped_waypoints,
         "raw_candidate_count": len(raw_events),
+        "implausible_candidate_count": implausible_candidates,
+        "max_plausible_speed_kn": max_plausible_speed_kn,
         "event_count": len(events),
         "events": [event.to_dict() for event in events],
         "vmg_used_for_acceptance": False,

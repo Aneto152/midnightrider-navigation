@@ -8,7 +8,12 @@ from mediaman.nautical_units import (
     meters_per_second_to_knots,
     wrap_degrees,
 )
-from mediaman.pattern_contract import PATTERN_BY_ID, PatternEvent, SeriesPoint
+from mediaman.pattern_contract import (
+    IMPLEMENTED_PATTERN_IDS,
+    PATTERN_BY_ID,
+    PatternEvent,
+    SeriesPoint,
+)
 from mediaman.pattern_detector import (
     PatternProfile,
     classify_point_of_sail,
@@ -118,3 +123,9 @@ def test_pattern_registry_documents_future_extensions():
 def test_unknown_pattern_event_is_rejected():
     with pytest.raises(ValueError, match="unknown pattern_id"):
         PatternEvent("not-a-pattern", "2026-09-05T12:00:00Z", "2026-09-05T12:00:00Z", 1.0, (), {})
+
+
+def test_mark_passage_is_implemented_but_not_wired():
+    """mark_passage has a validated detector that no analysis path calls yet."""
+    assert PATTERN_BY_ID["mark_passage"].status == "implemented_unwired"
+    assert "mark_passage" not in IMPLEMENTED_PATTERN_IDS

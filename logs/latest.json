@@ -1,6 +1,6 @@
 {
-  "task": "document_influx_measurement_dictionary",
-  "date": "2026-09-22T21:00:29Z",
+  "task": "MediaMan - mark_passage hardening after real-data validation",
+  "date": "2026-09-24T22:41:58Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
   "incident": {
@@ -11,7 +11,7 @@
     "aggravating_factor": "the exposed authorization declared write access on authorizations, so it could also create or deactivate tokens",
     "note_on_values": "this file never contains a token value; tokens are referenced by the first 16 hex characters of their sha256 only"
   },
-  "note_on_this_record": "written before its own commit existed, so it cannot contain its own SHA; that SHA is appended to logs/oc-actions.log by the same script",
+  "note_on_this_record": "written before its own commit existed, so it cannot contain its own SHA. commit_sha above is 4df4071, the Stage A commit being journalled retroactively. The SHA of this commit is added by the following journal commit.",
   "deployment": "no service restarted, no container restarted, no data written to the production bucket by this phase",
   "commit_chain": [
     "265bb857e1e2  H1b audit en lecture seule des autorisations InfluxDB et de leurs consommateurs",
@@ -48,7 +48,8 @@
     "h9_journal:f59411b5a12c6bb3cfe5d9f979060d95a2b69d5c",
     "h9b_content:42b63390402c73e0b63f84921584da934681f412",
     "h9b_journal:d5bba0054b9e49aa64d28c9b3674a3ccf64f0f75",
-    "h11_content:0d4b94a509be2b3fd06fca4f0134b82934060665"
+    "h11_content:0d4b94a509be2b3fd06fca4f0134b82934060665",
+    "mark_passage_contract_content:4df4071faeed0dd8ae0efcfc27fa943b7db98920"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
@@ -92,7 +93,10 @@
     "95 - telegraf etait la seule unite en echec de la machine : sa configuration reclame un parseur nmea que le paquet ne fournit pas, il n a jamais demarre une seule fois - unite masquee, reversible par unmask | preuve: systemctl is-enabled telegraf rend masked, mesure consignee dans logs/debug/deux-gestes-reversibles-2026-09-20.md",
     "92 - RETRACTE : j avais ecrit que le compose du workspace OpenClaw declarait un Signal K en restart: unless-stopped. C est faux. Je l avais deduit d une etiquette de conteneur, sans jamais ouvrir le fichier. Il declare influxdb, grafana, regatta et start-line-worker - les quatre conteneurs de production. Le chantier qui devait le renommer a ete arrete par une garde de prudence, pas par ma comprehension | preuve: la lecture du fichier par H14b-1 rend \"declare un Signal K : non\", sortie complete dans logs/debug/premisse-fausse-2026-09-20.md",
     "71 - telegraf etait en echec depuis son installation, unite absente du depot - rendu caduc par la fermeture 95 : l unite est masquee depuis H14b-1 et la machine ne compte plus aucune unite en echec | preuve: logs/debug/deux-gestes-reversibles-2026-09-20.md",
-    "96 - doublon du defaut 69 : meme conteneur, meme image, ouvert le meme jour par un chantier qui n avait pas relu la liste des defauts ouverts - fusionne dans 69 | preuve: logs/debug/premisse-fausse-2026-09-20.md"
+    "96 - doublon du defaut 69 : meme conteneur, meme image, ouvert le meme jour par un chantier qui n avait pas relu la liste des defauts ouverts - fusionne dans 69 | preuve: logs/debug/premisse-fausse-2026-09-20.md",
+    "104 - route snapshots were lost whole when a waypoint carried null coordinates: 821 of 2155 real snapshots on 2026-09-05 raised TypeError from inside float(). A snapshot now survives while two usable waypoints remain and skipped waypoints are counted in RouteSnapshot.skipped_waypoints.",
+    "105 - an event was accepted whose supporting samples implied 624 knots (15.6 nm across 90 s on source N2K.0) with a negative route_progress_nm. Acceptance now requires the implied average speed to stay at or below max_plausible_speed_kn, default 15 kn, exposed as a parameter and documented as an outlier filter rather than a performance model.",
+    "106 - a false-positive cluster on N2K.0 at 2026-09-05T14:23:22Z implied 29 knots over 90 s and was excluded by the dry-run only because it fell outside the expected window. The implied-speed gate now rejects it on its own merits."
   ],
   "defects_open": [
     "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten | constat: logs/debug/audit-influx-tokens-2026-09-15.md",
@@ -137,7 +141,9 @@
     "MediaMan : ecrire les tests de mediaman.py ou le retirer",
     "MediaMan : implementer LocalLLMProvider / OpenClawGatewayProvider ou les retirer",
     "defaut 63 : trancher l unite de course_over_ground_degrees",
-    "defaut 61 : brider scripts/commit-logs.sh (service en marche)"
+    "defaut 61 : brider scripts/commit-logs.sh (service en marche)",
+    "mark_passage Stage B : cabler navigation.currentRoute.waypoints et navigation.position dans racing.js, mcp_collector.py et temporal_analyzer.py, en respectant la contrainte de requete Flux unique (test_h9_chemin_unique)",
+    "mark_passage : rejouer la validation sur plusieurs jours avant toute revision du seuil max_plausible_speed_kn"
   ],
   "previous_record": {
     "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
@@ -271,7 +277,7 @@
       "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
     ]
   },
-  "last_updated": "2026-09-22T21:00:29Z",
+  "last_updated": "2026-09-24T22:41:58Z",
   "h5c": {
     "phase": "H5c - defaut 49 : test instable une fois sur six",
     "script_version": "h5c-v1",
@@ -1449,11 +1455,44 @@
       "tests_barrier": 48,
       "machine_actions": 0,
       "note": "Added nautical units, circular arithmetic, implemented v1 pattern detectors and an SSOT registry for future patterns."
+    },
+    {
+      "task": "MediaMan - mark_passage hardening after real-data validation",
+      "date": "2026-09-24T22:41:58Z",
+      "status": "SUCCESS",
+      "base": "4df4071faeed0dd8ae0efcfc27fa943b7db98920",
+      "files_modified": [
+        "mediaman/mark_passage_geometry.py",
+        "mediaman/pattern_contract.py",
+        "tests/mediaman/test_mark_passage_geometry.py",
+        "tests/mediaman/test_pattern_detector.py",
+        "docs/DECISIONS/MEDIAMAN-NAVIGATION-PATTERN-SSOT.md",
+        "docs/DECISIONS/MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md",
+        "logs/oc-actions.log",
+        "logs/latest.json"
+      ],
+      "tests_targeted_passed": "48",
+      "tests_targeted_total": "48",
+      "real_data_window_utc": "2026-09-05T14:00:00Z..2026-09-05T15:00:00Z",
+      "real_data_window_local": "2026-09-05 10:00-11:00 EDT",
+      "prototype_agreement_match_yes_before": "6",
+      "prototype_agreement_match_yes_after": "6",
+      "defects_closed": [
+        104,
+        105,
+        106
+      ],
+      "production_code_modified": true,
+      "read_only_influx": true,
+      "machine_actions": 0,
+      "llm_activated": false,
+      "telegram_sent": false,
+      "note": "One content commit carrying the retroactive journal of 4df4071, the registry declaration and the three robustness fixes, as chosen by Denis. mark_passage is implemented_unwired: no analysis path calls it yet."
     }
   ],
-  "last_task": "MediaMan historical analysis Phase I",
+  "last_task": "MediaMan - mark_passage hardening after real-data validation",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-23T03:35:54Z",
+  "last_update": "2026-09-24T22:41:58Z",
   "last_dust_action": {
     "timestamp": "2026-09-23T04:03:46.499931Z",
     "action": "mediaman_historical_analysis_phase1",
@@ -1547,9 +1586,16 @@
     "telegram_sent": false,
     "credentials_logged": false
   },
-  "commit_sha": "0b72be60304a5784c21d9aaf50c1b5316e875469",
+  "commit_sha": "4df4071faeed0dd8ae0efcfc27fa943b7db98920",
   "files_modified": [
-    "docs/SOFTWARE/INFLUXDB-DATA-MODEL.md"
+    "mediaman/mark_passage_geometry.py",
+    "mediaman/pattern_contract.py",
+    "tests/mediaman/test_mark_passage_geometry.py",
+    "tests/mediaman/test_pattern_detector.py",
+    "docs/DECISIONS/MEDIAMAN-NAVIGATION-PATTERN-SSOT.md",
+    "docs/DECISIONS/MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md",
+    "logs/oc-actions.log",
+    "logs/latest.json"
   ],
-  "timestamp_utc": "2026-09-24T13:21:13Z"
+  "timestamp_utc": "2026-09-24T22:41:58Z"
 }

@@ -69,7 +69,7 @@ signed events; the port/starboard label remains a calibration responsibility.
 | `ais_comparison` | time-aligned AIS tracks and identity | planned |
 | `sun_phase` | position and astronomical calculation | planned |
 | `tide_state` | position and tide source | planned |
-| `mark_passage` | configured race geometry | planned |
+| `mark_passage` | route geometry + raw position (`mediaman/mark_passage_geometry.py`) | implemented, not wired into `analyze()` |
 | `point_of_interest` | configured POI catalogue | planned |
 | `helm_identity` | explicit helm log or event input | planned |
 

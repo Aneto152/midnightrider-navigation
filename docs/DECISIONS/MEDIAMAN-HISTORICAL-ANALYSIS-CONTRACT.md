@@ -204,3 +204,42 @@ The validated September 5, 2026 dry-run detected `BUZZARD` around
 `2026-09-05T14:12Z` across three independent position sources. This empirical
 result validates the detector contract only; it does not characterize Vulcan's
 undocumented internal algorithm.
+
+### Mark-passage robustness gates
+
+Running the committed detector against the real September 5, 2026 race hour
+exposed three defects that synthetic fixtures could not reveal. All three are
+now part of the contract.
+
+**Unusable waypoints.** Real route snapshots publish waypoints whose
+coordinates are null. 821 of 2155 snapshots in the measured hour were lost
+because coordinate coercion raised `TypeError` from inside `float()`. A
+snapshot now survives while at least two usable waypoints remain; skipped
+waypoints are counted in `RouteSnapshot.skipped_waypoints` and reported as
+`route_waypoints_skipped`. Nothing is dropped silently.
+
+**Implausible supporting geometry.** On source `N2K.0` the sample 90 s after
+the closest approach sat 15.6 nm away, implying 624 knots, and the event was
+accepted with a negative `route_progress_nm`. Acceptance now requires that the
+displacement between the supporting samples imply an average speed at or below
+`max_plausible_speed_kn`, exposed as a parameter and defaulting to 15 knots.
+That default is an outlier filter for a 30-foot keelboat, not a performance
+model of the vessel, and it must be revised against multi-day data rather than
+from one window.
+
+**False positives from outliers.** A second cluster on `N2K.0` at
+`2026-09-05T14:23:22Z` implied 29 knots over 90 s. It was excluded from the
+dry-run only because it fell outside the expected window, not because it was
+implausible. The speed gate now rejects it on its own merits. Rejected
+candidates are counted in `implausible_candidate_count`.
+
+`route_progress_nm` is reported but deliberately not gated: its sign depends on
+route topology and on which endpoint the mark occupies, so gating it would
+require evidence this project does not yet have.
+
+The representative instant of a clustered event carries an uncertainty of
+roughly one sampling interval, because the minimum distance is rounded to four
+decimals and ties are broken by the earliest timestamp.
+
+`mark_passage` is registered as `implemented_unwired`: the detector is
+validated but no analysis path calls it, so the pattern is never emitted yet.

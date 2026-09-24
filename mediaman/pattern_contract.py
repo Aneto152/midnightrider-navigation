@@ -54,7 +54,15 @@ class PatternEvent:
 
 @dataclass(frozen=True)
 class PatternSpec:
-    """SSOT description of one detectable or planned pattern."""
+    """SSOT description of one detectable or planned pattern.
+
+    ``status`` is one of:
+
+    - ``implemented``: produced by the analyzer and reported to callers.
+    - ``implemented_unwired``: a validated detector exists in the codebase
+      but no analysis path calls it yet, so the pattern is never emitted.
+    - ``planned``: no detector exists.
+    """
 
     pattern_id: str
     category: str
@@ -81,7 +89,7 @@ PATTERN_REGISTRY: tuple[PatternSpec, ...] = (
     PatternSpec("ais_comparison", "fleet", "planned", ("ais_tracks",), "Compare performance with nearby AIS targets."),
     PatternSpec("sun_phase", "environment", "planned", ("position", "timestamp"), "Attach sunrise, sunset and light phase."),
     PatternSpec("tide_state", "environment", "planned", ("position", "timestamp"), "Attach tidal height and stream state."),
-    PatternSpec("mark_passage", "race", "planned", ("position", "course_geometry"), "Detect passage near a configured mark."),
+    PatternSpec("mark_passage", "race", "implemented_unwired", ("position", "course_geometry"), "Detect passage near a named route waypoint from course geometry; detector lives in mediaman/mark_passage_geometry.py and is not yet called by analyze()."),
     PatternSpec("point_of_interest", "context", "planned", ("position", "poi_catalog"), "Attach a nearby configured point of interest."),
     PatternSpec("helm_identity", "context", "planned", ("helm_log",), "Attach the person at the helm when explicitly recorded."),
 )

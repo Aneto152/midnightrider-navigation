@@ -557,3 +557,12 @@
 [2026-09-24T13:21:13] [FILE_MODIFY] [influxdb] Measured Saturday ET inventory documented in SSOT
 [2026-09-24T13:21:13] [RESULT] [influxdb] Result: SUCCESS - measurement dictionary updated
 [2026-09-24T13:21:13] [COMMIT] SHA: 0b72be60304a5784c21d9aaf50c1b5316e875469
+[2026-09-24T22:41:58] [FILE_CREATE] [mediaman] mark_passage_geometry.py - deterministic geometric mark-passage detector (retroactive entry: this action was performed but never journalled)
+[2026-09-24T22:41:58] [RESULT] [mediaman] Result: SUCCESS - 3 targeted tests green, contract frozen in docs/DECISIONS/MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md
+[2026-09-24T22:41:58] [COMMIT] SHA: 4df4071faeed0dd8ae0efcfc27fa943b7db98920
+[2026-09-24T22:41:58] [DEBUG] [mediaman] read-only validation of the committed detector against real InfluxDB data for 2026-09-05 14:00-15:00Z (10:00-11:00 EDT), per position source, no repository write: production reproduced the independent prototype on 3/3 sources, BUZZARD at 14:12, distance delta 0.0000 nm, robust across radii 0.05 to 0.50 nm. match=YES lines before hardening: 6
+[2026-09-24T22:41:58] [FILE_MODIFY] [mediaman] mark_passage_geometry.py - D1 null waypoints tolerated and counted, D2 and D3 implied-speed gate added, docstrings completed on all 18 definitions
+[2026-09-24T22:41:58] [FILE_MODIFY] [mediaman] pattern_contract.py - mark_passage declared implemented_unwired, status vocabulary documented
+[2026-09-24T22:41:58] [FILE_MODIFY] [docs] MEDIAMAN-NAVIGATION-PATTERN-SSOT.md and MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md - robustness gates and unwired status documented in SSOT
+[2026-09-24T22:41:58] [RESULT] [mediaman] Result: SUCCESS - targeted tests 48/48, match=YES lines after hardening: 6
+[2026-09-24T22:41:58] [COMMIT] SHA: recorded in the immediately following journal commit, because a commit cannot contain its own SHA
