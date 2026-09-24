@@ -11,7 +11,7 @@
     "aggravating_factor": "the exposed authorization declared write access on authorizations, so it could also create or deactivate tokens",
     "note_on_values": "this file never contains a token value; tokens are referenced by the first 16 hex characters of their sha256 only"
   },
-  "note_on_this_record": "written before its own commit existed, so it cannot contain its own SHA. commit_sha above is 4df4071, the Stage A commit being journalled retroactively. The SHA of this commit is added by the following journal commit.",
+  "note_on_this_record": "commit_sha is the hardening content commit. This journal commit cannot contain its own SHA; it is printed to the operator instead.",
   "deployment": "no service restarted, no container restarted, no data written to the production bucket by this phase",
   "commit_chain": [
     "265bb857e1e2  H1b audit en lecture seule des autorisations InfluxDB et de leurs consommateurs",
@@ -49,7 +49,8 @@
     "h9b_content:42b63390402c73e0b63f84921584da934681f412",
     "h9b_journal:d5bba0054b9e49aa64d28c9b3674a3ccf64f0f75",
     "h11_content:0d4b94a509be2b3fd06fca4f0134b82934060665",
-    "mark_passage_contract_content:4df4071faeed0dd8ae0efcfc27fa943b7db98920"
+    "mark_passage_contract_content:4df4071faeed0dd8ae0efcfc27fa943b7db98920",
+    "mark_passage_hardening_content:f4455d44e0d8a974f86a6a693f35d107483ac72f"
   ],
   "defects_closed": [
     "12 the exposed value remained in two tracked files - files untracked in H3b | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
@@ -1492,7 +1493,7 @@
   ],
   "last_task": "MediaMan - mark_passage hardening after real-data validation",
   "last_status": "SUCCESS",
-  "last_update": "2026-09-24T22:41:58Z",
+  "last_update": "2026-09-24T22:42:00Z",
   "last_dust_action": {
     "timestamp": "2026-09-23T04:03:46.499931Z",
     "action": "mediaman_historical_analysis_phase1",
@@ -1586,7 +1587,7 @@
     "telegram_sent": false,
     "credentials_logged": false
   },
-  "commit_sha": "4df4071faeed0dd8ae0efcfc27fa943b7db98920",
+  "commit_sha": "f4455d44e0d8a974f86a6a693f35d107483ac72f",
   "files_modified": [
     "mediaman/mark_passage_geometry.py",
     "mediaman/pattern_contract.py",
@@ -1597,5 +1598,5 @@
     "logs/oc-actions.log",
     "logs/latest.json"
   ],
-  "timestamp_utc": "2026-09-24T22:41:58Z"
+  "timestamp_utc": "2026-09-24T22:42:00Z"
 }
