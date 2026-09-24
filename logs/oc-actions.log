@@ -554,3 +554,6 @@
 [2026-09-24T02:59:25] [FILE_MODIFY] [mediaman] Suppressed standalone sustained_turn; requires overlap with heading-confirmed true_tack or true_gybe
 [2026-09-24T02:59:25] [RESULT] [mediaman] Result: SUCCESS - targeted suite and pre-LLM E2E passed
 [2026-09-24T02:59:25] [COMMIT] SHA: 2c6906d9d7bc32acb642bccc231fa56cc9d6a33e
+[2026-09-24T13:21:13] [FILE_MODIFY] [influxdb] Measured Saturday ET inventory documented in SSOT
+[2026-09-24T13:21:13] [RESULT] [influxdb] Result: SUCCESS - measurement dictionary updated
+[2026-09-24T13:21:13] [COMMIT] SHA: 0b72be60304a5784c21d9aaf50c1b5316e875469
