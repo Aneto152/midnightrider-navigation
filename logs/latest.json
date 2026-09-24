@@ -1,5 +1,5 @@
 {
-  "task": "step4_environmental_series",
+  "task": "step4_worktree_restoration",
   "date": "2026-09-22T21:00:29Z",
   "status": "SUCCESS",
   "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
@@ -1547,14 +1547,12 @@
     "telegram_sent": false,
     "credentials_logged": false
   },
-  "commit_sha": "ca04852e66fe48a191b9d48f7ae8da520854c17b",
+  "commit_sha": "30c406f359408ce102ba5edbcfeae0c088b9cb60",
   "files_modified": [
-    "mcp/servers/racing.js",
-    "mediaman/temporal_analyzer.py",
-    "tests/mediaman/test_environmental_patterns.py",
-    "tests/mcp/test_temporal_selectors_step4.py",
-    "docs/DECISIONS/MEDIAMAN-HISTORICAL-ANALYSIS-CONTRACT.md",
-    "docs/ops/RECOVERY-GUIDE-SAFE.md"
+    "docs/SOFTWARE/INFLUXDB-DATA-MODEL.md",
+    "grafana-dashboards/03-performance.json",
+    "logs/latest.json.avant-attitude",
+    "logs/latest.json.avant-refonte"
   ],
-  "timestamp_utc": "2026-09-24T02:20:48Z"
+  "timestamp_utc": "2026-09-24T02:27:47Z"
 }
