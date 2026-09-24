@@ -120,3 +120,64 @@ angle alone, which cannot separate a boat maneuver from a wind rotation. The
 attribution branch for `luffing` and `bearing_away` now also requires a
 material absolute TWA change, so a tack, which leaves the TWA magnitude
 unchanged, is never reported as a bearing away.
+
+## Environmental and turn-rate series
+
+Four series were added to the single grouped Flux query. Each measurement,
+source and field below was confirmed present in the analysis window by a
+probe carrying positive controls, not inferred from documentation.
+
+| Series | Measurement | Source pinned | Stored unit | Emitted unit |
+|---|---|---|---|---|
+| `outside_pressure` | `environment.outside.pressure` | `N2K.116` | pascal | hectopascal |
+| `water_temperature` | `environment.water.temperature` | `N2K.35` | kelvin | celsius |
+| `leeway_angle` | `performance.leewayAngle` | `signalk-j30-leeway.*` | radian, signed | degree, signed |
+| `rate_of_turn` | `navigation.rateOfTurn` | `Calypso.XX` | radian per second | degree per minute |
+
+### Why the source is pinned
+
+Three candidate measurements carry two instruments at once. Pressure is
+published by both the dedicated barometer and the Calypso unit; rate of turn
+by both the Calypso unit and another bus node; depth by two transducers. A
+selector that does not name one instrument interleaves two time lines into a
+single series, and the resulting steps are indistinguishable from real
+events. Pressure follows the barometer and depth follows the DST sensor, in
+line with the optional-fact selectors already shipped.
+
+### Exhaustive source resolver
+
+The resolver previously ended in an unconditional fallback to the true-wind
+calculator, so an unrecognised source kind produced a filter for the wrong
+instrument rather than an error. It is now a lookup table and an unknown
+kind throws. A wrong filter and an empty series are otherwise impossible to
+tell apart, which is the failure mode that once hid a malformed regex.
+
+### Detectors and thresholds
+
+| Pattern | Condition | Confidence |
+|---|---|---|
+| `pressure_drop` / `pressure_rise` | slope at least 1.0 hPa per hour and R squared at least 0.7 | 0.85 |
+| `thermal_front` | water temperature changes by at least 1.0 celsius across the window | 0.8 |
+| `excessive_leeway` | absolute leeway at or above 6 degrees for at least 3 consecutive samples | 0.75 |
+| `sustained_turn` | absolute rate of turn at or above 20 degrees per minute, constant sign, at least 2 samples | 0.6 |
+
+### Rate-of-turn sampling caveat
+
+The temporal query downsamples with the last raw sample of each bucket. At a
+sixty second resolution a rate-of-turn value is therefore instantaneous, not
+an average, and a turn shorter than one bucket can be missed entirely. Its
+confidence is deliberately the lowest of the set and `sustained_turn` is
+corroborating evidence for a maneuver established from heading, never an
+independent claim. No port or starboard direction is asserted, for the same
+reason as in tack and gybe attribution: the sign convention of this
+installation has not been verified against a known maneuver.
+
+### Known divergence, not addressed here
+
+`mediaman/pattern_contract.py` presents `PATTERN_REGISTRY` as the registry of
+patterns, and `PatternEvent` rejects an unregistered identifier. The temporal
+detectors return plain dictionaries, so they bypass that validation. Every
+identifier emitted since the wind-attribution work is absent from the
+registry, and the registry still lists the wind refusal and adonnante
+patterns as planned under different names. Reconciling the registry with the
+code is deliberately kept out of this change.

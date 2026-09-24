@@ -667,16 +667,42 @@ const TEMPORAL_SELECTORS = [
   { series: 'wind_true_direction', measurement: 'environment.wind.directionTrue', field: 'value', source: 'truewind' },
   { series: 'heading_true', measurement: 'navigation.headingTrue', field: 'value', source: 'heading' },
   { series: 'attitude_roll', measurement: 'navigation.attitude.roll', field: 'value', source: 'N2K.35' },
-  { series: 'attitude_pitch', measurement: 'navigation.attitude.pitch', field: 'value', source: 'N2K.35' }
+  { series: 'attitude_pitch', measurement: 'navigation.attitude.pitch', field: 'value', source: 'N2K.35' },
+  // Pressure and rate of turn are published by two instruments each. The
+  // source is pinned so a single physical sensor feeds a single series; an
+  // unpinned selector would interleave two devices into one time line.
+  { series: 'outside_pressure', measurement: 'environment.outside.pressure', field: 'value', source: 'N2K.116' },
+  { series: 'water_temperature', measurement: 'environment.water.temperature', field: 'value', source: 'N2K.35' },
+  { series: 'leeway_angle', measurement: 'performance.leewayAngle', field: 'value', source: 'leeway' },
+  { series: 'rate_of_turn', measurement: 'navigation.rateOfTurn', field: 'value', source: 'Calypso.XX' }
 ];
+
+/**
+ * Exhaustive source resolver.
+ *
+ * The previous chain ended in an unconditional fallback to the true-wind
+ * calculator, so any unrecognised source kind silently produced a filter
+ * for the wrong instrument. A wrong filter is indistinguishable from an
+ * absence of data, which is how a malformed regex once looked like an
+ * empty series. An unknown kind now throws.
+ */
+const TEMPORAL_SOURCE_CLAUSES = {
+  self: measurement => `(r._measurement == "${measurement}" and r.self == "true")`,
+  'N2K.35': measurement => `(r._measurement == "${measurement}" and r.source == "N2K.35")`,
+  'N2K.116': measurement => `(r._measurement == "${measurement}" and r.source == "N2K.116")`,
+  'Calypso.XX': measurement => `(r._measurement == "${measurement}" and r.source == "Calypso.XX")`,
+  heading: measurement => `(r._measurement == "${measurement}" and r.source =~ /^signalk-heading-true-calculator\./)`,
+  truewind: measurement => `(r._measurement == "${measurement}" and r.source =~ /^signalk-truewind-calculator\./)`,
+  leeway: measurement => `(r._measurement == "${measurement}" and r.source =~ /^signalk-j30-leeway\./)`
+};
 
 function buildTemporalQuery(startUtc, endUtc, resolutionSeconds) {
   const measurements = [...new Set(TEMPORAL_SELECTORS.map(selector => selector.measurement))];
   const sourceClauses = TEMPORAL_SELECTORS.map(selector => {
-    if (selector.source === 'self') return `(r._measurement == "${selector.measurement}" and r.self == "true")`;
-    if (selector.source === 'N2K.35') return `(r._measurement == "${selector.measurement}" and r.source == "N2K.35")`;
-    if (selector.source === 'heading') return `(r._measurement == "${selector.measurement}" and r.source =~ /^signalk-heading-true-calculator\./)`;
-    return `(r._measurement == "${selector.measurement}" and r.source =~ /^signalk-truewind-calculator\./)`;
+    if (!Object.prototype.hasOwnProperty.call(TEMPORAL_SOURCE_CLAUSES, selector.source)) {
+      throw new Error(`unknown temporal source kind: ${selector.source}`);
+    }
+    return TEMPORAL_SOURCE_CLAUSES[selector.source](selector.measurement);
   }).join(' or ');
   const queryBody = [
     `    |> filter(fn: (r) => contains(value: r._measurement, set: [${measurements.map(value => `"${value}"`).join(', ')}]))`,
@@ -698,7 +724,7 @@ function temporalSeriesName(row) {
 function normalizeTemporalValue(series, value) {
   const numeric = Number(value);
   if (!Number.isFinite(numeric)) return null;
-  if (series === 'wind_true_angle' || series === 'attitude_roll' || series === 'attitude_pitch') {
+  if (series === 'wind_true_angle' || series === 'attitude_roll' || series === 'attitude_pitch' || series === 'leeway_angle') {
     const degrees = numeric * 180 / Math.PI;
     return degrees > 180 ? degrees - 360 : degrees;
   }
@@ -707,12 +733,16 @@ function normalizeTemporalValue(series, value) {
   }
   if (series === 'speed_through_water' || series === 'wind_true_speed' || series === 'speed_over_ground') return numeric;
   if (series === 'water_temperature') return numeric - 273.15;
+  if (series === 'outside_pressure') return numeric / 100.0;
+  // Radians per second to degrees per minute. The value is the last raw
+  // sample of the bucket, never an average over it.
+  if (series === 'rate_of_turn') return numeric * (180 / Math.PI) * 60;
   return numeric;
 }
 
 function downsampleTemporalRows(rows, resolutionSeconds) {
   const buckets = new Map();
-  const angular = new Set(['wind_true_angle', 'course_over_ground', 'attitude_roll', 'attitude_pitch']);
+  const angular = new Set(['wind_true_angle', 'course_over_ground', 'attitude_roll', 'attitude_pitch', 'leeway_angle', 'rate_of_turn']);
   for (const row of rows) {
     const series = temporalSeriesName(row);
     if (!series || !row._time) continue;

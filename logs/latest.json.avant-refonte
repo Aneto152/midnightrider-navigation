@@ -1,0 +1,1184 @@
+{
+  "task": "H14a-bis - le perimetre de la mesure porte son nom",
+  "date": "2026-09-20T20:18:52Z",
+  "status": "SUCCESS",
+  "session_mode": "Denis working directly over SSH, scripts written by Dust, rehearsed offline before delivery, no OpenClaw delegation",
+  "incident": {
+    "id": "SEC-2026-09-14-01",
+    "what": "an organisation-wide InfluxDB authorization was readable in this public repository, published by the 15-minute log auto-commit",
+    "exposed_since": "2026-06-28",
+    "closed_influxdb_side": "2026-09-15, authorization deactivated - the published value no longer authenticates anything",
+    "aggravating_factor": "the exposed authorization declared write access on authorizations, so it could also create or deactivate tokens",
+    "note_on_values": "this file never contains a token value; tokens are referenced by the first 16 hex characters of their sha256 only"
+  },
+  "note_on_this_record": "written before its own commit existed, so it cannot contain its own SHA; that SHA is appended to logs/oc-actions.log by the same script",
+  "deployment": "no service restarted, no container restarted, no data written to the production bucket by this phase",
+  "commit_chain": [
+    "265bb857e1e2  H1b audit en lecture seule des autorisations InfluxDB et de leurs consommateurs",
+    "fb73946746ff  H2a rotation du token signalk-to-influxdb2 hors de la valeur exposee",
+    "548ee128e63d  H2b recreation du conteneur grafana pour que la datasource recoive un vrai token",
+    "860120398157  H3a desactivation de l autorisation exposee et du token orphelin, reversible",
+    "bc39bb0e24b7  H3b detrackage des deux fichiers porteurs + pose de la barriere anti-fuite",
+    "9d9ba4f502e0  H3e caviardage du second token publie (SEC-2026-09-15-02)",
+    "1d0d58a55086  H3f caviardage ciblee du tableau des credentials - INCOMPLET, fuite laissee ligne 93",
+    "a2f59a3f68b7  H3g contenu - passphrase WiFi retiree de la commande nmcli, barriere v3",
+    "10ba9ece3f1a  H3g journal",
+    "e3a98921b3e5  H4b contenu - reprise en main du compte administrateur Grafana",
+    "36956d45c16c  H4b journal",
+    "6f91220de4aa  H4c contenu - sonde de dependance a l acces anonyme, correction du registre",
+    "69f38303df48  H4c journal",
+    "h5b_content:7b237a3101992e306a16961bdffdf854f9f9db0f",
+    "h5c_content:64078669c14668820885a816321957a2a56d47d6",
+    "h5d_content:7da5057760595bd4266d49a9925e699f503a0e06",
+    "h6a_content:ce1de700a3da0e5020f06560d742055e15ea863c",
+    "h6c_content:9a4bfc5be0f93c2f274753130c4a41eae0309025",
+    "h7d_content:c4792a8594b73fa9884ee8574d2357214f7d33b1",
+    "h7d_journal:8120f3c481e87b801569792c8d135a065f05f013",
+    "h7e_content:be0233e98f19bd41fe4593c4b0b56ef6dc8ac71c",
+    "h7e_journal:6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65",
+    "h8a_content:8919130fe36e82dd66e8eb07a073e26234f48a9e",
+    "h8a_journal:ca11c26d1b1f869745dfcabc43255c45a90630e1",
+    "h8b_content:1fa2853f91f1925c96a0972e57553f656fd1cb43",
+    "h8b_journal:b6b7c1cc851cfd93637163cfffda73be9ba8f4f1",
+    "h8c_content:5cf6d029e4af8e0d44f568ea89e26bff4e7df20e",
+    "h8c_journal:2a02632084c7e37d34d3305ad87969a02ea6c25e",
+    "h8d_content:36d2641c5cb2ef3b3963d45a57326f85fc295013",
+    "h8d_journal:e64f3ca5b51a83ed74772346c86fcbc02a003dc6",
+    "h9_content:019c4ef6c13938885d54fb8bafd4e2484c2b6f73",
+    "h9_journal:f59411b5a12c6bb3cfe5d9f979060d95a2b69d5c",
+    "h9b_content:42b63390402c73e0b63f84921584da934681f412",
+    "h9b_journal:d5bba0054b9e49aa64d28c9b3674a3ccf64f0f75",
+    "h11_content:0d4b94a509be2b3fd06fca4f0134b82934060665"
+  ],
+  "defects_closed": [
+    "12 the exposed value remained in two tracked files - files untracked in H3b | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "13 the H2b v1 Flux probe used count() on a time column - rewritten without aggregate | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "15 the H2b v2 RESULT line over-claimed that Grafana never held the exposed token - corrected by addition in H3a | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "16 the H3a report printed a hardcoded HTTP 401 instead of the observed HTTP 404 - corrected by addition in H3b | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "17 the 401/403 log grep matched digits inside nanosecond timestamps - corrected by addition in H3b | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "18 the claim that the two files were not covered by .gitignore was false - corrected by addition in H3b | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "28 la barriere v2 ignorait un identifiant passe en argument de ligne de commande - corrige en v3 | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "29 la verification de H3f ne regardait que les lignes que le script venait d ecrire - corrige par un recensement du depot entier | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "30 H3f a remplace l adresse statique de la passerelle AP par un nom d hote, rendant la commande nmcli invalide - corrige | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "31 H3f a fait perdre le bit d execution de scripts/check-staged-secrets.py - corrige | preuve: scripts/check-staged-secrets.py est en mode git 100755",
+    "32 H3f n a pas inscrit son propre SHA dans logs/oc-actions.log - corrige par ajout | preuve: logs/oc-actions.log porte deux lignes [COMMIT] SHA apres le RESULT de H3f",
+    "34 l affirmation 'le mot de passe publie ouvre encore Grafana' etait fausse : le test utilisait un point d acces lisible par l anonyme - corrige par ajout en H4b | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "20b le compte administrateur Grafana n etait detenu par personne : valeur publiee perimee, aucune cle dans .env - repris en main en H4b, valeur connue desormais dans .env hors git | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "35 H4c a resolu les placeholders de commit_chain avec 'git log --grep=TAG -1', qui renvoie le commit le PLUS RECENT citant l etiquette : 9d9ba4f a ete ecrit comme H3b alors qu il est H3e, et e3a9892 comme H3f alors qu il est H4b. Deux marqueurs honnetes remplaces par deux SHA faux. Corrige en H4d a partir de l API GitHub, autorite unique | preuve: logs/latest.json associe 9d9ba4f a H3e et e3a9892 a H4b",
+    "33 scripts/check-staged-secrets.py --audit sans --files n examinait que l index et non le depot : mesure en H4c le 20260916T231406Z -> CORRIGE en H4d : --audit sans --files lit desormais git ls-files | preuve: scripts/check-staged-secrets.py appelle git ls-files",
+    "20 acces anonyme en lecture de Grafana : FERME en H4d (GF_AUTH_ANONYMOUS_ENABLED=false), verifie par une requete sans identifiant | preuve: docker-compose.yml declare GF_AUTH_ANONYMOUS_ENABLED=false",
+    "40 en H4d j ai ecrit 'aucun tunnel actif : l exposition se limite au reseau local' apres n avoir teste que cloudflared. Tailscale etait actif et documente depuis toujours dans SYSTEM-SUMMARY.md section 11, que je n ai pas relu sur ce point. Consequence : avant H4d, les tableaux Grafana lisibles sans identifiant l etaient pour tout le tailnet, pas seulement pour le reseau du bateau. Etat Tailscale mesure en H4e : ACTIF. Troisieme conclusion tiree au-dela de la mesure (voir 34, 35) | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "41 portal/index.html passait host=midnightrider.local sur ses sept liens, ce qui neutralisait le repli correct de viewer.html (params.get('host') || window.location.hostname). Le portail etait donc inutilisable a distance par Tailscale. Corrige en H4e : le parametre fige est retire, les pages suivent l hote d arrivee, aucune adresse 100.x.x.x n est ecrite nulle part | preuve: portal/index.html ne porte ni host= fige ni adresse en 100.x",
+    "38 docs/ARCHITECTURE-MASTER.md annonce un acces distant par Cloudflare Tunnel et renvoie a CLOUDFLARE-TUNNEL-URL.md, fichier absent du depot. Etat mesure du service en H4d : ABSENT. -> CORRIGE en H4e : la ligne annonce desormais Tailscale, restreint au tailnet | preuve: docs/ARCHITECTURE-MASTER.md annonce Tailscale et documente l absence du fichier cloudflare",
+    "42 MediaMan : EventDetector, EventQueue et EventOrchestrator (etapes 4A/4B/4D, ~1150 lignes, 106 tests) n etaient importes par aucun module hors de leurs propres tests. Trois sous-systemes complets branches sur rien. Corrige en H5a par mediaman/event_pipeline.py et snapshot_store.py | preuve: mediaman/event_pipeline.py et mediaman/snapshot_store.py existent et sont importes",
+    "43 la documentation MediaMan datait du 2026-08-27 et affirmait '303/303', 'Telegram NOT IMPLEMENTED' et 'OpenClaw adapter not implemented', trois affirmations fausses. Chiffres reels mesures en H5a : 461 tests dans tests/mediaman, 41 dans tests/mcp. Section 4.6bis ajoutee | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "45 tests/mcp/test_phase2_historical_contract.py annoncait 24 scenarios pour 23 fonctions. Docstring alignee sur la realite en H5a | preuve: tests/mcp/test_phase2_historical_contract.py, en-tete accorde a son enumeration et a ses fonctions par H13",
+    "86 ProtectHome=yes rendait mediaman.service inexecutable, son WorkingDirectory etant sous /home - corrigee en H5d, numerotee retroactivement par H12c | preuve: etc/systemd/system/mediaman.service declare ProtectHome=no",
+    "50 le garde-fou H5c declarait legitime other.replace(second=d.second + 10) | preuve: tests/mediaman/test_no_fragile_datetime_arithmetic.py, echantillon coupable et six legitimes",
+    "58 mcp/servers/racing.js interrogeait InfluxDB sans filtre de contexte : les 4 faits publies etaient ceux de la derniere cible AIS ayant ecrit dans la fenetre - corrige en H8a, 6 tests de non-regression | preuve: mcp/servers/racing.js porte le filtre de contexte",
+    "64 RETRACTE le 2026-09-18 avant toute ecriture : j avais accuse la documentation de mentir sur les deux Vulcan alors que N2K.0 est le recepteur AIS et n ecrit jamais notre contexte - erreur de meme nature que le defaut 58, commise dans l outil de diagnostic | preuve: sans preuve materielle (annotation d un compte rendu, rien dans le depot ne peut la trancher)",
+    "63 CLOSED on 2026-09-18, chantier H8d: the course over ground was published in radians under the key course_over_ground_degrees. racing.js now converts it once in cogRadiansToDegrees(), validates the incoming value in [0, 2*PI] instead of [0, 360], and every snapshot declares its units; mcp_collector refuses a units block that disagrees. Measured proof over 365 days: [0.000000, 6.281400] rad, 0 row(s) above 2*PI out of 4078141. Content commit 36d2641c5cb2ef3b3963d45a57326f85fc295013 | preuve: mcp/servers/racing.js definit cogRadiansToDegrees sur 2 * Math.PI",
+    "65 mediaman/mcp_collector.py calls racing.get_position, racing.get_sog and racing.get_cog, three tools that racing.js does not declare - it exposes get_historical_snapshot only. The realtime path of the collector is therefore dead and only mocks cover it. To arbitrate: implement the three tools, or remove the path. - ferme par H9 le 2026-09-18 | preuve: tests/mcp/test_h9b_coherence_doc_code.py exige que les trois noms morts restent cites, jamais appeles",
+    "74 six commandes de la documentation visaient le bucket inexistant signalk, sur trois fichiers, plus une organisation fausse dans README.md - annonce ferme par H11 sur un detecteur aveugle, ferme pour de bon par H11b, entrees fusionnees par H12c | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse toute reference vivante au bucket signalk",
+    "81 docs/ops/RECOVERY-GUIDE-SAFE.md ne pouvait pas etre suivi - reecrit en version 2.0 par H12 | preuve: docs/ops/RECOVERY-GUIDE-SAFE.md, version 2.0, sous garde",
+    "67 harnais JS mort supprime (tests/mcp/js/), npm test et mcp/README.md corriges - H12b, verifiable : le repertoire n existe plus | preuve: tests/mcp/test_h9b_coherence_doc_code.py verifie que tests/mcp/js a disparu",
+    "80 le harnais codait en dur le bucket inexistant signalk - supprime avec lui en H12b | preuve: tests/mcp/test_h9b_coherence_doc_code.py garde les valeurs attestees",
+    "84 H12 annoncait 80 tests mcp dans un guide dont le commit en portait 85 - corrige et mis sous garde en H12b | preuve: tests/mcp/test_h9b_coherence_doc_code.py compare le chiffre annonce au chiffre declare",
+    "85 logs/latest.json se contredisait - 67 ouvert et ferme, 74 ferme deux fois, une entree sans identifiant, aucun test sur ces listes - repare et mis sous garde par H12c, verifiable : quatre tests | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse une entree ouverte et fermee a la fois",
+    "87 tests/mcp/test_phase2_historical_contract.py annoncait 23 scenarios puis en enumerait 24 - H5a avait aligne le nombre et laisse la liste - en-tete accorde a ses deux chiffres par H13 | preuve: tests/mcp/test_h9b_coherence_doc_code.py compare l en-tete a l enumeration et aux fonctions",
+    "88 etc/systemd/system/mediaman-events.service affirmait en commentaire que mediaman.service declare ProtectHome=yes, faux depuis H5d - reecrit au passe par H13 | preuve: etc/systemd/system/mediaman-events.service",
+    "89 le guide de secours v2.0 prescrivait systemctl enable --now midnight-logsync.timer, unite desarmee par H7e dont l en-tete dit en capitales NE PAS REINSTALLER - ordre retire, avertissement pose, copies en masse du README remplacees par une boucle qui l exclut | preuve: tests/mcp/test_h9b_coherence_doc_code.py refuse toute prescription d armement dans docs/ et toute copie en masse",
+    "94 - la mesure posee par H14a pour fermer le defaut 89 ne regardait que docs/ : la commande interdite restait prete a coller dans etc/systemd/system/README.md ligne 153 et dans l en-tete des deux unites, trois lignes sous NE PAS REINSTALLER - cinq lignes retirees, perimetre elargi aux fichiers de procedure de docs/, etc/, scripts/ et de la racine | preuve: tests/mcp/test_h9b_coherence_doc_code.py verifie que etc/systemd/system/midnight-logsync.service fait partie du perimetre mesure et refuse toute prescription d armement qui s y trouverait"
+  ],
+  "defects_open": [
+    "14 the H2b v2 DEBUG line in logs/oc-actions.log is split in two by a grep -c || echo 0; documented, not rewritten",
+    "19 the exposed value remains in the git history, deliberately not rewritten",
+    "21 influx auth list prints every token value in clear to anyone who can docker exec",
+    "22 a Grafana alert rule (mr-safety-network) queries a bucket weather_lis that does not exist, so that alert is silent",
+    "36 deux liens de portal/index.html pointent sur des tableaux de bord qui n existent pas dans l instance Grafana : 01-navigation-dashboard et data-model-status renvoient 404 meme authentifie. Deux des sept cartes de la page d accueil sont mortes. Mesure en H4c.",
+    "37 les UID des JSON de grafana-dashboards/ ne correspondent pas a ceux de l instance vivante (03-performance.json declare uid=performance-analysis, l instance repond sur 03-performance ; 11 fichiers sur 13 ont nom != uid). Depuis H4b, deploy-dashboards-to-grafana.sh dispose enfin d un identifiant valide : l executer creerait vraisemblablement une seconde serie de tableaux. NE PAS LANCER.",
+    "39 tests/portal/test_portal.py::TestGrafanaConfig verifie allow_embedding dans config/grafana-custom.ini, fichier que Grafana ne charge pas. Le test passe et ne prouve rien. A repointer sur les variables d environnement de docker-compose.yml.",
+    "44 mediaman/mediaman.py (167 lignes) est le seul fichier que mediaman.service execute et n a aucun test ; il n utilise que la fondation d aout avec MEDIAMAN_CONTENT_PROVIDER=test, donc il produirait un article factice. La vraie chaine (historical_entrypoint.py) n est referencee par aucune unite systemd. A trancher en 4E.2.",
+    "61 auto-commit de 15 minutes : publie l index d un script abandonne (commit 80f3980) - constat dans logs/debug/architecture-master-numerotation-2026-09-17.md",
+    "62 etc/systemd/system/README.md : tableau des unites obsolete - constat dans logs/debug/timers-systemd-2026-09-17.md",
+    "68 - validate_capabilities() ne controle au demarrage que get_historical_snapshot ; la porte du direct, get_snapshot, n est pas validee. Constate le 2026-09-18 par la relecture de H9.",
+    "69 - conteneur Docker nomme signalk, Exited (137) depuis 4 mois. La regle du bord est systemctl uniquement pour Signal K ; ce conteneur est un piege dormant. Constate le 2026-09-18.",
+    "70 - midnight-logsync.timer est desarmee a dessein depuis H7e, ce n est pas une panne : elle n apparait plus dans les unites en echec. Ce qui reste ouvert est la consequence : les journaux de services ne sont pas publies, .gitignore excluant logs/services/*.log. Requalifie le 2026-09-20 par H14a.",
+    "71 - telegraf.service en echec, unite absente du depot. Constate le 2026-09-18.",
+    "72 - quatre plugins de calcul tournent sans donnee d entree et ont ecrit 11,8 Mo de journaux (j30-leeway 3,8 Mo, truewind 3,1 Mo, heading-true 2,6 Mo, current 2,2 Mo) pour un standard de 5 Mo. Constate le 2026-09-18.",
+    "73 - InfluxDB 2.8.0 panique cote lecture sur l operateur last : 'Dispatcher panic: arrow/array: index out of range', des dizaines d occurrences le 2026-09-17 a 03:27. C est l operateur central du chemin MCP. Constate le 2026-09-18.",
+    "75 le motif de bucket de H11 ne voyait pas INFLUX_DB_BUCKET - corrige en H11b",
+    "76 le motif d organisation de H11 ne voyait pas le mot-cle nu org= - corrige en H11b",
+    "77 la procedure d activation cloud cite trois artefacts inexistants - rectification datee en H11b",
+    "78 les champs de tete de latest.json etaient perimes du 2026-09-17 - corriges en H11b",
+    "82 README.md cite quatre serveurs MCP fantomes en -server.js",
+    "83 recensement : 189 chemins morts dans la documentation canonique, dont 119 dans docs/INDEX.md",
+    "90 - mediaman.service, mediaman.timer, mediaman-events.service et mediaman-events.timer ne sont pas installes sur la machine (LoadState=not-found). La chaine mediaman n est plus programmee, alors que le collecteur MCP a ecrit a 14h52 le 2026-09-20 : il reste a comprendre ce qui la declenche. Constate le 2026-09-20.",
+    "91 - quatre unites installees divergent de leur copie de reference au depot : calypso_direct.service, midnight-logsync.service, midnightrider-portal.service, midnight-logsync.timer. Constate le 2026-09-20.",
+    "92 - /home/aneto/.openclaw/workspace/docker-compose.yml declare un Signal K en conteneur avec restart: unless-stopped. C est de la que vient le conteneur orphelin, pas du guide comme je l avais affirme. Un docker compose up dans ce repertoire lancerait un second Signal K en concurrence du service systemd sur le port 3000. Constate le 2026-09-20.",
+    "93 - l historique git porte 3 104 Mo de logs/services/wit-ble-direct.log, 1 824 Mo de logs/debug/data-flow.log et 517 Mo de logs/services/calypso-direct.log, malgre .gitignore : un git add -f les a forces. 1 350 des 2 411 commits sont des logs: auto-update. 146 des 344 Mo sont des objets en vrac qu un git gc repackerait sans toucher a l historique. Constate le 2026-09-20."
+  ],
+  "next_steps": [
+    "revoke the InfluxDB Cloud token of SEC-2026-09-15-02",
+    "H3d: delete the two deactivated authorizations and the 3 unused Grafana-* tokens",
+    "H3d, after a day of observation: permanently delete the two deactivated authorizations and the three unused Grafana-* org-wide tokens",
+    "give Grafana a read-only token instead of the shared read+write one",
+    "defaut 36 : reparer ou retirer les deux cartes mortes de portal/index.html",
+    "defaut 37 : aligner les UID de grafana-dashboards/ avant tout deploiement",
+    "controle visuel du portail par Tailscale et en local apres H4e",
+    "defaut 39 : repointer TestGrafanaConfig sur docker-compose.yml",
+    "MediaMan 4E.2 : choisir le point d entree que mediaman.service doit executer",
+    "MediaMan : ecrire les tests de mediaman.py ou le retirer",
+    "MediaMan : implementer LocalLLMProvider / OpenClawGatewayProvider ou les retirer",
+    "defaut 63 : trancher l unite de course_over_ground_degrees",
+    "defaut 61 : brider scripts/commit-logs.sh (service en marche)"
+  ],
+  "previous_record": {
+    "task": "MediaMan Phase 2 - bounded-skew historical snapshot, from broken selectors to a real dry-run on production data",
+    "date": "2026-09-15T19:44:23Z",
+    "commit": "43faf7685431c322911dc449cf296745926b7f1c"
+  },
+  "second_incident": {
+    "id": "SEC-2026-09-15-02",
+    "what": "a second InfluxDB token, commented \"InfluxDB Cloud token\", was published in docs/guides/RESTORE.md; found by the H3b barrier run over all tracked files",
+    "fingerprint": "5e9d36294bf2a558",
+    "occurrences_redacted": 1,
+    "is_a_boat_credential": "no - matches none of the 10 local authorizations and is refused by the local InfluxDB",
+    "status": "REDACTED in the repository, NOT REVOKED - revocation in the InfluxDB Cloud console is owed and can only be done by Denis"
+  },
+  "third_incident": {
+    "id": "SEC-2026-09-16-03",
+    "what": "Grafana administrator credential and boat WiFi passphrase were published in docs/guides/RESTORE.md",
+    "status": "REDACTED dans l arbre courant : tableau des credentials (H3f) ET commande nmcli (H3g). NON CHANGE : la passphrase WiFi reste valide, risque accepte par Denis. Le compte administrateur Grafana a ete repris en main en H4b (la valeur publiee etait perimee). L acces anonyme en lecture reste ouvert : c est le seul point de securite encore ouvert ici.",
+    "repository_action": "Targeted field redaction, canonical host-name replacement, and v2 staged-secret barrier",
+    "note_on_values": "No credential value or credential fingerprint is stored in this record",
+    "note_on_the_wifi_value": "la valeur publiee est egale au nom de compte GitHub, donc presente dans les URL de clonage du depot : la masquer ne la rend pas secrete",
+    "grafana_admin_password": "la valeur publiee etait PERIMEE et n authentifiait rien (401 sur /api/user); un mot de passe administrateur connu a ete etabli le 2026-09-16T22:54:14Z et vit dans .env seulement",
+    "grafana_anonymous_access": "TOUJOURS ACTIF : lecture de tous les tableaux de bord sans aucun identifiant sur le reseau du bateau; seul vrai sujet restant, decision a prendre avec l effet sur portal/viewer.html"
+  },
+  "h3f_v2_attempt": {
+    "run_utc": "20260916T200024Z",
+    "previous_attempt": "H3f-v1 stopped before commit because its final guard classified a diagnostic fingerprint as a literal secret",
+    "correction": "Rebuilt RESTORE.md from clean HEAD and redacted only credential fields; public SSID/title text preserved",
+    "service_impact": "none"
+  },
+  "h3g": {
+    "run_utc": "20260916T201947Z",
+    "h3f_commit": "1d0d58a550868a329e83a7ac721c23373c8dbdae",
+    "what_h3f_missed": "la passphrase WiFi restait en clair dans l argument wifi-sec.psk de l etape 6",
+    "why": "verification limitee aux deux lignes du tableau, et barriere v2 exigeant : = ou | apres l etiquette",
+    "service_impact": "aucun"
+  },
+  "h4b": {
+    "run_utc": "20260916T225410Z",
+    "grafana_version": "12.3.1",
+    "method": "grafana-cli admin reset-admin-password dans le conteneur en fonctionnement",
+    "proof": "/api/user HTTP 200 login=admin; /api/admin/stats accessible; /api/org anonyme inchange",
+    "where_the_value_lives": ".env uniquement, non suivi par git",
+    "service_impact": "aucun redemarrage, aucune recreation"
+  },
+  "numbering_gaps": {
+    "note": "numeros annonces en conversation mais jamais ecrits dans le depot",
+    "27": "contenu non retrouvable dans le depot ; trou assume plutot que comble par invention",
+    "33": "connu et consigne en H4c"
+  },
+  "h4c": {
+    "run_utc": "20260916T231406Z",
+    "mode": "sonde en lecture seule, aucun service touche",
+    "iframe_portail": "BLOQUE",
+    "dashboards_lisibles_sans_identifiant": 5,
+    "defaut_33": "OUVERT",
+    "writes": "trois journaux et .gitignore uniquement"
+  },
+  "h4d": {
+    "run_utc": "20260916T235020Z",
+    "partie_A": "registre + scanner",
+    "defaut_33": "CORRIGE",
+    "tunnel_cloudflare": "ABSENT",
+    "tableau_temoin": "03-performance",
+    "partie_B": "acces anonyme ferme, embarquement iframe rendu effectif",
+    "anonyme_apres": "HTTP 401",
+    "x_frame_options_apres": "aucun",
+    "methode": "variables d environnement dans docker-compose.yml ; aucun fichier remonte sur /etc/grafana/grafana.ini",
+    "conteneur": "grafana recree seul (--no-deps) ; influxdb et signalk intacts"
+  },
+  "h4e": {
+    "run_utc": "20260917T000404Z",
+    "tailscale": "ACTIF",
+    "correctif": "portal/index.html, viewer.html et mcp.html suivent l hote d arrivee",
+    "adresse_figee": "aucune ; conforme a SYSTEM-SUMMARY.md section 11",
+    "services_touches": "aucun ; le portail relit ses fichiers a chaque requete"
+  },
+  "h5a": {
+    "run_utc": "20260917T004517Z",
+    "etape": "4E.1 - joint du pipeline evenementiel",
+    "modules_ajoutes": [
+      "mediaman/snapshot_store.py",
+      "mediaman/event_pipeline.py"
+    ],
+    "tests_mediaman": 461,
+    "tests_mcp": 41,
+    "suite_complete_code_retour": 0,
+    "systemd": "aucune unite modifiee",
+    "telegram": "aucun envoi",
+    "dry_run": "impose par construction"
+  },
+  "h5b": {
+    "phase": "H5b - MediaMan etape 4E.2 : point d entree du pipeline evenementiel",
+    "script_version": "h5b-v2",
+    "executed_at": "2026-09-17T01:40:59Z",
+    "status": "SUCCESS",
+    "files_created": [
+      "mediaman/event_entrypoint.py",
+      "tests/mediaman/test_event_entrypoint.py",
+      "etc/systemd/system/mediaman-events.service",
+      "etc/systemd/system/mediaman-events.timer"
+    ],
+    "files_modified": [
+      "mediaman/event_pipeline.py",
+      "docs/ARCHITECTURE-MASTER.md",
+      "logs/latest.json",
+      "logs/oc-actions.log",
+      "logs/debug/audit-influx-tokens-2026-09-15.md"
+    ],
+    "units_installed": false,
+    "units_enabled": false,
+    "mediaman_service_touched": false,
+    "telegram_sent": false,
+    "llm_invoked": false,
+    "dry_run_enforced": true,
+    "tests_mediaman": 501,
+    "tests_mcp": 41,
+    "tests_new_file": 40,
+    "defaut_46": "CORRIGE - chaine evenementielle desormais journalisee",
+    "defaut_46_preuve": "1 ligne(s) de mediaman.event_orchestrator dans le journal de l execution de controle",
+    "defaut_47": "RETIRE - affirmation fausse de l assistant, fondee sur des fichiers corrompus par un quota d API GitHub epuise",
+    "defaut_47_mesure_reelle": "2 fichiers de test dedies (test_runtime_entrypoint.py, test_staging_activation.py) ; 21 lignes de code differentes entre runtime_entrypoint et staging_activation : ce ne sont PAS des clones",
+    "defaut_48": "ANNULE - la mesure montre 21 lignes de difference, il n y a pas de duplication a trancher",
+    "defaut_49": "OUVERT - tests/mediaman/test_historical_request.py::TestHistoricalRequestValidation::test_future_timestamp_rejected echouait a 01:32Z alors que la suite etait entierement verte a 00:45Z, sans changement dans cette zone",
+    "defaut_44": "OUVERT - le point d entree de mediaman.service produit toujours un article factice",
+    "protecthome_hypothesis": "BLOQUE - mesure par portee systemd transitoire : avec ProtectHome=yes et WorkingDirectory sous /home, l execution echoue. mediaman.service, si elle etait activee, echouerait avant tout ExecStart. systemd-analyze verify ne detecte pas ce cas.",
+    "notes": [
+      "Additif par construction : mediaman.service et mediaman/mediaman.py intacts, verifie par git diff avant commit.",
+      "Unites livrees desactivees ; aucune installation dans /etc.",
+      "L etat du mode selftest est cloisonne pour ne jamais contaminer les mesures reelles.",
+      "h5b-v1 s est arrete en STEP 5 : le script supposait un commit_chain de type objet alors qu il est d un autre type. Corrige en lisant la forme reelle."
+    ]
+  },
+  "last_updated": "2026-09-20T20:18:52",
+  "h5c": {
+    "phase": "H5c - defaut 49 : test instable une fois sur six",
+    "script_version": "h5c-v1",
+    "executed_at": "2026-09-17T02:12:44Z",
+    "status": "SUCCESS",
+    "files_created": [
+      "tests/mediaman/test_no_fragile_datetime_arithmetic.py"
+    ],
+    "files_modified": [
+      "tests/mediaman/test_historical_request.py",
+      "docs/ARCHITECTURE-MASTER.md",
+      "logs/latest.json",
+      "logs/oc-actions.log",
+      "logs/debug/audit-influx-tokens-2026-09-15.md"
+    ],
+    "tests_mediaman": 506,
+    "tests_mcp": 41,
+    "defaut_49": "CORRIGE",
+    "defaut_49_mecanisme": "datetime.replace(second=...+N) remplace un CHAMP sans arithmetique : au-dela de 59 il leve ValueError. Echec sur 10 secondes sur 60, soit 16,7 % des executions, depuis la creation du test.",
+    "defaut_49_portee": "1 occurrence(s) du motif trouvee(s) dans tests/ ; la classe entiere a ete corrigee, pas la seule occurrence connue",
+    "defaut_49_preuve": "test execute 6 fois dans la fenetre des secondes 48-59, celle qui echouait, sans aucun echec",
+    "defaut_49_garde": "tests/mediaman/test_no_fragile_datetime_arithmetic.py echoue si le motif reapparait",
+    "consequence": "Les annonces de suite entierement verte des phases precedentes etaient en partie dues au hasard de l horloge.",
+    "services_touched": [],
+    "notes": [
+      "Aucun service, aucune unite, aucun conteneur touche : seuls des tests.",
+      "Les champs month et year sont volontairement exclus du garde : ce ne sont pas des durees fixes."
+    ]
+  },
+  "h5d": {
+    "phase": "H5d - mediaman.service etait inexecutable",
+    "script_version": "h5d-v1",
+    "executed_at": "2026-09-17T02:34:48Z",
+    "status": "SUCCESS",
+    "files_modified": [
+      "etc/systemd/system/mediaman.service",
+      "tests/mediaman/test_no_fragile_datetime_arithmetic.py",
+      "docs/ARCHITECTURE-MASTER.md",
+      "logs/latest.json",
+      "logs/oc-actions.log",
+      "logs/debug/audit-influx-tokens-2026-09-15.md"
+    ],
+    "tests_mediaman": 508,
+    "tests_mcp": 41,
+    "protecthome": "CORRIGE - yes -> no",
+    "protecthome_mecanisme": "ProtectHome=yes remplace /home par un tmpfs vide dans l espace de noms ; le WorkingDirectory de l unite est sous /home, donc l unite echouait avant son ExecStart. systemd-analyze verify ne signale rien : visible seulement a l execution.",
+    "protecthome_matrice": {
+      "A_unite_telle_quelle": "ECHEC",
+      "B_protecthome_no": "PASSE",
+      "C_protecthome_absent": "PASSE",
+      "D_sans_protectsystem": "ECHEC",
+      "E_sans_readwritepaths": "ECHEC",
+      "F_protecthome_readonly": "PASSE",
+      "G_fichier_corrige_relu": "PASSE"
+    },
+    "execstart_reel_code_sortie": 1,
+    "defaut_50": "CORRIGE - motif elargi a toute variable et a la soustraction",
+    "units_installed": false,
+    "units_enabled": false,
+    "services_touched": [],
+    "notes": [
+      "Aucune unite copiee dans /etc, aucune unite activee, aucun service demarre.",
+      "Les portees systemd-run sont transitoires et disparaissent d elles-memes.",
+      "Le code de sortie du vrai ExecStart est rapporte tel quel : il concerne le defaut 44, pas H5d.",
+      "Effet de bord assume : /var/lib/mediaman et /var/log/mediaman ont ete crees par systemd pendant les sondes, exactement comme l unite les aurait crees."
+    ]
+  },
+  "h6a": {
+    "phase": "H6a - reconnaissance en lecture seule de la chaine historique",
+    "script_version": "h6a-v1",
+    "executed_at": "2026-09-17T02:59:26Z",
+    "status": "SUCCESS",
+    "verdict_donnees": "FAITS_MANQUANTS",
+    "as_of_retenu": "2026-09-17T01:59:24Z",
+    "racing_js_verdict": "ERREUR",
+    "racing_js_skew_ms": "n/d",
+    "historical_entrypoint_exit_code": 1,
+    "instants_testes": 0,
+    "instants_4_faits": 0,
+    "instants_sous_1000ms": 0,
+    "constat_couverture": "test_historical_e2e_offline.py remplace MCPClient ET MCPCollector par des doublures : la chaine reelle n avait jamais ete executee avant H6a.",
+    "defaut_51": "CORRIGE - tableau de la doc relu depuis la matrice mesuree",
+    "services_touched": [],
+    "units_installed": false,
+    "units_enabled": false
+  },
+  "h6c": {
+    "phase": "H6c - defaut 58 : racing.js ne filtre pas le contexte",
+    "script_version": "h6c-v1",
+    "executed_at": "2026-09-17T03:27:07Z",
+    "status": "SUCCESS",
+    "defaut_58": "racing.js ligne 322 interroge navigation.position sans filtre de contexte ; group() effondre toutes les series AIS et AtoN et last() renvoie le point le plus recent quel qu en soit l emetteur",
+    "contexte_bateau": "vessels.urn:mrn:signalk:uuid:fdcfc5d2-9e90-401f-8b9c-1b80dd9ee72f",
+    "reponses_polluees": "1/1",
+    "skew_contexte_filtre": "EXPLOITABLE",
+    "instants_acceptes_fenetre_60s": 12,
+    "instants_acceptes_fenetre_300s": 11,
+    "consequence_jalon_2026_09_15": "le premier instantane historique COMPLETE avec bounded_skew_ms=1 a ete obtenu avec la requete non filtree : a rejouer avant d etre considere comme acquis",
+    "mystere_cardinalite_resolu": "18456 series = une par emetteur AIS, pas un bogue Influx",
+    "services_touched": [],
+    "units_installed": false,
+    "units_enabled": false
+  },
+  "history": [
+    {
+      "task": "H7a - sonde Flux unique et retractations",
+      "version": "h7a-v3",
+      "timestamp": "2026-09-17T20:38:09Z",
+      "status": "SUCCESS",
+      "read_only_influx": true,
+      "production_code_modified": false,
+      "files_created": [
+        "tools/fluxprobe.py",
+        "tests/tools/test_fluxprobe.py",
+        "logs/debug/RETRACTATIONS.md",
+        "logs/debug/etalonnage-fluxprobe-2026-09-17.md"
+      ],
+      "files_modified": [
+        "logs/debug/contexte-ais-2026-09-17.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "tests": "VERT",
+      "calibration": "4/4",
+      "defect_60_verdict": "CONFIRME (8/8 reponses ou rows[0] n est pas le plus recent)",
+      "retracted": [
+        55,
+        56,
+        59,
+        60
+      ],
+      "still_open": [
+        44,
+        52,
+        53,
+        54,
+        58
+      ]
+    },
+    {
+      "task": "H7d - documentation : etat UM982, dedoublonnage section 8, collision SYSTEM-SUMMARY",
+      "version": "h7d-v2",
+      "timestamp": "2026-09-17T21:43:29Z",
+      "status": "ABORTED",
+      "production_code_modified": false,
+      "services_touched": [],
+      "files_modified": [],
+      "files_renamed": {
+        "docs/SYSTEM-SUMMARY.md": "docs/SYSTEM-OVERVIEW-1PAGE.md"
+      },
+      "files_created": [
+        "logs/debug/architecture-master-numerotation-2026-09-17.md"
+      ],
+      "facts": {
+        "um982_connected": false,
+        "um982_status_date": "2026-09-17",
+        "position_sources": [
+          "N2K.1",
+          "N2K.2"
+        ],
+        "position_source_hardware": "two B&G Vulcan 7 FS chartplotters",
+        "section8_duplicate_copies_removed": 4
+      },
+      "deferred": [
+        "renumerotation ARCHITECTURE-MASTER (voir logs/debug/architecture-master-numerotation-2026-09-17.md)"
+      ],
+      "still_open": [
+        44,
+        52,
+        53,
+        54,
+        58
+      ],
+      "correction": {
+        "corrected_on": "2026-09-17T22:50:37Z",
+        "corrected_by": "h7d-v4",
+        "why": "cette entree a ete publiee par le job d auto-commit de 15 minutes (commit 80f3980) alors que h7d-v2 s etait arretee a son etape 8 sans commiter. Elle declarait SUCCESS et listait des fichiers absents du commit.",
+        "actually_published_by_80f3980": [
+          "docs/SYSTEM-SUMMARY.md -> docs/SYSTEM-OVERVIEW-1PAGE.md (renommage seul, sans le bandeau)",
+          "logs/debug/architecture-master-numerotation-2026-09-17.md",
+          "logs/latest.json",
+          "logs/oc-actions.log"
+        ],
+        "claimed_but_not_published": [
+          "docs/ARCHITECTURE-MASTER.md",
+          "docs/HARDWARE/UM982-GNSS-DATASHEET.md",
+          "docs/INTEGRATION/UM982-INTEGRATION-GUIDE.md",
+          "docs/SIGNALK-PLUGINS-INVENTORY.md",
+          "SYSTEM-SUMMARY.md"
+        ],
+        "consequence": "4 references cassees sur main jusqu a h7d-v4"
+      }
+    },
+    {
+      "task": "H7d - documentation : etat UM982, dedoublonnage section 8, achevement du renommage publie a moitie",
+      "version": "h7d-v4",
+      "timestamp": "2026-09-17T22:50:37Z",
+      "status": "SUCCESS",
+      "parent": "80f3980912be16616f300017ca00d76e5be90617",
+      "production_code_modified": false,
+      "services_touched": [],
+      "files_modified": [
+        "README.md",
+        "docs/INDEX.md",
+        "docs/ARCHITECTURE-MASTER.md",
+        "docs/HARDWARE/UM982-GNSS-DATASHEET.md",
+        "docs/INTEGRATION/UM982-INTEGRATION-GUIDE.md",
+        "docs/SIGNALK-PLUGINS-INVENTORY.md",
+        "docs/SYSTEM-OVERVIEW-1PAGE.md",
+        "SYSTEM-SUMMARY.md",
+        "logs/debug/architecture-master-numerotation-2026-09-17.md"
+      ],
+      "facts": {
+        "um982_connected": false,
+        "um982_status_date": "2026-09-17",
+        "position_sources": [
+          "N2K.1",
+          "N2K.2"
+        ],
+        "position_source_hardware": "two B&G Vulcan 7 FS chartplotters",
+        "position_source_caveat": "either chartplotter may be switched off - no source may be pinned",
+        "section8_duplicate_copies_removed": 4,
+        "broken_references_repaired": 5,
+        "broken_references_that_were_relative": 3
+      },
+      "defects_recorded": [
+        "61 le job d auto-commit de 15 minutes publie l index laisse par un script abandonne, journaux compris - a l origine du commit 80f3980 et, plus tot, de SEC-2026-09-14-01"
+      ],
+      "deferred": [
+        "renumerotation ARCHITECTURE-MASTER (voir logs/debug/architecture-master-numerotation-2026-09-17.md)",
+        "20 liens relatifs casses dans docs/INDEX.md, anterieurs, meme fichier de constat",
+        "defaut 61 : faire refuser au job d auto-commit tout index contenant autre chose que logs/"
+      ],
+      "still_open": [
+        44,
+        52,
+        53,
+        54,
+        58,
+        61
+      ]
+    },
+    {
+      "task": "H7e - retrait documente de midnight-logsync",
+      "version": "h7e-v1",
+      "timestamp": "2026-09-17T23:04:22Z",
+      "status": "SUCCESS",
+      "parent": "8120f3c481e87b801569792c8d135a065f05f013",
+      "production_code_modified": false,
+      "services_touched": [],
+      "systemd_change_applied_by_denis_before_this_commit": [
+        "sudo systemctl disable --now midnight-logsync.timer"
+      ],
+      "files_modified": [
+        "etc/systemd/system/midnight-logsync.service",
+        "etc/systemd/system/midnight-logsync.timer",
+        "etc/systemd/system/README.md",
+        "logs/debug/timers-systemd-2026-09-17.md"
+      ],
+      "facts": {
+        "logsync_ever_worked": false,
+        "logsync_failure": "status=200/CHDIR - WorkingDirectory /home/pi/midnightrider-navigation inexistant",
+        "logsync_failures_per_day": 480,
+        "logs_committed_by": "scripts/commit-logs.sh via midnight-logs-commit.timer (15 min)",
+        "coverage_loss": "none - verified at runtime against LOG_PATHS",
+        "logs_commit_timer_untouched": true
+      },
+      "defects_recorded": [
+        "62 le tableau de etc/systemd/system/README.md ne correspond plus au contenu du dossier"
+      ],
+      "deferred": [
+        "defaut 61 : brider scripts/commit-logs.sh pour qu il desindexe tout ce qui n est pas sous logs/ au lieu de le publier",
+        "defaut 62 : remise a plat du tableau des unites systemd",
+        "22 liens relatifs morts dans la documentation",
+        "renumerotation ARCHITECTURE-MASTER"
+      ],
+      "still_open": [
+        44,
+        52,
+        53,
+        54,
+        58,
+        61,
+        62
+      ]
+    },
+    {
+      "task": "H8a - defaut 58 : filtre de contexte de racing.js",
+      "version": "h8a-v2",
+      "timestamp": "2026-09-18T00:31:18Z",
+      "status": "SUCCESS",
+      "parent": "6c7bfa327c9d8193c71406cdb99b3c1e6ffe7a65",
+      "content_sha": "8919130fe36e82dd66e8eb07a073e26234f48a9e",
+      "production_code_modified": true,
+      "services_touched": [],
+      "files_modified": [
+        "mcp/servers/racing.js",
+        "tests/mcp/test_defaut_58_context_filter.py",
+        "logs/debug/timers-systemd-2026-09-17.md",
+        "logs/debug/defaut-58-filtre-contexte-2026-09-17.md"
+      ],
+      "change": "une ligne ajoutee dans la requete Flux : |> filter(fn: (r) => r.self == \"true\"), placee entre le filtre _field et keep() qui detruit le tag self",
+      "measured_before_writing": {
+        "window": "300 s finissant a 2026-09-07T14:36:25Z",
+        "facts_from_ais_target_before_fix": 4,
+        "ais_context": "vessels.urn:mrn:imo:mmsi:368111560",
+        "boat_context": "vessels.urn:mrn:signalk:uuid:fdcfc5d2-9e90-401f-8b9c-1b80dd9ee72f",
+        "self_tag_values": [
+          "true"
+        ],
+        "ais_rows_carry_self_tag": false,
+        "our_rows_lost_by_the_filter": 0,
+        "source_tags_per_nav_path": [
+          "N2K.0",
+          "N2K.1",
+          "N2K.2"
+        ]
+      },
+      "tests": {
+        "new_file": "tests/mcp/test_defaut_58_context_filter.py",
+        "new_tests": 6,
+        "result_new": "6 passed",
+        "result_tests_mcp_suite": "47 passed",
+        "offline_rehearsal": "4 des 6 tests echouent sur le code d avant le correctif, les 6 passent apres"
+      },
+      "rectifications_h7e": [
+        "logs/debug/timers-systemd-2026-09-17.md : LOG_PATHS cite dans le mauvais ordre - remplace par l ordre reel de la ligne 17",
+        "logs/debug/timers-systemd-2026-09-17.md : message de 80f3980 cite avec 43 insertions au lieu de 97 - remplace par le message relu",
+        "commit_chain : les SHA de contenu de H7d et H7e manquaient - ajoutes"
+      ],
+      "defects_recorded": [
+        "63 racing.js publie course_over_ground_degrees mais la valeur est en radians, telle que Signal K la stocke - aucune conversion dans le code, contrat publie, arbitrage requis"
+      ],
+      "deferred": [
+        "defaut 63 : unite du cap sur le fond (contrat publie)",
+        "jalon MediaMan du 2026-09-15 (f79abaf5ba15) a rejouer",
+        "defaut 61 : brider scripts/commit-logs.sh",
+        "defaut 62 : Deployment Checklist de etc/systemd/system/README.md",
+        "22 liens relatifs morts dans la documentation"
+      ],
+      "version_correction": "l entree indiquait h8a-v1 ; c est h8a-v2 qui a ete executee, v1 s etant arretee sur sa propre barriere de mesure - count() supprime la colonne _time, que latest_row() exige. Rectifie en H8b."
+    },
+    {
+      "task": "H8b - rejeu du jalon du 2026-09-15 avec racing.js corrige",
+      "version": "h8b-v1",
+      "timestamp": "2026-09-18T14:16:59Z",
+      "status": "SUCCESS",
+      "parent": "ca11c26d1b1f869745dfcabc43255c45a90630e1",
+      "content_sha": "1fa2853f91f1925c96a0972e57553f656fd1cb43",
+      "services_touched": [],
+      "influxdb_writes": 0,
+      "telegram_access": false,
+      "files_modified": [
+        "docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md",
+        "logs/debug/defaut-58-filtre-contexte-2026-09-17.md",
+        "mcp/servers/racing.js",
+        "tests/mcp/test_defaut_58_context_filter.py"
+      ],
+      "replay": {
+        "as_of": "2026-09-07T14:36:26Z",
+        "window_seconds": 60,
+        "dry_run": true,
+        "result": "SUCCESS",
+        "publication_id": "b36f4233caab5c1d794e184823f75031487a462754ef1a66fcfc671f81650e6f"
+      },
+      "measured": {
+        "facts_from_ais_before": 4,
+        "facts_changed": 4,
+        "distance_nm": 11.04,
+        "our_sources_in_window": {
+          "navigation.position": [
+            "N2K.1",
+            "N2K.2"
+          ],
+          "navigation.speedOverGround": [
+            "N2K.1",
+            "N2K.2"
+          ],
+          "navigation.courseOverGroundTrue": [
+            "N2K.1",
+            "N2K.2"
+          ]
+        },
+        "contexts_sharing_our_filtered_timestamp": 1,
+        "measurement_method_error": "ce comptage portait sur NOTRE horodatage gagnant apres filtrage et non sur l instant que l ANCIENNE requete retenait : il ne repondait pas a la question posee. Refait par H8c, entree suivante. Le message du commit 1fa2853f91f1925c96a0972e57553f656fd1cb43 affirme de plus la conclusion inverse de celle qui a ete ecrite dans les documents : conclusion redigee avant la mesure."
+      },
+      "tests": {
+        "defect_58": "6 passed",
+        "tests_mcp": "47 passed"
+      },
+      "redaction": "coordonnees du bateau retirees de TROIS fichiers - mcp/servers/racing.js, logs/debug/defaut-58-filtre-contexte-2026-09-17.md et tests/mcp/test_defaut_58_context_filter.py, ou les valeurs sont remplacees par des valeurs fictives : la politique du depot est que les valeurs de faits n y sont pas consignees. Elles restent dans l historique du commit 8919130, qui ne se reecrit pas.",
+      "corrections": [
+        "entree h8a : version h8a-v1 rectifiee en h8a-v2",
+        "note ajoutee au constat du defaut 58 : N2K.0 est le recepteur AIS, pas un instrument du bord ; defaut 64 retracte, jamais ecrit au depot"
+      ],
+      "deferred": [
+        "defaut 63 : unite de course_over_ground_degrees (contrat publie)",
+        "defaut 61 : brider scripts/commit-logs.sh",
+        "defaut 62 : Deployment Checklist systemd",
+        "SEC-2026-09-14-01 : revocation de l ancien jeton InfluxDB",
+        "22 liens relatifs morts"
+      ],
+      "journal_commit": "b6b7c1cc851cfd93637163cfffda73be9ba8f4f1",
+      "journal_files": [
+        "logs/debug/jalon-rejeu-2026-09-18.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "rectified_by": "h8c-v1, 2026-09-18T16:42:30Z"
+    },
+    {
+      "task": "H8c - mesure de l egalite d horodatage au bon instant et rectification de H8b",
+      "version": "h8c-v1",
+      "timestamp": "2026-09-18T16:42:30Z",
+      "status": "SUCCESS",
+      "parent": "b6b7c1cc851cfd93637163cfffda73be9ba8f4f1",
+      "content_sha": "5cf6d029e4af8e0d44f568ea89e26bff4e7df20e",
+      "services_touched": [],
+      "influxdb_writes": 0,
+      "telegram_access": false,
+      "code_modified": false,
+      "files_modified": [
+        "docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md"
+      ],
+      "journal_files": [
+        "logs/debug/jalon-rejeu-2026-09-18.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "question": "sur la fenetre du jalon, plusieurs lignes partageaient-elles l instant que l ancienne requete (sans filtre de contexte) retenait ? Si oui, le last() de Flux tranchait arbitrairement et le jalon est inverifiable plutot que prouve faux.",
+      "measured": {
+        "window_seconds": 60,
+        "as_of": "2026-09-07T14:36:26Z",
+        "recorded_source_timestamp": "2026-09-07T14:36:24.298Z",
+        "facts_measured": 4,
+        "facts_total": 4,
+        "facts_won_by_ais": 4,
+        "facts_with_tie": 0,
+        "max_rows_at_winning_instant": 1,
+        "facts_matching_recorded_timestamp": 2,
+        "facts_where_our_row_shared_the_instant": 0,
+        "per_fact": {
+          "latitude": {
+            "old_winning_time": "2026-09-07T14:36:24.298Z",
+            "old_winning_context_is_ais": true,
+            "rows_at_that_instant": 1,
+            "contexts_at_that_instant": 1,
+            "ais_contexts_at_that_instant": 1,
+            "our_row_at_that_instant": false,
+            "equals_recorded_source_timestamp": true
+          },
+          "longitude": {
+            "old_winning_time": "2026-09-07T14:36:24.298Z",
+            "old_winning_context_is_ais": true,
+            "rows_at_that_instant": 1,
+            "contexts_at_that_instant": 1,
+            "ais_contexts_at_that_instant": 1,
+            "our_row_at_that_instant": false,
+            "equals_recorded_source_timestamp": true
+          },
+          "speed_over_ground": {
+            "old_winning_time": "2026-09-07T14:36:24.297Z",
+            "old_winning_context_is_ais": true,
+            "rows_at_that_instant": 1,
+            "contexts_at_that_instant": 1,
+            "ais_contexts_at_that_instant": 1,
+            "our_row_at_that_instant": false,
+            "equals_recorded_source_timestamp": false
+          },
+          "course_over_ground": {
+            "old_winning_time": "2026-09-07T14:36:24.297Z",
+            "old_winning_context_is_ais": true,
+            "rows_at_that_instant": 1,
+            "contexts_at_that_instant": 1,
+            "ais_contexts_at_that_instant": 1,
+            "our_row_at_that_instant": false,
+            "equals_recorded_source_timestamp": false
+          }
+        }
+      },
+      "verdict": "Remeasured on 2026-09-18 at the instant the unfiltered query actually selected: exactly one row existed there for each of the 4 facts, so that query was deterministic. Replayed against the same dataset, frozen since 2026-09-07, it returned an AIS context for 4 of the 4 facts. The 2026-09-15 output is therefore wrong, not merely unverifiable. For 2 of the 4 facts that instant is the source_timestamp recorded on 2026-09-15.",
+      "tests": {
+        "defect_58": "6 passed"
+      },
+      "corrections": [
+        "entree h8b : files_modified rectifie - il omettait tests/mcp/test_defaut_58_context_filter.py et citait logs/debug/jalon-rejeu-2026-09-18.md, qui appartient au commit de journal",
+        "entree h8b : journal_commit et journal_files ajoutes, caviardage porte a trois fichiers, comptage d horodatage renomme et son erreur de methode consignee",
+        "commit_chain : h8a_journal insere apres h8a_content",
+        "commit_chain : h8b_journal insere apres h8b_content",
+        "commit_chain : h8c_content ajoute en fin de chaine"
+      ],
+      "lesson": "aucune prose ecrite d avance - message de commit, titre de section, ligne de journal - ne doit affirmer une conclusion qui depend d une mesure : elle doit etre engendree depuis le resume de mesure, ou rester neutre. Une mesure doit en outre porter sur l instant exact de la question posee.",
+      "deferred": [
+        "defaut 63 : unite de course_over_ground_degrees (contrat publie)",
+        "defaut 61 : brider scripts/commit-logs.sh",
+        "defaut 62 : Deployment Checklist systemd",
+        "SEC-2026-09-14-01 : revocation de l ancien jeton InfluxDB",
+        "22 liens relatifs morts"
+      ]
+    },
+    {
+      "task": "H8d - defaut 63 : le cap publie en degres vrais et les unites declarees",
+      "version": "h8d-v1",
+      "timestamp": "2026-09-18T17:28:11Z",
+      "status": "SUCCESS",
+      "parent": "2a02632084c7e37d34d3305ad87969a02ea6c25e",
+      "content_sha": "36d2641c5cb2ef3b3963d45a57326f85fc295013",
+      "services_touched": [],
+      "services_restarted": [],
+      "influxdb_writes": 0,
+      "telegram_access": false,
+      "code_modified": true,
+      "files_modified": [
+        "mcp/servers/racing.js",
+        "mediaman/mcp_collector.py",
+        "tests/mcp/test_defaut_63_cog_degres.py",
+        "tests/mcp/test_defaut_58_context_filter.py",
+        "tests/mcp/test_phase2_historical_contract.py",
+        "docs/DECISIONS/MEDIAMAN-HISTORICAL-DRY-RUN.md"
+      ],
+      "journal_files": [
+        "logs/debug/defaut-63-cap-en-degres-2026-09-18.md",
+        "logs/latest.json",
+        "logs/oc-actions.log"
+      ],
+      "arbitration": "Denis, 2026-09-18 : convertir dans racing.js, garder la cle course_over_ground_degrees, declarer les unites",
+      "measured": {
+        "measurement": "navigation.courseOverGroundTrue",
+        "days_probed": 365,
+        "cog_min_radians": 0.0,
+        "cog_max_radians": 6.2814,
+        "max_degrees": 359.89770943347526,
+        "rows_total": 4078141,
+        "rows_above_two_pi": 0,
+        "rows_nonzero": 3626071,
+        "sample_time": "2026-09-07T14:36:23.698Z",
+        "sample_radians": 1.7523,
+        "sample_degrees": 100.39939444077416
+      },
+      "tests": {
+        "defect_63": "8 passed",
+        "defect_58": "6 passed",
+        "tests_mcp": "55 passed",
+        "tests_mediaman": "511 passed"
+      },
+      "deployed_copy": "aucune",
+      "not_proven": "le jeu de donnees est fige depuis le 2026-09-07 et notre cap valait 0 sur la fenetre du jalon : aucun rejeu ne peut montrer la difference, 0 radian valant 0 degre. La preuve repose sur le domaine mesure et sur les huit tests.",
+      "corrections": [
+        "defaut 63 ferme",
+        "defaut 65 ouvert : chemin temps reel mort",
+        "commit_chain : h8c_journal insere apres h8c_content",
+        "commit_chain : h8d_content ajoute en fin de chaine"
+      ],
+      "deferred": [
+        "defaut 61 : brider scripts/commit-logs.sh",
+        "defaut 62 : Deployment Checklist systemd",
+        "defaut 65 : chemin temps reel mort du collecteur",
+        "SEC-2026-09-14-01 : revocation de l ancien jeton InfluxDB",
+        "22 liens relatifs morts"
+      ]
+    },
+    {
+      "task": "H9 - un seul chemin de collecte",
+      "version": "h9-v1",
+      "started_utc": "20260918T200114Z",
+      "finished_utc": "2026-09-18T20:02:45Z",
+      "content_commit": "019c4ef6c13938885d54fb8bafd4e2484c2b6f73",
+      "parent": "e64f3ca5b51a83ed74772346c86fcbc02a003dc6",
+      "status": "SUCCESS",
+      "decided_by": "Denis, 2026-09-18 : maintenir les deux usages, architecture la plus proche possible",
+      "engine": "collectSnapshot(startUtc, endUtc) - unique, verifie par test",
+      "doors": [
+        "get_historical_snapshot(as_of_utc, window_seconds)",
+        "get_snapshot(start_utc, end_utc)"
+      ],
+      "legitimate_differences": [
+        "qui choisit la borne haute",
+        "limite de fraicheur (None en historique)"
+      ],
+      "tests": {
+        "h9 - chemin unique (serveur)": "============================== 13 passed in 8.07s ==============================",
+        "h9 - collect_current (collecteur)": "============================== 16 passed in 0.30s ==============================",
+        "defaut 58 - filtre de contexte": "============================== 6 passed in 6.49s ===============================",
+        "defaut 63 - cap en degres": "============================== 8 passed in 5.36s ===============================",
+        "suite tests/mcp": "============================= 68 passed in 39.46s ==============================",
+        "suite tests/mediaman": "======================= 495 passed, 2 warnings in 21.88s ======================="
+      },
+      "removed": {
+        "mcp_collector.collect_and_helpers_lines": 235,
+        "tests/mediaman/test_mcp_collector.py": "627 lignes, 32 tests, tous sur le chemin mort",
+        "properties_ported": 8
+      },
+      "caught_before_shipping": "racing.get_snapshot manquait dans la liste blanche de mcp_client.py ; les faux clients des tests ne l auraient pas signale",
+      "not_proven": "aucune donnee ingeree depuis 2026-09-07T14:36:24Z : collect_current ne peut pas etre verifie de bout en bout sur le Pi tant que le bateau ne navigue pas. La preuve repose sur le banc d essai reference_time, qui execute le code du direct sur des donnees reellement enregistrees.",
+      "no_service_restarted": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H9b - la documentation canonique doit pointer vers ce qui existe",
+      "version": "h9b-v1",
+      "started_utc": "20260918T213737Z",
+      "finished_utc": "2026-09-18T21:38:44",
+      "content_commit": "42b63390402c73e0b63f84921584da934681f412",
+      "parent": "f59411b5a12c6bb3cfe5d9f979060d95a2b69d5c",
+      "status": "SUCCESS",
+      "root_cause_addressed": "la section 4.7 certifiait Verified trois outils que le serveur n a jamais declares ; le defaut 65 a probablement survecu la",
+      "dead_pointers_fixed": 6,
+      "guard_added": "tests/mcp/test_h9b_coherence_doc_code.py",
+      "guard_proven": "executee sur le depot avant correction : 3 des 6 tests echouent",
+      "tests": {
+        "h9b-garde": "============================== 6 passed in 0.09s ===============================",
+        "suite-mcp": "============================= 74 passed in 39.44s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 21.65s ======================="
+      },
+      "not_done": [
+        "defaut 67 - harnais test-all-mcp.js mort, trois renvois faux",
+        "defaut 68 - validation de capacites asymetrique",
+        "les 41 lignes horodatees avec Z ne sont pas reecrites, un journal append-only ne se recrit pas"
+      ],
+      "foreign_work_present": true,
+      "foreign_work_untouched": true,
+      "no_service_restarted": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H11 - la chaine est au repos, pas cassee",
+      "version": "h11-v1",
+      "started_utc": "20260918T220632Z",
+      "finished_utc": "2026-09-18T22:07:39",
+      "content_commit": "0d4b94a509be2b3fd06fca4f0134b82934060665",
+      "parent": "d5bba0054b9e49aa64d28c9b3674a3ccf64f0f75",
+      "status": "SUCCESS",
+      "question_resolue": "l arret d ingestion du 2026-09-07 n est pas une panne : bateau a quai, instruments eteints, confirme par Denis",
+      "ingestion_state": "idle_by_design",
+      "last_data_point_utc": "2026-09-07T13:42:57Z",
+      "defects_opened": [
+        69,
+        70,
+        71,
+        72,
+        73
+      ],
+      "defects_closed": [
+        74
+      ],
+      "guard_extended": "noms de bucket et d organisation cites dans la documentation",
+      "guard_proven": "executee avant correction : 3 des 9 tests echouent",
+      "manual_count_vs_guard": "comptage manuel 2 occurrences, barriere 6 plus une organisation",
+      "tests": {
+        "barriere": "============================== 9 passed in 0.20s ===============================",
+        "suite-mcp": "============================= 77 passed in 39.55s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 21.75s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H11b - la barriere ne voyait pas ce qu elle mesurait",
+      "version": "h11b-v1",
+      "started_utc": "20260918T223328Z",
+      "finished_utc": "2026-09-18T22:34:36",
+      "content_commit": "94e6f3f7397f7eef805c3c765aa1bf3a50b21f00",
+      "parent": "d8933d99dc3d8e74fb526aa9b840b088f61b7f50",
+      "status": "SUCCESS",
+      "retraction": "H11 a affiche BUCKETS_FANTOMES_RESTANTS=0 et declare le defaut 74 ferme alors que ses motifs ne voyaient ni INFLUX_DB_BUCKET ni le mot-cle nu org= ; un bucket et six organisations restaient faux",
+      "values_fixed": 7,
+      "guard_extended": "motifs elargis, variables exclues, detecteur teste sur echantillons",
+      "guard_proven": "executee avant correction : elle tombe sur les deux points",
+      "guard_tests": "9 -> 12",
+      "defects_opened": [
+        75,
+        76,
+        77,
+        78
+      ],
+      "defects_closed": [
+        74
+      ],
+      "tests": {
+        "barriere": "============================== 12 passed in 0.34s ==============================",
+        "suite-mcp": "============================= 80 passed in 39.71s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.00s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H12 - le guide de secours ne pouvait pas etre suivi",
+      "version": "h12-v1",
+      "started_utc": "20260918T233227Z",
+      "finished_utc": "2026-09-18T23:33:34",
+      "content_commit": "6ad1a6b6b24a0d6d81df1a0395f1fde74f77d622",
+      "parent": "4ac4e97c52eb43e5b333ea56b6bde6a9c8ba4b2e",
+      "status": "SUCCESS",
+      "audit": {
+        "paths_cited": 53,
+        "paths_existing": 2,
+        "false_lines": 65,
+        "sections_affected": "11/12",
+        "rule_violation": "STEP 1 prescrivait docker-compose up -d pour Signal K"
+      },
+      "guide_lines": "559 -> 356",
+      "sections_removed": [
+        "gabarit config Claude",
+        "carte arborescence"
+      ],
+      "measured_not_remembered": {
+        "mcp_servers": 11,
+        "mcp_tools": 48,
+        "docker_containers": 4,
+        "systemd_timers": 4
+      },
+      "guard_documents": 2,
+      "guard_proven": "version 1.1 : 62 chemins morts, 20 commandes fautives ; version 2.0 : 0",
+      "guard_tests": "12 -> 17",
+      "defects_opened": [
+        82,
+        83
+      ],
+      "defects_closed": [
+        67,
+        81
+      ],
+      "tests": {
+        "barriere": "============================== 17 passed in 0.41s ==============================",
+        "suite-mcp": "============================= 85 passed in 39.74s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.10s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H12b - retractation : signaler un defaut n est pas le fermer",
+      "version": "h12b-v2",
+      "started_utc": "20260920T180302Z",
+      "finished_utc": "2026-09-20T18:04:12",
+      "content_commit": "44623e362d5a92447b836d7dbea2783e4737c920",
+      "base": "c83c2ba0c9a13babe99b1a117d914786af539dfb",
+      "status": "SUCCESS",
+      "retraction": "H12 avait inscrit le defaut 67 dans defects_closed alors que le guide de secours, pousse dans le meme commit, ecrivait 'Known, open: defects 67 and 80' ; le harnais, npm test et mcp/README.md etaient intacts",
+      "entries_retracted": 1,
+      "files_deleted": [
+        "tests/mcp/js/test-all-mcp.js",
+        "tests/mcp/js/test-servers.sh",
+        "tests/mcp/js/__init__.py"
+      ],
+      "self_inflicted_defect": "H12 annoncait 'expect 80 passed' dans un guide dont le propre commit portait tests/mcp a 85",
+      "guard_added": "le compte annonce par le guide doit egaler les tests declares",
+      "guard_scope_refused": "tests/mediaman non mis sous garde : comptage statique 492 contre 495 rendus par pytest",
+      "guard_tests": "17 -> 20",
+      "mcp_tests_declared": 88,
+      "defects_opened": [
+        84
+      ],
+      "defects_closed": [
+        67,
+        80,
+        84
+      ],
+      "tests": {
+        "barriere": "============================== 20 passed in 0.44s ==============================",
+        "suite-mcp": "============================= 88 passed in 39.89s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.59s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H12c - le journal doit se tenir lui-meme",
+      "version": "h12c-v1",
+      "started_utc": "20260920T183023Z",
+      "finished_utc": "2026-09-20T18:31:32",
+      "content_commit": "cbd002bbe5e6789a0d8d64cbf17fb5eb39b407cc",
+      "base": "9234a33a149ec969f1b5c2e47f55c7369f50e0bc",
+      "status": "SUCCESS",
+      "origin": "la verification par API du commit H12b 9234a33a a trouve le defaut 67 simultanement dans defects_closed et defects_open",
+      "self_inflicted": "en relisant H12b avant livraison j ai supprime la ligne qui devait retirer 67 des ouverts, la jugeant sans effet ; elle etait mal ecrite, pas sans effet",
+      "sixth_narrow_measure": "le motif \\d+\\b ne reconnait pas 20b et comptait une entree orpheline de trop ; corrige en ^\\s*(\\d+[a-z]?)\\b et prouve par echantillon",
+      "repairs": [
+        "67 retire de defects_open",
+        "74 fusionne en une seule entree",
+        "86 attribue retroactivement a la fermeture ProtectHome"
+      ],
+      "guard_added": "quatre controles sur logs/latest.json : pas de defaut ouvert et ferme, pas de doublon, pas d entree sans identifiant, fichier lisible",
+      "guard_proven_by": "deux echantillons qui doivent rendre rouge",
+      "guard_tests": "20 -> 26",
+      "guide_count": "88 -> 94, impose par la garde posee en H12b",
+      "mcp_tests_declared": 94,
+      "not_done": "la justesse des trente-trois fermetures declarees n est toujours pas verifiee ; ce chantier verifie leur coherence, pas leur verite",
+      "defects_opened": [
+        85
+      ],
+      "defects_closed": [
+        85
+      ],
+      "defects_renumbered": [
+        86
+      ],
+      "tests": {
+        "barriere": "============================== 26 passed in 0.48s ==============================",
+        "suite-mcp": "============================= 94 passed in 40.23s ==============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 21.92s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H13 - une fermeture doit porter sa preuve",
+      "version": "h13-v1",
+      "started_utc": "20260920T185133Z",
+      "finished_utc": "2026-09-20T18:53:03",
+      "content_commit": "cfb5201b633d8a026ab79a876e0849577f3bcc17",
+      "base": "f795d2e8b067d140c6a25bf498c13ee9dc0f4221",
+      "status": "SUCCESS",
+      "audit": "20 fermetures sur 34 passees a la preuve materielle : 19 prouvees, 1 fermee a moitie, 14 infalsifiables par construction",
+      "finding": "le registre ne distinguait pas changer le systeme et ecrire a propos du systeme",
+      "ratchet": "plafond de 14 fermetures sans preuve materielle, il peut baisser et ne peut plus monter",
+      "guard_tests": "26 -> 32",
+      "guide_count": "94 -> 100",
+      "mcp_tests_declared": 100,
+      "my_own_detector": "3 fausses alertes sur 4 ; signalk\\b capturait signalk-cloud, septieme mesure fautive de la semaine et la premiere par exces",
+      "not_asserted": "l appariement des 24 scenarios aux 23 fonctions n est pas fiable ; rien n est affirme sur la couverture reelle",
+      "defects_closed": [
+        87,
+        88
+      ],
+      "tests": {
+        "barriere": "============================== 32 passed in 0.51s ==============================",
+        "contrat-historique": "============================= 23 passed in 19.95s ==============================",
+        "suite-mcp": "============================= 100 passed in 39.99s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.04s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H14a - le guide cesse de prescrire ce que le depot interdit",
+      "version": "h14a-v1",
+      "started_utc": "20260920T194026Z",
+      "finished_utc": "2026-09-20T19:41:38",
+      "content_commit": "96b84834d85a3fb4d7fed21964336cdbe79812ea",
+      "base": "de89dcc6c418b9139bb6dc17e77ff68c91567926",
+      "status": "SUCCESS",
+      "trap_removed": "le guide v2.0 prescrivait d armer midnight-logsync, unite desarmee par H7e ; meme famille de faute que le docker-compose up -d de la v1.1",
+      "third_path": "les deux copies en masse du README des unites reinstallaient l unite desarmee sans qu on tape rien de suspect",
+      "measured": "un seul timer installe et actif, pas quatre ; mediaman.timer et mediaman-events.timer sont not-found",
+      "telegraf_cause": "la configuration reclame un parseur nmea que Telegraf ne fournit pas : le service n a jamais demarre",
+      "i_was_wrong": "j avais attribue le conteneur orphelin au guide v1.1 ; docker inspect le rattache a /home/aneto/.openclaw/workspace",
+      "git_weight": "3 104 Mo de wit-ble-direct.log dans l historique, pas data-flow.log comme je le supposais",
+      "guard_tests": "32 -> 36",
+      "guide_count": "100 -> 104",
+      "mcp_tests_declared": 104,
+      "defects_closed": [
+        89
+      ],
+      "defects_requalified": [
+        70
+      ],
+      "defects_opened": [
+        90,
+        91,
+        92,
+        93
+      ],
+      "scope": "fichiers du depot uniquement ; 90 a 93 demandent d agir sur la machine, ce sera H14b",
+      "tests": {
+        "barriere": "============================== 36 passed in 0.68s ==============================",
+        "suite-mcp": "============================= 104 passed in 41.25s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.08s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "no_installed_unit_touched": true,
+      "influxdb_writes": 0
+    },
+    {
+      "task": "H14a-bis - le perimetre de la mesure porte son nom",
+      "version": "h14a-bis-v1",
+      "started_utc": "20260920T201743Z",
+      "finished_utc": "2026-09-20T20:18:52",
+      "content_commit": "0bc2a69e0ba37f79e8d57c7d728ffd54663cb995",
+      "base": "f761aedaf986e6a6645202f284c9ca971f1be570",
+      "status": "SUCCESS",
+      "what_h14a_missed": "le controle de H14a ne parcourait que docs/ ; la commande interdite survivait dans etc/systemd/system/README.md et dans l en-tete des deux unites",
+      "lines_removed": 5,
+      "new_scope": "docs/, etc/, scripts/ et la racine ; .md .sh .service .timer .py ; 88 fichiers",
+      "excluded_on_purpose": "logs/ et tests/ citent la ligne interdite a dessein : archives et echantillons",
+      "guard_tests": "36 -> 39",
+      "guide_count": "104 -> 107",
+      "mcp_tests_declared": 107,
+      "defects_closed": [
+        94
+      ],
+      "units_redeployed": false,
+      "only_comments_changed_in_units": true,
+      "tests": {
+        "barriere": "============================== 39 passed in 0.60s ==============================",
+        "suite-mcp": "============================= 107 passed in 39.87s =============================",
+        "suite-mediaman": "======================= 495 passed, 2 warnings in 22.41s ======================="
+      },
+      "no_service_restarted": true,
+      "no_container_removed": true,
+      "no_installed_unit_touched": true,
+      "influxdb_writes": 0
+    }
+  ],
+  "last_task": "H14a-bis - defaut 94, la mesure ne regardait que docs/",
+  "last_status": "SUCCESS",
+  "last_update": "2026-09-20T20:18:52"
+}

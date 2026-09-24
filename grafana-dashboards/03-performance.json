@@ -1,869 +1,895 @@
 {
- "annotations": {
-  "list": []
- },
- "editable": true,
- "fiscalYearStartMonth": 0,
- "graphTooltip": 0,
- "links": [],
- "liveNow": true,
- "panels": [
-  {
-   "collapsed": false,
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {},
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 1,
-    "w": 24,
-    "x": 0,
-    "y": 0
-   },
-   "id": 200,
-   "targets": [],
-   "title": "VOILES",
-   "type": "row"
+  "annotations": {
+    "list": []
   },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "mappings": [
-      {
-       "options": {
-        "FULL": {
-         "color": "green",
-         "text": "Pleine"
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "liveNow": true,
+  "panels": [
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 200,
+      "targets": [],
+      "title": "VOILES",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "FULL": {
+                  "color": "green",
+                  "text": "Pleine"
+                },
+                "FURLED": {
+                  "color": "gray",
+                  "text": "Affalee"
+                },
+                "R1": {
+                  "color": "yellow",
+                  "text": "Ris 1"
+                },
+                "R2": {
+                  "color": "orange",
+                  "text": "Ris 2"
+                },
+                "R3": {
+                  "color": "red",
+                  "text": "Ris 3"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
         },
-        "FURLED": {
-         "color": "gray",
-         "text": "Affalee"
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 0,
+        "y": 1
+      },
+      "id": 201,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "R1": {
-         "color": "yellow",
-         "text": "Ris 1"
-        },
-        "R2": {
-         "color": "orange",
-         "text": "Ris 2"
-        },
-        "R3": {
-         "color": "red",
-         "text": "Ris 3"
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"regatta.sails\")\n |> filter(fn: (r) => r._field == \"mainsail_config\")\n |> last()",
+          "refId": "A"
         }
-       },
-       "type": "value"
-      }
-     ],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "green",
-        "value": null
-       }
-      ]
-     }
+      ],
+      "title": "GV",
+      "type": "stat"
     },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 5,
-    "w": 6,
-    "x": 0,
-    "y": 1
-   },
-   "id": 201,
-   "options": {
-    "colorMode": "background",
-    "graphMode": "none",
-    "orientation": "auto",
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "textMode": "auto"
-   },
-   "targets": [
     {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"regatta.sails\")\n |> filter(fn: (r) => r._field == \"mainsail_config\")\n |> last()",
-     "refId": "A"
-    }
-   ],
-   "title": "GV",
-   "type": "stat"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "mappings": [
-      {
-       "options": {
-        "GENOA": {
-         "color": "green",
-         "text": "Genois"
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "GENOA": {
+                  "color": "green",
+                  "text": "Genois"
+                },
+                "JIB": {
+                  "color": "blue",
+                  "text": "Foc"
+                },
+                "NONE": {
+                  "color": "gray",
+                  "text": "Aucun"
+                },
+                "STORM": {
+                  "color": "red",
+                  "text": "Foc tempete"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
         },
-        "JIB": {
-         "color": "blue",
-         "text": "Foc"
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 6,
+        "y": 1
+      },
+      "id": 202,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "NONE": {
-         "color": "gray",
-         "text": "Aucun"
-        },
-        "STORM": {
-         "color": "red",
-         "text": "Foc tempete"
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"regatta.sails\")\n |> filter(fn: (r) => r._field == \"headsail_config\")\n |> last()",
+          "refId": "A"
         }
-       },
-       "type": "value"
-      }
-     ],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "green",
-        "value": null
-       }
-      ]
-     }
+      ],
+      "title": "Foc Genois",
+      "type": "stat"
     },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 5,
-    "w": 6,
-    "x": 6,
-    "y": 1
-   },
-   "id": 202,
-   "options": {
-    "colorMode": "background",
-    "graphMode": "none",
-    "orientation": "auto",
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "textMode": "auto"
-   },
-   "targets": [
     {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"regatta.sails\")\n |> filter(fn: (r) => r._field == \"headsail_config\")\n |> last()",
-     "refId": "A"
-    }
-   ],
-   "title": "Foc Genois",
-   "type": "stat"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "mappings": [
-      {
-       "options": {
-        "ASYM": {
-         "color": "cyan",
-         "text": "Asym"
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "ASYM": {
+                  "color": "cyan",
+                  "text": "Asym"
+                },
+                "NONE": {
+                  "color": "gray",
+                  "text": "Aucun"
+                },
+                "SPI": {
+                  "color": "purple",
+                  "text": "Spi sym"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
         },
-        "NONE": {
-         "color": "gray",
-         "text": "Aucun"
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 12,
+        "y": 1
+      },
+      "id": 203,
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "SPI": {
-         "color": "purple",
-         "text": "Spi sym"
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"regatta.sails\")\n |> filter(fn: (r) => r._field == \"downwind_sail\")\n |> last()",
+          "refId": "A"
         }
-       },
-       "type": "value"
-      }
-     ],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "green",
-        "value": null
-       }
-      ]
-     }
+      ],
+      "title": "Spi Asym",
+      "type": "stat"
     },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 5,
-    "w": 6,
-    "x": 12,
-    "y": 1
-   },
-   "id": 203,
-   "options": {
-    "colorMode": "background",
-    "graphMode": "none",
-    "orientation": "auto",
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "textMode": "auto"
-   },
-   "targets": [
     {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"regatta.sails\")\n |> filter(fn: (r) => r._field == \"downwind_sail\")\n |> last()",
-     "refId": "A"
-    }
-   ],
-   "title": "Spi Asym",
-   "type": "stat"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "fixedColor": "gray",
-      "mode": "fixed"
-     },
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "gray",
-        "value": null
-       }
-      ]
-     }
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 5,
-    "w": 6,
-    "x": 18,
-    "y": 1
-   },
-   "id": 204,
-   "options": {
-    "colorMode": "value",
-    "graphMode": "none",
-    "orientation": "auto",
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "textMode": "auto"
-   },
-   "targets": [
-    {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"regatta.sails\")\n |> filter(fn: (r) => r._field == \"sail_note\")\n |> last()",
-     "refId": "A"
-    }
-   ],
-   "title": "Note voilure",
-   "type": "stat"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {},
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 3,
-    "w": 24,
-    "x": 0,
-    "y": 6
-   },
-   "id": 205,
-   "options": {
-    "content": "Regatta: http://midnightrider.local:8888/regatta/",
-    "mode": "markdown"
-   },
-   "targets": [],
-   "title": "Interface",
-   "type": "text"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "mappings": [],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "green",
-        "value": null
-       },
-       {
-        "color": "orange",
-        "value": 5
-       },
-       {
-        "color": "red",
-        "value": 8
-       }
-      ]
-     },
-     "unit": "kn"
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 4,
-    "w": 6,
-    "x": 0,
-    "y": 10
-   },
-   "id": 1,
-   "options": {
-    "orientation": "auto",
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "showThresholdLabels": false,
-    "showThresholdMarkers": true
-   },
-   "pluginVersion": "9.0.0",
-   "targets": [
-    {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "refId": "A"
-    }
-   ],
-   "title": "Speed Through Water (STW)",
-   "type": "gauge"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "mappings": [],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "green",
-        "value": null
-       },
-       {
-        "color": "orange",
-        "value": 3
-       },
-       {
-        "color": "red",
-        "value": 1
-       }
-      ]
-     },
-     "unit": "kn"
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 4,
-    "w": 6,
-    "x": 6,
-    "y": 10
-   },
-   "id": 2,
-   "options": {
-    "orientation": "auto",
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "showThresholdLabels": false,
-    "showThresholdMarkers": true
-   },
-   "pluginVersion": "9.0.0",
-   "targets": [
-    {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "refId": "A"
-    }
-   ],
-   "title": "VMG (Velocity Made Good)",
-   "type": "gauge"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "mappings": [],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "orange",
-        "value": null
-       },
-       {
-        "color": "yellow",
-        "value": 70
-       },
-       {
-        "color": "green",
-        "value": 85
-       }
-      ]
-     },
-     "unit": "%"
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 4,
-    "w": 6,
-    "x": 12,
-    "y": 10
-   },
-   "id": 3,
-   "options": {
-    "orientation": "auto",
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "showThresholdLabels": false,
-    "showThresholdMarkers": true
-   },
-   "pluginVersion": "9.0.0",
-   "targets": [
-    {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "refId": "A"
-    }
-   ],
-   "title": "Performance Efficiency",
-   "type": "gauge"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "mappings": [],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "green",
-        "value": null
-       },
-       {
-        "color": "orange",
-        "value": 10
-       },
-       {
-        "color": "red",
-        "value": 5
-       }
-      ]
-     },
-     "unit": "nm"
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 4,
-    "w": 6,
-    "x": 18,
-    "y": 10
-   },
-   "id": 4,
-   "options": {
-    "orientation": "auto",
-    "reduceOptions": {
-     "calcs": [
-      "lastNotNull"
-     ],
-     "fields": "",
-     "values": false
-    },
-    "showThresholdLabels": false,
-    "showThresholdMarkers": true
-   },
-   "pluginVersion": "9.0.0",
-   "targets": [
-    {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "refId": "A"
-    }
-   ],
-   "title": "Distance to Next Mark",
-   "type": "gauge"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "custom": {
-      "hideFrom": {
-       "legend": false,
-       "tooltip": false,
-       "viz": false
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
       },
-      "lineInterpolation": "linear",
-      "lineWidth": 2,
-      "showPoints": "never",
-      "spanNulls": false
-     },
-     "mappings": [],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "orange",
-        "value": null
-       }
-      ]
-     },
-     "unit": "kn"
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 6,
-    "w": 12,
-    "x": 0,
-    "y": 14
-   },
-   "id": 5,
-   "options": {
-    "legend": {
-     "calcs": [
-      "last",
-      "max"
-     ],
-     "displayMode": "table",
-     "placement": "bottom"
-    },
-    "tooltip": {
-     "mode": "single"
-    }
-   },
-   "pluginVersion": "9.0.0",
-   "targets": [
-    {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "refId": "A"
-    }
-   ],
-   "title": "Speed vs Polars (5 min)",
-   "type": "timeseries"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "color": {
-      "mode": "thresholds"
-     },
-     "custom": {
-      "hideFrom": {
-       "legend": false,
-       "tooltip": false,
-       "viz": false
-      },
-      "lineInterpolation": "linear",
-      "lineWidth": 2,
-      "showPoints": "never",
-      "spanNulls": false
-     },
-     "mappings": [],
-     "thresholds": {
-      "mode": "absolute",
-      "steps": [
-       {
-        "color": "red",
-        "value": null
-       }
-      ]
-     },
-     "unit": "kn"
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 6,
-    "w": 12,
-    "x": 12,
-    "y": 14
-   },
-   "id": 6,
-   "options": {
-    "legend": {
-     "calcs": [
-      "last",
-      "max"
-     ],
-     "displayMode": "table",
-     "placement": "bottom"
-    },
-    "tooltip": {
-     "mode": "single"
-    }
-   },
-   "pluginVersion": "9.0.0",
-   "targets": [
-    {
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "refId": "A"
-    }
-   ],
-   "title": "VMG History (30 min)",
-   "type": "timeseries"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "fieldConfig": {
-    "defaults": {
-     "custom": {
-      "hideFrom": {
-       "legend": false,
-       "tooltip": false,
-       "viz": false
-      }
-     }
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 2,
-    "w": 24,
-    "x": 0,
-    "y": 20
-   },
-   "id": 7,
-   "options": {
-    "content": "\n\n**NAVIGATION LINKS:**  [🏠 Cockpit](d/cockpit-main) | [🌊 Environment](d/environment-conditions) | [⚓ Crew](d/crew-management) | [⚡ Performance](d/performance-analysis) | [🌪️ Wind](d/wind-current-tactical) | [🏆 Competitive](d/competitive-fleet) | [🔋 Electrical](d/electrical-power) | [🏁 Race](d/race-block-island) | [🔔 Alerts](d/alerts-monitoring)",
-    "mode": "markdown"
-   },
-   "pluginVersion": "9.0.0",
-   "type": "text"
-  },
-  {
-   "datasource": {
-    "type": "influxdb",
-    "uid": "efifgp8jvgj5sf"
-   },
-   "description": "Position du bord uniquement : filtre self == true, source epinglee. Les cibles AIS (source N2K.0) sont volontairement exclues. Pilote par le selecteur de temps. Si la ligne ne s affiche pas, basculer le type de couche sur Markers dans l editeur.",
-   "fieldConfig": {
-    "defaults": {
-     "custom": {
-      "hideFrom": {
-       "legend": false,
-       "tooltip": false,
-       "viz": false
-      }
-     }
-    },
-    "overrides": []
-   },
-   "gridPos": {
-    "h": 13,
-    "w": 24,
-    "x": 0,
-    "y": 22
-   },
-   "id": 300,
-   "options": {
-    "basemap": {
-     "type": "osm-standard",
-     "name": "OpenStreetMap",
-     "config": {}
-    },
-    "controls": {
-     "mouseWheelZoom": true,
-     "showZoom": true
-    },
-    "layers": [
-     {
-      "config": {
-       "style": {
-        "color": {
-         "fixed": "dark-green"
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "fixedColor": "gray",
+            "mode": "fixed"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "gray",
+                "value": null
+              }
+            ]
+          }
         },
-        "lineWidth": 2,
-        "opacity": 0.8
-       }
+        "overrides": []
       },
-      "location": {
-       "latitude": "lat",
-       "longitude": "lon",
-       "mode": "coords"
+      "gridPos": {
+        "h": 5,
+        "w": 6,
+        "x": 18,
+        "y": 1
       },
-      "name": "Trace",
-      "tooltip": true,
-      "type": "route"
-     }
-    ],
-    "tooltip": {
-     "mode": "details"
+      "id": 204,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n |> filter(fn: (r) => r._measurement == \"regatta.sails\")\n |> filter(fn: (r) => r._field == \"sail_note\")\n |> last()",
+          "refId": "A"
+        }
+      ],
+      "title": "Note voilure",
+      "type": "stat"
     },
-    "view": {
-     "id": "fit",
-     "allLayers": true,
-     "padding": 8
-    }
-   },
-   "targets": [
     {
-     "refId": "A",
-     "datasource": {
-      "type": "influxdb",
-      "uid": "efifgp8jvgj5sf"
-     },
-     "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.position\")\n  // sans ce filtre, la carte tracerait aussi les cibles AIS (source N2K.0)\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r.source == \"N2K.2\")\n  |> filter(fn: (r) => r._field == \"lat\" or r._field == \"lon\")\n  // v.windowPeriod : le pas suit la plage affichee, borne en bas a 5 s par\n  // l intervalle minimum du panneau. On reste sous maxDataPoints = 3000,\n  // donc plus de troncature a 9331 lignes.\n  // createEmpty: true : une fenetre sans position produit une ligne nulle,\n  // qui doit casser le trace au lieu de relier deux bords.\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: true)\n  |> keep(columns: [\"_time\", \"_field\", \"_value\"])\n  |> group()\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> keep(columns: [\"_time\", \"lat\", \"lon\"])"
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 205,
+      "options": {
+        "content": "Regatta: http://midnightrider.local:8888/regatta/",
+        "mode": "markdown"
+      },
+      "targets": [],
+      "title": "Interface",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 8
+              }
+            ]
+          },
+          "unit": "kn"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 0,
+        "y": 10
+      },
+      "id": 1,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Speed Through Water (STW)",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 3
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
+          "unit": "kn"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 6,
+        "y": 10
+      },
+      "id": 2,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "VMG (Velocity Made Good)",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "green",
+                "value": 85
+              }
+            ]
+          },
+          "unit": "%"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 12,
+        "y": 10
+      },
+      "id": 3,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Performance Efficiency",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 10
+              },
+              {
+                "color": "red",
+                "value": 5
+              }
+            ]
+          },
+          "unit": "nm"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 6,
+        "x": 18,
+        "y": 10
+      },
+      "id": 4,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Distance to Next Mark",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "orange",
+                "value": null
+              }
+            ]
+          },
+          "unit": "kn"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 0,
+        "y": 14
+      },
+      "id": 5,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Speed vs Polars (5 min)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              }
+            ]
+          },
+          "unit": "kn"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 12,
+        "x": 12,
+        "y": 14
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [
+            "last",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "pluginVersion": "9.0.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "VMG History (30 min)",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 20
+      },
+      "id": 7,
+      "options": {
+        "content": "\n\n**NAVIGATION LINKS:**  [🏠 Cockpit](d/cockpit-main) | [🌊 Environment](d/environment-conditions) | [⚓ Crew](d/crew-management) | [⚡ Performance](d/performance-analysis) | [🌪️ Wind](d/wind-current-tactical) | [🏆 Competitive](d/competitive-fleet) | [🔋 Electrical](d/electrical-power) | [🏁 Race](d/race-block-island) | [🔔 Alerts](d/alerts-monitoring)",
+        "mode": "markdown"
+      },
+      "pluginVersion": "9.0.0",
+      "type": "text"
+    },
+    {
+      "datasource": {
+        "type": "influxdb",
+        "uid": "efifgp8jvgj5sf"
+      },
+      "description": "Position du bord uniquement : filtre self == true, source epinglee. Les cibles AIS (source N2K.0) sont volontairement exclues. Pilote par le selecteur de temps. Si la ligne ne s affiche pas, basculer le type de couche sur Markers dans l editeur.",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 300,
+      "interval": "5s",
+      "maxDataPoints": 3000,
+      "options": {
+        "basemap": {
+          "type": "osm-standard",
+          "name": "OpenStreetMap",
+          "config": {}
+        },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showZoom": true
+        },
+        "layers": [
+          {
+            "type": "route",
+            "name": "Trace",
+            "config": {
+              "style": {
+                "color": {
+                  "fixed": "dark-green"
+                },
+                "lineWidth": 2,
+                "opacity": 0.8
+              }
+            },
+            "location": {
+              "mode": "auto"
+            },
+            "tooltip": true
+          },
+          {
+            "type": "markers",
+            "name": "Points de mesure",
+            "config": {
+              "showLegend": false,
+              "style": {
+                "color": {
+                  "fixed": "light-yellow"
+                },
+                "opacity": 0.85,
+                "size": {
+                  "fixed": 2
+                },
+                "symbol": {
+                  "fixed": "img/icons/marker/circle.svg",
+                  "mode": "fixed"
+                },
+                "symbolAlign": {
+                  "horizontal": "center",
+                  "vertical": "center"
+                }
+              }
+            },
+            "location": {
+              "mode": "auto"
+            },
+            "tooltip": true
+          }
+        ],
+        "tooltip": {
+          "mode": "details"
+        },
+        "view": {
+          "id": "fit",
+          "allLayers": true,
+          "padding": 8
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "influxdb",
+            "uid": "efifgp8jvgj5sf"
+          },
+          "query": "from(bucket: \"midnight_rider\")\n  |> range(start: v.timeRangeStart, stop: v.timeRangeStop)\n  |> filter(fn: (r) => r._measurement == \"navigation.position\")\n  // Filtre canonique du bord, le meme que pour toutes les autres mesures.\n  // Les cibles AIS et les aides a la navigation portent un contexte MMSI\n  // et n ont PAS ce tag : elles sont exclues ici, sans filtre de source.\n  |> filter(fn: (r) => r.self == \"true\")\n  |> filter(fn: (r) => r._field == \"lat\" or r._field == \"lon\")\n  // Ecrase les tags s2_cell_id, context et source. Sans cette ligne, le\n  // bateau change de cellule S2 en avancant, chaque cellule devient une\n  // serie, et le pivot apparie des lat et des lon issues de cellules\n  // differentes -> des sauts de 20 milles en 30 secondes.\n  |> group(columns: [\"_field\"])\n  // createEmpty reste a false : sur cette mesure les fenetres nulles\n  // detruisent la trace (mesure : 70 positions survivantes sur 2880).\n  |> aggregateWindow(every: v.windowPeriod, fn: mean, createEmpty: false)\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> sort(columns: [\"_time\"])\n  |> keep(columns: [\"_time\", \"lat\", \"lon\"])"
+        }
+      ],
+      "title": "Trace du bateau (bord, ligne + points de mesure)",
+      "type": "geomap"
     }
-   ],
-   "title": "Trace du bateau (N2K.2, 1 point / 5 s)",
-   "type": "geomap",
-   "maxDataPoints": 3000,
-   "interval": "5s"
-  }
- ],
- "schemaVersion": 38,
- "style": "dark",
- "tags": [
-  "midnight-rider",
-  "performance"
- ],
- "templating": {
-  "list": []
- },
- "time": {
-  "from": "2026-09-04T04:00:00.000Z",
-  "to": "2026-09-05T04:00:00.000Z"
- },
- "timepicker": {},
- "timezone": "America/New_York",
- "title": "03 — PERFORMANCE (Speed & Efficiency)",
- "uid": "performance-analysis",
- "weekStart": "monday",
- "refresh": ""
+  ],
+  "refresh": "",
+  "schemaVersion": 38,
+  "style": "dark",
+  "tags": [
+    "midnight-rider",
+    "performance"
+  ],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "2026-09-05T04:00:00.000Z",
+    "to": "2026-09-06T04:00:00.000Z"
+  },
+  "timepicker": {},
+  "timezone": "America/New_York",
+  "title": "03 — PERFORMANCE (Speed & Efficiency)",
+  "uid": "performance-analysis",
+  "weekStart": "monday"
 }

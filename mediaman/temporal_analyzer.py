@@ -23,6 +23,10 @@ STW = "speed_through_water"
 HEEL = "attitude_roll"
 WIND_DIRECTION = "wind_true_direction"
 HEADING = "heading_true"
+PRESSURE = "outside_pressure"
+WATER_TEMPERATURE = "water_temperature"
+LEEWAY = "leeway_angle"
+RATE_OF_TURN = "rate_of_turn"
 
 PERSISTENT_SHIFT_MIN_DEGREES = 10.0
 PERSISTENT_SHIFT_MIN_R_SQUARED = 0.7
@@ -36,6 +40,13 @@ MANEUVER_MIN_HEADING_CHANGE_DEGREES = 45.0
 MANEUVER_MAX_WIND_ROTATION_RATIO = 0.5
 MANEUVER_TACK_GYBE_BOUNDARY_DEGREES = 90.0
 MANEUVER_MIN_ANGLE_DEADBAND_DEGREES = 5.0
+PRESSURE_TREND_MIN_HPA_PER_HOUR = 1.0
+PRESSURE_TREND_MIN_R_SQUARED = 0.7
+THERMAL_FRONT_MIN_DELTA_CELSIUS = 1.0
+EXCESSIVE_LEEWAY_MIN_DEGREES = 6.0
+EXCESSIVE_LEEWAY_MIN_SAMPLES = 3
+SUSTAINED_TURN_MIN_DEGREES_PER_MINUTE = 20.0
+SUSTAINED_TURN_MIN_SAMPLES = 2
 
 def _percentile(values: list[float], fraction: float) -> float | None:
     if not values:
@@ -313,6 +324,177 @@ def detect_maneuver_patterns(series: Mapping[str, list[TemporalSample]]) -> list
         })
     return events
 
+def detect_pressure_patterns(series: Mapping[str, list[TemporalSample]]) -> list[dict[str, Any]]:
+    """Report a barometric trend only when a linear fit explains it.
+
+    Pressure is read from the dedicated barometer alone. A second instrument
+    publishes on the same measurement, so the series is pinned upstream; a
+    mixed series would manufacture steps that look like weather.
+    """
+    samples = series.get(PRESSURE, [])
+    if len(samples) < TREND_MIN_SAMPLES:
+        return []
+    moments = [_parse_utc(sample.timestamp_utc) for sample in samples]
+    if any(moment is None for moment in moments):
+        return []
+    origin = moments[0]
+    hours = [(moment - origin).total_seconds() / 3600.0 for moment in moments]
+    if len(set(hours)) < TREND_MIN_SAMPLES:
+        return []
+    values = [sample.value for sample in samples]
+    try:
+        slope, _intercept = statistics.linear_regression(hours, values)
+        r_squared = statistics.correlation(hours, values) ** 2
+    except (statistics.StatisticsError, ValueError, ZeroDivisionError):
+        return []
+    if abs(slope) < PRESSURE_TREND_MIN_HPA_PER_HOUR or r_squared < PRESSURE_TREND_MIN_R_SQUARED:
+        return []
+    falling = slope < 0.0
+    return [{
+        "pattern_id": "pressure_drop" if falling else "pressure_rise",
+        "start_utc": samples[0].timestamp_utc,
+        "end_utc": samples[-1].timestamp_utc,
+        "confidence": 0.85,
+        "evidence": [
+            "barometric pressure followed a linear trend a fit explains well",
+            "a falling barometer precedes deteriorating conditions"
+            if falling
+            else "a rising barometer precedes settling conditions",
+        ],
+        "metrics": {
+            "start_hpa": values[0],
+            "end_hpa": values[-1],
+            "delta_hpa": values[-1] - values[0],
+            "slope_hpa_per_hour": slope,
+            "r_squared": r_squared,
+        },
+    }]
+
+
+def detect_water_temperature_patterns(series: Mapping[str, list[TemporalSample]]) -> list[dict[str, Any]]:
+    """Flag a water-temperature change large enough to mark a thermal front.
+
+    A front separates two water masses and often carries a different current
+    and a different breeze. Only the magnitude is claimed here; no causal
+    link with the wind is asserted, because none can be proven from these
+    two series alone.
+    """
+    samples = series.get(WATER_TEMPERATURE, [])
+    if len(samples) < 2:
+        return []
+    values = [sample.value for sample in samples]
+    delta = values[-1] - values[0]
+    if abs(delta) < THERMAL_FRONT_MIN_DELTA_CELSIUS:
+        return []
+    steps = [second - first for first, second in zip(values, values[1:])]
+    largest = max(steps, key=abs) if steps else 0.0
+    return [{
+        "pattern_id": "thermal_front",
+        "start_utc": samples[0].timestamp_utc,
+        "end_utc": samples[-1].timestamp_utc,
+        "confidence": 0.8,
+        "evidence": ["water temperature changed beyond the configured front threshold"],
+        "metrics": {
+            "start_celsius": values[0],
+            "end_celsius": values[-1],
+            "delta_celsius": delta,
+            "largest_step_celsius": largest,
+            "direction": "warming" if delta > 0 else "cooling",
+        },
+    }]
+
+
+def detect_leeway_patterns(series: Mapping[str, list[TemporalSample]]) -> list[dict[str, Any]]:
+    """Report leeway sustained above the threshold, without naming a board.
+
+    Only the magnitude is claimed. The sign convention of the leeway plugin
+    for this installation is not formally documented, so no port or starboard
+    attribution is made.
+    """
+    samples = series.get(LEEWAY, [])
+    if len(samples) < EXCESSIVE_LEEWAY_MIN_SAMPLES:
+        return []
+    longest: list[TemporalSample] = []
+    current: list[TemporalSample] = []
+    for sample in samples:
+        if abs(sample.value) >= EXCESSIVE_LEEWAY_MIN_DEGREES:
+            current.append(sample)
+            if len(current) > len(longest):
+                longest = list(current)
+        else:
+            current = []
+    if len(longest) < EXCESSIVE_LEEWAY_MIN_SAMPLES:
+        return []
+    magnitudes = [abs(sample.value) for sample in longest]
+    return [{
+        "pattern_id": "excessive_leeway",
+        "start_utc": longest[0].timestamp_utc,
+        "end_utc": longest[-1].timestamp_utc,
+        "confidence": 0.75,
+        "evidence": [
+            "computed leeway stayed above the configured threshold for a sustained run",
+            "no board is asserted because the plugin sign convention is not documented",
+        ],
+        "metrics": {
+            "sustained_samples": len(longest),
+            "mean_absolute_degrees": statistics.fmean(magnitudes),
+            "maximum_absolute_degrees": max(magnitudes),
+            "threshold_degrees": EXCESSIVE_LEEWAY_MIN_DEGREES,
+        },
+    }]
+
+
+def detect_turn_rate_patterns(series: Mapping[str, list[TemporalSample]]) -> list[dict[str, Any]]:
+    """Corroborate a turn from the rate-of-turn series. Never proves one.
+
+    The series is downsampled with the last raw sample of each bucket, so at
+    sixty seconds a value is instantaneous rather than representative and a
+    turn shorter than one bucket can be missed entirely. This detector is
+    therefore corroborating evidence for a maneuver established from heading,
+    not an independent claim. No port or starboard direction is asserted.
+    """
+    samples = series.get(RATE_OF_TURN, [])
+    if len(samples) < SUSTAINED_TURN_MIN_SAMPLES:
+        return []
+    events: list[dict[str, Any]] = []
+    run: list[TemporalSample] = []
+
+    def flush(group: list[TemporalSample]) -> None:
+        if len(group) < SUSTAINED_TURN_MIN_SAMPLES:
+            return
+        rates = [sample.value for sample in group]
+        events.append({
+            "pattern_id": "sustained_turn",
+            "start_utc": group[0].timestamp_utc,
+            "end_utc": group[-1].timestamp_utc,
+            "confidence": 0.6,
+            "evidence": [
+                "rate of turn stayed above the threshold with a constant sign",
+                "sampled as the last raw value of each bucket, so corroborating only",
+            ],
+            "metrics": {
+                "sustained_samples": len(group),
+                "peak_degrees_per_minute": max(rates, key=abs),
+                "mean_degrees_per_minute": statistics.fmean(rates),
+                "threshold_degrees_per_minute": SUSTAINED_TURN_MIN_DEGREES_PER_MINUTE,
+                "sampling": "instantaneous_last_in_bucket",
+            },
+        })
+
+    for sample in samples:
+        if abs(sample.value) < SUSTAINED_TURN_MIN_DEGREES_PER_MINUTE:
+            flush(run)
+            run = []
+            continue
+        if run and (run[-1].value > 0) != (sample.value > 0):
+            flush(run)
+            run = [sample]
+            continue
+        run.append(sample)
+    flush(run)
+    return events
+
+
 def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, resolution_seconds: int) -> dict[str, Any]:
     """Build a deterministic evidence-backed analysis packet."""
     interval = HistoricalInterval(start_utc, end_utc, resolution_seconds)
@@ -350,6 +532,10 @@ def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, res
     patterns.extend(detect_wind_direction_trend_patterns(series))
     patterns.extend(detect_data_gap_patterns(series, start_utc, end_utc, resolution_seconds))
     patterns.extend(detect_maneuver_patterns(series))
+    patterns.extend(detect_pressure_patterns(series))
+    patterns.extend(detect_water_temperature_patterns(series))
+    patterns.extend(detect_leeway_patterns(series))
+    patterns.extend(detect_turn_rate_patterns(series))
     if HEEL in series:
         patterns.extend(event.as_dict() for event in detect_heavy_heel(_points(series[HEEL], HEEL)))
     return HistoricalAnalysis(interval, coverage, series_output, stats, patterns=patterns, evidence=evidence).as_dict()
