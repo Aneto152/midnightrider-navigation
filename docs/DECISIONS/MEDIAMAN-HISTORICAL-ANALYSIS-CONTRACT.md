@@ -159,7 +159,7 @@ tell apart, which is the failure mode that once hid a malformed regex.
 | `pressure_drop` / `pressure_rise` | slope at least 1.0 hPa per hour and R squared at least 0.7 | 0.85 |
 | `thermal_front` | water temperature changes by at least 1.0 celsius across the window | 0.8 |
 | `excessive_leeway` | absolute leeway at or above 6 degrees for at least 3 consecutive samples | 0.75 |
-| `sustained_turn` | absolute rate of turn at or above 20 degrees per minute, constant sign, at least 2 samples | 0.6 |
+| `sustained_turn` | absolute rate of turn at or above 20 degrees per minute, constant sign, at least 2 samples, and overlapping a heading-confirmed `true_tack` or `true_gybe` | 0.6 |
 
 ### Rate-of-turn sampling caveat
 
@@ -168,9 +168,10 @@ sixty second resolution a rate-of-turn value is therefore instantaneous, not
 an average, and a turn shorter than one bucket can be missed entirely. Its
 confidence is deliberately the lowest of the set and `sustained_turn` is
 corroborating evidence for a maneuver established from heading, never an
-independent claim. No port or starboard direction is asserted, for the same
-reason as in tack and gybe attribution: the sign convention of this
-installation has not been verified against a known maneuver.
+independent claim. If no `true_tack` or `true_gybe` interval overlaps the
+rate-of-turn run, the run is suppressed entirely. No port or starboard direction
+is asserted, for the same reason as in tack and gybe attribution: the sign
+convention of this installation has not been verified against a known maneuver.
 
 ### Known divergence, not addressed here
 

@@ -112,17 +112,29 @@ def test_moderate_leeway_raises_no_pattern():
     assert "excessive_leeway" not in _identifiers(rows, 11)
 
 
-def test_turn_rate_corroborates_only_when_sign_is_constant():
+def test_turn_rate_requires_a_heading_confirmed_maneuver():
     minutes = range(0, 11)
+    without_maneuver = _baseline(minutes)
     steady = _baseline(minutes)
     alternating = _baseline(minutes)
     for minute in minutes:
+        without_maneuver.append(_row("rate_of_turn", minute, 30.0 if 3 <= minute <= 5 else 2.0))
         steady.append(_row("rate_of_turn", minute, 30.0 if 3 <= minute <= 5 else 2.0))
         alternating.append(_row("rate_of_turn", minute, 30.0 if minute % 2 else -30.0))
+        if minute < 4:
+            heading, wind = 40.0, 0.0
+        else:
+            heading, wind = 320.0, 0.0
+        for rows in (steady, alternating):
+            rows.append(_row("heading_true", minute, heading))
+            rows.append(_row("wind_true_direction", minute, wind))
+            rows.append(_row("wind_true_angle", minute, ((heading - wind) + 180.0) % 360.0 - 180.0))
+
+    assert "sustained_turn" not in _identifiers(without_maneuver, 11)
 
     event = _event(steady, 11, "sustained_turn")
-
     assert event["metrics"]["sustained_samples"] == 3
     assert event["metrics"]["sampling"] == "instantaneous_last_in_bucket"
+    assert event["metrics"]["corroborated_by"] == ["true_tack"]
     assert event["confidence"] == 0.6
     assert "sustained_turn" not in _identifiers(alternating, 11)

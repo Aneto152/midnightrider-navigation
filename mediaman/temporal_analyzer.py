@@ -444,15 +444,29 @@ def detect_leeway_patterns(series: Mapping[str, list[TemporalSample]]) -> list[d
     }]
 
 
-def detect_turn_rate_patterns(series: Mapping[str, list[TemporalSample]]) -> list[dict[str, Any]]:
-    """Corroborate a turn from the rate-of-turn series. Never proves one.
+def detect_turn_rate_patterns(
+    series: Mapping[str, list[TemporalSample]],
+    maneuver_patterns: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Corroborate only a heading-confirmed tack or gybe.
 
-    The series is downsampled with the last raw sample of each bucket, so at
-    sixty seconds a value is instantaneous rather than representative and a
-    turn shorter than one bucket can be missed entirely. This detector is
-    therefore corroborating evidence for a maneuver established from heading,
-    not an independent claim. No port or starboard direction is asserted.
+    The temporal query keeps the last raw rate-of-turn sample in each bucket.
+    That value is instantaneous and noisy; it cannot establish a maneuver by
+    itself. A sustained_turn event is therefore emitted only when its interval
+    overlaps a true_tack or true_gybe already detected from heading and
+    absolute-wind evidence.
     """
+    maneuver_intervals = []
+    for maneuver in maneuver_patterns:
+        if maneuver.get("pattern_id") not in {"true_tack", "true_gybe"}:
+            continue
+        start = _parse_utc(maneuver.get("start_utc"))
+        end = _parse_utc(maneuver.get("end_utc"))
+        if start is not None and end is not None:
+            maneuver_intervals.append((start, end, maneuver["pattern_id"]))
+    if not maneuver_intervals:
+        return []
+
     samples = series.get(RATE_OF_TURN, [])
     if len(samples) < SUSTAINED_TURN_MIN_SAMPLES:
         return []
@@ -462,6 +476,17 @@ def detect_turn_rate_patterns(series: Mapping[str, list[TemporalSample]]) -> lis
     def flush(group: list[TemporalSample]) -> None:
         if len(group) < SUSTAINED_TURN_MIN_SAMPLES:
             return
+        start = _parse_utc(group[0].timestamp_utc)
+        end = _parse_utc(group[-1].timestamp_utc)
+        if start is None or end is None:
+            return
+        corroborated_by = sorted({
+            pattern_id
+            for maneuver_start, maneuver_end, pattern_id in maneuver_intervals
+            if start <= maneuver_end and end >= maneuver_start
+        })
+        if not corroborated_by:
+            return
         rates = [sample.value for sample in group]
         events.append({
             "pattern_id": "sustained_turn",
@@ -470,6 +495,7 @@ def detect_turn_rate_patterns(series: Mapping[str, list[TemporalSample]]) -> lis
             "confidence": 0.6,
             "evidence": [
                 "rate of turn stayed above the threshold with a constant sign",
+                "the interval overlaps a heading-confirmed tack or gybe",
                 "sampled as the last raw value of each bucket, so corroborating only",
             ],
             "metrics": {
@@ -478,6 +504,7 @@ def detect_turn_rate_patterns(series: Mapping[str, list[TemporalSample]]) -> lis
                 "mean_degrees_per_minute": statistics.fmean(rates),
                 "threshold_degrees_per_minute": SUSTAINED_TURN_MIN_DEGREES_PER_MINUTE,
                 "sampling": "instantaneous_last_in_bucket",
+                "corroborated_by": corroborated_by,
             },
         })
 
@@ -531,11 +558,12 @@ def analyze(rows: Iterable[Mapping[str, Any]], start_utc: str, end_utc: str, res
     patterns.extend(detect_wind_attribution_patterns(series))
     patterns.extend(detect_wind_direction_trend_patterns(series))
     patterns.extend(detect_data_gap_patterns(series, start_utc, end_utc, resolution_seconds))
-    patterns.extend(detect_maneuver_patterns(series))
+    maneuver_patterns = detect_maneuver_patterns(series)
+    patterns.extend(maneuver_patterns)
     patterns.extend(detect_pressure_patterns(series))
     patterns.extend(detect_water_temperature_patterns(series))
     patterns.extend(detect_leeway_patterns(series))
-    patterns.extend(detect_turn_rate_patterns(series))
+    patterns.extend(detect_turn_rate_patterns(series, maneuver_patterns))
     if HEEL in series:
         patterns.extend(event.as_dict() for event in detect_heavy_heel(_points(series[HEEL], HEEL)))
     return HistoricalAnalysis(interval, coverage, series_output, stats, patterns=patterns, evidence=evidence).as_dict()
