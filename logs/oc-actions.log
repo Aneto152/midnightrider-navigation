@@ -572,3 +572,4 @@
 [2026-09-25T20:45:23] [COMMIT] SHA: 8cc383de7fea2e835e74159ea699cec49b439727
 [2026-09-25T20:53:42] [CONFIG_CHANGE] [mediaman-mcp] Restored numeric cleanup after Stage A route transport
 [2026-09-25T20:53:42] [RESULT] [mediaman-mcp] Result: SUCCESS — targeted tests and live route/collector gates passed
+[2026-09-25T20:53:43] [COMMIT] SHA: 0dda2dcdcfff70233b2d10b0a3cfb4520bd890f8

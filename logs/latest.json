@@ -1601,5 +1601,8 @@
   "timestamp_utc": "2026-09-24T22:42:00Z",
   "stage_a_route_transport_content_sha": "8cc383de7fea2e835e74159ea699cec49b439727",
   "stage_a_route_transport_status": "SUCCESS",
-  "stage_a_route_transport_date": "2026-09-25T20:45:23Z"
+  "stage_a_route_transport_date": "2026-09-25T20:45:23Z",
+  "stage_a_route_output_correction_status": "SUCCESS",
+  "stage_a_route_output_correction_content_sha": "0dda2dcdcfff70233b2d10b0a3cfb4520bd890f8",
+  "stage_a_route_output_correction_date": "2026-09-25T20:53:43Z"
 }
