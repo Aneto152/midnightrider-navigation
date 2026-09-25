@@ -569,3 +569,4 @@
 [2026-09-24T22:42:00] [COMMIT] SHA: f4455d44e0d8a974f86a6a693f35d107483ac72f
 [2026-09-25T20:45:21] [CONFIG_CHANGE] [mediaman-mcp] Stage A route snapshot transport prepared; credentials redacted
 [2026-09-25T20:45:21] [RESULT] [mediaman-mcp] Result: SUCCESS — static tests and live route gate passed
+[2026-09-25T20:45:23] [COMMIT] SHA: 8cc383de7fea2e835e74159ea699cec49b439727

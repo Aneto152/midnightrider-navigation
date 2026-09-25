@@ -1598,5 +1598,8 @@
     "logs/oc-actions.log",
     "logs/latest.json"
   ],
-  "timestamp_utc": "2026-09-24T22:42:00Z"
+  "timestamp_utc": "2026-09-24T22:42:00Z",
+  "stage_a_route_transport_content_sha": "8cc383de7fea2e835e74159ea699cec49b439727",
+  "stage_a_route_transport_status": "SUCCESS",
+  "stage_a_route_transport_date": "2026-09-25T20:45:23Z"
 }
