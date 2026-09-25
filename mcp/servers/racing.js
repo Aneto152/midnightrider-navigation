@@ -137,6 +137,31 @@ async function queryInfluxDB(fluxQuery, timeoutMs = HTTP_TIMEOUT_MS) {
  * (#group / #datatype / #default rows plus a leading empty column)
  * and plain CSV (dialect.annotations = []). Requires _value and _time.
  */
+
+function parseCsvLine(line) {
+  const cells = [];
+  let current = '';
+  let quoted = false;
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (character === '"') {
+      if (quoted && line[index + 1] === '"') {
+        current += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (character === ',' && !quoted) {
+      cells.push(current);
+      current = '';
+    } else {
+      current += character;
+    }
+  }
+  cells.push(current);
+  return cells;
+}
+
 function parseFluxResponse(csvData) {
   try {
     if (typeof csvData !== 'string' || csvData.trim() === '') {
@@ -172,7 +197,7 @@ function parseFluxResponse(csvData) {
       // aligned. Plain CSV (dialect.annotations = []) has no such column and
       // aligns just as well. Filtering empty cells - as the previous
       // implementation did on the header only - is what misaligned the data.
-      const cells = line.split(',');
+      const cells = parseCsvLine(line);
 
       // The first non-annotation row is the header.
       if (header === null) {
@@ -675,7 +700,8 @@ const TEMPORAL_SELECTORS = [
   { series: 'water_temperature', measurement: 'environment.water.temperature', field: 'value', source: 'N2K.35' },
   { series: 'leeway_angle', measurement: 'performance.leewayAngle', field: 'value', source: 'leeway' },
   { series: 'rate_of_turn', measurement: 'navigation.rateOfTurn', field: 'value', source: 'Calypso.XX' }
-];
+,
+  { measurement: 'navigation.currentRoute.waypoints', field: 'value', series: 'route_waypoints', source: 'self' },];
 
 /**
  * Exhaustive source resolver.
@@ -697,18 +723,19 @@ const TEMPORAL_SOURCE_CLAUSES = {
 };
 
 function buildTemporalQuery(startUtc, endUtc, resolutionSeconds) {
-  const measurements = [...new Set(TEMPORAL_SELECTORS.map(selector => selector.measurement))];
+  const measurements = [...new Set([...TEMPORAL_SELECTORS.map(selector => selector.measurement), 'navigation.currentRoute.waypoints'])];
   const sourceClauses = TEMPORAL_SELECTORS.map(selector => {
     if (!Object.prototype.hasOwnProperty.call(TEMPORAL_SOURCE_CLAUSES, selector.source)) {
       throw new Error(`unknown temporal source kind: ${selector.source}`);
     }
     return TEMPORAL_SOURCE_CLAUSES[selector.source](selector.measurement);
-  }).join(' or ');
+  }).join(' or ') + ' or (r._measurement == "navigation.currentRoute.waypoints" and r._field == "value")';
   const queryBody = [
     `    |> filter(fn: (r) => contains(value: r._measurement, set: [${measurements.map(value => `"${value}"`).join(', ')}]))`,
     `    |> filter(fn: (r) => ${sourceClauses})`,
     '    |> group(columns: ["_measurement", "_field", "source"])',
-    `    |> aggregateWindow(every: ${resolutionSeconds}s, fn: last, createEmpty: false)`,
+    `    |> aggregateWindow(every: ${resolutionSeconds}s, fn: last, createEmpty: false)
+  |> map(fn: (r) => ({ r with _value: string(v: r._value) }))`,
     '    |> group()',
     '    |> keep(columns: ["_time", "_measurement", "_field", "_value", "source"])',
     '    |> sort(columns: ["_time"])'
@@ -716,7 +743,41 @@ function buildTemporalQuery(startUtc, endUtc, resolutionSeconds) {
   return buildFluxQuery(queryBody, startUtc, endUtc);
 }
 
+
+const ROUTE_MEASUREMENT = 'navigation.currentRoute.waypoints';
+const ROUTE_FIELD = 'value';
+const ROUTE_SERIES = 'route_waypoints';
+
+function isRouteRow(row) {
+  return Boolean(row && row._measurement === ROUTE_MEASUREMENT && row._field === ROUTE_FIELD);
+}
+
+function normalizeRouteWaypointValue(value) {
+  const text = typeof value === 'string' ? value : JSON.stringify(value);
+  if (!text) return null;
+  try {
+    const parsed = JSON.parse(text);
+    if (!Array.isArray(parsed)) return null;
+    return parsed;
+  } catch (_error) {
+    return null;
+  }
+}
+
+function normalizeRouteRow(row) {
+  const value = normalizeRouteWaypointValue(row?._value);
+  if (!value) return null;
+  const sourceId = row.source_id || row._source || row.source || row.sourceId || 'unknown';
+  return {
+    series: ROUTE_SERIES,
+    source_id: sourceId,
+    timestamp_utc: row._time,
+    value,
+  };
+}
+
 function temporalSeriesName(row) {
+  if (isRouteRow(row)) return ROUTE_SERIES;
   const selector = TEMPORAL_SELECTORS.find(item => item.measurement === row._measurement && item.field === row._field);
   return selector ? selector.series : null;
 }
@@ -741,9 +802,15 @@ function normalizeTemporalValue(series, value) {
 }
 
 function downsampleTemporalRows(rows, resolutionSeconds) {
+  const routeRows = [];
   const buckets = new Map();
   const angular = new Set(['wind_true_angle', 'course_over_ground', 'attitude_roll', 'attitude_pitch', 'leeway_angle', 'rate_of_turn']);
   for (const row of rows) {
+    if (isRouteRow(row)) {
+      const normalizedRoute = normalizeRouteRow(row);
+      if (normalizedRoute) routeRows.push(normalizedRoute);
+      continue;
+    }
     const series = temporalSeriesName(row);
     if (!series || !row._time) continue;
     const value = normalizeTemporalValue(series, row._value);
@@ -763,9 +830,7 @@ function downsampleTemporalRows(rows, resolutionSeconds) {
       previous.source_id = row.source || previous.source_id;
     }
   }
-  return [...buckets.values()]
-    .map(({ sum, count, ...row }) => row)
-    .sort((a, b) => a.timestamp_utc.localeCompare(b.timestamp_utc));
+  return [...Array.from(buckets.values()), ...routeRows];
 }
 
 async function getHistoricalAnalysis(startUtc, endUtc, resolutionSeconds = 60) {

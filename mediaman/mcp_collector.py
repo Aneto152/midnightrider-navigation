@@ -319,7 +319,13 @@ class MCPCollector:
         payload = response.get('result', response)
         rows = payload.get('rows', []) if isinstance(payload, dict) else []
         self.logger.info('Historical analysis DATA_IN rows=%s resolution=%s', len(rows), resolution_seconds)
-        result = analyze(rows, start_utc, end_utc, resolution_seconds)
+        temporal_rows = [
+            row for row in rows
+            if not (isinstance(row, dict) and row.get('series') == 'route_waypoints')
+        ]
+        result = analyze(temporal_rows, start_utc, end_utc, resolution_seconds)
+        result['raw_rows'] = payload.get('raw_rows', rows)
+        result['route_rows'] = [row for row in rows if isinstance(row, dict) and row.get('series') == 'route_waypoints']
         result['evidence'] = {
             **result.get('evidence', {}),
             'mcp_source': response.get('source', 'mcp:racing'),

@@ -567,3 +567,5 @@
 [2026-09-24T22:41:58] [RESULT] [mediaman] Result: SUCCESS - targeted tests 48/48, match=YES lines after hardening: 6
 [2026-09-24T22:41:58] [COMMIT] SHA: recorded in the immediately following journal commit, because a commit cannot contain its own SHA
 [2026-09-24T22:42:00] [COMMIT] SHA: f4455d44e0d8a974f86a6a693f35d107483ac72f
+[2026-09-25T20:45:21] [CONFIG_CHANGE] [mediaman-mcp] Stage A route snapshot transport prepared; credentials redacted
+[2026-09-25T20:45:21] [RESULT] [mediaman-mcp] Result: SUCCESS — static tests and live route gate passed
