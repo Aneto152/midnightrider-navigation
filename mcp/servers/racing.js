@@ -830,7 +830,10 @@ function downsampleTemporalRows(rows, resolutionSeconds) {
       previous.source_id = row.source || previous.source_id;
     }
   }
-  return [...Array.from(buckets.values()), ...routeRows];
+  const numericRows = [...buckets.values()]
+    .map(({ sum, count, ...row }) => row);
+  return [...numericRows, ...routeRows]
+    .sort((a, b) => a.timestamp_utc.localeCompare(b.timestamp_utc));
 }
 
 async function getHistoricalAnalysis(startUtc, endUtc, resolutionSeconds = 60) {

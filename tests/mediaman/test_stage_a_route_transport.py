@@ -18,6 +18,8 @@ def test_route_rows_have_a_non_numeric_path():
     assert "function normalizeRouteRow" in RACING
     assert "if (isRouteRow(row))" in RACING
     assert "...routeRows" in RACING
+    assert ".map(({ sum, count, ...row }) => row)" in RACING
+    assert ".sort((a, b) => a.timestamp_utc.localeCompare(b.timestamp_utc))" in RACING
 
 
 def test_collector_exposes_raw_rows():
