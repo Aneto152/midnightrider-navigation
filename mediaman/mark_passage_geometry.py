@@ -335,12 +335,22 @@ def detect_mark_passage(
         for run in runs:
             minimum_index = min(run, key=lambda i: distance_nm(
                 projected[i][0].latitude, projected[i][0].longitude, waypoint.latitude, waypoint.longitude))
-            before_index = min(range(len(projected)), key=lambda i: abs(
-                (projected[i][0].timestamp - projected[minimum_index][0].timestamp).total_seconds() + edge_seconds))
-            after_index = min(range(len(projected)), key=lambda i: abs(
-                (projected[i][0].timestamp - projected[minimum_index][0].timestamp).total_seconds() - edge_seconds))
-            if before_index >= minimum_index or after_index <= minimum_index:
+            minimum_time = projected[minimum_index][0].timestamp
+            before_candidates = [
+                i for i, (sample, *_rest) in enumerate(projected)
+                if (minimum_time - sample.timestamp).total_seconds() >= edge_seconds
+            ]
+            after_candidates = [
+                i for i, (sample, *_rest) in enumerate(projected)
+                if (sample.timestamp - minimum_time).total_seconds() >= edge_seconds
+            ]
+            if not before_candidates or not after_candidates:
                 continue
+            # Select directionally valid neighbors. A sparse track must not
+            # reuse the minimum sample as the "after" sample merely because
+            # it is numerically closest to minimum_time + edge_seconds.
+            before_index = max(before_candidates, key=lambda i: projected[i][0].timestamp)
+            after_index = min(after_candidates, key=lambda i: projected[i][0].timestamp)
             before = projected[before_index][0]
             minimum = projected[minimum_index][0]
             after = projected[after_index][0]

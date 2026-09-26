@@ -326,6 +326,15 @@ class MCPCollector:
         result = analyze(temporal_rows, start_utc, end_utc, resolution_seconds)
         result['raw_rows'] = payload.get('raw_rows', rows)
         result['route_rows'] = [row for row in rows if isinstance(row, dict) and row.get('series') == 'route_waypoints']
+        try:
+            from mediaman.historical_mark_passage import detect_mark_passage_by_source
+        except ImportError:
+            from historical_mark_passage import detect_mark_passage_by_source
+        result['mark_passage'] = detect_mark_passage_by_source(
+            rows,
+            acceptance_start=start_utc,
+            acceptance_end=end_utc,
+        )
         result['evidence'] = {
             **result.get('evidence', {}),
             'mcp_source': response.get('source', 'mcp:racing'),

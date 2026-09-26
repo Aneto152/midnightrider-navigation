@@ -573,3 +573,5 @@
 [2026-09-25T20:53:42] [CONFIG_CHANGE] [mediaman-mcp] Restored numeric cleanup after Stage A route transport
 [2026-09-25T20:53:42] [RESULT] [mediaman-mcp] Result: SUCCESS — targeted tests and live route/collector gates passed
 [2026-09-25T20:53:43] [COMMIT] SHA: 0dda2dcdcfff70233b2d10b0a3cfb4520bd890f8
+[2026-09-26T17:28:54] [FILE_CREATE] [mediaman] Stage B geometric mark passage wiring added
+[2026-09-26T17:28:54] [RESULT] [mediaman] Result: SUCCESS - tests and live real-data gate passed
